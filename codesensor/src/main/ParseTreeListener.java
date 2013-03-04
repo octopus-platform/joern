@@ -1,14 +1,23 @@
 package main;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.ParseTree;
 
 
 import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
 import main.codeitems.FunctionDef;
+import main.codeitems.IdentifierDecl;
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
+import antlr.CodeSensorParser.Class_nameContext;
+import antlr.CodeSensorParser.Init_declaratorContext;
+import antlr.CodeSensorParser.Init_declarator_listContext;
 
 public class ParseTreeListener extends CodeSensorBaseListener{
 	
@@ -82,11 +91,55 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	
 	// Class/Structure Definitions
 	
-	@Override public void enterClass_def(CodeSensorParser.Class_defContext ctx)
+	@Override
+	public void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
 		ClassDef classDef = new ClassDef();
 		classDef.create(ctx, itemStack);
 		itemStack.push(classDef);
+	
+		Init_declarator_listContext decl_list = ctx.init_declarator_list();
+		
+		if(decl_list != null){
+		String typeName = "";
+		Class_nameContext class_name = ctx.class_def().class_name();
+		
+		if(class_name != null)
+			typeName = class_name.getText();
+		
+		createDeclarations(decl_list, typeName);
+		}
+	}
+	
+	private List<IdentifierDecl> createDeclarations(Init_declarator_listContext decl_list, String typeName)
+	{
+		Init_declaratorContext decl_ctx;
+		LinkedList<IdentifierDecl> retList = new LinkedList<IdentifierDecl>();
+		
+		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
+		{
+			try{
+				decl_ctx = (Init_declaratorContext) i.next();
+			}catch(java.lang.ClassCastException e)
+			{
+				// this is perfectly normal:
+				// not all child-nodes are init-declarators
+				continue;
+			}
+				
+			IdentifierDecl idDecl = new IdentifierDecl();
+			idDecl.create(decl_ctx, itemStack);
+			idDecl.setName(decl_ctx.identifier(), itemStack);
+			retList.add(idDecl);
+		}
+		return retList;
+	}
+	
+	@Override
+	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
+	{
+		CodeItem classDef = itemStack.pop();
+		nodePrinter.printItem(classDef);
 	}
 
 	@Override
@@ -100,12 +153,6 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	public void exitClass_name(CodeSensorParser.Class_nameContext ctx)
 	{
 		
-	}
-	
-	@Override public void exitClass_def(CodeSensorParser.Class_defContext ctx)
-	{
-		CodeItem classDef = itemStack.pop();
-		nodePrinter.printItem(classDef);
 	}
 		
 	/*
