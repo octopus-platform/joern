@@ -1,6 +1,8 @@
 #include <foo.h>
 
-int x = 0;
+struct foo{
+	int x;
+};
 
 namespace foo{
 	int *ptr = 0x0, *foo = bar;

@@ -84,11 +84,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 
-	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
-	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
-
 	void enterUnary_operator(CodeSensorParser.Unary_operatorContext ctx);
 	void exitUnary_operator(CodeSensorParser.Unary_operatorContext ctx);
+
+	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
+	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
 
 	void enterCv_qualifier(CodeSensorParser.Cv_qualifierContext ctx);
 	void exitCv_qualifier(CodeSensorParser.Cv_qualifierContext ctx);
@@ -140,9 +140,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterClass_key(CodeSensorParser.Class_keyContext ctx);
 	void exitClass_key(CodeSensorParser.Class_keyContext ctx);
-
-	void enterClass_content_elem(CodeSensorParser.Class_content_elemContext ctx);
-	void exitClass_content_elem(CodeSensorParser.Class_content_elemContext ctx);
 
 	void enterPtrs(CodeSensorParser.PtrsContext ctx);
 	void exitPtrs(CodeSensorParser.PtrsContext ctx);

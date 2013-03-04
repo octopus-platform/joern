@@ -87,11 +87,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 	@Override public void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 
-	@Override public void enterNo_squares(CodeSensorParser.No_squaresContext ctx) { }
-	@Override public void exitNo_squares(CodeSensorParser.No_squaresContext ctx) { }
-
 	@Override public void enterUnary_operator(CodeSensorParser.Unary_operatorContext ctx) { }
 	@Override public void exitUnary_operator(CodeSensorParser.Unary_operatorContext ctx) { }
+
+	@Override public void enterNo_squares(CodeSensorParser.No_squaresContext ctx) { }
+	@Override public void exitNo_squares(CodeSensorParser.No_squaresContext ctx) { }
 
 	@Override public void enterCv_qualifier(CodeSensorParser.Cv_qualifierContext ctx) { }
 	@Override public void exitCv_qualifier(CodeSensorParser.Cv_qualifierContext ctx) { }
@@ -143,9 +143,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterClass_key(CodeSensorParser.Class_keyContext ctx) { }
 	@Override public void exitClass_key(CodeSensorParser.Class_keyContext ctx) { }
-
-	@Override public void enterClass_content_elem(CodeSensorParser.Class_content_elemContext ctx) { }
-	@Override public void exitClass_content_elem(CodeSensorParser.Class_content_elemContext ctx) { }
 
 	@Override public void enterPtrs(CodeSensorParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(CodeSensorParser.PtrsContext ctx) { }

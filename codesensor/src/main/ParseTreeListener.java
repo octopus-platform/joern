@@ -3,6 +3,7 @@ package main;
 import java.util.Stack;
 
 
+import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
 import main.codeitems.FunctionDef;
 
@@ -13,10 +14,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	
 	Stack<CodeItem> itemStack = new Stack<CodeItem>();
 	Printer nodePrinter = new CSVPrinter();
-	// Printer nodePrinter = new HRPrinter();
 	String filename;
-	
-	Stack<FunctionDef> functionStack = new Stack<FunctionDef>();
 	
 	ParseTreeListener(String aFilename)
 	{
@@ -38,21 +36,19 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	{
 		FunctionDef func = new FunctionDef();
 		func.create(ctx, itemStack);
-		functionStack.push(func);
 		itemStack.push(func);
 	}
 
 	@Override public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
 	{
-		FunctionDef func = functionStack.peek();
+		FunctionDef func = (FunctionDef) itemStack.peek();
 		func.setName(ctx, itemStack);
 	}
 	
 	
 	@Override public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
-		FunctionDef func = functionStack.pop();
-		itemStack.pop();
+		FunctionDef func = (FunctionDef) itemStack.pop();
 		func.complete(ctx);
 		nodePrinter.printItem(func);
 	}
@@ -66,26 +62,52 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	
 	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
 	{
-		FunctionDef func = functionStack.peek();
+		FunctionDef func = (FunctionDef) itemStack.peek();
 		func.setReturnType(ctx, itemStack);
 	}
 		
 		
 	@Override public void enterParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx)
 	{
-		FunctionDef func = functionStack.peek();
+		FunctionDef func = (FunctionDef) itemStack.peek();
 		func.setParameterList(ctx, itemStack);
 	}
 	
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx)
 	{
-		FunctionDef func = functionStack.peek();
+		FunctionDef func = (FunctionDef) itemStack.peek();
 		func.addParameter(ctx, itemStack);
 	}
 	
 	
-	// Class/Structure/Variable declarations
+	// Class/Structure Definitions
 	
+	@Override public void enterClass_def(CodeSensorParser.Class_defContext ctx)
+	{
+		ClassDef classDef = new ClassDef();
+		classDef.create(ctx, itemStack);
+		itemStack.push(classDef);
+	}
+
+	@Override
+	public void enterClass_name(CodeSensorParser.Class_nameContext ctx)
+	{
+		ClassDef classDef = (ClassDef) itemStack.peek();
+		classDef.setName(ctx, itemStack);
+	}
+	
+	@Override
+	public void exitClass_name(CodeSensorParser.Class_nameContext ctx)
+	{
+		
+	}
+	
+	@Override public void exitClass_def(CodeSensorParser.Class_defContext ctx)
+	{
+		CodeItem classDef = itemStack.pop();
+		nodePrinter.printItem(classDef);
+	}
+		
 	/*
 	@Override public void enterVar_decl(CodeSensorParser.Var_declContext ctx)
 	{
@@ -200,21 +222,5 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		level++;
 	}
 	*/
-	
-	/*
-	@Override public void exitCtor_list(CodeSensorParser.Ctor_listContext ctx){ level--;}	
-	@Override public void exitTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx){ level--;}
-	
-	@Override public void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx){ level--;}
-	@Override public void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx){ level--;}
-	@Override public void exitClass_def(CodeSensorParser.Class_defContext ctx){ level--;}
-	@Override public void exitVar_decl(CodeSensorParser.Var_declContext ctx){ level--; }
-	@Override public void exitSimple_decl(CodeSensorParser.Simple_declContext ctx){ level--;}
-	@Override public void exitCtor_expr(CodeSensorParser.Ctor_exprContext ctx){ level--;}
-	@Override public void exitInitializer_id(CodeSensorParser.Initializer_idContext ctx){ level--;}
-	@Override public void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx){ level--;}
-	@Override public void exitType_suffix(CodeSensorParser.Type_suffixContext ctx){level--;}
-	*/
-	
 
 }

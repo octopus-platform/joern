@@ -56,4 +56,15 @@ public class CodeSensorParserTest {
 		assertTrue(output.equals(expected));
 	}
 	
+	@Test
+	public void testClassDef()
+	{
+		String input = "struct foo{int x;};";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.simple_decl().toStringTree(parser);
+		System.out.println(output);
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier foo))"));
+	}
+	
 }

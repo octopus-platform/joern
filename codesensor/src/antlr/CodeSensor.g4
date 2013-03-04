@@ -45,19 +45,17 @@ init_declarator_list: init_declarator (',' init_declarator)*;
 
 init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr))?;
 
-class_def: class_key class_name base_classes '{' class_content '}';
+class_def: class_key class_name base_classes? '{' class_content '}';
 class_name: identifier?;
 base_classes: ':' base_class (',' base_class)*;
 base_class: 'virtual'? access_specifier? identifier;
 
-class_content: class_content_elem*;
-
-class_content_elem :  simple_decl
-                   | function_def
-                   | label
-                   | '{' class_content '}'
-                   | no_curlies
-                   ;
+class_content: ( simple_decl
+                | function_def
+                | label
+                | '{' class_content '}'
+                | no_curlies)*
+                ;
 
 label: (('case'? (identifier | number) ) | access_specifier) ':' ;
 

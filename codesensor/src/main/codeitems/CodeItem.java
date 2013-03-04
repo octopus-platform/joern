@@ -20,7 +20,7 @@ public class CodeItem {
 		codeStr = childTokenString(ctx);
 	}
 	
-	private void setLocation(ParserRuleContext ctx)
+	protected void setLocation(ParserRuleContext ctx)
 	{
 		location = new CodeLocation(ctx);
 	}
