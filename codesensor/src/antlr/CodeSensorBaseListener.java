@@ -87,11 +87,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 	@Override public void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 
-	@Override public void enterUnary_operator(CodeSensorParser.Unary_operatorContext ctx) { }
-	@Override public void exitUnary_operator(CodeSensorParser.Unary_operatorContext ctx) { }
-
 	@Override public void enterNo_squares(CodeSensorParser.No_squaresContext ctx) { }
 	@Override public void exitNo_squares(CodeSensorParser.No_squaresContext ctx) { }
+
+	@Override public void enterUnary_operator(CodeSensorParser.Unary_operatorContext ctx) { }
+	@Override public void exitUnary_operator(CodeSensorParser.Unary_operatorContext ctx) { }
 
 	@Override public void enterCv_qualifier(CodeSensorParser.Cv_qualifierContext ctx) { }
 	@Override public void exitCv_qualifier(CodeSensorParser.Cv_qualifierContext ctx) { }
@@ -123,6 +123,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterNo_curlies(CodeSensorParser.No_curliesContext ctx) { }
 	@Override public void exitNo_curlies(CodeSensorParser.No_curliesContext ctx) { }
 
+	@Override public void enterParam_type_list(CodeSensorParser.Param_type_listContext ctx) { }
+	@Override public void exitParam_type_list(CodeSensorParser.Param_type_listContext ctx) { }
+
 	@Override public void enterExpr(CodeSensorParser.ExprContext ctx) { }
 	@Override public void exitExpr(CodeSensorParser.ExprContext ctx) { }
 
@@ -137,6 +140,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx) { }
 	@Override public void exitAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx) { }
+
+	@Override public void enterParam_type(CodeSensorParser.Param_typeContext ctx) { }
+	@Override public void exitParam_type(CodeSensorParser.Param_typeContext ctx) { }
 
 	@Override public void enterType_id_list(CodeSensorParser.Type_id_listContext ctx) { }
 	@Override public void exitType_id_list(CodeSensorParser.Type_id_listContext ctx) { }

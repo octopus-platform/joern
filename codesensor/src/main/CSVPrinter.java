@@ -2,6 +2,7 @@ package main;
 
 import java.util.Iterator;
 
+import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
 import main.codeitems.FunctionDef;
 import main.codeitems.Parameter;
@@ -30,13 +31,16 @@ class CSVPrinter extends Printer
     	case "FUNCTION_DEF":
     		outputFunctionDef(item);
     		break;
+    	case "CLASS_DEF":
+    		outputClassDef(item);
+    		break;
     	default:
     			defaultOut(item);
     			break;
     	}
     }
 
-    private void outputFunctionDef(CodeItem aItem)
+	private void outputFunctionDef(CodeItem aItem)
     {
     	FunctionDef item = (FunctionDef) aItem;
     	defaultOut(item);
@@ -53,7 +57,17 @@ class CSVPrinter extends Printer
     		}
     	}
     }
-    
+
+    private void outputClassDef(CodeItem aItem)
+    {
+    	ClassDef item = (ClassDef) aItem;
+    	defaultOut(item);
+    	if(item.name != null){
+    		item.name.level = item.level + 1;
+    		defaultOut(item.name);
+    	}
+    }
+	
     private void defaultOut(CodeItem item)
     {
     	String output = item.nodeTypeName + SEPARATOR;

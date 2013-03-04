@@ -12,6 +12,8 @@ public class NamedCodeItem extends CodeItem
 	{
 		name = new Name();
 		name.create(ctx, itemStack);
+		if(name.codeStr.equals(""))
+			name = null;
 	}
 	
 }

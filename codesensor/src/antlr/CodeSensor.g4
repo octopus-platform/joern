@@ -45,8 +45,8 @@ init_declarator_list: init_declarator (',' init_declarator)*;
 
 init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr))?;
 
-class_def: class_key class_name base_classes? '{' class_content '}';
-class_name: identifier?;
+class_def: class_key class_name? base_classes? '{' class_content '}';
+class_name: identifier;
 base_classes: ':' base_class (',' base_class)*;
 base_class: 'virtual'? access_specifier? identifier;
 
@@ -80,14 +80,17 @@ template_param_list_elem :  ('<' template_param_list '>')
 ;
 
 function_param_list : o='(' parameter_decl_clause? c=')' cv_qualifier* exception_specification?;
-parameter_decl_clause: parameter_decl (',' parameter_decl)*;
 
+parameter_decl_clause: parameter_decl (',' parameter_decl)*;
 parameter_decl : param_decl_specifiers ptrs? parameter_name type_suffix?;
 
 ptrs: ptr_operator+;
 
 param_decl_specifiers : ('auto' | 'register')? type_name;
-type_suffix : ('[' constant_expr ']');
+type_suffix : ('[' constant_expr ']') | param_type_list;
+
+param_type_list: '(' (param_type (',' param_type)*)? ')';
+param_type: param_decl_specifiers ptrs? parameter_name? type_suffix?;
 
 // this one is new
 constant_expr: no_squares* ('[' constant_expr ']' no_squares*)*;

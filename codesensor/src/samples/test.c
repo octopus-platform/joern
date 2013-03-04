@@ -4,6 +4,10 @@ struct foo{
 	int x;
 };
 
+struct {
+	int x;
+} v;
+
 namespace foo{
 	int *ptr = 0x0, *foo = bar;
 }
