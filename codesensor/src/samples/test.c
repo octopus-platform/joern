@@ -8,6 +8,10 @@ struct {
 	int x;
 } v;
 
+struct foobar{
+	int x;
+} *v;
+
 namespace foo{
 	int *ptr = 0x0, *foo = bar;
 }

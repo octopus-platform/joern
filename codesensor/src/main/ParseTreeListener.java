@@ -107,14 +107,14 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		if(class_name != null)
 			typeName = class_name.getText();
 		
-		createDeclarations(decl_list, typeName);
+		emitDeclarations(decl_list, typeName);
+		
 		}
 	}
 	
-	private List<IdentifierDecl> createDeclarations(Init_declarator_listContext decl_list, String typeName)
+	private void emitDeclarations(Init_declarator_listContext decl_list, String typeName)
 	{
 		Init_declaratorContext decl_ctx;
-		LinkedList<IdentifierDecl> retList = new LinkedList<IdentifierDecl>();
 		
 		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
 		{
@@ -130,9 +130,18 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 			IdentifierDecl idDecl = new IdentifierDecl();
 			idDecl.create(decl_ctx, itemStack);
 			idDecl.setName(decl_ctx.identifier(), itemStack);
-			retList.add(idDecl);
+			
+			String completeType = typeName;
+			if(decl_ctx.ptrs() != null)
+				completeType += decl_ctx.ptrs().getText();
+			if(decl_ctx.type_suffix() != null)
+				completeType += decl_ctx.type_suffix().getText();
+			
+			idDecl.setType(typeName, completeType);
+			
+			nodePrinter.printItem(idDecl);
 		}
-		return retList;
+		
 	}
 	
 	@Override

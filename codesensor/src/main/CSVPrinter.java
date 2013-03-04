@@ -5,6 +5,7 @@ import java.util.Iterator;
 import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
 import main.codeitems.FunctionDef;
+import main.codeitems.IdentifierDecl;
 import main.codeitems.Parameter;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -33,6 +34,9 @@ class CSVPrinter extends Printer
     		break;
     	case "CLASS_DEF":
     		outputClassDef(item);
+    		break;
+    	case "DECL":
+    		outputDecl(item);
     		break;
     	default:
     			defaultOut(item);
@@ -67,7 +71,16 @@ class CSVPrinter extends Printer
     		defaultOut(item.name);
     	}
     }
-	
+
+    private void outputDecl(CodeItem aItem)
+	{
+    	IdentifierDecl item = (IdentifierDecl) aItem;
+    	
+    	item.codeStr = item.type.completeType + " " + item.name.codeStr;
+    	defaultOut(item);
+	}
+    
+    
     private void defaultOut(CodeItem item)
     {
     	String output = item.nodeTypeName + SEPARATOR;
