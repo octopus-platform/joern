@@ -163,7 +163,19 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	{
 		
 	}
+	
+	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
+	{
+		Init_declarator_listContext decl_list = ctx.init_declarator_list();
+		String typeName = ctx.type_name().getText();
+		emitDeclarations(decl_list, typeName);
+	}
+	
+	@Override public void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx)
+	{
 		
+	}
+	
 	/*
 	@Override public void enterVar_decl(CodeSensorParser.Var_declContext ctx)
 	{

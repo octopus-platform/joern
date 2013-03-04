@@ -76,7 +76,9 @@ class CSVPrinter extends Printer
 	{
     	IdentifierDecl item = (IdentifierDecl) aItem;
     	
-    	item.codeStr = item.type.completeType + " " + item.name.codeStr;
+    	item.codeStr = item.name.codeStr;
+    	if(item.type.completeType != "")
+    		item.codeStr = item.type.completeType + " " + item.name.codeStr;
     	defaultOut(item);
 	}
     

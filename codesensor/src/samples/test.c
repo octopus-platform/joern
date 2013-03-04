@@ -1,5 +1,7 @@
 #include <foo.h>
 
+int bar, *foo[10];
+
 struct foo{
 	int x;
 };
