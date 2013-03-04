@@ -1,5 +1,7 @@
 package main.codeitems;
 
+import java.util.Stack;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CodeSensorParser.Function_defContext;
@@ -12,8 +14,8 @@ public class FunctionDef extends CodeItem{
 
 	public class FunctionName extends CodeItem
 	{
-		public void create(ParserRuleContext ctx){
-			nodeTypeName = "FUNCTION_NAME"; super.create(ctx);
+		public void create(ParserRuleContext ctx, Stack<CodeItem> itemStack){
+			nodeTypeName = "FUNCTION_NAME"; super.create(ctx, itemStack);
 			}
 	}
 
@@ -22,34 +24,34 @@ public class FunctionDef extends CodeItem{
 	public FunctionName name;
 		
 	@Override
-	public void create(ParserRuleContext ctx)
+	public void create(ParserRuleContext ctx, Stack<CodeItem> itemStack)
 	{	
 		nodeTypeName = "FUNCTION_DEF";
-		super.create(ctx);
+		super.create(ctx, itemStack);
 	}
 
-	public void setName(Function_nameContext ctx)
+	public void setName(Function_nameContext ctx, Stack<CodeItem> itemStack)
 	{
 		name = new FunctionName();
-		name.create(ctx);
+		name.create(ctx, itemStack);
 	}
 
-	public void setReturnType(Return_typeContext ctx)
+	public void setReturnType(Return_typeContext ctx, Stack<CodeItem> itemStack)
 	{
 		returnType = new ReturnType();
-		returnType.create(ctx);
+		returnType.create(ctx, itemStack);
 	}
 
 
-	public void setParameterList(Parameter_decl_clauseContext ctx)
+	public void setParameterList(Parameter_decl_clauseContext ctx, Stack<CodeItem> itemStack)
 	{
 		parameterList = new ParameterList();
-		parameterList.create(ctx);
+		parameterList.create(ctx, itemStack);
 	}
 
-	public void addParameter(Parameter_declContext ctx)
+	public void addParameter(Parameter_declContext ctx, Stack<CodeItem> itemStack)
 	{
-		parameterList.addParameter(ctx);
+		parameterList.addParameter(ctx, itemStack);
 		
 	}
 

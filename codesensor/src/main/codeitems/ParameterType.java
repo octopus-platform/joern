@@ -1,5 +1,7 @@
 package main.codeitems;
 
+import java.util.Stack;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CodeSensorParser.Parameter_declContext;
@@ -12,7 +14,7 @@ public class ParameterType extends CodeItem
 	String baseType;
 
 	@Override
-	public void create(ParserRuleContext aCtx)
+	public void create(ParserRuleContext aCtx, Stack<CodeItem> itemStack)
 	{
 		Parameter_declContext ctx = (Parameter_declContext) aCtx;
 		
@@ -35,7 +37,7 @@ public class ParameterType extends CodeItem
 	
 		// use entire parameter as location. It's the best
 		// we can do right now.
-		super.create(ctx);
+		super.create(ctx, itemStack);
 		codeStr = typeName;
 	}
 }

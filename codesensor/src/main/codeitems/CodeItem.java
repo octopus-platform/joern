@@ -1,5 +1,7 @@
 package main.codeitems;
 
+import java.util.Stack;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -12,7 +14,7 @@ public class CodeItem {
 	public int level;
 	public String codeStr;
 	
-	public void create(ParserRuleContext ctx)
+	public void create(ParserRuleContext ctx, Stack<CodeItem> itemStack)
 	{
 		setLocation(ctx);
 		codeStr = childTokenString(ctx);

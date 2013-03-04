@@ -37,20 +37,22 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	@Override public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
 		FunctionDef func = new FunctionDef();
-		func.create(ctx);
+		func.create(ctx, itemStack);
 		functionStack.push(func);
+		itemStack.push(func);
 	}
 
 	@Override public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
 	{
 		FunctionDef func = functionStack.peek();
-		func.setName(ctx);
+		func.setName(ctx, itemStack);
 	}
 	
 	
 	@Override public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
 		FunctionDef func = functionStack.pop();
+		itemStack.pop();
 		func.complete(ctx);
 		nodePrinter.printItem(func);
 	}
@@ -65,20 +67,20 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
 	{
 		FunctionDef func = functionStack.peek();
-		func.setReturnType(ctx);
+		func.setReturnType(ctx, itemStack);
 	}
 		
 		
 	@Override public void enterParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx)
 	{
 		FunctionDef func = functionStack.peek();
-		func.setParameterList(ctx);
+		func.setParameterList(ctx, itemStack);
 	}
 	
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx)
 	{
 		FunctionDef func = functionStack.peek();
-		func.addParameter(ctx);
+		func.addParameter(ctx, itemStack);
 	}
 	
 	
