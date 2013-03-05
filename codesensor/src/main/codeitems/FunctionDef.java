@@ -18,7 +18,7 @@ public class FunctionDef extends NamedCodeItem{
 	public void create(ParserRuleContext ctx, Stack<CodeItem> itemStack)
 	{	
 		nodeTypeName = "FUNCTION_DEF";
-		super.create(ctx, itemStack);
+		setLocation(ctx);
 	}
 
 
