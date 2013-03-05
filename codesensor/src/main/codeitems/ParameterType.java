@@ -22,7 +22,7 @@ public class ParameterType extends CodeItem
 		// We want to include the type_suffix in the type-node,
 		// e.g., the type of "char buf[256]" should be "char [256]".
 
-		baseType = ctx.param_decl_specifiers().getText();
+		baseType = childTokenString(ctx.param_decl_specifiers());
 			
 		String typeName = baseType;
 		Type_suffixContext type_suffix = ctx.type_suffix();

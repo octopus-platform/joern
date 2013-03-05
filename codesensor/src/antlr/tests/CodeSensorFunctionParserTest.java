@@ -56,4 +56,16 @@ public class CodeSensorFunctionParserTest {
 		assertTrue(output.equals(expected));
 	}
 	
+	@Test
+	public void testFunction_defStaticUnsigned()
+	{
+		String input = "static unsigned my_atoi(const char *p){}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);		
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def (return_type (function_decl_specifiers static) (type_name unsigned)) (function_name (identifier my_atoi))"));
+	}
+	
+	
 }

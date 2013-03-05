@@ -63,8 +63,9 @@ function_def : template_decl_start? return_type? function_name
             function_param_list ctor_list? compound_statement;
 
 return_type : (function_decl_specifiers* type_name) function_decl_specifiers* ptr_operator*;
-type_name : cv_qualifier* class_key? ('unsigned' | 'signed')?
-        ALPHA_NUMERIC ('<' template_param_list '>')? ('::' ALPHA_NUMERIC ('<' template_param_list '>' )?)*;
+type_name : (cv_qualifier* class_key? ('unsigned' | 'signed')?
+        ALPHA_NUMERIC ('<' template_param_list '>')? ('::' ALPHA_NUMERIC ('<' template_param_list '>' )?)*)
+    | ('unsigned' | 'signed');
 
 
 template_decl_start : 'template' '<' template_param_list '>';
@@ -79,7 +80,7 @@ template_param_list_elem :  ('<' template_param_list '>')
     | no_angle_brackets_or_brackets
 ;
 
-function_param_list : o='(' parameter_decl_clause? c=')' cv_qualifier* exception_specification?;
+function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 
 parameter_decl_clause: parameter_decl (',' parameter_decl)*;
 parameter_decl : param_decl_specifiers ptrs? parameter_name type_suffix?;

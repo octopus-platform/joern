@@ -1,5 +1,9 @@
 lexer grammar CodeSensorLex;
 
+IF: 'if'; ELSE: 'ELSE'; FOR: 'for'; WHILE: 'while';
+SWITCH: 'switch'; CONTINUE: 'continue'; BREAK: 'break';
+GOTO: 'goto'; RETURN: 'return'; CASE: 'case';
+
 ALPHA_NUMERIC: [a-zA-Z_~][a-zA-Z0-9_]*;
 
 CPPCOMMENT : '//' .*? '\n' -> skip;
