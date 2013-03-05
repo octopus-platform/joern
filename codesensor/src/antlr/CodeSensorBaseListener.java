@@ -75,6 +75,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterNumber(CodeSensorParser.NumberContext ctx) { }
 	@Override public void exitNumber(CodeSensorParser.NumberContext ctx) { }
 
+	@Override public void enterBase_type(CodeSensorParser.Base_typeContext ctx) { }
+	@Override public void exitBase_type(CodeSensorParser.Base_typeContext ctx) { }
+
 	@Override public void enterLabel(CodeSensorParser.LabelContext ctx) { }
 	@Override public void exitLabel(CodeSensorParser.LabelContext ctx) { }
 
@@ -194,9 +197,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterPart(CodeSensorParser.PartContext ctx) { }
 	@Override public void exitPart(CodeSensorParser.PartContext ctx) { }
-
-	@Override public void enterParameter_name_start(CodeSensorParser.Parameter_name_startContext ctx) { }
-	@Override public void exitParameter_name_start(CodeSensorParser.Parameter_name_startContext ctx) { }
 
 	@Override public void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }

@@ -59,14 +59,17 @@ class_content: ( simple_decl
 
 label: (('case'? (identifier | number) ) | access_specifier) ':' ;
 
+
+
 function_def : template_decl_start? return_type? function_name
             function_param_list ctor_list? compound_statement;
 
 return_type : (function_decl_specifiers* type_name) function_decl_specifiers* ptr_operator*;
 type_name : (cv_qualifier* class_key? ('unsigned' | 'signed')?
-            (ALPHA_NUMERIC | 'void')  ('<' template_param_list '>')? ('::' (ALPHA_NUMERIC | 'void') ('<' template_param_list '>' )?)*)
-    | ('unsigned' | 'signed');
+            base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*) | ('unsigned' | 'signed');
 
+
+base_type: (ALPHA_NUMERIC | 'void' | 'long' | 'long' 'long');
 
 template_decl_start : 'template' '<' template_param_list '>';
 
@@ -82,8 +85,8 @@ template_param_list_elem :  ('<' template_param_list '>')
 
 function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 
-parameter_decl_clause: 'void'
-                     | (parameter_decl (',' parameter_decl)*);
+parameter_decl_clause: (parameter_decl (',' parameter_decl)*) (',' '...')?
+                     | 'void';
 parameter_decl : param_decl_specifiers parameter_id;
 
 parameter_id: ptrs? '(' parameter_id ')' type_suffix?
@@ -96,6 +99,7 @@ type_suffix : ('[' constant_expr ']') | param_type_list;
 
 param_type_list: '(' 'void' ')'
     | '(' (param_type (',' param_type)*)? ')';
+
 param_type: param_decl_specifiers ptrs? parameter_name? type_suffix?;
 
 // this one is new
@@ -104,8 +108,9 @@ expr: no_brackets* ('(' expr ')' no_brackets*)*;
 compound_statement: '{' no_curlies* (compound_statement no_curlies*)* '}';
 
 
-parameter_name: x=parameter_name_start s=type_suffix?;
-parameter_name_start: ('(' parameter_name ')' | identifier);
+parameter_name: identifier | access_specifier;
+// parameter_name: parameter_name_start type_suffix?;
+// parameter_name_start: ('(' parameter_name ')' | identifier);
 
 ctor_list: ':'  ctor_initializer (',' ctor_initializer)*;
 ctor_initializer:  initializer_id ctor_expr;

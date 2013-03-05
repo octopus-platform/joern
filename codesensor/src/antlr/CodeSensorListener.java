@@ -72,6 +72,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNumber(CodeSensorParser.NumberContext ctx);
 	void exitNumber(CodeSensorParser.NumberContext ctx);
 
+	void enterBase_type(CodeSensorParser.Base_typeContext ctx);
+	void exitBase_type(CodeSensorParser.Base_typeContext ctx);
+
 	void enterLabel(CodeSensorParser.LabelContext ctx);
 	void exitLabel(CodeSensorParser.LabelContext ctx);
 
@@ -191,9 +194,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterPart(CodeSensorParser.PartContext ctx);
 	void exitPart(CodeSensorParser.PartContext ctx);
-
-	void enterParameter_name_start(CodeSensorParser.Parameter_name_startContext ctx);
-	void exitParameter_name_start(CodeSensorParser.Parameter_name_startContext ctx);
 
 	void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx);
 	void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx);

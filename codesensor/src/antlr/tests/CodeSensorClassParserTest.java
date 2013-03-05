@@ -48,7 +48,7 @@ public class CodeSensorClassParserTest {
 		
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key class) (class_name (identifier foo)) { (class_content (function_def (return_type (type_name int))"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key class) (class_name (identifier foo)) { (class_content (function_def (return_type (type_name (base_type int)))"));
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ public class CodeSensorClassParserTest {
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
 		
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key class) (class_name (identifier foo)) { (class_content (simple_decl (var_decl (type_name int) (init_declarator_list (init_declarator (identifier func) (type_suffix (param_type_list ( (param_type"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key class) (class_name (identifier foo)) { (class_content (simple_decl (var_decl (type_name (base_type int)) (init_declarator_list (init_declarator (identifier func) (type_suffix (param_type_list ( (param_type"));
 	}
 	
 }
