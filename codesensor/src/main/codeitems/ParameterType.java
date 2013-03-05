@@ -29,12 +29,11 @@ public class ParameterType extends CodeItem
 		PtrsContext ptrs = ctx.ptrs();
 			
 		if(ptrs != null)
-			typeName += " " + ptrs.getText();
+			typeName += " " + childTokenString(ptrs);
 		if(type_suffix != null)
-			typeName += " " + type_suffix.getText();
+			typeName += " " + childTokenString(type_suffix);
 		completeType = typeName;
 		
-	
 		// use entire parameter as location. It's the best
 		// we can do right now.
 		super.create(ctx, itemStack);

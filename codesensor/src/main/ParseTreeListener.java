@@ -1,10 +1,9 @@
 package main;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
@@ -18,6 +17,7 @@ import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_nameContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
+import antlr.CodeSensorParser.Type_nameContext;
 
 public class ParseTreeListener extends CodeSensorBaseListener{
 	
@@ -101,18 +101,17 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		
 		if(decl_list != null){
-		String typeName = "";
 		Class_nameContext class_name = ctx.class_def().class_name();
 		
-		if(class_name != null)
-			typeName = class_name.getText();
+
+		ParserRuleContext typeName = class_name;
 		
 		emitDeclarations(decl_list, typeName);
 		
 		}
 	}
 	
-	private void emitDeclarations(Init_declarator_listContext decl_list, String typeName)
+	private void emitDeclarations(Init_declarator_listContext decl_list, ParserRuleContext typeName)
 	{
 		Init_declaratorContext decl_ctx;
 		
@@ -130,14 +129,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 			IdentifierDecl idDecl = new IdentifierDecl();
 			idDecl.create(decl_ctx, itemStack);
 			idDecl.setName(decl_ctx.identifier(), itemStack);
-			
-			String completeType = typeName;
-			if(decl_ctx.ptrs() != null)
-				completeType += decl_ctx.ptrs().getText();
-			if(decl_ctx.type_suffix() != null)
-				completeType += decl_ctx.type_suffix().getText();
-			
-			idDecl.setType(typeName, completeType);
+			idDecl.setType(decl_ctx, typeName);
 			
 			nodePrinter.printItem(idDecl);
 		}
@@ -167,7 +159,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
 	{
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
-		String typeName = ctx.type_name().getText();
+		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
 	}
 	
