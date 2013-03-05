@@ -19,7 +19,7 @@ public class CommandLineInterfaceTest {
 		cmd.parseCommandLine(args);
 		
 		try {
-			String expected = "[src/samples/test.c, src/samples/subdir/test.c]";
+			String expected = "[src/samples/test.c, src/samples/tiff.cpp, src/samples/subdir/test.c]";
 			assertTrue(expected.equals(cmd.getFilesToProcess().toString()));
 		} catch (IOException e) {
 			fail("IO Error");

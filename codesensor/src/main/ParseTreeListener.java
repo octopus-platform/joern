@@ -163,76 +163,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		emitDeclarations(decl_list, typeName);
 	}
 	
-	@Override public void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx)
-	{
-		
-	}
-	
 	/*
-	@Override public void enterVar_decl(CodeSensorParser.Var_declContext ctx)
-	{
-		Init_declarator_listContext decl_list = ctx.init_declarator_list();
-		CodeSensorParser.Init_declaratorContext decl_ctx;
-		
-		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
-		{
-			try{
-				decl_ctx = (Init_declaratorContext) i.next();
-			}catch(java.lang.ClassCastException e)
-			{
-				// this is perfectly normal:
-				// not all child-nodes are init-declarators
-				continue;
-			}
-				
-			String typeName = ctx.type_name().getText();
-			String completeTypeName = getVariableType(decl_ctx, typeName);
-				
-			CodeItem line = new CodeItem();
-			line.nodeTypeName = "TYPE";
-			line.level = level + 1;
-			line.location = new CodeLocation(ctx);
-			line.location.stopIndex = -1;
-			line.codeStr = completeTypeName;
-			nodePrinter.printItem(line);
-			
-			line.nodeTypeName = "NAME";
-			line.codeStr = decl_ctx.identifier().getText();
-			nodePrinter.printItem(line);
-			
-		}
-		
-		level++;
-	}
-	
-	private String getVariableType(CodeSensorParser.Init_declaratorContext ctx, String baseType)
-	{
-		
-		String completeTypeName = baseType;
-		PtrsContext ptrs = ctx.ptrs();
-		Type_suffixContext type_suffix = ctx.type_suffix();
-		
-		if(ptrs != null)
-			completeTypeName += " " + ptrs.getText();
-		if(type_suffix != null)
-			completeTypeName += " " + type_suffix.getText();
-		return completeTypeName;
-	}
-	
-	@Override public void enterParameter_name(CodeSensorParser.Parameter_nameContext ctx)
-	{
-		String nodeTypeName = "NAME";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-	
-	@Override public void enterType_suffix(CodeSensorParser.Type_suffixContext ctx)
-	{
-		String nodeTypeName = "TYPE_SUFFIX";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-		
 	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx)
 	{
 		String nodeTypeName = "CTOR_INITIALIZER";
@@ -251,34 +182,6 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	{
 		String nodeTypeName = "CTOR_EXPR";
 		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-	
-	@Override public void enterSimple_decl(CodeSensorParser.Simple_declContext ctx)
-	{
-		String nodeTypeName = "SIMPLE_DECL";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-	
-	@Override public void enterClass_def(CodeSensorParser.Class_defContext ctx)
-	{
-		String nodeTypeName = "CLASS_DEF";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-		
-	@Override public void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx)
-	{
-		String nodeTypeName = "INIT_DECL_LIST";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-	
-	@Override public void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx)
-	{
-		String nodeTypeName = "VAR_DECL";
-		nodePrinter.print(nodeTypeName, ctx, this.level);		
 		level++;
 	}
 	*/

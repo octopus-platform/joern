@@ -85,6 +85,8 @@ class CSVPrinter extends Printer
     
     private void defaultOut(CodeItem item)
     {
+    	if(item == null) return;
+    	
     	String output = item.nodeTypeName + SEPARATOR;
     	output += createLocationString(item) + SEPARATOR + item.level;
     	output += SEPARATOR + escapeCodeStr(item.codeStr);
