@@ -83,7 +83,10 @@ template_param_list_elem :  ('<' template_param_list '>')
 function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 
 parameter_decl_clause: parameter_decl (',' parameter_decl)*;
-parameter_decl : param_decl_specifiers ptrs? parameter_name type_suffix?;
+parameter_decl : param_decl_specifiers parameter_id;
+
+parameter_id: ptrs? '(' parameter_id ')' type_suffix?
+    | ptrs? parameter_name type_suffix?;
 
 ptrs: ptr_operator+;
 

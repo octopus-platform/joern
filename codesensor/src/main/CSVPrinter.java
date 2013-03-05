@@ -1,6 +1,7 @@
 package main;
 
 import java.util.Iterator;
+import java.util.Stack;
 
 import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
@@ -22,73 +23,76 @@ class CSVPrinter extends Printer
     	item.nodeTypeName = nodeTypeName;
     	item.location = new CodeLocation(ctx);
     	item.codeStr = codeStr;	
-    	defaultOut(item);
+    	defaultOut(item, 0);
     }
     
     @Override
-    public void printItem(CodeItem item)
+    public void printItem(CodeItem item, Stack<CodeItem> itemStack)
     {
     	switch(item.nodeTypeName){
     	case "FUNCTION_DEF":
-    		outputFunctionDef(item);
+    		outputFunctionDef(item, itemStack);
     		break;
     	case "CLASS_DEF":
-    		outputClassDef(item);
+    		outputClassDef(item, itemStack);
     		break;
     	case "DECL":
-    		outputDecl(item);
+    		outputDecl(item, itemStack);
     		break;
     	default:
-    			defaultOut(item);
+    			defaultOut(item, itemStack.size());
     			break;
     	}
     }
 
-	private void outputFunctionDef(CodeItem aItem)
+
+	private void outputFunctionDef(CodeItem aItem, Stack<CodeItem> itemStack)
     {
-    	FunctionDef item = (FunctionDef) aItem;
-    	defaultOut(item);
-    	defaultOut(item.returnType);
-    	defaultOut(item.name);
+    	int level = itemStack.size();
+		FunctionDef item = (FunctionDef) aItem;
+    	defaultOut(item, level);
+    	defaultOut(item.returnType, level + 1);
+    	defaultOut(item.name, level + 1);
     	if(item.parameterList != null){
-    		defaultOut(item.parameterList);
+    		defaultOut(item.parameterList, level + 1);
     		Iterator<Parameter> i = item.parameterList.parameters.iterator();
     		for(; i.hasNext();){
     			Parameter p = i.next();
-    			defaultOut(p);
-    			defaultOut(p.type);
-    			defaultOut(p.name);
+    			defaultOut(p, level+2);
+    			defaultOut(p.type, level+2);
+    			defaultOut(p.name, level+2);
     		}
     	}
     }
 
-    private void outputClassDef(CodeItem aItem)
+    private void outputClassDef(CodeItem aItem, Stack<CodeItem> itemStack)
     {
+    	int level = itemStack.size();
     	ClassDef item = (ClassDef) aItem;
-    	defaultOut(item);
+    	defaultOut(item, level);
     	if(item.name != null){
-    		item.name.level = item.level + 1;
-    		defaultOut(item.name);
+    		defaultOut(item.name, level + 1);
     	}
     }
 
-    private void outputDecl(CodeItem aItem)
+    private void outputDecl(CodeItem aItem, Stack<CodeItem> itemStack)
 	{
     	IdentifierDecl item = (IdentifierDecl) aItem;
+    	int level = itemStack.size();
     	
     	item.codeStr = item.name.codeStr;
     	if(item.type.completeType != "")
     		item.codeStr = item.type.completeType + " " + item.name.codeStr;
-    	defaultOut(item);
+    	defaultOut(item, level);
 	}
     
     
-    private void defaultOut(CodeItem item)
+    private void defaultOut(CodeItem item, int level)
     {
     	if(item == null) return;
     	
     	String output = item.nodeTypeName + SEPARATOR;
-    	output += createLocationString(item) + SEPARATOR + item.level;
+    	output += createLocationString(item) + SEPARATOR + level;
     	output += SEPARATOR + escapeCodeStr(item.codeStr);
     	System.out.println(output);
     }

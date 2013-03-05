@@ -1,6 +1,7 @@
 package main;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 import main.codeitems.CodeItem;
 
@@ -33,7 +34,7 @@ public class HRPrinter extends Printer{
 	}
 	
 	@Override
-	public void printItem(CodeItem line)
+	public void printItem(CodeItem line, Stack<CodeItem> itemStack)
 	{
 		// TODO Auto-generated method stub		
 	}

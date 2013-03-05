@@ -186,6 +186,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterTemplate_param_list_elem(CodeSensorParser.Template_param_list_elemContext ctx);
 	void exitTemplate_param_list_elem(CodeSensorParser.Template_param_list_elemContext ctx);
 
+	void enterParameter_id(CodeSensorParser.Parameter_idContext ctx);
+	void exitParameter_id(CodeSensorParser.Parameter_idContext ctx);
+
 	void enterPart(CodeSensorParser.PartContext ctx);
 	void exitPart(CodeSensorParser.PartContext ctx);
 

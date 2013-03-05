@@ -66,5 +66,14 @@ public class CodeSensorFunctionParserTest {
 		assertTrue(output.startsWith("(function_def (return_type (function_decl_specifiers static) (type_name unsigned)) (function_name (identifier my_atoi))"));
 	}
 	
+	@Test
+	public void testFunctionPtrParam()
+	{
+		String input = "int foo(char *(*param)(void)){}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);		
+		assertTrue(output.startsWith("(function_def (return_type (type_name int)) (function_name (identifier foo)) (function_param_list ( (parameter_decl_clause (parameter_decl (param_decl_specifiers (type_name char)) (parameter_id (ptrs (ptr_operator *)) ( (parameter_id (ptrs (ptr_operator *)) (parameter_name (parameter_name_start (identifier param)))) ) (type_suffix (param_type_list ( (param_type (param_decl_specifiers (type_name void))) )))))) ))"));
+	}
 	
 }

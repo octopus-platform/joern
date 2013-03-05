@@ -11,7 +11,6 @@ public class CodeItem {
 
 	public String nodeTypeName;
 	public CodeLocation location;
-	public int level;
 	public String codeStr;
 	
 	public void create(ParserRuleContext ctx, Stack<CodeItem> itemStack)

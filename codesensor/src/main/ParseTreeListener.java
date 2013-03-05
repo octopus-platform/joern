@@ -59,7 +59,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	{
 		FunctionDef func = (FunctionDef) itemStack.pop();
 		func.complete(ctx);
-		nodePrinter.printItem(func);
+		nodePrinter.printItem(func, itemStack);
 	}
 
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
@@ -131,7 +131,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 			idDecl.setName(decl_ctx.identifier(), itemStack);
 			idDecl.setType(decl_ctx, typeName);
 			
-			nodePrinter.printItem(idDecl);
+			nodePrinter.printItem(idDecl, itemStack);
 		}
 		
 	}
@@ -140,7 +140,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
 		CodeItem classDef = itemStack.pop();
-		nodePrinter.printItem(classDef);
+		nodePrinter.printItem(classDef, itemStack);
 	}
 
 	@Override
