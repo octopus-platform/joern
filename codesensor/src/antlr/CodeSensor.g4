@@ -82,7 +82,8 @@ template_param_list_elem :  ('<' template_param_list '>')
 
 function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 
-parameter_decl_clause: parameter_decl (',' parameter_decl)*;
+parameter_decl_clause: 'void'
+                     | (parameter_decl (',' parameter_decl)*);
 parameter_decl : param_decl_specifiers parameter_id;
 
 parameter_id: ptrs? '(' parameter_id ')' type_suffix?
@@ -93,7 +94,8 @@ ptrs: ptr_operator+;
 param_decl_specifiers : ('auto' | 'register')? type_name;
 type_suffix : ('[' constant_expr ']') | param_type_list;
 
-param_type_list: '(' (param_type (',' param_type)*)? ')';
+param_type_list: '(' 'void' ')'
+    | '(' (param_type (',' param_type)*)? ')';
 param_type: param_decl_specifiers ptrs? parameter_name? type_suffix?;
 
 // this one is new
