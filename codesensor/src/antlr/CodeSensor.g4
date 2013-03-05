@@ -64,7 +64,7 @@ function_def : template_decl_start? return_type? function_name
 
 return_type : (function_decl_specifiers* type_name) function_decl_specifiers* ptr_operator*;
 type_name : (cv_qualifier* class_key? ('unsigned' | 'signed')?
-        ALPHA_NUMERIC ('<' template_param_list '>')? ('::' ALPHA_NUMERIC ('<' template_param_list '>' )?)*)
+            (ALPHA_NUMERIC | 'void')  ('<' template_param_list '>')? ('::' (ALPHA_NUMERIC | 'void') ('<' template_param_list '>' )?)*)
     | ('unsigned' | 'signed');
 
 

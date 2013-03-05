@@ -83,8 +83,31 @@ public class CodeSensorFunctionParserTest {
 	
 		CodeSensorParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
-		System.out.println(output);
+
 		assertTrue(output.startsWith("(function_def (return_type (function_decl_specifiers static) (type_name int)) (function_name (identifier altgid)) (function_param_list ( (parameter_decl_clause void) )) (compound_statement { }))"));
 	}
 	
+	@Test
+	public void testParamVoidPtr()
+	{
+		String input = "static int altgid(void *ptr){}";
+	
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);		
+		assertTrue(output.startsWith("(function_def"));
+	}
+
+	@Test
+	public void testParamConstVoidPtr()
+	{
+		String input = "static ssize_t _7z_write_data(struct archive_write *a, const void *buff, size_t s){}";
+	
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);		
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def"));
+	}
+	
 }
+
+

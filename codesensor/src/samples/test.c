@@ -46,3 +46,8 @@ static const char * lookup_name(struct cpio *cpio, struct name_cache **name_cach
 	
 }
 		
+static ssize_t
+_7z_write_data(struct archive_write *a, const void *buff, size_t s)
+{
+	
+}
