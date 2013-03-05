@@ -50,6 +50,7 @@ public class ParameterType extends CodeItem
 			newCompleteType += completeType;
 			newCompleteType += ")";
 			completeType = newCompleteType;
+			parameter_id = parameter_id.parameter_id();
 		}
 		
 	}

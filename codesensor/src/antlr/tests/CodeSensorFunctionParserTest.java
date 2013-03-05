@@ -75,5 +75,22 @@ public class CodeSensorFunctionParserTest {
 		String output = parser.function_def().toStringTree(parser);		
 		assertTrue(output.startsWith("(function_def (return_type (type_name int)) (function_name (identifier foo)) (function_param_list ( (parameter_decl_clause (parameter_decl (param_decl_specifiers (type_name char)) (parameter_id (ptrs (ptr_operator *)) ( (parameter_id (ptrs (ptr_operator *)) (parameter_name (parameter_name_start (identifier param)))) ) (type_suffix (param_type_list ( (param_type (param_decl_specifiers (type_name void))) )))))) ))"));
 	}
+
+	
+	
+	@Test
+	public void testFunctionPtrParam2()
+	{
+		String input = "static const char * lookup_name(struct cpio *cpio, struct name_cache **name_cache_variable, int (*lookup_fn)(struct cpio *, const char **, id_t), id_t id){}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);		
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def (return_type (type_name int)) (function_name (identifier foo)) (function_param_list ( (parameter_decl_clause (parameter_decl (param_decl_specifiers (type_name char)) (parameter_id (ptrs (ptr_operator *)) ( (parameter_id (ptrs (ptr_operator *)) (parameter_name (parameter_name_start (identifier param)))) ) (type_suffix (param_type_list ( (param_type (param_decl_specifiers (type_name void))) )))))) ))"));
+	}
+
+	
+	
+
 	
 }
