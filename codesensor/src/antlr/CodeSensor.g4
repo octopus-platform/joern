@@ -99,7 +99,6 @@ type_suffix : ('[' constant_expr ']') | param_type_list;
 param_type_list: '(' 'void' ')'
                | '(' (param_type (',' param_type)*)? ')';
 
-//param_type: param_decl_specifiers ptrs? parameter_name? type_suffix?;
 param_type: param_decl_specifiers param_type_id?;
 param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 
@@ -110,8 +109,6 @@ compound_statement: '{' no_curlies* (compound_statement no_curlies*)* '}';
 
 
 parameter_name: identifier | access_specifier;
-// parameter_name: parameter_name_start type_suffix?;
-// parameter_name_start: ('(' parameter_name ')' | identifier);
 
 ctor_list: ':'  ctor_initializer (',' ctor_initializer)*;
 ctor_initializer:  initializer_id ctor_expr;
