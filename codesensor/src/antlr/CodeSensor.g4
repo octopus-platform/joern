@@ -82,7 +82,12 @@ type_name : (cv_qualifier* (class_key | 'unsigned' | 'signed')?
 base_type: (ALPHA_NUMERIC | 'void' | 'long' | 'long' 'long');
 
 // this is new
-assign_expr: no_comma_or_semicolon+;
+assign_expr: assign_water*
+        (('{' assign_expr_l2 '}' | '(' assign_expr_l2 ')' | '[' assign_expr_l2 ']')
+             assign_water*)*;
+
+assign_expr_l2: assign_water_l2* (('{' assign_expr_l2 '}' | '(' assign_expr_l2 ')' | '[' assign_expr_l2 ']')
+             assign_water_l2*)*;
 
 function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 
@@ -149,6 +154,9 @@ no_curlies: ~('{' | '}');
 no_squares: ~('[' | ']');
 no_squares_or_semicolon: ~('[' | ']' | ';');
 no_comma_or_semicolon: ~(',' | ';');
+
+assign_water: ~('(' | ')' | '{' | '}' | '[' | ']' | ';' | ',');
+assign_water_l2: ~('(' | ')' | '{' | '}' | '[' | ']');
 
 // keywords & operators
 

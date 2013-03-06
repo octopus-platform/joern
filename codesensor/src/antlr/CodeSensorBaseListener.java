@@ -12,6 +12,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterClass_content(CodeSensorParser.Class_contentContext ctx) { }
 	@Override public void exitClass_content(CodeSensorParser.Class_contentContext ctx) { }
 
+	@Override public void enterAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx) { }
+	@Override public void exitAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx) { }
+
 	@Override public void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }
 	@Override public void exitOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }
 
@@ -62,6 +65,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterDeclaration(CodeSensorParser.DeclarationContext ctx) { }
 	@Override public void exitDeclaration(CodeSensorParser.DeclarationContext ctx) { }
+
+	@Override public void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx) { }
+	@Override public void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx) { }
 
 	@Override public void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx) { }
 	@Override public void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx) { }
@@ -200,6 +206,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
+
+	@Override public void enterAssign_water(CodeSensorParser.Assign_waterContext ctx) { }
+	@Override public void exitAssign_water(CodeSensorParser.Assign_waterContext ctx) { }
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext ctx) { }

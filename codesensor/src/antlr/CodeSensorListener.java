@@ -9,6 +9,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterClass_content(CodeSensorParser.Class_contentContext ctx);
 	void exitClass_content(CodeSensorParser.Class_contentContext ctx);
 
+	void enterAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx);
+	void exitAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx);
+
 	void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx);
 	void exitOperator_function_id(CodeSensorParser.Operator_function_idContext ctx);
 
@@ -59,6 +62,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterDeclaration(CodeSensorParser.DeclarationContext ctx);
 	void exitDeclaration(CodeSensorParser.DeclarationContext ctx);
+
+	void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
+	void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 
 	void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 	void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
@@ -197,4 +203,7 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx);
 	void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx);
+
+	void enterAssign_water(CodeSensorParser.Assign_waterContext ctx);
+	void exitAssign_water(CodeSensorParser.Assign_waterContext ctx);
 }
