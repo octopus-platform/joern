@@ -69,9 +69,13 @@ class CSVPrinter extends Printer
     {
     	int level = itemStack.size();
     	ClassDef item = (ClassDef) aItem;
-    	defaultOut(item, level);
+    	
     	if(item.name != null){
+    		item.codeStr = item.name.codeStr;
+    		defaultOut(item, level);
     		defaultOut(item.name, level + 1);
+    	}else{
+    		defaultOut(item, level);
     	}
     }
 
