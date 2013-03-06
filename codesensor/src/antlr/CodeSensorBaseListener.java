@@ -90,6 +90,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 	@Override public void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 
+	@Override public void enterParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
+	@Override public void exitParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
+
 	@Override public void enterNo_squares(CodeSensorParser.No_squaresContext ctx) { }
 	@Override public void exitNo_squares(CodeSensorParser.No_squaresContext ctx) { }
 
@@ -188,9 +191,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx) { }
 	@Override public void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx) { }
-
-	@Override public void enterTemplate_param_list_elem(CodeSensorParser.Template_param_list_elemContext ctx) { }
-	@Override public void exitTemplate_param_list_elem(CodeSensorParser.Template_param_list_elemContext ctx) { }
 
 	@Override public void enterParameter_id(CodeSensorParser.Parameter_idContext ctx) { }
 	@Override public void exitParameter_id(CodeSensorParser.Parameter_idContext ctx) { }

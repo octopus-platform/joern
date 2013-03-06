@@ -87,6 +87,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 
+	void enterParam_type_id(CodeSensorParser.Param_type_idContext ctx);
+	void exitParam_type_id(CodeSensorParser.Param_type_idContext ctx);
+
 	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
 	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
 
@@ -185,9 +188,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx);
 	void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx);
-
-	void enterTemplate_param_list_elem(CodeSensorParser.Template_param_list_elemContext ctx);
-	void exitTemplate_param_list_elem(CodeSensorParser.Template_param_list_elemContext ctx);
 
 	void enterParameter_id(CodeSensorParser.Parameter_idContext ctx);
 	void exitParameter_id(CodeSensorParser.Parameter_idContext ctx);

@@ -37,10 +37,9 @@ simple_decl : 'typedef'? template_decl_start? var_decl ';' ;
 template_decl_start : 'template' '<' template_param_list '>';
 
 // template water
-template_param_list : template_param_list_elem*;
-template_param_list_elem :  ('<' template_param_list '>')
-    | ('(' template_param_list ')')
-    | no_angle_brackets_or_brackets
+template_param_list : (('<' template_param_list '>') |
+                       ('(' template_param_list ')') | 
+                       no_angle_brackets_or_brackets)*
 ;
 
 var_decl : type_name init_declarator_list   #declByType
@@ -76,7 +75,8 @@ function_def : template_decl_start? return_type? function_name
 return_type : (function_decl_specifiers* type_name) function_decl_specifiers* ptr_operator*;
 
 type_name : (cv_qualifier* (class_key | 'unsigned' | 'signed')?
-            base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*) | ('unsigned' | 'signed');
+            base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
+          | ('unsigned' | 'signed');
 
 
 base_type: (ALPHA_NUMERIC | 'void' | 'long' | 'long' 'long');
@@ -87,11 +87,9 @@ assign_expr: no_comma_or_semicolon+;
 function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 
 parameter_decl_clause: (parameter_decl (',' parameter_decl)*) (',' '...')?
-                     | 'void';
+    | 'void';
 parameter_decl : param_decl_specifiers parameter_id;
-
-parameter_id: ptrs? '(' parameter_id ')' type_suffix?
-    | ptrs? parameter_name type_suffix?;
+parameter_id: ptrs? ('(' parameter_id ')' | parameter_name) type_suffix?;
 
 ptrs: ptr_operator+;
 
@@ -99,9 +97,11 @@ param_decl_specifiers : ('auto' | 'register')? type_name;
 type_suffix : ('[' constant_expr ']') | param_type_list;
 
 param_type_list: '(' 'void' ')'
-    | '(' (param_type (',' param_type)*)? ')';
+               | '(' (param_type (',' param_type)*)? ')';
 
-param_type: param_decl_specifiers ptrs? parameter_name? type_suffix?;
+//param_type: param_decl_specifiers ptrs? parameter_name? type_suffix?;
+param_type: param_decl_specifiers param_type_id?;
+param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 
 // this one is new
 constant_expr: no_squares* ('[' constant_expr ']' no_squares*)*;
