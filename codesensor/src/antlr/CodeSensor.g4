@@ -34,6 +34,15 @@ declaration : simple_decl
 
 simple_decl : 'typedef'? template_decl_start? var_decl ';' ;
 
+template_decl_start : 'template' '<' template_param_list '>';
+
+// template water
+template_param_list : template_param_list_elem*;
+template_param_list_elem :  ('<' template_param_list '>')
+    | ('(' template_param_list ')')
+    | no_angle_brackets_or_brackets
+;
+
 var_decl : type_name init_declarator_list   #declByType
          | class_def init_declarator_list?  #declByClass
          ;
@@ -65,23 +74,15 @@ function_def : template_decl_start? return_type? function_name
             function_param_list ctor_list? compound_statement;
 
 return_type : (function_decl_specifiers* type_name) function_decl_specifiers* ptr_operator*;
-type_name : (cv_qualifier* class_key? ('unsigned' | 'signed')?
+
+type_name : (cv_qualifier* (class_key | 'unsigned' | 'signed')?
             base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*) | ('unsigned' | 'signed');
 
 
 base_type: (ALPHA_NUMERIC | 'void' | 'long' | 'long' 'long');
 
-template_decl_start : 'template' '<' template_param_list '>';
-
 // this is new
 assign_expr: no_comma_or_semicolon+;
-
-// this is just water
-template_param_list : template_param_list_elem*;
-template_param_list_elem :  ('<' template_param_list '>')
-    | ('(' template_param_list ')')
-    | no_angle_brackets_or_brackets
-;
 
 function_param_list : '(' parameter_decl_clause? ')' cv_qualifier* exception_specification?;
 

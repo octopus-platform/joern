@@ -1,5 +1,7 @@
 #include <foo.h>
 
+some_water;
+
 int bar, *foo[10];
 
 struct foo{
