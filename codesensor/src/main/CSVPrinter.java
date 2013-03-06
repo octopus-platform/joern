@@ -75,6 +75,7 @@ class CSVPrinter extends Printer
     		defaultOut(item, level);
     		defaultOut(item.name, level + 1);
     	}else{
+    		item.codeStr = "[unnamed]";
     		defaultOut(item, level);
     	}
     }
