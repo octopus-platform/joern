@@ -199,9 +199,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterPart(CodeSensorParser.PartContext ctx) { }
 	@Override public void exitPart(CodeSensorParser.PartContext ctx) { }
 
-	@Override public void enterCompound_content(CodeSensorParser.Compound_contentContext ctx) { }
-	@Override public void exitCompound_content(CodeSensorParser.Compound_contentContext ctx) { }
-
 	@Override public void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
 

@@ -140,11 +140,7 @@ param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 // this one is new
 constant_expr: no_squares* ('[' constant_expr ']' no_squares*)*;
 expr: no_brackets* ('(' expr ')' no_brackets*)*;
-compound_statement: '{' { skipToEndOfObject(); }; // compound_content* '}';
-
-compound_content: no_curlies
-                | '{' compound_content* '}'
-                ;
+compound_statement: '{' { skipToEndOfObject(); };
 
 parameter_name: identifier | access_specifier;
 

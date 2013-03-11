@@ -196,9 +196,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterPart(CodeSensorParser.PartContext ctx);
 	void exitPart(CodeSensorParser.PartContext ctx);
 
-	void enterCompound_content(CodeSensorParser.Compound_contentContext ctx);
-	void exitCompound_content(CodeSensorParser.Compound_contentContext ctx);
-
 	void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx);
 	void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx);
 
