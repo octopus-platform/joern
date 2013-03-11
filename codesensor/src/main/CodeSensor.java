@@ -42,9 +42,9 @@ public class CodeSensor {
         CodeSensorParser parser = new CodeSensorParser(tokens);
         ParseTree tree = null;
         
-        
 		parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
-        // we don't want error messages or recovery during first try
+		
+		// we don't want error messages or recovery during first try
         parser.removeErrorListeners();
         parser.setErrorHandler(new BailErrorStrategy());
         try {
@@ -70,6 +70,7 @@ public class CodeSensor {
         ParseTreeListener extractor = new ParseTreeListener(filename);
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(extractor, tree);
+        
     }
         
 }

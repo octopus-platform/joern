@@ -1,14 +1,12 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
+    import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface CodeSensorListener extends ParseTreeListener {
-	void enterClass_content(CodeSensorParser.Class_contentContext ctx);
-	void exitClass_content(CodeSensorParser.Class_contentContext ctx);
-
 	void enterAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx);
 	void exitAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx);
 
@@ -80,9 +78,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterBase_type(CodeSensorParser.Base_typeContext ctx);
 	void exitBase_type(CodeSensorParser.Base_typeContext ctx);
-
-	void enterLabel(CodeSensorParser.LabelContext ctx);
-	void exitLabel(CodeSensorParser.LabelContext ctx);
 
 	void enterReturn_type(CodeSensorParser.Return_typeContext ctx);
 	void exitReturn_type(CodeSensorParser.Return_typeContext ctx);
@@ -200,6 +195,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterPart(CodeSensorParser.PartContext ctx);
 	void exitPart(CodeSensorParser.PartContext ctx);
+
+	void enterCompound_content(CodeSensorParser.Compound_contentContext ctx);
+	void exitCompound_content(CodeSensorParser.Compound_contentContext ctx);
 
 	void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx);
 	void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx);

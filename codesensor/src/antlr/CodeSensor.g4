@@ -19,6 +19,46 @@ import CodeSensorLex;
 
 @header{
 	package antlr;
+    import java.util.Stack;
+}
+
+@parser::members
+{
+            public boolean skipToEndOfObject()
+            {
+                Stack<Object> CurlyStack = new Stack<Object>();
+                Object o = new Object();
+                int t = _input.LA(1);
+
+                while(t != EOF && !(CurlyStack.empty() && t == CLOSING_CURLY)){
+                    
+                    if(t == PRE_IF){
+                        Stack<Object> ifdefStack = new Stack<Object>();
+                        consume();
+                        t = _input.LA(1);
+                        
+                        while(t != EOF && !(ifdefStack.empty() && (t == PRE_ELSE || t == PRE_ENDIF))){
+                            if(t == PRE_IF)
+                                ifdefStack.push(o);
+                            else if(t == PRE_ENDIF)
+                                ifdefStack.pop();
+                            consume();
+                            t = _input.LA(1);
+                        }
+                    }
+                    
+                    if(t == OPENING_CURLY)
+                        CurlyStack.push(o);
+                    else if(t == CLOSING_CURLY)
+                        CurlyStack.pop();
+                    
+                    consume();
+                    t = _input.LA(1);
+                }
+                if(t != EOF)
+                    consume();
+                return true;
+            }
 }
 
 code : part*;
@@ -27,12 +67,12 @@ part : declaration
      | water
      ;
 
-declaration : simple_decl
-            | function_def
+declaration : function_def
+            | simple_decl
             | using_directive;
 
 
-simple_decl : 'typedef'? template_decl_start? var_decl ';' ;
+simple_decl : 'typedef'? template_decl_start? var_decl;
 
 template_decl_start : 'template' '<' template_param_list '>';
 
@@ -42,37 +82,27 @@ template_param_list : (('<' template_param_list '>') |
                        no_angle_brackets_or_brackets)*
 ;
 
-var_decl : type_name init_declarator_list   #declByType
-         | class_def init_declarator_list?  #declByClass
+var_decl : type_name init_declarator_list #declByType
+         | class_def init_declarator_list? #declByClass
          ;
 
-init_declarator_list: init_declarator (',' init_declarator)*;
+init_declarator_list: init_declarator (',' init_declarator)* ';';
 
 // this rule is buggy: we can't match int (foo); or int (*foo)(bar *);
 // let's get it running as-is first and then fix bugs.
 
 init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr))?;
 
-class_def: class_key class_name? base_classes? '{' class_content '}';
+class_def: class_key class_name? base_classes? '{' {skipToEndOfObject(); } ;
 class_name: identifier;
 base_classes: ':' base_class (',' base_class)*;
 base_class: 'virtual'? access_specifier? identifier;
-
-class_content: ( simple_decl
-                | function_def
-                | label
-                | '{' class_content '}'
-                | no_curlies)*
-                ;
-
-label: (('case'? (identifier | number) ) | access_specifier) ':' ;
-
 
 
 function_def : template_decl_start? return_type? function_name
             function_param_list ctor_list? compound_statement;
 
-return_type : (function_decl_specifiers* type_name) function_decl_specifiers* ptr_operator*;
+return_type : (function_decl_specifiers* type_name) ptr_operator*;
 
 type_name : (cv_qualifier* (class_key | 'unsigned' | 'signed')?
             base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
@@ -110,8 +140,11 @@ param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 // this one is new
 constant_expr: no_squares* ('[' constant_expr ']' no_squares*)*;
 expr: no_brackets* ('(' expr ')' no_brackets*)*;
-compound_statement: '{' no_curlies* (compound_statement no_curlies*)* '}';
+compound_statement: '{' { skipToEndOfObject(); }; // compound_content* '}';
 
+compound_content: no_curlies
+                | '{' compound_content* '}'
+                ;
 
 parameter_name: identifier | access_specifier;
 

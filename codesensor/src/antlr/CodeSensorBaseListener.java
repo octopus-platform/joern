@@ -1,6 +1,7 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
+    import java.util.Stack;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -9,9 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CodeSensorBaseListener implements CodeSensorListener {
-	@Override public void enterClass_content(CodeSensorParser.Class_contentContext ctx) { }
-	@Override public void exitClass_content(CodeSensorParser.Class_contentContext ctx) { }
-
 	@Override public void enterAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx) { }
 	@Override public void exitAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx) { }
 
@@ -83,9 +81,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterBase_type(CodeSensorParser.Base_typeContext ctx) { }
 	@Override public void exitBase_type(CodeSensorParser.Base_typeContext ctx) { }
-
-	@Override public void enterLabel(CodeSensorParser.LabelContext ctx) { }
-	@Override public void exitLabel(CodeSensorParser.LabelContext ctx) { }
 
 	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx) { }
 	@Override public void exitReturn_type(CodeSensorParser.Return_typeContext ctx) { }
@@ -203,6 +198,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterPart(CodeSensorParser.PartContext ctx) { }
 	@Override public void exitPart(CodeSensorParser.PartContext ctx) { }
+
+	@Override public void enterCompound_content(CodeSensorParser.Compound_contentContext ctx) { }
+	@Override public void exitCompound_content(CodeSensorParser.Compound_contentContext ctx) { }
 
 	@Override public void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
