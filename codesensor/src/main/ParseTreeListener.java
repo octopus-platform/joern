@@ -24,10 +24,12 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	Stack<CodeItem> itemStack = new Stack<CodeItem>();
 	Printer nodePrinter = new CSVPrinter();
 	String filename;
+	TokenSubStream stream;
 	
-	ParseTreeListener(String aFilename)
+	ParseTreeListener(String aFilename, TokenSubStream aStream)
 	{
 		filename = aFilename;
+		stream = aStream;
 	}
 	
 	void setPrinter(Printer aPrinter)
@@ -43,6 +45,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	
 	@Override public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
+		
 		FunctionDef func = new FunctionDef();
 		func.create(ctx, itemStack);
 		itemStack.push(func);
