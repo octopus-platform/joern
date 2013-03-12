@@ -11,7 +11,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import antlr.CodeSensorParser;
 
-public class ShallowParser {
+public class ShallowParser
+{
 
 	public void parse(String filename, TokenSubStream tokens)
 	{
@@ -22,7 +23,8 @@ public class ShallowParser {
         
 	}
 	
-	private static ParseTree parseTokenStream(TokenSubStream tokens) {
+	public ParseTree parseTokenStream(TokenSubStream tokens)
+	{
 		CodeSensorParser parser = new CodeSensorParser(tokens);
         ParseTree tree = null;
         

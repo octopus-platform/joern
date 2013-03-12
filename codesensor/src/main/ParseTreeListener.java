@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
@@ -14,6 +15,7 @@ import main.codeitems.IdentifierDecl;
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
+import antlr.CodeSensorParser.Class_defContext;
 import antlr.CodeSensorParser.Class_nameContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
@@ -39,6 +41,8 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	
 	@Override public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
+		if(filename == null)
+			return;
 		String nodeTypeName = "SOURCE_FILE";
 		nodePrinter.startOfUnit(nodeTypeName, ctx, filename);
 	}
@@ -100,7 +104,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		ClassDef classDef = new ClassDef();
 		classDef.create(ctx, itemStack);
 		itemStack.push(classDef);
-	
+		
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		
 		if(decl_list != null){
@@ -112,7 +116,20 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		emitDeclarations(decl_list, typeName);
 		
 		}
+	
 	}
+
+	private void restrictStreamToClassContent(
+			CodeSensorParser.DeclByClassContext ctx)
+	{
+		Class_defContext class_def = ctx.class_def();
+		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
+		int stopIndex = class_def.stop.getTokenIndex();
+		stream.restrict(startIndex+1, stopIndex);
+	}
+	
+	
+	
 	
 	private void emitDeclarations(Init_declarator_listContext decl_list, ParserRuleContext typeName)
 	{
@@ -144,6 +161,11 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 	{
 		CodeItem classDef = itemStack.pop();
 		nodePrinter.printItem(classDef, itemStack);
+	
+		restrictStreamToClassContent(ctx);
+		ShallowParser shallowParser = new ShallowParser();
+		shallowParser.parse(null, stream);
+		stream.resetRestriction();
 	}
 
 	@Override

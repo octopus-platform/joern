@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser;
+import antlr.CodeSensorParser.Class_defContext;
+import antlr.CodeSensorParser.Simple_declContext;
+import antlr.CodeSensorParser.Var_declContext;
 
 public class CodeSensorClassParserTest {
 
@@ -56,6 +59,21 @@ public class CodeSensorClassParserTest {
 		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier archive_contents)) { const char * f ; struct contents * c ; }) (init_declarator_list (init_declarator (identifier files) (type_suffix [ constant_expr ]) = (assign_expr"));
 	}
 	
+	@Test
+	public void testClassContentExtraction()
+	{
+		String input = "class foo{ foobar; }";
+		
+		CodeSensorParser parser = createParser(input);
+		Class_defContext class_def = parser.class_def();
+
+		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
+		int stopIndex = class_def.stop.getTokenIndex();
+		System.out.println(startIndex);
+		System.out.println(stopIndex);
+				
+		assertTrue((startIndex == 2) && (stopIndex == 5));
+	}
 
 	
 }

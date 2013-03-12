@@ -93,7 +93,7 @@ init_declarator_list: init_declarator (',' init_declarator)* ';';
 
 init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr))?;
 
-class_def: class_key class_name? base_classes? '{' {skipToEndOfObject(); } ;
+class_def: class_key class_name? base_classes? OPENING_CURLY {skipToEndOfObject(); } ;
 class_name: identifier;
 base_classes: ':' base_class (',' base_class)*;
 base_class: 'virtual'? access_specifier? identifier;

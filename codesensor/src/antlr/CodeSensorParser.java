@@ -843,6 +843,7 @@ public class CodeSensorParser extends Parser {
 		public Class_nameContext class_name() {
 			return getRuleContext(Class_nameContext.class,0);
 		}
+		public TerminalNode OPENING_CURLY() { return getToken(CodeSensorParser.OPENING_CURLY, 0); }
 		public Class_defContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}

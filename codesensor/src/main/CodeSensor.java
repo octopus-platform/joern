@@ -1,16 +1,12 @@
 package main;
 
 import antlr.CodeSensorLexer;
-import antlr.CodeSensorParser;
 
 import java.io.*;
 import java.util.Iterator;
 import java.util.List;
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.tree.*;
-
 
 public class CodeSensor {
     
@@ -18,7 +14,6 @@ public class CodeSensor {
     public static void main(String[] args) throws IOException
 	{
 	    try{
-	    	
 	    	CommandLineInterface cmd = new CommandLineInterface();
 	    	cmd.parseCommandLine(args);
 	    	
