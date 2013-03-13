@@ -9,8 +9,6 @@ import org.junit.Test;
 import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
-import antlr.CodeSensorParser.Simple_declContext;
-import antlr.CodeSensorParser.Var_declContext;
 
 public class CodeSensorClassParserTest {
 
@@ -50,14 +48,24 @@ public class CodeSensorClassParserTest {
 	{
 		String input = "struct archive_contents" +
 				"{ const char *f; struct contents *c; } files[] " +
-				"={{\"sparse\",archive_contents_sparse }, {\"sparse2\", archive_contents_sparse2} };";
+				"= {{\"sparse\",archive_contents_sparse }, {\"sparse2\", archive_contents_sparse2} };";
 			
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
 		
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier archive_contents)) { const char * f ; struct contents * c ; }) (init_declarator_list (init_declarator (identifier files) (type_suffix [ constant_expr ]) = (assign_expr"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier archive_contents)) { const char * f ; struct contents * c ; }) (init_declarator_list (init_declarator (identifier files) (type_suffix [ constant_expr_w_ ]) = (initializer { (initializer_list"));
 	}
+
+	@Test
+	public void testStructureInitSimple()
+	{
+		String input = "struct foo{ int x; } y;";			
+		CodeSensorParser parser = createParser(input);
+		String output = parser.simple_decl().toStringTree(parser);		
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (identifier y)) ;)))"));
+	}
+
 	
 	@Test
 	public void testClassContentExtraction()
@@ -68,10 +76,7 @@ public class CodeSensorClassParserTest {
 		Class_defContext class_def = parser.class_def();
 
 		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
-		int stopIndex = class_def.stop.getTokenIndex();
-		System.out.println(startIndex);
-		System.out.println(stopIndex);
-				
+		int stopIndex = class_def.stop.getTokenIndex();		
 		assertTrue((startIndex == 2) && (stopIndex == 5));
 	}
 

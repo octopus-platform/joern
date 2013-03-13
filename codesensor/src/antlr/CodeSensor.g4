@@ -29,11 +29,6 @@ part : declaration
     | water
     ;
 
-// catch [ParseCancellationException re] {
-//    if(!(re.getCause() instanceof NoViableAltException)) throw re;
-//    consume();
-// }
-
 declaration : function_def
             | simple_decl
             | using_directive;

@@ -1,4 +1,4 @@
-// Generated from CodeSensor.g4 by ANTLR 4.0
+// Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
     import java.util.Stack;
@@ -67,11 +67,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterParameter_name(CodeSensorParser.Parameter_nameContext ctx);
 	void exitParameter_name(CodeSensorParser.Parameter_nameContext ctx);
 
-	void enterCtor_list(CodeSensorParser.Ctor_listContext ctx);
-	void exitCtor_list(CodeSensorParser.Ctor_listContext ctx);
-
 	void enterAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
 	void exitAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
+
+	void enterCtor_list(CodeSensorParser.Ctor_listContext ctx);
+	void exitCtor_list(CodeSensorParser.Ctor_listContext ctx);
 
 	void enterCtor_expr(CodeSensorParser.Ctor_exprContext ctx);
 	void exitCtor_expr(CodeSensorParser.Ctor_exprContext ctx);
@@ -114,6 +114,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterAdditive_expression(CodeSensorParser.Additive_expressionContext ctx);
 	void exitAdditive_expression(CodeSensorParser.Additive_expressionContext ctx);
+
+	void enterInitializer_list(CodeSensorParser.Initializer_listContext ctx);
+	void exitInitializer_list(CodeSensorParser.Initializer_listContext ctx);
 
 	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
 	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
@@ -232,11 +235,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterPostfix(CodeSensorParser.PostfixContext ctx);
 	void exitPostfix(CodeSensorParser.PostfixContext ctx);
 
-	void enterClass_def(CodeSensorParser.Class_defContext ctx);
-	void exitClass_def(CodeSensorParser.Class_defContext ctx);
-
 	void enterInitializer_id(CodeSensorParser.Initializer_idContext ctx);
 	void exitInitializer_id(CodeSensorParser.Initializer_idContext ctx);
+
+	void enterClass_def(CodeSensorParser.Class_defContext ctx);
+	void exitClass_def(CodeSensorParser.Class_defContext ctx);
 
 	void enterConditional_expression(CodeSensorParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(CodeSensorParser.Conditional_expressionContext ctx);
@@ -270,4 +273,7 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterAssign_water(CodeSensorParser.Assign_waterContext ctx);
 	void exitAssign_water(CodeSensorParser.Assign_waterContext ctx);
+
+	void enterInitializer(CodeSensorParser.InitializerContext ctx);
+	void exitInitializer(CodeSensorParser.InitializerContext ctx);
 }
