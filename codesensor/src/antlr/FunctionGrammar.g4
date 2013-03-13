@@ -6,8 +6,6 @@ import Common;
 	package antlr;
 }
 
-// we are not handling pre-processor conditions yet
-
 statements: statement*;
 
 statement: block_opener
@@ -17,8 +15,12 @@ statement: block_opener
          | pre_else 
          | non_expr_statement
          | expr_statement
-         | statement_water
-;
+         // | statement_water
+        ;
+catch [ParseCancellationException re] {
+   consume();
+}
+
 
 pre_opener: PRE_IF;
 pre_else: PRE_ELSE;

@@ -26,8 +26,11 @@ import Common;
 code : part*;
 
 part : declaration
-     | water
-     ;
+     // | water
+    catch [ParseCancellationException re] {
+            consume();
+    }
+    ;
 
 declaration : function_def
             | simple_decl
