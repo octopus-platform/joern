@@ -4,34 +4,37 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import antlr.CodeSensorLexer;
+import antlr.FunctionGrammarLexer;
 import antlr.FunctionGrammarParser;
 
 public class FunctionParser extends CommonParser
 {
-	public void parse(String input)
+	public FunctionGrammarParser parser;
+	
+	public ParseTree parse(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
-		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
+		FunctionGrammarLexer lex = new FunctionGrammarLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
-		parse(tokens);
+		return parse(tokens);
 	}
 	
-	public void parse(TokenSubStream tokens)
+	public ParseTree parse(TokenSubStream tokens)
 	{
 		ParseTree tree = parseTokenStream(tokens);
 		
         if(tree == null)
-        	return;
+        	return null;
 		        
         FunctionParseTreeListener listener = new FunctionParseTreeListener();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
+        return tree;
 	}
 	
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
-		FunctionGrammarParser parser = new FunctionGrammarParser(tokens);
+		parser = new FunctionGrammarParser(tokens);
         ParseTree tree = null;
         
         try {

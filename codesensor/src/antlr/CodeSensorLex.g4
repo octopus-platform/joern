@@ -8,7 +8,7 @@ TRY: 'try'; CATCH: 'catch';
 ALPHA_NUMERIC: [a-zA-Z_~][a-zA-Z0-9_]*;
 
 PRE_IF: '#if' | '#ifdef' | '#ifndef';
-PRE_ELSE: '#else';
+PRE_ELSE: '#else' | '#elif';
 PRE_ENDIF: '#endif';
 
 

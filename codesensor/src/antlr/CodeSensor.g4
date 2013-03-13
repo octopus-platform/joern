@@ -51,7 +51,7 @@ compound_statement: '{' { skipToEndOfObject(); };
 ctor_list: ':'  ctor_initializer (',' ctor_initializer)*;
 ctor_initializer:  initializer_id ctor_expr;
 initializer_id : '::'? identifier;
-ctor_expr:  '(' expr_w_? ')';
+ctor_expr:  '(' expr? ')';
 
 function_name: '(' function_name ')' | identifier | operator_function_id;
 

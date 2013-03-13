@@ -56,7 +56,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		func.create(ctx, itemStack);
 		itemStack.push(func);
 	
-		parseFunctionContents(ctx);
+		// parseFunctionContents(ctx);
 	}
 
 	private void parseFunctionContents(CodeSensorParser.Function_defContext ctx)

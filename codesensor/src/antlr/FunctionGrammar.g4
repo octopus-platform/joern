@@ -1,28 +1,39 @@
 grammar FunctionGrammar;
-import Expressions;
+
+import Common;
+
 @header{
 	package antlr;
 }
 
+// we are not handling pre-processor conditions yet
+
 statements: statement*;
 
-statement: compound_statement
-         | non_compound_statement
+statement: block_opener
+         | block_closer
+         | pre_opener
+         | pre_closer
+         | pre_else 
+         | non_expr_statement
+         | expr_statement
+         | statement_water
 ;
 
-compound_statement: '{' statement* '}';
+pre_opener: PRE_IF;
+pre_else: PRE_ELSE;
+pre_closer: PRE_ENDIF;
 
-non_compound_statement: non_expr_statement
-        | expr_statement
-        | statement_water
-;
+block_opener: '{';
+block_closer: '}';
+
 
 non_expr_statement: selection_statement
                   | iteration_statement
-                  | jump_statement
                   | try_block
                   | catch_block
-                  // | simple_decl
+                  | jump_statement
+                  | simple_decl
                   | label
 ;
 
@@ -31,9 +42,9 @@ selection_statement: if_statement
                    | switch_statement
 ;
 
-if_statement: IF '(' condition ')'  statement;
-else_statement: ELSE statement;
-switch_statement: SWITCH '(' condition ')' statement;
+if_statement: IF '(' condition ')';
+else_statement: ELSE;
+switch_statement: SWITCH '(' condition ')';
 
 
 iteration_statement: for_statement
@@ -41,8 +52,8 @@ iteration_statement: for_statement
                    | do_statement
 ;
 
-for_statement: 'for' '(' for_init_statement condition ';'  expr? ')' statement;
-while_statement: 'while' '(' condition ')' statement;
+for_statement: 'for' '(' for_init_statement condition ';'  expr? ')';
+while_statement: 'while' '(' condition ')';
 do_statement: 'do' statement 'while' '(' expr ')';
 
 for_init_statement : simple_decl | expr? ';';
@@ -52,13 +63,12 @@ break_or_continue: ('break' | 'continue');
 return_statement: 'return' expr?;
 goto_statement: 'goto' identifier;
 
-try_block: TRY compound_statement;
-catch_block: CATCH '('param_decl_specifiers parameter_name? ')' compound_statement;
+try_block: TRY block_opener;
+catch_block: CATCH '('param_decl_specifiers parameter_name? ')' block_opener;
 
 label: (('case'? (identifier | number) ) | access_specifier) ':' ;
 
-expr_statement: {!(_input.LT(1).getText().equals("{"))}? expr ';';
+expr_statement: expr ';';
 
-statement_water: identifier | ~(ALPHA_NUMERIC | '::' | '{' | '}');
-
+statement_water: .;
 condition: expr;

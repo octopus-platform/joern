@@ -1,6 +1,6 @@
 grammar Common;
-import SimpleDecl;
-import CodeSensorLex;
+
+import Expressions;
 
 @header{
   import java.util.Stack;
@@ -46,6 +46,24 @@ import CodeSensorLex;
             }
 }
 
+simple_decl : 'typedef'? template_decl_start? var_decl;
+
+var_decl : type_name init_declarator_list #declByType
+         | class_def init_declarator_list? #declByClass
+         ;
+
+init_declarator_list: init_declarator (',' init_declarator)* ';';
+
+// this rule is buggy: we can't match int (foo); or int (*foo)(bar *);
+// let's get it running as-is first and then fix bugs.
+
+init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr))?;
+
+class_def: class_key class_name? base_classes? OPENING_CURLY {skipToEndOfObject(); } ;
+class_name: identifier;
+base_classes: ':' base_class (',' base_class)*;
+base_class: 'virtual'? access_specifier? identifier;
+
 type_name : (cv_qualifier* (class_key | 'unsigned' | 'signed')?
             base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
           | ('unsigned' | 'signed');
@@ -55,7 +73,6 @@ base_type: (ALPHA_NUMERIC | 'void' | 'long' | 'long' 'long');
 
 // this one is new
 constant_expr_w_: no_squares* ('[' constant_expr_w_ ']' no_squares*)*;
-expr_w_: no_brackets* ('(' expr_w_ ')' no_brackets*)*;
 
 // Parameters
 

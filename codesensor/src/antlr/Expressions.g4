@@ -1,9 +1,8 @@
 grammar Expressions;
-import Common;
+import CodeSensorLex;
 
 expr: assign_expr (',' assign_expr)?;
 assign_expr: conditional_expression (assignment_operator assign_expr)?;
-
 conditional_expression: or_expression ('?' expr ':' conditional_expression)?;
 or_expression : and_expression ('||' or_expression)?;
 and_expression : inclusive_or_expression ('&&' and_expression)?;
@@ -26,7 +25,7 @@ unary_expression: postfix_expression
                 | (unary_operator+ postfix_expression)
 ;
 
-postfix_expression: callee function_call_tail;
+postfix_expression: callee function_call_tail?;
 
 callee: (primary_expression postfix*);
 
