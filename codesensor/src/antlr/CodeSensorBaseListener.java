@@ -4,15 +4,15 @@
     import java.util.Stack;
 
 
+  import java.util.Stack;
+
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CodeSensorBaseListener implements CodeSensorListener {
-	@Override public void enterAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx) { }
-	@Override public void exitAssign_expr_l2(CodeSensorParser.Assign_expr_l2Context ctx) { }
-
 	@Override public void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }
 	@Override public void exitOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }
 
@@ -30,9 +30,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterCompound_statement(CodeSensorParser.Compound_statementContext ctx) { }
 	@Override public void exitCompound_statement(CodeSensorParser.Compound_statementContext ctx) { }
-
-	@Override public void enterAssign_expr(CodeSensorParser.Assign_exprContext ctx) { }
-	@Override public void exitAssign_expr(CodeSensorParser.Assign_exprContext ctx) { }
 
 	@Override public void enterNo_angle_brackets_or_brackets(CodeSensorParser.No_angle_brackets_or_bracketsContext ctx) { }
 	@Override public void exitNo_angle_brackets_or_brackets(CodeSensorParser.No_angle_brackets_or_bracketsContext ctx) { }
@@ -52,11 +49,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterParameter_name(CodeSensorParser.Parameter_nameContext ctx) { }
 	@Override public void exitParameter_name(CodeSensorParser.Parameter_nameContext ctx) { }
 
-	@Override public void enterAccess_specifier(CodeSensorParser.Access_specifierContext ctx) { }
-	@Override public void exitAccess_specifier(CodeSensorParser.Access_specifierContext ctx) { }
-
 	@Override public void enterCtor_list(CodeSensorParser.Ctor_listContext ctx) { }
 	@Override public void exitCtor_list(CodeSensorParser.Ctor_listContext ctx) { }
+
+	@Override public void enterAccess_specifier(CodeSensorParser.Access_specifierContext ctx) { }
+	@Override public void exitAccess_specifier(CodeSensorParser.Access_specifierContext ctx) { }
 
 	@Override public void enterCtor_expr(CodeSensorParser.Ctor_exprContext ctx) { }
 	@Override public void exitCtor_expr(CodeSensorParser.Ctor_exprContext ctx) { }
@@ -64,11 +61,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterDeclaration(CodeSensorParser.DeclarationContext ctx) { }
 	@Override public void exitDeclaration(CodeSensorParser.DeclarationContext ctx) { }
 
-	@Override public void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx) { }
-	@Override public void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx) { }
-
 	@Override public void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx) { }
 	@Override public void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx) { }
+
+	@Override public void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx) { }
+	@Override public void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx) { }
 
 	@Override public void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx) { }
 	@Override public void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx) { }
@@ -76,20 +73,23 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx) { }
 	@Override public void exitParameter_decl(CodeSensorParser.Parameter_declContext ctx) { }
 
-	@Override public void enterNumber(CodeSensorParser.NumberContext ctx) { }
-	@Override public void exitNumber(CodeSensorParser.NumberContext ctx) { }
-
 	@Override public void enterBase_type(CodeSensorParser.Base_typeContext ctx) { }
 	@Override public void exitBase_type(CodeSensorParser.Base_typeContext ctx) { }
 
-	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx) { }
-	@Override public void exitReturn_type(CodeSensorParser.Return_typeContext ctx) { }
+	@Override public void enterNumber(CodeSensorParser.NumberContext ctx) { }
+	@Override public void exitNumber(CodeSensorParser.NumberContext ctx) { }
 
 	@Override public void enterCode(CodeSensorParser.CodeContext ctx) { }
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx) { }
 
+	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx) { }
+	@Override public void exitReturn_type(CodeSensorParser.Return_typeContext ctx) { }
+
 	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 	@Override public void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
+
+	@Override public void enterAssign_expr_w_(CodeSensorParser.Assign_expr_w_Context ctx) { }
+	@Override public void exitAssign_expr_w_(CodeSensorParser.Assign_expr_w_Context ctx) { }
 
 	@Override public void enterParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
 	@Override public void exitParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
@@ -112,9 +112,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterNo_brackets_curlies_or_squares(CodeSensorParser.No_brackets_curlies_or_squaresContext ctx) { }
 	@Override public void exitNo_brackets_curlies_or_squares(CodeSensorParser.No_brackets_curlies_or_squaresContext ctx) { }
 
-	@Override public void enterConstant_expr(CodeSensorParser.Constant_exprContext ctx) { }
-	@Override public void exitConstant_expr(CodeSensorParser.Constant_exprContext ctx) { }
-
 	@Override public void enterIdentifier(CodeSensorParser.IdentifierContext ctx) { }
 	@Override public void exitIdentifier(CodeSensorParser.IdentifierContext ctx) { }
 
@@ -130,11 +127,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterNo_curlies(CodeSensorParser.No_curliesContext ctx) { }
 	@Override public void exitNo_curlies(CodeSensorParser.No_curliesContext ctx) { }
 
+	@Override public void enterEquality_operator(CodeSensorParser.Equality_operatorContext ctx) { }
+	@Override public void exitEquality_operator(CodeSensorParser.Equality_operatorContext ctx) { }
+
 	@Override public void enterParam_type_list(CodeSensorParser.Param_type_listContext ctx) { }
 	@Override public void exitParam_type_list(CodeSensorParser.Param_type_listContext ctx) { }
-
-	@Override public void enterExpr(CodeSensorParser.ExprContext ctx) { }
-	@Override public void exitExpr(CodeSensorParser.ExprContext ctx) { }
 
 	@Override public void enterClass_name(CodeSensorParser.Class_nameContext ctx) { }
 	@Override public void exitClass_name(CodeSensorParser.Class_nameContext ctx) { }
@@ -148,11 +145,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx) { }
 	@Override public void exitAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx) { }
 
-	@Override public void enterParam_type(CodeSensorParser.Param_typeContext ctx) { }
-	@Override public void exitParam_type(CodeSensorParser.Param_typeContext ctx) { }
-
 	@Override public void enterType_id_list(CodeSensorParser.Type_id_listContext ctx) { }
 	@Override public void exitType_id_list(CodeSensorParser.Type_id_listContext ctx) { }
+
+	@Override public void enterParam_type(CodeSensorParser.Param_typeContext ctx) { }
+	@Override public void exitParam_type(CodeSensorParser.Param_typeContext ctx) { }
 
 	@Override public void enterClass_key(CodeSensorParser.Class_keyContext ctx) { }
 	@Override public void exitClass_key(CodeSensorParser.Class_keyContext ctx) { }
@@ -160,11 +157,17 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterPtrs(CodeSensorParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(CodeSensorParser.PtrsContext ctx) { }
 
+	@Override public void enterConstant_expr_w_(CodeSensorParser.Constant_expr_w_Context ctx) { }
+	@Override public void exitConstant_expr_w_(CodeSensorParser.Constant_expr_w_Context ctx) { }
+
 	@Override public void enterWater(CodeSensorParser.WaterContext ctx) { }
 	@Override public void exitWater(CodeSensorParser.WaterContext ctx) { }
 
 	@Override public void enterConstant(CodeSensorParser.ConstantContext ctx) { }
 	@Override public void exitConstant(CodeSensorParser.ConstantContext ctx) { }
+
+	@Override public void enterAssign_expr_w__l2(CodeSensorParser.Assign_expr_w__l2Context ctx) { }
+	@Override public void exitAssign_expr_w__l2(CodeSensorParser.Assign_expr_w__l2Context ctx) { }
 
 	@Override public void enterFunction_def(CodeSensorParser.Function_defContext ctx) { }
 	@Override public void exitFunction_def(CodeSensorParser.Function_defContext ctx) { }
@@ -172,11 +175,17 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterUsing_directive(CodeSensorParser.Using_directiveContext ctx) { }
 	@Override public void exitUsing_directive(CodeSensorParser.Using_directiveContext ctx) { }
 
-	@Override public void enterOperator(CodeSensorParser.OperatorContext ctx) { }
-	@Override public void exitOperator(CodeSensorParser.OperatorContext ctx) { }
+	@Override public void enterRelational_operator(CodeSensorParser.Relational_operatorContext ctx) { }
+	@Override public void exitRelational_operator(CodeSensorParser.Relational_operatorContext ctx) { }
 
 	@Override public void enterPtr_operator(CodeSensorParser.Ptr_operatorContext ctx) { }
 	@Override public void exitPtr_operator(CodeSensorParser.Ptr_operatorContext ctx) { }
+
+	@Override public void enterOperator(CodeSensorParser.OperatorContext ctx) { }
+	@Override public void exitOperator(CodeSensorParser.OperatorContext ctx) { }
+
+	@Override public void enterExpr_w_(CodeSensorParser.Expr_w_Context ctx) { }
+	@Override public void exitExpr_w_(CodeSensorParser.Expr_w_Context ctx) { }
 
 	@Override public void enterClass_def(CodeSensorParser.Class_defContext ctx) { }
 	@Override public void exitClass_def(CodeSensorParser.Class_defContext ctx) { }
@@ -184,11 +193,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterInitializer_id(CodeSensorParser.Initializer_idContext ctx) { }
 	@Override public void exitInitializer_id(CodeSensorParser.Initializer_idContext ctx) { }
 
-	@Override public void enterTemplate_param_list(CodeSensorParser.Template_param_listContext ctx) { }
-	@Override public void exitTemplate_param_list(CodeSensorParser.Template_param_listContext ctx) { }
-
 	@Override public void enterException_specification(CodeSensorParser.Exception_specificationContext ctx) { }
 	@Override public void exitException_specification(CodeSensorParser.Exception_specificationContext ctx) { }
+
+	@Override public void enterTemplate_param_list(CodeSensorParser.Template_param_listContext ctx) { }
+	@Override public void exitTemplate_param_list(CodeSensorParser.Template_param_listContext ctx) { }
 
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx) { }
 	@Override public void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx) { }

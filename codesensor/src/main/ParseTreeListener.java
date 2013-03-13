@@ -128,9 +128,7 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		stream.restrict(startIndex+1, stopIndex);
 	}
 	
-	
-	
-	
+		
 	private void emitDeclarations(Init_declarator_listContext decl_list, ParserRuleContext typeName)
 	{
 		Init_declaratorContext decl_ctx;
@@ -162,6 +160,11 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		CodeItem classDef = itemStack.pop();
 		nodePrinter.printItem(classDef, itemStack);
 	
+		parseClassContent(ctx);
+	}
+
+	private void parseClassContent(CodeSensorParser.DeclByClassContext ctx)
+	{
 		restrictStreamToClassContent(ctx);
 		ShallowParser shallowParser = new ShallowParser();
 		shallowParser.parse(null, stream);
@@ -188,27 +191,4 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		emitDeclarations(decl_list, typeName);
 	}
 	
-	/*
-	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx)
-	{
-		String nodeTypeName = "CTOR_INITIALIZER";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-		
-	@Override public void enterInitializer_id(CodeSensorParser.Initializer_idContext ctx)
-	{
-		String nodeTypeName = "INITIALIZER_ID";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-		
-	@Override public void enterCtor_expr(CodeSensorParser.Ctor_exprContext ctx)
-	{
-		String nodeTypeName = "CTOR_EXPR";
-		nodePrinter.print(nodeTypeName, ctx, this.level);
-		level++;
-	}
-	*/
-
 }

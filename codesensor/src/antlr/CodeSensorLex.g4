@@ -3,6 +3,7 @@ lexer grammar CodeSensorLex;
 IF: 'if'; ELSE: 'else'; FOR: 'for'; WHILE: 'while';
 SWITCH: 'switch'; CONTINUE: 'continue'; BREAK: 'break';
 GOTO: 'goto'; RETURN: 'return'; CASE: 'case';
+TRY: 'try'; CATCH: 'catch';
 
 ALPHA_NUMERIC: [a-zA-Z_~][a-zA-Z0-9_]*;
 
