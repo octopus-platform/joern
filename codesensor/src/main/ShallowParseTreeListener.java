@@ -3,6 +3,7 @@ package main;
 import java.util.Iterator;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -17,18 +18,19 @@ import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 import antlr.CodeSensorParser.Class_nameContext;
+import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
-public class ParseTreeListener extends CodeSensorBaseListener{
+public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	
 	Stack<CodeItem> itemStack = new Stack<CodeItem>();
 	Printer nodePrinter = new CSVPrinter();
 	String filename;
 	TokenSubStream stream;
 	
-	ParseTreeListener(String aFilename, TokenSubStream aStream)
+	ShallowParseTreeListener(String aFilename, TokenSubStream aStream)
 	{
 		filename = aFilename;
 		stream = aStream;
@@ -53,6 +55,25 @@ public class ParseTreeListener extends CodeSensorBaseListener{
 		FunctionDef func = new FunctionDef();
 		func.create(ctx, itemStack);
 		itemStack.push(func);
+	
+		parseFunctionContents(ctx);
+	}
+
+	private void parseFunctionContents(CodeSensorParser.Function_defContext ctx)
+	{
+		String text = getCompoundStmtAsString(ctx);
+		FunctionParser functionParser = new FunctionParser();
+		functionParser.parse(text);
+	}
+
+	private String getCompoundStmtAsString(
+			CodeSensorParser.Function_defContext ctx)
+	{
+		Compound_statementContext compound_statement = ctx.compound_statement();
+		CharStream inputStream = compound_statement.start.getInputStream();
+		int startIndex = compound_statement.start.getStartIndex();
+		int stopIndex = compound_statement.stop.getStopIndex();
+		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
 	}
 
 	@Override public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)

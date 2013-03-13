@@ -4,6 +4,8 @@ import Expressions;
 	package antlr;
 }
 
+statements: statement*;
+
 statement: compound_statement
          | non_compound_statement
 ;
