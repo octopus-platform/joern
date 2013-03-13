@@ -63,17 +63,13 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	{
 		String text = getCompoundStmtAsString(ctx);
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(text);	
+		functionParser.parse(text);	
 	}
 
 	private String getCompoundStmtAsString(
 			CodeSensorParser.Function_defContext ctx)
 	{
 		Compound_statementContext compound_statement = ctx.compound_statement();
-		if(compound_statement == null){
-			// System.out.println(ctx.start.getInputStream().getText(new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex())));
-			return "";
-		}
 		
 		CharStream inputStream = compound_statement.start.getInputStream();
 		int startIndex = compound_statement.start.getStartIndex();
