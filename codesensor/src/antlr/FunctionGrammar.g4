@@ -15,11 +15,11 @@ statement: block_opener
          | pre_else 
          | non_expr_statement
          | expr_statement
-         // | statement_water
+         | statement_water
         ;
-catch [ParseCancellationException re] {
-   consume();
-}
+// catch [ParseCancellationException re] {
+//   consume();
+// }
 
 
 pre_opener: PRE_IF;

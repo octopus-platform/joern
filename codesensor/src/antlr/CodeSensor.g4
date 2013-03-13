@@ -26,11 +26,13 @@ import Common;
 code : part*;
 
 part : declaration
-     // | water
-    catch [ParseCancellationException re] {
-            consume();
-    }
+    | water
     ;
+
+// catch [ParseCancellationException re] {
+//    if(!(re.getCause() instanceof NoViableAltException)) throw re;
+//    consume();
+// }
 
 declaration : function_def
             | simple_decl

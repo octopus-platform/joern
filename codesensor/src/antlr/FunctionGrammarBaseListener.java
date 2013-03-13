@@ -1,4 +1,4 @@
-// Generated from ./FunctionGrammar.g4 by ANTLR 4.0
+// Generated from FunctionGrammar.g4 by ANTLR 4.0
 
 	package antlr;
 

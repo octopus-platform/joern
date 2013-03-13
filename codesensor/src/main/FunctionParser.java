@@ -16,7 +16,8 @@ public class FunctionParser extends CommonParser
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
 		FunctionGrammarLexer lex = new FunctionGrammarLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
-		return parse(tokens);
+		ParseTree tree = parse(tokens);
+		return tree;
 	}
 	
 	public ParseTree parse(TokenSubStream tokens)
@@ -25,7 +26,7 @@ public class FunctionParser extends CommonParser
 		
         if(tree == null)
         	return null;
-		        
+        	
         FunctionParseTreeListener listener = new FunctionParseTreeListener();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
