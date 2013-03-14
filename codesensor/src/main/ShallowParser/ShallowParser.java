@@ -48,7 +48,7 @@ public class ShallowParser extends CommonParser
 	private void initializeContext(TokenSubStream stream)
 	{
 		context = new ParserContext();
-		context.filename = "";
+		context.filename = null;
 		context.stream = stream;
 		listener.initializeContext(context);
 	}

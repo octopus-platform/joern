@@ -218,6 +218,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		restrictStreamToClassContent(ctx);
 		ShallowParser shallowParser = new ShallowParser();
 		shallowParser.setStack(itemStack);
+		shallowParser.setProcessor(processor);
 		shallowParser.parseAndWalk(stream);
 		stream.resetRestriction();
 	}

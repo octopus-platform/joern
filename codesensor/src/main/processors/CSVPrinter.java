@@ -21,6 +21,7 @@ public class CSVPrinter extends Processor
     @Override
     public void startOfUnit(ParserRuleContext ctx, String filename)
     {	
+    	if(filename == null) return;
     	CodeItem item = new CodeItem();
     	item.nodeTypeName = "SOURCE_FILE";
     	item.location = new CodeLocation(ctx);
