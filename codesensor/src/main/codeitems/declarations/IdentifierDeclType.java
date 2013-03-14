@@ -1,4 +1,6 @@
-package main.codeitems;
+package main.codeitems.declarations;
+
+import main.codeitems.CodeItem;
 
 public class IdentifierDeclType extends CodeItem
 {

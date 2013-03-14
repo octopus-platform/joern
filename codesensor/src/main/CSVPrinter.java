@@ -3,11 +3,12 @@ package main;
 import java.util.Iterator;
 import java.util.Stack;
 
-import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
-import main.codeitems.FunctionDef;
-import main.codeitems.IdentifierDecl;
-import main.codeitems.Parameter;
+import main.codeitems.CodeItemBuilder;
+import main.codeitems.declarations.ClassDef;
+import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.function.FunctionDef;
+import main.codeitems.function.Parameter;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -22,12 +23,12 @@ public class CSVPrinter extends Printer
     	CodeItem item = new CodeItem();
     	item.nodeTypeName = nodeTypeName;
     	item.location = new CodeLocation(ctx);
-    	item.codeStr = codeStr;	
+    	item.setCodeStr(codeStr);	
     	defaultOut(item, 0);
     }
     
     @Override
-    public void printItem(CodeItem item, Stack<CodeItem> itemStack)
+    public void printItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
     {
     	switch(item.nodeTypeName){
     	case "FUNCTION_DEF":
@@ -46,7 +47,7 @@ public class CSVPrinter extends Printer
     }
 
 
-	private void outputFunctionDef(CodeItem aItem, Stack<CodeItem> itemStack)
+	private void outputFunctionDef(CodeItem aItem, Stack<CodeItemBuilder> itemStack)
     {
     	int level = itemStack.size();
 		FunctionDef item = (FunctionDef) aItem;
@@ -65,32 +66,31 @@ public class CSVPrinter extends Printer
     	}
     }
 
-    private void outputClassDef(CodeItem aItem, Stack<CodeItem> itemStack)
+    private void outputClassDef(CodeItem aItem, Stack<CodeItemBuilder> itemStack)
     {
     	int level = itemStack.size();
     	ClassDef item = (ClassDef) aItem;
     	
     	if(item.name != null){
-    		item.codeStr = item.name.codeStr;
+    		item.setCodeStr(item.name.getCodeStr());
     		defaultOut(item, level);
     		defaultOut(item.name, level + 1);
     	}else{
-    		item.codeStr = "[unnamed]";
+    		item.setCodeStr("[unnamed]");
     		defaultOut(item, level);
     	}
     }
 
-    private void outputDecl(CodeItem aItem, Stack<CodeItem> itemStack)
+    private void outputDecl(CodeItem aItem, Stack<CodeItemBuilder> itemStack)
 	{
     	IdentifierDecl item = (IdentifierDecl) aItem;
     	int level = itemStack.size();
     	
-    	item.codeStr = item.name.codeStr;
+    	item.setCodeStr(item.name.getCodeStr());
     	if(item.type.completeType != "")
-    		item.codeStr = item.type.completeType + " " + item.name.codeStr;
+    		item.setCodeStr(item.type.completeType + " " + item.name.getCodeStr());
     	defaultOut(item, level);
 	}
-    
     
     private void defaultOut(CodeItem item, int level)
     {
@@ -98,7 +98,11 @@ public class CSVPrinter extends Printer
     	
     	String output = item.nodeTypeName + SEPARATOR;
     	output += createLocationString(item) + SEPARATOR + level;
-    	output += SEPARATOR + escapeCodeStr(item.codeStr);
+    	String codeStr = item.getCodeStr();
+    	if(codeStr != null)
+    		output += SEPARATOR + escapeCodeStr(codeStr);
+    	else
+    		output += SEPARATOR + "";
     	System.out.println(output);
     }
     

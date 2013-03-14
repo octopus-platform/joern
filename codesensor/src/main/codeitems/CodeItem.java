@@ -1,46 +1,34 @@
 package main.codeitems;
 
-import java.util.Stack;
-
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import main.CodeLocation;
 
 public class CodeItem {
 
 	public String nodeTypeName;
-	public CodeLocation location;
-	public String codeStr;
+	public CodeLocation location;	
+	protected String codeStr = null;
+	protected ParserRuleContext rootRule;
 	
-	public void create(ParserRuleContext ctx, Stack<CodeItem> itemStack)
+	public void initializeFromContext(ParserRuleContext ctx)
 	{
 		setLocation(ctx);
-		codeStr = childTokenString(ctx);
+		rootRule = ctx;
 	}
 	
-	protected void setLocation(ParserRuleContext ctx)
+	public void setLocation(ParserRuleContext ctx)
 	{
 		location = new CodeLocation(ctx);
 	}
 	
-	protected String childTokenString(ParseTree ctx)
-    {
-    	int nChildren = ctx.getChildCount();
-    	
-    	if(nChildren == 0){
-    		return ctx.getText();
-    	}
-    	        
-    	String retval = "";
-    	for(int i = 0; i < nChildren; i++){
-    		ParseTree child = ctx.getChild(i);
-    		retval += childTokenString(child);
-    		retval += " ";
-    	}
-    	retval = retval.substring(0, retval.length()-1);
-    	return retval;
-    	
-    }
+	public void setCodeStr(String aCodeStr)
+	{
+		codeStr = aCodeStr;
+	}
+	public String getCodeStr()
+	{
+		return codeStr;
+	}
 	
 }

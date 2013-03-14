@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 import main.codeitems.CodeItem;
+import main.codeitems.CodeItemBuilder;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -34,7 +35,7 @@ public class HRPrinter extends Printer{
 	}
 	
 	@Override
-	public void printItem(CodeItem line, Stack<CodeItem> itemStack)
+	public void printItem(CodeItem line, Stack<CodeItemBuilder> itemStack)
 	{
 		// TODO Auto-generated method stub		
 	}

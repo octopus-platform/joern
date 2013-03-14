@@ -40,14 +40,6 @@ public class ShallowParser extends CommonParser
 		return tokens;
 	}
 	
-	private void walkParseTree(TokenSubStream tokens,
-			ParseTree tree)
-	{
-		ShallowParseTreeListener listener = new ShallowParseTreeListener(context);
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(listener, tree);
-	}
-	
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
 		CodeSensorParser parser = new CodeSensorParser(tokens);
@@ -65,6 +57,14 @@ public class ShallowParser extends CommonParser
         	}
         }
 		return tree;
+	}
+	
+	private void walkParseTree(TokenSubStream tokens,
+			ParseTree tree)
+	{
+		ShallowParseTreeListener listener = new ShallowParseTreeListener(context);
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(listener, tree);
 	}
 	
 }

@@ -13,23 +13,30 @@ import main.CSVPrinter;
 import main.Printer;
 import main.TokenSubStream;
 import main.FunctionParser.FunctionParser;
-import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
-import main.codeitems.FunctionDef;
-import main.codeitems.IdentifierDecl;
+import main.codeitems.CodeItemBuilder;
+import main.codeitems.Name;
+import main.codeitems.declarations.ClassDef;
+import main.codeitems.declarations.ClassDefBuilder;
+import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.declarations.IdentifierDeclBuilder;
+import main.codeitems.function.FunctionDef;
+import main.codeitems.function.FunctionDefBuilder;
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 import antlr.CodeSensorParser.Class_nameContext;
 import antlr.CodeSensorParser.Compound_statementContext;
+import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
 public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	
-	Stack<CodeItem> itemStack = new Stack<CodeItem>();
+	Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
+	
 	Printer nodePrinter = new CSVPrinter();
 	String filename;
 	TokenSubStream stream;
@@ -48,19 +55,24 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	@Override
 	public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
-		if(filename == null)
-			return;
 		String nodeTypeName = "SOURCE_FILE";
 		nodePrinter.startOfUnit(nodeTypeName, ctx, filename);
 	}
+	
+	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
+	{
+		String nodeTypeName = "SOURCE_FILE";
+		nodePrinter.endOfUnit(nodeTypeName, ctx, filename);
+	}	
 	
 	@Override
 	public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
 		
-		FunctionDef func = new FunctionDef();
-		func.create(ctx, itemStack);
-		itemStack.push(func);
+		FunctionDefBuilder builder = new FunctionDefBuilder();
+		builder.createNew(ctx);
+		
+		itemStack.push(builder);
 	
 		// parseFunctionContents(ctx);
 	}
@@ -83,70 +95,60 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
 	}
 
-	@Override public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
+	@Override
+	public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
 	{
-		FunctionDef func = (FunctionDef) itemStack.peek();
-		func.setName(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.setReturnType(ctx, itemStack);
 	}
 	
-	
-	@Override public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
+	@Override
+	public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
 	{
-		FunctionDef func = (FunctionDef) itemStack.pop();
-		func.complete(ctx);
-		nodePrinter.printItem(func, itemStack);
-	}
-
-	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
-	{
-		String nodeTypeName = "SOURCE_FILE";
-		nodePrinter.endOfUnit(nodeTypeName, ctx, filename);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.setName(ctx, itemStack);
 	}
 	
-	
-	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
+	@Override
+	public void enterParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx)
 	{
-		FunctionDef func = (FunctionDef) itemStack.peek();
-		func.setReturnType(ctx, itemStack);
-	}
-		
-		
-	@Override public void enterParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx)
-	{
-		FunctionDef func = (FunctionDef) itemStack.peek();
-		func.setParameterList(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.setParameterList(ctx, itemStack);
 	}
 	
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx)
 	{
-		FunctionDef func = (FunctionDef) itemStack.peek();
-		func.addParameter(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.addParameter(ctx, itemStack);
 	}
 	
+	@Override
+	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
+	{
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.pop();
+		nodePrinter.printItem(builder.getItem(), itemStack);
+	}	
 	
 	// Class/Structure Definitions
 	
 	@Override
 	public void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
-		ClassDef classDef = new ClassDef();
-		classDef.create(ctx, itemStack);
-		itemStack.push(classDef);
+		ClassDefBuilder builder = new ClassDefBuilder();
+		builder.createNew(ctx);
 		
-		Init_declarator_listContext decl_list = ctx.init_declarator_list();
+		itemStack.push(builder);
 		
-		if(decl_list != null){
-		Class_nameContext class_name = ctx.class_def().class_name();
-		
-
-		ParserRuleContext typeName = class_name;
-		
-		emitDeclarations(decl_list, typeName);
-		
-		}
-	
+		emitDeclarationsForClass(ctx);		
 	}
 
+	@Override
+	public void enterClass_name(CodeSensorParser.Class_nameContext ctx)
+	{
+		ClassDefBuilder builder = (ClassDefBuilder) itemStack.peek();
+		builder.setName(ctx);
+	}
+	
 	private void restrictStreamToClassContent(
 			CodeSensorParser.DeclByClassContext ctx)
 	{
@@ -156,9 +158,21 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		stream.restrict(startIndex+1, stopIndex);
 	}
 	
-		
-	private void emitDeclarations(Init_declarator_listContext decl_list, ParserRuleContext typeName)
+	
+	private void emitDeclarationsForClass(DeclByClassContext ctx)
 	{
+		Init_declarator_listContext decl_list = ctx.init_declarator_list();		
+		if(decl_list == null)
+			return;
+		
+		ParserRuleContext typeName = ctx.class_def().class_name();
+		emitDeclarations(decl_list, typeName);
+	}
+	
+	private void emitDeclarations(Init_declarator_listContext decl_list,
+								  ParserRuleContext typeName)
+	{
+		
 		Init_declaratorContext decl_ctx;
 		
 		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
@@ -171,22 +185,21 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 				// not all child-nodes are init-declarators
 				continue;
 			}
-				
-			IdentifierDecl idDecl = new IdentifierDecl();
-			idDecl.create(decl_ctx, itemStack);
-			idDecl.setName(decl_ctx.identifier(), itemStack);
-			idDecl.setType(decl_ctx, typeName);
 			
-			nodePrinter.printItem(idDecl, itemStack);
+			IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
+			builder.createNew(decl_ctx);
+			builder.setName(decl_ctx);
+			builder.setType(decl_ctx, typeName);
+			
+			nodePrinter.printItem(builder.getItem(), itemStack);
 		}
-		
 	}
-	
+		
 	@Override
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
-		CodeItem classDef = itemStack.pop();
-		nodePrinter.printItem(classDef, itemStack);
+		CodeItemBuilder builder = itemStack.pop();
+		nodePrinter.printItem(builder.getItem(), itemStack);
 	
 		parseClassContent(ctx);
 	}
@@ -199,18 +212,6 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		stream.resetRestriction();
 	}
 
-	@Override
-	public void enterClass_name(CodeSensorParser.Class_nameContext ctx)
-	{
-		ClassDef classDef = (ClassDef) itemStack.peek();
-		classDef.setName(ctx, itemStack);
-	}
-	
-	@Override
-	public void exitClass_name(CodeSensorParser.Class_nameContext ctx)
-	{
-		
-	}
 	
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
 	{
@@ -218,5 +219,6 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
 	}
+	
 	
 }
