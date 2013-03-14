@@ -6,6 +6,7 @@ import java.util.Stack;
 import main.CommonParser;
 import main.TokenSubStream;
 import main.codeitems.CodeItemBuilder;
+import main.processors.Processor;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -17,13 +18,10 @@ import antlr.CodeSensorParser;
 
 public class ShallowParser extends CommonParser
 {
-	private ParserContext context = null;
-	Stack<CodeItemBuilder> stack = null;
 	
-	public void setStack(Stack<CodeItemBuilder> aStack)
-	{
-		stack = aStack;
-	}
+	private ParserContext context = null;
+	public ShallowParseTreeListener listener = new ShallowParseTreeListener();
+	
 	
 	public void parseAndWalk(String filename) throws IOException
 	{
@@ -37,16 +35,25 @@ public class ShallowParser extends CommonParser
 		context = new ParserContext();
 		context.filename = filename;
 		context.stream = createTokenStreamFromFile(context.filename);
+		listener.initializeContext(context);
+	}
+	
+	public void parseAndWalk(TokenSubStream stream)
+	{
+		initializeContext(stream);
+		ParseTree tree = parseTokenStream(context.stream);
+        walkParseTree(context.stream, tree);
+	}
+	
+	private void initializeContext(TokenSubStream stream)
+	{
+		context = new ParserContext();
+		context.filename = "";
+		context.stream = stream;
+		listener.initializeContext(context);
 	}
 
-	private static TokenSubStream createTokenStreamFromFile(String filename)
-			throws IOException
-	{
-		ANTLRInputStream input = new ANTLRFileStream(filename);
-    	CodeSensorLexer lexer = new CodeSensorLexer(input);
-        TokenSubStream tokens = new TokenSubStream(lexer);
-		return tokens;
-	}
+	
 	
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
@@ -67,12 +74,28 @@ public class ShallowParser extends CommonParser
 		return tree;
 	}
 	
-	private void walkParseTree(TokenSubStream tokens,
+	public void setStack(Stack<CodeItemBuilder> aStack)
+	{
+		listener.setStack(aStack);;
+	}
+	
+	public void setProcessor(Processor aProcessor)
+	{
+		listener.setProcessor(aProcessor);
+	}
+	
+	private static TokenSubStream createTokenStreamFromFile(String filename)
+			throws IOException
+	{
+		ANTLRInputStream input = new ANTLRFileStream(filename);
+    	CodeSensorLexer lexer = new CodeSensorLexer(input);
+        TokenSubStream tokens = new TokenSubStream(lexer);
+		return tokens;
+	}
+	
+	public void walkParseTree(TokenSubStream tokens,
 			ParseTree tree)
 	{
-		ShallowParseTreeListener listener = new ShallowParseTreeListener(context);
-		if(stack != null)
-			listener.setStack(stack);
 		ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
 	}

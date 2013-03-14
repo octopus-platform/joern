@@ -45,8 +45,8 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	Processor processor = new CSVPrinter();
 	String filename;
 	TokenSubStream stream;
-	
-	ShallowParseTreeListener(ParserContext context)
+		
+	void initializeContext(ParserContext context)
 	{
 		filename = context.filename;
 		stream = context.stream;
@@ -218,7 +218,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		restrictStreamToClassContent(ctx);
 		ShallowParser shallowParser = new ShallowParser();
 		shallowParser.setStack(itemStack);
-		shallowParser.parseTokenStream(stream);
+		shallowParser.parseAndWalk(stream);
 		stream.resetRestriction();
 	}
 	
@@ -227,6 +227,11 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
+	}
+
+	public Processor getProcessor()
+	{
+		return processor;
 	}
 	
 	
