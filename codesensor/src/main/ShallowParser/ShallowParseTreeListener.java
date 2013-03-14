@@ -17,7 +17,7 @@ import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.function.FunctionDefBuilder;
 import main.processors.CSVPrinter;
-import main.processors.Printer;
+import main.processors.Processor;
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
@@ -42,7 +42,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	
 	Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
 	
-	Printer nodePrinter = new CSVPrinter();
+	Processor processor = new CSVPrinter();
 	String filename;
 	TokenSubStream stream;
 	
@@ -60,20 +60,20 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		itemStack = aStack;
 	}
 	
-	void setPrinter(Printer aPrinter)
+	void setProcessor(Processor aProcessor)
 	{
-		nodePrinter = aPrinter;
+		processor = aProcessor;
 	}
 	
 	@Override
 	public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
-		nodePrinter.startOfUnit(ctx, filename);
+		processor.startOfUnit(ctx, filename);
 	}
 	
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
 	{
-		nodePrinter.endOfUnit(ctx, filename);
+		processor.endOfUnit(ctx, filename);
 	}	
 	
 	@Override
@@ -136,7 +136,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.pop();
-		nodePrinter.printItem(builder.getItem(), itemStack);
+		processor.processItem(builder.getItem(), itemStack);
 	}	
 	
 	// Class/Structure Definitions
@@ -200,7 +200,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 			builder.setName(decl_ctx);
 			builder.setType(decl_ctx, typeName);
 			
-			nodePrinter.printItem(builder.getItem(), itemStack);
+			processor.processItem(builder.getItem(), itemStack);
 		}
 	}
 		
@@ -208,7 +208,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
 		CodeItemBuilder builder = itemStack.pop();
-		nodePrinter.printItem(builder.getItem(), itemStack);
+		processor.processItem(builder.getItem(), itemStack);
 	
 		parseClassContent(ctx);
 	}

@@ -7,9 +7,9 @@ import main.codeitems.CodeItemBuilder;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-public abstract class Printer
+public abstract class Processor
 {
 	public abstract void startOfUnit(ParserRuleContext ctx, String filename);
 	public abstract void endOfUnit(ParserRuleContext ctx, String filename);
-	public abstract void printItem(CodeItem line, Stack<CodeItemBuilder> itemStack);
+	public abstract void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack);
 }

@@ -8,7 +8,7 @@ import main.codeitems.CodeItemBuilder;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-public class HRPrinter extends Printer{
+public class HRPrinter extends Processor{
 
 	String filename = null;
 	LinkedList<String> functionDefs = new LinkedList<String>();
@@ -33,7 +33,7 @@ public class HRPrinter extends Printer{
 	}
 	
 	@Override
-	public void printItem(CodeItem line, Stack<CodeItemBuilder> itemStack)
+	public void processItem(CodeItem line, Stack<CodeItemBuilder> itemStack)
 	{
 		// TODO Auto-generated method stub		
 	}

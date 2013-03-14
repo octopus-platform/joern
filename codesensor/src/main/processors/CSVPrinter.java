@@ -13,7 +13,7 @@ import main.codeitems.function.Parameter;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-public class CSVPrinter extends Printer
+public class CSVPrinter extends Processor
 {
     
     private static final String SEPARATOR = "\t";
@@ -29,7 +29,7 @@ public class CSVPrinter extends Printer
     }
     
     @Override
-    public void printItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
+    public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
     {
     	switch(item.nodeTypeName){
     	case "FUNCTION_DEF":
