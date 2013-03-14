@@ -54,7 +54,7 @@ public class CodeSensorClassParserTest {
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
 		
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier archive_contents)) { const char * f ; struct contents * c ; }) (init_declarator_list (init_declarator (identifier files) (type_suffix [ constant_expr_w_ ]) = (initializer { (initializer_list"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier archive_contents)) { const char * f ; struct contents * c ; }) (init_declarator_list (init_declarator (identifier files) (type_suffix [ constant_expr_w_ ]) = (assign_expr_w_ {"));
 	}
 
 	@Test

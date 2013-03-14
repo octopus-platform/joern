@@ -112,14 +112,14 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterExclusive_or_expression(CodeSensorParser.Exclusive_or_expressionContext ctx) { }
 	@Override public void exitExclusive_or_expression(CodeSensorParser.Exclusive_or_expressionContext ctx) { }
 
+	@Override public void enterAssign_expr_w_(CodeSensorParser.Assign_expr_w_Context ctx) { }
+	@Override public void exitAssign_expr_w_(CodeSensorParser.Assign_expr_w_Context ctx) { }
+
 	@Override public void enterParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
 	@Override public void exitParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
 
 	@Override public void enterAdditive_expression(CodeSensorParser.Additive_expressionContext ctx) { }
 	@Override public void exitAdditive_expression(CodeSensorParser.Additive_expressionContext ctx) { }
-
-	@Override public void enterInitializer_list(CodeSensorParser.Initializer_listContext ctx) { }
-	@Override public void exitInitializer_list(CodeSensorParser.Initializer_listContext ctx) { }
 
 	@Override public void enterNo_squares(CodeSensorParser.No_squaresContext ctx) { }
 	@Override public void exitNo_squares(CodeSensorParser.No_squaresContext ctx) { }
@@ -220,6 +220,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterConstant(CodeSensorParser.ConstantContext ctx) { }
 	@Override public void exitConstant(CodeSensorParser.ConstantContext ctx) { }
 
+	@Override public void enterAssign_expr_w__l2(CodeSensorParser.Assign_expr_w__l2Context ctx) { }
+	@Override public void exitAssign_expr_w__l2(CodeSensorParser.Assign_expr_w__l2Context ctx) { }
+
 	@Override public void enterFunction_def(CodeSensorParser.Function_defContext ctx) { }
 	@Override public void exitFunction_def(CodeSensorParser.Function_defContext ctx) { }
 
@@ -276,9 +279,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterAssign_water(CodeSensorParser.Assign_waterContext ctx) { }
 	@Override public void exitAssign_water(CodeSensorParser.Assign_waterContext ctx) { }
-
-	@Override public void enterInitializer(CodeSensorParser.InitializerContext ctx) { }
-	@Override public void exitInitializer(CodeSensorParser.InitializerContext ctx) { }
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext ctx) { }

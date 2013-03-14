@@ -57,13 +57,24 @@ init_declarator_list: init_declarator (',' init_declarator)* ';';
 // this rule is buggy: we can't match int (foo); or int (*foo)(bar *);
 // let's get it running as-is first and then fix bugs.
 
-init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' initializer))?;
+init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr_w_))?;
 
+// this is new
+assign_expr_w_: assign_water*
+        (('{' assign_expr_w__l2 '}' | '(' assign_expr_w__l2 ')' | '[' assign_expr_w__l2 ']')
+             assign_water*)*;
+
+assign_expr_w__l2: assign_water_l2* (('{' assign_expr_w__l2 '}' | '(' assign_expr_w__l2 ')' | '[' assign_expr_w__l2 ']')
+             assign_water_l2*)*;
+
+
+/*
 initializer: assign_expr
            | '{' initializer_list '}'
 ;
 
 initializer_list: initializer (',' initializer)*;
+*/
 
 class_def: class_key class_name? base_classes? OPENING_CURLY {skipToEndOfObject(); } ;
 class_name: identifier;
