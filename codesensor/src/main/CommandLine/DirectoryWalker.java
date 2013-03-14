@@ -1,4 +1,4 @@
-package main;
+package main.CommandLine;
 
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;

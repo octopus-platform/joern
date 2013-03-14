@@ -1,4 +1,4 @@
-package main;
+package main.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 
 import java.util.LinkedList;
 import java.util.List;
+
 
 
 import org.apache.commons.cli.BasicParser;

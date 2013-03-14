@@ -1,4 +1,4 @@
-package main;
+package main.processors;
 
 import java.util.LinkedList;
 import java.util.Stack;
@@ -14,10 +14,9 @@ public class HRPrinter extends Printer{
 	LinkedList<String> functionDefs = new LinkedList<String>();
 	
 	@Override
-	public void startOfUnit(String nodeTypeName, ParserRuleContext ctx,
-			String codeStr)
+	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-		filename = codeStr;
+		filename = filename;
 		reset();
 	}
 
@@ -27,8 +26,7 @@ public class HRPrinter extends Printer{
 	}
 	
 	@Override
-	public void endOfUnit(String nodeTypeName, ParserRuleContext ctx,
-			String codeStr)
+	public void endOfUnit(ParserRuleContext ctx, String filename)
 	{
 		// TODO Auto-generated method stub
 		

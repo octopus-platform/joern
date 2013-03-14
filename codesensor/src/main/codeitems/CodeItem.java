@@ -2,12 +2,12 @@ package main.codeitems;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import main.CodeLocation;
 
 public class CodeItem {
 
 	public String nodeTypeName;
 	public CodeLocation location;	
+	
 	protected String codeStr = null;
 	protected ParserRuleContext rootRule;
 	

@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import main.CommandLineInterface;
+import main.CommandLine.CommandLineInterface;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package main;
+package main.codeitems;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class CodeLocation {

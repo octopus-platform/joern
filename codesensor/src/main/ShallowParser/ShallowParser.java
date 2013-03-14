@@ -1,9 +1,11 @@
 package main.ShallowParser;
 
 import java.io.IOException;
+import java.util.Stack;
 
 import main.CommonParser;
 import main.TokenSubStream;
+import main.codeitems.CodeItemBuilder;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -16,6 +18,12 @@ import antlr.CodeSensorParser;
 public class ShallowParser extends CommonParser
 {
 	private ParserContext context = null;
+	Stack<CodeItemBuilder> stack = null;
+	
+	public void setStack(Stack<CodeItemBuilder> aStack)
+	{
+		stack = aStack;
+	}
 	
 	public void parseAndWalk(String filename) throws IOException
 	{
@@ -63,7 +71,9 @@ public class ShallowParser extends CommonParser
 			ParseTree tree)
 	{
 		ShallowParseTreeListener listener = new ShallowParseTreeListener(context);
-        ParseTreeWalker walker = new ParseTreeWalker();
+		if(stack != null)
+			listener.setStack(stack);
+		ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
 	}
 	

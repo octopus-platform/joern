@@ -9,31 +9,36 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
-import main.CSVPrinter;
-import main.Printer;
 import main.TokenSubStream;
 import main.FunctionParser.FunctionParser;
-import main.codeitems.CodeItem;
+
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.Name;
-import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.ClassDefBuilder;
-import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclBuilder;
-import main.codeitems.function.FunctionDef;
 import main.codeitems.function.FunctionDefBuilder;
+import main.processors.CSVPrinter;
+import main.processors.Printer;
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
-import antlr.CodeSensorParser.Class_nameContext;
+
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
-public class ShallowParseTreeListener extends CodeSensorBaseListener{
+// This should be refactored at some point:
+
+// The class implements callback-functions accessed
+// when walking the parse tree and calls different
+// builders to create CodeItems from subtrees.
+// As such, it implements several "Directors" in one class,
+// which is not nice.
+
+public class ShallowParseTreeListener extends CodeSensorBaseListener
+{
 	
 	Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
 	
@@ -47,6 +52,14 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		stream = context.stream;
 	}
 	
+	// Users can initialize the stack with
+	// an existing stack. This allows us to
+	// pass state from one parser to the next.
+	void setStack(Stack<CodeItemBuilder> aStack)
+	{
+		itemStack = aStack;
+	}
+	
 	void setPrinter(Printer aPrinter)
 	{
 		nodePrinter = aPrinter;
@@ -55,14 +68,12 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	@Override
 	public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
-		String nodeTypeName = "SOURCE_FILE";
-		nodePrinter.startOfUnit(nodeTypeName, ctx, filename);
+		nodePrinter.startOfUnit(ctx, filename);
 	}
 	
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
 	{
-		String nodeTypeName = "SOURCE_FILE";
-		nodePrinter.endOfUnit(nodeTypeName, ctx, filename);
+		nodePrinter.endOfUnit(ctx, filename);
 	}	
 	
 	@Override
@@ -71,7 +82,6 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		
 		FunctionDefBuilder builder = new FunctionDefBuilder();
 		builder.createNew(ctx);
-		
 		itemStack.push(builder);
 	
 		// parseFunctionContents(ctx);
@@ -136,7 +146,6 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	{
 		ClassDefBuilder builder = new ClassDefBuilder();
 		builder.createNew(ctx);
-		
 		itemStack.push(builder);
 		
 		emitDeclarationsForClass(ctx);		
@@ -208,10 +217,10 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	{
 		restrictStreamToClassContent(ctx);
 		ShallowParser shallowParser = new ShallowParser();
+		shallowParser.setStack(itemStack);
 		shallowParser.parseTokenStream(stream);
 		stream.resetRestriction();
 	}
-
 	
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
 	{

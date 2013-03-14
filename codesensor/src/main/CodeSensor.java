@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.List;
 
+import main.CommandLine.CommandLineInterface;
 import main.ShallowParser.ShallowParser;
 
 

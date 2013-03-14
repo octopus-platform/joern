@@ -20,7 +20,7 @@ public class CodeSensorFunctionParserTest {
         return parser;
 	}
 	
-	// Return values
+	// Return value
 	
 	@Test
 	public void testFunction_defNoReturnValue()

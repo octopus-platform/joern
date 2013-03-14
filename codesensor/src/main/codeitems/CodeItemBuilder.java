@@ -1,7 +1,6 @@
 package main.codeitems;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 abstract public class CodeItemBuilder
 {
@@ -13,9 +12,7 @@ abstract public class CodeItemBuilder
     	return item;
     }
     
-    public void complete()
-    {
-    }
+    public void complete(){}
     
     abstract public void createNew(ParserRuleContext ctx);
     

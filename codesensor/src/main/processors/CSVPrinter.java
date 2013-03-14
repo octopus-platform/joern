@@ -1,10 +1,11 @@
-package main;
+package main.processors;
 
 import java.util.Iterator;
 import java.util.Stack;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
+import main.codeitems.CodeLocation;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.function.FunctionDef;
@@ -18,12 +19,12 @@ public class CSVPrinter extends Printer
     private static final String SEPARATOR = "\t";
     
     @Override
-    public void startOfUnit(String nodeTypeName, ParserRuleContext ctx, String codeStr)
+    public void startOfUnit(ParserRuleContext ctx, String filename)
     {	
     	CodeItem item = new CodeItem();
-    	item.nodeTypeName = nodeTypeName;
+    	item.nodeTypeName = "SOURCE_FILE";
     	item.location = new CodeLocation(ctx);
-    	item.setCodeStr(codeStr);	
+    	item.setCodeStr(filename);	
     	defaultOut(item, 0);
     }
     
@@ -123,8 +124,7 @@ public class CSVPrinter extends Printer
     }
 
 	@Override
-	public void endOfUnit(String nodeTypeName, ParserRuleContext ctx,
-			String codeStr)
+	public void endOfUnit(ParserRuleContext ctx, String filename)
 	{
 		
 	}
