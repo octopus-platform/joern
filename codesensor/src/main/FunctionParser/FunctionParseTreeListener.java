@@ -1,4 +1,4 @@
-package main;
+package main.FunctionParser;
 
 import antlr.FunctionGrammarBaseListener;
 

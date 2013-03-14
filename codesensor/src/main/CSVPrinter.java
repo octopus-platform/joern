@@ -11,7 +11,7 @@ import main.codeitems.Parameter;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-class CSVPrinter extends Printer
+public class CSVPrinter extends Printer
 {
     
     private static final String SEPARATOR = "\t";

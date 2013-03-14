@@ -19,35 +19,36 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 
-public class CommandLineInterface {
-	Options options = new Options();
-	CommandLineParser parser = new BasicParser();
-	HelpFormatter formater = new HelpFormatter();
-	CommandLine cmd = null;
-	String [] filenames;
+public class CommandLineInterface
+{
+	private Options options = new Options();
+	private CommandLineParser parser = new BasicParser();
+	private HelpFormatter formater = new HelpFormatter();
+	private CommandLine cmd = null;
+	private String [] filenames;
 	
 	public CommandLineInterface()
 	{
 		initializeOptions();
 	}
 
-	public void outputHelp()
-	{	
-		formater.printHelp("codesensor [OPTION]... [FILE] ...", options);
-	}
-
-	
 	private void initializeOptions()
 	{
 		Option helpOpt = new Option("h","help", false, "show this help message");
 		options.addOption(helpOpt);
 	}
 	
+	public void outputHelp()
+	{	
+		formater.printHelp("codesensor [OPTION]... [FILE] ...", options);
+	}
+
 	public List<String> getFilesToProcess() throws IOException
 	{
 		List<String> retList = new LinkedList<String>();
 		
 		for(int i = 0; i < filenames.length ; i++){
+			
 			String filename = filenames[i];
 			File file = new File(filename);
 			

@@ -21,7 +21,6 @@ public class CodeSensorClassParserTest {
         return parser;
 	}
 	
-	
 	@Test
 	public void testSimpleStructDef()
 	{
@@ -41,10 +40,9 @@ public class CodeSensorClassParserTest {
 		String output = parser.simple_decl().toStringTree(parser);
 		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) {"));
 	}
-	
-	
+		
 	@Test
-	public void testStructureInit()
+	public void testStructureInitArray()
 	{
 		String input = "struct archive_contents" +
 				"{ const char *f; struct contents *c; } files[] " +
@@ -65,7 +63,6 @@ public class CodeSensorClassParserTest {
 		String output = parser.simple_decl().toStringTree(parser);		
 		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (identifier y)) ;)))"));
 	}
-
 	
 	@Test
 	public void testClassContentExtraction()
@@ -80,5 +77,4 @@ public class CodeSensorClassParserTest {
 		assertTrue((startIndex == 2) && (stopIndex == 5));
 	}
 
-	
 }

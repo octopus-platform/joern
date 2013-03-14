@@ -1,47 +1,47 @@
 package main;
 
-import antlr.CodeSensorLexer;
-
 import java.io.*;
 import java.util.Iterator;
 import java.util.List;
 
-import org.antlr.v4.runtime.*;
+import main.ShallowParser.ShallowParser;
+
 
 public class CodeSensor {
     
+	private static ShallowParser parser = new ShallowParser();
+	private static CommandLineInterface cmd = new CommandLineInterface();
 	
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
 	{
-	    try{
-	    	CommandLineInterface cmd = new CommandLineInterface();
-	    	cmd.parseCommandLine(args);
-	    	
+    	cmd.parseCommandLine(args);
+    	
+    	try{
 	    	List<String> filesToProcess = cmd.getFilesToProcess();
-	    	
-	    	for(Iterator<String> i = filesToProcess.iterator(); i.hasNext();){
-	    		String filename = i.next();
-	    		processFile(filename);
-	    	}
-	    	
-	    } catch (Exception e) {
-	    	e.printStackTrace();
+	    	processListOfFiles(filesToProcess);
+	    }catch(IOException err){
+			System.err.println("I/O-Error: " + err.getMessage()); 
 	    }
+
+	}
+
+	private static void processListOfFiles(List<String> filesToProcess)
+	{
+		for(Iterator<String> i = filesToProcess.iterator(); i.hasNext();)
+		{
+			String filename = i.next();
+			processSingleFile(filename);
+		}
 	}
 	
-    private static void processFile(String filename) throws IOException
+    private static void processSingleFile(String filename)
     {
-    	TokenSubStream tokens = createTokenStreamFromFile(filename);
-        ShallowParser parser = new ShallowParser();
-        parser.parse(filename, tokens);
+    	try{
+    		parser.parseAndWalk(filename);
+    	}catch(IOException ex){
+    		System.err.println("Error processing file: " + filename);
+    	}
     }
     
-    private static TokenSubStream createTokenStreamFromFile(String filename)
-			throws IOException {
-		ANTLRInputStream input = new ANTLRFileStream(filename);
-    	CodeSensorLexer lexer = new CodeSensorLexer(input);
-        TokenSubStream tokens = new TokenSubStream(lexer);
-		return tokens;
-	}
     
 }

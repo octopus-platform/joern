@@ -72,7 +72,6 @@ assign_expr_w__l2: assign_water_l2* (('{' assign_expr_w__l2 '}' | '(' assign_exp
 initializer: assign_expr
            | '{' initializer_list '}'
 ;
-
 initializer_list: initializer (',' initializer)*;
 */
 

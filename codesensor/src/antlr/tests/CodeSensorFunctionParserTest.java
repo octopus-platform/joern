@@ -11,7 +11,6 @@ import antlr.CodeSensorParser;
 
 public class CodeSensorFunctionParserTest {
 
-
 	private CodeSensorParser createParser(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
@@ -111,8 +110,7 @@ public class CodeSensorFunctionParserTest {
 		String output = parser.function_def().toStringTree(parser);		
 		assertTrue(output.startsWith("(function_def"));
 	}
-	
-	
+		
 }
 
 

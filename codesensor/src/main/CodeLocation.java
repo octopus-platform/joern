@@ -1,10 +1,21 @@
 package main;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-
 public class CodeLocation {
+
+	public int startLine;
+	public int startPos;
+	public int startIndex;
+	public int stopIndex;
+	
+	final private int NOT_SET = -1;
 	
 	public CodeLocation(ParserRuleContext ctx)
+	{
+		initializeFromContext(ctx);
+	}
+
+	private void initializeFromContext(ParserRuleContext ctx)
 	{
 		startLine = ctx.start.getLine();
 		startPos = ctx.start.getCharPositionInLine();
@@ -12,12 +23,7 @@ public class CodeLocation {
 		if(ctx.stop != null)
 			stopIndex = ctx.stop.getStopIndex();
 		else
-			stopIndex = -1;
+			stopIndex = NOT_SET;
 	}
 
-	public int startLine;
-	public int startPos;
-	public int startIndex;
-	public int stopIndex;
-	
 }

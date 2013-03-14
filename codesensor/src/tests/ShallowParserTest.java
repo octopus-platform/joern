@@ -2,8 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import main.ShallowParser;
 import main.TokenSubStream;
+import main.ShallowParser.ShallowParser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class ShallowParserTest {
 		String input = "class foo{ bar(){} }; xxx(){}";
 		TokenSubStream tokens = createTokenStream(input);
 		ShallowParser shallowParser = new ShallowParser();
-		shallowParser.parse("filename", tokens);
+		shallowParser.parseTokenStream(tokens);
 		assertTrue(true);
 	}
 

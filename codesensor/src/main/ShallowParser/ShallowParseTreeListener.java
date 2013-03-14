@@ -1,4 +1,4 @@
-package main;
+package main.ShallowParser;
 
 import java.util.Iterator;
 import java.util.Stack;
@@ -9,6 +9,10 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
+import main.CSVPrinter;
+import main.Printer;
+import main.TokenSubStream;
+import main.FunctionParser.FunctionParser;
 import main.codeitems.ClassDef;
 import main.codeitems.CodeItem;
 import main.codeitems.FunctionDef;
@@ -30,10 +34,10 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	String filename;
 	TokenSubStream stream;
 	
-	ShallowParseTreeListener(String aFilename, TokenSubStream aStream)
+	ShallowParseTreeListener(ParserContext context)
 	{
-		filename = aFilename;
-		stream = aStream;
+		filename = context.filename;
+		stream = context.stream;
 	}
 	
 	void setPrinter(Printer aPrinter)
@@ -41,7 +45,8 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		nodePrinter = aPrinter;
 	}
 	
-	@Override public void enterCode(CodeSensorParser.CodeContext ctx)
+	@Override
+	public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
 		if(filename == null)
 			return;
@@ -49,7 +54,8 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 		nodePrinter.startOfUnit(nodeTypeName, ctx, filename);
 	}
 	
-	@Override public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
+	@Override
+	public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
 		
 		FunctionDef func = new FunctionDef();
@@ -189,7 +195,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener{
 	{
 		restrictStreamToClassContent(ctx);
 		ShallowParser shallowParser = new ShallowParser();
-		shallowParser.parse(null, stream);
+		shallowParser.parseTokenStream(stream);
 		stream.resetRestriction();
 	}
 
