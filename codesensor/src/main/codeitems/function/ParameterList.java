@@ -1,8 +1,8 @@
 package main.codeitems.function;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
-import main.ParseTreeUtils;
 import main.codeitems.CodeItem;
 
 public class ParameterList extends CodeItem
@@ -19,7 +19,16 @@ public class ParameterList extends CodeItem
 		if(codeStr != null)
 			return codeStr;
 		
-		codeStr = ParseTreeUtils.childTokenString(rootRule);
+		Iterator<Parameter> i = parameters.iterator();
+		StringBuilder s = new StringBuilder();
+		for(; i.hasNext();){
+			Parameter param = i.next();
+			s.append(param.getCodeStr() + " , ");
+		}
+		
+		codeStr = s.toString();
+		codeStr = codeStr.substring(0, s.length() - 3);
+		
 		return codeStr;
 	}
 

@@ -2,16 +2,16 @@ package main.codeitems.function;
 
 import java.util.Stack;
 
+import main.ParseTreeUtils;
+import main.codeitems.CodeItemBuilder;
+import main.codeitems.Name;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.CodeSensorParser.Function_defContext;
 import antlr.CodeSensorParser.Function_nameContext;
 import antlr.CodeSensorParser.Parameter_declContext;
 import antlr.CodeSensorParser.Parameter_decl_clauseContext;
 import antlr.CodeSensorParser.Return_typeContext;
-import main.ParseTreeUtils;
-import main.codeitems.CodeItemBuilder;
-import main.codeitems.Name;
 
 public class FunctionDefBuilder extends CodeItemBuilder {
 

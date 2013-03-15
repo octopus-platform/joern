@@ -1,12 +1,12 @@
 package tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import main.TokenSubStream;
 import main.ShallowParser.ShallowParser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
+
 import antlr.CodeSensorLexer;
 
 

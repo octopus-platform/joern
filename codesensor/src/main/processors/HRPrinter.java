@@ -14,9 +14,9 @@ public class HRPrinter extends Processor{
 	LinkedList<String> functionDefs = new LinkedList<String>();
 	
 	@Override
-	public void startOfUnit(ParserRuleContext ctx, String filename)
+	public void startOfUnit(ParserRuleContext ctx, String aFilename)
 	{
-		filename = filename;
+		filename = aFilename;
 		reset();
 	}
 

@@ -3,15 +3,8 @@ package main.ShallowParser;
 import java.util.Iterator;
 import java.util.Stack;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.tree.ParseTree;
-
-
 import main.TokenSubStream;
 import main.FunctionParser.FunctionParser;
-
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDeclBuilder;
@@ -19,10 +12,14 @@ import main.codeitems.function.FunctionDefBuilder;
 import main.processors.CSVPrinter;
 import main.processors.Processor;
 
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
-
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
@@ -146,9 +143,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	{
 		ClassDefBuilder builder = new ClassDefBuilder();
 		builder.createNew(ctx);
-		itemStack.push(builder);
-		
-		emitDeclarationsForClass(ctx);		
+		itemStack.push(builder);		
 	}
 
 	@Override
@@ -209,8 +204,10 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	{
 		CodeItemBuilder builder = itemStack.pop();
 		processor.processItem(builder.getItem(), itemStack);
-	
+		
 		parseClassContent(ctx);
+	
+		emitDeclarationsForClass(ctx);
 	}
 
 	private void parseClassContent(CodeSensorParser.DeclByClassContext ctx)

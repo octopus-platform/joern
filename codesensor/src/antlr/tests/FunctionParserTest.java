@@ -1,7 +1,5 @@
 package antlr.tests;
 
-import static org.junit.Assert.*;
-
 import main.FunctionParser.FunctionParser;
 
 import org.antlr.v4.runtime.tree.ParseTree;

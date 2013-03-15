@@ -1,10 +1,8 @@
 package main.codeitems.function;
 
-import java.util.Stack;
-
+import main.ParseTreeUtils;
 import main.codeitems.CodeItem;
 import main.codeitems.Name;
-
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -20,6 +18,15 @@ public class Parameter extends CodeItem
 	public Parameter()
 	{
 		nodeTypeName = "PARAMETER";
+	}
+	
+	public String getCodeStr()
+	{
+		if(codeStr != null)
+			return codeStr;
+		
+		codeStr = ParseTreeUtils.childTokenString(rootRule);
+		return codeStr;
 	}
 	
 	@Override

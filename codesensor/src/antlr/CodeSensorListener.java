@@ -1,13 +1,7 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
-    import java.util.Stack;
-
-
-  import java.util.Stack;
-
-import org.antlr.v4.runtime.tree.*;
-import org.antlr.v4.runtime.Token;
+    import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 public interface CodeSensorListener extends ParseTreeListener {
 	void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx);

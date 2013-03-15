@@ -1,21 +1,22 @@
 package main.codeitems.function;
 
-import java.util.Stack;
-
 import main.codeitems.CodeItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-
-import antlr.CodeSensorParser.Parameter_declContext;
-import antlr.CodeSensorParser.Parameter_idContext;
-import antlr.CodeSensorParser.PtrsContext;
-import antlr.CodeSensorParser.Type_suffixContext;
 
 public class ParameterType extends CodeItem
 {
 	String completeType;
 	String baseType;
 
+	public String getCodeStr()
+	{
+		if(codeStr != null)
+			return codeStr;
+		codeStr = completeType;
+		return codeStr;
+	}
+	
 	public void setCompleteType(String aCompleteType)
 	{
 		completeType = aCompleteType;
@@ -32,8 +33,7 @@ public class ParameterType extends CodeItem
 	}
 	
 	public void initializeFromContext(ParserRuleContext aCtx)
-	{
-		
+	{	
 		// use entire parameter as location. It's the best
 		// we can do right now.
 		super.initializeFromContext(aCtx);

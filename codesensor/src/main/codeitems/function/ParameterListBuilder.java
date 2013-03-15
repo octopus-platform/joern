@@ -45,7 +45,7 @@ public class ParameterListBuilder extends CodeItemBuilder {
 	{
 		String retType = baseType;
 		
-		// TODO: use a string-builder here
+		// TODO: use a string-builder here and clean this up.
 		
 		// iterate until nesting level is reached
 		// where type is given.
@@ -66,6 +66,12 @@ public class ParameterListBuilder extends CodeItemBuilder {
 			retType = newCompleteType;
 			parameter_id = parameter_id.parameter_id();
 		}
+		
+		if(parameter_id.ptrs() != null)
+			retType += " " + ParseTreeUtils.childTokenString(parameter_id.ptrs());
+		if(parameter_id.type_suffix() != null)
+			retType += " " + ParseTreeUtils.childTokenString(parameter_id.type_suffix());
+		
 		return retType;
 	}
 	

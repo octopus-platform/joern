@@ -1,13 +1,13 @@
 package main.codeitems.declarations;
 
+import main.ParseTreeUtils;
+import main.codeitems.CodeItemBuilder;
+import main.codeitems.Name;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CodeSensorParser.IdentifierContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
-
-import main.ParseTreeUtils;
-import main.codeitems.CodeItemBuilder;
-import main.codeitems.Name;
 
 public class IdentifierDeclBuilder extends CodeItemBuilder
 {

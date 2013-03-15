@@ -1,11 +1,11 @@
 package main.codeitems.declarations;
 
+import main.codeitems.CodeItemBuilder;
+import main.codeitems.Name;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CodeSensorParser.Class_nameContext;
-
-import main.codeitems.CodeItemBuilder;
-import main.codeitems.Name;
 
 public class ClassDefBuilder extends CodeItemBuilder
 {
