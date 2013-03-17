@@ -7,7 +7,7 @@ import main.codeitems.Name;
 public class FunctionDef extends CodeItem{
 
 	public Name name;
-	public ParameterList parameterList;
+	public ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = null;
 	
 	public FunctionDef()

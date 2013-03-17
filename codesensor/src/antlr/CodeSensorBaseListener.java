@@ -1,9 +1,16 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
-    import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
+    import java.util.Stack;
+
+
+  import java.util.Stack;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }

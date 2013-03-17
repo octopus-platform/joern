@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import antlr.CodeSensorLexer;
 
-public class BuilderTest {
+public class ShallowBuildersTest {
 
 	@Test
 	public void testNestedStructs()
@@ -145,6 +145,24 @@ public class BuilderTest {
 		assertTrue(codeItem.name.getCodeStr().equals("foo"));
 	}
 
+	@Test
+	public void testEmptyParamList()
+	{
+		String input = "int foo(){}";
+		List<CodeItem> codeItems = parseInput(input);
+		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
+		assertTrue(codeItem.parameterList.getCodeStr().equals(""));
+	}
+	
+	@Test
+	public void testEmptyParamListLocation()
+	{
+		String input = "int foo(){}";
+		List<CodeItem> codeItems = parseInput(input);
+		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
+		assertTrue(codeItem.parameterList.location != null);
+	}
+	
 	private List<CodeItem> parseInput(String input)
 	{
 		ShallowParser parser = new ShallowParser();		
@@ -154,7 +172,7 @@ public class BuilderTest {
 		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		
-		parser.parseAndWalk(tokens);
+		parser.parseAndWalkStream(tokens);
 		TestProcessor processor = (TestProcessor) parser.listener.getProcessor();
 		return processor.codeItems;
 	}

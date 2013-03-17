@@ -19,43 +19,60 @@ import antlr.CodeSensorParser;
 public class ShallowParser extends CommonParser
 {
 	
-	private ParserContext context = null;
+	protected ShallowParserContext context = null;
 	public ShallowParseTreeListener listener = new ShallowParseTreeListener();
 	
-	
-	public void parseAndWalk(String filename) throws IOException
+	public void setStack(Stack<CodeItemBuilder> aStack)
 	{
-		initializeContext(filename);
+		listener.setStack(aStack);;
+	}
+	
+	public void setProcessor(Processor aProcessor)
+	{
+		listener.setProcessor(aProcessor);
+	}
+	
+	public void parseAndWalkFile(String filename) throws IOException
+	{
+		initializeContextWithFile(filename);
 		ParseTree tree = parseTokenStream(context.stream);
         walkParseTree(context.stream, tree);
 	}
 
-	private void initializeContext(String filename) throws IOException
+	private void initializeContextWithFile(String filename) throws IOException
 	{
-		context = new ParserContext();
+		context = new ShallowParserContext();
 		context.filename = filename;
 		context.stream = createTokenStreamFromFile(context.filename);
 		listener.initializeContext(context);
 	}
 	
-	public void parseAndWalk(TokenSubStream stream)
+	private static TokenSubStream createTokenStreamFromFile(String filename)
+			throws IOException
 	{
-		initializeContext(stream);
+		ANTLRInputStream input = new ANTLRFileStream(filename);
+    	CodeSensorLexer lexer = new CodeSensorLexer(input);
+        TokenSubStream tokens = new TokenSubStream(lexer);
+		return tokens;
+	}
+	
+	
+	public void parseAndWalkStream(TokenSubStream stream)
+	{
+		initializeContextWithStream(stream);
 		ParseTree tree = parseTokenStream(context.stream);
         walkParseTree(context.stream, tree);
 	}
 	
-	private void initializeContext(TokenSubStream stream)
+	private void initializeContextWithStream(TokenSubStream stream)
 	{
-		context = new ParserContext();
+		context = new ShallowParserContext();
 		context.filename = null;
 		context.stream = stream;
 		listener.initializeContext(context);
 	}
 
-	
-	
-	public ParseTree parseTokenStream(TokenSubStream tokens)
+	private ParseTree parseTokenStream(TokenSubStream tokens)
 	{
 		CodeSensorParser parser = new CodeSensorParser(tokens);
         ParseTree tree = null;
@@ -74,26 +91,7 @@ public class ShallowParser extends CommonParser
 		return tree;
 	}
 	
-	public void setStack(Stack<CodeItemBuilder> aStack)
-	{
-		listener.setStack(aStack);;
-	}
-	
-	public void setProcessor(Processor aProcessor)
-	{
-		listener.setProcessor(aProcessor);
-	}
-	
-	private static TokenSubStream createTokenStreamFromFile(String filename)
-			throws IOException
-	{
-		ANTLRInputStream input = new ANTLRFileStream(filename);
-    	CodeSensorLexer lexer = new CodeSensorLexer(input);
-        TokenSubStream tokens = new TokenSubStream(lexer);
-		return tokens;
-	}
-	
-	public void walkParseTree(TokenSubStream tokens,
+	private void walkParseTree(TokenSubStream tokens,
 			ParseTree tree)
 	{
 		ParseTreeWalker walker = new ParseTreeWalker();

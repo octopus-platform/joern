@@ -65,6 +65,17 @@ public class CodeSensorClassParserTest {
 	}
 	
 	@Test
+	public void testFunctionPrototype()
+	{
+		String input = "int foo(int x);";			
+		CodeSensorParser parser = createParser(input);
+		String output = parser.simple_decl().toStringTree(parser);		
+		System.out.println(output);
+		assertTrue(output.startsWith("(simple_decl (var_decl (type_name (base_type int)) (init_declarator_list (init_declarator (identifier foo) (type_suffix (param_type_list ( (param_type"));
+	}
+	
+	
+	@Test
 	public void testClassContentExtraction()
 	{
 		String input = "class foo{ foobar; }";

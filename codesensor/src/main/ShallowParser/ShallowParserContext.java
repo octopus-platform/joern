@@ -2,7 +2,7 @@ package main.ShallowParser;
 
 import main.TokenSubStream;
 
-public class ParserContext
+public class ShallowParserContext
 {
 	public String filename;
 	public TokenSubStream stream;

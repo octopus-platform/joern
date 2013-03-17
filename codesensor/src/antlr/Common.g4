@@ -97,7 +97,7 @@ parameter_name: identifier | access_specifier;
 param_type_list: '(' 'void' ')'
                | '(' (param_type (',' param_type)*)? ')';
 
-param_type: param_decl_specifiers param_type_id?;
+param_type: param_decl_specifiers param_type_id;
 param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 
 identifier : ALPHA_NUMERIC ('::' ALPHA_NUMERIC)*;

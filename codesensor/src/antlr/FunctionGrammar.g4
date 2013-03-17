@@ -6,13 +6,37 @@ import Common;
 	package antlr;
 }
 
-statements: statement*;
+@parser::members
+{
+            public boolean preProcSkipToEnd()
+            {
+                Stack<Object> CurlyStack = new Stack<Object>();
+                Object o = new Object();
+                int t = _input.LA(1);
 
-statement: block_opener
-         | block_closer
-         | pre_opener
-         | pre_closer
-         | pre_else 
+                while(t != EOF && !(CurlyStack.empty() && t == PRE_ENDIF)){
+                                        
+                    if(t == PRE_IF)
+                        CurlyStack.push(o);
+                    else if(t == PRE_ENDIF)
+                        CurlyStack.pop();
+                    
+                    consume();
+                    t = _input.LA(1);
+                }
+                if(t != EOF)
+                    consume();
+                return true;
+            }
+}
+
+statements: (pre_opener
+            | pre_closer
+            | pre_else {preProcSkipToEnd(); }
+            | statement)*;
+
+statement: opening_curly
+         | closing_curly
          | non_expr_statement
          | expr_statement
          | statement_water
@@ -26,17 +50,23 @@ pre_opener: PRE_IF;
 pre_else: PRE_ELSE;
 pre_closer: PRE_ENDIF;
 
-block_opener: '{';
-block_closer: '}';
+opening_curly: '{';
+closing_curly: '}';
 
 
-non_expr_statement: selection_statement
-                  | iteration_statement
-                  | try_block
-                  | catch_block
-                  | jump_statement
-                  | simple_decl
-                  | label
+non_expr_statement: block_starter
+                  | non_block_starter
+;
+
+block_starter: selection_statement
+             | iteration_statement
+             | try_block
+             | catch_block
+;
+
+non_block_starter: jump_statement
+                 | simple_decl
+                 | label
 ;
 
 selection_statement: if_statement
@@ -65,8 +95,8 @@ break_or_continue: ('break' | 'continue');
 return_statement: 'return' expr?;
 goto_statement: 'goto' identifier;
 
-try_block: TRY block_opener;
-catch_block: CATCH '('param_decl_specifiers parameter_name? ')' block_opener;
+try_block: TRY opening_curly;
+catch_block: CATCH '('param_decl_specifiers parameter_name? ')' opening_curly;
 
 label: (('case'? (identifier | number) ) | access_specifier) ':' ;
 

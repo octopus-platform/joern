@@ -7,7 +7,8 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
-public class CommonParser {
+public class CommonParser
+{
 
 	protected static boolean isRecognitionException(RuntimeException ex)
 	{

@@ -2,6 +2,7 @@ package main.FunctionParser;
 
 import main.CommonParser;
 import main.TokenSubStream;
+import main.processors.Processor;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -13,7 +14,15 @@ import antlr.FunctionGrammarParser;
 public class FunctionParser extends CommonParser
 {
 	public FunctionGrammarParser parser;
+	public FunctionParseTreeListener listener = new FunctionParseTreeListener();
 	
+	public ParseTree parseAndWalk(String input)
+	{
+		ParseTree tree = parse(input);
+		walkTree(tree);
+		return tree;
+	}
+
 	public ParseTree parse(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
@@ -23,6 +32,8 @@ public class FunctionParser extends CommonParser
 		return tree;
 	}
 	
+	
+	
 	public ParseTree parse(TokenSubStream tokens)
 	{
 		ParseTree tree = parseTokenStream(tokens);
@@ -30,10 +41,13 @@ public class FunctionParser extends CommonParser
         if(tree == null)
         	return null;
         	
-        FunctionParseTreeListener listener = new FunctionParseTreeListener();
+        return tree;
+	}
+
+	private void walkTree(ParseTree tree)
+	{
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
-        return tree;
 	}
 	
 	public ParseTree parseTokenStream(TokenSubStream tokens)
@@ -54,5 +68,16 @@ public class FunctionParser extends CommonParser
         
         }
 		return tree;
+	}
+
+	public void setProcessor(Processor processor)
+	{
+		listener.setProcessor(processor);
+	}
+
+	public void parseAndWalkStream(TokenSubStream tokens)
+	{
+		ParseTree tree = parseTokenStream(tokens);
+		walkTree(tree);
 	}
 }

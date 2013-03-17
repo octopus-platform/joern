@@ -14,10 +14,16 @@ public class ParameterList extends CodeItem
 		nodeTypeName = "PARAMETER_LIST";
 	}
 	
+	@Override
 	public String getCodeStr()
 	{
 		if(codeStr != null)
 			return codeStr;
+		
+		if(parameters.size() == 0){
+			codeStr = "";
+			return codeStr;
+		}
 		
 		Iterator<Parameter> i = parameters.iterator();
 		StringBuilder s = new StringBuilder();

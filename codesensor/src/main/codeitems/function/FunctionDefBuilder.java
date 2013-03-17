@@ -9,6 +9,7 @@ import main.codeitems.Name;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CodeSensorParser.Function_nameContext;
+import antlr.CodeSensorParser.Function_param_listContext;
 import antlr.CodeSensorParser.Parameter_declContext;
 import antlr.CodeSensorParser.Parameter_decl_clauseContext;
 import antlr.CodeSensorParser.Return_typeContext;
@@ -44,7 +45,7 @@ public class FunctionDefBuilder extends CodeItemBuilder {
 		returnType.setCompleteType(ParseTreeUtils.childTokenString(ctx));
 	}
 
-	public void setParameterList(Parameter_decl_clauseContext ctx,
+	public void setParameterList(Function_param_listContext ctx,
 								 Stack<CodeItemBuilder> itemStack)
 	{
 		paramListBuilder.createNew(ctx);

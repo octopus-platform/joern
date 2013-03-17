@@ -110,7 +110,63 @@ public class CodeSensorFunctionParserTest {
 		String output = parser.function_def().toStringTree(parser);		
 		assertTrue(output.startsWith("(function_def"));
 	}
+
+	@Test
+	public void testPreprocessorIfs()
+	{
+		String input = "int foo(){ #if bar\n { #endif\n}";
 		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);	
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def "));
+	}
+	
+	@Test
+	public void testNestedPreprocessorIfs()
+	{
+		String input = "int foo(){ #if bar\n #if bar2\n { #endif #endif\n}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);	
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def "));
+	}
+	
+	@Test
+	public void testNestedFunctionName()
+	{
+		String input = "int (foo)(){}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);	
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def "));
+	}
+	
+	@Test
+	public void testOperatorOverloading()
+	{
+		String input = "inline bool operator == (const PlMessageHeader &b) const {}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);	
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def "));
+	}
+	
+	@Test
+	public void testExceptionSpecificationCpp()
+	{
+		String input = "int foo() throw(){}";
+		
+		CodeSensorParser parser = createParser(input);
+		String output = parser.function_def().toStringTree(parser);	
+		System.out.println(output);
+		assertTrue(output.startsWith("(function_def "));
+	}
+	
+	
 }
 
 
