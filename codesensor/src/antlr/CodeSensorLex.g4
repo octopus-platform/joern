@@ -1,23 +1,28 @@
 lexer grammar CodeSensorLex;
 
+
+// keywords
+
 IF: 'if'; ELSE: 'else'; FOR: 'for'; WHILE: 'while';
 SWITCH: 'switch'; CONTINUE: 'continue'; BREAK: 'break';
 GOTO: 'goto'; RETURN: 'return'; CASE: 'case';
-TRY: 'try'; CATCH: 'catch';
+TRY: 'try'; CATCH: 'catch'; THROW: 'throw';
+VOID: 'void'; USING: 'using';
+NAMESPACE: 'namespace'; TYPEDEF: 'typedef';
+VIRTUAL: 'virtual';
+UNSIGNED: 'unsigned'; SIGNED: 'signed';
+LONG: 'long';
+AUTO: 'auto'; REGISTER: 'register';
+OPERATOR: 'operator'; TEMPLATE: 'template';
 
 ALPHA_NUMERIC: [a-zA-Z_~][a-zA-Z0-9_]*;
+
+// pre-processor directives
 
 PRE_IF: ('#if' | '#ifdef' | '#ifndef') ( (.*?) ~('\\') '\n');
 PRE_ELSE: '#else' | '#elif';
 PRE_ENDIF: '#endif';
-
-
-CPPCOMMENT : '//' .*? '\n' -> skip;
-COMMENT :       '/*'  (.*?) '*/' -> skip;
-
-STRING : ('\'' ( ('\\' . ) | ~('\\' | '\'') )* '\'' )
-        |('"'  ( ('\\' . ) | ~('\\' | '"') )* '"') ;
-
+INCLUDE: '#include ' ( (.*?) ~('\\') '\n');
 
 OPENING_CURLY: '{';
 CLOSING_CURLY: '}';
@@ -49,6 +54,12 @@ fragment
 FloatTypeSuffix : ('f'|'F'|'d'|'D');
 
 // PREPROC : '#'  ( (.*?) ~('\\') '\n') -> skip;
+
+CPPCOMMENT : '//' .*? '\n' -> skip;
+COMMENT :       '/*'  (.*?) '*/' -> skip;
+
+STRING : ('\'' ( ('\\' . ) | ~('\\' | '\'') )* '\'' )
+        |('"'  ( ('\\' . ) | ~('\\' | '"') )* '"') ;
 
 WHITESPACE: (' ' | '\t' | '\n' | '\r')+ -> skip;
 OTHER : .  -> skip;

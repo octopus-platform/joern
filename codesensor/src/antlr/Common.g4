@@ -46,7 +46,7 @@ import Expressions;
             }
 }
 
-simple_decl : 'typedef'? template_decl_start? var_decl;
+simple_decl : TYPEDEF? template_decl_start? var_decl;
 
 var_decl : type_name init_declarator_list #declByType
          | class_def init_declarator_list? #declByClass
@@ -78,23 +78,23 @@ initializer_list: initializer (',' initializer)*;
 class_def: class_key class_name? base_classes? OPENING_CURLY {skipToEndOfObject(); } ;
 class_name: identifier;
 base_classes: ':' base_class (',' base_class)*;
-base_class: 'virtual'? access_specifier? identifier;
+base_class: VIRTUAL? access_specifier? identifier;
 
-type_name : (cv_qualifier* (class_key | 'unsigned' | 'signed')?
+type_name : (cv_qualifier* (class_key | UNSIGNED | SIGNED)?
             base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
-          | ('unsigned' | 'signed');
+          | (UNSIGNED | SIGNED);
 
 type_suffix : ('[' constant_expr_w_ ']') | param_type_list;
-base_type: (ALPHA_NUMERIC | 'void' | 'long' | 'long' 'long');
+base_type: (ALPHA_NUMERIC | VOID | LONG | LONG LONG);
 
 // this one is new
 constant_expr_w_: no_squares* ('[' constant_expr_w_ ']' no_squares*)*;
 
 // Parameters
 
-param_decl_specifiers : ('auto' | 'register')? type_name;
+param_decl_specifiers : (AUTO | REGISTER)? type_name;
 parameter_name: identifier | access_specifier;
-param_type_list: '(' 'void' ')'
+param_type_list: '(' VOID ')'
                | '(' (param_type (',' param_type)*)? ')';
 
 param_type: param_decl_specifiers param_type_id;
@@ -124,7 +124,7 @@ class_key: ('struct' | 'class' | 'union' | 'enum');
 ptr_operator: ('*' | '&');
 
 access_specifier: ('public' | 'private' | 'protected');
-operator_function_id: 'operator' operator;
+operator_function_id: OPERATOR operator;
 
 operator: (('new' | 'delete' ) ('[' ']')?)
   | '+' | '-' | '*' | '/' | '%' |'^' | '&' | '|' | '~'
@@ -138,7 +138,7 @@ operator: (('new' | 'delete' ) ('[' ']')?)
 assignment_operator: '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='; 
 equality_operator: ('=='| '!=');
 
-template_decl_start : 'template' '<' template_param_list '>';
+template_decl_start : TEMPLATE '<' template_param_list '>';
 
 // template water
 template_param_list : (('<' template_param_list '>') |

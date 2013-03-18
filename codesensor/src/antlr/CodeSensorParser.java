@@ -21,36 +21,36 @@ public class CodeSensorParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__73=1, T__72=2, T__71=3, T__70=4, T__69=5, T__68=6, T__67=7, T__66=8, 
-		T__65=9, T__64=10, T__63=11, T__62=12, T__61=13, T__60=14, T__59=15, T__58=16, 
-		T__57=17, T__56=18, T__55=19, T__54=20, T__53=21, T__52=22, T__51=23, 
-		T__50=24, T__49=25, T__48=26, T__47=27, T__46=28, T__45=29, T__44=30, 
-		T__43=31, T__42=32, T__41=33, T__40=34, T__39=35, T__38=36, T__37=37, 
-		T__36=38, T__35=39, T__34=40, T__33=41, T__32=42, T__31=43, T__30=44, 
-		T__29=45, T__28=46, T__27=47, T__26=48, T__25=49, T__24=50, T__23=51, 
-		T__22=52, T__21=53, T__20=54, T__19=55, T__18=56, T__17=57, T__16=58, 
-		T__15=59, T__14=60, T__13=61, T__12=62, T__11=63, T__10=64, T__9=65, T__8=66, 
-		T__7=67, T__6=68, T__5=69, T__4=70, T__3=71, T__2=72, T__1=73, T__0=74, 
-		IF=75, ELSE=76, FOR=77, WHILE=78, SWITCH=79, CONTINUE=80, BREAK=81, GOTO=82, 
-		RETURN=83, CASE=84, TRY=85, CATCH=86, ALPHA_NUMERIC=87, PRE_IF=88, PRE_ELSE=89, 
-		PRE_ENDIF=90, CPPCOMMENT=91, COMMENT=92, STRING=93, OPENING_CURLY=94, 
-		CLOSING_CURLY=95, HEX_LITERAL=96, DECIMAL_LITERAL=97, OCTAL_LITERAL=98, 
-		FLOATING_POINT_LITERAL=99, WHITESPACE=100, OTHER=101;
+		T__60=1, T__59=2, T__58=3, T__57=4, T__56=5, T__55=6, T__54=7, T__53=8, 
+		T__52=9, T__51=10, T__50=11, T__49=12, T__48=13, T__47=14, T__46=15, T__45=16, 
+		T__44=17, T__43=18, T__42=19, T__41=20, T__40=21, T__39=22, T__38=23, 
+		T__37=24, T__36=25, T__35=26, T__34=27, T__33=28, T__32=29, T__31=30, 
+		T__30=31, T__29=32, T__28=33, T__27=34, T__26=35, T__25=36, T__24=37, 
+		T__23=38, T__22=39, T__21=40, T__20=41, T__19=42, T__18=43, T__17=44, 
+		T__16=45, T__15=46, T__14=47, T__13=48, T__12=49, T__11=50, T__10=51, 
+		T__9=52, T__8=53, T__7=54, T__6=55, T__5=56, T__4=57, T__3=58, T__2=59, 
+		T__1=60, T__0=61, IF=62, ELSE=63, FOR=64, WHILE=65, SWITCH=66, CONTINUE=67, 
+		BREAK=68, GOTO=69, RETURN=70, CASE=71, TRY=72, CATCH=73, THROW=74, VOID=75, 
+		USING=76, NAMESPACE=77, TYPEDEF=78, VIRTUAL=79, UNSIGNED=80, SIGNED=81, 
+		LONG=82, AUTO=83, REGISTER=84, OPERATOR=85, TEMPLATE=86, ALPHA_NUMERIC=87, 
+		PRE_IF=88, PRE_ELSE=89, PRE_ENDIF=90, INCLUDE=91, OPENING_CURLY=92, CLOSING_CURLY=93, 
+		HEX_LITERAL=94, DECIMAL_LITERAL=95, OCTAL_LITERAL=96, FLOATING_POINT_LITERAL=97, 
+		CPPCOMMENT=98, COMMENT=99, STRING=100, WHITESPACE=101, OTHER=102;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'&'", "'register'", "'*'", "'['", "'<'", "'--'", "'!='", 
-		"'<='", "'<<'", "'namespace'", "'%'", "'->'", "'auto'", "'union'", "'*='", 
-		"')'", "'virtual'", "'signed'", "'explicit'", "'inline'", "'throw'", "'::'", 
-		"'unsigned'", "'template'", "'='", "'const'", "'|='", "'new'", "'class'", 
-		"'|'", "'!'", "'enum'", "'long'", "'using'", "']'", "'<<='", "'-='", "'->*'", 
-		"'public'", "','", "'-'", "':'", "'('", "'&='", "'private'", "'?'", "'void'", 
-		"'>>='", "'...'", "'+='", "'^='", "'friend'", "'struct'", "'static'", 
-		"'++'", "'>>'", "'delete'", "'^'", "'.'", "'+'", "'protected'", "'operator'", 
-		"'typedef'", "'volatile'", "';'", "'&&'", "'||'", "'>'", "'%='", "'/='", 
+		"<INVALID>", "'&'", "'['", "'*'", "'<'", "'--'", "'!='", "'<='", "'<<'", 
+		"'%'", "'->'", "'*='", "'union'", "')'", "'explicit'", "'inline'", "'::'", 
+		"'='", "'const'", "'|='", "'new'", "'class'", "'|'", "'!'", "'enum'", 
+		"']'", "'<<='", "'-='", "'->*'", "'public'", "','", "'-'", "':'", "'('", 
+		"'&='", "'private'", "'?'", "'>>='", "'...'", "'+='", "'^='", "'friend'", 
+		"'struct'", "'static'", "'++'", "'>>'", "'^'", "'delete'", "'.'", "'+'", 
+		"'protected'", "';'", "'volatile'", "'&&'", "'||'", "'>'", "'%='", "'/='", 
 		"'/'", "'=='", "'~'", "'>='", "'if'", "'else'", "'for'", "'while'", "'switch'", 
 		"'continue'", "'break'", "'goto'", "'return'", "'case'", "'try'", "'catch'", 
-		"ALPHA_NUMERIC", "PRE_IF", "PRE_ELSE", "'#endif'", "CPPCOMMENT", "COMMENT", 
-		"STRING", "'{'", "'}'", "HEX_LITERAL", "DECIMAL_LITERAL", "OCTAL_LITERAL", 
-		"FLOATING_POINT_LITERAL", "WHITESPACE", "OTHER"
+		"'throw'", "'void'", "'using'", "'namespace'", "'typedef'", "'virtual'", 
+		"'unsigned'", "'signed'", "'long'", "'auto'", "'register'", "'operator'", 
+		"'template'", "ALPHA_NUMERIC", "PRE_IF", "PRE_ELSE", "'#endif'", "INCLUDE", 
+		"'{'", "'}'", "HEX_LITERAL", "DECIMAL_LITERAL", "OCTAL_LITERAL", "FLOATING_POINT_LITERAL", 
+		"CPPCOMMENT", "COMMENT", "STRING", "WHITESPACE", "OTHER"
 	};
 	public static final int
 		RULE_code = 0, RULE_part = 1, RULE_declaration = 2, RULE_function_def = 3, 
@@ -190,7 +190,7 @@ public class CodeSensorParser extends Parser {
 			setState(179);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (23 - 64)) | (1L << (24 - 64)) | (1L << (26 - 64)) | (1L << (29 - 64)) | (1L << (32 - 64)) | (1L << (33 - 64)) | (1L << (34 - 64)) | (1L << (43 - 64)) | (1L << (47 - 64)) | (1L << (52 - 64)) | (1L << (53 - 64)) | (1L << (54 - 64)) | (1L << (62 - 64)) | (1L << (63 - 64)) | (1L << (64 - 64)) | (1L << (ALPHA_NUMERIC - 64)))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (18 - 64)) | (1L << (21 - 64)) | (1L << (24 - 64)) | (1L << (33 - 64)) | (1L << (41 - 64)) | (1L << (42 - 64)) | (1L << (43 - 64)) | (1L << (52 - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)))) != 0)) {
 				{
 				{
 				setState(176); part();
@@ -371,7 +371,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(192);
 			_la = _input.LA(1);
-			if (_la==24) {
+			if (_la==TEMPLATE) {
 				{
 				setState(191); template_decl_start();
 				}
@@ -389,7 +389,7 @@ public class CodeSensorParser extends Parser {
 			setState(198); function_param_list();
 			setState(200);
 			_la = _input.LA(1);
-			if (_la==42) {
+			if (_la==32) {
 				{
 				setState(199); ctor_list();
 				}
@@ -450,7 +450,7 @@ public class CodeSensorParser extends Parser {
 			setState(207);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 17) | (1L << 19) | (1L << 20) | (1L << 52) | (1L << 54))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 14) | (1L << 15) | (1L << 41) | (1L << 43))) != 0) || _la==VIRTUAL) {
 				{
 				{
 				setState(204); function_decl_specifiers();
@@ -522,20 +522,20 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(218); match(43);
+			setState(218); match(33);
 			setState(220);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 13) | (1L << 14) | (1L << 18) | (1L << 23) | (1L << 26) | (1L << 29) | (1L << 32) | (1L << 33) | (1L << 47) | (1L << 53))) != 0) || _la==64 || _la==ALPHA_NUMERIC) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 12) | (1L << 18) | (1L << 21) | (1L << 24) | (1L << 42) | (1L << 52))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (VOID - 75)) | (1L << (UNSIGNED - 75)) | (1L << (SIGNED - 75)) | (1L << (LONG - 75)) | (1L << (AUTO - 75)) | (1L << (REGISTER - 75)) | (1L << (ALPHA_NUMERIC - 75)))) != 0)) {
 				{
 				setState(219); parameter_decl_clause();
 				}
 			}
 
-			setState(222); match(16);
+			setState(222); match(13);
 			setState(226);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==26 || _la==64) {
+			while (_la==18 || _la==52) {
 				{
 				{
 				setState(223); cv_qualifier();
@@ -547,7 +547,7 @@ public class CodeSensorParser extends Parser {
 			}
 			setState(230);
 			_la = _input.LA(1);
-			if (_la==21) {
+			if (_la==THROW) {
 				{
 				setState(229); exception_specification();
 				}
@@ -567,6 +567,7 @@ public class CodeSensorParser extends Parser {
 	}
 
 	public static class Parameter_decl_clauseContext extends ParserRuleContext {
+		public TerminalNode VOID() { return getToken(CodeSensorParser.VOID, 0); }
 		public List<Parameter_declContext> parameter_decl() {
 			return getRuleContexts(Parameter_declContext.class);
 		}
@@ -607,7 +608,7 @@ public class CodeSensorParser extends Parser {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(233); match(40);
+						setState(233); match(30);
 						setState(234); parameter_decl();
 						}
 						} 
@@ -619,10 +620,10 @@ public class CodeSensorParser extends Parser {
 				}
 				setState(242);
 				_la = _input.LA(1);
-				if (_la==40) {
+				if (_la==30) {
 					{
-					setState(240); match(40);
-					setState(241); match(49);
+					setState(240); match(30);
+					setState(241); match(38);
 					}
 				}
 
@@ -632,7 +633,7 @@ public class CodeSensorParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(244); match(47);
+				setState(244); match(VOID);
 				}
 				break;
 			}
@@ -734,16 +735,16 @@ public class CodeSensorParser extends Parser {
 
 			setState(258);
 			switch (_input.LA(1)) {
-			case 43:
+			case 33:
 				{
-				setState(253); match(43);
+				setState(253); match(33);
 				setState(254); parameter_id();
-				setState(255); match(16);
+				setState(255); match(13);
 				}
 				break;
-			case 39:
-			case 45:
-			case 61:
+			case 29:
+			case 35:
+			case 50:
 			case ALPHA_NUMERIC:
 				{
 				setState(257); parameter_name();
@@ -754,7 +755,7 @@ public class CodeSensorParser extends Parser {
 			}
 			setState(261);
 			_la = _input.LA(1);
-			if (_la==4 || _la==43) {
+			if (_la==2 || _la==33) {
 				{
 				setState(260); type_suffix();
 				}
@@ -837,15 +838,15 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(266); match(42);
+			setState(266); match(32);
 			setState(267); ctor_initializer();
 			setState(272);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==40) {
+			while (_la==30) {
 				{
 				{
-				setState(268); match(40);
+				setState(268); match(30);
 				setState(269); ctor_initializer();
 				}
 				}
@@ -935,9 +936,9 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(279);
 			_la = _input.LA(1);
-			if (_la==22) {
+			if (_la==16) {
 				{
-				setState(278); match(22);
+				setState(278); match(16);
 				}
 			}
 
@@ -980,16 +981,16 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(283); match(43);
+			setState(283); match(33);
 			setState(285);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 6) | (1L << 31) | (1L << 41) | (1L << 43) | (1L << 55) | (1L << 60))) != 0) || ((((_la - 73)) & ~0x3f) == 0 && ((1L << (_la - 73)) & ((1L << (73 - 73)) | (1L << (ALPHA_NUMERIC - 73)) | (1L << (STRING - 73)) | (1L << (HEX_LITERAL - 73)) | (1L << (DECIMAL_LITERAL - 73)) | (1L << (OCTAL_LITERAL - 73)) | (1L << (FLOATING_POINT_LITERAL - 73)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 5) | (1L << 23) | (1L << 31) | (1L << 33) | (1L << 44) | (1L << 49) | (1L << 60))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (ALPHA_NUMERIC - 87)) | (1L << (HEX_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (OCTAL_LITERAL - 87)) | (1L << (FLOATING_POINT_LITERAL - 87)) | (1L << (STRING - 87)))) != 0)) {
 				{
 				setState(284); expr();
 				}
 			}
 
-			setState(287); match(16);
+			setState(287); match(13);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1033,12 +1034,12 @@ public class CodeSensorParser extends Parser {
 		try {
 			setState(295);
 			switch (_input.LA(1)) {
-			case 43:
+			case 33:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(289); match(43);
+				setState(289); match(33);
 				setState(290); function_name();
-				setState(291); match(16);
+				setState(291); match(13);
 				}
 				break;
 			case ALPHA_NUMERIC:
@@ -1047,7 +1048,7 @@ public class CodeSensorParser extends Parser {
 				setState(293); identifier();
 				}
 				break;
-			case 62:
+			case OPERATOR:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(294); operator_function_id();
@@ -1072,6 +1073,7 @@ public class CodeSensorParser extends Parser {
 		public Type_id_listContext type_id_list() {
 			return getRuleContext(Type_id_listContext.class,0);
 		}
+		public TerminalNode THROW() { return getToken(CodeSensorParser.THROW, 0); }
 		public Exception_specificationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1092,10 +1094,10 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(297); match(21);
-			setState(298); match(43);
+			setState(297); match(THROW);
+			setState(298); match(33);
 			setState(299); type_id_list();
-			setState(300); match(16);
+			setState(300); match(13);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1146,7 +1148,7 @@ public class CodeSensorParser extends Parser {
 			setState(305);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
 				setState(302); no_brackets();
@@ -1159,16 +1161,16 @@ public class CodeSensorParser extends Parser {
 			setState(319);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==43) {
+			while (_la==33) {
 				{
 				{
-				setState(308); match(43);
+				setState(308); match(33);
 				setState(309); type_id_list();
-				setState(310); match(16);
+				setState(310); match(13);
 				setState(314);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
 					setState(311); no_brackets();
@@ -1198,9 +1200,11 @@ public class CodeSensorParser extends Parser {
 	}
 
 	public static class Using_directiveContext extends ParserRuleContext {
+		public TerminalNode USING() { return getToken(CodeSensorParser.USING, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode NAMESPACE() { return getToken(CodeSensorParser.NAMESPACE, 0); }
 		public Using_directiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1221,10 +1225,10 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(322); match(34);
-			setState(323); match(10);
+			setState(322); match(USING);
+			setState(323); match(NAMESPACE);
 			setState(324); identifier();
-			setState(325); match(65);
+			setState(325); match(51);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1242,6 +1246,7 @@ public class CodeSensorParser extends Parser {
 		public Template_decl_startContext template_decl_start() {
 			return getRuleContext(Template_decl_startContext.class,0);
 		}
+		public TerminalNode TYPEDEF() { return getToken(CodeSensorParser.TYPEDEF, 0); }
 		public Var_declContext var_decl() {
 			return getRuleContext(Var_declContext.class,0);
 		}
@@ -1268,15 +1273,15 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(328);
 			_la = _input.LA(1);
-			if (_la==63) {
+			if (_la==TYPEDEF) {
 				{
-				setState(327); match(63);
+				setState(327); match(TYPEDEF);
 				}
 			}
 
 			setState(331);
 			_la = _input.LA(1);
-			if (_la==24) {
+			if (_la==TEMPLATE) {
 				{
 				setState(330); template_decl_start();
 				}
@@ -1417,10 +1422,10 @@ public class CodeSensorParser extends Parser {
 			setState(349);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==40) {
+			while (_la==30) {
 				{
 				{
-				setState(345); match(40);
+				setState(345); match(30);
 				setState(346); init_declarator();
 				}
 				}
@@ -1428,7 +1433,7 @@ public class CodeSensorParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(352); match(65);
+			setState(352); match(51);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1500,32 +1505,32 @@ public class CodeSensorParser extends Parser {
 			}
 			setState(368);
 			switch (_input.LA(1)) {
-			case 43:
+			case 33:
 				{
 				{
-				setState(361); match(43);
+				setState(361); match(33);
 				setState(363);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 6) | (1L << 31) | (1L << 41) | (1L << 43) | (1L << 55) | (1L << 60))) != 0) || ((((_la - 73)) & ~0x3f) == 0 && ((1L << (_la - 73)) & ((1L << (73 - 73)) | (1L << (ALPHA_NUMERIC - 73)) | (1L << (STRING - 73)) | (1L << (HEX_LITERAL - 73)) | (1L << (DECIMAL_LITERAL - 73)) | (1L << (OCTAL_LITERAL - 73)) | (1L << (FLOATING_POINT_LITERAL - 73)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 5) | (1L << 23) | (1L << 31) | (1L << 33) | (1L << 44) | (1L << 49) | (1L << 60))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (ALPHA_NUMERIC - 87)) | (1L << (HEX_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (OCTAL_LITERAL - 87)) | (1L << (FLOATING_POINT_LITERAL - 87)) | (1L << (STRING - 87)))) != 0)) {
 					{
 					setState(362); expr();
 					}
 				}
 
-				setState(365); match(16);
+				setState(365); match(13);
 				}
 				}
 				break;
-			case 25:
+			case 17:
 				{
 				{
-				setState(366); match(25);
+				setState(366); match(17);
 				setState(367); assign_expr_w_();
 				}
 				}
 				break;
-			case 40:
-			case 65:
+			case 30:
+			case 51:
 				break;
 			default:
 				throw new NoViableAltException(this);
@@ -1580,7 +1585,7 @@ public class CodeSensorParser extends Parser {
 			setState(373);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 41) | (1L << 42) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 31) | (1L << 32) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
 				setState(370); assign_water();
@@ -1593,7 +1598,7 @@ public class CodeSensorParser extends Parser {
 			setState(398);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==4 || _la==43 || _la==OPENING_CURLY) {
+			while (_la==2 || _la==33 || _la==OPENING_CURLY) {
 				{
 				{
 				setState(388);
@@ -1605,18 +1610,18 @@ public class CodeSensorParser extends Parser {
 					setState(378); match(CLOSING_CURLY);
 					}
 					break;
-				case 43:
+				case 33:
 					{
-					setState(380); match(43);
+					setState(380); match(33);
 					setState(381); assign_expr_w__l2();
-					setState(382); match(16);
+					setState(382); match(13);
 					}
 					break;
-				case 4:
+				case 2:
 					{
-					setState(384); match(4);
+					setState(384); match(2);
 					setState(385); assign_expr_w__l2();
-					setState(386); match(35);
+					setState(386); match(25);
 					}
 					break;
 				default:
@@ -1625,7 +1630,7 @@ public class CodeSensorParser extends Parser {
 				setState(393);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 41) | (1L << 42) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 31) | (1L << 32) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
 					setState(390); assign_water();
@@ -1691,7 +1696,7 @@ public class CodeSensorParser extends Parser {
 			setState(404);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
 				setState(401); assign_water_l2();
@@ -1704,7 +1709,7 @@ public class CodeSensorParser extends Parser {
 			setState(429);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==4 || _la==43 || _la==OPENING_CURLY) {
+			while (_la==2 || _la==33 || _la==OPENING_CURLY) {
 				{
 				{
 				setState(419);
@@ -1716,18 +1721,18 @@ public class CodeSensorParser extends Parser {
 					setState(409); match(CLOSING_CURLY);
 					}
 					break;
-				case 43:
+				case 33:
 					{
-					setState(411); match(43);
+					setState(411); match(33);
 					setState(412); assign_expr_w__l2();
-					setState(413); match(16);
+					setState(413); match(13);
 					}
 					break;
-				case 4:
+				case 2:
 					{
-					setState(415); match(4);
+					setState(415); match(2);
 					setState(416); assign_expr_w__l2();
-					setState(417); match(35);
+					setState(417); match(25);
 					}
 					break;
 				default:
@@ -1736,7 +1741,7 @@ public class CodeSensorParser extends Parser {
 				setState(424);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
 					setState(421); assign_water_l2();
@@ -1808,7 +1813,7 @@ public class CodeSensorParser extends Parser {
 
 			setState(437);
 			_la = _input.LA(1);
-			if (_la==42) {
+			if (_la==32) {
 				{
 				setState(436); base_classes();
 				}
@@ -1895,15 +1900,15 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(444); match(42);
+			setState(444); match(32);
 			setState(445); base_class();
 			setState(450);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==40) {
+			while (_la==30) {
 				{
 				{
-				setState(446); match(40);
+				setState(446); match(30);
 				setState(447); base_class();
 				}
 				}
@@ -1925,6 +1930,7 @@ public class CodeSensorParser extends Parser {
 	}
 
 	public static class Base_classContext extends ParserRuleContext {
+		public TerminalNode VIRTUAL() { return getToken(CodeSensorParser.VIRTUAL, 0); }
 		public Access_specifierContext access_specifier() {
 			return getRuleContext(Access_specifierContext.class,0);
 		}
@@ -1954,15 +1960,15 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(454);
 			_la = _input.LA(1);
-			if (_la==17) {
+			if (_la==VIRTUAL) {
 				{
-				setState(453); match(17);
+				setState(453); match(VIRTUAL);
 				}
 			}
 
 			setState(457);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 39) | (1L << 45) | (1L << 61))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 29) | (1L << 35) | (1L << 50))) != 0)) {
 				{
 				setState(456); access_specifier();
 				}
@@ -1986,6 +1992,8 @@ public class CodeSensorParser extends Parser {
 		public Template_param_listContext template_param_list(int i) {
 			return getRuleContext(Template_param_listContext.class,i);
 		}
+		public TerminalNode SIGNED() { return getToken(CodeSensorParser.SIGNED, 0); }
+		public TerminalNode UNSIGNED() { return getToken(CodeSensorParser.UNSIGNED, 0); }
 		public List<Cv_qualifierContext> cv_qualifier() {
 			return getRuleContexts(Cv_qualifierContext.class);
 		}
@@ -2032,7 +2040,7 @@ public class CodeSensorParser extends Parser {
 				setState(464);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==26 || _la==64) {
+				while (_la==18 || _la==52) {
 					{
 					{
 					setState(461); cv_qualifier();
@@ -2044,26 +2052,26 @@ public class CodeSensorParser extends Parser {
 				}
 				setState(470);
 				switch (_input.LA(1)) {
-				case 14:
-				case 29:
-				case 32:
-				case 53:
+				case 12:
+				case 21:
+				case 24:
+				case 42:
 					{
 					setState(467); class_key();
 					}
 					break;
-				case 23:
+				case UNSIGNED:
 					{
-					setState(468); match(23);
+					setState(468); match(UNSIGNED);
 					}
 					break;
-				case 18:
+				case SIGNED:
 					{
-					setState(469); match(18);
+					setState(469); match(SIGNED);
 					}
 					break;
-				case 33:
-				case 47:
+				case VOID:
+				case LONG:
 				case ALPHA_NUMERIC:
 					break;
 				default:
@@ -2072,29 +2080,29 @@ public class CodeSensorParser extends Parser {
 				setState(472); base_type();
 				setState(477);
 				_la = _input.LA(1);
-				if (_la==5) {
+				if (_la==4) {
 					{
-					setState(473); match(5);
+					setState(473); match(4);
 					setState(474); template_param_list();
-					setState(475); match(68);
+					setState(475); match(55);
 					}
 				}
 
 				setState(489);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==22) {
+				while (_la==16) {
 					{
 					{
-					setState(479); match(22);
+					setState(479); match(16);
 					setState(480); base_type();
 					setState(485);
 					_la = _input.LA(1);
-					if (_la==5) {
+					if (_la==4) {
 						{
-						setState(481); match(5);
+						setState(481); match(4);
 						setState(482); template_param_list();
-						setState(483); match(68);
+						setState(483); match(55);
 						}
 					}
 
@@ -2113,7 +2121,7 @@ public class CodeSensorParser extends Parser {
 				{
 				setState(492);
 				_la = _input.LA(1);
-				if ( !(_la==18 || _la==23) ) {
+				if ( !(_la==UNSIGNED || _la==SIGNED) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -2159,17 +2167,17 @@ public class CodeSensorParser extends Parser {
 		try {
 			setState(500);
 			switch (_input.LA(1)) {
-			case 4:
+			case 2:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(495); match(4);
+				setState(495); match(2);
 				setState(496); constant_expr_w_();
-				setState(497); match(35);
+				setState(497); match(25);
 				}
 				}
 				break;
-			case 43:
+			case 33:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(499); param_type_list();
@@ -2191,7 +2199,12 @@ public class CodeSensorParser extends Parser {
 	}
 
 	public static class Base_typeContext extends ParserRuleContext {
+		public TerminalNode VOID() { return getToken(CodeSensorParser.VOID, 0); }
 		public TerminalNode ALPHA_NUMERIC() { return getToken(CodeSensorParser.ALPHA_NUMERIC, 0); }
+		public TerminalNode LONG(int i) {
+			return getToken(CodeSensorParser.LONG, i);
+		}
+		public List<TerminalNode> LONG() { return getTokens(CodeSensorParser.LONG); }
 		public Base_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2222,20 +2235,20 @@ public class CodeSensorParser extends Parser {
 
 			case 2:
 				{
-				setState(503); match(47);
+				setState(503); match(VOID);
 				}
 				break;
 
 			case 3:
 				{
-				setState(504); match(33);
+				setState(504); match(LONG);
 				}
 				break;
 
 			case 4:
 				{
-				setState(505); match(33);
-				setState(506); match(33);
+				setState(505); match(LONG);
+				setState(506); match(LONG);
 				}
 				break;
 			}
@@ -2289,7 +2302,7 @@ public class CodeSensorParser extends Parser {
 			setState(512);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
 				setState(509); no_squares();
@@ -2302,16 +2315,16 @@ public class CodeSensorParser extends Parser {
 			setState(526);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==4) {
+			while (_la==2) {
 				{
 				{
-				setState(515); match(4);
+				setState(515); match(2);
 				setState(516); constant_expr_w_();
-				setState(517); match(35);
+				setState(517); match(25);
 				setState(521);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (68 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
 					setState(518); no_squares();
@@ -2344,6 +2357,8 @@ public class CodeSensorParser extends Parser {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
+		public TerminalNode REGISTER() { return getToken(CodeSensorParser.REGISTER, 0); }
+		public TerminalNode AUTO() { return getToken(CodeSensorParser.AUTO, 0); }
 		public Param_decl_specifiersContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2367,11 +2382,11 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(530);
 			_la = _input.LA(1);
-			if (_la==2 || _la==13) {
+			if (_la==AUTO || _la==REGISTER) {
 				{
 				setState(529);
 				_la = _input.LA(1);
-				if ( !(_la==2 || _la==13) ) {
+				if ( !(_la==AUTO || _la==REGISTER) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -2425,9 +2440,9 @@ public class CodeSensorParser extends Parser {
 				setState(534); identifier();
 				}
 				break;
-			case 39:
-			case 45:
-			case 61:
+			case 29:
+			case 35:
+			case 50:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(535); access_specifier();
@@ -2455,6 +2470,7 @@ public class CodeSensorParser extends Parser {
 		public List<Param_typeContext> param_type() {
 			return getRuleContexts(Param_typeContext.class);
 		}
+		public TerminalNode VOID() { return getToken(CodeSensorParser.VOID, 0); }
 		public Param_type_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2479,28 +2495,28 @@ public class CodeSensorParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(538); match(43);
-				setState(539); match(47);
-				setState(540); match(16);
+				setState(538); match(33);
+				setState(539); match(VOID);
+				setState(540); match(13);
 				}
 				break;
 
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(541); match(43);
+				setState(541); match(33);
 				setState(550);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 13) | (1L << 14) | (1L << 18) | (1L << 23) | (1L << 26) | (1L << 29) | (1L << 32) | (1L << 33) | (1L << 47) | (1L << 53))) != 0) || _la==64 || _la==ALPHA_NUMERIC) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 12) | (1L << 18) | (1L << 21) | (1L << 24) | (1L << 42) | (1L << 52))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (VOID - 75)) | (1L << (UNSIGNED - 75)) | (1L << (SIGNED - 75)) | (1L << (LONG - 75)) | (1L << (AUTO - 75)) | (1L << (REGISTER - 75)) | (1L << (ALPHA_NUMERIC - 75)))) != 0)) {
 					{
 					setState(542); param_type();
 					setState(547);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-					while (_la==40) {
+					while (_la==30) {
 						{
 						{
-						setState(543); match(40);
+						setState(543); match(30);
 						setState(544); param_type();
 						}
 						}
@@ -2511,7 +2527,7 @@ public class CodeSensorParser extends Parser {
 					}
 				}
 
-				setState(552); match(16);
+				setState(552); match(13);
 				}
 				break;
 			}
@@ -2615,9 +2631,9 @@ public class CodeSensorParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,64,_ctx) ) {
 			case 1:
 				{
-				setState(561); match(43);
+				setState(561); match(33);
 				setState(562); param_type_id();
-				setState(563); match(16);
+				setState(563); match(13);
 				}
 				break;
 
@@ -2625,7 +2641,7 @@ public class CodeSensorParser extends Parser {
 				{
 				setState(566);
 				_la = _input.LA(1);
-				if (((((_la - 39)) & ~0x3f) == 0 && ((1L << (_la - 39)) & ((1L << (39 - 39)) | (1L << (45 - 39)) | (1L << (61 - 39)) | (1L << (ALPHA_NUMERIC - 39)))) != 0)) {
+				if (((((_la - 29)) & ~0x3f) == 0 && ((1L << (_la - 29)) & ((1L << (29 - 29)) | (1L << (35 - 29)) | (1L << (50 - 29)) | (1L << (ALPHA_NUMERIC - 29)))) != 0)) {
 					{
 					setState(565); parameter_name();
 					}
@@ -2636,7 +2652,7 @@ public class CodeSensorParser extends Parser {
 			}
 			setState(571);
 			_la = _input.LA(1);
-			if (_la==4 || _la==43) {
+			if (_la==2 || _la==33) {
 				{
 				setState(570); type_suffix();
 				}
@@ -2685,10 +2701,10 @@ public class CodeSensorParser extends Parser {
 			setState(578);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==22) {
+			while (_la==16) {
 				{
 				{
-				setState(574); match(22);
+				setState(574); match(16);
 				setState(575); match(ALPHA_NUMERIC);
 				}
 				}
@@ -2736,7 +2752,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(581);
 			_la = _input.LA(1);
-			if ( !(((((_la - 96)) & ~0x3f) == 0 && ((1L << (_la - 96)) & ((1L << (HEX_LITERAL - 96)) | (1L << (DECIMAL_LITERAL - 96)) | (1L << (OCTAL_LITERAL - 96)))) != 0)) ) {
+			if ( !(((((_la - 94)) & ~0x3f) == 0 && ((1L << (_la - 94)) & ((1L << (HEX_LITERAL - 94)) | (1L << (DECIMAL_LITERAL - 94)) | (1L << (OCTAL_LITERAL - 94)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2831,7 +2847,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(588);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 31) | (1L << 41) | (1L << 60))) != 0) || _la==73) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 23) | (1L << 31) | (1L << 49) | (1L << 60))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2872,7 +2888,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(590);
 			_la = _input.LA(1);
-			if ( !(_la==5 || _la==8 || _la==68 || _la==74) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 7) | (1L << 55) | (1L << 61))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2918,7 +2934,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(592);
 			_la = _input.LA(1);
-			if ( !(((((_la - 93)) & ~0x3f) == 0 && ((1L << (_la - 93)) & ((1L << (STRING - 93)) | (1L << (HEX_LITERAL - 93)) | (1L << (DECIMAL_LITERAL - 93)) | (1L << (OCTAL_LITERAL - 93)) | (1L << (FLOATING_POINT_LITERAL - 93)))) != 0)) ) {
+			if ( !(((((_la - 94)) & ~0x3f) == 0 && ((1L << (_la - 94)) & ((1L << (HEX_LITERAL - 94)) | (1L << (DECIMAL_LITERAL - 94)) | (1L << (OCTAL_LITERAL - 94)) | (1L << (FLOATING_POINT_LITERAL - 94)) | (1L << (STRING - 94)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2959,7 +2975,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(594);
 			_la = _input.LA(1);
-			if ( !(_la==26 || _la==64) ) {
+			if ( !(_la==18 || _la==52) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3000,7 +3016,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(596);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 17) | (1L << 19) | (1L << 20) | (1L << 52) | (1L << 54))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 14) | (1L << 15) | (1L << 41) | (1L << 43))) != 0) || _la==VIRTUAL) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3041,7 +3057,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(598);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 14) | (1L << 29) | (1L << 32) | (1L << 53))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 12) | (1L << 21) | (1L << 24) | (1L << 42))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3123,7 +3139,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(602);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 39) | (1L << 45) | (1L << 61))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 29) | (1L << 35) | (1L << 50))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3141,6 +3157,7 @@ public class CodeSensorParser extends Parser {
 	}
 
 	public static class Operator_function_idContext extends ParserRuleContext {
+		public TerminalNode OPERATOR() { return getToken(CodeSensorParser.OPERATOR, 0); }
 		public OperatorContext operator() {
 			return getRuleContext(OperatorContext.class,0);
 		}
@@ -3164,7 +3181,7 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(604); match(62);
+			setState(604); match(OPERATOR);
 			setState(605); operator();
 			}
 		}
@@ -3201,39 +3218,39 @@ public class CodeSensorParser extends Parser {
 		try {
 			setState(652);
 			switch (_input.LA(1)) {
-			case 28:
-			case 57:
+			case 20:
+			case 47:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
 				setState(607);
 				_la = _input.LA(1);
-				if ( !(_la==28 || _la==57) ) {
+				if ( !(_la==20 || _la==47) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
 				setState(610);
 				_la = _input.LA(1);
-				if (_la==4) {
+				if (_la==2) {
 					{
-					setState(608); match(4);
-					setState(609); match(35);
+					setState(608); match(2);
+					setState(609); match(25);
 					}
 				}
 
 				}
 				}
 				break;
-			case 60:
+			case 49:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(612); match(60);
+				setState(612); match(49);
 				}
 				break;
-			case 41:
+			case 31:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(613); match(41);
+				setState(613); match(31);
 				}
 				break;
 			case 3:
@@ -3242,22 +3259,22 @@ public class CodeSensorParser extends Parser {
 				setState(614); match(3);
 				}
 				break;
-			case 71:
+			case 58:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(615); match(71);
+				setState(615); match(58);
 				}
 				break;
-			case 11:
+			case 9:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(616); match(11);
+				setState(616); match(9);
 				}
 				break;
-			case 58:
+			case 46:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(617); match(58);
+				setState(617); match(46);
 				}
 				break;
 			case 1:
@@ -3266,192 +3283,192 @@ public class CodeSensorParser extends Parser {
 				setState(618); match(1);
 				}
 				break;
-			case 30:
+			case 22:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(619); match(30);
+				setState(619); match(22);
 				}
 				break;
-			case 73:
+			case 60:
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(620); match(73);
+				setState(620); match(60);
 				}
 				break;
-			case 31:
+			case 23:
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(621); match(31);
+				setState(621); match(23);
 				}
 				break;
-			case 25:
+			case 17:
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(622); match(25);
-				}
-				break;
-			case 5:
-				enterOuterAlt(_localctx, 13);
-				{
-				setState(623); match(5);
-				}
-				break;
-			case 68:
-				enterOuterAlt(_localctx, 14);
-				{
-				setState(624); match(68);
-				}
-				break;
-			case 50:
-				enterOuterAlt(_localctx, 15);
-				{
-				setState(625); match(50);
-				}
-				break;
-			case 37:
-				enterOuterAlt(_localctx, 16);
-				{
-				setState(626); match(37);
-				}
-				break;
-			case 15:
-				enterOuterAlt(_localctx, 17);
-				{
-				setState(627); match(15);
-				}
-				break;
-			case 70:
-				enterOuterAlt(_localctx, 18);
-				{
-				setState(628); match(70);
-				}
-				break;
-			case 69:
-				enterOuterAlt(_localctx, 19);
-				{
-				setState(629); match(69);
-				}
-				break;
-			case 51:
-				enterOuterAlt(_localctx, 20);
-				{
-				setState(630); match(51);
-				}
-				break;
-			case 44:
-				enterOuterAlt(_localctx, 21);
-				{
-				setState(631); match(44);
-				}
-				break;
-			case 27:
-				enterOuterAlt(_localctx, 22);
-				{
-				setState(632); match(27);
-				}
-				break;
-			case 56:
-				enterOuterAlt(_localctx, 23);
-				{
-				setState(633); match(56);
-				}
-				break;
-			case 9:
-				enterOuterAlt(_localctx, 24);
-				{
-				setState(634); match(9);
-				}
-				break;
-			case 48:
-				enterOuterAlt(_localctx, 25);
-				{
-				setState(635); match(48);
-				}
-				break;
-			case 36:
-				enterOuterAlt(_localctx, 26);
-				{
-				setState(636); match(36);
-				}
-				break;
-			case 72:
-				enterOuterAlt(_localctx, 27);
-				{
-				setState(637); match(72);
-				}
-				break;
-			case 7:
-				enterOuterAlt(_localctx, 28);
-				{
-				setState(638); match(7);
-				}
-				break;
-			case 8:
-				enterOuterAlt(_localctx, 29);
-				{
-				setState(639); match(8);
-				}
-				break;
-			case 74:
-				enterOuterAlt(_localctx, 30);
-				{
-				setState(640); match(74);
-				}
-				break;
-			case 66:
-				enterOuterAlt(_localctx, 31);
-				{
-				setState(641); match(66);
-				}
-				break;
-			case 67:
-				enterOuterAlt(_localctx, 32);
-				{
-				setState(642); match(67);
-				}
-				break;
-			case 55:
-				enterOuterAlt(_localctx, 33);
-				{
-				setState(643); match(55);
-				}
-				break;
-			case 6:
-				enterOuterAlt(_localctx, 34);
-				{
-				setState(644); match(6);
-				}
-				break;
-			case 40:
-				enterOuterAlt(_localctx, 35);
-				{
-				setState(645); match(40);
-				}
-				break;
-			case 38:
-				enterOuterAlt(_localctx, 36);
-				{
-				setState(646); match(38);
-				}
-				break;
-			case 12:
-				enterOuterAlt(_localctx, 37);
-				{
-				setState(647); match(12);
-				}
-				break;
-			case 43:
-				enterOuterAlt(_localctx, 38);
-				{
-				setState(648); match(43);
-				setState(649); match(16);
+				setState(622); match(17);
 				}
 				break;
 			case 4:
+				enterOuterAlt(_localctx, 13);
+				{
+				setState(623); match(4);
+				}
+				break;
+			case 55:
+				enterOuterAlt(_localctx, 14);
+				{
+				setState(624); match(55);
+				}
+				break;
+			case 39:
+				enterOuterAlt(_localctx, 15);
+				{
+				setState(625); match(39);
+				}
+				break;
+			case 27:
+				enterOuterAlt(_localctx, 16);
+				{
+				setState(626); match(27);
+				}
+				break;
+			case 11:
+				enterOuterAlt(_localctx, 17);
+				{
+				setState(627); match(11);
+				}
+				break;
+			case 57:
+				enterOuterAlt(_localctx, 18);
+				{
+				setState(628); match(57);
+				}
+				break;
+			case 56:
+				enterOuterAlt(_localctx, 19);
+				{
+				setState(629); match(56);
+				}
+				break;
+			case 40:
+				enterOuterAlt(_localctx, 20);
+				{
+				setState(630); match(40);
+				}
+				break;
+			case 34:
+				enterOuterAlt(_localctx, 21);
+				{
+				setState(631); match(34);
+				}
+				break;
+			case 19:
+				enterOuterAlt(_localctx, 22);
+				{
+				setState(632); match(19);
+				}
+				break;
+			case 45:
+				enterOuterAlt(_localctx, 23);
+				{
+				setState(633); match(45);
+				}
+				break;
+			case 8:
+				enterOuterAlt(_localctx, 24);
+				{
+				setState(634); match(8);
+				}
+				break;
+			case 37:
+				enterOuterAlt(_localctx, 25);
+				{
+				setState(635); match(37);
+				}
+				break;
+			case 26:
+				enterOuterAlt(_localctx, 26);
+				{
+				setState(636); match(26);
+				}
+				break;
+			case 59:
+				enterOuterAlt(_localctx, 27);
+				{
+				setState(637); match(59);
+				}
+				break;
+			case 6:
+				enterOuterAlt(_localctx, 28);
+				{
+				setState(638); match(6);
+				}
+				break;
+			case 7:
+				enterOuterAlt(_localctx, 29);
+				{
+				setState(639); match(7);
+				}
+				break;
+			case 61:
+				enterOuterAlt(_localctx, 30);
+				{
+				setState(640); match(61);
+				}
+				break;
+			case 53:
+				enterOuterAlt(_localctx, 31);
+				{
+				setState(641); match(53);
+				}
+				break;
+			case 54:
+				enterOuterAlt(_localctx, 32);
+				{
+				setState(642); match(54);
+				}
+				break;
+			case 44:
+				enterOuterAlt(_localctx, 33);
+				{
+				setState(643); match(44);
+				}
+				break;
+			case 5:
+				enterOuterAlt(_localctx, 34);
+				{
+				setState(644); match(5);
+				}
+				break;
+			case 30:
+				enterOuterAlt(_localctx, 35);
+				{
+				setState(645); match(30);
+				}
+				break;
+			case 28:
+				enterOuterAlt(_localctx, 36);
+				{
+				setState(646); match(28);
+				}
+				break;
+			case 10:
+				enterOuterAlt(_localctx, 37);
+				{
+				setState(647); match(10);
+				}
+				break;
+			case 33:
+				enterOuterAlt(_localctx, 38);
+				{
+				setState(648); match(33);
+				setState(649); match(13);
+				}
+				break;
+			case 2:
 				enterOuterAlt(_localctx, 39);
 				{
-				setState(650); match(4);
-				setState(651); match(35);
+				setState(650); match(2);
+				setState(651); match(25);
 				}
 				break;
 			default:
@@ -3493,7 +3510,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(654);
 			_la = _input.LA(1);
-			if ( !(((((_la - 15)) & ~0x3f) == 0 && ((1L << (_la - 15)) & ((1L << (15 - 15)) | (1L << (25 - 15)) | (1L << (27 - 15)) | (1L << (36 - 15)) | (1L << (37 - 15)) | (1L << (44 - 15)) | (1L << (48 - 15)) | (1L << (50 - 15)) | (1L << (51 - 15)) | (1L << (69 - 15)) | (1L << (70 - 15)))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 11) | (1L << 17) | (1L << 19) | (1L << 26) | (1L << 27) | (1L << 34) | (1L << 37) | (1L << 39) | (1L << 40) | (1L << 56) | (1L << 57))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3534,7 +3551,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(656);
 			_la = _input.LA(1);
-			if ( !(_la==7 || _la==72) ) {
+			if ( !(_la==6 || _la==59) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3555,6 +3572,7 @@ public class CodeSensorParser extends Parser {
 		public Template_param_listContext template_param_list() {
 			return getRuleContext(Template_param_listContext.class,0);
 		}
+		public TerminalNode TEMPLATE() { return getToken(CodeSensorParser.TEMPLATE, 0); }
 		public Template_decl_startContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3575,10 +3593,10 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(658); match(24);
-			setState(659); match(5);
+			setState(658); match(TEMPLATE);
+			setState(659); match(4);
 			setState(660); template_param_list();
-			setState(661); match(68);
+			setState(661); match(55);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3629,32 +3647,32 @@ public class CodeSensorParser extends Parser {
 			setState(674);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << 62) | (1L << 63))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (64 - 64)) | (1L << (65 - 64)) | (1L << (66 - 64)) | (1L << (67 - 64)) | (1L << (69 - 64)) | (1L << (70 - 64)) | (1L << (71 - 64)) | (1L << (72 - 64)) | (1L << (73 - 64)) | (1L << (74 - 64)) | (1L << (IF - 64)) | (1L << (ELSE - 64)) | (1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << 61) | (1L << IF) | (1L << ELSE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (FOR - 64)) | (1L << (WHILE - 64)) | (1L << (SWITCH - 64)) | (1L << (CONTINUE - 64)) | (1L << (BREAK - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (CASE - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (VOID - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VIRTUAL - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (INCLUDE - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (COMMENT - 64)) | (1L << (STRING - 64)) | (1L << (WHITESPACE - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				setState(672);
 				switch (_input.LA(1)) {
-				case 5:
+				case 4:
 					{
 					{
-					setState(663); match(5);
+					setState(663); match(4);
 					setState(664); template_param_list();
-					setState(665); match(68);
+					setState(665); match(55);
 					}
 					}
 					break;
-				case 43:
+				case 33:
 					{
 					{
-					setState(667); match(43);
+					setState(667); match(33);
 					setState(668); template_param_list();
-					setState(669); match(16);
+					setState(669); match(13);
 					}
 					}
 					break;
 				case 1:
 				case 2:
 				case 3:
-				case 4:
+				case 5:
 				case 6:
 				case 7:
 				case 8:
@@ -3662,9 +3680,9 @@ public class CodeSensorParser extends Parser {
 				case 10:
 				case 11:
 				case 12:
-				case 13:
 				case 14:
 				case 15:
+				case 16:
 				case 17:
 				case 18:
 				case 19:
@@ -3681,7 +3699,6 @@ public class CodeSensorParser extends Parser {
 				case 30:
 				case 31:
 				case 32:
-				case 33:
 				case 34:
 				case 35:
 				case 36:
@@ -3691,6 +3708,7 @@ public class CodeSensorParser extends Parser {
 				case 40:
 				case 41:
 				case 42:
+				case 43:
 				case 44:
 				case 45:
 				case 46:
@@ -3702,25 +3720,12 @@ public class CodeSensorParser extends Parser {
 				case 52:
 				case 53:
 				case 54:
-				case 55:
 				case 56:
 				case 57:
 				case 58:
 				case 59:
 				case 60:
 				case 61:
-				case 62:
-				case 63:
-				case 64:
-				case 65:
-				case 66:
-				case 67:
-				case 69:
-				case 70:
-				case 71:
-				case 72:
-				case 73:
-				case 74:
 				case IF:
 				case ELSE:
 				case FOR:
@@ -3733,19 +3738,33 @@ public class CodeSensorParser extends Parser {
 				case CASE:
 				case TRY:
 				case CATCH:
+				case THROW:
+				case VOID:
+				case USING:
+				case NAMESPACE:
+				case TYPEDEF:
+				case VIRTUAL:
+				case UNSIGNED:
+				case SIGNED:
+				case LONG:
+				case AUTO:
+				case REGISTER:
+				case OPERATOR:
+				case TEMPLATE:
 				case ALPHA_NUMERIC:
 				case PRE_IF:
 				case PRE_ELSE:
 				case PRE_ENDIF:
-				case CPPCOMMENT:
-				case COMMENT:
-				case STRING:
+				case INCLUDE:
 				case OPENING_CURLY:
 				case CLOSING_CURLY:
 				case HEX_LITERAL:
 				case DECIMAL_LITERAL:
 				case OCTAL_LITERAL:
 				case FLOATING_POINT_LITERAL:
+				case CPPCOMMENT:
+				case COMMENT:
+				case STRING:
 				case WHITESPACE:
 				case OTHER:
 					{
@@ -3797,7 +3816,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(677);
 			_la = _input.LA(1);
-			if ( _la <= 0 || (_la==16 || _la==43) ) {
+			if ( _la <= 0 || (_la==13 || _la==33) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3838,7 +3857,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(679);
 			_la = _input.LA(1);
-			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 16) | (1L << 35) | (1L << 43))) != 0) || _la==OPENING_CURLY || _la==CLOSING_CURLY) ) {
+			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 13) | (1L << 25) | (1L << 33))) != 0) || _la==OPENING_CURLY || _la==CLOSING_CURLY) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3879,7 +3898,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(681);
 			_la = _input.LA(1);
-			if ( _la <= 0 || (((((_la - 16)) & ~0x3f) == 0 && ((1L << (_la - 16)) & ((1L << (16 - 16)) | (1L << (43 - 16)) | (1L << (65 - 16)))) != 0)) ) {
+			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 13) | (1L << 33) | (1L << 51))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -3920,7 +3939,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(683);
 			_la = _input.LA(1);
-			if ( _la <= 0 || (((((_la - 5)) & ~0x3f) == 0 && ((1L << (_la - 5)) & ((1L << (5 - 5)) | (1L << (16 - 5)) | (1L << (43 - 5)) | (1L << (68 - 5)))) != 0)) ) {
+			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 13) | (1L << 33) | (1L << 55))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4002,7 +4021,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(687);
 			_la = _input.LA(1);
-			if ( _la <= 0 || (_la==4 || _la==35) ) {
+			if ( _la <= 0 || (_la==2 || _la==25) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4043,7 +4062,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(689);
 			_la = _input.LA(1);
-			if ( _la <= 0 || (((((_la - 4)) & ~0x3f) == 0 && ((1L << (_la - 4)) & ((1L << (4 - 4)) | (1L << (35 - 4)) | (1L << (65 - 4)))) != 0)) ) {
+			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 25) | (1L << 51))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4084,7 +4103,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(691);
 			_la = _input.LA(1);
-			if ( _la <= 0 || (_la==40 || _la==65) ) {
+			if ( _la <= 0 || (_la==30 || _la==51) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4125,7 +4144,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(693);
 			_la = _input.LA(1);
-			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 16) | (1L << 35) | (1L << 40) | (1L << 43))) != 0) || ((((_la - 65)) & ~0x3f) == 0 && ((1L << (_la - 65)) & ((1L << (65 - 65)) | (1L << (OPENING_CURLY - 65)) | (1L << (CLOSING_CURLY - 65)))) != 0)) ) {
+			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 13) | (1L << 25) | (1L << 30) | (1L << 33) | (1L << 51))) != 0) || _la==OPENING_CURLY || _la==CLOSING_CURLY) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4166,7 +4185,7 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(695);
 			_la = _input.LA(1);
-			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 16) | (1L << 35) | (1L << 43))) != 0) || _la==OPENING_CURLY || _la==CLOSING_CURLY) ) {
+			if ( _la <= 0 || ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 13) | (1L << 25) | (1L << 33))) != 0) || _la==OPENING_CURLY || _la==CLOSING_CURLY) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4256,9 +4275,9 @@ public class CodeSensorParser extends Parser {
 			setState(699); assign_expr();
 			setState(702);
 			_la = _input.LA(1);
-			if (_la==40) {
+			if (_la==30) {
 				{
-				setState(700); match(40);
+				setState(700); match(30);
 				setState(701); assign_expr();
 				}
 			}
@@ -4310,7 +4329,7 @@ public class CodeSensorParser extends Parser {
 			setState(704); conditional_expression();
 			setState(708);
 			_la = _input.LA(1);
-			if (((((_la - 15)) & ~0x3f) == 0 && ((1L << (_la - 15)) & ((1L << (15 - 15)) | (1L << (25 - 15)) | (1L << (27 - 15)) | (1L << (36 - 15)) | (1L << (37 - 15)) | (1L << (44 - 15)) | (1L << (48 - 15)) | (1L << (50 - 15)) | (1L << (51 - 15)) | (1L << (69 - 15)) | (1L << (70 - 15)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 11) | (1L << 17) | (1L << 19) | (1L << 26) | (1L << 27) | (1L << 34) | (1L << 37) | (1L << 39) | (1L << 40) | (1L << 56) | (1L << 57))) != 0)) {
 				{
 				setState(705); assignment_operator();
 				setState(706); assign_expr();
@@ -4364,11 +4383,11 @@ public class CodeSensorParser extends Parser {
 			setState(710); or_expression();
 			setState(716);
 			_la = _input.LA(1);
-			if (_la==46) {
+			if (_la==36) {
 				{
-				setState(711); match(46);
+				setState(711); match(36);
 				setState(712); expr();
-				setState(713); match(42);
+				setState(713); match(32);
 				setState(714); conditional_expression();
 				}
 			}
@@ -4417,9 +4436,9 @@ public class CodeSensorParser extends Parser {
 			setState(718); and_expression();
 			setState(721);
 			_la = _input.LA(1);
-			if (_la==67) {
+			if (_la==54) {
 				{
-				setState(719); match(67);
+				setState(719); match(54);
 				setState(720); or_expression();
 				}
 			}
@@ -4468,9 +4487,9 @@ public class CodeSensorParser extends Parser {
 			setState(723); inclusive_or_expression();
 			setState(726);
 			_la = _input.LA(1);
-			if (_la==66) {
+			if (_la==53) {
 				{
-				setState(724); match(66);
+				setState(724); match(53);
 				setState(725); and_expression();
 				}
 			}
@@ -4519,9 +4538,9 @@ public class CodeSensorParser extends Parser {
 			setState(728); exclusive_or_expression();
 			setState(731);
 			_la = _input.LA(1);
-			if (_la==30) {
+			if (_la==22) {
 				{
-				setState(729); match(30);
+				setState(729); match(22);
 				setState(730); inclusive_or_expression();
 				}
 			}
@@ -4570,9 +4589,9 @@ public class CodeSensorParser extends Parser {
 			setState(733); bit_and_expression();
 			setState(736);
 			_la = _input.LA(1);
-			if (_la==58) {
+			if (_la==46) {
 				{
-				setState(734); match(58);
+				setState(734); match(46);
 				setState(735); exclusive_or_expression();
 				}
 			}
@@ -4675,7 +4694,7 @@ public class CodeSensorParser extends Parser {
 			setState(743); relational_expression();
 			setState(747);
 			_la = _input.LA(1);
-			if (_la==7 || _la==72) {
+			if (_la==6 || _la==59) {
 				{
 				setState(744); equality_operator();
 				setState(745); equality_expression();
@@ -4729,7 +4748,7 @@ public class CodeSensorParser extends Parser {
 			setState(749); shift_expression();
 			setState(753);
 			_la = _input.LA(1);
-			if (_la==5 || _la==8 || _la==68 || _la==74) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 7) | (1L << 55) | (1L << 61))) != 0)) {
 				{
 				setState(750); relational_operator();
 				setState(751); relational_expression();
@@ -4780,11 +4799,11 @@ public class CodeSensorParser extends Parser {
 			setState(755); additive_expression();
 			setState(758);
 			_la = _input.LA(1);
-			if (_la==9 || _la==56) {
+			if (_la==8 || _la==45) {
 				{
 				setState(756);
 				_la = _input.LA(1);
-				if ( !(_la==9 || _la==56) ) {
+				if ( !(_la==8 || _la==45) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -4836,11 +4855,11 @@ public class CodeSensorParser extends Parser {
 			setState(760); multiplicative_expression();
 			setState(763);
 			_la = _input.LA(1);
-			if (_la==41 || _la==60) {
+			if (_la==31 || _la==49) {
 				{
 				setState(761);
 				_la = _input.LA(1);
-				if ( !(_la==41 || _la==60) ) {
+				if ( !(_la==31 || _la==49) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -4892,11 +4911,11 @@ public class CodeSensorParser extends Parser {
 			setState(765); cast_expression();
 			setState(768);
 			_la = _input.LA(1);
-			if (_la==3 || _la==11 || _la==71) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 3) | (1L << 9) | (1L << 58))) != 0)) {
 				{
 				setState(766);
 				_la = _input.LA(1);
-				if ( !(_la==3 || _la==11 || _la==71) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 3) | (1L << 9) | (1L << 58))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -4958,7 +4977,7 @@ public class CodeSensorParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(770); match(43);
+				setState(770); match(33);
 				setState(771); type_name();
 				setState(775);
 				_errHandler.sync(this);
@@ -4973,7 +4992,7 @@ public class CodeSensorParser extends Parser {
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(778); match(16);
+				setState(778); match(13);
 				setState(779); cast_expression();
 				}
 				}
@@ -5032,38 +5051,38 @@ public class CodeSensorParser extends Parser {
 		try {
 			setState(796);
 			switch (_input.LA(1)) {
-			case 43:
+			case 33:
 			case ALPHA_NUMERIC:
-			case STRING:
 			case HEX_LITERAL:
 			case DECIMAL_LITERAL:
 			case OCTAL_LITERAL:
 			case FLOATING_POINT_LITERAL:
+			case STRING:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(784); postfix_expression();
 				}
 				break;
-			case 6:
+			case 5:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(785); match(6);
+				setState(785); match(5);
 				setState(786); unary_expression();
 				}
 				break;
-			case 55:
+			case 44:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(787); match(55);
+				setState(787); match(44);
 				setState(788); unary_expression();
 				}
 				break;
 			case 1:
 			case 3:
+			case 23:
 			case 31:
-			case 41:
+			case 49:
 			case 60:
-			case 73:
 				enterOuterAlt(_localctx, 4);
 				{
 				{
@@ -5079,7 +5098,7 @@ public class CodeSensorParser extends Parser {
 					setState(792); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 31) | (1L << 41) | (1L << 60))) != 0) || _la==73 );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 23) | (1L << 31) | (1L << 49) | (1L << 60))) != 0) );
 				setState(794); postfix_expression();
 				}
 				}
@@ -5213,7 +5232,7 @@ public class CodeSensorParser extends Parser {
 			setState(808);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 4) | (1L << 6) | (1L << 12) | (1L << 55) | (1L << 59))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 2) | (1L << 5) | (1L << 10) | (1L << 44) | (1L << 48))) != 0)) {
 				{
 				{
 				setState(805); postfix();
@@ -5264,14 +5283,14 @@ public class CodeSensorParser extends Parser {
 		try {
 			setState(815);
 			switch (_input.LA(1)) {
-			case 5:
+			case 4:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(811); call_template_list();
 				setState(812); function_argument_list();
 				}
 				break;
-			case 43:
+			case 33:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(814); function_argument_list();
@@ -5317,9 +5336,9 @@ public class CodeSensorParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(817); match(5);
+			setState(817); match(4);
 			setState(818); template_param_list();
-			setState(819); match(68);
+			setState(819); match(55);
 			}
 			}
 		}
@@ -5362,19 +5381,19 @@ public class CodeSensorParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(821); match(43);
+			setState(821); match(33);
 			setState(830);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 6) | (1L << 31) | (1L << 41) | (1L << 43) | (1L << 55) | (1L << 60))) != 0) || ((((_la - 73)) & ~0x3f) == 0 && ((1L << (_la - 73)) & ((1L << (73 - 73)) | (1L << (ALPHA_NUMERIC - 73)) | (1L << (STRING - 73)) | (1L << (HEX_LITERAL - 73)) | (1L << (DECIMAL_LITERAL - 73)) | (1L << (OCTAL_LITERAL - 73)) | (1L << (FLOATING_POINT_LITERAL - 73)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 5) | (1L << 23) | (1L << 31) | (1L << 33) | (1L << 44) | (1L << 49) | (1L << 60))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (ALPHA_NUMERIC - 87)) | (1L << (HEX_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (OCTAL_LITERAL - 87)) | (1L << (FLOATING_POINT_LITERAL - 87)) | (1L << (STRING - 87)))) != 0)) {
 				{
 				setState(822); function_argument();
 				setState(827);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==40) {
+				while (_la==30) {
 					{
 					{
-					setState(823); match(40);
+					setState(823); match(30);
 					setState(824); function_argument();
 					}
 					}
@@ -5385,7 +5404,7 @@ public class CodeSensorParser extends Parser {
 				}
 			}
 
-			setState(832); match(16);
+			setState(832); match(13);
 			}
 		}
 		catch (RecognitionException re) {
@@ -5464,30 +5483,30 @@ public class CodeSensorParser extends Parser {
 		try {
 			setState(848);
 			switch (_input.LA(1)) {
-			case 4:
-			case 12:
-			case 59:
+			case 2:
+			case 10:
+			case 48:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(844);
 				switch (_input.LA(1)) {
-				case 59:
+				case 48:
 					{
-					setState(836); match(59);
+					setState(836); match(48);
 					setState(837); identifier();
 					}
 					break;
-				case 12:
+				case 10:
 					{
-					setState(838); match(12);
+					setState(838); match(10);
 					setState(839); identifier();
 					}
 					break;
-				case 4:
+				case 2:
 					{
-					setState(840); match(4);
+					setState(840); match(2);
 					setState(841); expr();
-					setState(842); match(35);
+					setState(842); match(25);
 					}
 					break;
 				default:
@@ -5495,16 +5514,16 @@ public class CodeSensorParser extends Parser {
 				}
 				}
 				break;
-			case 55:
+			case 44:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(846); match(55);
+				setState(846); match(44);
 				}
 				break;
-			case 6:
+			case 5:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(847); match(6);
+				setState(847); match(5);
 				}
 				break;
 			default:
@@ -5554,11 +5573,11 @@ public class CodeSensorParser extends Parser {
 			{
 			setState(856);
 			switch (_input.LA(1)) {
-			case 43:
+			case 33:
 				{
-				setState(850); match(43);
+				setState(850); match(33);
 				setState(851); expr();
-				setState(852); match(16);
+				setState(852); match(13);
 				}
 				break;
 			case ALPHA_NUMERIC:
@@ -5566,11 +5585,11 @@ public class CodeSensorParser extends Parser {
 				setState(854); identifier();
 				}
 				break;
-			case STRING:
 			case HEX_LITERAL:
 			case DECIMAL_LITERAL:
 			case OCTAL_LITERAL:
 			case FLOATING_POINT_LITERAL:
+			case STRING:
 				{
 				setState(855); constant();
 				}
@@ -5592,7 +5611,7 @@ public class CodeSensorParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\2\3g\u035d\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4"+
+		"\2\3h\u035d\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4"+
 		"\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20"+
 		"\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27"+
 		"\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36"+
@@ -5656,273 +5675,274 @@ public class CodeSensorParser extends Parser {
 		"\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd"+
 		"fhjlnprtvxz|~\u0080\u0082\u0084\u0086\u0088\u008a\u008c\u008e\u0090\u0092"+
 		"\u0094\u0096\u0098\u009a\u009c\u009e\u00a0\u00a2\u00a4\u00a6\u00a8\u00aa"+
-		"\u00ac\u00ae\u00b0\2\36\4\24\24\31\31\4\4\4\17\17\3bd\b\3\3\5\5!!++>>"+
-		"KK\6\7\7\n\nFFLL\4__be\4\34\34BB\6\23\23\25\26\66\6688\6\20\20\37\37\""+
-		"\"\67\67\4\3\3\5\5\5))//??\4\36\36;;\n\21\21\33\33\35\35&\'..\62\62\64"+
-		"\65GH\4\t\tJJ\4\22\22--\7\6\6\22\22%%--`a\5\22\22--CC\6\7\7\22\22--FF"+
-		"\3`a\4\6\6%%\5\6\6%%CC\4**CC\t\6\6\22\22%%**--CC`a\7\6\6\22\22%%--`a\3"+
-		"gg\4\13\13::\4++>>\5\5\5\r\rII\u0399\2\u00b5\3\2\2\2\4\u00ba\3\2\2\2\6"+
-		"\u00bf\3\2\2\2\b\u00c2\3\2\2\2\n\u00d1\3\2\2\2\f\u00dc\3\2\2\2\16\u00f7"+
-		"\3\2\2\2\20\u00f9\3\2\2\2\22\u00fd\3\2\2\2\24\u0109\3\2\2\2\26\u010c\3"+
-		"\2\2\2\30\u0115\3\2\2\2\32\u0119\3\2\2\2\34\u011d\3\2\2\2\36\u0129\3\2"+
-		"\2\2 \u012b\3\2\2\2\"\u0133\3\2\2\2$\u0144\3\2\2\2&\u014a\3\2\2\2(\u0158"+
-		"\3\2\2\2*\u015a\3\2\2\2,\u0165\3\2\2\2.\u0177\3\2\2\2\60\u0196\3\2\2\2"+
-		"\62\u01b2\3\2\2\2\64\u01bc\3\2\2\2\66\u01be\3\2\2\28\u01c8\3\2\2\2:\u01ef"+
-		"\3\2\2\2<\u01f6\3\2\2\2>\u01fd\3\2\2\2@\u0202\3\2\2\2B\u0214\3\2\2\2D"+
-		"\u021a\3\2\2\2F\u022b\3\2\2\2H\u022d\3\2\2\2J\u0231\3\2\2\2L\u023f\3\2"+
-		"\2\2N\u0247\3\2\2\2P\u024a\3\2\2\2R\u024e\3\2\2\2T\u0250\3\2\2\2V\u0252"+
-		"\3\2\2\2X\u0254\3\2\2\2Z\u0256\3\2\2\2\\\u0258\3\2\2\2^\u025a\3\2\2\2"+
-		"`\u025c\3\2\2\2b\u025e\3\2\2\2d\u028e\3\2\2\2f\u0290\3\2\2\2h\u0292\3"+
-		"\2\2\2j\u0294\3\2\2\2l\u02a4\3\2\2\2n\u02a7\3\2\2\2p\u02a9\3\2\2\2r\u02ab"+
-		"\3\2\2\2t\u02ad\3\2\2\2v\u02af\3\2\2\2x\u02b1\3\2\2\2z\u02b3\3\2\2\2|"+
-		"\u02b5\3\2\2\2~\u02b7\3\2\2\2\u0080\u02b9\3\2\2\2\u0082\u02bb\3\2\2\2"+
-		"\u0084\u02bd\3\2\2\2\u0086\u02c2\3\2\2\2\u0088\u02c8\3\2\2\2\u008a\u02d0"+
-		"\3\2\2\2\u008c\u02d5\3\2\2\2\u008e\u02da\3\2\2\2\u0090\u02df\3\2\2\2\u0092"+
-		"\u02e4\3\2\2\2\u0094\u02e9\3\2\2\2\u0096\u02ef\3\2\2\2\u0098\u02f5\3\2"+
-		"\2\2\u009a\u02fa\3\2\2\2\u009c\u02ff\3\2\2\2\u009e\u0310\3\2\2\2\u00a0"+
-		"\u031e\3\2\2\2\u00a2\u0324\3\2\2\2\u00a4\u0326\3\2\2\2\u00a6\u0331\3\2"+
-		"\2\2\u00a8\u0333\3\2\2\2\u00aa\u0337\3\2\2\2\u00ac\u0344\3\2\2\2\u00ae"+
-		"\u0352\3\2\2\2\u00b0\u035a\3\2\2\2\u00b2\u00b4\5\4\3\2\u00b3\u00b2\3\2"+
-		"\2\2\u00b4\u00b7\3\2\2\2\u00b5\u00b3\3\2\2\2\u00b5\u00b6\3\2\2\2\u00b6"+
-		"\3\3\2\2\2\u00b7\u00b5\3\2\2\2\u00b8\u00bb\5\6\4\2\u00b9\u00bb\5\u0082"+
-		"B\2\u00ba\u00b8\3\2\2\2\u00ba\u00b9\3\2\2\2\u00bb\5\3\2\2\2\u00bc\u00c0"+
-		"\5\b\5\2\u00bd\u00c0\5&\24\2\u00be\u00c0\5$\23\2\u00bf\u00bc\3\2\2\2\u00bf"+
-		"\u00bd\3\2\2\2\u00bf\u00be\3\2\2\2\u00c0\7\3\2\2\2\u00c1\u00c3\5j\66\2"+
-		"\u00c2\u00c1\3\2\2\2\u00c2\u00c3\3\2\2\2\u00c3\u00c5\3\2\2\2\u00c4\u00c6"+
-		"\5\n\6\2\u00c5\u00c4\3\2\2\2\u00c5\u00c6\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7"+
-		"\u00c8\5\36\20\2\u00c8\u00ca\5\f\7\2\u00c9\u00cb\5\26\f\2\u00ca\u00c9"+
-		"\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb\u00cc\3\2\2\2\u00cc\u00cd\5\24\13\2"+
-		"\u00cd\t\3\2\2\2\u00ce\u00d0\5Z.\2\u00cf\u00ce\3\2\2\2\u00d0\u00d3\3\2"+
-		"\2\2\u00d1\u00cf\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2\u00d4\3\2\2\2\u00d3"+
-		"\u00d1\3\2\2\2\u00d4\u00d5\5:\36\2\u00d5\u00d9\3\2\2\2\u00d6\u00d8\5^"+
-		"\60\2\u00d7\u00d6\3\2\2\2\u00d8\u00db\3\2\2\2\u00d9\u00d7\3\2\2\2\u00d9"+
-		"\u00da\3\2\2\2\u00da\13\3\2\2\2\u00db\u00d9\3\2\2\2\u00dc\u00de\7-\2\2"+
-		"\u00dd\u00df\5\16\b\2\u00de\u00dd\3\2\2\2\u00de\u00df\3\2\2\2\u00df\u00e0"+
-		"\3\2\2\2\u00e0\u00e4\7\22\2\2\u00e1\u00e3\5X-\2\u00e2\u00e1\3\2\2\2\u00e3"+
-		"\u00e6\3\2\2\2\u00e4\u00e2\3\2\2\2\u00e4\u00e5\3\2\2\2\u00e5\u00e8\3\2"+
-		"\2\2\u00e6\u00e4\3\2\2\2\u00e7\u00e9\5 \21\2\u00e8\u00e7\3\2\2\2\u00e8"+
-		"\u00e9\3\2\2\2\u00e9\r\3\2\2\2\u00ea\u00ef\5\20\t\2\u00eb\u00ec\7*\2\2"+
-		"\u00ec\u00ee\5\20\t\2\u00ed\u00eb\3\2\2\2\u00ee\u00f1\3\2\2\2\u00ef\u00ed"+
-		"\3\2\2\2\u00ef\u00f0\3\2\2\2\u00f0\u00f4\3\2\2\2\u00f1\u00ef\3\2\2\2\u00f2"+
-		"\u00f3\7*\2\2\u00f3\u00f5\7\63\2\2\u00f4\u00f2\3\2\2\2\u00f4\u00f5\3\2"+
-		"\2\2\u00f5\u00f8\3\2\2\2\u00f6\u00f8\7\61\2\2\u00f7\u00ea\3\2\2\2\u00f7"+
-		"\u00f6\3\2\2\2\u00f8\17\3\2\2\2\u00f9\u00fa\5B\"\2\u00fa\u00fb\5\22\n"+
-		"\2\u00fb\21\3\2\2\2\u00fc\u00fe\5P)\2\u00fd\u00fc\3\2\2\2\u00fd\u00fe"+
-		"\3\2\2\2\u00fe\u0104\3\2\2\2\u00ff\u0100\7-\2\2\u0100\u0101\5\22\n\2\u0101"+
-		"\u0102\7\22\2\2\u0102\u0105\3\2\2\2\u0103\u0105\5D#\2\u0104\u00ff\3\2"+
-		"\2\2\u0104\u0103\3\2\2\2\u0105\u0107\3\2\2\2\u0106\u0108\5<\37\2\u0107"+
-		"\u0106\3\2\2\2\u0107\u0108\3\2\2\2\u0108\23\3\2\2\2\u0109\u010a\7`\2\2"+
-		"\u010a\u010b\b\13\1\2\u010b\25\3\2\2\2\u010c\u010d\7,\2\2\u010d\u0112"+
-		"\5\30\r\2\u010e\u010f\7*\2\2\u010f\u0111\5\30\r\2\u0110\u010e\3\2\2\2"+
-		"\u0111\u0114\3\2\2\2\u0112\u0110\3\2\2\2\u0112\u0113\3\2\2\2\u0113\27"+
-		"\3\2\2\2\u0114\u0112\3\2\2\2\u0115\u0116\5\32\16\2\u0116\u0117\5\34\17"+
-		"\2\u0117\31\3\2\2\2\u0118\u011a\7\30\2\2\u0119\u0118\3\2\2\2\u0119\u011a"+
-		"\3\2\2\2\u011a\u011b\3\2\2\2\u011b\u011c\5L\'\2\u011c\33\3\2\2\2\u011d"+
-		"\u011f\7-\2\2\u011e\u0120\5\u0084C\2\u011f\u011e\3\2\2\2\u011f\u0120\3"+
-		"\2\2\2\u0120\u0121\3\2\2\2\u0121\u0122\7\22\2\2\u0122\35\3\2\2\2\u0123"+
-		"\u0124\7-\2\2\u0124\u0125\5\36\20\2\u0125\u0126\7\22\2\2\u0126\u012a\3"+
-		"\2\2\2\u0127\u012a\5L\'\2\u0128\u012a\5b\62\2\u0129\u0123\3\2\2\2\u0129"+
-		"\u0127\3\2\2\2\u0129\u0128\3\2\2\2\u012a\37\3\2\2\2\u012b\u012c\7\27\2"+
-		"\2\u012c\u012d\7-\2\2\u012d\u012e\5\"\22\2\u012e\u012f\7\22\2\2\u012f"+
-		"!\3\2\2\2\u0130\u0132\5n8\2\u0131\u0130\3\2\2\2\u0132\u0135\3\2\2\2\u0133"+
-		"\u0131\3\2\2\2\u0133\u0134\3\2\2\2\u0134\u0141\3\2\2\2\u0135\u0133\3\2"+
-		"\2\2\u0136\u0137\7-\2\2\u0137\u0138\5\"\22\2\u0138\u013c\7\22\2\2\u0139"+
-		"\u013b\5n8\2\u013a\u0139\3\2\2\2\u013b\u013e\3\2\2\2\u013c\u013a\3\2\2"+
-		"\2\u013c\u013d\3\2\2\2\u013d\u0140\3\2\2\2\u013e\u013c\3\2\2\2\u013f\u0136"+
-		"\3\2\2\2\u0140\u0143\3\2\2\2\u0141\u013f\3\2\2\2\u0141\u0142\3\2\2\2\u0142"+
-		"#\3\2\2\2\u0143\u0141\3\2\2\2\u0144\u0145\7$\2\2\u0145\u0146\7\f\2\2\u0146"+
-		"\u0147\5L\'\2\u0147\u0148\7C\2\2\u0148%\3\2\2\2\u0149\u014b\7A\2\2\u014a"+
-		"\u0149\3\2\2\2\u014a\u014b\3\2\2\2\u014b\u014d\3\2\2\2\u014c\u014e\5j"+
-		"\66\2\u014d\u014c\3\2\2\2\u014d\u014e\3\2\2\2\u014e\u014f\3\2\2\2\u014f"+
-		"\u0150\5(\25\2\u0150\'\3\2\2\2\u0151\u0152\5:\36\2\u0152\u0153\5*\26\2"+
-		"\u0153\u0159\3\2\2\2\u0154\u0156\5\62\32\2\u0155\u0157\5*\26\2\u0156\u0155"+
-		"\3\2\2\2\u0156\u0157\3\2\2\2\u0157\u0159\3\2\2\2\u0158\u0151\3\2\2\2\u0158"+
-		"\u0154\3\2\2\2\u0159)\3\2\2\2\u015a\u015f\5,\27\2\u015b\u015c\7*\2\2\u015c"+
-		"\u015e\5,\27\2\u015d\u015b\3\2\2\2\u015e\u0161\3\2\2\2\u015f\u015d\3\2"+
-		"\2\2\u015f\u0160\3\2\2\2\u0160\u0162\3\2\2\2\u0161\u015f\3\2\2\2\u0162"+
-		"\u0163\7C\2\2\u0163+\3\2\2\2\u0164\u0166\5P)\2\u0165\u0164\3\2\2\2\u0165"+
-		"\u0166\3\2\2\2\u0166\u0167\3\2\2\2\u0167\u0169\5L\'\2\u0168\u016a\5<\37"+
-		"\2\u0169\u0168\3\2\2\2\u0169\u016a\3\2\2\2\u016a\u0172\3\2\2\2\u016b\u016d"+
-		"\7-\2\2\u016c\u016e\5\u0084C\2\u016d\u016c\3\2\2\2\u016d\u016e\3\2\2\2"+
-		"\u016e\u016f\3\2\2\2\u016f\u0173\7\22\2\2\u0170\u0171\7\33\2\2\u0171\u0173"+
-		"\5.\30\2\u0172\u016b\3\2\2\2\u0172\u0170\3\2\2\2\u0172\u0173\3\2\2\2\u0173"+
-		"-\3\2\2\2\u0174\u0176\5~@\2\u0175\u0174\3\2\2\2\u0176\u0179\3\2\2\2\u0177"+
-		"\u0175\3\2\2\2\u0177\u0178\3\2\2\2\u0178\u0190\3\2\2\2\u0179\u0177\3\2"+
-		"\2\2\u017a\u017b\7`\2\2\u017b\u017c\5\60\31\2\u017c\u017d\7a\2\2\u017d"+
-		"\u0187\3\2\2\2\u017e\u017f\7-\2\2\u017f\u0180\5\60\31\2\u0180\u0181\7"+
-		"\22\2\2\u0181\u0187\3\2\2\2\u0182\u0183\7\6\2\2\u0183\u0184\5\60\31\2"+
-		"\u0184\u0185\7%\2\2\u0185\u0187\3\2\2\2\u0186\u017a\3\2\2\2\u0186\u017e"+
-		"\3\2\2\2\u0186\u0182\3\2\2\2\u0187\u018b\3\2\2\2\u0188\u018a\5~@\2\u0189"+
-		"\u0188\3\2\2\2\u018a\u018d\3\2\2\2\u018b\u0189\3\2\2\2\u018b\u018c\3\2"+
-		"\2\2\u018c\u018f\3\2\2\2\u018d\u018b\3\2\2\2\u018e\u0186\3\2\2\2\u018f"+
-		"\u0192\3\2\2\2\u0190\u018e\3\2\2\2\u0190\u0191\3\2\2\2\u0191/\3\2\2\2"+
-		"\u0192\u0190\3\2\2\2\u0193\u0195\5\u0080A\2\u0194\u0193\3\2\2\2\u0195"+
-		"\u0198\3\2\2\2\u0196\u0194\3\2\2\2\u0196\u0197\3\2\2\2\u0197\u01af\3\2"+
-		"\2\2\u0198\u0196\3\2\2\2\u0199\u019a\7`\2\2\u019a\u019b\5\60\31\2\u019b"+
-		"\u019c\7a\2\2\u019c\u01a6\3\2\2\2\u019d\u019e\7-\2\2\u019e\u019f\5\60"+
-		"\31\2\u019f\u01a0\7\22\2\2\u01a0\u01a6\3\2\2\2\u01a1\u01a2\7\6\2\2\u01a2"+
-		"\u01a3\5\60\31\2\u01a3\u01a4\7%\2\2\u01a4\u01a6\3\2\2\2\u01a5\u0199\3"+
-		"\2\2\2\u01a5\u019d\3\2\2\2\u01a5\u01a1\3\2\2\2\u01a6\u01aa\3\2\2\2\u01a7"+
-		"\u01a9\5\u0080A\2\u01a8\u01a7\3\2\2\2\u01a9\u01ac\3\2\2\2\u01aa\u01a8"+
-		"\3\2\2\2\u01aa\u01ab\3\2\2\2\u01ab\u01ae\3\2\2\2\u01ac\u01aa\3\2\2\2\u01ad"+
-		"\u01a5\3\2\2\2\u01ae\u01b1\3\2\2\2\u01af\u01ad\3\2\2\2\u01af\u01b0\3\2"+
-		"\2\2\u01b0\61\3\2\2\2\u01b1\u01af\3\2\2\2\u01b2\u01b4\5\\/\2\u01b3\u01b5"+
-		"\5\64\33\2\u01b4\u01b3\3\2\2\2\u01b4\u01b5\3\2\2\2\u01b5\u01b7\3\2\2\2"+
-		"\u01b6\u01b8\5\66\34\2\u01b7\u01b6\3\2\2\2\u01b7\u01b8\3\2\2\2\u01b8\u01b9"+
-		"\3\2\2\2\u01b9\u01ba\7`\2\2\u01ba\u01bb\b\32\1\2\u01bb\63\3\2\2\2\u01bc"+
-		"\u01bd\5L\'\2\u01bd\65\3\2\2\2\u01be\u01bf\7,\2\2\u01bf\u01c4\58\35\2"+
-		"\u01c0\u01c1\7*\2\2\u01c1\u01c3\58\35\2\u01c2\u01c0\3\2\2\2\u01c3\u01c6"+
-		"\3\2\2\2\u01c4\u01c2\3\2\2\2\u01c4\u01c5\3\2\2\2\u01c5\67\3\2\2\2\u01c6"+
-		"\u01c4\3\2\2\2\u01c7\u01c9\7\23\2\2\u01c8\u01c7\3\2\2\2\u01c8\u01c9\3"+
-		"\2\2\2\u01c9\u01cb\3\2\2\2\u01ca\u01cc\5`\61\2\u01cb\u01ca\3\2\2\2\u01cb"+
-		"\u01cc\3\2\2\2\u01cc\u01cd\3\2\2\2\u01cd\u01ce\5L\'\2\u01ce9\3\2\2\2\u01cf"+
-		"\u01d1\5X-\2\u01d0\u01cf\3\2\2\2\u01d1\u01d4\3\2\2\2\u01d2\u01d0\3\2\2"+
-		"\2\u01d2\u01d3\3\2\2\2\u01d3\u01d8\3\2\2\2\u01d4\u01d2\3\2\2\2\u01d5\u01d9"+
-		"\5\\/\2\u01d6\u01d9\7\31\2\2\u01d7\u01d9\7\24\2\2\u01d8\u01d5\3\2\2\2"+
-		"\u01d8\u01d6\3\2\2\2\u01d8\u01d7\3\2\2\2\u01d8\u01d9\3\2\2\2\u01d9\u01da"+
-		"\3\2\2\2\u01da\u01df\5> \2\u01db\u01dc\7\7\2\2\u01dc\u01dd\5l\67\2\u01dd"+
-		"\u01de\7F\2\2\u01de\u01e0\3\2\2\2\u01df\u01db\3\2\2\2\u01df\u01e0\3\2"+
-		"\2\2\u01e0\u01eb\3\2\2\2\u01e1\u01e2\7\30\2\2\u01e2\u01e7\5> \2\u01e3"+
-		"\u01e4\7\7\2\2\u01e4\u01e5\5l\67\2\u01e5\u01e6\7F\2\2\u01e6\u01e8\3\2"+
-		"\2\2\u01e7\u01e3\3\2\2\2\u01e7\u01e8\3\2\2\2\u01e8\u01ea\3\2\2\2\u01e9"+
-		"\u01e1\3\2\2\2\u01ea\u01ed\3\2\2\2\u01eb\u01e9\3\2\2\2\u01eb\u01ec\3\2"+
-		"\2\2\u01ec\u01f0\3\2\2\2\u01ed\u01eb\3\2\2\2\u01ee\u01f0\t\2\2\2\u01ef"+
-		"\u01d2\3\2\2\2\u01ef\u01ee\3\2\2\2\u01f0;\3\2\2\2\u01f1\u01f2\7\6\2\2"+
-		"\u01f2\u01f3\5@!\2\u01f3\u01f4\7%\2\2\u01f4\u01f7\3\2\2\2\u01f5\u01f7"+
-		"\5F$\2\u01f6\u01f1\3\2\2\2\u01f6\u01f5\3\2\2\2\u01f7=\3\2\2\2\u01f8\u01fe"+
-		"\7Y\2\2\u01f9\u01fe\7\61\2\2\u01fa\u01fe\7#\2\2\u01fb\u01fc\7#\2\2\u01fc"+
-		"\u01fe\7#\2\2\u01fd\u01f8\3\2\2\2\u01fd\u01f9\3\2\2\2\u01fd\u01fa\3\2"+
-		"\2\2\u01fd\u01fb\3\2\2\2\u01fe?\3\2\2\2\u01ff\u0201\5x=\2\u0200\u01ff"+
-		"\3\2\2\2\u0201\u0204\3\2\2\2\u0202\u0200\3\2\2\2\u0202\u0203\3\2\2\2\u0203"+
-		"\u0210\3\2\2\2\u0204\u0202\3\2\2\2\u0205\u0206\7\6\2\2\u0206\u0207\5@"+
-		"!\2\u0207\u020b\7%\2\2\u0208\u020a\5x=\2\u0209\u0208\3\2\2\2\u020a\u020d"+
-		"\3\2\2\2\u020b\u0209\3\2\2\2\u020b\u020c\3\2\2\2\u020c\u020f\3\2\2\2\u020d"+
-		"\u020b\3\2\2\2\u020e\u0205\3\2\2\2\u020f\u0212\3\2\2\2\u0210\u020e\3\2"+
-		"\2\2\u0210\u0211\3\2\2\2\u0211A\3\2\2\2\u0212\u0210\3\2\2\2\u0213\u0215"+
-		"\t\3\2\2\u0214\u0213\3\2\2\2\u0214\u0215\3\2\2\2\u0215\u0216\3\2\2\2\u0216"+
-		"\u0217\5:\36\2\u0217C\3\2\2\2\u0218\u021b\5L\'\2\u0219\u021b\5`\61\2\u021a"+
-		"\u0218\3\2\2\2\u021a\u0219\3\2\2\2\u021bE\3\2\2\2\u021c\u021d\7-\2\2\u021d"+
-		"\u021e\7\61\2\2\u021e\u022c\7\22\2\2\u021f\u0228\7-\2\2\u0220\u0225\5"+
-		"H%\2\u0221\u0222\7*\2\2\u0222\u0224\5H%\2\u0223\u0221\3\2\2\2\u0224\u0227"+
-		"\3\2\2\2\u0225\u0223\3\2\2\2\u0225\u0226\3\2\2\2\u0226\u0229\3\2\2\2\u0227"+
-		"\u0225\3\2\2\2\u0228\u0220\3\2\2\2\u0228\u0229\3\2\2\2\u0229\u022a\3\2"+
-		"\2\2\u022a\u022c\7\22\2\2\u022b\u021c\3\2\2\2\u022b\u021f\3\2\2\2\u022c"+
-		"G\3\2\2\2\u022d\u022e\5B\"\2\u022e\u022f\5J&\2\u022fI\3\2\2\2\u0230\u0232"+
-		"\5P)\2\u0231\u0230\3\2\2\2\u0231\u0232\3\2\2\2\u0232\u023a\3\2\2\2\u0233"+
-		"\u0234\7-\2\2\u0234\u0235\5J&\2\u0235\u0236\7\22\2\2\u0236\u023b\3\2\2"+
-		"\2\u0237\u0239\5D#\2\u0238\u0237\3\2\2\2\u0238\u0239\3\2\2\2\u0239\u023b"+
-		"\3\2\2\2\u023a\u0233\3\2\2\2\u023a\u0238\3\2\2\2\u023b\u023d\3\2\2\2\u023c"+
-		"\u023e\5<\37\2\u023d\u023c\3\2\2\2\u023d\u023e\3\2\2\2\u023eK\3\2\2\2"+
-		"\u023f\u0244\7Y\2\2\u0240\u0241\7\30\2\2\u0241\u0243\7Y\2\2\u0242\u0240"+
-		"\3\2\2\2\u0243\u0246\3\2\2\2\u0244\u0242\3\2\2\2\u0244\u0245\3\2\2\2\u0245"+
-		"M\3\2\2\2\u0246\u0244\3\2\2\2\u0247\u0248\t\4\2\2\u0248O\3\2\2\2\u0249"+
-		"\u024b\5^\60\2\u024a\u0249\3\2\2\2\u024b\u024c\3\2\2\2\u024c\u024a\3\2"+
-		"\2\2\u024c\u024d\3\2\2\2\u024dQ\3\2\2\2\u024e\u024f\t\5\2\2\u024fS\3\2"+
-		"\2\2\u0250\u0251\t\6\2\2\u0251U\3\2\2\2\u0252\u0253\t\7\2\2\u0253W\3\2"+
-		"\2\2\u0254\u0255\t\b\2\2\u0255Y\3\2\2\2\u0256\u0257\t\t\2\2\u0257[\3\2"+
-		"\2\2\u0258\u0259\t\n\2\2\u0259]\3\2\2\2\u025a\u025b\t\13\2\2\u025b_\3"+
-		"\2\2\2\u025c\u025d\t\f\2\2\u025da\3\2\2\2\u025e\u025f\7@\2\2\u025f\u0260"+
-		"\5d\63\2\u0260c\3\2\2\2\u0261\u0264\t\r\2\2\u0262\u0263\7\6\2\2\u0263"+
-		"\u0265\7%\2\2\u0264\u0262\3\2\2\2\u0264\u0265\3\2\2\2\u0265\u028f\3\2"+
-		"\2\2\u0266\u028f\7>\2\2\u0267\u028f\7+\2\2\u0268\u028f\7\5\2\2\u0269\u028f"+
-		"\7I\2\2\u026a\u028f\7\r\2\2\u026b\u028f\7<\2\2\u026c\u028f\7\3\2\2\u026d"+
-		"\u028f\7 \2\2\u026e\u028f\7K\2\2\u026f\u028f\7!\2\2\u0270\u028f\7\33\2"+
-		"\2\u0271\u028f\7\7\2\2\u0272\u028f\7F\2\2\u0273\u028f\7\64\2\2\u0274\u028f"+
-		"\7\'\2\2\u0275\u028f\7\21\2\2\u0276\u028f\7H\2\2\u0277\u028f\7G\2\2\u0278"+
-		"\u028f\7\65\2\2\u0279\u028f\7.\2\2\u027a\u028f\7\35\2\2\u027b\u028f\7"+
-		":\2\2\u027c\u028f\7\13\2\2\u027d\u028f\7\62\2\2\u027e\u028f\7&\2\2\u027f"+
-		"\u028f\7J\2\2\u0280\u028f\7\t\2\2\u0281\u028f\7\n\2\2\u0282\u028f\7L\2"+
-		"\2\u0283\u028f\7D\2\2\u0284\u028f\7E\2\2\u0285\u028f\79\2\2\u0286\u028f"+
-		"\7\b\2\2\u0287\u028f\7*\2\2\u0288\u028f\7(\2\2\u0289\u028f\7\16\2\2\u028a"+
-		"\u028b\7-\2\2\u028b\u028f\7\22\2\2\u028c\u028d\7\6\2\2\u028d\u028f\7%"+
-		"\2\2\u028e\u0261\3\2\2\2\u028e\u0266\3\2\2\2\u028e\u0267\3\2\2\2\u028e"+
-		"\u0268\3\2\2\2\u028e\u0269\3\2\2\2\u028e\u026a\3\2\2\2\u028e\u026b\3\2"+
-		"\2\2\u028e\u026c\3\2\2\2\u028e\u026d\3\2\2\2\u028e\u026e\3\2\2\2\u028e"+
-		"\u026f\3\2\2\2\u028e\u0270\3\2\2\2\u028e\u0271\3\2\2\2\u028e\u0272\3\2"+
-		"\2\2\u028e\u0273\3\2\2\2\u028e\u0274\3\2\2\2\u028e\u0275\3\2\2\2\u028e"+
-		"\u0276\3\2\2\2\u028e\u0277\3\2\2\2\u028e\u0278\3\2\2\2\u028e\u0279\3\2"+
-		"\2\2\u028e\u027a\3\2\2\2\u028e\u027b\3\2\2\2\u028e\u027c\3\2\2\2\u028e"+
-		"\u027d\3\2\2\2\u028e\u027e\3\2\2\2\u028e\u027f\3\2\2\2\u028e\u0280\3\2"+
-		"\2\2\u028e\u0281\3\2\2\2\u028e\u0282\3\2\2\2\u028e\u0283\3\2\2\2\u028e"+
-		"\u0284\3\2\2\2\u028e\u0285\3\2\2\2\u028e\u0286\3\2\2\2\u028e\u0287\3\2"+
-		"\2\2\u028e\u0288\3\2\2\2\u028e\u0289\3\2\2\2\u028e\u028a\3\2\2\2\u028e"+
-		"\u028c\3\2\2\2\u028fe\3\2\2\2\u0290\u0291\t\16\2\2\u0291g\3\2\2\2\u0292"+
-		"\u0293\t\17\2\2\u0293i\3\2\2\2\u0294\u0295\7\32\2\2\u0295\u0296\7\7\2"+
-		"\2\u0296\u0297\5l\67\2\u0297\u0298\7F\2\2\u0298k\3\2\2\2\u0299\u029a\7"+
-		"\7\2\2\u029a\u029b\5l\67\2\u029b\u029c\7F\2\2\u029c\u02a3\3\2\2\2\u029d"+
-		"\u029e\7-\2\2\u029e\u029f\5l\67\2\u029f\u02a0\7\22\2\2\u02a0\u02a3\3\2"+
-		"\2\2\u02a1\u02a3\5t;\2\u02a2\u0299\3\2\2\2\u02a2\u029d\3\2\2\2\u02a2\u02a1"+
-		"\3\2\2\2\u02a3\u02a6\3\2\2\2\u02a4\u02a2\3\2\2\2\u02a4\u02a5\3\2\2\2\u02a5"+
-		"m\3\2\2\2\u02a6\u02a4\3\2\2\2\u02a7\u02a8\n\20\2\2\u02a8o\3\2\2\2\u02a9"+
-		"\u02aa\n\21\2\2\u02aaq\3\2\2\2\u02ab\u02ac\n\22\2\2\u02acs\3\2\2\2\u02ad"+
-		"\u02ae\n\23\2\2\u02aeu\3\2\2\2\u02af\u02b0\n\24\2\2\u02b0w\3\2\2\2\u02b1"+
-		"\u02b2\n\25\2\2\u02b2y\3\2\2\2\u02b3\u02b4\n\26\2\2\u02b4{\3\2\2\2\u02b5"+
-		"\u02b6\n\27\2\2\u02b6}\3\2\2\2\u02b7\u02b8\n\30\2\2\u02b8\177\3\2\2\2"+
-		"\u02b9\u02ba\n\31\2\2\u02ba\u0081\3\2\2\2\u02bb\u02bc\n\32\2\2\u02bc\u0083"+
-		"\3\2\2\2\u02bd\u02c0\5\u0086D\2\u02be\u02bf\7*\2\2\u02bf\u02c1\5\u0086"+
-		"D\2\u02c0\u02be\3\2\2\2\u02c0\u02c1\3\2\2\2\u02c1\u0085\3\2\2\2\u02c2"+
-		"\u02c6\5\u0088E\2\u02c3\u02c4\5f\64\2\u02c4\u02c5\5\u0086D\2\u02c5\u02c7"+
-		"\3\2\2\2\u02c6\u02c3\3\2\2\2\u02c6\u02c7\3\2\2\2\u02c7\u0087\3\2\2\2\u02c8"+
-		"\u02ce\5\u008aF\2\u02c9\u02ca\7\60\2\2\u02ca\u02cb\5\u0084C\2\u02cb\u02cc"+
-		"\7,\2\2\u02cc\u02cd\5\u0088E\2\u02cd\u02cf\3\2\2\2\u02ce\u02c9\3\2\2\2"+
-		"\u02ce\u02cf\3\2\2\2\u02cf\u0089\3\2\2\2\u02d0\u02d3\5\u008cG\2\u02d1"+
-		"\u02d2\7E\2\2\u02d2\u02d4\5\u008aF\2\u02d3\u02d1\3\2\2\2\u02d3\u02d4\3"+
-		"\2\2\2\u02d4\u008b\3\2\2\2\u02d5\u02d8\5\u008eH\2\u02d6\u02d7\7D\2\2\u02d7"+
-		"\u02d9\5\u008cG\2\u02d8\u02d6\3\2\2\2\u02d8\u02d9\3\2\2\2\u02d9\u008d"+
-		"\3\2\2\2\u02da\u02dd\5\u0090I\2\u02db\u02dc\7 \2\2\u02dc\u02de\5\u008e"+
-		"H\2\u02dd\u02db\3\2\2\2\u02dd\u02de\3\2\2\2\u02de\u008f\3\2\2\2\u02df"+
-		"\u02e2\5\u0092J\2\u02e0\u02e1\7<\2\2\u02e1\u02e3\5\u0090I\2\u02e2\u02e0"+
-		"\3\2\2\2\u02e2\u02e3\3\2\2\2\u02e3\u0091\3\2\2\2\u02e4\u02e7\5\u0094K"+
-		"\2\u02e5\u02e6\7\3\2\2\u02e6\u02e8\5\u0092J\2\u02e7\u02e5\3\2\2\2\u02e7"+
-		"\u02e8\3\2\2\2\u02e8\u0093\3\2\2\2\u02e9\u02ed\5\u0096L\2\u02ea\u02eb"+
-		"\5h\65\2\u02eb\u02ec\5\u0094K\2\u02ec\u02ee\3\2\2\2\u02ed\u02ea\3\2\2"+
-		"\2\u02ed\u02ee\3\2\2\2\u02ee\u0095\3\2\2\2\u02ef\u02f3\5\u0098M\2\u02f0"+
-		"\u02f1\5T+\2\u02f1\u02f2\5\u0096L\2\u02f2\u02f4\3\2\2\2\u02f3\u02f0\3"+
-		"\2\2\2\u02f3\u02f4\3\2\2\2\u02f4\u0097\3\2\2\2\u02f5\u02f8\5\u009aN\2"+
-		"\u02f6\u02f7\t\33\2\2\u02f7\u02f9\5\u0098M\2\u02f8\u02f6\3\2\2\2\u02f8"+
-		"\u02f9\3\2\2\2\u02f9\u0099\3\2\2\2\u02fa\u02fd\5\u009cO\2\u02fb\u02fc"+
-		"\t\34\2\2\u02fc\u02fe\5\u009aN\2\u02fd\u02fb\3\2\2\2\u02fd\u02fe\3\2\2"+
-		"\2\u02fe\u009b\3\2\2\2\u02ff\u0302\5\u009eP\2\u0300\u0301\t\35\2\2\u0301"+
-		"\u0303\5\u009eP\2\u0302\u0300\3\2\2\2\u0302\u0303\3\2\2\2\u0303\u009d"+
-		"\3\2\2\2\u0304\u0305\7-\2\2\u0305\u0309\5:\36\2\u0306\u0308\5^\60\2\u0307"+
-		"\u0306\3\2\2\2\u0308\u030b\3\2\2\2\u0309\u0307\3\2\2\2\u0309\u030a\3\2"+
-		"\2\2\u030a\u030c\3\2\2\2\u030b\u0309\3\2\2\2\u030c\u030d\7\22\2\2\u030d"+
-		"\u030e\5\u009eP\2\u030e\u0311\3\2\2\2\u030f\u0311\5\u00a0Q\2\u0310\u0304"+
-		"\3\2\2\2\u0310\u030f\3\2\2\2\u0311\u009f\3\2\2\2\u0312\u031f\5\u00a2R"+
-		"\2\u0313\u0314\7\b\2\2\u0314\u031f\5\u00a0Q\2\u0315\u0316\79\2\2\u0316"+
-		"\u031f\5\u00a0Q\2\u0317\u0319\5R*\2\u0318\u0317\3\2\2\2\u0319\u031a\3"+
-		"\2\2\2\u031a\u0318\3\2\2\2\u031a\u031b\3\2\2\2\u031b\u031c\3\2\2\2\u031c"+
-		"\u031d\5\u00a2R\2\u031d\u031f\3\2\2\2\u031e\u0312\3\2\2\2\u031e\u0313"+
-		"\3\2\2\2\u031e\u0315\3\2\2\2\u031e\u0318\3\2\2\2\u031f\u00a1\3\2\2\2\u0320"+
-		"\u0325\5\u00a4S\2\u0321\u0322\5\u00a4S\2\u0322\u0323\5\u00a6T\2\u0323"+
-		"\u0325\3\2\2\2\u0324\u0320\3\2\2\2\u0324\u0321\3\2\2\2\u0325\u00a3\3\2"+
-		"\2\2\u0326\u032a\5\u00b0Y\2\u0327\u0329\5\u00aeX\2\u0328\u0327\3\2\2\2"+
-		"\u0329\u032c\3\2\2\2\u032a\u0328\3\2\2\2\u032a\u032b\3\2\2\2\u032b\u00a5"+
-		"\3\2\2\2\u032c\u032a\3\2\2\2\u032d\u032e\5\u00a8U\2\u032e\u032f\5\u00aa"+
-		"V\2\u032f\u0332\3\2\2\2\u0330\u0332\5\u00aaV\2\u0331\u032d\3\2\2\2\u0331"+
-		"\u0330\3\2\2\2\u0332\u00a7\3\2\2\2\u0333\u0334\7\7\2\2\u0334\u0335\5l"+
-		"\67\2\u0335\u0336\7F\2\2\u0336\u00a9\3\2\2\2\u0337\u0340\7-\2\2\u0338"+
-		"\u033d\5\u00acW\2\u0339\u033a\7*\2\2\u033a\u033c\5\u00acW\2\u033b\u0339"+
-		"\3\2\2\2\u033c\u033f\3\2\2\2\u033d\u033b\3\2\2\2\u033d\u033e\3\2\2\2\u033e"+
-		"\u0341\3\2\2\2\u033f\u033d\3\2\2\2\u0340\u0338\3\2\2\2\u0340\u0341\3\2"+
-		"\2\2\u0341\u0342\3\2\2\2\u0342\u0343\7\22\2\2\u0343\u00ab\3\2\2\2\u0344"+
-		"\u0345\5\u0086D\2\u0345\u00ad\3\2\2\2\u0346\u0347\7=\2\2\u0347\u034f\5"+
-		"L\'\2\u0348\u0349\7\16\2\2\u0349\u034f\5L\'\2\u034a\u034b\7\6\2\2\u034b"+
-		"\u034c\5\u0084C\2\u034c\u034d\7%\2\2\u034d\u034f\3\2\2\2\u034e\u0346\3"+
-		"\2\2\2\u034e\u0348\3\2\2\2\u034e\u034a\3\2\2\2\u034f\u0353\3\2\2\2\u0350"+
-		"\u0353\79\2\2\u0351\u0353\7\b\2\2\u0352\u034e\3\2\2\2\u0352\u0350\3\2"+
-		"\2\2\u0352\u0351\3\2\2\2\u0353\u00af\3\2\2\2\u0354\u0355\7-\2\2\u0355"+
-		"\u0356\5\u0084C\2\u0356\u0357\7\22\2\2\u0357\u035b\3\2\2\2\u0358\u035b"+
-		"\5L\'\2\u0359\u035b\5V,\2\u035a\u0354\3\2\2\2\u035a\u0358\3\2\2\2\u035a"+
-		"\u0359\3\2\2\2\u035b\u00b1\3\2\2\2c\u00b5\u00ba\u00bf\u00c2\u00c5\u00ca"+
-		"\u00d1\u00d9\u00de\u00e4\u00e8\u00ef\u00f4\u00f7\u00fd\u0104\u0107\u0112"+
-		"\u0119\u011f\u0129\u0133\u013c\u0141\u014a\u014d\u0156\u0158\u015f\u0165"+
-		"\u0169\u016d\u0172\u0177\u0186\u018b\u0190\u0196\u01a5\u01aa\u01af\u01b4"+
-		"\u01b7\u01c4\u01c8\u01cb\u01d2\u01d8\u01df\u01e7\u01eb\u01ef\u01f6\u01fd"+
-		"\u0202\u020b\u0210\u0214\u021a\u0225\u0228\u022b\u0231\u0238\u023a\u023d"+
-		"\u0244\u024c\u0264\u028e\u02a2\u02a4\u02c0\u02c6\u02ce\u02d3\u02d8\u02dd"+
-		"\u02e2\u02e7\u02ed\u02f3\u02f8\u02fd\u0302\u0309\u0310\u031a\u031e\u0324"+
-		"\u032a\u0331\u033d\u0340\u034e\u0352\u035a";
+		"\u00ac\u00ae\u00b0\2\36\3RS\3UV\3`b\b\3\3\5\5\31\31!!\63\63>>\6\6\6\t"+
+		"\t99??\4`cff\4\24\24\66\66\6\20\21++--QQ\6\16\16\27\27\32\32,,\4\3\3\5"+
+		"\5\5\37\37%%\64\64\4\26\26\61\61\n\r\r\23\23\25\25\34\35$$\'\')*:;\4\b"+
+		"\b==\4\17\17##\7\4\4\17\17\33\33##^_\5\17\17##\65\65\6\6\6\17\17##99\3"+
+		"^_\4\4\4\33\33\5\4\4\33\33\65\65\4  \65\65\t\4\4\17\17\33\33  ##\65\65"+
+		"^_\7\4\4\17\17\33\33##^_\3hh\4\n\n//\4!!\63\63\5\5\5\13\13<<\u0399\2\u00b5"+
+		"\3\2\2\2\4\u00ba\3\2\2\2\6\u00bf\3\2\2\2\b\u00c2\3\2\2\2\n\u00d1\3\2\2"+
+		"\2\f\u00dc\3\2\2\2\16\u00f7\3\2\2\2\20\u00f9\3\2\2\2\22\u00fd\3\2\2\2"+
+		"\24\u0109\3\2\2\2\26\u010c\3\2\2\2\30\u0115\3\2\2\2\32\u0119\3\2\2\2\34"+
+		"\u011d\3\2\2\2\36\u0129\3\2\2\2 \u012b\3\2\2\2\"\u0133\3\2\2\2$\u0144"+
+		"\3\2\2\2&\u014a\3\2\2\2(\u0158\3\2\2\2*\u015a\3\2\2\2,\u0165\3\2\2\2."+
+		"\u0177\3\2\2\2\60\u0196\3\2\2\2\62\u01b2\3\2\2\2\64\u01bc\3\2\2\2\66\u01be"+
+		"\3\2\2\28\u01c8\3\2\2\2:\u01ef\3\2\2\2<\u01f6\3\2\2\2>\u01fd\3\2\2\2@"+
+		"\u0202\3\2\2\2B\u0214\3\2\2\2D\u021a\3\2\2\2F\u022b\3\2\2\2H\u022d\3\2"+
+		"\2\2J\u0231\3\2\2\2L\u023f\3\2\2\2N\u0247\3\2\2\2P\u024a\3\2\2\2R\u024e"+
+		"\3\2\2\2T\u0250\3\2\2\2V\u0252\3\2\2\2X\u0254\3\2\2\2Z\u0256\3\2\2\2\\"+
+		"\u0258\3\2\2\2^\u025a\3\2\2\2`\u025c\3\2\2\2b\u025e\3\2\2\2d\u028e\3\2"+
+		"\2\2f\u0290\3\2\2\2h\u0292\3\2\2\2j\u0294\3\2\2\2l\u02a4\3\2\2\2n\u02a7"+
+		"\3\2\2\2p\u02a9\3\2\2\2r\u02ab\3\2\2\2t\u02ad\3\2\2\2v\u02af\3\2\2\2x"+
+		"\u02b1\3\2\2\2z\u02b3\3\2\2\2|\u02b5\3\2\2\2~\u02b7\3\2\2\2\u0080\u02b9"+
+		"\3\2\2\2\u0082\u02bb\3\2\2\2\u0084\u02bd\3\2\2\2\u0086\u02c2\3\2\2\2\u0088"+
+		"\u02c8\3\2\2\2\u008a\u02d0\3\2\2\2\u008c\u02d5\3\2\2\2\u008e\u02da\3\2"+
+		"\2\2\u0090\u02df\3\2\2\2\u0092\u02e4\3\2\2\2\u0094\u02e9\3\2\2\2\u0096"+
+		"\u02ef\3\2\2\2\u0098\u02f5\3\2\2\2\u009a\u02fa\3\2\2\2\u009c\u02ff\3\2"+
+		"\2\2\u009e\u0310\3\2\2\2\u00a0\u031e\3\2\2\2\u00a2\u0324\3\2\2\2\u00a4"+
+		"\u0326\3\2\2\2\u00a6\u0331\3\2\2\2\u00a8\u0333\3\2\2\2\u00aa\u0337\3\2"+
+		"\2\2\u00ac\u0344\3\2\2\2\u00ae\u0352\3\2\2\2\u00b0\u035a\3\2\2\2\u00b2"+
+		"\u00b4\5\4\3\2\u00b3\u00b2\3\2\2\2\u00b4\u00b7\3\2\2\2\u00b5\u00b3\3\2"+
+		"\2\2\u00b5\u00b6\3\2\2\2\u00b6\3\3\2\2\2\u00b7\u00b5\3\2\2\2\u00b8\u00bb"+
+		"\5\6\4\2\u00b9\u00bb\5\u0082B\2\u00ba\u00b8\3\2\2\2\u00ba\u00b9\3\2\2"+
+		"\2\u00bb\5\3\2\2\2\u00bc\u00c0\5\b\5\2\u00bd\u00c0\5&\24\2\u00be\u00c0"+
+		"\5$\23\2\u00bf\u00bc\3\2\2\2\u00bf\u00bd\3\2\2\2\u00bf\u00be\3\2\2\2\u00c0"+
+		"\7\3\2\2\2\u00c1\u00c3\5j\66\2\u00c2\u00c1\3\2\2\2\u00c2\u00c3\3\2\2\2"+
+		"\u00c3\u00c5\3\2\2\2\u00c4\u00c6\5\n\6\2\u00c5\u00c4\3\2\2\2\u00c5\u00c6"+
+		"\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7\u00c8\5\36\20\2\u00c8\u00ca\5\f\7\2"+
+		"\u00c9\u00cb\5\26\f\2\u00ca\u00c9\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb\u00cc"+
+		"\3\2\2\2\u00cc\u00cd\5\24\13\2\u00cd\t\3\2\2\2\u00ce\u00d0\5Z.\2\u00cf"+
+		"\u00ce\3\2\2\2\u00d0\u00d3\3\2\2\2\u00d1\u00cf\3\2\2\2\u00d1\u00d2\3\2"+
+		"\2\2\u00d2\u00d4\3\2\2\2\u00d3\u00d1\3\2\2\2\u00d4\u00d5\5:\36\2\u00d5"+
+		"\u00d9\3\2\2\2\u00d6\u00d8\5^\60\2\u00d7\u00d6\3\2\2\2\u00d8\u00db\3\2"+
+		"\2\2\u00d9\u00d7\3\2\2\2\u00d9\u00da\3\2\2\2\u00da\13\3\2\2\2\u00db\u00d9"+
+		"\3\2\2\2\u00dc\u00de\7#\2\2\u00dd\u00df\5\16\b\2\u00de\u00dd\3\2\2\2\u00de"+
+		"\u00df\3\2\2\2\u00df\u00e0\3\2\2\2\u00e0\u00e4\7\17\2\2\u00e1\u00e3\5"+
+		"X-\2\u00e2\u00e1\3\2\2\2\u00e3\u00e6\3\2\2\2\u00e4\u00e2\3\2\2\2\u00e4"+
+		"\u00e5\3\2\2\2\u00e5\u00e8\3\2\2\2\u00e6\u00e4\3\2\2\2\u00e7\u00e9\5 "+
+		"\21\2\u00e8\u00e7\3\2\2\2\u00e8\u00e9\3\2\2\2\u00e9\r\3\2\2\2\u00ea\u00ef"+
+		"\5\20\t\2\u00eb\u00ec\7 \2\2\u00ec\u00ee\5\20\t\2\u00ed\u00eb\3\2\2\2"+
+		"\u00ee\u00f1\3\2\2\2\u00ef\u00ed\3\2\2\2\u00ef\u00f0\3\2\2\2\u00f0\u00f4"+
+		"\3\2\2\2\u00f1\u00ef\3\2\2\2\u00f2\u00f3\7 \2\2\u00f3\u00f5\7(\2\2\u00f4"+
+		"\u00f2\3\2\2\2\u00f4\u00f5\3\2\2\2\u00f5\u00f8\3\2\2\2\u00f6\u00f8\7M"+
+		"\2\2\u00f7\u00ea\3\2\2\2\u00f7\u00f6\3\2\2\2\u00f8\17\3\2\2\2\u00f9\u00fa"+
+		"\5B\"\2\u00fa\u00fb\5\22\n\2\u00fb\21\3\2\2\2\u00fc\u00fe\5P)\2\u00fd"+
+		"\u00fc\3\2\2\2\u00fd\u00fe\3\2\2\2\u00fe\u0104\3\2\2\2\u00ff\u0100\7#"+
+		"\2\2\u0100\u0101\5\22\n\2\u0101\u0102\7\17\2\2\u0102\u0105\3\2\2\2\u0103"+
+		"\u0105\5D#\2\u0104\u00ff\3\2\2\2\u0104\u0103\3\2\2\2\u0105\u0107\3\2\2"+
+		"\2\u0106\u0108\5<\37\2\u0107\u0106\3\2\2\2\u0107\u0108\3\2\2\2\u0108\23"+
+		"\3\2\2\2\u0109\u010a\7^\2\2\u010a\u010b\b\13\1\2\u010b\25\3\2\2\2\u010c"+
+		"\u010d\7\"\2\2\u010d\u0112\5\30\r\2\u010e\u010f\7 \2\2\u010f\u0111\5\30"+
+		"\r\2\u0110\u010e\3\2\2\2\u0111\u0114\3\2\2\2\u0112\u0110\3\2\2\2\u0112"+
+		"\u0113\3\2\2\2\u0113\27\3\2\2\2\u0114\u0112\3\2\2\2\u0115\u0116\5\32\16"+
+		"\2\u0116\u0117\5\34\17\2\u0117\31\3\2\2\2\u0118\u011a\7\22\2\2\u0119\u0118"+
+		"\3\2\2\2\u0119\u011a\3\2\2\2\u011a\u011b\3\2\2\2\u011b\u011c\5L\'\2\u011c"+
+		"\33\3\2\2\2\u011d\u011f\7#\2\2\u011e\u0120\5\u0084C\2\u011f\u011e\3\2"+
+		"\2\2\u011f\u0120\3\2\2\2\u0120\u0121\3\2\2\2\u0121\u0122\7\17\2\2\u0122"+
+		"\35\3\2\2\2\u0123\u0124\7#\2\2\u0124\u0125\5\36\20\2\u0125\u0126\7\17"+
+		"\2\2\u0126\u012a\3\2\2\2\u0127\u012a\5L\'\2\u0128\u012a\5b\62\2\u0129"+
+		"\u0123\3\2\2\2\u0129\u0127\3\2\2\2\u0129\u0128\3\2\2\2\u012a\37\3\2\2"+
+		"\2\u012b\u012c\7L\2\2\u012c\u012d\7#\2\2\u012d\u012e\5\"\22\2\u012e\u012f"+
+		"\7\17\2\2\u012f!\3\2\2\2\u0130\u0132\5n8\2\u0131\u0130\3\2\2\2\u0132\u0135"+
+		"\3\2\2\2\u0133\u0131\3\2\2\2\u0133\u0134\3\2\2\2\u0134\u0141\3\2\2\2\u0135"+
+		"\u0133\3\2\2\2\u0136\u0137\7#\2\2\u0137\u0138\5\"\22\2\u0138\u013c\7\17"+
+		"\2\2\u0139\u013b\5n8\2\u013a\u0139\3\2\2\2\u013b\u013e\3\2\2\2\u013c\u013a"+
+		"\3\2\2\2\u013c\u013d\3\2\2\2\u013d\u0140\3\2\2\2\u013e\u013c\3\2\2\2\u013f"+
+		"\u0136\3\2\2\2\u0140\u0143\3\2\2\2\u0141\u013f\3\2\2\2\u0141\u0142\3\2"+
+		"\2\2\u0142#\3\2\2\2\u0143\u0141\3\2\2\2\u0144\u0145\7N\2\2\u0145\u0146"+
+		"\7O\2\2\u0146\u0147\5L\'\2\u0147\u0148\7\65\2\2\u0148%\3\2\2\2\u0149\u014b"+
+		"\7P\2\2\u014a\u0149\3\2\2\2\u014a\u014b\3\2\2\2\u014b\u014d\3\2\2\2\u014c"+
+		"\u014e\5j\66\2\u014d\u014c\3\2\2\2\u014d\u014e\3\2\2\2\u014e\u014f\3\2"+
+		"\2\2\u014f\u0150\5(\25\2\u0150\'\3\2\2\2\u0151\u0152\5:\36\2\u0152\u0153"+
+		"\5*\26\2\u0153\u0159\3\2\2\2\u0154\u0156\5\62\32\2\u0155\u0157\5*\26\2"+
+		"\u0156\u0155\3\2\2\2\u0156\u0157\3\2\2\2\u0157\u0159\3\2\2\2\u0158\u0151"+
+		"\3\2\2\2\u0158\u0154\3\2\2\2\u0159)\3\2\2\2\u015a\u015f\5,\27\2\u015b"+
+		"\u015c\7 \2\2\u015c\u015e\5,\27\2\u015d\u015b\3\2\2\2\u015e\u0161\3\2"+
+		"\2\2\u015f\u015d\3\2\2\2\u015f\u0160\3\2\2\2\u0160\u0162\3\2\2\2\u0161"+
+		"\u015f\3\2\2\2\u0162\u0163\7\65\2\2\u0163+\3\2\2\2\u0164\u0166\5P)\2\u0165"+
+		"\u0164\3\2\2\2\u0165\u0166\3\2\2\2\u0166\u0167\3\2\2\2\u0167\u0169\5L"+
+		"\'\2\u0168\u016a\5<\37\2\u0169\u0168\3\2\2\2\u0169\u016a\3\2\2\2\u016a"+
+		"\u0172\3\2\2\2\u016b\u016d\7#\2\2\u016c\u016e\5\u0084C\2\u016d\u016c\3"+
+		"\2\2\2\u016d\u016e\3\2\2\2\u016e\u016f\3\2\2\2\u016f\u0173\7\17\2\2\u0170"+
+		"\u0171\7\23\2\2\u0171\u0173\5.\30\2\u0172\u016b\3\2\2\2\u0172\u0170\3"+
+		"\2\2\2\u0172\u0173\3\2\2\2\u0173-\3\2\2\2\u0174\u0176\5~@\2\u0175\u0174"+
+		"\3\2\2\2\u0176\u0179\3\2\2\2\u0177\u0175\3\2\2\2\u0177\u0178\3\2\2\2\u0178"+
+		"\u0190\3\2\2\2\u0179\u0177\3\2\2\2\u017a\u017b\7^\2\2\u017b\u017c\5\60"+
+		"\31\2\u017c\u017d\7_\2\2\u017d\u0187\3\2\2\2\u017e\u017f\7#\2\2\u017f"+
+		"\u0180\5\60\31\2\u0180\u0181\7\17\2\2\u0181\u0187\3\2\2\2\u0182\u0183"+
+		"\7\4\2\2\u0183\u0184\5\60\31\2\u0184\u0185\7\33\2\2\u0185\u0187\3\2\2"+
+		"\2\u0186\u017a\3\2\2\2\u0186\u017e\3\2\2\2\u0186\u0182\3\2\2\2\u0187\u018b"+
+		"\3\2\2\2\u0188\u018a\5~@\2\u0189\u0188\3\2\2\2\u018a\u018d\3\2\2\2\u018b"+
+		"\u0189\3\2\2\2\u018b\u018c\3\2\2\2\u018c\u018f\3\2\2\2\u018d\u018b\3\2"+
+		"\2\2\u018e\u0186\3\2\2\2\u018f\u0192\3\2\2\2\u0190\u018e\3\2\2\2\u0190"+
+		"\u0191\3\2\2\2\u0191/\3\2\2\2\u0192\u0190\3\2\2\2\u0193\u0195\5\u0080"+
+		"A\2\u0194\u0193\3\2\2\2\u0195\u0198\3\2\2\2\u0196\u0194\3\2\2\2\u0196"+
+		"\u0197\3\2\2\2\u0197\u01af\3\2\2\2\u0198\u0196\3\2\2\2\u0199\u019a\7^"+
+		"\2\2\u019a\u019b\5\60\31\2\u019b\u019c\7_\2\2\u019c\u01a6\3\2\2\2\u019d"+
+		"\u019e\7#\2\2\u019e\u019f\5\60\31\2\u019f\u01a0\7\17\2\2\u01a0\u01a6\3"+
+		"\2\2\2\u01a1\u01a2\7\4\2\2\u01a2\u01a3\5\60\31\2\u01a3\u01a4\7\33\2\2"+
+		"\u01a4\u01a6\3\2\2\2\u01a5\u0199\3\2\2\2\u01a5\u019d\3\2\2\2\u01a5\u01a1"+
+		"\3\2\2\2\u01a6\u01aa\3\2\2\2\u01a7\u01a9\5\u0080A\2\u01a8\u01a7\3\2\2"+
+		"\2\u01a9\u01ac\3\2\2\2\u01aa\u01a8\3\2\2\2\u01aa\u01ab\3\2\2\2\u01ab\u01ae"+
+		"\3\2\2\2\u01ac\u01aa\3\2\2\2\u01ad\u01a5\3\2\2\2\u01ae\u01b1\3\2\2\2\u01af"+
+		"\u01ad\3\2\2\2\u01af\u01b0\3\2\2\2\u01b0\61\3\2\2\2\u01b1\u01af\3\2\2"+
+		"\2\u01b2\u01b4\5\\/\2\u01b3\u01b5\5\64\33\2\u01b4\u01b3\3\2\2\2\u01b4"+
+		"\u01b5\3\2\2\2\u01b5\u01b7\3\2\2\2\u01b6\u01b8\5\66\34\2\u01b7\u01b6\3"+
+		"\2\2\2\u01b7\u01b8\3\2\2\2\u01b8\u01b9\3\2\2\2\u01b9\u01ba\7^\2\2\u01ba"+
+		"\u01bb\b\32\1\2\u01bb\63\3\2\2\2\u01bc\u01bd\5L\'\2\u01bd\65\3\2\2\2\u01be"+
+		"\u01bf\7\"\2\2\u01bf\u01c4\58\35\2\u01c0\u01c1\7 \2\2\u01c1\u01c3\58\35"+
+		"\2\u01c2\u01c0\3\2\2\2\u01c3\u01c6\3\2\2\2\u01c4\u01c2\3\2\2\2\u01c4\u01c5"+
+		"\3\2\2\2\u01c5\67\3\2\2\2\u01c6\u01c4\3\2\2\2\u01c7\u01c9\7Q\2\2\u01c8"+
+		"\u01c7\3\2\2\2\u01c8\u01c9\3\2\2\2\u01c9\u01cb\3\2\2\2\u01ca\u01cc\5`"+
+		"\61\2\u01cb\u01ca\3\2\2\2\u01cb\u01cc\3\2\2\2\u01cc\u01cd\3\2\2\2\u01cd"+
+		"\u01ce\5L\'\2\u01ce9\3\2\2\2\u01cf\u01d1\5X-\2\u01d0\u01cf\3\2\2\2\u01d1"+
+		"\u01d4\3\2\2\2\u01d2\u01d0\3\2\2\2\u01d2\u01d3\3\2\2\2\u01d3\u01d8\3\2"+
+		"\2\2\u01d4\u01d2\3\2\2\2\u01d5\u01d9\5\\/\2\u01d6\u01d9\7R\2\2\u01d7\u01d9"+
+		"\7S\2\2\u01d8\u01d5\3\2\2\2\u01d8\u01d6\3\2\2\2\u01d8\u01d7\3\2\2\2\u01d8"+
+		"\u01d9\3\2\2\2\u01d9\u01da\3\2\2\2\u01da\u01df\5> \2\u01db\u01dc\7\6\2"+
+		"\2\u01dc\u01dd\5l\67\2\u01dd\u01de\79\2\2\u01de\u01e0\3\2\2\2\u01df\u01db"+
+		"\3\2\2\2\u01df\u01e0\3\2\2\2\u01e0\u01eb\3\2\2\2\u01e1\u01e2\7\22\2\2"+
+		"\u01e2\u01e7\5> \2\u01e3\u01e4\7\6\2\2\u01e4\u01e5\5l\67\2\u01e5\u01e6"+
+		"\79\2\2\u01e6\u01e8\3\2\2\2\u01e7\u01e3\3\2\2\2\u01e7\u01e8\3\2\2\2\u01e8"+
+		"\u01ea\3\2\2\2\u01e9\u01e1\3\2\2\2\u01ea\u01ed\3\2\2\2\u01eb\u01e9\3\2"+
+		"\2\2\u01eb\u01ec\3\2\2\2\u01ec\u01f0\3\2\2\2\u01ed\u01eb\3\2\2\2\u01ee"+
+		"\u01f0\t\2\2\2\u01ef\u01d2\3\2\2\2\u01ef\u01ee\3\2\2\2\u01f0;\3\2\2\2"+
+		"\u01f1\u01f2\7\4\2\2\u01f2\u01f3\5@!\2\u01f3\u01f4\7\33\2\2\u01f4\u01f7"+
+		"\3\2\2\2\u01f5\u01f7\5F$\2\u01f6\u01f1\3\2\2\2\u01f6\u01f5\3\2\2\2\u01f7"+
+		"=\3\2\2\2\u01f8\u01fe\7Y\2\2\u01f9\u01fe\7M\2\2\u01fa\u01fe\7T\2\2\u01fb"+
+		"\u01fc\7T\2\2\u01fc\u01fe\7T\2\2\u01fd\u01f8\3\2\2\2\u01fd\u01f9\3\2\2"+
+		"\2\u01fd\u01fa\3\2\2\2\u01fd\u01fb\3\2\2\2\u01fe?\3\2\2\2\u01ff\u0201"+
+		"\5x=\2\u0200\u01ff\3\2\2\2\u0201\u0204\3\2\2\2\u0202\u0200\3\2\2\2\u0202"+
+		"\u0203\3\2\2\2\u0203\u0210\3\2\2\2\u0204\u0202\3\2\2\2\u0205\u0206\7\4"+
+		"\2\2\u0206\u0207\5@!\2\u0207\u020b\7\33\2\2\u0208\u020a\5x=\2\u0209\u0208"+
+		"\3\2\2\2\u020a\u020d\3\2\2\2\u020b\u0209\3\2\2\2\u020b\u020c\3\2\2\2\u020c"+
+		"\u020f\3\2\2\2\u020d\u020b\3\2\2\2\u020e\u0205\3\2\2\2\u020f\u0212\3\2"+
+		"\2\2\u0210\u020e\3\2\2\2\u0210\u0211\3\2\2\2\u0211A\3\2\2\2\u0212\u0210"+
+		"\3\2\2\2\u0213\u0215\t\3\2\2\u0214\u0213\3\2\2\2\u0214\u0215\3\2\2\2\u0215"+
+		"\u0216\3\2\2\2\u0216\u0217\5:\36\2\u0217C\3\2\2\2\u0218\u021b\5L\'\2\u0219"+
+		"\u021b\5`\61\2\u021a\u0218\3\2\2\2\u021a\u0219\3\2\2\2\u021bE\3\2\2\2"+
+		"\u021c\u021d\7#\2\2\u021d\u021e\7M\2\2\u021e\u022c\7\17\2\2\u021f\u0228"+
+		"\7#\2\2\u0220\u0225\5H%\2\u0221\u0222\7 \2\2\u0222\u0224\5H%\2\u0223\u0221"+
+		"\3\2\2\2\u0224\u0227\3\2\2\2\u0225\u0223\3\2\2\2\u0225\u0226\3\2\2\2\u0226"+
+		"\u0229\3\2\2\2\u0227\u0225\3\2\2\2\u0228\u0220\3\2\2\2\u0228\u0229\3\2"+
+		"\2\2\u0229\u022a\3\2\2\2\u022a\u022c\7\17\2\2\u022b\u021c\3\2\2\2\u022b"+
+		"\u021f\3\2\2\2\u022cG\3\2\2\2\u022d\u022e\5B\"\2\u022e\u022f\5J&\2\u022f"+
+		"I\3\2\2\2\u0230\u0232\5P)\2\u0231\u0230\3\2\2\2\u0231\u0232\3\2\2\2\u0232"+
+		"\u023a\3\2\2\2\u0233\u0234\7#\2\2\u0234\u0235\5J&\2\u0235\u0236\7\17\2"+
+		"\2\u0236\u023b\3\2\2\2\u0237\u0239\5D#\2\u0238\u0237\3\2\2\2\u0238\u0239"+
+		"\3\2\2\2\u0239\u023b\3\2\2\2\u023a\u0233\3\2\2\2\u023a\u0238\3\2\2\2\u023b"+
+		"\u023d\3\2\2\2\u023c\u023e\5<\37\2\u023d\u023c\3\2\2\2\u023d\u023e\3\2"+
+		"\2\2\u023eK\3\2\2\2\u023f\u0244\7Y\2\2\u0240\u0241\7\22\2\2\u0241\u0243"+
+		"\7Y\2\2\u0242\u0240\3\2\2\2\u0243\u0246\3\2\2\2\u0244\u0242\3\2\2\2\u0244"+
+		"\u0245\3\2\2\2\u0245M\3\2\2\2\u0246\u0244\3\2\2\2\u0247\u0248\t\4\2\2"+
+		"\u0248O\3\2\2\2\u0249\u024b\5^\60\2\u024a\u0249\3\2\2\2\u024b\u024c\3"+
+		"\2\2\2\u024c\u024a\3\2\2\2\u024c\u024d\3\2\2\2\u024dQ\3\2\2\2\u024e\u024f"+
+		"\t\5\2\2\u024fS\3\2\2\2\u0250\u0251\t\6\2\2\u0251U\3\2\2\2\u0252\u0253"+
+		"\t\7\2\2\u0253W\3\2\2\2\u0254\u0255\t\b\2\2\u0255Y\3\2\2\2\u0256\u0257"+
+		"\t\t\2\2\u0257[\3\2\2\2\u0258\u0259\t\n\2\2\u0259]\3\2\2\2\u025a\u025b"+
+		"\t\13\2\2\u025b_\3\2\2\2\u025c\u025d\t\f\2\2\u025da\3\2\2\2\u025e\u025f"+
+		"\7W\2\2\u025f\u0260\5d\63\2\u0260c\3\2\2\2\u0261\u0264\t\r\2\2\u0262\u0263"+
+		"\7\4\2\2\u0263\u0265\7\33\2\2\u0264\u0262\3\2\2\2\u0264\u0265\3\2\2\2"+
+		"\u0265\u028f\3\2\2\2\u0266\u028f\7\63\2\2\u0267\u028f\7!\2\2\u0268\u028f"+
+		"\7\5\2\2\u0269\u028f\7<\2\2\u026a\u028f\7\13\2\2\u026b\u028f\7\60\2\2"+
+		"\u026c\u028f\7\3\2\2\u026d\u028f\7\30\2\2\u026e\u028f\7>\2\2\u026f\u028f"+
+		"\7\31\2\2\u0270\u028f\7\23\2\2\u0271\u028f\7\6\2\2\u0272\u028f\79\2\2"+
+		"\u0273\u028f\7)\2\2\u0274\u028f\7\35\2\2\u0275\u028f\7\r\2\2\u0276\u028f"+
+		"\7;\2\2\u0277\u028f\7:\2\2\u0278\u028f\7*\2\2\u0279\u028f\7$\2\2\u027a"+
+		"\u028f\7\25\2\2\u027b\u028f\7/\2\2\u027c\u028f\7\n\2\2\u027d\u028f\7\'"+
+		"\2\2\u027e\u028f\7\34\2\2\u027f\u028f\7=\2\2\u0280\u028f\7\b\2\2\u0281"+
+		"\u028f\7\t\2\2\u0282\u028f\7?\2\2\u0283\u028f\7\67\2\2\u0284\u028f\78"+
+		"\2\2\u0285\u028f\7.\2\2\u0286\u028f\7\7\2\2\u0287\u028f\7 \2\2\u0288\u028f"+
+		"\7\36\2\2\u0289\u028f\7\f\2\2\u028a\u028b\7#\2\2\u028b\u028f\7\17\2\2"+
+		"\u028c\u028d\7\4\2\2\u028d\u028f\7\33\2\2\u028e\u0261\3\2\2\2\u028e\u0266"+
+		"\3\2\2\2\u028e\u0267\3\2\2\2\u028e\u0268\3\2\2\2\u028e\u0269\3\2\2\2\u028e"+
+		"\u026a\3\2\2\2\u028e\u026b\3\2\2\2\u028e\u026c\3\2\2\2\u028e\u026d\3\2"+
+		"\2\2\u028e\u026e\3\2\2\2\u028e\u026f\3\2\2\2\u028e\u0270\3\2\2\2\u028e"+
+		"\u0271\3\2\2\2\u028e\u0272\3\2\2\2\u028e\u0273\3\2\2\2\u028e\u0274\3\2"+
+		"\2\2\u028e\u0275\3\2\2\2\u028e\u0276\3\2\2\2\u028e\u0277\3\2\2\2\u028e"+
+		"\u0278\3\2\2\2\u028e\u0279\3\2\2\2\u028e\u027a\3\2\2\2\u028e\u027b\3\2"+
+		"\2\2\u028e\u027c\3\2\2\2\u028e\u027d\3\2\2\2\u028e\u027e\3\2\2\2\u028e"+
+		"\u027f\3\2\2\2\u028e\u0280\3\2\2\2\u028e\u0281\3\2\2\2\u028e\u0282\3\2"+
+		"\2\2\u028e\u0283\3\2\2\2\u028e\u0284\3\2\2\2\u028e\u0285\3\2\2\2\u028e"+
+		"\u0286\3\2\2\2\u028e\u0287\3\2\2\2\u028e\u0288\3\2\2\2\u028e\u0289\3\2"+
+		"\2\2\u028e\u028a\3\2\2\2\u028e\u028c\3\2\2\2\u028fe\3\2\2\2\u0290\u0291"+
+		"\t\16\2\2\u0291g\3\2\2\2\u0292\u0293\t\17\2\2\u0293i\3\2\2\2\u0294\u0295"+
+		"\7X\2\2\u0295\u0296\7\6\2\2\u0296\u0297\5l\67\2\u0297\u0298\79\2\2\u0298"+
+		"k\3\2\2\2\u0299\u029a\7\6\2\2\u029a\u029b\5l\67\2\u029b\u029c\79\2\2\u029c"+
+		"\u02a3\3\2\2\2\u029d\u029e\7#\2\2\u029e\u029f\5l\67\2\u029f\u02a0\7\17"+
+		"\2\2\u02a0\u02a3\3\2\2\2\u02a1\u02a3\5t;\2\u02a2\u0299\3\2\2\2\u02a2\u029d"+
+		"\3\2\2\2\u02a2\u02a1\3\2\2\2\u02a3\u02a6\3\2\2\2\u02a4\u02a2\3\2\2\2\u02a4"+
+		"\u02a5\3\2\2\2\u02a5m\3\2\2\2\u02a6\u02a4\3\2\2\2\u02a7\u02a8\n\20\2\2"+
+		"\u02a8o\3\2\2\2\u02a9\u02aa\n\21\2\2\u02aaq\3\2\2\2\u02ab\u02ac\n\22\2"+
+		"\2\u02acs\3\2\2\2\u02ad\u02ae\n\23\2\2\u02aeu\3\2\2\2\u02af\u02b0\n\24"+
+		"\2\2\u02b0w\3\2\2\2\u02b1\u02b2\n\25\2\2\u02b2y\3\2\2\2\u02b3\u02b4\n"+
+		"\26\2\2\u02b4{\3\2\2\2\u02b5\u02b6\n\27\2\2\u02b6}\3\2\2\2\u02b7\u02b8"+
+		"\n\30\2\2\u02b8\177\3\2\2\2\u02b9\u02ba\n\31\2\2\u02ba\u0081\3\2\2\2\u02bb"+
+		"\u02bc\n\32\2\2\u02bc\u0083\3\2\2\2\u02bd\u02c0\5\u0086D\2\u02be\u02bf"+
+		"\7 \2\2\u02bf\u02c1\5\u0086D\2\u02c0\u02be\3\2\2\2\u02c0\u02c1\3\2\2\2"+
+		"\u02c1\u0085\3\2\2\2\u02c2\u02c6\5\u0088E\2\u02c3\u02c4\5f\64\2\u02c4"+
+		"\u02c5\5\u0086D\2\u02c5\u02c7\3\2\2\2\u02c6\u02c3\3\2\2\2\u02c6\u02c7"+
+		"\3\2\2\2\u02c7\u0087\3\2\2\2\u02c8\u02ce\5\u008aF\2\u02c9\u02ca\7&\2\2"+
+		"\u02ca\u02cb\5\u0084C\2\u02cb\u02cc\7\"\2\2\u02cc\u02cd\5\u0088E\2\u02cd"+
+		"\u02cf\3\2\2\2\u02ce\u02c9\3\2\2\2\u02ce\u02cf\3\2\2\2\u02cf\u0089\3\2"+
+		"\2\2\u02d0\u02d3\5\u008cG\2\u02d1\u02d2\78\2\2\u02d2\u02d4\5\u008aF\2"+
+		"\u02d3\u02d1\3\2\2\2\u02d3\u02d4\3\2\2\2\u02d4\u008b\3\2\2\2\u02d5\u02d8"+
+		"\5\u008eH\2\u02d6\u02d7\7\67\2\2\u02d7\u02d9\5\u008cG\2\u02d8\u02d6\3"+
+		"\2\2\2\u02d8\u02d9\3\2\2\2\u02d9\u008d\3\2\2\2\u02da\u02dd\5\u0090I\2"+
+		"\u02db\u02dc\7\30\2\2\u02dc\u02de\5\u008eH\2\u02dd\u02db\3\2\2\2\u02dd"+
+		"\u02de\3\2\2\2\u02de\u008f\3\2\2\2\u02df\u02e2\5\u0092J\2\u02e0\u02e1"+
+		"\7\60\2\2\u02e1\u02e3\5\u0090I\2\u02e2\u02e0\3\2\2\2\u02e2\u02e3\3\2\2"+
+		"\2\u02e3\u0091\3\2\2\2\u02e4\u02e7\5\u0094K\2\u02e5\u02e6\7\3\2\2\u02e6"+
+		"\u02e8\5\u0092J\2\u02e7\u02e5\3\2\2\2\u02e7\u02e8\3\2\2\2\u02e8\u0093"+
+		"\3\2\2\2\u02e9\u02ed\5\u0096L\2\u02ea\u02eb\5h\65\2\u02eb\u02ec\5\u0094"+
+		"K\2\u02ec\u02ee\3\2\2\2\u02ed\u02ea\3\2\2\2\u02ed\u02ee\3\2\2\2\u02ee"+
+		"\u0095\3\2\2\2\u02ef\u02f3\5\u0098M\2\u02f0\u02f1\5T+\2\u02f1\u02f2\5"+
+		"\u0096L\2\u02f2\u02f4\3\2\2\2\u02f3\u02f0\3\2\2\2\u02f3\u02f4\3\2\2\2"+
+		"\u02f4\u0097\3\2\2\2\u02f5\u02f8\5\u009aN\2\u02f6\u02f7\t\33\2\2\u02f7"+
+		"\u02f9\5\u0098M\2\u02f8\u02f6\3\2\2\2\u02f8\u02f9\3\2\2\2\u02f9\u0099"+
+		"\3\2\2\2\u02fa\u02fd\5\u009cO\2\u02fb\u02fc\t\34\2\2\u02fc\u02fe\5\u009a"+
+		"N\2\u02fd\u02fb\3\2\2\2\u02fd\u02fe\3\2\2\2\u02fe\u009b\3\2\2\2\u02ff"+
+		"\u0302\5\u009eP\2\u0300\u0301\t\35\2\2\u0301\u0303\5\u009eP\2\u0302\u0300"+
+		"\3\2\2\2\u0302\u0303\3\2\2\2\u0303\u009d\3\2\2\2\u0304\u0305\7#\2\2\u0305"+
+		"\u0309\5:\36\2\u0306\u0308\5^\60\2\u0307\u0306\3\2\2\2\u0308\u030b\3\2"+
+		"\2\2\u0309\u0307\3\2\2\2\u0309\u030a\3\2\2\2\u030a\u030c\3\2\2\2\u030b"+
+		"\u0309\3\2\2\2\u030c\u030d\7\17\2\2\u030d\u030e\5\u009eP\2\u030e\u0311"+
+		"\3\2\2\2\u030f\u0311\5\u00a0Q\2\u0310\u0304\3\2\2\2\u0310\u030f\3\2\2"+
+		"\2\u0311\u009f\3\2\2\2\u0312\u031f\5\u00a2R\2\u0313\u0314\7\7\2\2\u0314"+
+		"\u031f\5\u00a0Q\2\u0315\u0316\7.\2\2\u0316\u031f\5\u00a0Q\2\u0317\u0319"+
+		"\5R*\2\u0318\u0317\3\2\2\2\u0319\u031a\3\2\2\2\u031a\u0318\3\2\2\2\u031a"+
+		"\u031b\3\2\2\2\u031b\u031c\3\2\2\2\u031c\u031d\5\u00a2R\2\u031d\u031f"+
+		"\3\2\2\2\u031e\u0312\3\2\2\2\u031e\u0313\3\2\2\2\u031e\u0315\3\2\2\2\u031e"+
+		"\u0318\3\2\2\2\u031f\u00a1\3\2\2\2\u0320\u0325\5\u00a4S\2\u0321\u0322"+
+		"\5\u00a4S\2\u0322\u0323\5\u00a6T\2\u0323\u0325\3\2\2\2\u0324\u0320\3\2"+
+		"\2\2\u0324\u0321\3\2\2\2\u0325\u00a3\3\2\2\2\u0326\u032a\5\u00b0Y\2\u0327"+
+		"\u0329\5\u00aeX\2\u0328\u0327\3\2\2\2\u0329\u032c\3\2\2\2\u032a\u0328"+
+		"\3\2\2\2\u032a\u032b\3\2\2\2\u032b\u00a5\3\2\2\2\u032c\u032a\3\2\2\2\u032d"+
+		"\u032e\5\u00a8U\2\u032e\u032f\5\u00aaV\2\u032f\u0332\3\2\2\2\u0330\u0332"+
+		"\5\u00aaV\2\u0331\u032d\3\2\2\2\u0331\u0330\3\2\2\2\u0332\u00a7\3\2\2"+
+		"\2\u0333\u0334\7\6\2\2\u0334\u0335\5l\67\2\u0335\u0336\79\2\2\u0336\u00a9"+
+		"\3\2\2\2\u0337\u0340\7#\2\2\u0338\u033d\5\u00acW\2\u0339\u033a\7 \2\2"+
+		"\u033a\u033c\5\u00acW\2\u033b\u0339\3\2\2\2\u033c\u033f\3\2\2\2\u033d"+
+		"\u033b\3\2\2\2\u033d\u033e\3\2\2\2\u033e\u0341\3\2\2\2\u033f\u033d\3\2"+
+		"\2\2\u0340\u0338\3\2\2\2\u0340\u0341\3\2\2\2\u0341\u0342\3\2\2\2\u0342"+
+		"\u0343\7\17\2\2\u0343\u00ab\3\2\2\2\u0344\u0345\5\u0086D\2\u0345\u00ad"+
+		"\3\2\2\2\u0346\u0347\7\62\2\2\u0347\u034f\5L\'\2\u0348\u0349\7\f\2\2\u0349"+
+		"\u034f\5L\'\2\u034a\u034b\7\4\2\2\u034b\u034c\5\u0084C\2\u034c\u034d\7"+
+		"\33\2\2\u034d\u034f\3\2\2\2\u034e\u0346\3\2\2\2\u034e\u0348\3\2\2\2\u034e"+
+		"\u034a\3\2\2\2\u034f\u0353\3\2\2\2\u0350\u0353\7.\2\2\u0351\u0353\7\7"+
+		"\2\2\u0352\u034e\3\2\2\2\u0352\u0350\3\2\2\2\u0352\u0351\3\2\2\2\u0353"+
+		"\u00af\3\2\2\2\u0354\u0355\7#\2\2\u0355\u0356\5\u0084C\2\u0356\u0357\7"+
+		"\17\2\2\u0357\u035b\3\2\2\2\u0358\u035b\5L\'\2\u0359\u035b\5V,\2\u035a"+
+		"\u0354\3\2\2\2\u035a\u0358\3\2\2\2\u035a\u0359\3\2\2\2\u035b\u00b1\3\2"+
+		"\2\2c\u00b5\u00ba\u00bf\u00c2\u00c5\u00ca\u00d1\u00d9\u00de\u00e4\u00e8"+
+		"\u00ef\u00f4\u00f7\u00fd\u0104\u0107\u0112\u0119\u011f\u0129\u0133\u013c"+
+		"\u0141\u014a\u014d\u0156\u0158\u015f\u0165\u0169\u016d\u0172\u0177\u0186"+
+		"\u018b\u0190\u0196\u01a5\u01aa\u01af\u01b4\u01b7\u01c4\u01c8\u01cb\u01d2"+
+		"\u01d8\u01df\u01e7\u01eb\u01ef\u01f6\u01fd\u0202\u020b\u0210\u0214\u021a"+
+		"\u0225\u0228\u022b\u0231\u0238\u023a\u023d\u0244\u024c\u0264\u028e\u02a2"+
+		"\u02a4\u02c0\u02c6\u02ce\u02d3\u02d8\u02dd\u02e2\u02e7\u02ed\u02f3\u02f8"+
+		"\u02fd\u0302\u0309\u0310\u031a\u031e\u0324\u032a\u0331\u033d\u0340\u034e"+
+		"\u0352\u035a";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
