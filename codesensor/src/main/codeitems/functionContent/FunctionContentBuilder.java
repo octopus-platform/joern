@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import antlr.FunctionGrammarParser.Block_starterContext;
 import antlr.FunctionGrammarParser.Closing_curlyContext;
 import antlr.FunctionGrammarParser.Else_statementContext;
+import antlr.FunctionGrammarParser.FuncCallContext;
 import antlr.FunctionGrammarParser.If_statementContext;
 import antlr.FunctionGrammarParser.Opening_curlyContext;
 import antlr.FunctionGrammarParser.StatementContext;
@@ -25,6 +26,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	{
 		item = new CompoundItem();
 		rootItem = (CompoundItem) item;
+		item.initializeFromContext(ctx);
 		itemStack.push(rootItem);
 	}
 
@@ -45,39 +47,44 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	
 	public void enterBlockStarter(Block_starterContext ctx)
 	{
-		itemStack.pop();
-		BlockStarterItem starterItem = new BlockStarterItem();
-		itemStack.push(starterItem);
+		replaceTopOfStack(new BlockStarterItem());
 	}
 
-	public void enterIf(If_statementContext ctx)
+		public void enterIf(If_statementContext ctx)
 	{
-		itemStack.pop();
-		IfItem ifItem = new IfItem();
-		itemStack.push(ifItem);
+		replaceTopOfStack(new IfItem());
 	}
 	
 	public void enterElse(Else_statementContext ctx)
 	{
-		itemStack.pop();
-		ElseItem elseItem = new ElseItem();
-		itemStack.push(elseItem);
+		replaceTopOfStack(new ElseItem());
 	}
 
 	public void enterOpeningCurly(Opening_curlyContext ctx)
 	{
-		itemStack.pop();
-		CompoundItem compoundItem = new CompoundItem();
-		itemStack.push(compoundItem);
+		replaceTopOfStack(new CompoundItem());
 	}
 	
 	public void enterClosingCurly(Closing_curlyContext ctx)
 	{
-		itemStack.pop();
-		CloseBlockItem closeBlock = new CloseBlockItem();
-		itemStack.push(closeBlock);
+		replaceTopOfStack(new CloseBlockItem());
 	}
 
+	public void enterFuncCall(FuncCallContext ctx)
+	{
+		CallItem callItem = new CallItem();
+		callItem.initializeFromContext(ctx);
+		callItem.callee = new FieldItem();
+		callItem.callee.initializeFromContext(ctx.field());
+		replaceTopOfStack(callItem);
+	}
+	
+	private void replaceTopOfStack(StatementItem item)
+	{
+		itemStack.pop();
+		itemStack.push(item);
+	}
+	
 	public void exitStatement(StatementContext ctx)
 	{
 		if(itemStack.size() == 0)
@@ -102,8 +109,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 
 	private void closeCompoundStatement()
 	{
-		// remove 'CloseBlock'
-		itemStack.pop();
+		itemStack.pop(); // remove 'CloseBlock'
 		
 		CompoundItem compoundItem = (CompoundItem) itemStack.pop();
 		consolidateIfElse(compoundItem);
@@ -115,6 +121,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		Iterator<StatementItem> it = compoundItem.statements.iterator();
 		StatementItem prev = null;
 		while(it.hasNext()){
+			
 			StatementItem cur = it.next();
 			if(prev != null && cur instanceof ElseItem){
 				if(prev instanceof IfItem){
@@ -145,9 +152,6 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	
 	private void consolidate()
 	{
-		// We know at this point, that the item
-		// on the top of the stack is not a
-		// compound statement and not a blockstarter
 		
 		StatementItem stmt = (StatementItem) itemStack.pop();
 		StatementItem topOfStack = null;

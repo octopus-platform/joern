@@ -1,5 +1,7 @@
 package main.codeitems;
 
+import main.ParseTreeUtils;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 
@@ -26,9 +28,14 @@ public class CodeItem {
 	{
 		codeStr = aCodeStr;
 	}
+	
 	public String getCodeStr()
 	{
+		if(codeStr != null)
+			return codeStr;
+		
+		codeStr = ParseTreeUtils.childTokenString(rootRule);
 		return codeStr;
 	}
-	
+		
 }

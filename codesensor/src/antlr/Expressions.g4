@@ -25,9 +25,11 @@ unary_expression: postfix_expression
                 | (unary_operator+ postfix_expression)
 ;
 
-postfix_expression: callee function_call_tail?;
+postfix_expression: field #fieldOnly
+		  | field function_call_tail #funcCall
+		  ;
 
-callee: (primary_expression postfix*);
+field: (primary_expression postfix*);
 
 function_call_tail: call_template_list function_argument_list
                   | function_argument_list

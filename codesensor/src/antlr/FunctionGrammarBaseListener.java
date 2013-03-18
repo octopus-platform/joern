@@ -75,6 +75,9 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterType_name(FunctionGrammarParser.Type_nameContext ctx) { }
 	@Override public void exitType_name(FunctionGrammarParser.Type_nameContext ctx) { }
 
+	@Override public void enterFuncCall(FunctionGrammarParser.FuncCallContext ctx) { }
+	@Override public void exitFuncCall(FunctionGrammarParser.FuncCallContext ctx) { }
+
 	@Override public void enterInclusive_or_expression(FunctionGrammarParser.Inclusive_or_expressionContext ctx) { }
 	@Override public void exitInclusive_or_expression(FunctionGrammarParser.Inclusive_or_expressionContext ctx) { }
 
@@ -98,9 +101,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 
 	@Override public void enterParam_decl_specifiers(FunctionGrammarParser.Param_decl_specifiersContext ctx) { }
 	@Override public void exitParam_decl_specifiers(FunctionGrammarParser.Param_decl_specifiersContext ctx) { }
-
-	@Override public void enterPostfix_expression(FunctionGrammarParser.Postfix_expressionContext ctx) { }
-	@Override public void exitPostfix_expression(FunctionGrammarParser.Postfix_expressionContext ctx) { }
 
 	@Override public void enterParam_type(FunctionGrammarParser.Param_typeContext ctx) { }
 	@Override public void exitParam_type(FunctionGrammarParser.Param_typeContext ctx) { }
@@ -144,6 +144,9 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterOperator(FunctionGrammarParser.OperatorContext ctx) { }
 	@Override public void exitOperator(FunctionGrammarParser.OperatorContext ctx) { }
 
+	@Override public void enterField(FunctionGrammarParser.FieldContext ctx) { }
+	@Override public void exitField(FunctionGrammarParser.FieldContext ctx) { }
+
 	@Override public void enterConditional_expression(FunctionGrammarParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(FunctionGrammarParser.Conditional_expressionContext ctx) { }
 
@@ -152,6 +155,9 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 
 	@Override public void enterOpening_curly(FunctionGrammarParser.Opening_curlyContext ctx) { }
 	@Override public void exitOpening_curly(FunctionGrammarParser.Opening_curlyContext ctx) { }
+
+	@Override public void enterFieldOnly(FunctionGrammarParser.FieldOnlyContext ctx) { }
+	@Override public void exitFieldOnly(FunctionGrammarParser.FieldOnlyContext ctx) { }
 
 	@Override public void enterNo_brackets(FunctionGrammarParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(FunctionGrammarParser.No_bracketsContext ctx) { }
@@ -174,14 +180,14 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterAssign_expr(FunctionGrammarParser.Assign_exprContext ctx) { }
 	@Override public void exitAssign_expr(FunctionGrammarParser.Assign_exprContext ctx) { }
 
+	@Override public void enterCall_template_list(FunctionGrammarParser.Call_template_listContext ctx) { }
+	@Override public void exitCall_template_list(FunctionGrammarParser.Call_template_listContext ctx) { }
+
 	@Override public void enterExpr_statement(FunctionGrammarParser.Expr_statementContext ctx) { }
 	@Override public void exitExpr_statement(FunctionGrammarParser.Expr_statementContext ctx) { }
 
 	@Override public void enterFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx) { }
 	@Override public void exitFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx) { }
-
-	@Override public void enterCall_template_list(FunctionGrammarParser.Call_template_listContext ctx) { }
-	@Override public void exitCall_template_list(FunctionGrammarParser.Call_template_listContext ctx) { }
 
 	@Override public void enterBase_class(FunctionGrammarParser.Base_classContext ctx) { }
 	@Override public void exitBase_class(FunctionGrammarParser.Base_classContext ctx) { }
@@ -233,9 +239,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 
 	@Override public void enterNo_brackets_curlies_or_squares(FunctionGrammarParser.No_brackets_curlies_or_squaresContext ctx) { }
 	@Override public void exitNo_brackets_curlies_or_squares(FunctionGrammarParser.No_brackets_curlies_or_squaresContext ctx) { }
-
-	@Override public void enterCallee(FunctionGrammarParser.CalleeContext ctx) { }
-	@Override public void exitCallee(FunctionGrammarParser.CalleeContext ctx) { }
 
 	@Override public void enterIdentifier(FunctionGrammarParser.IdentifierContext ctx) { }
 	@Override public void exitIdentifier(FunctionGrammarParser.IdentifierContext ctx) { }

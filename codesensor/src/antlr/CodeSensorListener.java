@@ -139,8 +139,8 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNo_brackets_curlies_or_squares(CodeSensorParser.No_brackets_curlies_or_squaresContext ctx);
 	void exitNo_brackets_curlies_or_squares(CodeSensorParser.No_brackets_curlies_or_squaresContext ctx);
 
-	void enterCallee(CodeSensorParser.CalleeContext ctx);
-	void exitCallee(CodeSensorParser.CalleeContext ctx);
+	void enterFuncCall(CodeSensorParser.FuncCallContext ctx);
+	void exitFuncCall(CodeSensorParser.FuncCallContext ctx);
 
 	void enterIdentifier(CodeSensorParser.IdentifierContext ctx);
 	void exitIdentifier(CodeSensorParser.IdentifierContext ctx);
@@ -180,9 +180,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx);
 	void exitParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx);
-
-	void enterPostfix_expression(CodeSensorParser.Postfix_expressionContext ctx);
-	void exitPostfix_expression(CodeSensorParser.Postfix_expressionContext ctx);
 
 	void enterAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx);
 	void exitAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx);
@@ -235,6 +232,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterPtr_operator(CodeSensorParser.Ptr_operatorContext ctx);
 	void exitPtr_operator(CodeSensorParser.Ptr_operatorContext ctx);
 
+	void enterField(CodeSensorParser.FieldContext ctx);
+	void exitField(CodeSensorParser.FieldContext ctx);
+
 	void enterPostfix(CodeSensorParser.PostfixContext ctx);
 	void exitPostfix(CodeSensorParser.PostfixContext ctx);
 
@@ -261,6 +261,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx);
 	void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx);
+
+	void enterFieldOnly(CodeSensorParser.FieldOnlyContext ctx);
+	void exitFieldOnly(CodeSensorParser.FieldOnlyContext ctx);
 
 	void enterParameter_id(CodeSensorParser.Parameter_idContext ctx);
 	void exitParameter_id(CodeSensorParser.Parameter_idContext ctx);

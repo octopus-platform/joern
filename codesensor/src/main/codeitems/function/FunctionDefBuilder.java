@@ -3,15 +3,19 @@ package main.codeitems.function;
 import java.util.Stack;
 
 import main.ParseTreeUtils;
+import main.FunctionParser.FunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
 
+import antlr.CodeSensorParser;
+import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.Function_nameContext;
 import antlr.CodeSensorParser.Function_param_listContext;
 import antlr.CodeSensorParser.Parameter_declContext;
-import antlr.CodeSensorParser.Parameter_decl_clauseContext;
 import antlr.CodeSensorParser.Return_typeContext;
 
 public class FunctionDefBuilder extends CodeItemBuilder {
@@ -57,5 +61,23 @@ public class FunctionDefBuilder extends CodeItemBuilder {
 	{
 		paramListBuilder.addParameter(ctx, itemStack);
 	}
+	
+	public void parseFunctionContents(CodeSensorParser.Function_defContext ctx)
+	{
+		String text = getCompoundStmtAsString(ctx);
+		FunctionParser functionParser = new FunctionParser();
+		functionParser.parseAndWalk(text);	
+	}
+
+	private String getCompoundStmtAsString(
+			CodeSensorParser.Function_defContext ctx)
+	{
+		Compound_statementContext compound_statement = ctx.compound_statement();
 		
+		CharStream inputStream = compound_statement.start.getInputStream();
+		int startIndex = compound_statement.start.getStopIndex();
+		int stopIndex = compound_statement.stop.getStopIndex();
+		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
+	}
+	
 }

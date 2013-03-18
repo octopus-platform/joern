@@ -25,7 +25,8 @@ public class FunctionParser extends CommonParser
 
 	public ParseTree parse(String input)
 	{
-		ANTLRInputStream inputStream = new ANTLRInputStream(input);
+		char[] charArray = input.toCharArray();
+		ANTLRInputStream inputStream = new ANTLRInputStream(charArray, charArray.length);
 		FunctionGrammarLexer lex = new FunctionGrammarLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		ParseTree tree = parse(tokens);

@@ -40,8 +40,34 @@ public class FunctionParserTest {
 		assertTrue(output.equals("(statements (pre_opener #if foo\\n) (pre_closer #endif))"));
 	}
 	
+	@Test
+	public void testFunctionCall()
+	{
+		String input = "foo(x);";
+		FunctionParser functionParser = new FunctionParser();
+		ParseTree tree = functionParser.parse(input);
+		String output = tree.toStringTree(functionParser.parser);
+		assertTrue(output.contains("function_argument_list"));
+	}
 	
+	@Test
+	public void testCallViaPtr()
+	{
+		String input = "ptr->foo(x);";
+		FunctionParser functionParser = new FunctionParser();
+		ParseTree tree = functionParser.parse(input);
+		String output = tree.toStringTree(functionParser.parser);
+		assertTrue(output.contains("function_argument_list"));
+	}
 	
-
-
+	@Test
+	public void testCallWithExprInArg()
+	{
+		String input = "foo(x == 1, x++);";
+		FunctionParser functionParser = new FunctionParser();
+		ParseTree tree = functionParser.parse(input);
+		String output = tree.toStringTree(functionParser.parser);
+		assertTrue(output.contains("function_argument_list"));
+	}
+	
 }

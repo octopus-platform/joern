@@ -103,5 +103,11 @@ public class FunctionParseTreeListener extends FunctionGrammarBaseListener
 		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
 		builder.enterClosingCurly(ctx);
 	}
-		
+	
+	@Override public void enterFuncCall(FunctionGrammarParser.FuncCallContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		builder.enterFuncCall(ctx);
+	}
+	
 }

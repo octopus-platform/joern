@@ -142,8 +142,8 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterNo_brackets_curlies_or_squares(CodeSensorParser.No_brackets_curlies_or_squaresContext ctx) { }
 	@Override public void exitNo_brackets_curlies_or_squares(CodeSensorParser.No_brackets_curlies_or_squaresContext ctx) { }
 
-	@Override public void enterCallee(CodeSensorParser.CalleeContext ctx) { }
-	@Override public void exitCallee(CodeSensorParser.CalleeContext ctx) { }
+	@Override public void enterFuncCall(CodeSensorParser.FuncCallContext ctx) { }
+	@Override public void exitFuncCall(CodeSensorParser.FuncCallContext ctx) { }
 
 	@Override public void enterIdentifier(CodeSensorParser.IdentifierContext ctx) { }
 	@Override public void exitIdentifier(CodeSensorParser.IdentifierContext ctx) { }
@@ -183,9 +183,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx) { }
 	@Override public void exitParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx) { }
-
-	@Override public void enterPostfix_expression(CodeSensorParser.Postfix_expressionContext ctx) { }
-	@Override public void exitPostfix_expression(CodeSensorParser.Postfix_expressionContext ctx) { }
 
 	@Override public void enterAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx) { }
 	@Override public void exitAssignment_operator(CodeSensorParser.Assignment_operatorContext ctx) { }
@@ -238,6 +235,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterPtr_operator(CodeSensorParser.Ptr_operatorContext ctx) { }
 	@Override public void exitPtr_operator(CodeSensorParser.Ptr_operatorContext ctx) { }
 
+	@Override public void enterField(CodeSensorParser.FieldContext ctx) { }
+	@Override public void exitField(CodeSensorParser.FieldContext ctx) { }
+
 	@Override public void enterPostfix(CodeSensorParser.PostfixContext ctx) { }
 	@Override public void exitPostfix(CodeSensorParser.PostfixContext ctx) { }
 
@@ -264,6 +264,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx) { }
 	@Override public void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx) { }
+
+	@Override public void enterFieldOnly(CodeSensorParser.FieldOnlyContext ctx) { }
+	@Override public void exitFieldOnly(CodeSensorParser.FieldOnlyContext ctx) { }
 
 	@Override public void enterParameter_id(CodeSensorParser.Parameter_idContext ctx) { }
 	@Override public void exitParameter_id(CodeSensorParser.Parameter_idContext ctx) { }

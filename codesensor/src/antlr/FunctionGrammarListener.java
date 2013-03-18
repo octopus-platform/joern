@@ -72,6 +72,9 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterType_name(FunctionGrammarParser.Type_nameContext ctx);
 	void exitType_name(FunctionGrammarParser.Type_nameContext ctx);
 
+	void enterFuncCall(FunctionGrammarParser.FuncCallContext ctx);
+	void exitFuncCall(FunctionGrammarParser.FuncCallContext ctx);
+
 	void enterInclusive_or_expression(FunctionGrammarParser.Inclusive_or_expressionContext ctx);
 	void exitInclusive_or_expression(FunctionGrammarParser.Inclusive_or_expressionContext ctx);
 
@@ -95,9 +98,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 
 	void enterParam_decl_specifiers(FunctionGrammarParser.Param_decl_specifiersContext ctx);
 	void exitParam_decl_specifiers(FunctionGrammarParser.Param_decl_specifiersContext ctx);
-
-	void enterPostfix_expression(FunctionGrammarParser.Postfix_expressionContext ctx);
-	void exitPostfix_expression(FunctionGrammarParser.Postfix_expressionContext ctx);
 
 	void enterParam_type(FunctionGrammarParser.Param_typeContext ctx);
 	void exitParam_type(FunctionGrammarParser.Param_typeContext ctx);
@@ -141,6 +141,9 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterOperator(FunctionGrammarParser.OperatorContext ctx);
 	void exitOperator(FunctionGrammarParser.OperatorContext ctx);
 
+	void enterField(FunctionGrammarParser.FieldContext ctx);
+	void exitField(FunctionGrammarParser.FieldContext ctx);
+
 	void enterConditional_expression(FunctionGrammarParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(FunctionGrammarParser.Conditional_expressionContext ctx);
 
@@ -149,6 +152,9 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 
 	void enterOpening_curly(FunctionGrammarParser.Opening_curlyContext ctx);
 	void exitOpening_curly(FunctionGrammarParser.Opening_curlyContext ctx);
+
+	void enterFieldOnly(FunctionGrammarParser.FieldOnlyContext ctx);
+	void exitFieldOnly(FunctionGrammarParser.FieldOnlyContext ctx);
 
 	void enterNo_brackets(FunctionGrammarParser.No_bracketsContext ctx);
 	void exitNo_brackets(FunctionGrammarParser.No_bracketsContext ctx);
@@ -171,14 +177,14 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterAssign_expr(FunctionGrammarParser.Assign_exprContext ctx);
 	void exitAssign_expr(FunctionGrammarParser.Assign_exprContext ctx);
 
+	void enterCall_template_list(FunctionGrammarParser.Call_template_listContext ctx);
+	void exitCall_template_list(FunctionGrammarParser.Call_template_listContext ctx);
+
 	void enterExpr_statement(FunctionGrammarParser.Expr_statementContext ctx);
 	void exitExpr_statement(FunctionGrammarParser.Expr_statementContext ctx);
 
 	void enterFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx);
 	void exitFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx);
-
-	void enterCall_template_list(FunctionGrammarParser.Call_template_listContext ctx);
-	void exitCall_template_list(FunctionGrammarParser.Call_template_listContext ctx);
 
 	void enterBase_class(FunctionGrammarParser.Base_classContext ctx);
 	void exitBase_class(FunctionGrammarParser.Base_classContext ctx);
@@ -230,9 +236,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 
 	void enterNo_brackets_curlies_or_squares(FunctionGrammarParser.No_brackets_curlies_or_squaresContext ctx);
 	void exitNo_brackets_curlies_or_squares(FunctionGrammarParser.No_brackets_curlies_or_squaresContext ctx);
-
-	void enterCallee(FunctionGrammarParser.CalleeContext ctx);
-	void exitCallee(FunctionGrammarParser.CalleeContext ctx);
 
 	void enterIdentifier(FunctionGrammarParser.IdentifierContext ctx);
 	void exitIdentifier(FunctionGrammarParser.IdentifierContext ctx);

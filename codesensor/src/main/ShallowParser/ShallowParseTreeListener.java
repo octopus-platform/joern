@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import main.TokenSubStream;
-import main.FunctionParser.FunctionParser;
+
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDeclBuilder;
@@ -12,54 +12,46 @@ import main.codeitems.function.FunctionDefBuilder;
 import main.processors.CSVPrinter;
 import main.processors.Processor;
 
-import org.antlr.v4.runtime.CharStream;
+
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.Interval;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
-import antlr.CodeSensorParser.Compound_statementContext;
+
 import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
-// This should be refactored at some point:
-
-// The class implements callback-functions accessed
-// when walking the parse tree and calls different
-// builders to create CodeItems from subtrees.
-// As such, it implements several "Directors" in one class,
-// which is not nice.
 
 public class ShallowParseTreeListener extends CodeSensorBaseListener
 {
 	
 	Stack<CodeItemBuilder> builderStack = new Stack<CodeItemBuilder>();
-	
 	Processor processor = new CSVPrinter();
 	String filename;
 	TokenSubStream stream;
-		
-	void initializeContext(ShallowParserContext context)
-	{
-		filename = context.filename;
-		stream = context.stream;
-	}
 	
 	// Users can initialize the stack with
 	// an existing stack. This allows us to
 	// pass state from one parser to the next.
-	void setStack(Stack<CodeItemBuilder> aStack)
+	public void setStack(Stack<CodeItemBuilder> aStack)
 	{
 		builderStack = aStack;
 	}
 	
-	void setProcessor(Processor aProcessor)
+	public void setProcessor(Processor aProcessor)
 	{
 		processor = aProcessor;
+	}
+	
+	public void initializeContext(ShallowParserContext context)
+	{
+		filename = context.filename;
+		stream = context.stream;
 	}
 	
 	@Override
@@ -73,6 +65,8 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		processor.endOfUnit(ctx, filename);
 	}	
 	
+	// Function Definitions
+	
 	@Override
 	public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
@@ -81,25 +75,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		builder.createNew(ctx);
 		builderStack.push(builder);
 	
-		// parseFunctionContents(ctx);
-	}
-
-	private void parseFunctionContents(CodeSensorParser.Function_defContext ctx)
-	{
-		String text = getCompoundStmtAsString(ctx);
-		FunctionParser functionParser = new FunctionParser();
-		functionParser.parseAndWalk(text);	
-	}
-
-	private String getCompoundStmtAsString(
-			CodeSensorParser.Function_defContext ctx)
-	{
-		Compound_statementContext compound_statement = ctx.compound_statement();
-		
-		CharStream inputStream = compound_statement.start.getInputStream();
-		int startIndex = compound_statement.start.getStartIndex();
-		int stopIndex = compound_statement.stop.getStopIndex();
-		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
+		builder.parseFunctionContents(ctx);
 	}
 
 	@Override
@@ -138,6 +114,13 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	
 	// Class/Structure Definitions
 	
+	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
+	{
+		Init_declarator_listContext decl_list = ctx.init_declarator_list();
+		Type_nameContext typeName = ctx.type_name();
+		emitDeclarations(decl_list, typeName);
+	}
+	
 	@Override
 	public void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
@@ -152,16 +135,6 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		ClassDefBuilder builder = (ClassDefBuilder) builderStack.peek();
 		builder.setName(ctx);
 	}
-	
-	private void restrictStreamToClassContent(
-			CodeSensorParser.DeclByClassContext ctx)
-	{
-		Class_defContext class_def = ctx.class_def();
-		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
-		int stopIndex = class_def.stop.getTokenIndex();
-		stream.restrict(startIndex+1, stopIndex);
-	}
-	
 	
 	private void emitDeclarationsForClass(DeclByClassContext ctx)
 	{
@@ -212,21 +185,29 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 
 	private void parseClassContent(CodeSensorParser.DeclByClassContext ctx)
 	{
+		ShallowParser shallowParser = createNewShallowParser();
 		restrictStreamToClassContent(ctx);
-		ShallowParser shallowParser = new ShallowParser();
-		shallowParser.setStack(builderStack);
-		shallowParser.setProcessor(processor);
 		shallowParser.parseAndWalkStream(stream);
 		stream.resetRestriction();
 	}
-	
-	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
-	{
-		Init_declarator_listContext decl_list = ctx.init_declarator_list();
-		Type_nameContext typeName = ctx.type_name();
-		emitDeclarations(decl_list, typeName);
-	}
 
+	private ShallowParser createNewShallowParser()
+	{
+		ShallowParser shallowParser = new ShallowParser();
+		shallowParser.setStack(builderStack);
+		shallowParser.setProcessor(processor);
+		return shallowParser;
+	}
+	
+	private void restrictStreamToClassContent(
+			CodeSensorParser.DeclByClassContext ctx)
+	{
+		Class_defContext class_def = ctx.class_def();
+		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
+		int stopIndex = class_def.stop.getTokenIndex();
+		stream.restrict(startIndex+1, stopIndex);
+	}
+	
 	public Processor getProcessor()
 	{
 		return processor;

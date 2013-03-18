@@ -20,15 +20,6 @@ public class Parameter extends CodeItem
 		nodeTypeName = "PARAMETER";
 	}
 	
-	public String getCodeStr()
-	{
-		if(codeStr != null)
-			return codeStr;
-		
-		codeStr = ParseTreeUtils.childTokenString(rootRule);
-		return codeStr;
-	}
-	
 	@Override
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
