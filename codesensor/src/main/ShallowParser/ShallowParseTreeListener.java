@@ -85,6 +85,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	{
 		restrictStreamToFunctionContent(ctx);
 		FunctionParser parser = new FunctionParser();
+		
 		parser.parseAndWalkStream(stream);
 		stream.resetRestriction();
 	}

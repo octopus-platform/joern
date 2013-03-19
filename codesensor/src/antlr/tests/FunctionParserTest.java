@@ -32,12 +32,12 @@ public class FunctionParserTest {
 	@Test
 	public void testPreprocIf()
 	{
-		String input = "#if foo\n #endif";
+		String input = "#if foo\n #endif\n";
 		FunctionParser functionParser = new FunctionParser();
 		ParseTree tree = functionParser.parse(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
-		assertTrue(output.equals("(statements (pre_opener #if foo\\n) (pre_closer #endif))"));
+		assertTrue(output.equals("(statements (pre_opener #if foo\\n) (pre_closer #endif\\n))"));
 	}
 		
 	@Test

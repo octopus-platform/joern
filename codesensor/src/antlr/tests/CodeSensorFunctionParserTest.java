@@ -181,13 +181,24 @@ public class CodeSensorFunctionParserTest {
 	}
 	
 	@Test
-	public void test()
+	public void testStartingPreProcElse()
 	{
 		String input = "#ifdef foo\n int foo(){ #else\n {\n#endif\n } abc\n #endif\n" ;
 		CodeSensorParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
 		assertTrue(output.contains("(water abc)"));
+	}
+	
+	@Test
+	public void testEscaping()
+	{
+		String input = "for (tp = \"\\tt\\bb\\rr\\nn\\vv\"; *tp; tp++) if (*tp++ == *cp) break;";
+				;
+		CodeSensorParser parser = createParser(input);
+		String output = parser.statements().toStringTree(parser);
+		System.out.println(output);
+		assertTrue(output.contains("block_starter"));
 	}
 	
 	

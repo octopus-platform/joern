@@ -136,6 +136,7 @@ constant
     |   OCTAL_LITERAL
     |   DECIMAL_LITERAL
 	|	STRING
+    |   CHAR
     |   FLOATING_POINT_LITERAL
     ;
 
@@ -235,9 +236,9 @@ iteration_statement: for_statement
 
 for_statement: 'for' '(' for_init_statement condition ';'  expr? ')';
 while_statement: 'while' '(' condition ')';
-do_statement: 'do' statement 'while' '(' expr ')';
+do_statement: 'do'; //  statement 'while' '(' expr ')';
 
-for_init_statement : simple_decl | expr? ';';
+for_init_statement : (simple_decl | expr?) ';';
 
 jump_statement: ( break_or_continue | return_statement | goto_statement ) ';';
 break_or_continue: ('break' | 'continue');

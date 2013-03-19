@@ -107,3 +107,14 @@ void read_png(char *file_name)  /* We need to open the file */
 
 #endif /* if 0 */
 
+
+int main(int argc, char **argv)
+{
+
+    do
+        XNextEvent(display, &e);
+    while (!(e.type == ButtonPress && e.xbutton.button == Button1) &&
+           !(e.type == KeyPress &&    /*  v--- or 1 for shifted keys */
+             ((k = XLookupKeysym(&e.xkey, 0)) == XK_q || k == XK_Escape) ));
+   
+}
