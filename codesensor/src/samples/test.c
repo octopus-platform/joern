@@ -88,3 +88,22 @@ _7z_write_data(struct archive_write *a, const void *buff, size_t s)
 {
 	
 }
+
+#ifdef open_file
+/* prototype 1 */
+
+void read_png(char *file_name)  /* We need to open the file */
+{
+	return (ERROR);
+
+#else no_open_file
+/* prototype 2 */
+   void read_png(FILE *fp, unsigned int sig_read)  /* File is already open */
+      {
+#endif no_open_file
+ /* Only use one prototype! */
+	   foo();
+}
+
+#endif /* if 0 */
+

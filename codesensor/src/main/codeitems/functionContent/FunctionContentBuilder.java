@@ -5,14 +5,14 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.FunctionGrammarParser.Block_starterContext;
-import antlr.FunctionGrammarParser.Closing_curlyContext;
-import antlr.FunctionGrammarParser.Else_statementContext;
-import antlr.FunctionGrammarParser.FuncCallContext;
-import antlr.FunctionGrammarParser.If_statementContext;
-import antlr.FunctionGrammarParser.Opening_curlyContext;
-import antlr.FunctionGrammarParser.StatementContext;
-import antlr.FunctionGrammarParser.StatementsContext;
+import antlr.CodeSensorParser.Block_starterContext;
+import antlr.CodeSensorParser.Closing_curlyContext;
+import antlr.CodeSensorParser.Else_statementContext;
+import antlr.CodeSensorParser.FuncCallContext;
+import antlr.CodeSensorParser.If_statementContext;
+import antlr.CodeSensorParser.Opening_curlyContext;
+import antlr.CodeSensorParser.StatementContext;
+import antlr.CodeSensorParser.StatementsContext;
 
 import main.codeitems.CodeItemBuilder;
 
@@ -28,6 +28,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		rootItem = (CompoundItem) item;
 		item.initializeFromContext(ctx);
 		itemStack.push(rootItem);
+	
 	}
 
 	public void exitStatements(StatementsContext ctx)
@@ -43,6 +44,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		StatementItem statementItem = new StatementItem();
 		statementItem.initializeFromContext(ctx);
 		itemStack.push(statementItem);
+	
 	}
 	
 	public void enterBlockStarter(Block_starterContext ctx)

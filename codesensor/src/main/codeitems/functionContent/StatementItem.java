@@ -4,5 +4,12 @@ import main.codeitems.CodeItem;
 
 public class StatementItem extends CodeItem
 {
-	
+	public String getCodeStr()
+	{
+		if(codeStr != null)
+			return codeStr;
+		
+		codeStr = "";
+		return codeStr;
+	}
 }

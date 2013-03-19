@@ -17,12 +17,12 @@ import Expressions;
 
                 while(t != EOF && !(CurlyStack.empty() && t == CLOSING_CURLY)){
                     
-                    if(t == PRE_IF){
+                    if(t == PRE_ELSE){
                         Stack<Object> ifdefStack = new Stack<Object>();
                         consume();
                         t = _input.LA(1);
                         
-                        while(t != EOF && !(ifdefStack.empty() && (t == PRE_ELSE || t == PRE_ENDIF))){
+                        while(t != EOF && !(ifdefStack.empty() && (t == PRE_ENDIF))){
                             if(t == PRE_IF)
                                 ifdefStack.push(o);
                             else if(t == PRE_ENDIF)
@@ -44,6 +44,29 @@ import Expressions;
                     consume();
                 return true;
             }
+
+
+   public boolean preProcSkipToEnd()
+   {
+                Stack<Object> CurlyStack = new Stack<Object>();
+                Object o = new Object();
+                int t = _input.LA(1);
+
+                while(t != EOF && !(CurlyStack.empty() && t == PRE_ENDIF)){
+                                        
+                    if(t == PRE_IF)
+                        CurlyStack.push(o);
+                    else if(t == PRE_ENDIF)
+                        CurlyStack.pop();
+                    
+                    consume();
+                    t = _input.LA(1);
+                }
+                if(t != EOF)
+                    consume();
+                return true;
+   }
+
 }
 
 simple_decl : TYPEDEF? template_decl_start? var_decl;
@@ -80,7 +103,7 @@ class_name: identifier;
 base_classes: ':' base_class (',' base_class)*;
 base_class: VIRTUAL? access_specifier? identifier;
 
-type_name : (cv_qualifier* (class_key | UNSIGNED | SIGNED)?
+type_name : (CV_QUALIFIER* (class_key | UNSIGNED | SIGNED)?
             base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
           | (UNSIGNED | SIGNED);
 
@@ -118,7 +141,6 @@ constant
 
 // keywords & operators
 
-cv_qualifier :  'const' | 'volatile';
 function_decl_specifiers: ('inline' | 'virtual' | 'explicit' | 'friend' | 'static');
 class_key: ('struct' | 'class' | 'union' | 'enum');
 ptr_operator: ('*' | '&');
@@ -161,3 +183,85 @@ assign_water: ~('(' | ')' | '{' | '}' | '[' | ']' | ';' | ',');
 assign_water_l2: ~('(' | ')' | '{' | '}' | '[' | ']');
 
 water : ~OTHER;
+
+
+statements: (pre_opener
+            | pre_closer
+            | pre_else {preProcSkipToEnd(); }
+            | statement)*;
+
+statement: opening_curly
+         | closing_curly
+         | non_expr_statement
+         | expr_statement
+         | statement_water
+        ;
+
+pre_opener: PRE_IF;
+pre_else: PRE_ELSE;
+pre_closer: PRE_ENDIF;
+opening_curly: '{';
+closing_curly: '}';
+
+non_expr_statement: block_starter
+                  | non_block_starter
+;
+
+block_starter: selection_statement
+             | iteration_statement
+             | try_block
+             | catch_block
+;
+
+non_block_starter: jump_statement
+                 | simple_decl
+                 | label
+;
+
+selection_statement: if_statement
+                   | else_statement
+                   | switch_statement
+;
+
+if_statement: IF '(' condition ')';
+else_statement: ELSE;
+switch_statement: SWITCH '(' condition ')';
+
+
+iteration_statement: for_statement
+                   | while_statement
+                   | do_statement
+;
+
+for_statement: 'for' '(' for_init_statement condition ';'  expr? ')';
+while_statement: 'while' '(' condition ')';
+do_statement: 'do' statement 'while' '(' expr ')';
+
+for_init_statement : simple_decl | expr? ';';
+
+jump_statement: ( break_or_continue | return_statement | goto_statement ) ';';
+break_or_continue: ('break' | 'continue');
+return_statement: 'return' expr?;
+goto_statement: 'goto' identifier;
+
+try_block: TRY; // opening_curly;
+
+//// Workaround
+// if we use 'type_name' here, we get a crash.
+// Seems like a bug in antlr.
+catch_block: CATCH '(' param_type2 ')';
+////
+param_type2: param_decl_specifiers2 param_type_id;
+param_decl_specifiers2 : (AUTO | REGISTER)? type_name2;
+type_name2 : (CV_QUALIFIER* (class_key | UNSIGNED | SIGNED)?
+            base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
+          | (UNSIGNED | SIGNED);
+/////
+
+
+label: (('case'? (identifier | number) ) | access_specifier) ':' ;
+
+expr_statement: expr ';';
+
+statement_water: . ;
+condition: expr;

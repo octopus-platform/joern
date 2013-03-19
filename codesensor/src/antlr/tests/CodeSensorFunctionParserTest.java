@@ -2,8 +2,12 @@ package antlr.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import main.FunctionParser.FunctionParser;
+import main.ShallowParser.ShallowParser;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import antlr.CodeSensorLexer;
@@ -164,6 +168,26 @@ public class CodeSensorFunctionParserTest {
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
+	}
+	
+	@Test
+	public void testPreprocIfBeforeFunc()
+	{
+		String input = "#ifdef foo\nint foo(){ #if x\n foo();\n #else\n #endif\n} abc\n #endif\n" ;
+		CodeSensorParser parser = createParser(input);
+		String output = parser.code().toStringTree(parser);
+		System.out.println(output);
+		assertTrue(output.contains("(water abc)"));
+	}
+	
+	@Test
+	public void test()
+	{
+		String input = "#ifdef foo\n int foo(){ #else\n {\n#endif\n } abc\n #endif\n" ;
+		CodeSensorParser parser = createParser(input);
+		String output = parser.code().toStringTree(parser);
+		System.out.println(output);
+		assertTrue(output.contains("(water abc)"));
 	}
 	
 	

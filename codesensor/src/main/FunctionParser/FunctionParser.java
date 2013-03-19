@@ -8,12 +8,12 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import antlr.FunctionGrammarLexer;
-import antlr.FunctionGrammarParser;
+import antlr.CodeSensorLexer;
+import antlr.CodeSensorParser;
 
 public class FunctionParser extends CommonParser
 {
-	public FunctionGrammarParser parser;
+	public CodeSensorParser parser;
 	public FunctionParseTreeListener listener = new FunctionParseTreeListener();
 	
 	public ParseTree parseAndWalk(String input)
@@ -27,7 +27,7 @@ public class FunctionParser extends CommonParser
 	{
 		char[] charArray = input.toCharArray();
 		ANTLRInputStream inputStream = new ANTLRInputStream(charArray, charArray.length);
-		FunctionGrammarLexer lex = new FunctionGrammarLexer(inputStream);
+		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		ParseTree tree = parse(tokens);
 		return tree;
@@ -53,7 +53,7 @@ public class FunctionParser extends CommonParser
 	
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
-		parser = new FunctionGrammarParser(tokens);
+		parser = new CodeSensorParser(tokens);
         ParseTree tree = null;
         
         try {

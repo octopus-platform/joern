@@ -39,7 +39,7 @@ public class FunctionParserTest {
 		System.out.println(output);
 		assertTrue(output.equals("(statements (pre_opener #if foo\\n) (pre_closer #endif))"));
 	}
-	
+		
 	@Test
 	public void testFunctionCall()
 	{

@@ -38,6 +38,7 @@ public class CodeSensor {
     private static void processSingleFile(String filename)
     {
     	try{
+    		System.out.println(filename);
     		parser.parseAndWalkFile(filename);
     	}catch(IOException ex){
     		System.err.println("Error processing file: " + filename);

@@ -62,22 +62,4 @@ public class FunctionDefBuilder extends CodeItemBuilder {
 		paramListBuilder.addParameter(ctx, itemStack);
 	}
 	
-	public void parseFunctionContents(CodeSensorParser.Function_defContext ctx)
-	{
-		String text = getCompoundStmtAsString(ctx);
-		FunctionParser functionParser = new FunctionParser();
-		functionParser.parseAndWalk(text);	
-	}
-
-	private String getCompoundStmtAsString(
-			CodeSensorParser.Function_defContext ctx)
-	{
-		Compound_statementContext compound_statement = ctx.compound_statement();
-		
-		CharStream inputStream = compound_statement.start.getInputStream();
-		int startIndex = compound_statement.start.getStopIndex();
-		int stopIndex = compound_statement.stop.getStopIndex();
-		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
-	}
-	
 }

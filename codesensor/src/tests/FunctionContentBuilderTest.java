@@ -15,8 +15,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import antlr.FunctionGrammarLexer;
-import antlr.FunctionGrammarParser.StatementsContext;
+import antlr.CodeSensorLexer;
+import antlr.CodeSensorParser.StatementsContext;
 
 public class FunctionContentBuilderTest {
 
@@ -57,12 +57,13 @@ public class FunctionContentBuilderTest {
 	}
 	
 	@Test
-	public void ifBlocksNoCompound()
+	public void NestedIfndefs()
 	{
-		String input = "if(foo) bar(); if(fooAgain) barAgain();";
+		String input = "#ifdef foo\n#else\n #ifdef foo\n#else\n#endif\n#endif";
+		
 		List<CodeItem> codeItems = parseAndWalk(input);
 		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		assertTrue(contentItem.statements.size() == 2);
+		assertTrue(contentItem.statements.size() == 0);
 	}
 	
 	@Test
@@ -136,7 +137,7 @@ public class FunctionContentBuilderTest {
 	private TokenSubStream tokenStreamFromString(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
-		FunctionGrammarLexer lex = new FunctionGrammarLexer(inputStream);
+		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		return tokens;
 	}

@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import main.TokenSubStream;
 
+import main.FunctionParser.FunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDeclBuilder;
@@ -21,7 +22,9 @@ import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 
+import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
+import antlr.CodeSensorParser.Function_defContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
@@ -75,9 +78,27 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		builder.createNew(ctx);
 		builderStack.push(builder);
 	
-		builder.parseFunctionContents(ctx);
+		parseFunctionContents(ctx);
 	}
 
+	private void parseFunctionContents(Function_defContext ctx)
+	{
+		restrictStreamToFunctionContent(ctx);
+		FunctionParser parser = new FunctionParser();
+		parser.parseAndWalkStream(stream);
+		stream.resetRestriction();
+	}
+
+	private void restrictStreamToFunctionContent(
+			CodeSensorParser.Function_defContext ctx)
+	{
+		Compound_statementContext compound = ctx.compound_statement();
+		
+		int startIndex = compound.OPENING_CURLY().getSymbol().getTokenIndex();
+		int stopIndex = compound.stop.getTokenIndex();
+		stream.restrict(startIndex+1, stopIndex);
+	}
+	
 	@Override
 	public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
 	{
