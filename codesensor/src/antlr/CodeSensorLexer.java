@@ -1,7 +1,6 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
-    import java.util.Stack;
 
 
   import java.util.Stack;

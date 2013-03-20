@@ -1,7 +1,6 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
-    import java.util.Stack;
 
 
   import java.util.Stack;
@@ -79,18 +78,18 @@ public class CodeSensorParser extends Parser {
 		RULE_multiplicative_expression = 73, RULE_cast_expression = 74, RULE_unary_expression = 75, 
 		RULE_postfix_expression = 76, RULE_field = 77, RULE_function_call_tail = 78, 
 		RULE_call_template_list = 79, RULE_function_argument_list = 80, RULE_function_argument = 81, 
-		RULE_postfix = 82, RULE_primary_expression = 83, RULE_simple_decl = 84, 
-		RULE_var_decl = 85, RULE_init_declarator_list = 86, RULE_init_declarator = 87, 
-		RULE_assign_expr_w_ = 88, RULE_assign_expr_w__l2 = 89, RULE_class_def = 90, 
-		RULE_class_name = 91, RULE_base_classes = 92, RULE_base_class = 93, RULE_type_name = 94, 
-		RULE_type_suffix = 95, RULE_base_type = 96, RULE_constant_expr_w_ = 97, 
-		RULE_param_decl_specifiers = 98, RULE_parameter_name = 99, RULE_param_type_list = 100, 
-		RULE_param_type = 101, RULE_param_type_id = 102, RULE_identifier = 103, 
-		RULE_number = 104, RULE_ptrs = 105, RULE_function_def = 106, RULE_return_type = 107, 
-		RULE_function_param_list = 108, RULE_parameter_decl_clause = 109, RULE_parameter_decl = 110, 
-		RULE_parameter_id = 111, RULE_compound_statement = 112, RULE_ctor_list = 113, 
-		RULE_ctor_initializer = 114, RULE_initializer_id = 115, RULE_ctor_expr = 116, 
-		RULE_function_name = 117, RULE_exception_specification = 118, RULE_type_id_list = 119;
+		RULE_postfix = 82, RULE_primary_expression = 83, RULE_function_def = 84, 
+		RULE_return_type = 85, RULE_function_param_list = 86, RULE_parameter_decl_clause = 87, 
+		RULE_parameter_decl = 88, RULE_parameter_id = 89, RULE_compound_statement = 90, 
+		RULE_ctor_list = 91, RULE_ctor_initializer = 92, RULE_initializer_id = 93, 
+		RULE_ctor_expr = 94, RULE_function_name = 95, RULE_exception_specification = 96, 
+		RULE_type_id_list = 97, RULE_simple_decl = 98, RULE_var_decl = 99, RULE_init_declarator_list = 100, 
+		RULE_init_declarator = 101, RULE_assign_expr_w_ = 102, RULE_assign_expr_w__l2 = 103, 
+		RULE_class_def = 104, RULE_class_name = 105, RULE_base_classes = 106, 
+		RULE_base_class = 107, RULE_type_name = 108, RULE_type_suffix = 109, RULE_base_type = 110, 
+		RULE_constant_expr_w_ = 111, RULE_param_decl_specifiers = 112, RULE_parameter_name = 113, 
+		RULE_param_type_list = 114, RULE_param_type = 115, RULE_param_type_id = 116, 
+		RULE_identifier = 117, RULE_number = 118, RULE_ptrs = 119;
 	public static final String[] ruleNames = {
 		"code", "part", "declaration", "using_directive", "unary_operator", "relational_operator", 
 		"constant", "function_decl_specifiers", "class_key", "ptr_operator", "access_specifier", 
@@ -111,15 +110,15 @@ public class CodeSensorParser extends Parser {
 		"relational_expression", "shift_expression", "additive_expression", "multiplicative_expression", 
 		"cast_expression", "unary_expression", "postfix_expression", "field", 
 		"function_call_tail", "call_template_list", "function_argument_list", 
-		"function_argument", "postfix", "primary_expression", "simple_decl", "var_decl", 
-		"init_declarator_list", "init_declarator", "assign_expr_w_", "assign_expr_w__l2", 
-		"class_def", "class_name", "base_classes", "base_class", "type_name", 
-		"type_suffix", "base_type", "constant_expr_w_", "param_decl_specifiers", 
-		"parameter_name", "param_type_list", "param_type", "param_type_id", "identifier", 
-		"number", "ptrs", "function_def", "return_type", "function_param_list", 
-		"parameter_decl_clause", "parameter_decl", "parameter_id", "compound_statement", 
-		"ctor_list", "ctor_initializer", "initializer_id", "ctor_expr", "function_name", 
-		"exception_specification", "type_id_list"
+		"function_argument", "postfix", "primary_expression", "function_def", 
+		"return_type", "function_param_list", "parameter_decl_clause", "parameter_decl", 
+		"parameter_id", "compound_statement", "ctor_list", "ctor_initializer", 
+		"initializer_id", "ctor_expr", "function_name", "exception_specification", 
+		"type_id_list", "simple_decl", "var_decl", "init_declarator_list", "init_declarator", 
+		"assign_expr_w_", "assign_expr_w__l2", "class_def", "class_name", "base_classes", 
+		"base_class", "type_name", "type_suffix", "base_type", "constant_expr_w_", 
+		"param_decl_specifiers", "parameter_name", "param_type_list", "param_type", 
+		"param_type_id", "identifier", "number", "ptrs"
 	};
 
 	@Override
@@ -4950,6 +4949,875 @@ public class CodeSensorParser extends Parser {
 		return _localctx;
 	}
 
+	public static class Function_defContext extends ParserRuleContext {
+		public Function_param_listContext function_param_list() {
+			return getRuleContext(Function_param_listContext.class,0);
+		}
+		public Template_decl_startContext template_decl_start() {
+			return getRuleContext(Template_decl_startContext.class,0);
+		}
+		public Function_nameContext function_name() {
+			return getRuleContext(Function_nameContext.class,0);
+		}
+		public Return_typeContext return_type() {
+			return getRuleContext(Return_typeContext.class,0);
+		}
+		public Ctor_listContext ctor_list() {
+			return getRuleContext(Ctor_listContext.class,0);
+		}
+		public Compound_statementContext compound_statement() {
+			return getRuleContext(Compound_statementContext.class,0);
+		}
+		public Function_defContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_function_def; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_def(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_def(this);
+		}
+	}
+
+	public final Function_defContext function_def() throws RecognitionException {
+		Function_defContext _localctx = new Function_defContext(_ctx, getState());
+		enterRule(_localctx, 168, RULE_function_def);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(709);
+			_la = _input.LA(1);
+			if (_la==TEMPLATE) {
+				{
+				setState(708); template_decl_start();
+				}
+			}
+
+			setState(712);
+			switch ( getInterpreter().adaptivePredict(_input,56,_ctx) ) {
+			case 1:
+				{
+				setState(711); return_type();
+				}
+				break;
+			}
+			setState(714); function_name();
+			setState(715); function_param_list();
+			setState(717);
+			_la = _input.LA(1);
+			if (_la==33) {
+				{
+				setState(716); ctor_list();
+				}
+			}
+
+			setState(719); compound_statement();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Return_typeContext extends ParserRuleContext {
+		public List<Function_decl_specifiersContext> function_decl_specifiers() {
+			return getRuleContexts(Function_decl_specifiersContext.class);
+		}
+		public Ptr_operatorContext ptr_operator(int i) {
+			return getRuleContext(Ptr_operatorContext.class,i);
+		}
+		public Type_nameContext type_name() {
+			return getRuleContext(Type_nameContext.class,0);
+		}
+		public Function_decl_specifiersContext function_decl_specifiers(int i) {
+			return getRuleContext(Function_decl_specifiersContext.class,i);
+		}
+		public List<Ptr_operatorContext> ptr_operator() {
+			return getRuleContexts(Ptr_operatorContext.class);
+		}
+		public Return_typeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_return_type; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterReturn_type(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitReturn_type(this);
+		}
+	}
+
+	public final Return_typeContext return_type() throws RecognitionException {
+		Return_typeContext _localctx = new Return_typeContext(_ctx, getState());
+		enterRule(_localctx, 170, RULE_return_type);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			{
+			setState(724);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (((((_la - 15)) & ~0x3f) == 0 && ((1L << (_la - 15)) & ((1L << (15 - 15)) | (1L << (16 - 15)) | (1L << (41 - 15)) | (1L << (42 - 15)) | (1L << (VIRTUAL - 15)))) != 0)) {
+				{
+				{
+				setState(721); function_decl_specifiers();
+				}
+				}
+				setState(726);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(727); type_name();
+			}
+			setState(732);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==1 || _la==3) {
+				{
+				{
+				setState(729); ptr_operator();
+				}
+				}
+				setState(734);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Function_param_listContext extends ParserRuleContext {
+		public List<TerminalNode> CV_QUALIFIER() { return getTokens(CodeSensorParser.CV_QUALIFIER); }
+		public Exception_specificationContext exception_specification() {
+			return getRuleContext(Exception_specificationContext.class,0);
+		}
+		public Parameter_decl_clauseContext parameter_decl_clause() {
+			return getRuleContext(Parameter_decl_clauseContext.class,0);
+		}
+		public TerminalNode CV_QUALIFIER(int i) {
+			return getToken(CodeSensorParser.CV_QUALIFIER, i);
+		}
+		public Function_param_listContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_function_param_list; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_param_list(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_param_list(this);
+		}
+	}
+
+	public final Function_param_listContext function_param_list() throws RecognitionException {
+		Function_param_listContext _localctx = new Function_param_listContext(_ctx, getState());
+		enterRule(_localctx, 172, RULE_function_param_list);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(735); match(32);
+			setState(737);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 13) | (1L << 21) | (1L << 24) | (1L << 43))) != 0) || ((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & ((1L << (VOID - 72)) | (1L << (UNSIGNED - 72)) | (1L << (SIGNED - 72)) | (1L << (LONG - 72)) | (1L << (CV_QUALIFIER - 72)) | (1L << (AUTO - 72)) | (1L << (REGISTER - 72)) | (1L << (ALPHA_NUMERIC - 72)))) != 0)) {
+				{
+				setState(736); parameter_decl_clause();
+				}
+			}
+
+			setState(739); match(14);
+			setState(743);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==CV_QUALIFIER) {
+				{
+				{
+				setState(740); match(CV_QUALIFIER);
+				}
+				}
+				setState(745);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(747);
+			_la = _input.LA(1);
+			if (_la==THROW) {
+				{
+				setState(746); exception_specification();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Parameter_decl_clauseContext extends ParserRuleContext {
+		public TerminalNode VOID() { return getToken(CodeSensorParser.VOID, 0); }
+		public List<Parameter_declContext> parameter_decl() {
+			return getRuleContexts(Parameter_declContext.class);
+		}
+		public Parameter_declContext parameter_decl(int i) {
+			return getRuleContext(Parameter_declContext.class,i);
+		}
+		public Parameter_decl_clauseContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_parameter_decl_clause; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_decl_clause(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_decl_clause(this);
+		}
+	}
+
+	public final Parameter_decl_clauseContext parameter_decl_clause() throws RecognitionException {
+		Parameter_decl_clauseContext _localctx = new Parameter_decl_clauseContext(_ctx, getState());
+		enterRule(_localctx, 174, RULE_parameter_decl_clause);
+		int _la;
+		try {
+			int _alt;
+			setState(762);
+			switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				{
+				setState(749); parameter_decl();
+				setState(754);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,63,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(750); match(30);
+						setState(751); parameter_decl();
+						}
+						} 
+					}
+					setState(756);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,63,_ctx);
+				}
+				}
+				setState(759);
+				_la = _input.LA(1);
+				if (_la==30) {
+					{
+					setState(757); match(30);
+					setState(758); match(38);
+					}
+				}
+
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(761); match(VOID);
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Parameter_declContext extends ParserRuleContext {
+		public Param_decl_specifiersContext param_decl_specifiers() {
+			return getRuleContext(Param_decl_specifiersContext.class,0);
+		}
+		public Parameter_idContext parameter_id() {
+			return getRuleContext(Parameter_idContext.class,0);
+		}
+		public Parameter_declContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_parameter_decl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_decl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_decl(this);
+		}
+	}
+
+	public final Parameter_declContext parameter_decl() throws RecognitionException {
+		Parameter_declContext _localctx = new Parameter_declContext(_ctx, getState());
+		enterRule(_localctx, 176, RULE_parameter_decl);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(764); param_decl_specifiers();
+			setState(765); parameter_id();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Parameter_idContext extends ParserRuleContext {
+		public Type_suffixContext type_suffix() {
+			return getRuleContext(Type_suffixContext.class,0);
+		}
+		public Parameter_idContext parameter_id() {
+			return getRuleContext(Parameter_idContext.class,0);
+		}
+		public Parameter_nameContext parameter_name() {
+			return getRuleContext(Parameter_nameContext.class,0);
+		}
+		public PtrsContext ptrs() {
+			return getRuleContext(PtrsContext.class,0);
+		}
+		public Parameter_idContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_parameter_id; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_id(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_id(this);
+		}
+	}
+
+	public final Parameter_idContext parameter_id() throws RecognitionException {
+		Parameter_idContext _localctx = new Parameter_idContext(_ctx, getState());
+		enterRule(_localctx, 178, RULE_parameter_id);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(768);
+			_la = _input.LA(1);
+			if (_la==1 || _la==3) {
+				{
+				setState(767); ptrs();
+				}
+			}
+
+			setState(775);
+			switch (_input.LA(1)) {
+			case 32:
+				{
+				setState(770); match(32);
+				setState(771); parameter_id();
+				setState(772); match(14);
+				}
+				break;
+			case 29:
+			case 35:
+			case 50:
+			case ALPHA_NUMERIC:
+				{
+				setState(774); parameter_name();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			setState(778);
+			_la = _input.LA(1);
+			if (_la==2 || _la==32) {
+				{
+				setState(777); type_suffix();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Compound_statementContext extends ParserRuleContext {
+		public TerminalNode OPENING_CURLY() { return getToken(CodeSensorParser.OPENING_CURLY, 0); }
+		public Compound_statementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_compound_statement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCompound_statement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCompound_statement(this);
+		}
+	}
+
+	public final Compound_statementContext compound_statement() throws RecognitionException {
+		Compound_statementContext _localctx = new Compound_statementContext(_ctx, getState());
+		enterRule(_localctx, 180, RULE_compound_statement);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(780); match(OPENING_CURLY);
+			 skipToEndOfObject(); 
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Ctor_listContext extends ParserRuleContext {
+		public Ctor_initializerContext ctor_initializer(int i) {
+			return getRuleContext(Ctor_initializerContext.class,i);
+		}
+		public List<Ctor_initializerContext> ctor_initializer() {
+			return getRuleContexts(Ctor_initializerContext.class);
+		}
+		public Ctor_listContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_ctor_list; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_list(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_list(this);
+		}
+	}
+
+	public final Ctor_listContext ctor_list() throws RecognitionException {
+		Ctor_listContext _localctx = new Ctor_listContext(_ctx, getState());
+		enterRule(_localctx, 182, RULE_ctor_list);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(783); match(33);
+			setState(784); ctor_initializer();
+			setState(789);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==30) {
+				{
+				{
+				setState(785); match(30);
+				setState(786); ctor_initializer();
+				}
+				}
+				setState(791);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Ctor_initializerContext extends ParserRuleContext {
+		public Initializer_idContext initializer_id() {
+			return getRuleContext(Initializer_idContext.class,0);
+		}
+		public Ctor_exprContext ctor_expr() {
+			return getRuleContext(Ctor_exprContext.class,0);
+		}
+		public Ctor_initializerContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_ctor_initializer; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_initializer(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_initializer(this);
+		}
+	}
+
+	public final Ctor_initializerContext ctor_initializer() throws RecognitionException {
+		Ctor_initializerContext _localctx = new Ctor_initializerContext(_ctx, getState());
+		enterRule(_localctx, 184, RULE_ctor_initializer);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(792); initializer_id();
+			setState(793); ctor_expr();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Initializer_idContext extends ParserRuleContext {
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public Initializer_idContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_initializer_id; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInitializer_id(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInitializer_id(this);
+		}
+	}
+
+	public final Initializer_idContext initializer_id() throws RecognitionException {
+		Initializer_idContext _localctx = new Initializer_idContext(_ctx, getState());
+		enterRule(_localctx, 186, RULE_initializer_id);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(796);
+			_la = _input.LA(1);
+			if (_la==17) {
+				{
+				setState(795); match(17);
+				}
+			}
+
+			setState(798); identifier();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Ctor_exprContext extends ParserRuleContext {
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public Ctor_exprContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_ctor_expr; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_expr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_expr(this);
+		}
+	}
+
+	public final Ctor_exprContext ctor_expr() throws RecognitionException {
+		Ctor_exprContext _localctx = new Ctor_exprContext(_ctx, getState());
+		enterRule(_localctx, 188, RULE_ctor_expr);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(800); match(32);
+			setState(802);
+			_la = _input.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 5) | (1L << 23) | (1L << 31) | (1L << 32) | (1L << 44) | (1L << 49) | (1L << 59))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (ALPHA_NUMERIC - 87)) | (1L << (HEX_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (OCTAL_LITERAL - 87)) | (1L << (FLOATING_POINT_LITERAL - 87)) | (1L << (CHAR - 87)) | (1L << (STRING - 87)))) != 0)) {
+				{
+				setState(801); expr();
+				}
+			}
+
+			setState(804); match(14);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Function_nameContext extends ParserRuleContext {
+		public Operator_function_idContext operator_function_id() {
+			return getRuleContext(Operator_function_idContext.class,0);
+		}
+		public Function_nameContext function_name() {
+			return getRuleContext(Function_nameContext.class,0);
+		}
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public Function_nameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_function_name; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_name(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_name(this);
+		}
+	}
+
+	public final Function_nameContext function_name() throws RecognitionException {
+		Function_nameContext _localctx = new Function_nameContext(_ctx, getState());
+		enterRule(_localctx, 190, RULE_function_name);
+		try {
+			setState(812);
+			switch (_input.LA(1)) {
+			case 32:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(806); match(32);
+				setState(807); function_name();
+				setState(808); match(14);
+				}
+				break;
+			case ALPHA_NUMERIC:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(810); identifier();
+				}
+				break;
+			case OPERATOR:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(811); operator_function_id();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Exception_specificationContext extends ParserRuleContext {
+		public Type_id_listContext type_id_list() {
+			return getRuleContext(Type_id_listContext.class,0);
+		}
+		public TerminalNode THROW() { return getToken(CodeSensorParser.THROW, 0); }
+		public Exception_specificationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_exception_specification; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterException_specification(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitException_specification(this);
+		}
+	}
+
+	public final Exception_specificationContext exception_specification() throws RecognitionException {
+		Exception_specificationContext _localctx = new Exception_specificationContext(_ctx, getState());
+		enterRule(_localctx, 192, RULE_exception_specification);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(814); match(THROW);
+			setState(815); match(32);
+			setState(816); type_id_list();
+			setState(817); match(14);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Type_id_listContext extends ParserRuleContext {
+		public List<Type_id_listContext> type_id_list() {
+			return getRuleContexts(Type_id_listContext.class);
+		}
+		public Type_id_listContext type_id_list(int i) {
+			return getRuleContext(Type_id_listContext.class,i);
+		}
+		public No_bracketsContext no_brackets(int i) {
+			return getRuleContext(No_bracketsContext.class,i);
+		}
+		public List<No_bracketsContext> no_brackets() {
+			return getRuleContexts(No_bracketsContext.class);
+		}
+		public Type_id_listContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_type_id_list; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterType_id_list(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitType_id_list(this);
+		}
+	}
+
+	public final Type_id_listContext type_id_list() throws RecognitionException {
+		Type_id_listContext _localctx = new Type_id_listContext(_ctx, getState());
+		enterRule(_localctx, 194, RULE_type_id_list);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(822);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
+				{
+				{
+				setState(819); no_brackets();
+				}
+				}
+				setState(824);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(836);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==32) {
+				{
+				{
+				setState(825); match(32);
+				setState(826); type_id_list();
+				setState(827); match(14);
+				setState(831);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
+					{
+					{
+					setState(828); no_brackets();
+					}
+					}
+					setState(833);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				}
+				}
+				setState(838);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class Simple_declContext extends ParserRuleContext {
 		public Template_decl_startContext template_decl_start() {
 			return getRuleContext(Template_decl_startContext.class,0);
@@ -4974,28 +5842,28 @@ public class CodeSensorParser extends Parser {
 
 	public final Simple_declContext simple_decl() throws RecognitionException {
 		Simple_declContext _localctx = new Simple_declContext(_ctx, getState());
-		enterRule(_localctx, 168, RULE_simple_decl);
+		enterRule(_localctx, 196, RULE_simple_decl);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(709);
+			setState(840);
 			_la = _input.LA(1);
 			if (_la==TYPEDEF) {
 				{
-				setState(708); match(TYPEDEF);
+				setState(839); match(TYPEDEF);
 				}
 			}
 
-			setState(712);
+			setState(843);
 			_la = _input.LA(1);
 			if (_la==TEMPLATE) {
 				{
-				setState(711); template_decl_start();
+				setState(842); template_decl_start();
 				}
 			}
 
-			setState(714); var_decl();
+			setState(845); var_decl();
 			}
 		}
 		catch (RecognitionException re) {
@@ -5057,16 +5925,16 @@ public class CodeSensorParser extends Parser {
 
 	public final Var_declContext var_decl() throws RecognitionException {
 		Var_declContext _localctx = new Var_declContext(_ctx, getState());
-		enterRule(_localctx, 170, RULE_var_decl);
+		enterRule(_localctx, 198, RULE_var_decl);
 		try {
-			setState(723);
-			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
+			setState(854);
+			switch ( getInterpreter().adaptivePredict(_input,79,_ctx) ) {
 			case 1:
 				_localctx = new DeclByTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(716); type_name();
-				setState(717); init_declarator_list();
+				setState(847); type_name();
+				setState(848); init_declarator_list();
 				}
 				break;
 
@@ -5074,12 +5942,12 @@ public class CodeSensorParser extends Parser {
 				_localctx = new DeclByClassContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(719); class_def();
-				setState(721);
-				switch ( getInterpreter().adaptivePredict(_input,57,_ctx) ) {
+				setState(850); class_def();
+				setState(852);
+				switch ( getInterpreter().adaptivePredict(_input,78,_ctx) ) {
 				case 1:
 					{
-					setState(720); init_declarator_list();
+					setState(851); init_declarator_list();
 					}
 					break;
 				}
@@ -5121,27 +5989,27 @@ public class CodeSensorParser extends Parser {
 
 	public final Init_declarator_listContext init_declarator_list() throws RecognitionException {
 		Init_declarator_listContext _localctx = new Init_declarator_listContext(_ctx, getState());
-		enterRule(_localctx, 172, RULE_init_declarator_list);
+		enterRule(_localctx, 200, RULE_init_declarator_list);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(725); init_declarator();
-			setState(730);
+			setState(856); init_declarator();
+			setState(861);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==30) {
 				{
 				{
-				setState(726); match(30);
-				setState(727); init_declarator();
+				setState(857); match(30);
+				setState(858); init_declarator();
 				}
 				}
-				setState(732);
+				setState(863);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(733); match(51);
+			setState(864); match(51);
 			}
 		}
 		catch (RecognitionException re) {
@@ -5187,53 +6055,53 @@ public class CodeSensorParser extends Parser {
 
 	public final Init_declaratorContext init_declarator() throws RecognitionException {
 		Init_declaratorContext _localctx = new Init_declaratorContext(_ctx, getState());
-		enterRule(_localctx, 174, RULE_init_declarator);
+		enterRule(_localctx, 202, RULE_init_declarator);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(736);
+			setState(867);
 			_la = _input.LA(1);
 			if (_la==1 || _la==3) {
 				{
-				setState(735); ptrs();
+				setState(866); ptrs();
 				}
 			}
 
-			setState(738); identifier();
-			setState(740);
-			switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
+			setState(869); identifier();
+			setState(871);
+			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
 			case 1:
 				{
-				setState(739); type_suffix();
+				setState(870); type_suffix();
 				}
 				break;
 			}
 			}
-			setState(749);
+			setState(880);
 			switch (_input.LA(1)) {
 			case 32:
 				{
 				{
-				setState(742); match(32);
-				setState(744);
+				setState(873); match(32);
+				setState(875);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 5) | (1L << 23) | (1L << 31) | (1L << 32) | (1L << 44) | (1L << 49) | (1L << 59))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (ALPHA_NUMERIC - 87)) | (1L << (HEX_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (OCTAL_LITERAL - 87)) | (1L << (FLOATING_POINT_LITERAL - 87)) | (1L << (CHAR - 87)) | (1L << (STRING - 87)))) != 0)) {
 					{
-					setState(743); expr();
+					setState(874); expr();
 					}
 				}
 
-				setState(746); match(14);
+				setState(877); match(14);
 				}
 				}
 				break;
 			case 18:
 				{
 				{
-				setState(747); match(18);
-				setState(748); assign_expr_w_();
+				setState(878); match(18);
+				setState(879); assign_expr_w_();
 				}
 				}
 				break;
@@ -5285,72 +6153,72 @@ public class CodeSensorParser extends Parser {
 
 	public final Assign_expr_w_Context assign_expr_w_() throws RecognitionException {
 		Assign_expr_w_Context _localctx = new Assign_expr_w_Context(_ctx, getState());
-		enterRule(_localctx, 176, RULE_assign_expr_w_);
+		enterRule(_localctx, 204, RULE_assign_expr_w_);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(754);
+			setState(885);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
-				setState(751); assign_water();
+				setState(882); assign_water();
 				}
 				}
-				setState(756);
+				setState(887);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(779);
+			setState(910);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==2 || _la==32 || _la==OPENING_CURLY) {
 				{
 				{
-				setState(769);
+				setState(900);
 				switch (_input.LA(1)) {
 				case OPENING_CURLY:
 					{
-					setState(757); match(OPENING_CURLY);
-					setState(758); assign_expr_w__l2();
-					setState(759); match(CLOSING_CURLY);
+					setState(888); match(OPENING_CURLY);
+					setState(889); assign_expr_w__l2();
+					setState(890); match(CLOSING_CURLY);
 					}
 					break;
 				case 32:
 					{
-					setState(761); match(32);
-					setState(762); assign_expr_w__l2();
-					setState(763); match(14);
+					setState(892); match(32);
+					setState(893); assign_expr_w__l2();
+					setState(894); match(14);
 					}
 					break;
 				case 2:
 					{
-					setState(765); match(2);
-					setState(766); assign_expr_w__l2();
-					setState(767); match(26);
+					setState(896); match(2);
+					setState(897); assign_expr_w__l2();
+					setState(898); match(26);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(774);
+				setState(905);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
-					setState(771); assign_water();
+					setState(902); assign_water();
 					}
 					}
-					setState(776);
+					setState(907);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 				}
-				setState(781);
+				setState(912);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -5396,72 +6264,72 @@ public class CodeSensorParser extends Parser {
 
 	public final Assign_expr_w__l2Context assign_expr_w__l2() throws RecognitionException {
 		Assign_expr_w__l2Context _localctx = new Assign_expr_w__l2Context(_ctx, getState());
-		enterRule(_localctx, 178, RULE_assign_expr_w__l2);
+		enterRule(_localctx, 206, RULE_assign_expr_w__l2);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(785);
+			setState(916);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
-				setState(782); assign_water_l2();
+				setState(913); assign_water_l2();
 				}
 				}
-				setState(787);
+				setState(918);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(810);
+			setState(941);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==2 || _la==32 || _la==OPENING_CURLY) {
 				{
 				{
-				setState(800);
+				setState(931);
 				switch (_input.LA(1)) {
 				case OPENING_CURLY:
 					{
-					setState(788); match(OPENING_CURLY);
-					setState(789); assign_expr_w__l2();
-					setState(790); match(CLOSING_CURLY);
+					setState(919); match(OPENING_CURLY);
+					setState(920); assign_expr_w__l2();
+					setState(921); match(CLOSING_CURLY);
 					}
 					break;
 				case 32:
 					{
-					setState(792); match(32);
-					setState(793); assign_expr_w__l2();
-					setState(794); match(14);
+					setState(923); match(32);
+					setState(924); assign_expr_w__l2();
+					setState(925); match(14);
 					}
 					break;
 				case 2:
 					{
-					setState(796); match(2);
-					setState(797); assign_expr_w__l2();
-					setState(798); match(26);
+					setState(927); match(2);
+					setState(928); assign_expr_w__l2();
+					setState(929); match(26);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(805);
+				setState(936);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
-					setState(802); assign_water_l2();
+					setState(933); assign_water_l2();
 					}
 					}
-					setState(807);
+					setState(938);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 				}
-				setState(812);
+				setState(943);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -5505,29 +6373,29 @@ public class CodeSensorParser extends Parser {
 
 	public final Class_defContext class_def() throws RecognitionException {
 		Class_defContext _localctx = new Class_defContext(_ctx, getState());
-		enterRule(_localctx, 180, RULE_class_def);
+		enterRule(_localctx, 208, RULE_class_def);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(813); class_key();
-			setState(815);
+			setState(944); class_key();
+			setState(946);
 			_la = _input.LA(1);
 			if (_la==ALPHA_NUMERIC) {
 				{
-				setState(814); class_name();
+				setState(945); class_name();
 				}
 			}
 
-			setState(818);
+			setState(949);
 			_la = _input.LA(1);
 			if (_la==33) {
 				{
-				setState(817); base_classes();
+				setState(948); base_classes();
 				}
 			}
 
-			setState(820); match(OPENING_CURLY);
+			setState(951); match(OPENING_CURLY);
 			skipToEndOfObject(); 
 			}
 		}
@@ -5562,11 +6430,11 @@ public class CodeSensorParser extends Parser {
 
 	public final Class_nameContext class_name() throws RecognitionException {
 		Class_nameContext _localctx = new Class_nameContext(_ctx, getState());
-		enterRule(_localctx, 182, RULE_class_name);
+		enterRule(_localctx, 210, RULE_class_name);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(823); identifier();
+			setState(954); identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -5603,24 +6471,24 @@ public class CodeSensorParser extends Parser {
 
 	public final Base_classesContext base_classes() throws RecognitionException {
 		Base_classesContext _localctx = new Base_classesContext(_ctx, getState());
-		enterRule(_localctx, 184, RULE_base_classes);
+		enterRule(_localctx, 212, RULE_base_classes);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(825); match(33);
-			setState(826); base_class();
-			setState(831);
+			setState(956); match(33);
+			setState(957); base_class();
+			setState(962);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==30) {
 				{
 				{
-				setState(827); match(30);
-				setState(828); base_class();
+				setState(958); match(30);
+				setState(959); base_class();
 				}
 				}
-				setState(833);
+				setState(964);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -5661,28 +6529,28 @@ public class CodeSensorParser extends Parser {
 
 	public final Base_classContext base_class() throws RecognitionException {
 		Base_classContext _localctx = new Base_classContext(_ctx, getState());
-		enterRule(_localctx, 186, RULE_base_class);
+		enterRule(_localctx, 214, RULE_base_class);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(835);
+			setState(966);
 			_la = _input.LA(1);
 			if (_la==VIRTUAL) {
 				{
-				setState(834); match(VIRTUAL);
+				setState(965); match(VIRTUAL);
 				}
 			}
 
-			setState(838);
+			setState(969);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 29) | (1L << 35) | (1L << 50))) != 0)) {
 				{
-				setState(837); access_specifier();
+				setState(968); access_specifier();
 				}
 			}
 
-			setState(840); identifier();
+			setState(971); identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -5734,46 +6602,46 @@ public class CodeSensorParser extends Parser {
 
 	public final Type_nameContext type_name() throws RecognitionException {
 		Type_nameContext _localctx = new Type_nameContext(_ctx, getState());
-		enterRule(_localctx, 188, RULE_type_name);
+		enterRule(_localctx, 216, RULE_type_name);
 		int _la;
 		try {
-			setState(874);
-			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
+			setState(1005);
+			switch ( getInterpreter().adaptivePredict(_input,103,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(845);
+				setState(976);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==CV_QUALIFIER) {
 					{
 					{
-					setState(842); match(CV_QUALIFIER);
+					setState(973); match(CV_QUALIFIER);
 					}
 					}
-					setState(847);
+					setState(978);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(851);
+				setState(982);
 				switch (_input.LA(1)) {
 				case 13:
 				case 21:
 				case 24:
 				case 43:
 					{
-					setState(848); class_key();
+					setState(979); class_key();
 					}
 					break;
 				case UNSIGNED:
 					{
-					setState(849); match(UNSIGNED);
+					setState(980); match(UNSIGNED);
 					}
 					break;
 				case SIGNED:
 					{
-					setState(850); match(SIGNED);
+					setState(981); match(SIGNED);
 					}
 					break;
 				case VOID:
@@ -5783,38 +6651,38 @@ public class CodeSensorParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(853); base_type();
-				setState(858);
+				setState(984); base_type();
+				setState(989);
 				_la = _input.LA(1);
 				if (_la==4) {
 					{
-					setState(854); match(4);
-					setState(855); template_param_list();
-					setState(856); match(54);
+					setState(985); match(4);
+					setState(986); template_param_list();
+					setState(987); match(54);
 					}
 				}
 
-				setState(870);
+				setState(1001);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==17) {
 					{
 					{
-					setState(860); match(17);
-					setState(861); base_type();
-					setState(866);
+					setState(991); match(17);
+					setState(992); base_type();
+					setState(997);
 					_la = _input.LA(1);
 					if (_la==4) {
 						{
-						setState(862); match(4);
-						setState(863); template_param_list();
-						setState(864); match(54);
+						setState(993); match(4);
+						setState(994); template_param_list();
+						setState(995); match(54);
 						}
 					}
 
 					}
 					}
-					setState(872);
+					setState(1003);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
@@ -5825,7 +6693,7 @@ public class CodeSensorParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(873);
+				setState(1004);
 				_la = _input.LA(1);
 				if ( !(_la==UNSIGNED || _la==SIGNED) ) {
 				_errHandler.recoverInline(this);
@@ -5869,24 +6737,24 @@ public class CodeSensorParser extends Parser {
 
 	public final Type_suffixContext type_suffix() throws RecognitionException {
 		Type_suffixContext _localctx = new Type_suffixContext(_ctx, getState());
-		enterRule(_localctx, 190, RULE_type_suffix);
+		enterRule(_localctx, 218, RULE_type_suffix);
 		try {
-			setState(881);
+			setState(1012);
 			switch (_input.LA(1)) {
 			case 2:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(876); match(2);
-				setState(877); constant_expr_w_();
-				setState(878); match(26);
+				setState(1007); match(2);
+				setState(1008); constant_expr_w_();
+				setState(1009); match(26);
 				}
 				}
 				break;
 			case 32:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(880); param_type_list();
+				setState(1011); param_type_list();
 				}
 				break;
 			default:
@@ -5927,34 +6795,34 @@ public class CodeSensorParser extends Parser {
 
 	public final Base_typeContext base_type() throws RecognitionException {
 		Base_typeContext _localctx = new Base_typeContext(_ctx, getState());
-		enterRule(_localctx, 192, RULE_base_type);
+		enterRule(_localctx, 220, RULE_base_type);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(888);
-			switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
+			setState(1019);
+			switch ( getInterpreter().adaptivePredict(_input,105,_ctx) ) {
 			case 1:
 				{
-				setState(883); match(ALPHA_NUMERIC);
+				setState(1014); match(ALPHA_NUMERIC);
 				}
 				break;
 
 			case 2:
 				{
-				setState(884); match(VOID);
+				setState(1015); match(VOID);
 				}
 				break;
 
 			case 3:
 				{
-				setState(885); match(LONG);
+				setState(1016); match(LONG);
 				}
 				break;
 
 			case 4:
 				{
-				setState(886); match(LONG);
-				setState(887); match(LONG);
+				setState(1017); match(LONG);
+				setState(1018); match(LONG);
 				}
 				break;
 			}
@@ -6000,49 +6868,49 @@ public class CodeSensorParser extends Parser {
 
 	public final Constant_expr_w_Context constant_expr_w_() throws RecognitionException {
 		Constant_expr_w_Context _localctx = new Constant_expr_w_Context(_ctx, getState());
-		enterRule(_localctx, 194, RULE_constant_expr_w_);
+		enterRule(_localctx, 222, RULE_constant_expr_w_);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(893);
+			setState(1024);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
 				{
 				{
-				setState(890); no_squares();
+				setState(1021); no_squares();
 				}
 				}
-				setState(895);
+				setState(1026);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(907);
+			setState(1038);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==2) {
 				{
 				{
-				setState(896); match(2);
-				setState(897); constant_expr_w_();
-				setState(898); match(26);
-				setState(902);
+				setState(1027); match(2);
+				setState(1028); constant_expr_w_();
+				setState(1029); match(26);
+				setState(1033);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 14) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 32) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
 					{
 					{
-					setState(899); no_squares();
+					setState(1030); no_squares();
 					}
 					}
-					setState(904);
+					setState(1035);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 				}
-				setState(909);
+				setState(1040);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -6081,16 +6949,16 @@ public class CodeSensorParser extends Parser {
 
 	public final Param_decl_specifiersContext param_decl_specifiers() throws RecognitionException {
 		Param_decl_specifiersContext _localctx = new Param_decl_specifiersContext(_ctx, getState());
-		enterRule(_localctx, 196, RULE_param_decl_specifiers);
+		enterRule(_localctx, 224, RULE_param_decl_specifiers);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(911);
+			setState(1042);
 			_la = _input.LA(1);
 			if (_la==AUTO || _la==REGISTER) {
 				{
-				setState(910);
+				setState(1041);
 				_la = _input.LA(1);
 				if ( !(_la==AUTO || _la==REGISTER) ) {
 				_errHandler.recoverInline(this);
@@ -6099,7 +6967,7 @@ public class CodeSensorParser extends Parser {
 				}
 			}
 
-			setState(913); type_name();
+			setState(1044); type_name();
 			}
 		}
 		catch (RecognitionException re) {
@@ -6136,14 +7004,14 @@ public class CodeSensorParser extends Parser {
 
 	public final Parameter_nameContext parameter_name() throws RecognitionException {
 		Parameter_nameContext _localctx = new Parameter_nameContext(_ctx, getState());
-		enterRule(_localctx, 198, RULE_parameter_name);
+		enterRule(_localctx, 226, RULE_parameter_name);
 		try {
-			setState(917);
+			setState(1048);
 			switch (_input.LA(1)) {
 			case ALPHA_NUMERIC:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(915); identifier();
+				setState(1046); identifier();
 				}
 				break;
 			case 29:
@@ -6151,7 +7019,7 @@ public class CodeSensorParser extends Parser {
 			case 50:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(916); access_specifier();
+				setState(1047); access_specifier();
 				}
 				break;
 			default:
@@ -6193,47 +7061,47 @@ public class CodeSensorParser extends Parser {
 
 	public final Param_type_listContext param_type_list() throws RecognitionException {
 		Param_type_listContext _localctx = new Param_type_listContext(_ctx, getState());
-		enterRule(_localctx, 200, RULE_param_type_list);
+		enterRule(_localctx, 228, RULE_param_type_list);
 		int _la;
 		try {
-			setState(934);
-			switch ( getInterpreter().adaptivePredict(_input,92,_ctx) ) {
+			setState(1065);
+			switch ( getInterpreter().adaptivePredict(_input,113,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(919); match(32);
-				setState(920); match(VOID);
-				setState(921); match(14);
+				setState(1050); match(32);
+				setState(1051); match(VOID);
+				setState(1052); match(14);
 				}
 				break;
 
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(922); match(32);
-				setState(931);
+				setState(1053); match(32);
+				setState(1062);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 13) | (1L << 21) | (1L << 24) | (1L << 43))) != 0) || ((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & ((1L << (VOID - 72)) | (1L << (UNSIGNED - 72)) | (1L << (SIGNED - 72)) | (1L << (LONG - 72)) | (1L << (CV_QUALIFIER - 72)) | (1L << (AUTO - 72)) | (1L << (REGISTER - 72)) | (1L << (ALPHA_NUMERIC - 72)))) != 0)) {
 					{
-					setState(923); param_type();
-					setState(928);
+					setState(1054); param_type();
+					setState(1059);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					while (_la==30) {
 						{
 						{
-						setState(924); match(30);
-						setState(925); param_type();
+						setState(1055); match(30);
+						setState(1056); param_type();
 						}
 						}
-						setState(930);
+						setState(1061);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
 					}
 				}
 
-				setState(933); match(14);
+				setState(1064); match(14);
 				}
 				break;
 			}
@@ -6272,12 +7140,12 @@ public class CodeSensorParser extends Parser {
 
 	public final Param_typeContext param_type() throws RecognitionException {
 		Param_typeContext _localctx = new Param_typeContext(_ctx, getState());
-		enterRule(_localctx, 202, RULE_param_type);
+		enterRule(_localctx, 230, RULE_param_type);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(936); param_decl_specifiers();
-			setState(937); param_type_id();
+			setState(1067); param_decl_specifiers();
+			setState(1068); param_type_id();
 			}
 		}
 		catch (RecognitionException re) {
@@ -6320,47 +7188,47 @@ public class CodeSensorParser extends Parser {
 
 	public final Param_type_idContext param_type_id() throws RecognitionException {
 		Param_type_idContext _localctx = new Param_type_idContext(_ctx, getState());
-		enterRule(_localctx, 204, RULE_param_type_id);
+		enterRule(_localctx, 232, RULE_param_type_id);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(940);
+			setState(1071);
 			_la = _input.LA(1);
 			if (_la==1 || _la==3) {
 				{
-				setState(939); ptrs();
+				setState(1070); ptrs();
 				}
 			}
 
-			setState(949);
-			switch ( getInterpreter().adaptivePredict(_input,95,_ctx) ) {
+			setState(1080);
+			switch ( getInterpreter().adaptivePredict(_input,116,_ctx) ) {
 			case 1:
 				{
-				setState(942); match(32);
-				setState(943); param_type_id();
-				setState(944); match(14);
+				setState(1073); match(32);
+				setState(1074); param_type_id();
+				setState(1075); match(14);
 				}
 				break;
 
 			case 2:
 				{
-				setState(947);
+				setState(1078);
 				_la = _input.LA(1);
 				if (((((_la - 29)) & ~0x3f) == 0 && ((1L << (_la - 29)) & ((1L << (29 - 29)) | (1L << (35 - 29)) | (1L << (50 - 29)) | (1L << (ALPHA_NUMERIC - 29)))) != 0)) {
 					{
-					setState(946); parameter_name();
+					setState(1077); parameter_name();
 					}
 				}
 
 				}
 				break;
 			}
-			setState(952);
+			setState(1083);
 			_la = _input.LA(1);
 			if (_la==2 || _la==32) {
 				{
-				setState(951); type_suffix();
+				setState(1082); type_suffix();
 				}
 			}
 
@@ -6398,23 +7266,23 @@ public class CodeSensorParser extends Parser {
 
 	public final IdentifierContext identifier() throws RecognitionException {
 		IdentifierContext _localctx = new IdentifierContext(_ctx, getState());
-		enterRule(_localctx, 206, RULE_identifier);
+		enterRule(_localctx, 234, RULE_identifier);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(954); match(ALPHA_NUMERIC);
-			setState(959);
+			setState(1085); match(ALPHA_NUMERIC);
+			setState(1090);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==17) {
 				{
 				{
-				setState(955); match(17);
-				setState(956); match(ALPHA_NUMERIC);
+				setState(1086); match(17);
+				setState(1087); match(ALPHA_NUMERIC);
 				}
 				}
-				setState(961);
+				setState(1092);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -6451,12 +7319,12 @@ public class CodeSensorParser extends Parser {
 
 	public final NumberContext number() throws RecognitionException {
 		NumberContext _localctx = new NumberContext(_ctx, getState());
-		enterRule(_localctx, 208, RULE_number);
+		enterRule(_localctx, 236, RULE_number);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(962);
+			setState(1093);
 			_la = _input.LA(1);
 			if ( !(((((_la - 93)) & ~0x3f) == 0 && ((1L << (_la - 93)) & ((1L << (HEX_LITERAL - 93)) | (1L << (DECIMAL_LITERAL - 93)) | (1L << (OCTAL_LITERAL - 93)))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -6498,893 +7366,24 @@ public class CodeSensorParser extends Parser {
 
 	public final PtrsContext ptrs() throws RecognitionException {
 		PtrsContext _localctx = new PtrsContext(_ctx, getState());
-		enterRule(_localctx, 210, RULE_ptrs);
+		enterRule(_localctx, 238, RULE_ptrs);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(965); 
+			setState(1096); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(964); ptr_operator();
+				setState(1095); ptr_operator();
 				}
 				}
-				setState(967); 
+				setState(1098); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==1 || _la==3 );
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Function_defContext extends ParserRuleContext {
-		public Function_param_listContext function_param_list() {
-			return getRuleContext(Function_param_listContext.class,0);
-		}
-		public Template_decl_startContext template_decl_start() {
-			return getRuleContext(Template_decl_startContext.class,0);
-		}
-		public Function_nameContext function_name() {
-			return getRuleContext(Function_nameContext.class,0);
-		}
-		public Return_typeContext return_type() {
-			return getRuleContext(Return_typeContext.class,0);
-		}
-		public Ctor_listContext ctor_list() {
-			return getRuleContext(Ctor_listContext.class,0);
-		}
-		public Compound_statementContext compound_statement() {
-			return getRuleContext(Compound_statementContext.class,0);
-		}
-		public Function_defContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_function_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_def(this);
-		}
-	}
-
-	public final Function_defContext function_def() throws RecognitionException {
-		Function_defContext _localctx = new Function_defContext(_ctx, getState());
-		enterRule(_localctx, 212, RULE_function_def);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(970);
-			_la = _input.LA(1);
-			if (_la==TEMPLATE) {
-				{
-				setState(969); template_decl_start();
-				}
-			}
-
-			setState(973);
-			switch ( getInterpreter().adaptivePredict(_input,100,_ctx) ) {
-			case 1:
-				{
-				setState(972); return_type();
-				}
-				break;
-			}
-			setState(975); function_name();
-			setState(976); function_param_list();
-			setState(978);
-			_la = _input.LA(1);
-			if (_la==33) {
-				{
-				setState(977); ctor_list();
-				}
-			}
-
-			setState(980); compound_statement();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Return_typeContext extends ParserRuleContext {
-		public List<Function_decl_specifiersContext> function_decl_specifiers() {
-			return getRuleContexts(Function_decl_specifiersContext.class);
-		}
-		public Ptr_operatorContext ptr_operator(int i) {
-			return getRuleContext(Ptr_operatorContext.class,i);
-		}
-		public Type_nameContext type_name() {
-			return getRuleContext(Type_nameContext.class,0);
-		}
-		public Function_decl_specifiersContext function_decl_specifiers(int i) {
-			return getRuleContext(Function_decl_specifiersContext.class,i);
-		}
-		public List<Ptr_operatorContext> ptr_operator() {
-			return getRuleContexts(Ptr_operatorContext.class);
-		}
-		public Return_typeContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_return_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterReturn_type(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitReturn_type(this);
-		}
-	}
-
-	public final Return_typeContext return_type() throws RecognitionException {
-		Return_typeContext _localctx = new Return_typeContext(_ctx, getState());
-		enterRule(_localctx, 214, RULE_return_type);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			{
-			setState(985);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (((((_la - 15)) & ~0x3f) == 0 && ((1L << (_la - 15)) & ((1L << (15 - 15)) | (1L << (16 - 15)) | (1L << (41 - 15)) | (1L << (42 - 15)) | (1L << (VIRTUAL - 15)))) != 0)) {
-				{
-				{
-				setState(982); function_decl_specifiers();
-				}
-				}
-				setState(987);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(988); type_name();
-			}
-			setState(993);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==1 || _la==3) {
-				{
-				{
-				setState(990); ptr_operator();
-				}
-				}
-				setState(995);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Function_param_listContext extends ParserRuleContext {
-		public List<TerminalNode> CV_QUALIFIER() { return getTokens(CodeSensorParser.CV_QUALIFIER); }
-		public Exception_specificationContext exception_specification() {
-			return getRuleContext(Exception_specificationContext.class,0);
-		}
-		public Parameter_decl_clauseContext parameter_decl_clause() {
-			return getRuleContext(Parameter_decl_clauseContext.class,0);
-		}
-		public TerminalNode CV_QUALIFIER(int i) {
-			return getToken(CodeSensorParser.CV_QUALIFIER, i);
-		}
-		public Function_param_listContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_function_param_list; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_param_list(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_param_list(this);
-		}
-	}
-
-	public final Function_param_listContext function_param_list() throws RecognitionException {
-		Function_param_listContext _localctx = new Function_param_listContext(_ctx, getState());
-		enterRule(_localctx, 216, RULE_function_param_list);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(996); match(32);
-			setState(998);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 13) | (1L << 21) | (1L << 24) | (1L << 43))) != 0) || ((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & ((1L << (VOID - 72)) | (1L << (UNSIGNED - 72)) | (1L << (SIGNED - 72)) | (1L << (LONG - 72)) | (1L << (CV_QUALIFIER - 72)) | (1L << (AUTO - 72)) | (1L << (REGISTER - 72)) | (1L << (ALPHA_NUMERIC - 72)))) != 0)) {
-				{
-				setState(997); parameter_decl_clause();
-				}
-			}
-
-			setState(1000); match(14);
-			setState(1004);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==CV_QUALIFIER) {
-				{
-				{
-				setState(1001); match(CV_QUALIFIER);
-				}
-				}
-				setState(1006);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(1008);
-			_la = _input.LA(1);
-			if (_la==THROW) {
-				{
-				setState(1007); exception_specification();
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Parameter_decl_clauseContext extends ParserRuleContext {
-		public TerminalNode VOID() { return getToken(CodeSensorParser.VOID, 0); }
-		public List<Parameter_declContext> parameter_decl() {
-			return getRuleContexts(Parameter_declContext.class);
-		}
-		public Parameter_declContext parameter_decl(int i) {
-			return getRuleContext(Parameter_declContext.class,i);
-		}
-		public Parameter_decl_clauseContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_parameter_decl_clause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_decl_clause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_decl_clause(this);
-		}
-	}
-
-	public final Parameter_decl_clauseContext parameter_decl_clause() throws RecognitionException {
-		Parameter_decl_clauseContext _localctx = new Parameter_decl_clauseContext(_ctx, getState());
-		enterRule(_localctx, 218, RULE_parameter_decl_clause);
-		int _la;
-		try {
-			int _alt;
-			setState(1023);
-			switch ( getInterpreter().adaptivePredict(_input,109,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				{
-				setState(1010); parameter_decl();
-				setState(1015);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,107,_ctx);
-				while ( _alt!=2 && _alt!=-1 ) {
-					if ( _alt==1 ) {
-						{
-						{
-						setState(1011); match(30);
-						setState(1012); parameter_decl();
-						}
-						} 
-					}
-					setState(1017);
-					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,107,_ctx);
-				}
-				}
-				setState(1020);
-				_la = _input.LA(1);
-				if (_la==30) {
-					{
-					setState(1018); match(30);
-					setState(1019); match(38);
-					}
-				}
-
-				}
-				break;
-
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(1022); match(VOID);
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Parameter_declContext extends ParserRuleContext {
-		public Param_decl_specifiersContext param_decl_specifiers() {
-			return getRuleContext(Param_decl_specifiersContext.class,0);
-		}
-		public Parameter_idContext parameter_id() {
-			return getRuleContext(Parameter_idContext.class,0);
-		}
-		public Parameter_declContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_parameter_decl; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_decl(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_decl(this);
-		}
-	}
-
-	public final Parameter_declContext parameter_decl() throws RecognitionException {
-		Parameter_declContext _localctx = new Parameter_declContext(_ctx, getState());
-		enterRule(_localctx, 220, RULE_parameter_decl);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1025); param_decl_specifiers();
-			setState(1026); parameter_id();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Parameter_idContext extends ParserRuleContext {
-		public Type_suffixContext type_suffix() {
-			return getRuleContext(Type_suffixContext.class,0);
-		}
-		public Parameter_idContext parameter_id() {
-			return getRuleContext(Parameter_idContext.class,0);
-		}
-		public Parameter_nameContext parameter_name() {
-			return getRuleContext(Parameter_nameContext.class,0);
-		}
-		public PtrsContext ptrs() {
-			return getRuleContext(PtrsContext.class,0);
-		}
-		public Parameter_idContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_parameter_id; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_id(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_id(this);
-		}
-	}
-
-	public final Parameter_idContext parameter_id() throws RecognitionException {
-		Parameter_idContext _localctx = new Parameter_idContext(_ctx, getState());
-		enterRule(_localctx, 222, RULE_parameter_id);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1029);
-			_la = _input.LA(1);
-			if (_la==1 || _la==3) {
-				{
-				setState(1028); ptrs();
-				}
-			}
-
-			setState(1036);
-			switch (_input.LA(1)) {
-			case 32:
-				{
-				setState(1031); match(32);
-				setState(1032); parameter_id();
-				setState(1033); match(14);
-				}
-				break;
-			case 29:
-			case 35:
-			case 50:
-			case ALPHA_NUMERIC:
-				{
-				setState(1035); parameter_name();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			setState(1039);
-			_la = _input.LA(1);
-			if (_la==2 || _la==32) {
-				{
-				setState(1038); type_suffix();
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Compound_statementContext extends ParserRuleContext {
-		public TerminalNode OPENING_CURLY() { return getToken(CodeSensorParser.OPENING_CURLY, 0); }
-		public Compound_statementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_compound_statement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCompound_statement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCompound_statement(this);
-		}
-	}
-
-	public final Compound_statementContext compound_statement() throws RecognitionException {
-		Compound_statementContext _localctx = new Compound_statementContext(_ctx, getState());
-		enterRule(_localctx, 224, RULE_compound_statement);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1041); match(OPENING_CURLY);
-			 skipToEndOfObject(); 
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Ctor_listContext extends ParserRuleContext {
-		public Ctor_initializerContext ctor_initializer(int i) {
-			return getRuleContext(Ctor_initializerContext.class,i);
-		}
-		public List<Ctor_initializerContext> ctor_initializer() {
-			return getRuleContexts(Ctor_initializerContext.class);
-		}
-		public Ctor_listContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_ctor_list; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_list(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_list(this);
-		}
-	}
-
-	public final Ctor_listContext ctor_list() throws RecognitionException {
-		Ctor_listContext _localctx = new Ctor_listContext(_ctx, getState());
-		enterRule(_localctx, 226, RULE_ctor_list);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1044); match(33);
-			setState(1045); ctor_initializer();
-			setState(1050);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==30) {
-				{
-				{
-				setState(1046); match(30);
-				setState(1047); ctor_initializer();
-				}
-				}
-				setState(1052);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Ctor_initializerContext extends ParserRuleContext {
-		public Initializer_idContext initializer_id() {
-			return getRuleContext(Initializer_idContext.class,0);
-		}
-		public Ctor_exprContext ctor_expr() {
-			return getRuleContext(Ctor_exprContext.class,0);
-		}
-		public Ctor_initializerContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_ctor_initializer; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_initializer(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_initializer(this);
-		}
-	}
-
-	public final Ctor_initializerContext ctor_initializer() throws RecognitionException {
-		Ctor_initializerContext _localctx = new Ctor_initializerContext(_ctx, getState());
-		enterRule(_localctx, 228, RULE_ctor_initializer);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1053); initializer_id();
-			setState(1054); ctor_expr();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Initializer_idContext extends ParserRuleContext {
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
-		}
-		public Initializer_idContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_initializer_id; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInitializer_id(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInitializer_id(this);
-		}
-	}
-
-	public final Initializer_idContext initializer_id() throws RecognitionException {
-		Initializer_idContext _localctx = new Initializer_idContext(_ctx, getState());
-		enterRule(_localctx, 230, RULE_initializer_id);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1057);
-			_la = _input.LA(1);
-			if (_la==17) {
-				{
-				setState(1056); match(17);
-				}
-			}
-
-			setState(1059); identifier();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Ctor_exprContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public Ctor_exprContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_ctor_expr; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_expr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_expr(this);
-		}
-	}
-
-	public final Ctor_exprContext ctor_expr() throws RecognitionException {
-		Ctor_exprContext _localctx = new Ctor_exprContext(_ctx, getState());
-		enterRule(_localctx, 232, RULE_ctor_expr);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1061); match(32);
-			setState(1063);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 5) | (1L << 23) | (1L << 31) | (1L << 32) | (1L << 44) | (1L << 49) | (1L << 59))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (ALPHA_NUMERIC - 87)) | (1L << (HEX_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (OCTAL_LITERAL - 87)) | (1L << (FLOATING_POINT_LITERAL - 87)) | (1L << (CHAR - 87)) | (1L << (STRING - 87)))) != 0)) {
-				{
-				setState(1062); expr();
-				}
-			}
-
-			setState(1065); match(14);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Function_nameContext extends ParserRuleContext {
-		public Operator_function_idContext operator_function_id() {
-			return getRuleContext(Operator_function_idContext.class,0);
-		}
-		public Function_nameContext function_name() {
-			return getRuleContext(Function_nameContext.class,0);
-		}
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
-		}
-		public Function_nameContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_function_name; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_name(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_name(this);
-		}
-	}
-
-	public final Function_nameContext function_name() throws RecognitionException {
-		Function_nameContext _localctx = new Function_nameContext(_ctx, getState());
-		enterRule(_localctx, 234, RULE_function_name);
-		try {
-			setState(1073);
-			switch (_input.LA(1)) {
-			case 32:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(1067); match(32);
-				setState(1068); function_name();
-				setState(1069); match(14);
-				}
-				break;
-			case ALPHA_NUMERIC:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(1071); identifier();
-				}
-				break;
-			case OPERATOR:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(1072); operator_function_id();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Exception_specificationContext extends ParserRuleContext {
-		public Type_id_listContext type_id_list() {
-			return getRuleContext(Type_id_listContext.class,0);
-		}
-		public TerminalNode THROW() { return getToken(CodeSensorParser.THROW, 0); }
-		public Exception_specificationContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_exception_specification; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterException_specification(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitException_specification(this);
-		}
-	}
-
-	public final Exception_specificationContext exception_specification() throws RecognitionException {
-		Exception_specificationContext _localctx = new Exception_specificationContext(_ctx, getState());
-		enterRule(_localctx, 236, RULE_exception_specification);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1075); match(THROW);
-			setState(1076); match(32);
-			setState(1077); type_id_list();
-			setState(1078); match(14);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Type_id_listContext extends ParserRuleContext {
-		public List<Type_id_listContext> type_id_list() {
-			return getRuleContexts(Type_id_listContext.class);
-		}
-		public Type_id_listContext type_id_list(int i) {
-			return getRuleContext(Type_id_listContext.class,i);
-		}
-		public No_bracketsContext no_brackets(int i) {
-			return getRuleContext(No_bracketsContext.class,i);
-		}
-		public List<No_bracketsContext> no_brackets() {
-			return getRuleContexts(No_bracketsContext.class);
-		}
-		public Type_id_listContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_type_id_list; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterType_id_list(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitType_id_list(this);
-		}
-	}
-
-	public final Type_id_listContext type_id_list() throws RecognitionException {
-		Type_id_listContext _localctx = new Type_id_listContext(_ctx, getState());
-		enterRule(_localctx, 238, RULE_type_id_list);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(1083);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
-				{
-				{
-				setState(1080); no_brackets();
-				}
-				}
-				setState(1085);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(1097);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==32) {
-				{
-				{
-				setState(1086); match(32);
-				setState(1087); type_id_list();
-				setState(1088); match(14);
-				setState(1092);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3) | (1L << 4) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 8) | (1L << 9) | (1L << 10) | (1L << 11) | (1L << 12) | (1L << 13) | (1L << 15) | (1L << 16) | (1L << 17) | (1L << 18) | (1L << 19) | (1L << 20) | (1L << 21) | (1L << 22) | (1L << 23) | (1L << 24) | (1L << 25) | (1L << 26) | (1L << 27) | (1L << 28) | (1L << 29) | (1L << 30) | (1L << 31) | (1L << 33) | (1L << 34) | (1L << 35) | (1L << 36) | (1L << 37) | (1L << 38) | (1L << 39) | (1L << 40) | (1L << 41) | (1L << 42) | (1L << 43) | (1L << 44) | (1L << 45) | (1L << 46) | (1L << 47) | (1L << 48) | (1L << 49) | (1L << 50) | (1L << 51) | (1L << 52) | (1L << 53) | (1L << 54) | (1L << 55) | (1L << 56) | (1L << 57) | (1L << 58) | (1L << 59) | (1L << 60) | (1L << IF) | (1L << ELSE) | (1L << FOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (WHILE - 64)) | (1L << (BREAK - 64)) | (1L << (CASE - 64)) | (1L << (CONTINUE - 64)) | (1L << (SWITCH - 64)) | (1L << (GOTO - 64)) | (1L << (RETURN - 64)) | (1L << (TYPEDEF - 64)) | (1L << (VOID - 64)) | (1L << (UNSIGNED - 64)) | (1L << (SIGNED - 64)) | (1L << (LONG - 64)) | (1L << (CV_QUALIFIER - 64)) | (1L << (VIRTUAL - 64)) | (1L << (TRY - 64)) | (1L << (CATCH - 64)) | (1L << (THROW - 64)) | (1L << (USING - 64)) | (1L << (NAMESPACE - 64)) | (1L << (AUTO - 64)) | (1L << (REGISTER - 64)) | (1L << (OPERATOR - 64)) | (1L << (TEMPLATE - 64)) | (1L << (ALPHA_NUMERIC - 64)) | (1L << (OPENING_CURLY - 64)) | (1L << (CLOSING_CURLY - 64)) | (1L << (PRE_IF - 64)) | (1L << (PRE_ELSE - 64)) | (1L << (PRE_ENDIF - 64)) | (1L << (HEX_LITERAL - 64)) | (1L << (DECIMAL_LITERAL - 64)) | (1L << (OCTAL_LITERAL - 64)) | (1L << (FLOATING_POINT_LITERAL - 64)) | (1L << (CHAR - 64)) | (1L << (STRING - 64)) | (1L << (COMMENT - 64)) | (1L << (WHITESPACE - 64)) | (1L << (CPPCOMMENT - 64)) | (1L << (OTHER - 64)))) != 0)) {
-					{
-					{
-					setState(1089); no_brackets();
-					}
-					}
-					setState(1094);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				}
-				}
-				setState(1099);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -7442,33 +7441,33 @@ public class CodeSensorParser extends Parser {
 		"\nO\fO\16O\u0296\13O\3P\3P\3P\3P\5P\u029c\nP\3Q\3Q\3Q\3Q\3R\3R\3R\3R\7"+
 		"R\u02a6\nR\fR\16R\u02a9\13R\5R\u02ab\nR\3R\3R\3S\3S\3T\3T\3T\3T\3T\3T"+
 		"\3T\3T\5T\u02b9\nT\3T\3T\5T\u02bd\nT\3U\3U\3U\3U\3U\3U\5U\u02c5\nU\3V"+
-		"\5V\u02c8\nV\3V\5V\u02cb\nV\3V\3V\3W\3W\3W\3W\3W\5W\u02d4\nW\5W\u02d6"+
-		"\nW\3X\3X\3X\7X\u02db\nX\fX\16X\u02de\13X\3X\3X\3Y\5Y\u02e3\nY\3Y\3Y\5"+
-		"Y\u02e7\nY\3Y\3Y\5Y\u02eb\nY\3Y\3Y\3Y\5Y\u02f0\nY\3Z\7Z\u02f3\nZ\fZ\16"+
-		"Z\u02f6\13Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\5Z\u0304\nZ\3Z\7Z\u0307"+
-		"\nZ\fZ\16Z\u030a\13Z\7Z\u030c\nZ\fZ\16Z\u030f\13Z\3[\7[\u0312\n[\f[\16"+
-		"[\u0315\13[\3[\3[\3[\3[\3[\3[\3[\3[\3[\3[\3[\3[\5[\u0323\n[\3[\7[\u0326"+
-		"\n[\f[\16[\u0329\13[\7[\u032b\n[\f[\16[\u032e\13[\3\\\3\\\5\\\u0332\n"+
-		"\\\3\\\5\\\u0335\n\\\3\\\3\\\3\\\3]\3]\3^\3^\3^\3^\7^\u0340\n^\f^\16^"+
-		"\u0343\13^\3_\5_\u0346\n_\3_\5_\u0349\n_\3_\3_\3`\7`\u034e\n`\f`\16`\u0351"+
-		"\13`\3`\3`\3`\5`\u0356\n`\3`\3`\3`\3`\3`\5`\u035d\n`\3`\3`\3`\3`\3`\3"+
-		"`\5`\u0365\n`\7`\u0367\n`\f`\16`\u036a\13`\3`\5`\u036d\n`\3a\3a\3a\3a"+
-		"\3a\5a\u0374\na\3b\3b\3b\3b\3b\5b\u037b\nb\3c\7c\u037e\nc\fc\16c\u0381"+
-		"\13c\3c\3c\3c\3c\7c\u0387\nc\fc\16c\u038a\13c\7c\u038c\nc\fc\16c\u038f"+
-		"\13c\3d\5d\u0392\nd\3d\3d\3e\3e\5e\u0398\ne\3f\3f\3f\3f\3f\3f\3f\7f\u03a1"+
-		"\nf\ff\16f\u03a4\13f\5f\u03a6\nf\3f\5f\u03a9\nf\3g\3g\3g\3h\5h\u03af\n"+
-		"h\3h\3h\3h\3h\3h\5h\u03b6\nh\5h\u03b8\nh\3h\5h\u03bb\nh\3i\3i\3i\7i\u03c0"+
-		"\ni\fi\16i\u03c3\13i\3j\3j\3k\6k\u03c8\nk\rk\16k\u03c9\3l\5l\u03cd\nl"+
-		"\3l\5l\u03d0\nl\3l\3l\3l\5l\u03d5\nl\3l\3l\3m\7m\u03da\nm\fm\16m\u03dd"+
-		"\13m\3m\3m\3m\7m\u03e2\nm\fm\16m\u03e5\13m\3n\3n\5n\u03e9\nn\3n\3n\7n"+
-		"\u03ed\nn\fn\16n\u03f0\13n\3n\5n\u03f3\nn\3o\3o\3o\7o\u03f8\no\fo\16o"+
-		"\u03fb\13o\3o\3o\5o\u03ff\no\3o\5o\u0402\no\3p\3p\3p\3q\5q\u0408\nq\3"+
-		"q\3q\3q\3q\3q\5q\u040f\nq\3q\5q\u0412\nq\3r\3r\3r\3s\3s\3s\3s\7s\u041b"+
-		"\ns\fs\16s\u041e\13s\3t\3t\3t\3u\5u\u0424\nu\3u\3u\3v\3v\5v\u042a\nv\3"+
-		"v\3v\3w\3w\3w\3w\3w\3w\5w\u0434\nw\3x\3x\3x\3x\3x\3y\7y\u043c\ny\fy\16"+
-		"y\u043f\13y\3y\3y\3y\3y\7y\u0445\ny\fy\16y\u0448\13y\7y\u044a\ny\fy\16"+
-		"y\u044d\13y\3y\2z\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62"+
-		"\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz|~\u0080\u0082\u0084\u0086\u0088"+
+		"\5V\u02c8\nV\3V\5V\u02cb\nV\3V\3V\3V\5V\u02d0\nV\3V\3V\3W\7W\u02d5\nW"+
+		"\fW\16W\u02d8\13W\3W\3W\3W\7W\u02dd\nW\fW\16W\u02e0\13W\3X\3X\5X\u02e4"+
+		"\nX\3X\3X\7X\u02e8\nX\fX\16X\u02eb\13X\3X\5X\u02ee\nX\3Y\3Y\3Y\7Y\u02f3"+
+		"\nY\fY\16Y\u02f6\13Y\3Y\3Y\5Y\u02fa\nY\3Y\5Y\u02fd\nY\3Z\3Z\3Z\3[\5[\u0303"+
+		"\n[\3[\3[\3[\3[\3[\5[\u030a\n[\3[\5[\u030d\n[\3\\\3\\\3\\\3]\3]\3]\3]"+
+		"\7]\u0316\n]\f]\16]\u0319\13]\3^\3^\3^\3_\5_\u031f\n_\3_\3_\3`\3`\5`\u0325"+
+		"\n`\3`\3`\3a\3a\3a\3a\3a\3a\5a\u032f\na\3b\3b\3b\3b\3b\3c\7c\u0337\nc"+
+		"\fc\16c\u033a\13c\3c\3c\3c\3c\7c\u0340\nc\fc\16c\u0343\13c\7c\u0345\n"+
+		"c\fc\16c\u0348\13c\3d\5d\u034b\nd\3d\5d\u034e\nd\3d\3d\3e\3e\3e\3e\3e"+
+		"\5e\u0357\ne\5e\u0359\ne\3f\3f\3f\7f\u035e\nf\ff\16f\u0361\13f\3f\3f\3"+
+		"g\5g\u0366\ng\3g\3g\5g\u036a\ng\3g\3g\5g\u036e\ng\3g\3g\3g\5g\u0373\n"+
+		"g\3h\7h\u0376\nh\fh\16h\u0379\13h\3h\3h\3h\3h\3h\3h\3h\3h\3h\3h\3h\3h"+
+		"\5h\u0387\nh\3h\7h\u038a\nh\fh\16h\u038d\13h\7h\u038f\nh\fh\16h\u0392"+
+		"\13h\3i\7i\u0395\ni\fi\16i\u0398\13i\3i\3i\3i\3i\3i\3i\3i\3i\3i\3i\3i"+
+		"\3i\5i\u03a6\ni\3i\7i\u03a9\ni\fi\16i\u03ac\13i\7i\u03ae\ni\fi\16i\u03b1"+
+		"\13i\3j\3j\5j\u03b5\nj\3j\5j\u03b8\nj\3j\3j\3j\3k\3k\3l\3l\3l\3l\7l\u03c3"+
+		"\nl\fl\16l\u03c6\13l\3m\5m\u03c9\nm\3m\5m\u03cc\nm\3m\3m\3n\7n\u03d1\n"+
+		"n\fn\16n\u03d4\13n\3n\3n\3n\5n\u03d9\nn\3n\3n\3n\3n\3n\5n\u03e0\nn\3n"+
+		"\3n\3n\3n\3n\3n\5n\u03e8\nn\7n\u03ea\nn\fn\16n\u03ed\13n\3n\5n\u03f0\n"+
+		"n\3o\3o\3o\3o\3o\5o\u03f7\no\3p\3p\3p\3p\3p\5p\u03fe\np\3q\7q\u0401\n"+
+		"q\fq\16q\u0404\13q\3q\3q\3q\3q\7q\u040a\nq\fq\16q\u040d\13q\7q\u040f\n"+
+		"q\fq\16q\u0412\13q\3r\5r\u0415\nr\3r\3r\3s\3s\5s\u041b\ns\3t\3t\3t\3t"+
+		"\3t\3t\3t\7t\u0424\nt\ft\16t\u0427\13t\5t\u0429\nt\3t\5t\u042c\nt\3u\3"+
+		"u\3u\3v\5v\u0432\nv\3v\3v\3v\3v\3v\5v\u0439\nv\5v\u043b\nv\3v\5v\u043e"+
+		"\nv\3w\3w\3w\7w\u0443\nw\fw\16w\u0446\13w\3x\3x\3y\6y\u044b\ny\ry\16y"+
+		"\u044c\3y\2z\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64"+
+		"\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz|~\u0080\u0082\u0084\u0086\u0088"+
 		"\u008a\u008c\u008e\u0090\u0092\u0094\u0096\u0098\u009a\u009c\u009e\u00a0"+
 		"\u00a2\u00a4\u00a6\u00a8\u00aa\u00ac\u00ae\u00b0\u00b2\u00b4\u00b6\u00b8"+
 		"\u00ba\u00bc\u00be\u00c0\u00c2\u00c4\u00c6\u00c8\u00ca\u00cc\u00ce\u00d0"+
@@ -7499,23 +7498,23 @@ public class CodeSensorParser extends Parser {
 		"\2\2\u0096\u027a\3\2\2\2\u0098\u0288\3\2\2\2\u009a\u028e\3\2\2\2\u009c"+
 		"\u0290\3\2\2\2\u009e\u029b\3\2\2\2\u00a0\u029d\3\2\2\2\u00a2\u02a1\3\2"+
 		"\2\2\u00a4\u02ae\3\2\2\2\u00a6\u02bc\3\2\2\2\u00a8\u02c4\3\2\2\2\u00aa"+
-		"\u02c7\3\2\2\2\u00ac\u02d5\3\2\2\2\u00ae\u02d7\3\2\2\2\u00b0\u02e2\3\2"+
-		"\2\2\u00b2\u02f4\3\2\2\2\u00b4\u0313\3\2\2\2\u00b6\u032f\3\2\2\2\u00b8"+
-		"\u0339\3\2\2\2\u00ba\u033b\3\2\2\2\u00bc\u0345\3\2\2\2\u00be\u036c\3\2"+
-		"\2\2\u00c0\u0373\3\2\2\2\u00c2\u037a\3\2\2\2\u00c4\u037f\3\2\2\2\u00c6"+
-		"\u0391\3\2\2\2\u00c8\u0397\3\2\2\2\u00ca\u03a8\3\2\2\2\u00cc\u03aa\3\2"+
-		"\2\2\u00ce\u03ae\3\2\2\2\u00d0\u03bc\3\2\2\2\u00d2\u03c4\3\2\2\2\u00d4"+
-		"\u03c7\3\2\2\2\u00d6\u03cc\3\2\2\2\u00d8\u03db\3\2\2\2\u00da\u03e6\3\2"+
-		"\2\2\u00dc\u0401\3\2\2\2\u00de\u0403\3\2\2\2\u00e0\u0407\3\2\2\2\u00e2"+
-		"\u0413\3\2\2\2\u00e4\u0416\3\2\2\2\u00e6\u041f\3\2\2\2\u00e8\u0423\3\2"+
-		"\2\2\u00ea\u0427\3\2\2\2\u00ec\u0433\3\2\2\2\u00ee\u0435\3\2\2\2\u00f0"+
-		"\u043d\3\2\2\2\u00f2\u00f4\5\4\3\2\u00f3\u00f2\3\2\2\2\u00f4\u00f7\3\2"+
+		"\u02c7\3\2\2\2\u00ac\u02d6\3\2\2\2\u00ae\u02e1\3\2\2\2\u00b0\u02fc\3\2"+
+		"\2\2\u00b2\u02fe\3\2\2\2\u00b4\u0302\3\2\2\2\u00b6\u030e\3\2\2\2\u00b8"+
+		"\u0311\3\2\2\2\u00ba\u031a\3\2\2\2\u00bc\u031e\3\2\2\2\u00be\u0322\3\2"+
+		"\2\2\u00c0\u032e\3\2\2\2\u00c2\u0330\3\2\2\2\u00c4\u0338\3\2\2\2\u00c6"+
+		"\u034a\3\2\2\2\u00c8\u0358\3\2\2\2\u00ca\u035a\3\2\2\2\u00cc\u0365\3\2"+
+		"\2\2\u00ce\u0377\3\2\2\2\u00d0\u0396\3\2\2\2\u00d2\u03b2\3\2\2\2\u00d4"+
+		"\u03bc\3\2\2\2\u00d6\u03be\3\2\2\2\u00d8\u03c8\3\2\2\2\u00da\u03ef\3\2"+
+		"\2\2\u00dc\u03f6\3\2\2\2\u00de\u03fd\3\2\2\2\u00e0\u0402\3\2\2\2\u00e2"+
+		"\u0414\3\2\2\2\u00e4\u041a\3\2\2\2\u00e6\u042b\3\2\2\2\u00e8\u042d\3\2"+
+		"\2\2\u00ea\u0431\3\2\2\2\u00ec\u043f\3\2\2\2\u00ee\u0447\3\2\2\2\u00f0"+
+		"\u044a\3\2\2\2\u00f2\u00f4\5\4\3\2\u00f3\u00f2\3\2\2\2\u00f4\u00f7\3\2"+
 		"\2\2\u00f5\u00f3\3\2\2\2\u00f5\u00f6\3\2\2\2\u00f6\3\3\2\2\2\u00f7\u00f5"+
 		"\3\2\2\2\u00f8\u00fb\5\6\4\2\u00f9\u00fb\58\35\2\u00fa\u00f8\3\2\2\2\u00fa"+
-		"\u00f9\3\2\2\2\u00fb\5\3\2\2\2\u00fc\u0100\5\u00d6l\2\u00fd\u0100\5\u00aa"+
-		"V\2\u00fe\u0100\5\b\5\2\u00ff\u00fc\3\2\2\2\u00ff\u00fd\3\2\2\2\u00ff"+
+		"\u00f9\3\2\2\2\u00fb\5\3\2\2\2\u00fc\u0100\5\u00aaV\2\u00fd\u0100\5\u00c6"+
+		"d\2\u00fe\u0100\5\b\5\2\u00ff\u00fc\3\2\2\2\u00ff\u00fd\3\2\2\2\u00ff"+
 		"\u00fe\3\2\2\2\u0100\7\3\2\2\2\u0101\u0102\7S\2\2\u0102\u0103\7T\2\2\u0103"+
-		"\u0104\5\u00d0i\2\u0104\u0105\7\65\2\2\u0105\t\3\2\2\2\u0106\u0107\t\2"+
+		"\u0104\5\u00ecw\2\u0104\u0105\7\65\2\2\u0105\t\3\2\2\2\u0106\u0107\t\2"+
 		"\2\2\u0107\13\3\2\2\2\u0108\u0109\t\3\2\2\u0109\r\3\2\2\2\u010a\u010b"+
 		"\t\4\2\2\u010b\17\3\2\2\2\u010c\u010d\t\5\2\2\u010d\21\3\2\2\2\u010e\u010f"+
 		"\t\6\2\2\u010f\23\3\2\2\2\u0110\u0111\t\7\2\2\u0111\25\3\2\2\2\u0112\u0113"+
@@ -7570,8 +7569,8 @@ public class CodeSensorParser extends Parser {
 		"\u0190\u0192\5L\'\2\u0191\u018f\3\2\2\2\u0191\u0190\3\2\2\2\u0192I\3\2"+
 		"\2\2\u0193\u0198\5N(\2\u0194\u0198\5V,\2\u0195\u0198\5j\66\2\u0196\u0198"+
 		"\5l\67\2\u0197\u0193\3\2\2\2\u0197\u0194\3\2\2\2\u0197\u0195\3\2\2\2\u0197"+
-		"\u0196\3\2\2\2\u0198K\3\2\2\2\u0199\u019d\5b\62\2\u019a\u019d\5\u00aa"+
-		"V\2\u019b\u019d\5t;\2\u019c\u0199\3\2\2\2\u019c\u019a\3\2\2\2\u019c\u019b"+
+		"\u0196\3\2\2\2\u0198K\3\2\2\2\u0199\u019d\5b\62\2\u019a\u019d\5\u00c6"+
+		"d\2\u019b\u019d\5t;\2\u019c\u0199\3\2\2\2\u019c\u019a\3\2\2\2\u019c\u019b"+
 		"\3\2\2\2\u019dM\3\2\2\2\u019e\u01a2\5P)\2\u019f\u01a2\5R*\2\u01a0\u01a2"+
 		"\5T+\2\u01a1\u019e\3\2\2\2\u01a1\u019f\3\2\2\2\u01a1\u01a0\3\2\2\2\u01a2"+
 		"O\3\2\2\2\u01a3\u01a4\7?\2\2\u01a4\u01a5\7\"\2\2\u01a5\u01a6\5z>\2\u01a6"+
@@ -7586,32 +7585,32 @@ public class CodeSensorParser extends Parser {
 		"\u01c2\7\20\2\2\u01c2[\3\2\2\2\u01c3\u01c4\7\13\2\2\u01c4]\3\2\2\2\u01c5"+
 		"\u01c6\7\13\2\2\u01c6\u01c7\5<\37\2\u01c7\u01c8\7B\2\2\u01c8\u01c9\7\""+
 		"\2\2\u01c9\u01ca\5|?\2\u01ca\u01cb\7\20\2\2\u01cb_\3\2\2\2\u01cc\u01d2"+
-		"\5\u00aaV\2\u01cd\u01cf\5|?\2\u01ce\u01cd\3\2\2\2\u01ce\u01cf\3\2\2\2"+
+		"\5\u00c6d\2\u01cd\u01cf\5|?\2\u01ce\u01cd\3\2\2\2\u01ce\u01cf\3\2\2\2"+
 		"\u01cf\u01d0\3\2\2\2\u01d0\u01d2\7\65\2\2\u01d1\u01cc\3\2\2\2\u01d1\u01ce"+
 		"\3\2\2\2\u01d2a\3\2\2\2\u01d3\u01d7\5d\63\2\u01d4\u01d7\5f\64\2\u01d5"+
 		"\u01d7\5h\65\2\u01d6\u01d3\3\2\2\2\u01d6\u01d4\3\2\2\2\u01d6\u01d5\3\2"+
 		"\2\2\u01d7\u01d8\3\2\2\2\u01d8\u01d9\7\65\2\2\u01d9c\3\2\2\2\u01da\u01db"+
 		"\t\27\2\2\u01dbe\3\2\2\2\u01dc\u01de\7H\2\2\u01dd\u01df\5|?\2\u01de\u01dd"+
 		"\3\2\2\2\u01de\u01df\3\2\2\2\u01dfg\3\2\2\2\u01e0\u01e1\7G\2\2\u01e1\u01e2"+
-		"\5\u00d0i\2\u01e2i\3\2\2\2\u01e3\u01e4\7P\2\2\u01e4k\3\2\2\2\u01e5\u01e6"+
+		"\5\u00ecw\2\u01e2i\3\2\2\2\u01e3\u01e4\7P\2\2\u01e4k\3\2\2\2\u01e5\u01e6"+
 		"\7Q\2\2\u01e6\u01e7\7\"\2\2\u01e7\u01e8\5n8\2\u01e8\u01e9\7\20\2\2\u01e9"+
-		"m\3\2\2\2\u01ea\u01eb\5p9\2\u01eb\u01ec\5\u00ceh\2\u01eco\3\2\2\2\u01ed"+
+		"m\3\2\2\2\u01ea\u01eb\5p9\2\u01eb\u01ec\5\u00eav\2\u01eco\3\2\2\2\u01ed"+
 		"\u01ef\t\30\2\2\u01ee\u01ed\3\2\2\2\u01ee\u01ef\3\2\2\2\u01ef\u01f0\3"+
 		"\2\2\2\u01f0\u01f1\5r:\2\u01f1q\3\2\2\2\u01f2\u01f4\7N\2\2\u01f3\u01f2"+
 		"\3\2\2\2\u01f4\u01f7\3\2\2\2\u01f5\u01f3\3\2\2\2\u01f5\u01f6\3\2\2\2\u01f6"+
 		"\u01fb\3\2\2\2\u01f7\u01f5\3\2\2\2\u01f8\u01fc\5\22\n\2\u01f9\u01fc\7"+
 		"K\2\2\u01fa\u01fc\7L\2\2\u01fb\u01f8\3\2\2\2\u01fb\u01f9\3\2\2\2\u01fb"+
-		"\u01fa\3\2\2\2\u01fb\u01fc\3\2\2\2\u01fc\u01fd\3\2\2\2\u01fd\u0202\5\u00c2"+
-		"b\2\u01fe\u01ff\7\6\2\2\u01ff\u0200\5\"\22\2\u0200\u0201\78\2\2\u0201"+
+		"\u01fa\3\2\2\2\u01fb\u01fc\3\2\2\2\u01fc\u01fd\3\2\2\2\u01fd\u0202\5\u00de"+
+		"p\2\u01fe\u01ff\7\6\2\2\u01ff\u0200\5\"\22\2\u0200\u0201\78\2\2\u0201"+
 		"\u0203\3\2\2\2\u0202\u01fe\3\2\2\2\u0202\u0203\3\2\2\2\u0203\u020e\3\2"+
-		"\2\2\u0204\u0205\7\23\2\2\u0205\u020a\5\u00c2b\2\u0206\u0207\7\6\2\2\u0207"+
+		"\2\2\u0204\u0205\7\23\2\2\u0205\u020a\5\u00dep\2\u0206\u0207\7\6\2\2\u0207"+
 		"\u0208\5\"\22\2\u0208\u0209\78\2\2\u0209\u020b\3\2\2\2\u020a\u0206\3\2"+
 		"\2\2\u020a\u020b\3\2\2\2\u020b\u020d\3\2\2\2\u020c\u0204\3\2\2\2\u020d"+
 		"\u0210\3\2\2\2\u020e\u020c\3\2\2\2\u020e\u020f\3\2\2\2\u020f\u0213\3\2"+
 		"\2\2\u0210\u020e\3\2\2\2\u0211\u0213\t\31\2\2\u0212\u01f5\3\2\2\2\u0212"+
 		"\u0211\3\2\2\2\u0213s\3\2\2\2\u0214\u0216\7D\2\2\u0215\u0214\3\2\2\2\u0215"+
-		"\u0216\3\2\2\2\u0216\u0219\3\2\2\2\u0217\u021a\5\u00d0i\2\u0218\u021a"+
-		"\5\u00d2j\2\u0219\u0217\3\2\2\2\u0219\u0218\3\2\2\2\u021a\u021d\3\2\2"+
+		"\u0216\3\2\2\2\u0216\u0219\3\2\2\2\u0217\u021a\5\u00ecw\2\u0218\u021a"+
+		"\5\u00eex\2\u0219\u0217\3\2\2\2\u0219\u0218\3\2\2\2\u021a\u021d\3\2\2"+
 		"\2\u021b\u021d\5\26\f\2\u021c\u0215\3\2\2\2\u021c\u021b\3\2\2\2\u021d"+
 		"\u021e\3\2\2\2\u021e\u021f\7#\2\2\u021fu\3\2\2\2\u0220\u0221\5|?\2\u0221"+
 		"\u0222\7\65\2\2\u0222w\3\2\2\2\u0223\u0224\13\2\2\2\u0224y\3\2\2\2\u0225"+
@@ -7640,7 +7639,7 @@ public class CodeSensorParser extends Parser {
 		"\t\33\2\2\u0266\u0268\5\u0092J\2\u0267\u0265\3\2\2\2\u0267\u0268\3\2\2"+
 		"\2\u0268\u0093\3\2\2\2\u0269\u026c\5\u0096L\2\u026a\u026b\t\34\2\2\u026b"+
 		"\u026d\5\u0096L\2\u026c\u026a\3\2\2\2\u026c\u026d\3\2\2\2\u026d\u0095"+
-		"\3\2\2\2\u026e\u026f\7\"\2\2\u026f\u0273\5\u00be`\2\u0270\u0272\5\24\13"+
+		"\3\2\2\2\u026e\u026f\7\"\2\2\u026f\u0273\5\u00dan\2\u0270\u0272\5\24\13"+
 		"\2\u0271\u0270\3\2\2\2\u0272\u0275\3\2\2\2\u0273\u0271\3\2\2\2\u0273\u0274"+
 		"\3\2\2\2\u0274\u0276\3\2\2\2\u0275\u0273\3\2\2\2\u0276\u0277\7\20\2\2"+
 		"\u0277\u0278\5\u0096L\2\u0278\u027b\3\2\2\2\u0279\u027b\5\u0098M\2\u027a"+
@@ -7662,159 +7661,159 @@ public class CodeSensorParser extends Parser {
 		"\3\2\2\2\u02a6\u02a9\3\2\2\2\u02a7\u02a5\3\2\2\2\u02a7\u02a8\3\2\2\2\u02a8"+
 		"\u02ab\3\2\2\2\u02a9\u02a7\3\2\2\2\u02aa\u02a2\3\2\2\2\u02aa\u02ab\3\2"+
 		"\2\2\u02ab\u02ac\3\2\2\2\u02ac\u02ad\7\20\2\2\u02ad\u00a3\3\2\2\2\u02ae"+
-		"\u02af\5~@\2\u02af\u00a5\3\2\2\2\u02b0\u02b1\7\62\2\2\u02b1\u02b9\5\u00d0"+
-		"i\2\u02b2\u02b3\7\r\2\2\u02b3\u02b9\5\u00d0i\2\u02b4\u02b5\7\4\2\2\u02b5"+
+		"\u02af\5~@\2\u02af\u00a5\3\2\2\2\u02b0\u02b1\7\62\2\2\u02b1\u02b9\5\u00ec"+
+		"w\2\u02b2\u02b3\7\r\2\2\u02b3\u02b9\5\u00ecw\2\u02b4\u02b5\7\4\2\2\u02b5"+
 		"\u02b6\5|?\2\u02b6\u02b7\7\34\2\2\u02b7\u02b9\3\2\2\2\u02b8\u02b0\3\2"+
 		"\2\2\u02b8\u02b2\3\2\2\2\u02b8\u02b4\3\2\2\2\u02b9\u02bd\3\2\2\2\u02ba"+
 		"\u02bd\7.\2\2\u02bb\u02bd\7\7\2\2\u02bc\u02b8\3\2\2\2\u02bc\u02ba\3\2"+
 		"\2\2\u02bc\u02bb\3\2\2\2\u02bd\u00a7\3\2\2\2\u02be\u02bf\7\"\2\2\u02bf"+
-		"\u02c0\5|?\2\u02c0\u02c1\7\20\2\2\u02c1\u02c5\3\2\2\2\u02c2\u02c5\5\u00d0"+
-		"i\2\u02c3\u02c5\5\16\b\2\u02c4\u02be\3\2\2\2\u02c4\u02c2\3\2\2\2\u02c4"+
-		"\u02c3\3\2\2\2\u02c5\u00a9\3\2\2\2\u02c6\u02c8\7I\2\2\u02c7\u02c6\3\2"+
-		"\2\2\u02c7\u02c8\3\2\2\2\u02c8\u02ca\3\2\2\2\u02c9\u02cb\5 \21\2\u02ca"+
-		"\u02c9\3\2\2\2\u02ca\u02cb\3\2\2\2\u02cb\u02cc\3\2\2\2\u02cc\u02cd\5\u00ac"+
-		"W\2\u02cd\u00ab\3\2\2\2\u02ce\u02cf\5\u00be`\2\u02cf\u02d0\5\u00aeX\2"+
-		"\u02d0\u02d6\3\2\2\2\u02d1\u02d3\5\u00b6\\\2\u02d2\u02d4\5\u00aeX\2\u02d3"+
-		"\u02d2\3\2\2\2\u02d3\u02d4\3\2\2\2\u02d4\u02d6\3\2\2\2\u02d5\u02ce\3\2"+
-		"\2\2\u02d5\u02d1\3\2\2\2\u02d6\u00ad\3\2\2\2\u02d7\u02dc\5\u00b0Y\2\u02d8"+
-		"\u02d9\7 \2\2\u02d9\u02db\5\u00b0Y\2\u02da\u02d8\3\2\2\2\u02db\u02de\3"+
-		"\2\2\2\u02dc\u02da\3\2\2\2\u02dc\u02dd\3\2\2\2\u02dd\u02df\3\2\2\2\u02de"+
-		"\u02dc\3\2\2\2\u02df\u02e0\7\65\2\2\u02e0\u00af\3\2\2\2\u02e1\u02e3\5"+
-		"\u00d4k\2\u02e2\u02e1\3\2\2\2\u02e2\u02e3\3\2\2\2\u02e3\u02e4\3\2\2\2"+
-		"\u02e4\u02e6\5\u00d0i\2\u02e5\u02e7\5\u00c0a\2\u02e6\u02e5\3\2\2\2\u02e6"+
-		"\u02e7\3\2\2\2\u02e7\u02ef\3\2\2\2\u02e8\u02ea\7\"\2\2\u02e9\u02eb\5|"+
-		"?\2\u02ea\u02e9\3\2\2\2\u02ea\u02eb\3\2\2\2\u02eb\u02ec\3\2\2\2\u02ec"+
-		"\u02f0\7\20\2\2\u02ed\u02ee\7\24\2\2\u02ee\u02f0\5\u00b2Z\2\u02ef\u02e8"+
-		"\3\2\2\2\u02ef\u02ed\3\2\2\2\u02ef\u02f0\3\2\2\2\u02f0\u00b1\3\2\2\2\u02f1"+
-		"\u02f3\5\64\33\2\u02f2\u02f1\3\2\2\2\u02f3\u02f6\3\2\2\2\u02f4\u02f2\3"+
-		"\2\2\2\u02f4\u02f5\3\2\2\2\u02f5\u030d\3\2\2\2\u02f6\u02f4\3\2\2\2\u02f7"+
-		"\u02f8\7Z\2\2\u02f8\u02f9\5\u00b4[\2\u02f9\u02fa\7[\2\2\u02fa\u0304\3"+
-		"\2\2\2\u02fb\u02fc\7\"\2\2\u02fc\u02fd\5\u00b4[\2\u02fd\u02fe\7\20\2\2"+
-		"\u02fe\u0304\3\2\2\2\u02ff\u0300\7\4\2\2\u0300\u0301\5\u00b4[\2\u0301"+
-		"\u0302\7\34\2\2\u0302\u0304\3\2\2\2\u0303\u02f7\3\2\2\2\u0303\u02fb\3"+
-		"\2\2\2\u0303\u02ff\3\2\2\2\u0304\u0308\3\2\2\2\u0305\u0307\5\64\33\2\u0306"+
-		"\u0305\3\2\2\2\u0307\u030a\3\2\2\2\u0308\u0306\3\2\2\2\u0308\u0309\3\2"+
-		"\2\2\u0309\u030c\3\2\2\2\u030a\u0308\3\2\2\2\u030b\u0303\3\2\2\2\u030c"+
-		"\u030f\3\2\2\2\u030d\u030b\3\2\2\2\u030d\u030e\3\2\2\2\u030e\u00b3\3\2"+
-		"\2\2\u030f\u030d\3\2\2\2\u0310\u0312\5\66\34\2\u0311\u0310\3\2\2\2\u0312"+
-		"\u0315\3\2\2\2\u0313\u0311\3\2\2\2\u0313\u0314\3\2\2\2\u0314\u032c\3\2"+
-		"\2\2\u0315\u0313\3\2\2\2\u0316\u0317\7Z\2\2\u0317\u0318\5\u00b4[\2\u0318"+
-		"\u0319\7[\2\2\u0319\u0323\3\2\2\2\u031a\u031b\7\"\2\2\u031b\u031c\5\u00b4"+
-		"[\2\u031c\u031d\7\20\2\2\u031d\u0323\3\2\2\2\u031e\u031f\7\4\2\2\u031f"+
-		"\u0320\5\u00b4[\2\u0320\u0321\7\34\2\2\u0321\u0323\3\2\2\2\u0322\u0316"+
-		"\3\2\2\2\u0322\u031a\3\2\2\2\u0322\u031e\3\2\2\2\u0323\u0327\3\2\2\2\u0324"+
-		"\u0326\5\66\34\2\u0325\u0324\3\2\2\2\u0326\u0329\3\2\2\2\u0327\u0325\3"+
-		"\2\2\2\u0327\u0328\3\2\2\2\u0328\u032b\3\2\2\2\u0329\u0327\3\2\2\2\u032a"+
-		"\u0322\3\2\2\2\u032b\u032e\3\2\2\2\u032c\u032a\3\2\2\2\u032c\u032d\3\2"+
-		"\2\2\u032d\u00b5\3\2\2\2\u032e\u032c\3\2\2\2\u032f\u0331\5\22\n\2\u0330"+
-		"\u0332\5\u00b8]\2\u0331\u0330\3\2\2\2\u0331\u0332\3\2\2\2\u0332\u0334"+
-		"\3\2\2\2\u0333\u0335\5\u00ba^\2\u0334\u0333\3\2\2\2\u0334\u0335\3\2\2"+
-		"\2\u0335\u0336\3\2\2\2\u0336\u0337\7Z\2\2\u0337\u0338\b\\\1\2\u0338\u00b7"+
-		"\3\2\2\2\u0339\u033a\5\u00d0i\2\u033a\u00b9\3\2\2\2\u033b\u033c\7#\2\2"+
-		"\u033c\u0341\5\u00bc_\2\u033d\u033e\7 \2\2\u033e\u0340\5\u00bc_\2\u033f"+
-		"\u033d\3\2\2\2\u0340\u0343\3\2\2\2\u0341\u033f\3\2\2\2\u0341\u0342\3\2"+
-		"\2\2\u0342\u00bb\3\2\2\2\u0343\u0341\3\2\2\2\u0344\u0346\7O\2\2\u0345"+
-		"\u0344\3\2\2\2\u0345\u0346\3\2\2\2\u0346\u0348\3\2\2\2\u0347\u0349\5\26"+
-		"\f\2\u0348\u0347\3\2\2\2\u0348\u0349\3\2\2\2\u0349\u034a\3\2\2\2\u034a"+
-		"\u034b\5\u00d0i\2\u034b\u00bd\3\2\2\2\u034c\u034e\7N\2\2\u034d\u034c\3"+
-		"\2\2\2\u034e\u0351\3\2\2\2\u034f\u034d\3\2\2\2\u034f\u0350\3\2\2\2\u0350"+
-		"\u0355\3\2\2\2\u0351\u034f\3\2\2\2\u0352\u0356\5\22\n\2\u0353\u0356\7"+
-		"K\2\2\u0354\u0356\7L\2\2\u0355\u0352\3\2\2\2\u0355\u0353\3\2\2\2\u0355"+
-		"\u0354\3\2\2\2\u0355\u0356\3\2\2\2\u0356\u0357\3\2\2\2\u0357\u035c\5\u00c2"+
-		"b\2\u0358\u0359\7\6\2\2\u0359\u035a\5\"\22\2\u035a\u035b\78\2\2\u035b"+
-		"\u035d\3\2\2\2\u035c\u0358\3\2\2\2\u035c\u035d\3\2\2\2\u035d\u0368\3\2"+
-		"\2\2\u035e\u035f\7\23\2\2\u035f\u0364\5\u00c2b\2\u0360\u0361\7\6\2\2\u0361"+
-		"\u0362\5\"\22\2\u0362\u0363\78\2\2\u0363\u0365\3\2\2\2\u0364\u0360\3\2"+
-		"\2\2\u0364\u0365\3\2\2\2\u0365\u0367\3\2\2\2\u0366\u035e\3\2\2\2\u0367"+
-		"\u036a\3\2\2\2\u0368\u0366\3\2\2\2\u0368\u0369\3\2\2\2\u0369\u036d\3\2"+
-		"\2\2\u036a\u0368\3\2\2\2\u036b\u036d\t\35\2\2\u036c\u034f\3\2\2\2\u036c"+
-		"\u036b\3\2\2\2\u036d\u00bf\3\2\2\2\u036e\u036f\7\4\2\2\u036f\u0370\5\u00c4"+
-		"c\2\u0370\u0371\7\34\2\2\u0371\u0374\3\2\2\2\u0372\u0374\5\u00caf\2\u0373"+
-		"\u036e\3\2\2\2\u0373\u0372\3\2\2\2\u0374\u00c1\3\2\2\2\u0375\u037b\7Y"+
-		"\2\2\u0376\u037b\7J\2\2\u0377\u037b\7M\2\2\u0378\u0379\7M\2\2\u0379\u037b"+
-		"\7M\2\2\u037a\u0375\3\2\2\2\u037a\u0376\3\2\2\2\u037a\u0377\3\2\2\2\u037a"+
-		"\u0378\3\2\2\2\u037b\u00c3\3\2\2\2\u037c\u037e\5.\30\2\u037d\u037c\3\2"+
-		"\2\2\u037e\u0381\3\2\2\2\u037f\u037d\3\2\2\2\u037f\u0380\3\2\2\2\u0380"+
-		"\u038d\3\2\2\2\u0381\u037f\3\2\2\2\u0382\u0383\7\4\2\2\u0383\u0384\5\u00c4"+
-		"c\2\u0384\u0388\7\34\2\2\u0385\u0387\5.\30\2\u0386\u0385\3\2\2\2\u0387"+
-		"\u038a\3\2\2\2\u0388\u0386\3\2\2\2\u0388\u0389\3\2\2\2\u0389\u038c\3\2"+
-		"\2\2\u038a\u0388\3\2\2\2\u038b\u0382\3\2\2\2\u038c\u038f\3\2\2\2\u038d"+
-		"\u038b\3\2\2\2\u038d\u038e\3\2\2\2\u038e\u00c5\3\2\2\2\u038f\u038d\3\2"+
-		"\2\2\u0390\u0392\t\36\2\2\u0391\u0390\3\2\2\2\u0391\u0392\3\2\2\2\u0392"+
-		"\u0393\3\2\2\2\u0393\u0394\5\u00be`\2\u0394\u00c7\3\2\2\2\u0395\u0398"+
-		"\5\u00d0i\2\u0396\u0398\5\26\f\2\u0397\u0395\3\2\2\2\u0397\u0396\3\2\2"+
-		"\2\u0398\u00c9\3\2\2\2\u0399\u039a\7\"\2\2\u039a\u039b\7J\2\2\u039b\u03a9"+
-		"\7\20\2\2\u039c\u03a5\7\"\2\2\u039d\u03a2\5\u00ccg\2\u039e\u039f\7 \2"+
-		"\2\u039f\u03a1\5\u00ccg\2\u03a0\u039e\3\2\2\2\u03a1\u03a4\3\2\2\2\u03a2"+
-		"\u03a0\3\2\2\2\u03a2\u03a3\3\2\2\2\u03a3\u03a6\3\2\2\2\u03a4\u03a2\3\2"+
-		"\2\2\u03a5\u039d\3\2\2\2\u03a5\u03a6\3\2\2\2\u03a6\u03a7\3\2\2\2\u03a7"+
-		"\u03a9\7\20\2\2\u03a8\u0399\3\2\2\2\u03a8\u039c\3\2\2\2\u03a9\u00cb\3"+
-		"\2\2\2\u03aa\u03ab\5\u00c6d\2\u03ab\u03ac\5\u00ceh\2\u03ac\u00cd\3\2\2"+
-		"\2\u03ad\u03af\5\u00d4k\2\u03ae\u03ad\3\2\2\2\u03ae\u03af\3\2\2\2\u03af"+
-		"\u03b7\3\2\2\2\u03b0\u03b1\7\"\2\2\u03b1\u03b2\5\u00ceh\2\u03b2\u03b3"+
-		"\7\20\2\2\u03b3\u03b8\3\2\2\2\u03b4\u03b6\5\u00c8e\2\u03b5\u03b4\3\2\2"+
-		"\2\u03b5\u03b6\3\2\2\2\u03b6\u03b8\3\2\2\2\u03b7\u03b0\3\2\2\2\u03b7\u03b5"+
-		"\3\2\2\2\u03b8\u03ba\3\2\2\2\u03b9\u03bb\5\u00c0a\2\u03ba\u03b9\3\2\2"+
-		"\2\u03ba\u03bb\3\2\2\2\u03bb\u00cf\3\2\2\2\u03bc\u03c1\7Y\2\2\u03bd\u03be"+
-		"\7\23\2\2\u03be\u03c0\7Y\2\2\u03bf\u03bd\3\2\2\2\u03c0\u03c3\3\2\2\2\u03c1"+
-		"\u03bf\3\2\2\2\u03c1\u03c2\3\2\2\2\u03c2\u00d1\3\2\2\2\u03c3\u03c1\3\2"+
-		"\2\2\u03c4\u03c5\t\37\2\2\u03c5\u00d3\3\2\2\2\u03c6\u03c8\5\24\13\2\u03c7"+
-		"\u03c6\3\2\2\2\u03c8\u03c9\3\2\2\2\u03c9\u03c7\3\2\2\2\u03c9\u03ca\3\2"+
-		"\2\2\u03ca\u00d5\3\2\2\2\u03cb\u03cd\5 \21\2\u03cc\u03cb\3\2\2\2\u03cc"+
-		"\u03cd\3\2\2\2\u03cd\u03cf\3\2\2\2\u03ce\u03d0\5\u00d8m\2\u03cf\u03ce"+
-		"\3\2\2\2\u03cf\u03d0\3\2\2\2\u03d0\u03d1\3\2\2\2\u03d1\u03d2\5\u00ecw"+
-		"\2\u03d2\u03d4\5\u00dan\2\u03d3\u03d5\5\u00e4s\2\u03d4\u03d3\3\2\2\2\u03d4"+
-		"\u03d5\3\2\2\2\u03d5\u03d6\3\2\2\2\u03d6\u03d7\5\u00e2r\2\u03d7\u00d7"+
-		"\3\2\2\2\u03d8\u03da\5\20\t\2\u03d9\u03d8\3\2\2\2\u03da\u03dd\3\2\2\2"+
-		"\u03db\u03d9\3\2\2\2\u03db\u03dc\3\2\2\2\u03dc\u03de\3\2\2\2\u03dd\u03db"+
-		"\3\2\2\2\u03de\u03df\5\u00be`\2\u03df\u03e3\3\2\2\2\u03e0\u03e2\5\24\13"+
-		"\2\u03e1\u03e0\3\2\2\2\u03e2\u03e5\3\2\2\2\u03e3\u03e1\3\2\2\2\u03e3\u03e4"+
-		"\3\2\2\2\u03e4\u00d9\3\2\2\2\u03e5\u03e3\3\2\2\2\u03e6\u03e8\7\"\2\2\u03e7"+
-		"\u03e9\5\u00dco\2\u03e8\u03e7\3\2\2\2\u03e8\u03e9\3\2\2\2\u03e9\u03ea"+
-		"\3\2\2\2\u03ea\u03ee\7\20\2\2\u03eb\u03ed\7N\2\2\u03ec\u03eb\3\2\2\2\u03ed"+
-		"\u03f0\3\2\2\2\u03ee\u03ec\3\2\2\2\u03ee\u03ef\3\2\2\2\u03ef\u03f2\3\2"+
-		"\2\2\u03f0\u03ee\3\2\2\2\u03f1\u03f3\5\u00eex\2\u03f2\u03f1\3\2\2\2\u03f2"+
-		"\u03f3\3\2\2\2\u03f3\u00db\3\2\2\2\u03f4\u03f9\5\u00dep\2\u03f5\u03f6"+
-		"\7 \2\2\u03f6\u03f8\5\u00dep\2\u03f7\u03f5\3\2\2\2\u03f8\u03fb\3\2\2\2"+
-		"\u03f9\u03f7\3\2\2\2\u03f9\u03fa\3\2\2\2\u03fa\u03fe\3\2\2\2\u03fb\u03f9"+
-		"\3\2\2\2\u03fc\u03fd\7 \2\2\u03fd\u03ff\7(\2\2\u03fe\u03fc\3\2\2\2\u03fe"+
-		"\u03ff\3\2\2\2\u03ff\u0402\3\2\2\2\u0400\u0402\7J\2\2\u0401\u03f4\3\2"+
-		"\2\2\u0401\u0400\3\2\2\2\u0402\u00dd\3\2\2\2\u0403\u0404\5\u00c6d\2\u0404"+
-		"\u0405\5\u00e0q\2\u0405\u00df\3\2\2\2\u0406\u0408\5\u00d4k\2\u0407\u0406"+
-		"\3\2\2\2\u0407\u0408\3\2\2\2\u0408\u040e\3\2\2\2\u0409\u040a\7\"\2\2\u040a"+
-		"\u040b\5\u00e0q\2\u040b\u040c\7\20\2\2\u040c\u040f\3\2\2\2\u040d\u040f"+
-		"\5\u00c8e\2\u040e\u0409\3\2\2\2\u040e\u040d\3\2\2\2\u040f\u0411\3\2\2"+
-		"\2\u0410\u0412\5\u00c0a\2\u0411\u0410\3\2\2\2\u0411\u0412\3\2\2\2\u0412"+
-		"\u00e1\3\2\2\2\u0413\u0414\7Z\2\2\u0414\u0415\br\1\2\u0415\u00e3\3\2\2"+
-		"\2\u0416\u0417\7#\2\2\u0417\u041c\5\u00e6t\2\u0418\u0419\7 \2\2\u0419"+
-		"\u041b\5\u00e6t\2\u041a\u0418\3\2\2\2\u041b\u041e\3\2\2\2\u041c\u041a"+
-		"\3\2\2\2\u041c\u041d\3\2\2\2\u041d\u00e5\3\2\2\2\u041e\u041c\3\2\2\2\u041f"+
-		"\u0420\5\u00e8u\2\u0420\u0421\5\u00eav\2\u0421\u00e7\3\2\2\2\u0422\u0424"+
-		"\7\23\2\2\u0423\u0422\3\2\2\2\u0423\u0424\3\2\2\2\u0424\u0425\3\2\2\2"+
-		"\u0425\u0426\5\u00d0i\2\u0426\u00e9\3\2\2\2\u0427\u0429\7\"\2\2\u0428"+
-		"\u042a\5|?\2\u0429\u0428\3\2\2\2\u0429\u042a\3\2\2\2\u042a\u042b\3\2\2"+
-		"\2\u042b\u042c\7\20\2\2\u042c\u00eb\3\2\2\2\u042d\u042e\7\"\2\2\u042e"+
-		"\u042f\5\u00ecw\2\u042f\u0430\7\20\2\2\u0430\u0434\3\2\2\2\u0431\u0434"+
-		"\5\u00d0i\2\u0432\u0434\5\30\r\2\u0433\u042d\3\2\2\2\u0433\u0431\3\2\2"+
-		"\2\u0433\u0432\3\2\2\2\u0434\u00ed\3\2\2\2\u0435\u0436\7R\2\2\u0436\u0437"+
-		"\7\"\2\2\u0437\u0438\5\u00f0y\2\u0438\u0439\7\20\2\2\u0439\u00ef\3\2\2"+
-		"\2\u043a\u043c\5$\23\2\u043b\u043a\3\2\2\2\u043c\u043f\3\2\2\2\u043d\u043b"+
-		"\3\2\2\2\u043d\u043e\3\2\2\2\u043e\u044b\3\2\2\2\u043f\u043d\3\2\2\2\u0440"+
-		"\u0441\7\"\2\2\u0441\u0442\5\u00f0y\2\u0442\u0446\7\20\2\2\u0443\u0445"+
-		"\5$\23\2\u0444\u0443\3\2\2\2\u0445\u0448\3\2\2\2\u0446\u0444\3\2\2\2\u0446"+
-		"\u0447\3\2\2\2\u0447\u044a\3\2\2\2\u0448\u0446\3\2\2\2\u0449\u0440\3\2"+
-		"\2\2\u044a\u044d\3\2\2\2\u044b\u0449\3\2\2\2\u044b\u044c\3\2\2\2\u044c"+
-		"\u00f1\3\2\2\2\u044d\u044b\3\2\2\2z\u00f5\u00fa\u00ff\u011a\u0144\u0158"+
-		"\u015a\u0179\u017b\u0183\u0191\u0197\u019c\u01a1\u01b2\u01ba\u01ce\u01d1"+
-		"\u01d6\u01de\u01ee\u01f5\u01fb\u0202\u020a\u020e\u0212\u0215\u0219\u021c"+
-		"\u022a\u0230\u0238\u023d\u0242\u0247\u024c\u0251\u0257\u025d\u0262\u0267"+
-		"\u026c\u0273\u027a\u0284\u0288\u028e\u0294\u029b\u02a7\u02aa\u02b8\u02bc"+
-		"\u02c4\u02c7\u02ca\u02d3\u02d5\u02dc\u02e2\u02e6\u02ea\u02ef\u02f4\u0303"+
-		"\u0308\u030d\u0313\u0322\u0327\u032c\u0331\u0334\u0341\u0345\u0348\u034f"+
-		"\u0355\u035c\u0364\u0368\u036c\u0373\u037a\u037f\u0388\u038d\u0391\u0397"+
-		"\u03a2\u03a5\u03a8\u03ae\u03b5\u03b7\u03ba\u03c1\u03c9\u03cc\u03cf\u03d4"+
-		"\u03db\u03e3\u03e8\u03ee\u03f2\u03f9\u03fe\u0401\u0407\u040e\u0411\u041c"+
-		"\u0423\u0429\u0433\u043d\u0446\u044b";
+		"\u02c0\5|?\2\u02c0\u02c1\7\20\2\2\u02c1\u02c5\3\2\2\2\u02c2\u02c5\5\u00ec"+
+		"w\2\u02c3\u02c5\5\16\b\2\u02c4\u02be\3\2\2\2\u02c4\u02c2\3\2\2\2\u02c4"+
+		"\u02c3\3\2\2\2\u02c5\u00a9\3\2\2\2\u02c6\u02c8\5 \21\2\u02c7\u02c6\3\2"+
+		"\2\2\u02c7\u02c8\3\2\2\2\u02c8\u02ca\3\2\2\2\u02c9\u02cb\5\u00acW\2\u02ca"+
+		"\u02c9\3\2\2\2\u02ca\u02cb\3\2\2\2\u02cb\u02cc\3\2\2\2\u02cc\u02cd\5\u00c0"+
+		"a\2\u02cd\u02cf\5\u00aeX\2\u02ce\u02d0\5\u00b8]\2\u02cf\u02ce\3\2\2\2"+
+		"\u02cf\u02d0\3\2\2\2\u02d0\u02d1\3\2\2\2\u02d1\u02d2\5\u00b6\\\2\u02d2"+
+		"\u00ab\3\2\2\2\u02d3\u02d5\5\20\t\2\u02d4\u02d3\3\2\2\2\u02d5\u02d8\3"+
+		"\2\2\2\u02d6\u02d4\3\2\2\2\u02d6\u02d7\3\2\2\2\u02d7\u02d9\3\2\2\2\u02d8"+
+		"\u02d6\3\2\2\2\u02d9\u02da\5\u00dan\2\u02da\u02de\3\2\2\2\u02db\u02dd"+
+		"\5\24\13\2\u02dc\u02db\3\2\2\2\u02dd\u02e0\3\2\2\2\u02de\u02dc\3\2\2\2"+
+		"\u02de\u02df\3\2\2\2\u02df\u00ad\3\2\2\2\u02e0\u02de\3\2\2\2\u02e1\u02e3"+
+		"\7\"\2\2\u02e2\u02e4\5\u00b0Y\2\u02e3\u02e2\3\2\2\2\u02e3\u02e4\3\2\2"+
+		"\2\u02e4\u02e5\3\2\2\2\u02e5\u02e9\7\20\2\2\u02e6\u02e8\7N\2\2\u02e7\u02e6"+
+		"\3\2\2\2\u02e8\u02eb\3\2\2\2\u02e9\u02e7\3\2\2\2\u02e9\u02ea\3\2\2\2\u02ea"+
+		"\u02ed\3\2\2\2\u02eb\u02e9\3\2\2\2\u02ec\u02ee\5\u00c2b\2\u02ed\u02ec"+
+		"\3\2\2\2\u02ed\u02ee\3\2\2\2\u02ee\u00af\3\2\2\2\u02ef\u02f4\5\u00b2Z"+
+		"\2\u02f0\u02f1\7 \2\2\u02f1\u02f3\5\u00b2Z\2\u02f2\u02f0\3\2\2\2\u02f3"+
+		"\u02f6\3\2\2\2\u02f4\u02f2\3\2\2\2\u02f4\u02f5\3\2\2\2\u02f5\u02f9\3\2"+
+		"\2\2\u02f6\u02f4\3\2\2\2\u02f7\u02f8\7 \2\2\u02f8\u02fa\7(\2\2\u02f9\u02f7"+
+		"\3\2\2\2\u02f9\u02fa\3\2\2\2\u02fa\u02fd\3\2\2\2\u02fb\u02fd\7J\2\2\u02fc"+
+		"\u02ef\3\2\2\2\u02fc\u02fb\3\2\2\2\u02fd\u00b1\3\2\2\2\u02fe\u02ff\5\u00e2"+
+		"r\2\u02ff\u0300\5\u00b4[\2\u0300\u00b3\3\2\2\2\u0301\u0303\5\u00f0y\2"+
+		"\u0302\u0301\3\2\2\2\u0302\u0303\3\2\2\2\u0303\u0309\3\2\2\2\u0304\u0305"+
+		"\7\"\2\2\u0305\u0306\5\u00b4[\2\u0306\u0307\7\20\2\2\u0307\u030a\3\2\2"+
+		"\2\u0308\u030a\5\u00e4s\2\u0309\u0304\3\2\2\2\u0309\u0308\3\2\2\2\u030a"+
+		"\u030c\3\2\2\2\u030b\u030d\5\u00dco\2\u030c\u030b\3\2\2\2\u030c\u030d"+
+		"\3\2\2\2\u030d\u00b5\3\2\2\2\u030e\u030f\7Z\2\2\u030f\u0310\b\\\1\2\u0310"+
+		"\u00b7\3\2\2\2\u0311\u0312\7#\2\2\u0312\u0317\5\u00ba^\2\u0313\u0314\7"+
+		" \2\2\u0314\u0316\5\u00ba^\2\u0315\u0313\3\2\2\2\u0316\u0319\3\2\2\2\u0317"+
+		"\u0315\3\2\2\2\u0317\u0318\3\2\2\2\u0318\u00b9\3\2\2\2\u0319\u0317\3\2"+
+		"\2\2\u031a\u031b\5\u00bc_\2\u031b\u031c\5\u00be`\2\u031c\u00bb\3\2\2\2"+
+		"\u031d\u031f\7\23\2\2\u031e\u031d\3\2\2\2\u031e\u031f\3\2\2\2\u031f\u0320"+
+		"\3\2\2\2\u0320\u0321\5\u00ecw\2\u0321\u00bd\3\2\2\2\u0322\u0324\7\"\2"+
+		"\2\u0323\u0325\5|?\2\u0324\u0323\3\2\2\2\u0324\u0325\3\2\2\2\u0325\u0326"+
+		"\3\2\2\2\u0326\u0327\7\20\2\2\u0327\u00bf\3\2\2\2\u0328\u0329\7\"\2\2"+
+		"\u0329\u032a\5\u00c0a\2\u032a\u032b\7\20\2\2\u032b\u032f\3\2\2\2\u032c"+
+		"\u032f\5\u00ecw\2\u032d\u032f\5\30\r\2\u032e\u0328\3\2\2\2\u032e\u032c"+
+		"\3\2\2\2\u032e\u032d\3\2\2\2\u032f\u00c1\3\2\2\2\u0330\u0331\7R\2\2\u0331"+
+		"\u0332\7\"\2\2\u0332\u0333\5\u00c4c\2\u0333\u0334\7\20\2\2\u0334\u00c3"+
+		"\3\2\2\2\u0335\u0337\5$\23\2\u0336\u0335\3\2\2\2\u0337\u033a\3\2\2\2\u0338"+
+		"\u0336\3\2\2\2\u0338\u0339\3\2\2\2\u0339\u0346\3\2\2\2\u033a\u0338\3\2"+
+		"\2\2\u033b\u033c\7\"\2\2\u033c\u033d\5\u00c4c\2\u033d\u0341\7\20\2\2\u033e"+
+		"\u0340\5$\23\2\u033f\u033e\3\2\2\2\u0340\u0343\3\2\2\2\u0341\u033f\3\2"+
+		"\2\2\u0341\u0342\3\2\2\2\u0342\u0345\3\2\2\2\u0343\u0341\3\2\2\2\u0344"+
+		"\u033b\3\2\2\2\u0345\u0348\3\2\2\2\u0346\u0344\3\2\2\2\u0346\u0347\3\2"+
+		"\2\2\u0347\u00c5\3\2\2\2\u0348\u0346\3\2\2\2\u0349\u034b\7I\2\2\u034a"+
+		"\u0349\3\2\2\2\u034a\u034b\3\2\2\2\u034b\u034d\3\2\2\2\u034c\u034e\5 "+
+		"\21\2\u034d\u034c\3\2\2\2\u034d\u034e\3\2\2\2\u034e\u034f\3\2\2\2\u034f"+
+		"\u0350\5\u00c8e\2\u0350\u00c7\3\2\2\2\u0351\u0352\5\u00dan\2\u0352\u0353"+
+		"\5\u00caf\2\u0353\u0359\3\2\2\2\u0354\u0356\5\u00d2j\2\u0355\u0357\5\u00ca"+
+		"f\2\u0356\u0355\3\2\2\2\u0356\u0357\3\2\2\2\u0357\u0359\3\2\2\2\u0358"+
+		"\u0351\3\2\2\2\u0358\u0354\3\2\2\2\u0359\u00c9\3\2\2\2\u035a\u035f\5\u00cc"+
+		"g\2\u035b\u035c\7 \2\2\u035c\u035e\5\u00ccg\2\u035d\u035b\3\2\2\2\u035e"+
+		"\u0361\3\2\2\2\u035f\u035d\3\2\2\2\u035f\u0360\3\2\2\2\u0360\u0362\3\2"+
+		"\2\2\u0361\u035f\3\2\2\2\u0362\u0363\7\65\2\2\u0363\u00cb\3\2\2\2\u0364"+
+		"\u0366\5\u00f0y\2\u0365\u0364\3\2\2\2\u0365\u0366\3\2\2\2\u0366\u0367"+
+		"\3\2\2\2\u0367\u0369\5\u00ecw\2\u0368\u036a\5\u00dco\2\u0369\u0368\3\2"+
+		"\2\2\u0369\u036a\3\2\2\2\u036a\u0372\3\2\2\2\u036b\u036d\7\"\2\2\u036c"+
+		"\u036e\5|?\2\u036d\u036c\3\2\2\2\u036d\u036e\3\2\2\2\u036e\u036f\3\2\2"+
+		"\2\u036f\u0373\7\20\2\2\u0370\u0371\7\24\2\2\u0371\u0373\5\u00ceh\2\u0372"+
+		"\u036b\3\2\2\2\u0372\u0370\3\2\2\2\u0372\u0373\3\2\2\2\u0373\u00cd\3\2"+
+		"\2\2\u0374\u0376\5\64\33\2\u0375\u0374\3\2\2\2\u0376\u0379\3\2\2\2\u0377"+
+		"\u0375\3\2\2\2\u0377\u0378\3\2\2\2\u0378\u0390\3\2\2\2\u0379\u0377\3\2"+
+		"\2\2\u037a\u037b\7Z\2\2\u037b\u037c\5\u00d0i\2\u037c\u037d\7[\2\2\u037d"+
+		"\u0387\3\2\2\2\u037e\u037f\7\"\2\2\u037f\u0380\5\u00d0i\2\u0380\u0381"+
+		"\7\20\2\2\u0381\u0387\3\2\2\2\u0382\u0383\7\4\2\2\u0383\u0384\5\u00d0"+
+		"i\2\u0384\u0385\7\34\2\2\u0385\u0387\3\2\2\2\u0386\u037a\3\2\2\2\u0386"+
+		"\u037e\3\2\2\2\u0386\u0382\3\2\2\2\u0387\u038b\3\2\2\2\u0388\u038a\5\64"+
+		"\33\2\u0389\u0388\3\2\2\2\u038a\u038d\3\2\2\2\u038b\u0389\3\2\2\2\u038b"+
+		"\u038c\3\2\2\2\u038c\u038f\3\2\2\2\u038d\u038b\3\2\2\2\u038e\u0386\3\2"+
+		"\2\2\u038f\u0392\3\2\2\2\u0390\u038e\3\2\2\2\u0390\u0391\3\2\2\2\u0391"+
+		"\u00cf\3\2\2\2\u0392\u0390\3\2\2\2\u0393\u0395\5\66\34\2\u0394\u0393\3"+
+		"\2\2\2\u0395\u0398\3\2\2\2\u0396\u0394\3\2\2\2\u0396\u0397\3\2\2\2\u0397"+
+		"\u03af\3\2\2\2\u0398\u0396\3\2\2\2\u0399\u039a\7Z\2\2\u039a\u039b\5\u00d0"+
+		"i\2\u039b\u039c\7[\2\2\u039c\u03a6\3\2\2\2\u039d\u039e\7\"\2\2\u039e\u039f"+
+		"\5\u00d0i\2\u039f\u03a0\7\20\2\2\u03a0\u03a6\3\2\2\2\u03a1\u03a2\7\4\2"+
+		"\2\u03a2\u03a3\5\u00d0i\2\u03a3\u03a4\7\34\2\2\u03a4\u03a6\3\2\2\2\u03a5"+
+		"\u0399\3\2\2\2\u03a5\u039d\3\2\2\2\u03a5\u03a1\3\2\2\2\u03a6\u03aa\3\2"+
+		"\2\2\u03a7\u03a9\5\66\34\2\u03a8\u03a7\3\2\2\2\u03a9\u03ac\3\2\2\2\u03aa"+
+		"\u03a8\3\2\2\2\u03aa\u03ab\3\2\2\2\u03ab\u03ae\3\2\2\2\u03ac\u03aa\3\2"+
+		"\2\2\u03ad\u03a5\3\2\2\2\u03ae\u03b1\3\2\2\2\u03af\u03ad\3\2\2\2\u03af"+
+		"\u03b0\3\2\2\2\u03b0\u00d1\3\2\2\2\u03b1\u03af\3\2\2\2\u03b2\u03b4\5\22"+
+		"\n\2\u03b3\u03b5\5\u00d4k\2\u03b4\u03b3\3\2\2\2\u03b4\u03b5\3\2\2\2\u03b5"+
+		"\u03b7\3\2\2\2\u03b6\u03b8\5\u00d6l\2\u03b7\u03b6\3\2\2\2\u03b7\u03b8"+
+		"\3\2\2\2\u03b8\u03b9\3\2\2\2\u03b9\u03ba\7Z\2\2\u03ba\u03bb\bj\1\2\u03bb"+
+		"\u00d3\3\2\2\2\u03bc\u03bd\5\u00ecw\2\u03bd\u00d5\3\2\2\2\u03be\u03bf"+
+		"\7#\2\2\u03bf\u03c4\5\u00d8m\2\u03c0\u03c1\7 \2\2\u03c1\u03c3\5\u00d8"+
+		"m\2\u03c2\u03c0\3\2\2\2\u03c3\u03c6\3\2\2\2\u03c4\u03c2\3\2\2\2\u03c4"+
+		"\u03c5\3\2\2\2\u03c5\u00d7\3\2\2\2\u03c6\u03c4\3\2\2\2\u03c7\u03c9\7O"+
+		"\2\2\u03c8\u03c7\3\2\2\2\u03c8\u03c9\3\2\2\2\u03c9\u03cb\3\2\2\2\u03ca"+
+		"\u03cc\5\26\f\2\u03cb\u03ca\3\2\2\2\u03cb\u03cc\3\2\2\2\u03cc\u03cd\3"+
+		"\2\2\2\u03cd\u03ce\5\u00ecw\2\u03ce\u00d9\3\2\2\2\u03cf\u03d1\7N\2\2\u03d0"+
+		"\u03cf\3\2\2\2\u03d1\u03d4\3\2\2\2\u03d2\u03d0\3\2\2\2\u03d2\u03d3\3\2"+
+		"\2\2\u03d3\u03d8\3\2\2\2\u03d4\u03d2\3\2\2\2\u03d5\u03d9\5\22\n\2\u03d6"+
+		"\u03d9\7K\2\2\u03d7\u03d9\7L\2\2\u03d8\u03d5\3\2\2\2\u03d8\u03d6\3\2\2"+
+		"\2\u03d8\u03d7\3\2\2\2\u03d8\u03d9\3\2\2\2\u03d9\u03da\3\2\2\2\u03da\u03df"+
+		"\5\u00dep\2\u03db\u03dc\7\6\2\2\u03dc\u03dd\5\"\22\2\u03dd\u03de\78\2"+
+		"\2\u03de\u03e0\3\2\2\2\u03df\u03db\3\2\2\2\u03df\u03e0\3\2\2\2\u03e0\u03eb"+
+		"\3\2\2\2\u03e1\u03e2\7\23\2\2\u03e2\u03e7\5\u00dep\2\u03e3\u03e4\7\6\2"+
+		"\2\u03e4\u03e5\5\"\22\2\u03e5\u03e6\78\2\2\u03e6\u03e8\3\2\2\2\u03e7\u03e3"+
+		"\3\2\2\2\u03e7\u03e8\3\2\2\2\u03e8\u03ea\3\2\2\2\u03e9\u03e1\3\2\2\2\u03ea"+
+		"\u03ed\3\2\2\2\u03eb\u03e9\3\2\2\2\u03eb\u03ec\3\2\2\2\u03ec\u03f0\3\2"+
+		"\2\2\u03ed\u03eb\3\2\2\2\u03ee\u03f0\t\35\2\2\u03ef\u03d2\3\2\2\2\u03ef"+
+		"\u03ee\3\2\2\2\u03f0\u00db\3\2\2\2\u03f1\u03f2\7\4\2\2\u03f2\u03f3\5\u00e0"+
+		"q\2\u03f3\u03f4\7\34\2\2\u03f4\u03f7\3\2\2\2\u03f5\u03f7\5\u00e6t\2\u03f6"+
+		"\u03f1\3\2\2\2\u03f6\u03f5\3\2\2\2\u03f7\u00dd\3\2\2\2\u03f8\u03fe\7Y"+
+		"\2\2\u03f9\u03fe\7J\2\2\u03fa\u03fe\7M\2\2\u03fb\u03fc\7M\2\2\u03fc\u03fe"+
+		"\7M\2\2\u03fd\u03f8\3\2\2\2\u03fd\u03f9\3\2\2\2\u03fd\u03fa\3\2\2\2\u03fd"+
+		"\u03fb\3\2\2\2\u03fe\u00df\3\2\2\2\u03ff\u0401\5.\30\2\u0400\u03ff\3\2"+
+		"\2\2\u0401\u0404\3\2\2\2\u0402\u0400\3\2\2\2\u0402\u0403\3\2\2\2\u0403"+
+		"\u0410\3\2\2\2\u0404\u0402\3\2\2\2\u0405\u0406\7\4\2\2\u0406\u0407\5\u00e0"+
+		"q\2\u0407\u040b\7\34\2\2\u0408\u040a\5.\30\2\u0409\u0408\3\2\2\2\u040a"+
+		"\u040d\3\2\2\2\u040b\u0409\3\2\2\2\u040b\u040c\3\2\2\2\u040c\u040f\3\2"+
+		"\2\2\u040d\u040b\3\2\2\2\u040e\u0405\3\2\2\2\u040f\u0412\3\2\2\2\u0410"+
+		"\u040e\3\2\2\2\u0410\u0411\3\2\2\2\u0411\u00e1\3\2\2\2\u0412\u0410\3\2"+
+		"\2\2\u0413\u0415\t\36\2\2\u0414\u0413\3\2\2\2\u0414\u0415\3\2\2\2\u0415"+
+		"\u0416\3\2\2\2\u0416\u0417\5\u00dan\2\u0417\u00e3\3\2\2\2\u0418\u041b"+
+		"\5\u00ecw\2\u0419\u041b\5\26\f\2\u041a\u0418\3\2\2\2\u041a\u0419\3\2\2"+
+		"\2\u041b\u00e5\3\2\2\2\u041c\u041d\7\"\2\2\u041d\u041e\7J\2\2\u041e\u042c"+
+		"\7\20\2\2\u041f\u0428\7\"\2\2\u0420\u0425\5\u00e8u\2\u0421\u0422\7 \2"+
+		"\2\u0422\u0424\5\u00e8u\2\u0423\u0421\3\2\2\2\u0424\u0427\3\2\2\2\u0425"+
+		"\u0423\3\2\2\2\u0425\u0426\3\2\2\2\u0426\u0429\3\2\2\2\u0427\u0425\3\2"+
+		"\2\2\u0428\u0420\3\2\2\2\u0428\u0429\3\2\2\2\u0429\u042a\3\2\2\2\u042a"+
+		"\u042c\7\20\2\2\u042b\u041c\3\2\2\2\u042b\u041f\3\2\2\2\u042c\u00e7\3"+
+		"\2\2\2\u042d\u042e\5\u00e2r\2\u042e\u042f\5\u00eav\2\u042f\u00e9\3\2\2"+
+		"\2\u0430\u0432\5\u00f0y\2\u0431\u0430\3\2\2\2\u0431\u0432\3\2\2\2\u0432"+
+		"\u043a\3\2\2\2\u0433\u0434\7\"\2\2\u0434\u0435\5\u00eav\2\u0435\u0436"+
+		"\7\20\2\2\u0436\u043b\3\2\2\2\u0437\u0439\5\u00e4s\2\u0438\u0437\3\2\2"+
+		"\2\u0438\u0439\3\2\2\2\u0439\u043b\3\2\2\2\u043a\u0433\3\2\2\2\u043a\u0438"+
+		"\3\2\2\2\u043b\u043d\3\2\2\2\u043c\u043e\5\u00dco\2\u043d\u043c\3\2\2"+
+		"\2\u043d\u043e\3\2\2\2\u043e\u00eb\3\2\2\2\u043f\u0444\7Y\2\2\u0440\u0441"+
+		"\7\23\2\2\u0441\u0443\7Y\2\2\u0442\u0440\3\2\2\2\u0443\u0446\3\2\2\2\u0444"+
+		"\u0442\3\2\2\2\u0444\u0445\3\2\2\2\u0445\u00ed\3\2\2\2\u0446\u0444\3\2"+
+		"\2\2\u0447\u0448\t\37\2\2\u0448\u00ef\3\2\2\2\u0449\u044b\5\24\13\2\u044a"+
+		"\u0449\3\2\2\2\u044b\u044c\3\2\2\2\u044c\u044a\3\2\2\2\u044c\u044d\3\2"+
+		"\2\2\u044d\u00f1\3\2\2\2z\u00f5\u00fa\u00ff\u011a\u0144\u0158\u015a\u0179"+
+		"\u017b\u0183\u0191\u0197\u019c\u01a1\u01b2\u01ba\u01ce\u01d1\u01d6\u01de"+
+		"\u01ee\u01f5\u01fb\u0202\u020a\u020e\u0212\u0215\u0219\u021c\u022a\u0230"+
+		"\u0238\u023d\u0242\u0247\u024c\u0251\u0257\u025d\u0262\u0267\u026c\u0273"+
+		"\u027a\u0284\u0288\u028e\u0294\u029b\u02a7\u02aa\u02b8\u02bc\u02c4\u02c7"+
+		"\u02ca\u02cf\u02d6\u02de\u02e3\u02e9\u02ed\u02f4\u02f9\u02fc\u0302\u0309"+
+		"\u030c\u0317\u031e\u0324\u032e\u0338\u0341\u0346\u034a\u034d\u0356\u0358"+
+		"\u035f\u0365\u0369\u036d\u0372\u0377\u0386\u038b\u0390\u0396\u03a5\u03aa"+
+		"\u03af\u03b4\u03b7\u03c4\u03c8\u03cb\u03d2\u03d8\u03df\u03e7\u03eb\u03ef"+
+		"\u03f6\u03fd\u0402\u040b\u0410\u0414\u041a\u0425\u0428\u042b\u0431\u0438"+
+		"\u043a\u043d\u0444\u044c";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

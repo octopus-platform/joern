@@ -1,6 +1,6 @@
 grammar CodeSensor;
 
-import Common, FunctionDef;
+import Common, FunctionDef, SimpleDecl;
 
 /*
     Copyright (C) 2013 Fabian 'fabs' Yamaguchi <fabs@phenoelit.de>
@@ -20,7 +20,6 @@ import Common, FunctionDef;
 
 @header{
 	package antlr;
-    import java.util.Stack;
 }
 
 code : part*;

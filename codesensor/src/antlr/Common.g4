@@ -1,6 +1,6 @@
 grammar Common;
 
-import FunctionGrammar, SimpleDecl;
+import FunctionGrammar;
 
 @header{
   import java.util.Stack;

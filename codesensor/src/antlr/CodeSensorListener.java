@@ -1,7 +1,6 @@
 // Generated from ./CodeSensor.g4 by ANTLR 4.0
 
 	package antlr;
-    import java.util.Stack;
 
 
   import java.util.Stack;
@@ -25,11 +24,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterFunction_argument_list(CodeSensorParser.Function_argument_listContext ctx);
 	void exitFunction_argument_list(CodeSensorParser.Function_argument_listContext ctx);
 
-	void enterCompound_statement(CodeSensorParser.Compound_statementContext ctx);
-	void exitCompound_statement(CodeSensorParser.Compound_statementContext ctx);
-
 	void enterNo_squares_or_semicolon(CodeSensorParser.No_squares_or_semicolonContext ctx);
 	void exitNo_squares_or_semicolon(CodeSensorParser.No_squares_or_semicolonContext ctx);
+
+	void enterCompound_statement(CodeSensorParser.Compound_statementContext ctx);
+	void exitCompound_statement(CodeSensorParser.Compound_statementContext ctx);
 
 	void enterCast_expression(CodeSensorParser.Cast_expressionContext ctx);
 	void exitCast_expression(CodeSensorParser.Cast_expressionContext ctx);
@@ -40,11 +39,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterEquality_expression(CodeSensorParser.Equality_expressionContext ctx);
 	void exitEquality_expression(CodeSensorParser.Equality_expressionContext ctx);
 
-	void enterParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx);
-	void exitParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx);
-
 	void enterNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx);
+
+	void enterParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx);
+	void exitParameter_decl_clause(CodeSensorParser.Parameter_decl_clauseContext ctx);
 
 	void enterFor_statement(CodeSensorParser.For_statementContext ctx);
 	void exitFor_statement(CodeSensorParser.For_statementContext ctx);
@@ -73,11 +72,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
 	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
 
-	void enterShift_expression(CodeSensorParser.Shift_expressionContext ctx);
-	void exitShift_expression(CodeSensorParser.Shift_expressionContext ctx);
-
 	void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx);
 	void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx);
+
+	void enterShift_expression(CodeSensorParser.Shift_expressionContext ctx);
+	void exitShift_expression(CodeSensorParser.Shift_expressionContext ctx);
 
 	void enterType_name(CodeSensorParser.Type_nameContext ctx);
 	void exitType_name(CodeSensorParser.Type_nameContext ctx);
@@ -100,11 +99,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterPre_closer(CodeSensorParser.Pre_closerContext ctx);
 	void exitPre_closer(CodeSensorParser.Pre_closerContext ctx);
 
-	void enterRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
-	void exitRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
-
 	void enterClass_name(CodeSensorParser.Class_nameContext ctx);
 	void exitClass_name(CodeSensorParser.Class_nameContext ctx);
+
+	void enterRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
+	void exitRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
 
 	void enterParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx);
 	void exitParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx);
@@ -211,20 +210,20 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterCall_template_list(CodeSensorParser.Call_template_listContext ctx);
 	void exitCall_template_list(CodeSensorParser.Call_template_listContext ctx);
 
-	void enterFunction_name(CodeSensorParser.Function_nameContext ctx);
-	void exitFunction_name(CodeSensorParser.Function_nameContext ctx);
-
 	void enterBase_class(CodeSensorParser.Base_classContext ctx);
 	void exitBase_class(CodeSensorParser.Base_classContext ctx);
+
+	void enterFunction_name(CodeSensorParser.Function_nameContext ctx);
+	void exitFunction_name(CodeSensorParser.Function_nameContext ctx);
 
 	void enterParameter_name(CodeSensorParser.Parameter_nameContext ctx);
 	void exitParameter_name(CodeSensorParser.Parameter_nameContext ctx);
 
-	void enterCtor_list(CodeSensorParser.Ctor_listContext ctx);
-	void exitCtor_list(CodeSensorParser.Ctor_listContext ctx);
-
 	void enterAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
 	void exitAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
+
+	void enterCtor_list(CodeSensorParser.Ctor_listContext ctx);
+	void exitCtor_list(CodeSensorParser.Ctor_listContext ctx);
 
 	void enterType_name2(CodeSensorParser.Type_name2Context ctx);
 	void exitType_name2(CodeSensorParser.Type_name2Context ctx);
@@ -232,17 +231,17 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterDeclaration(CodeSensorParser.DeclarationContext ctx);
 	void exitDeclaration(CodeSensorParser.DeclarationContext ctx);
 
-	void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
-	void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
-
 	void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 	void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 
-	void enterCondition(CodeSensorParser.ConditionContext ctx);
-	void exitCondition(CodeSensorParser.ConditionContext ctx);
+	void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
+	void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 
 	void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
+
+	void enterCondition(CodeSensorParser.ConditionContext ctx);
+	void exitCondition(CodeSensorParser.ConditionContext ctx);
 
 	void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx);
 	void exitParameter_decl(CodeSensorParser.Parameter_declContext ctx);
@@ -253,11 +252,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterCode(CodeSensorParser.CodeContext ctx);
 	void exitCode(CodeSensorParser.CodeContext ctx);
 
-	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
-	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
-
 	void enterDo_statement(CodeSensorParser.Do_statementContext ctx);
 	void exitDo_statement(CodeSensorParser.Do_statementContext ctx);
+
+	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
+	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 
 	void enterExclusive_or_expression(CodeSensorParser.Exclusive_or_expressionContext ctx);
 	void exitExclusive_or_expression(CodeSensorParser.Exclusive_or_expressionContext ctx);
@@ -355,11 +354,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterPostfix(CodeSensorParser.PostfixContext ctx);
 	void exitPostfix(CodeSensorParser.PostfixContext ctx);
 
-	void enterInitializer_id(CodeSensorParser.Initializer_idContext ctx);
-	void exitInitializer_id(CodeSensorParser.Initializer_idContext ctx);
-
 	void enterClass_def(CodeSensorParser.Class_defContext ctx);
 	void exitClass_def(CodeSensorParser.Class_defContext ctx);
+
+	void enterInitializer_id(CodeSensorParser.Initializer_idContext ctx);
+	void exitInitializer_id(CodeSensorParser.Initializer_idContext ctx);
 
 	void enterAnd_expression(CodeSensorParser.And_expressionContext ctx);
 	void exitAnd_expression(CodeSensorParser.And_expressionContext ctx);
