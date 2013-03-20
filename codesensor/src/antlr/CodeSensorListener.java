@@ -73,11 +73,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
 	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
 
-	void enterShift_expression(CodeSensorParser.Shift_expressionContext ctx);
-	void exitShift_expression(CodeSensorParser.Shift_expressionContext ctx);
-
 	void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx);
 	void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx);
+
+	void enterShift_expression(CodeSensorParser.Shift_expressionContext ctx);
+	void exitShift_expression(CodeSensorParser.Shift_expressionContext ctx);
 
 	void enterType_name(CodeSensorParser.Type_nameContext ctx);
 	void exitType_name(CodeSensorParser.Type_nameContext ctx);
@@ -100,11 +100,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterIf_statement(CodeSensorParser.If_statementContext ctx);
 	void exitIf_statement(CodeSensorParser.If_statementContext ctx);
 
-	void enterRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
-	void exitRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
-
 	void enterClass_name(CodeSensorParser.Class_nameContext ctx);
 	void exitClass_name(CodeSensorParser.Class_nameContext ctx);
+
+	void enterRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
+	void exitRelational_expression(CodeSensorParser.Relational_expressionContext ctx);
 
 	void enterParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx);
 	void exitParam_decl_specifiers(CodeSensorParser.Param_decl_specifiersContext ctx);
@@ -133,11 +133,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterClosing_curly(CodeSensorParser.Closing_curlyContext ctx);
 	void exitClosing_curly(CodeSensorParser.Closing_curlyContext ctx);
 
-	void enterOr_expression(CodeSensorParser.Or_expressionContext ctx);
-	void exitOr_expression(CodeSensorParser.Or_expressionContext ctx);
-
 	void enterFor_init_statement(CodeSensorParser.For_init_statementContext ctx);
 	void exitFor_init_statement(CodeSensorParser.For_init_statementContext ctx);
+
+	void enterOr_expression(CodeSensorParser.Or_expressionContext ctx);
+	void exitOr_expression(CodeSensorParser.Or_expressionContext ctx);
 
 	void enterSelection_statement(CodeSensorParser.Selection_statementContext ctx);
 	void exitSelection_statement(CodeSensorParser.Selection_statementContext ctx);
@@ -211,20 +211,20 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterExpr_statement(CodeSensorParser.Expr_statementContext ctx);
 	void exitExpr_statement(CodeSensorParser.Expr_statementContext ctx);
 
-	void enterBase_class(CodeSensorParser.Base_classContext ctx);
-	void exitBase_class(CodeSensorParser.Base_classContext ctx);
-
 	void enterFunction_name(CodeSensorParser.Function_nameContext ctx);
 	void exitFunction_name(CodeSensorParser.Function_nameContext ctx);
+
+	void enterBase_class(CodeSensorParser.Base_classContext ctx);
+	void exitBase_class(CodeSensorParser.Base_classContext ctx);
 
 	void enterParameter_name(CodeSensorParser.Parameter_nameContext ctx);
 	void exitParameter_name(CodeSensorParser.Parameter_nameContext ctx);
 
-	void enterAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
-	void exitAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
-
 	void enterCtor_list(CodeSensorParser.Ctor_listContext ctx);
 	void exitCtor_list(CodeSensorParser.Ctor_listContext ctx);
+
+	void enterAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
+	void exitAccess_specifier(CodeSensorParser.Access_specifierContext ctx);
 
 	void enterType_name2(CodeSensorParser.Type_name2Context ctx);
 	void exitType_name2(CodeSensorParser.Type_name2Context ctx);
@@ -238,11 +238,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 
-	void enterCondition(CodeSensorParser.ConditionContext ctx);
-	void exitCondition(CodeSensorParser.ConditionContext ctx);
-
 	void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
+
+	void enterCondition(CodeSensorParser.ConditionContext ctx);
+	void exitCondition(CodeSensorParser.ConditionContext ctx);
 
 	void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx);
 	void exitParameter_decl(CodeSensorParser.Parameter_declContext ctx);
@@ -292,20 +292,20 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNo_brackets_or_semicolon(CodeSensorParser.No_brackets_or_semicolonContext ctx);
 	void exitNo_brackets_or_semicolon(CodeSensorParser.No_brackets_or_semicolonContext ctx);
 
-	void enterEquality_operator(CodeSensorParser.Equality_operatorContext ctx);
-	void exitEquality_operator(CodeSensorParser.Equality_operatorContext ctx);
-
 	void enterNo_curlies(CodeSensorParser.No_curliesContext ctx);
 	void exitNo_curlies(CodeSensorParser.No_curliesContext ctx);
 
-	void enterExpr(CodeSensorParser.ExprContext ctx);
-	void exitExpr(CodeSensorParser.ExprContext ctx);
+	void enterEquality_operator(CodeSensorParser.Equality_operatorContext ctx);
+	void exitEquality_operator(CodeSensorParser.Equality_operatorContext ctx);
 
 	void enterParam_type_list(CodeSensorParser.Param_type_listContext ctx);
 	void exitParam_type_list(CodeSensorParser.Param_type_listContext ctx);
 
 	void enterWhile_statement(CodeSensorParser.While_statementContext ctx);
 	void exitWhile_statement(CodeSensorParser.While_statementContext ctx);
+
+	void enterExpr(CodeSensorParser.ExprContext ctx);
+	void exitExpr(CodeSensorParser.ExprContext ctx);
 
 	void enterSimple_decl(CodeSensorParser.Simple_declContext ctx);
 	void exitSimple_decl(CodeSensorParser.Simple_declContext ctx);
@@ -355,11 +355,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterParam_decl_specifiers2(CodeSensorParser.Param_decl_specifiers2Context ctx);
 	void exitParam_decl_specifiers2(CodeSensorParser.Param_decl_specifiers2Context ctx);
 
-	void enterClass_def(CodeSensorParser.Class_defContext ctx);
-	void exitClass_def(CodeSensorParser.Class_defContext ctx);
-
 	void enterInitializer_id(CodeSensorParser.Initializer_idContext ctx);
 	void exitInitializer_id(CodeSensorParser.Initializer_idContext ctx);
+
+	void enterClass_def(CodeSensorParser.Class_defContext ctx);
+	void exitClass_def(CodeSensorParser.Class_defContext ctx);
 
 	void enterAnd_expression(CodeSensorParser.And_expressionContext ctx);
 	void exitAnd_expression(CodeSensorParser.And_expressionContext ctx);

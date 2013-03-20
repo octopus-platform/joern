@@ -46,6 +46,9 @@ import FunctionGrammar;
             }
 
 
+   // this should go into FunctionGrammar but ANTLR fails
+   // to join the parser::members-section on inclusion
+   
    public boolean preProcSkipToEnd()
    {
                 Stack<Object> CurlyStack = new Stack<Object>();
@@ -82,7 +85,6 @@ init_declarator_list: init_declarator (',' init_declarator)* ';';
 
 init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr_w_))?;
 
-// this is new
 assign_expr_w_: assign_water*
         (('{' assign_expr_w__l2 '}' | '(' assign_expr_w__l2 ')' | '[' assign_expr_w__l2 ']')
              assign_water*)*;
