@@ -2,7 +2,6 @@ package main;
 
 import java.util.Stack;
 
-import main.ShallowParser.ShallowParserContext;
 import main.codeitems.CodeItemBuilder;
 import main.processors.CSVPrinter;
 import main.processors.Processor;
@@ -16,7 +15,7 @@ public class CommonCodeSensorListener extends CodeSensorBaseListener
 	protected String filename;
 	protected TokenSubStream stream;
 		
-	public void initializeContext(ShallowParserContext context)
+	public void initializeContext(CommonParserContext context)
 	{
 		filename = context.filename;
 		stream = context.stream;
@@ -36,7 +35,6 @@ public class CommonCodeSensorListener extends CodeSensorBaseListener
 	{
 		return processor;
 	}
-	
 	
 	public CommonCodeSensorListener() {
 		super();

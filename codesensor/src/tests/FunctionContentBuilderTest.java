@@ -131,7 +131,7 @@ public class FunctionContentBuilderTest {
 	private ParseTree parse(String input)
 	{
 		FunctionParser parser = new FunctionParser();
-		return parser.parse(input);
+		return parser.parseString(input);
 	}
 
 	private TokenSubStream tokenStreamFromString(String input)

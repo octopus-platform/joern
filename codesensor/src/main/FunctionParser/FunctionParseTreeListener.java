@@ -3,8 +3,8 @@ package main.FunctionParser;
 import java.util.Stack;
 
 import main.CommonCodeSensorListener;
+import main.CommonParserContext;
 import main.TokenSubStream;
-import main.ShallowParser.ShallowParserContext;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.functionContent.FunctionContentBuilder;
 import main.processors.CSVPrinter;

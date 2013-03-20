@@ -13,7 +13,7 @@ public class FunctionParserTest {
 	{
 		String input = "if(foo){}";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
 		assertTrue(output.contains("(if_statement"));
@@ -24,7 +24,7 @@ public class FunctionParserTest {
 	{
 		String input = "class foo{ int x; };";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		assertTrue(output.contains("class_def"));
 	}
@@ -34,7 +34,7 @@ public class FunctionParserTest {
 	{
 		String input = "#if foo\n #endif\n";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
 		assertTrue(output.equals("(statements (pre_opener #if foo\\n) (pre_closer #endif\\n))"));
@@ -45,7 +45,7 @@ public class FunctionParserTest {
 	{
 		String input = "foo(x);";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		assertTrue(output.contains("function_argument_list"));
 	}
@@ -55,7 +55,7 @@ public class FunctionParserTest {
 	{
 		String input = "ptr->foo(x);";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		assertTrue(output.contains("function_argument_list"));
 	}
@@ -65,7 +65,7 @@ public class FunctionParserTest {
 	{
 		String input = "foo(x == 1, x++);";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		assertTrue(output.contains("function_argument_list"));
 	}
@@ -75,7 +75,7 @@ public class FunctionParserTest {
 	{
 		String input = "x = y + 1;";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
@@ -86,7 +86,7 @@ public class FunctionParserTest {
 	{
 		String input = "k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c];";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
@@ -97,7 +97,7 @@ public class FunctionParserTest {
 	{
 		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";
 		FunctionParser functionParser = new FunctionParser();
-		ParseTree tree = functionParser.parse(input);
+		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));

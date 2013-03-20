@@ -214,10 +214,4 @@ public class ShallowParseTreeListener extends CommonCodeSensorListener
 		stream.restrict(startIndex+1, stopIndex);
 	}
 	
-	public Processor getProcessor()
-	{
-		return processor;
-	}
-	
-	
 }
