@@ -1,26 +1,38 @@
 lexer grammar CodeSensorLex;
 
-// keywords
+// Keywords shared among C/C++/Java
 
 IF: 'if'; ELSE: 'else'; FOR: 'for'; WHILE: 'while';
-SWITCH: 'switch'; CONTINUE: 'continue'; BREAK: 'break';
-GOTO: 'goto'; RETURN: 'return'; CASE: 'case';
-TRY: 'try'; CATCH: 'catch'; THROW: 'throw';
-VOID: 'void'; USING: 'using';
-NAMESPACE: 'namespace'; TYPEDEF: 'typedef';
-VIRTUAL: 'virtual';
-UNSIGNED: 'unsigned'; SIGNED: 'signed';
-LONG: 'long';
-AUTO: 'auto'; REGISTER: 'register';
-OPERATOR: 'operator'; TEMPLATE: 'template';
 
-CV_QUALIFIER :  'const' | 'volatile';
+BREAK: 'break'; CASE: 'case'; CONTINUE: 'continue'; 
+SWITCH: 'switch'; 
+
+GOTO: 'goto'; RETURN: 'return';
+
+TYPEDEF: 'typedef';
+VOID: 'void'; UNSIGNED: 'unsigned'; SIGNED: 'signed';
+LONG: 'long'; CV_QUALIFIER :  'const' | 'volatile';
+
+// Keywords shared among C++/Java
+
+VIRTUAL: 'virtual';
+TRY: 'try'; CATCH: 'catch'; THROW: 'throw';
+USING: 'using'; NAMESPACE: 'namespace'; 
+
+// Keywords shared among C/C++
+
+AUTO: 'auto'; REGISTER: 'register';
+
+// C++ keywords
+
+OPERATOR: 'operator';
+TEMPLATE: 'template';
 
 ALPHA_NUMERIC: [a-zA-Z_~][a-zA-Z0-9_]*;
 OPENING_CURLY: '{';
 CLOSING_CURLY: '}';
 
-// pre-processor directives
+// pre-processor directives: C/C++
 
 PRE_IF: ('#if' | '#ifdef' | '#ifndef') ~[\r\n]* '\r'? '\n';
 PRE_ELSE: ('#else' | '#elif') ~[\r\n]* '\r'? '\n';

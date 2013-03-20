@@ -29,10 +29,10 @@ public class CodeSensorLexer extends Lexer {
 		T__22=38, T__21=39, T__20=40, T__19=41, T__18=42, T__17=43, T__16=44, 
 		T__15=45, T__14=46, T__13=47, T__12=48, T__11=49, T__10=50, T__9=51, T__8=52, 
 		T__7=53, T__6=54, T__5=55, T__4=56, T__3=57, T__2=58, T__1=59, T__0=60, 
-		IF=61, ELSE=62, FOR=63, WHILE=64, SWITCH=65, CONTINUE=66, BREAK=67, GOTO=68, 
-		RETURN=69, CASE=70, TRY=71, CATCH=72, THROW=73, VOID=74, USING=75, NAMESPACE=76, 
-		TYPEDEF=77, VIRTUAL=78, UNSIGNED=79, SIGNED=80, LONG=81, AUTO=82, REGISTER=83, 
-		OPERATOR=84, TEMPLATE=85, CV_QUALIFIER=86, ALPHA_NUMERIC=87, OPENING_CURLY=88, 
+		IF=61, ELSE=62, FOR=63, WHILE=64, BREAK=65, CASE=66, CONTINUE=67, SWITCH=68, 
+		GOTO=69, RETURN=70, TYPEDEF=71, VOID=72, UNSIGNED=73, SIGNED=74, LONG=75, 
+		CV_QUALIFIER=76, VIRTUAL=77, TRY=78, CATCH=79, THROW=80, USING=81, NAMESPACE=82, 
+		AUTO=83, REGISTER=84, OPERATOR=85, TEMPLATE=86, ALPHA_NUMERIC=87, OPENING_CURLY=88, 
 		CLOSING_CURLY=89, PRE_IF=90, PRE_ELSE=91, PRE_ENDIF=92, HEX_LITERAL=93, 
 		DECIMAL_LITERAL=94, OCTAL_LITERAL=95, FLOATING_POINT_LITERAL=96, CHAR=97, 
 		STRING=98, COMMENT=99, WHITESPACE=100, CPPCOMMENT=101, OTHER=102;
@@ -49,13 +49,13 @@ public class CodeSensorLexer extends Lexer {
 		"'?'", "'>>='", "'...'", "'+='", "'^='", "'friend'", "'struct'", "'static'", 
 		"'++'", "'>>'", "'^'", "'delete'", "'.'", "'+'", "'protected'", "';'", 
 		"'&&'", "'||'", "'>'", "'%='", "'/='", "'/'", "'=='", "'~'", "'>='", "'if'", 
-		"'else'", "'for'", "'while'", "'switch'", "'continue'", "'break'", "'goto'", 
-		"'return'", "'case'", "'try'", "'catch'", "'throw'", "'void'", "'using'", 
-		"'namespace'", "'typedef'", "'virtual'", "'unsigned'", "'signed'", "'long'", 
-		"'auto'", "'register'", "'operator'", "'template'", "CV_QUALIFIER", "ALPHA_NUMERIC", 
-		"'{'", "'}'", "PRE_IF", "PRE_ELSE", "PRE_ENDIF", "HEX_LITERAL", "DECIMAL_LITERAL", 
-		"OCTAL_LITERAL", "FLOATING_POINT_LITERAL", "CHAR", "STRING", "COMMENT", 
-		"WHITESPACE", "CPPCOMMENT", "OTHER"
+		"'else'", "'for'", "'while'", "'break'", "'case'", "'continue'", "'switch'", 
+		"'goto'", "'return'", "'typedef'", "'void'", "'unsigned'", "'signed'", 
+		"'long'", "CV_QUALIFIER", "'virtual'", "'try'", "'catch'", "'throw'", 
+		"'using'", "'namespace'", "'auto'", "'register'", "'operator'", "'template'", 
+		"ALPHA_NUMERIC", "'{'", "'}'", "PRE_IF", "PRE_ELSE", "PRE_ENDIF", "HEX_LITERAL", 
+		"DECIMAL_LITERAL", "OCTAL_LITERAL", "FLOATING_POINT_LITERAL", "CHAR", 
+		"STRING", "COMMENT", "WHITESPACE", "CPPCOMMENT", "OTHER"
 	};
 	public static final String[] ruleNames = {
 		"T__59", "T__58", "T__57", "T__56", "T__55", "T__54", "T__53", "T__52", 
@@ -65,14 +65,15 @@ public class CodeSensorLexer extends Lexer {
 		"T__27", "T__26", "T__25", "T__24", "T__23", "T__22", "T__21", "T__20", 
 		"T__19", "T__18", "T__17", "T__16", "T__15", "T__14", "T__13", "T__12", 
 		"T__11", "T__10", "T__9", "T__8", "T__7", "T__6", "T__5", "T__4", "T__3", 
-		"T__2", "T__1", "T__0", "IF", "ELSE", "FOR", "WHILE", "SWITCH", "CONTINUE", 
-		"BREAK", "GOTO", "RETURN", "CASE", "TRY", "CATCH", "THROW", "VOID", "USING", 
-		"NAMESPACE", "TYPEDEF", "VIRTUAL", "UNSIGNED", "SIGNED", "LONG", "AUTO", 
-		"REGISTER", "OPERATOR", "TEMPLATE", "CV_QUALIFIER", "ALPHA_NUMERIC", "OPENING_CURLY", 
-		"CLOSING_CURLY", "PRE_IF", "PRE_ELSE", "PRE_ENDIF", "HEX_LITERAL", "DECIMAL_LITERAL", 
-		"OCTAL_LITERAL", "FLOATING_POINT_LITERAL", "CHAR", "STRING", "IntegerTypeSuffix", 
-		"Exponent", "FloatTypeSuffix", "EscapeSequence", "OctalEscape", "UnicodeEscape", 
-		"HexDigit", "COMMENT", "WHITESPACE", "CPPCOMMENT", "OTHER"
+		"T__2", "T__1", "T__0", "IF", "ELSE", "FOR", "WHILE", "BREAK", "CASE", 
+		"CONTINUE", "SWITCH", "GOTO", "RETURN", "TYPEDEF", "VOID", "UNSIGNED", 
+		"SIGNED", "LONG", "CV_QUALIFIER", "VIRTUAL", "TRY", "CATCH", "THROW", 
+		"USING", "NAMESPACE", "AUTO", "REGISTER", "OPERATOR", "TEMPLATE", "ALPHA_NUMERIC", 
+		"OPENING_CURLY", "CLOSING_CURLY", "PRE_IF", "PRE_ELSE", "PRE_ENDIF", "HEX_LITERAL", 
+		"DECIMAL_LITERAL", "OCTAL_LITERAL", "FLOATING_POINT_LITERAL", "CHAR", 
+		"STRING", "IntegerTypeSuffix", "Exponent", "FloatTypeSuffix", "EscapeSequence", 
+		"OctalEscape", "UnicodeEscape", "HexDigit", "COMMENT", "WHITESPACE", "CPPCOMMENT", 
+		"OTHER"
 	};
 
 
@@ -155,14 +156,14 @@ public class CodeSensorLexer extends Lexer {
 		"\61\3\62\3\62\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\63\3\64\3"+
 		"\64\3\65\3\65\3\65\3\66\3\66\3\66\3\67\3\67\38\38\38\39\39\39\3:\3:\3"+
 		";\3;\3;\3<\3<\3=\3=\3=\3>\3>\3>\3?\3?\3?\3?\3?\3@\3@\3@\3@\3A\3A\3A\3"+
-		"A\3A\3A\3B\3B\3B\3B\3B\3B\3B\3C\3C\3C\3C\3C\3C\3C\3C\3C\3D\3D\3D\3D\3"+
-		"D\3D\3E\3E\3E\3E\3E\3F\3F\3F\3F\3F\3F\3F\3G\3G\3G\3G\3G\3H\3H\3H\3H\3"+
-		"I\3I\3I\3I\3I\3I\3J\3J\3J\3J\3J\3J\3K\3K\3K\3K\3K\3L\3L\3L\3L\3L\3L\3"+
-		"M\3M\3M\3M\3M\3M\3M\3M\3M\3M\3N\3N\3N\3N\3N\3N\3N\3N\3O\3O\3O\3O\3O\3"+
-		"O\3O\3O\3P\3P\3P\3P\3P\3P\3P\3P\3P\3Q\3Q\3Q\3Q\3Q\3Q\3Q\3R\3R\3R\3R\3"+
-		"R\3S\3S\3S\3S\3S\3T\3T\3T\3T\3T\3T\3T\3T\3T\3U\3U\3U\3U\3U\3U\3U\3U\3"+
-		"U\3V\3V\3V\3V\3V\3V\3V\3V\3V\3W\3W\3W\3W\3W\3W\3W\3W\3W\3W\3W\3W\3W\5"+
-		"W\u0263\nW\3X\3X\7X\u0267\nX\fX\16X\u026a\13X\3Y\3Y\3Z\3Z\3[\3[\3[\3["+
+		"A\3A\3A\3B\3B\3B\3B\3B\3B\3C\3C\3C\3C\3C\3D\3D\3D\3D\3D\3D\3D\3D\3D\3"+
+		"E\3E\3E\3E\3E\3E\3E\3F\3F\3F\3F\3F\3G\3G\3G\3G\3G\3G\3G\3H\3H\3H\3H\3"+
+		"H\3H\3H\3H\3I\3I\3I\3I\3I\3J\3J\3J\3J\3J\3J\3J\3J\3J\3K\3K\3K\3K\3K\3"+
+		"K\3K\3L\3L\3L\3L\3L\3M\3M\3M\3M\3M\3M\3M\3M\3M\3M\3M\3M\3M\5M\u021b\n"+
+		"M\3N\3N\3N\3N\3N\3N\3N\3N\3O\3O\3O\3O\3P\3P\3P\3P\3P\3P\3Q\3Q\3Q\3Q\3"+
+		"Q\3Q\3R\3R\3R\3R\3R\3R\3S\3S\3S\3S\3S\3S\3S\3S\3S\3S\3T\3T\3T\3T\3T\3"+
+		"U\3U\3U\3U\3U\3U\3U\3U\3U\3V\3V\3V\3V\3V\3V\3V\3V\3V\3W\3W\3W\3W\3W\3"+
+		"W\3W\3W\3W\3X\3X\7X\u0267\nX\fX\16X\u026a\13X\3Y\3Y\3Z\3Z\3[\3[\3[\3["+
 		"\3[\3[\3[\3[\3[\3[\3[\3[\3[\3[\3[\3[\5[\u0280\n[\3[\7[\u0283\n[\f[\16"+
 		"[\u0286\13[\3[\5[\u0289\n[\3[\3[\3\\\3\\\3\\\3\\\3\\\3\\\3\\\3\\\3\\\3"+
 		"\\\5\\\u0297\n\\\3\\\7\\\u029a\n\\\f\\\16\\\u029d\13\\\3\\\5\\\u02a0\n"+
@@ -227,12 +228,12 @@ public class CodeSensorLexer extends Lexer {
 		"\2\2k\u019d\3\2\2\2m\u01a0\3\2\2\2o\u01a2\3\2\2\2q\u01a5\3\2\2\2s\u01a8"+
 		"\3\2\2\2u\u01aa\3\2\2\2w\u01ad\3\2\2\2y\u01af\3\2\2\2{\u01b2\3\2\2\2}"+
 		"\u01b5\3\2\2\2\177\u01ba\3\2\2\2\u0081\u01be\3\2\2\2\u0083\u01c4\3\2\2"+
-		"\2\u0085\u01cb\3\2\2\2\u0087\u01d4\3\2\2\2\u0089\u01da\3\2\2\2\u008b\u01df"+
-		"\3\2\2\2\u008d\u01e6\3\2\2\2\u008f\u01eb\3\2\2\2\u0091\u01ef\3\2\2\2\u0093"+
-		"\u01f5\3\2\2\2\u0095\u01fb\3\2\2\2\u0097\u0200\3\2\2\2\u0099\u0206\3\2"+
-		"\2\2\u009b\u0210\3\2\2\2\u009d\u0218\3\2\2\2\u009f\u0220\3\2\2\2\u00a1"+
-		"\u0229\3\2\2\2\u00a3\u0230\3\2\2\2\u00a5\u0235\3\2\2\2\u00a7\u023a\3\2"+
-		"\2\2\u00a9\u0243\3\2\2\2\u00ab\u024c\3\2\2\2\u00ad\u0262\3\2\2\2\u00af"+
+		"\2\u0085\u01ca\3\2\2\2\u0087\u01cf\3\2\2\2\u0089\u01d8\3\2\2\2\u008b\u01df"+
+		"\3\2\2\2\u008d\u01e4\3\2\2\2\u008f\u01eb\3\2\2\2\u0091\u01f3\3\2\2\2\u0093"+
+		"\u01f8\3\2\2\2\u0095\u0201\3\2\2\2\u0097\u0208\3\2\2\2\u0099\u021a\3\2"+
+		"\2\2\u009b\u021c\3\2\2\2\u009d\u0224\3\2\2\2\u009f\u0228\3\2\2\2\u00a1"+
+		"\u022e\3\2\2\2\u00a3\u0234\3\2\2\2\u00a5\u023a\3\2\2\2\u00a7\u0244\3\2"+
+		"\2\2\u00a9\u0249\3\2\2\2\u00ab\u0252\3\2\2\2\u00ad\u025b\3\2\2\2\u00af"+
 		"\u0264\3\2\2\2\u00b1\u026b\3\2\2\2\u00b3\u026d\3\2\2\2\u00b5\u027f\3\2"+
 		"\2\2\u00b7\u0296\3\2\2\2\u00b9\u02a3\3\2\2\2\u00bb\u02b5\3\2\2\2\u00bd"+
 		"\u02c7\3\2\2\2\u00bf\u02cc\3\2\2\2\u00c1\u0305\3\2\2\2\u00c3\u0307\3\2"+
@@ -298,51 +299,51 @@ public class CodeSensorLexer extends Lexer {
 		"\u01b8\7u\2\2\u01b8\u01b9\7g\2\2\u01b9~\3\2\2\2\u01ba\u01bb\7h\2\2\u01bb"+
 		"\u01bc\7q\2\2\u01bc\u01bd\7t\2\2\u01bd\u0080\3\2\2\2\u01be\u01bf\7y\2"+
 		"\2\u01bf\u01c0\7j\2\2\u01c0\u01c1\7k\2\2\u01c1\u01c2\7n\2\2\u01c2\u01c3"+
-		"\7g\2\2\u01c3\u0082\3\2\2\2\u01c4\u01c5\7u\2\2\u01c5\u01c6\7y\2\2\u01c6"+
-		"\u01c7\7k\2\2\u01c7\u01c8\7v\2\2\u01c8\u01c9\7e\2\2\u01c9\u01ca\7j\2\2"+
-		"\u01ca\u0084\3\2\2\2\u01cb\u01cc\7e\2\2\u01cc\u01cd\7q\2\2\u01cd\u01ce"+
-		"\7p\2\2\u01ce\u01cf\7v\2\2\u01cf\u01d0\7k\2\2\u01d0\u01d1\7p\2\2\u01d1"+
-		"\u01d2\7w\2\2\u01d2\u01d3\7g\2\2\u01d3\u0086\3\2\2\2\u01d4\u01d5\7d\2"+
-		"\2\u01d5\u01d6\7t\2\2\u01d6\u01d7\7g\2\2\u01d7\u01d8\7c\2\2\u01d8\u01d9"+
-		"\7m\2\2\u01d9\u0088\3\2\2\2\u01da\u01db\7i\2\2\u01db\u01dc\7q\2\2\u01dc"+
-		"\u01dd\7v\2\2\u01dd\u01de\7q\2\2\u01de\u008a\3\2\2\2\u01df\u01e0\7t\2"+
-		"\2\u01e0\u01e1\7g\2\2\u01e1\u01e2\7v\2\2\u01e2\u01e3\7w\2\2\u01e3\u01e4"+
-		"\7t\2\2\u01e4\u01e5\7p\2\2\u01e5\u008c\3\2\2\2\u01e6\u01e7\7e\2\2\u01e7"+
-		"\u01e8\7c\2\2\u01e8\u01e9\7u\2\2\u01e9\u01ea\7g\2\2\u01ea\u008e\3\2\2"+
-		"\2\u01eb\u01ec\7v\2\2\u01ec\u01ed\7t\2\2\u01ed\u01ee\7{\2\2\u01ee\u0090"+
-		"\3\2\2\2\u01ef\u01f0\7e\2\2\u01f0\u01f1\7c\2\2\u01f1\u01f2\7v\2\2\u01f2"+
-		"\u01f3\7e\2\2\u01f3\u01f4\7j\2\2\u01f4\u0092\3\2\2\2\u01f5\u01f6\7v\2"+
-		"\2\u01f6\u01f7\7j\2\2\u01f7\u01f8\7t\2\2\u01f8\u01f9\7q\2\2\u01f9\u01fa"+
-		"\7y\2\2\u01fa\u0094\3\2\2\2\u01fb\u01fc\7x\2\2\u01fc\u01fd\7q\2\2\u01fd"+
-		"\u01fe\7k\2\2\u01fe\u01ff\7f\2\2\u01ff\u0096\3\2\2\2\u0200\u0201\7w\2"+
-		"\2\u0201\u0202\7u\2\2\u0202\u0203\7k\2\2\u0203\u0204\7p\2\2\u0204\u0205"+
-		"\7i\2\2\u0205\u0098\3\2\2\2\u0206\u0207\7p\2\2\u0207\u0208\7c\2\2\u0208"+
-		"\u0209\7o\2\2\u0209\u020a\7g\2\2\u020a\u020b\7u\2\2\u020b\u020c\7r\2\2"+
-		"\u020c\u020d\7c\2\2\u020d\u020e\7e\2\2\u020e\u020f\7g\2\2\u020f\u009a"+
-		"\3\2\2\2\u0210\u0211\7v\2\2\u0211\u0212\7{\2\2\u0212\u0213\7r\2\2\u0213"+
-		"\u0214\7g\2\2\u0214\u0215\7f\2\2\u0215\u0216\7g\2\2\u0216\u0217\7h\2\2"+
-		"\u0217\u009c\3\2\2\2\u0218\u0219\7x\2\2\u0219\u021a\7k\2\2\u021a\u021b"+
-		"\7t\2\2\u021b\u021c\7v\2\2\u021c\u021d\7w\2\2\u021d\u021e\7c\2\2\u021e"+
-		"\u021f\7n\2\2\u021f\u009e\3\2\2\2\u0220\u0221\7w\2\2\u0221\u0222\7p\2"+
-		"\2\u0222\u0223\7u\2\2\u0223\u0224\7k\2\2\u0224\u0225\7i\2\2\u0225\u0226"+
-		"\7p\2\2\u0226\u0227\7g\2\2\u0227\u0228\7f\2\2\u0228\u00a0\3\2\2\2\u0229"+
-		"\u022a\7u\2\2\u022a\u022b\7k\2\2\u022b\u022c\7i\2\2\u022c\u022d\7p\2\2"+
-		"\u022d\u022e\7g\2\2\u022e\u022f\7f\2\2\u022f\u00a2\3\2\2\2\u0230\u0231"+
-		"\7n\2\2\u0231\u0232\7q\2\2\u0232\u0233\7p\2\2\u0233\u0234\7i\2\2\u0234"+
-		"\u00a4\3\2\2\2\u0235\u0236\7c\2\2\u0236\u0237\7w\2\2\u0237\u0238\7v\2"+
-		"\2\u0238\u0239\7q\2\2\u0239\u00a6\3\2\2\2\u023a\u023b\7t\2\2\u023b\u023c"+
-		"\7g\2\2\u023c\u023d\7i\2\2\u023d\u023e\7k\2\2\u023e\u023f\7u\2\2\u023f"+
-		"\u0240\7v\2\2\u0240\u0241\7g\2\2\u0241\u0242\7t\2\2\u0242\u00a8\3\2\2"+
-		"\2\u0243\u0244\7q\2\2\u0244\u0245\7r\2\2\u0245\u0246\7g\2\2\u0246\u0247"+
-		"\7t\2\2\u0247\u0248\7c\2\2\u0248\u0249\7v\2\2\u0249\u024a\7q\2\2\u024a"+
-		"\u024b\7t\2\2\u024b\u00aa\3\2\2\2\u024c\u024d\7v\2\2\u024d\u024e\7g\2"+
-		"\2\u024e\u024f\7o\2\2\u024f\u0250\7r\2\2\u0250\u0251\7n\2\2\u0251\u0252"+
-		"\7c\2\2\u0252\u0253\7v\2\2\u0253\u0254\7g\2\2\u0254\u00ac\3\2\2\2\u0255"+
-		"\u0256\7e\2\2\u0256\u0257\7q\2\2\u0257\u0258\7p\2\2\u0258\u0259\7u\2\2"+
-		"\u0259\u0263\7v\2\2\u025a\u025b\7x\2\2\u025b\u025c\7q\2\2\u025c\u025d"+
-		"\7n\2\2\u025d\u025e\7c\2\2\u025e\u025f\7v\2\2\u025f\u0260\7k\2\2\u0260"+
-		"\u0261\7n\2\2\u0261\u0263\7g\2\2\u0262\u0255\3\2\2\2\u0262\u025a\3\2\2"+
-		"\2\u0263\u00ae\3\2\2\2\u0264\u0268\t\2\2\2\u0265\u0267\t\3\2\2\u0266\u0265"+
+		"\7g\2\2\u01c3\u0082\3\2\2\2\u01c4\u01c5\7d\2\2\u01c5\u01c6\7t\2\2\u01c6"+
+		"\u01c7\7g\2\2\u01c7\u01c8\7c\2\2\u01c8\u01c9\7m\2\2\u01c9\u0084\3\2\2"+
+		"\2\u01ca\u01cb\7e\2\2\u01cb\u01cc\7c\2\2\u01cc\u01cd\7u\2\2\u01cd\u01ce"+
+		"\7g\2\2\u01ce\u0086\3\2\2\2\u01cf\u01d0\7e\2\2\u01d0\u01d1\7q\2\2\u01d1"+
+		"\u01d2\7p\2\2\u01d2\u01d3\7v\2\2\u01d3\u01d4\7k\2\2\u01d4\u01d5\7p\2\2"+
+		"\u01d5\u01d6\7w\2\2\u01d6\u01d7\7g\2\2\u01d7\u0088\3\2\2\2\u01d8\u01d9"+
+		"\7u\2\2\u01d9\u01da\7y\2\2\u01da\u01db\7k\2\2\u01db\u01dc\7v\2\2\u01dc"+
+		"\u01dd\7e\2\2\u01dd\u01de\7j\2\2\u01de\u008a\3\2\2\2\u01df\u01e0\7i\2"+
+		"\2\u01e0\u01e1\7q\2\2\u01e1\u01e2\7v\2\2\u01e2\u01e3\7q\2\2\u01e3\u008c"+
+		"\3\2\2\2\u01e4\u01e5\7t\2\2\u01e5\u01e6\7g\2\2\u01e6\u01e7\7v\2\2\u01e7"+
+		"\u01e8\7w\2\2\u01e8\u01e9\7t\2\2\u01e9\u01ea\7p\2\2\u01ea\u008e\3\2\2"+
+		"\2\u01eb\u01ec\7v\2\2\u01ec\u01ed\7{\2\2\u01ed\u01ee\7r\2\2\u01ee\u01ef"+
+		"\7g\2\2\u01ef\u01f0\7f\2\2\u01f0\u01f1\7g\2\2\u01f1\u01f2\7h\2\2\u01f2"+
+		"\u0090\3\2\2\2\u01f3\u01f4\7x\2\2\u01f4\u01f5\7q\2\2\u01f5\u01f6\7k\2"+
+		"\2\u01f6\u01f7\7f\2\2\u01f7\u0092\3\2\2\2\u01f8\u01f9\7w\2\2\u01f9\u01fa"+
+		"\7p\2\2\u01fa\u01fb\7u\2\2\u01fb\u01fc\7k\2\2\u01fc\u01fd\7i\2\2\u01fd"+
+		"\u01fe\7p\2\2\u01fe\u01ff\7g\2\2\u01ff\u0200\7f\2\2\u0200\u0094\3\2\2"+
+		"\2\u0201\u0202\7u\2\2\u0202\u0203\7k\2\2\u0203\u0204\7i\2\2\u0204\u0205"+
+		"\7p\2\2\u0205\u0206\7g\2\2\u0206\u0207\7f\2\2\u0207\u0096\3\2\2\2\u0208"+
+		"\u0209\7n\2\2\u0209\u020a\7q\2\2\u020a\u020b\7p\2\2\u020b\u020c\7i\2\2"+
+		"\u020c\u0098\3\2\2\2\u020d\u020e\7e\2\2\u020e\u020f\7q\2\2\u020f\u0210"+
+		"\7p\2\2\u0210\u0211\7u\2\2\u0211\u021b\7v\2\2\u0212\u0213\7x\2\2\u0213"+
+		"\u0214\7q\2\2\u0214\u0215\7n\2\2\u0215\u0216\7c\2\2\u0216\u0217\7v\2\2"+
+		"\u0217\u0218\7k\2\2\u0218\u0219\7n\2\2\u0219\u021b\7g\2\2\u021a\u020d"+
+		"\3\2\2\2\u021a\u0212\3\2\2\2\u021b\u009a\3\2\2\2\u021c\u021d\7x\2\2\u021d"+
+		"\u021e\7k\2\2\u021e\u021f\7t\2\2\u021f\u0220\7v\2\2\u0220\u0221\7w\2\2"+
+		"\u0221\u0222\7c\2\2\u0222\u0223\7n\2\2\u0223\u009c\3\2\2\2\u0224\u0225"+
+		"\7v\2\2\u0225\u0226\7t\2\2\u0226\u0227\7{\2\2\u0227\u009e\3\2\2\2\u0228"+
+		"\u0229\7e\2\2\u0229\u022a\7c\2\2\u022a\u022b\7v\2\2\u022b\u022c\7e\2\2"+
+		"\u022c\u022d\7j\2\2\u022d\u00a0\3\2\2\2\u022e\u022f\7v\2\2\u022f\u0230"+
+		"\7j\2\2\u0230\u0231\7t\2\2\u0231\u0232\7q\2\2\u0232\u0233\7y\2\2\u0233"+
+		"\u00a2\3\2\2\2\u0234\u0235\7w\2\2\u0235\u0236\7u\2\2\u0236\u0237\7k\2"+
+		"\2\u0237\u0238\7p\2\2\u0238\u0239\7i\2\2\u0239\u00a4\3\2\2\2\u023a\u023b"+
+		"\7p\2\2\u023b\u023c\7c\2\2\u023c\u023d\7o\2\2\u023d\u023e\7g\2\2\u023e"+
+		"\u023f\7u\2\2\u023f\u0240\7r\2\2\u0240\u0241\7c\2\2\u0241\u0242\7e\2\2"+
+		"\u0242\u0243\7g\2\2\u0243\u00a6\3\2\2\2\u0244\u0245\7c\2\2\u0245\u0246"+
+		"\7w\2\2\u0246\u0247\7v\2\2\u0247\u0248\7q\2\2\u0248\u00a8\3\2\2\2\u0249"+
+		"\u024a\7t\2\2\u024a\u024b\7g\2\2\u024b\u024c\7i\2\2\u024c\u024d\7k\2\2"+
+		"\u024d\u024e\7u\2\2\u024e\u024f\7v\2\2\u024f\u0250\7g\2\2\u0250\u0251"+
+		"\7t\2\2\u0251\u00aa\3\2\2\2\u0252\u0253\7q\2\2\u0253\u0254\7r\2\2\u0254"+
+		"\u0255\7g\2\2\u0255\u0256\7t\2\2\u0256\u0257\7c\2\2\u0257\u0258\7v\2\2"+
+		"\u0258\u0259\7q\2\2\u0259\u025a\7t\2\2\u025a\u00ac\3\2\2\2\u025b\u025c"+
+		"\7v\2\2\u025c\u025d\7g\2\2\u025d\u025e\7o\2\2\u025e\u025f\7r\2\2\u025f"+
+		"\u0260\7n\2\2\u0260\u0261\7c\2\2\u0261\u0262\7v\2\2\u0262\u0263\7g\2\2"+
+		"\u0263\u00ae\3\2\2\2\u0264\u0268\t\2\2\2\u0265\u0267\t\3\2\2\u0266\u0265"+
 		"\3\2\2\2\u0267\u026a\3\2\2\2\u0268\u0266\3\2\2\2\u0268\u0269\3\2\2\2\u0269"+
 		"\u00b0\3\2\2\2\u026a\u0268\3\2\2\2\u026b\u026c\7}\2\2\u026c\u00b2\3\2"+
 		"\2\2\u026d\u026e\7\177\2\2\u026e\u00b4\3\2\2\2\u026f\u0270\7%\2\2\u0270"+
@@ -431,7 +432,7 @@ public class CodeSensorLexer extends Lexer {
 		"\2\2\u0364\u0362\3\2\2\2\u0365\u0367\7\17\2\2\u0366\u0365\3\2\2\2\u0366"+
 		"\u0367\3\2\2\2\u0367\u0368\3\2\2\2\u0368\u0369\7\f\2\2\u0369\u036a\3\2"+
 		"\2\2\u036a\u036b\bm\4\2\u036b\u00da\3\2\2\2\u036c\u036d\13\2\2\2\u036d"+
-		"\u036e\3\2\2\2\u036e\u036f\bn\5\2\u036f\u00dc\3\2\2\2.\2\u0262\u0268\u027f"+
+		"\u036e\3\2\2\2\u036e\u036f\bn\5\2\u036f\u00dc\3\2\2\2.\2\u021a\u0268\u027f"+
 		"\u0284\u0288\u0296\u029b\u029f\u02ad\u02b1\u02ba\u02bd\u02c4\u02c7\u02ca"+
 		"\u02d0\u02d3\u02d8\u02de\u02e2\u02e5\u02eb\u02ee\u02f1\u02f6\u02fa\u02ff"+
 		"\u0302\u0305\u030a\u0311\u0313\u0319\u031e\u0320\u0324\u0329\u0331\u033c"+
