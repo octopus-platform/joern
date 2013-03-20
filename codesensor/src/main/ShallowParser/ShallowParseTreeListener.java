@@ -3,6 +3,7 @@ package main.ShallowParser;
 import java.util.Iterator;
 import java.util.Stack;
 
+import main.CommonCodeSensorListener;
 import main.TokenSubStream;
 
 import main.FunctionParser.FunctionParser;
@@ -30,32 +31,8 @@ import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
 
-public class ShallowParseTreeListener extends CodeSensorBaseListener
+public class ShallowParseTreeListener extends CommonCodeSensorListener
 {
-	
-	Stack<CodeItemBuilder> builderStack = new Stack<CodeItemBuilder>();
-	Processor processor = new CSVPrinter();
-	String filename;
-	TokenSubStream stream;
-	
-	// Users can initialize the stack with
-	// an existing stack. This allows us to
-	// pass state from one parser to the next.
-	public void setStack(Stack<CodeItemBuilder> aStack)
-	{
-		builderStack = aStack;
-	}
-	
-	public void setProcessor(Processor aProcessor)
-	{
-		processor = aProcessor;
-	}
-	
-	public void initializeContext(ShallowParserContext context)
-	{
-		filename = context.filename;
-		stream = context.stream;
-	}
 	
 	@Override
 	public void enterCode(CodeSensorParser.CodeContext ctx)
@@ -76,7 +53,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 		
 		FunctionDefBuilder builder = new FunctionDefBuilder();
 		builder.createNew(ctx);
-		builderStack.push(builder);
+		itemStack.push(builder);
 	
 		parseFunctionContents(ctx);
 	}
@@ -110,35 +87,35 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	@Override
 	public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) builderStack.peek();
-		builder.setReturnType(ctx, builderStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.setReturnType(ctx, itemStack);
 	}
 	
 	@Override
 	public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) builderStack.peek();
-		builder.setName(ctx, builderStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.setName(ctx, itemStack);
 	}
 	
 	@Override
 	public void enterFunction_param_list(CodeSensorParser.Function_param_listContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) builderStack.peek();
-		builder.setParameterList(ctx, builderStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.setParameterList(ctx, itemStack);
 	}
 	
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) builderStack.peek();
-		builder.addParameter(ctx, builderStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
+		builder.addParameter(ctx, itemStack);
 	}
 	
 	@Override
 	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) builderStack.pop();
-		processor.processItem(builder.getItem(), builderStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.pop();
+		processor.processItem(builder.getItem(), itemStack);
 	}	
 	
 	// Class/Structure Definitions
@@ -155,13 +132,13 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	{
 		ClassDefBuilder builder = new ClassDefBuilder();
 		builder.createNew(ctx);
-		builderStack.push(builder);		
+		itemStack.push(builder);		
 	}
 
 	@Override
 	public void enterClass_name(CodeSensorParser.Class_nameContext ctx)
 	{
-		ClassDefBuilder builder = (ClassDefBuilder) builderStack.peek();
+		ClassDefBuilder builder = (ClassDefBuilder) itemStack.peek();
 		builder.setName(ctx);
 	}
 	
@@ -197,15 +174,15 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 			builder.setName(decl_ctx);
 			builder.setType(decl_ctx, typeName);
 			
-			processor.processItem(builder.getItem(), builderStack);
+			processor.processItem(builder.getItem(), itemStack);
 		}
 	}
 		
 	@Override
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
-		CodeItemBuilder builder = builderStack.pop();
-		processor.processItem(builder.getItem(), builderStack);
+		CodeItemBuilder builder = itemStack.pop();
+		processor.processItem(builder.getItem(), itemStack);
 		
 		parseClassContent(ctx);
 	
@@ -223,7 +200,7 @@ public class ShallowParseTreeListener extends CodeSensorBaseListener
 	private ShallowParser createNewShallowParser()
 	{
 		ShallowParser shallowParser = new ShallowParser();
-		shallowParser.setStack(builderStack);
+		shallowParser.setStack(itemStack);
 		shallowParser.setProcessor(processor);
 		return shallowParser;
 	}

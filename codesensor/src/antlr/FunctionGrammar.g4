@@ -1,5 +1,5 @@
 grammar FunctionGrammar;
-import Expressions;
+import Expressions, Symbols;
 
 statements: (pre_opener
             | pre_closer

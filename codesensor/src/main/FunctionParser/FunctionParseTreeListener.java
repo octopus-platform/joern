@@ -2,46 +2,17 @@ package main.FunctionParser;
 
 import java.util.Stack;
 
+import main.CommonCodeSensorListener;
 import main.TokenSubStream;
 import main.ShallowParser.ShallowParserContext;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.functionContent.FunctionContentBuilder;
 import main.processors.CSVPrinter;
 import main.processors.Processor;
-import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 
-public class FunctionParseTreeListener extends CodeSensorBaseListener
+public class FunctionParseTreeListener extends CommonCodeSensorListener
 {
-	// Warning: code duplication! The same code is in ShallowParseTreeListener
-	
-	Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
-	
-	Processor processor = new CSVPrinter();
-	String filename;
-	TokenSubStream stream;
-		
-	void initializeContext(ShallowParserContext context)
-	{
-		filename = context.filename;
-		stream = context.stream;
-	}
-	void setStack(Stack<CodeItemBuilder> aStack)
-	{
-		itemStack = aStack;
-	}
-	
-	void setProcessor(Processor aProcessor)
-	{
-		processor = aProcessor;
-	}
-
-	public Processor getProcessor() 
-	{
-		return processor;
-	}
-	
-	// duplication end
 	
 	@Override
 	public void enterStatements(CodeSensorParser.StatementsContext ctx)

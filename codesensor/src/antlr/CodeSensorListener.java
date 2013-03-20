@@ -69,6 +69,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterPre_opener(CodeSensorParser.Pre_openerContext ctx);
 	void exitPre_opener(CodeSensorParser.Pre_openerContext ctx);
 
+	void enterSymbols(CodeSensorParser.SymbolsContext ctx);
+	void exitSymbols(CodeSensorParser.SymbolsContext ctx);
+
 	void enterNo_squares(CodeSensorParser.No_squaresContext ctx);
 	void exitNo_squares(CodeSensorParser.No_squaresContext ctx);
 
@@ -237,6 +240,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 
+	void enterSymbol(CodeSensorParser.SymbolContext ctx);
+	void exitSymbol(CodeSensorParser.SymbolContext ctx);
+
 	void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
 
@@ -252,11 +258,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterCode(CodeSensorParser.CodeContext ctx);
 	void exitCode(CodeSensorParser.CodeContext ctx);
 
-	void enterDo_statement(CodeSensorParser.Do_statementContext ctx);
-	void exitDo_statement(CodeSensorParser.Do_statementContext ctx);
-
 	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
+
+	void enterDo_statement(CodeSensorParser.Do_statementContext ctx);
+	void exitDo_statement(CodeSensorParser.Do_statementContext ctx);
 
 	void enterExclusive_or_expression(CodeSensorParser.Exclusive_or_expressionContext ctx);
 	void exitExclusive_or_expression(CodeSensorParser.Exclusive_or_expressionContext ctx);
@@ -332,6 +338,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterClass_key(CodeSensorParser.Class_keyContext ctx);
 	void exitClass_key(CodeSensorParser.Class_keyContext ctx);
+
+	void enterSymbol_water(CodeSensorParser.Symbol_waterContext ctx);
+	void exitSymbol_water(CodeSensorParser.Symbol_waterContext ctx);
 
 	void enterPtrs(CodeSensorParser.PtrsContext ctx);
 	void exitPtrs(CodeSensorParser.PtrsContext ctx);
