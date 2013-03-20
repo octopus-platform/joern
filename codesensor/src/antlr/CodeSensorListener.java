@@ -151,6 +151,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterUsing_directive(CodeSensorParser.Using_directiveContext ctx);
 	void exitUsing_directive(CodeSensorParser.Using_directiveContext ctx);
 
+	void enterDo_statement1(CodeSensorParser.Do_statement1Context ctx);
+	void exitDo_statement1(CodeSensorParser.Do_statement1Context ctx);
+
 	void enterTry_block(CodeSensorParser.Try_blockContext ctx);
 	void exitTry_block(CodeSensorParser.Try_blockContext ctx);
 

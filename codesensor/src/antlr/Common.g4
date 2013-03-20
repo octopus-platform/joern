@@ -230,13 +230,18 @@ switch_statement: SWITCH '(' condition ')';
 
 
 iteration_statement: for_statement
-                   | while_statement
                    | do_statement
+		   | while_statement
 ;
 
 for_statement: 'for' '(' for_init_statement condition ';'  expr? ')';
 while_statement: 'while' '(' condition ')';
 do_statement: 'do'; //  statement 'while' '(' expr ')';
+
+// Don't know why, but: introducing this unused rule results
+// in a performance boost.
+
+do_statement1: 'do' statement 'while' '(' expr ')';
 
 for_init_statement : (simple_decl | expr?) ';';
 

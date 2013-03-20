@@ -154,6 +154,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterUsing_directive(CodeSensorParser.Using_directiveContext ctx) { }
 	@Override public void exitUsing_directive(CodeSensorParser.Using_directiveContext ctx) { }
 
+	@Override public void enterDo_statement1(CodeSensorParser.Do_statement1Context ctx) { }
+	@Override public void exitDo_statement1(CodeSensorParser.Do_statement1Context ctx) { }
+
 	@Override public void enterTry_block(CodeSensorParser.Try_blockContext ctx) { }
 	@Override public void exitTry_block(CodeSensorParser.Try_blockContext ctx) { }
 

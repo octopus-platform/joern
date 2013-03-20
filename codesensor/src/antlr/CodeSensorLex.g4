@@ -63,7 +63,7 @@ FloatTypeSuffix : ('f'|'F'|'d'|'D');
 
 fragment
 EscapeSequence
-    :   '\\' ('b'|'t'|'n'|'f'|'r'| 'v' | '\"'|'\''|'\\')
+    :   '\\' .
     |   UnicodeEscape
     |   OctalEscape
     ;
