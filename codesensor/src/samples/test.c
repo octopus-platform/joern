@@ -153,4 +153,3 @@ js_BoyerMooreHorspool(const jschar *text, uint32_t textlen,
          }
 }
 
-
