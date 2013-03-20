@@ -118,3 +118,39 @@ int main(int argc, char **argv)
              ((k = XLookupKeysym(&e.xkey, 0)) == XK_q || k == XK_Escape) ));
    
 }
+
+void
+js_GetObjectSlotName(JSTracer *trc, char *buf, size_t bufsize)
+{
+   
+
+    if (!shape) {
+        const char *slotname = NULL;
+        if (obj->isGlobal()) {
+#define TEST_SLOT_MATCHES_PROTOTYPE(name,code,init)                           \
+            if ((code) == slot) { slotname = js_##name##_str; goto found; }
+            JS_FOR_EACH_PROTOTYPE(TEST_SLOT_MATCHES_PROTOTYPE)
+#undef TEST_SLOT_MATCHES_PROTOTYPE
+        }
+     
+    } else {
+        jsid propid = shape->propid();
+        if (JSID_IS_INT(propid)) {
+            JS_snprintf(buf, bufsize, "%ld", (long)JSID_TO_INT(propid));
+        } else if (JSID_IS_ATOM(propid)) {
+            PutEscapedString(buf, bufsize, JSID_TO_ATOM(propid), 0);
+        } else {
+            JS_snprintf(buf, bufsize, "**FINALIZED ATOM KEY**");
+        }
+    }
+}
+
+int
+js_BoyerMooreHorspool(const jschar *text, uint32_t textlen,
+                      const jschar *pat, uint32_t patlen)
+{
+	 for (uint32_t k = m; k < textlen; k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) {
+         }
+}
+
+

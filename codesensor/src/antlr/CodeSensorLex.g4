@@ -25,7 +25,7 @@ CLOSING_CURLY: '}';
 PRE_IF: ('#if' | '#ifdef' | '#ifndef') ~[\r\n]* '\r'? '\n';
 PRE_ELSE: ('#else' | '#elif') ~[\r\n]* '\r'? '\n';
 PRE_ENDIF: '#endif' ~[\r\n]* '\r'? '\n';
-PREPROC : '#' ~[\r\n]* '\r'? '\n' -> skip;
+// PREPROC : '#' ~[\r\n]* '\r'? '\n' -> skip;
 
 
 HEX_LITERAL : '0' ('x'|'X') HexDigit+ IntegerTypeSuffix? ;

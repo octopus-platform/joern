@@ -243,7 +243,8 @@ do_statement: 'do'; //  statement 'while' '(' expr ')';
 
 do_statement1: 'do' statement 'while' '(' expr ')';
 
-for_init_statement : (simple_decl | expr?) ';';
+for_init_statement : simple_decl
+                   | expr? ';';
 
 jump_statement: ( break_or_continue | return_statement | goto_statement ) ';';
 break_or_continue: ('break' | 'continue');

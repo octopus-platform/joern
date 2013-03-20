@@ -70,4 +70,37 @@ public class FunctionParserTest {
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
+	@Test
+	public void testAssignmentExpr()
+	{
+		String input = "x = y + 1;";
+		FunctionParser functionParser = new FunctionParser();
+		ParseTree tree = functionParser.parse(input);
+		String output = tree.toStringTree(functionParser.parser);
+		System.out.println(output);
+		assertTrue(output.contains("assign_expr"));
+	}
+	
+	@Test
+	public void testComplexAssignment()
+	{
+		String input = "k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c];";
+		FunctionParser functionParser = new FunctionParser();
+		ParseTree tree = functionParser.parse(input);
+		String output = tree.toStringTree(functionParser.parser);
+		System.out.println(output);
+		assertTrue(output.contains("assign_expr"));
+	}
+	
+	@Test
+	public void testComplexFor()
+	{
+		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";
+		FunctionParser functionParser = new FunctionParser();
+		ParseTree tree = functionParser.parse(input);
+		String output = tree.toStringTree(functionParser.parser);
+		System.out.println(output);
+		assertTrue(output.contains("assign_expr"));
+	}
+	
 }
