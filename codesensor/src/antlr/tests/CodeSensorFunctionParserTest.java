@@ -181,6 +181,27 @@ public class CodeSensorFunctionParserTest {
 	}
 	
 	@Test
+	public void testPreprocIfNesting()
+	{
+		String input = "foo(){ #ifdef x\n #ifdef y\n #else\n #endif\n#endif\n abc(); } foo();" ;
+		CodeSensorParser parser = createParser(input);
+		String output = parser.code().toStringTree(parser);
+		System.out.println(output);
+		assertTrue(output.contains("(compound_statement { #ifdef x\\n #ifdef y\\n #else\\n #endif\\n #endif\\n abc ( ) ; }))))"));
+	}
+	
+	@Test
+	public void testPreprocIfInElse()
+	{
+		String input = "foo(){ #ifdef x\n #else\n #ifdef y\n #endif\n#endif\n abc(); } foo();" ;
+		CodeSensorParser parser = createParser(input);
+		String output = parser.code().toStringTree(parser);
+		System.out.println(output);
+		assertTrue(output.contains("(compound_statement { #ifdef x\\n #else\\n #ifdef y\\n #endif\\n #endif\\n abc ( ) ; }))))"));
+	}
+	
+	
+	@Test
 	public void testStartingPreProcElse()
 	{
 		String input = "#ifdef foo\n int foo(){ #else\n {\n#endif\n } abc\n #endif\n" ;
