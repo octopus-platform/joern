@@ -2,13 +2,14 @@ package main.FunctionParser;
 
 import CoarseFunctionParser.CoarseFunctionParser;
 import main.CommonParser;
+import main.TokenSubStream;
 import main.FineFunctionParser.FineFunctionParser;
 
 public class FunctionParser
 {
 	CommonParser parser;
 
-	FunctionParser()
+	public FunctionParser()
 	{
 		parser = new CoarseFunctionParser();
 	}
@@ -21,6 +22,11 @@ public class FunctionParser
 	public void disableFineParsing()
 	{
 		parser = new CoarseFunctionParser();
+	}
+	
+	public void parseAndWalkStream(TokenSubStream tokens)
+	{
+		parser.parseAndWalkStream(tokens);
 	}
 	
 }

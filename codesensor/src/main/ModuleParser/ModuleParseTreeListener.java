@@ -1,25 +1,22 @@
 package main.ModuleParser;
 
 import java.util.Iterator;
-import java.util.Stack;
 
 import main.CommonCodeSensorListener;
-import main.TokenSubStream;
 
 import main.FineFunctionParser.FineFunctionParser;
+import main.FunctionParser.FunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.function.FunctionDefBuilder;
-import main.processors.CSVPrinter;
-import main.processors.Processor;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.CodeSensorBaseListener;
+
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 
@@ -61,7 +58,8 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 	private void parseFunctionContents(Function_defContext ctx)
 	{
 		restrictStreamToFunctionContent(ctx);
-		FineFunctionParser parser = new FineFunctionParser();
+		FunctionParser parser = new FunctionParser();
+		parser.enableFineParsing();
 		
 		try{
 			parser.parseAndWalkStream(stream);
