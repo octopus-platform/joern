@@ -30,9 +30,9 @@ public class CoarseFunctionParser extends CommonParser {
 		parser = new SymbolsParser(tokens);
         SymbolsParser thisParser = (SymbolsParser) parser;
 		ParseTree tree = null;
-        
+       
         try {
-    		setSLLMode(parser);
+        	setSLLMode(parser);
         	tree = thisParser.coarse_content();
         } catch (RuntimeException ex) {
         	if (isRecognitionException(ex))
@@ -40,8 +40,9 @@ public class CoarseFunctionParser extends CommonParser {
         		tokens.reset();
         		setLLStarMode(parser);
         		tree = thisParser.coarse_content();
+        		
         	}
-        
+        	return tree;
         }
 		return tree;
 	}

@@ -153,3 +153,25 @@ js_BoyerMooreHorspool(const jschar *text, uint32_t textlen,
          }
 }
 
+static void
+__tar_dosmaperr(unsigned long e)
+{
+	int			i;
+
+	if (e == 0)	{
+		errno = 0;
+		return;
+	}
+
+	for (i = 0; i < (int)sizeof(doserrors); i++) {
+		if (doserrors[i].winerr == e) {
+			errno = doserrors[i].doserr;
+			return;
+		}
+	}
+
+	/* fprintf(stderr, "unrecognized win32 error code: %lu", e); */
+	errno = EINVAL;
+	return;
+}
+

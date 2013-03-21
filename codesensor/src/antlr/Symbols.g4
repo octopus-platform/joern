@@ -9,8 +9,8 @@ import CodeSensorLex, Common, Expressions, SimpleDecl;
 
 coarse_content: coarse_elem* EOF;
 
-coarse_elem: unary_expression
-            | simple_decl
+coarse_elem: simple_decl
+            |  unary_expression
             | water
 ;
 

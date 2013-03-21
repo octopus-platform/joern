@@ -16,11 +16,11 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import antlr.CodeSensorLexer;
 
 abstract public class CommonParser
 {
@@ -103,13 +103,19 @@ abstract public class CommonParser
 	
 	protected static boolean isRecognitionException(RuntimeException ex)
 	{
-		return ex.getClass() == RuntimeException.class &&
-				ex.getCause() instanceof RecognitionException;
+		// return ex.getClass() == RuntimeException.class &&
+		//		ex.getCause() instanceof RecognitionException;
+		
+		return ex.getClass() == ParseCancellationException.class &&
+			   ex.getCause() instanceof RecognitionException;
+			
+	
 	}
 
 	protected static void setLLStarMode(Parser parser)
 	{
-		parser.addErrorListener(ConsoleErrorListener.INSTANCE);
+		parser.removeErrorListeners();
+		// parser.addErrorListener(ConsoleErrorListener.INSTANCE);
 		parser.setErrorHandler(new DefaultErrorStrategy());
 		parser.getInterpreter().setPredictionMode(PredictionMode.LL);
 	}

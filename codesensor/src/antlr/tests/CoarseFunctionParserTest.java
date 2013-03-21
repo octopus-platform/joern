@@ -57,6 +57,17 @@ public class CoarseFunctionParserTest {
 		assertTrue(occ == 2);
 	}
 	
+	@Test
+	public void testSimpleSimpleDecl()
+	{
+		String input = "int x;";
+		CoarseFunctionParser parser = new CoarseFunctionParser();
+		ParseTree tree = parser.parseString(input);
+		String output = tree.toStringTree(parser.parser);
+		System.out.println(output);
+		assertTrue(output.contains("simple_decl"));
+	}
+	
 	private int countOccurrences(String needle, String haystack)
 	{
 		int result = 0;
