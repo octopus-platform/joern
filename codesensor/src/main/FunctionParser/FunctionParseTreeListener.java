@@ -78,7 +78,7 @@ public class FunctionParseTreeListener extends CommonCodeSensorListener
 	@Override public void enterFuncCall(CodeSensorParser.FuncCallContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
-		builder.enterFuncCall(ctx);
+		// builder.enterFuncCall(ctx);
 	}
 	
 }
