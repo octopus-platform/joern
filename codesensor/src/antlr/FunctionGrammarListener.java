@@ -18,11 +18,11 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx);
 	void exitTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx);
 
-	void enterFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx);
-	void exitFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx);
-
 	void enterType_suffix(FunctionGrammarParser.Type_suffixContext ctx);
 	void exitType_suffix(FunctionGrammarParser.Type_suffixContext ctx);
+
+	void enterFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx);
+	void exitFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx);
 
 	void enterNo_squares_or_semicolon(FunctionGrammarParser.No_squares_or_semicolonContext ctx);
 	void exitNo_squares_or_semicolon(FunctionGrammarParser.No_squares_or_semicolonContext ctx);
@@ -165,6 +165,9 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterAssign_water(FunctionGrammarParser.Assign_waterContext ctx);
 	void exitAssign_water(FunctionGrammarParser.Assign_waterContext ctx);
 
+	void enterInitializer(FunctionGrammarParser.InitializerContext ctx);
+	void exitInitializer(FunctionGrammarParser.InitializerContext ctx);
+
 	void enterFunction_decl_specifiers(FunctionGrammarParser.Function_decl_specifiersContext ctx);
 	void exitFunction_decl_specifiers(FunctionGrammarParser.Function_decl_specifiersContext ctx);
 
@@ -233,6 +236,9 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 
 	void enterAdditive_expression(FunctionGrammarParser.Additive_expressionContext ctx);
 	void exitAdditive_expression(FunctionGrammarParser.Additive_expressionContext ctx);
+
+	void enterInitializer_list(FunctionGrammarParser.Initializer_listContext ctx);
+	void exitInitializer_list(FunctionGrammarParser.Initializer_listContext ctx);
 
 	void enterUnary_operator(FunctionGrammarParser.Unary_operatorContext ctx);
 	void exitUnary_operator(FunctionGrammarParser.Unary_operatorContext ctx);

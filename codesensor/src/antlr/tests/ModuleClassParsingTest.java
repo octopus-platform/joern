@@ -52,7 +52,7 @@ public class ModuleClassParsingTest {
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
 		
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier archive_contents)) { const char * f ; struct contents * c ; }) (init_declarator_list (init_declarator (identifier files) (type_suffix [ constant_expr_w_ ]) = (assign_expr_w_ {"));
+		assertTrue(output.contains("(assign_water_l2 archive_contents_sparse2)"));
 	}
 
 	@Test

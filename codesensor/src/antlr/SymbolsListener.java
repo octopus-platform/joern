@@ -18,11 +18,11 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx);
 	void exitFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx);
 
-	void enterFunction_argument_list(SymbolsParser.Function_argument_listContext ctx);
-	void exitFunction_argument_list(SymbolsParser.Function_argument_listContext ctx);
-
 	void enterType_suffix(SymbolsParser.Type_suffixContext ctx);
 	void exitType_suffix(SymbolsParser.Type_suffixContext ctx);
+
+	void enterFunction_argument_list(SymbolsParser.Function_argument_listContext ctx);
+	void exitFunction_argument_list(SymbolsParser.Function_argument_listContext ctx);
 
 	void enterMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx);
 	void exitMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx);
@@ -45,11 +45,11 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx);
 
-	void enterCall_template_list(SymbolsParser.Call_template_listContext ctx);
-	void exitCall_template_list(SymbolsParser.Call_template_listContext ctx);
-
 	void enterFunction_call_tail(SymbolsParser.Function_call_tailContext ctx);
 	void exitFunction_call_tail(SymbolsParser.Function_call_tailContext ctx);
+
+	void enterCall_template_list(SymbolsParser.Call_template_listContext ctx);
+	void exitCall_template_list(SymbolsParser.Call_template_listContext ctx);
 
 	void enterBase_class(SymbolsParser.Base_classContext ctx);
 	void exitBase_class(SymbolsParser.Base_classContext ctx);
@@ -84,8 +84,14 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterParam_type_id(SymbolsParser.Param_type_idContext ctx);
 	void exitParam_type_id(SymbolsParser.Param_type_idContext ctx);
 
+	void enterInitializer_list(SymbolsParser.Initializer_listContext ctx);
+	void exitInitializer_list(SymbolsParser.Initializer_listContext ctx);
+
 	void enterAdditive_expression(SymbolsParser.Additive_expressionContext ctx);
 	void exitAdditive_expression(SymbolsParser.Additive_expressionContext ctx);
+
+	void enterNo_squares(SymbolsParser.No_squaresContext ctx);
+	void exitNo_squares(SymbolsParser.No_squaresContext ctx);
 
 	void enterCoarse_content(SymbolsParser.Coarse_contentContext ctx);
 	void exitCoarse_content(SymbolsParser.Coarse_contentContext ctx);
@@ -93,17 +99,11 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterUnary_operator(SymbolsParser.Unary_operatorContext ctx);
 	void exitUnary_operator(SymbolsParser.Unary_operatorContext ctx);
 
-	void enterNo_squares(SymbolsParser.No_squaresContext ctx);
-	void exitNo_squares(SymbolsParser.No_squaresContext ctx);
+	void enterDeclByClass(SymbolsParser.DeclByClassContext ctx);
+	void exitDeclByClass(SymbolsParser.DeclByClassContext ctx);
 
 	void enterShift_expression(SymbolsParser.Shift_expressionContext ctx);
 	void exitShift_expression(SymbolsParser.Shift_expressionContext ctx);
-
-	void enterFunction_call(SymbolsParser.Function_callContext ctx);
-	void exitFunction_call(SymbolsParser.Function_callContext ctx);
-
-	void enterDeclByClass(SymbolsParser.DeclByClassContext ctx);
-	void exitDeclByClass(SymbolsParser.DeclByClassContext ctx);
 
 	void enterType_name(SymbolsParser.Type_nameContext ctx);
 	void exitType_name(SymbolsParser.Type_nameContext ctx);
@@ -111,11 +111,11 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterNo_brackets_curlies_or_squares(SymbolsParser.No_brackets_curlies_or_squaresContext ctx);
 	void exitNo_brackets_curlies_or_squares(SymbolsParser.No_brackets_curlies_or_squaresContext ctx);
 
-	void enterFuncCall(SymbolsParser.FuncCallContext ctx);
-	void exitFuncCall(SymbolsParser.FuncCallContext ctx);
-
 	void enterIdentifier(SymbolsParser.IdentifierContext ctx);
 	void exitIdentifier(SymbolsParser.IdentifierContext ctx);
+
+	void enterFuncCall(SymbolsParser.FuncCallContext ctx);
+	void exitFuncCall(SymbolsParser.FuncCallContext ctx);
 
 	void enterInclusive_or_expression(SymbolsParser.Inclusive_or_expressionContext ctx);
 	void exitInclusive_or_expression(SymbolsParser.Inclusive_or_expressionContext ctx);
@@ -126,23 +126,23 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterBase_classes(SymbolsParser.Base_classesContext ctx);
 	void exitBase_classes(SymbolsParser.Base_classesContext ctx);
 
-	void enterEquality_operator(SymbolsParser.Equality_operatorContext ctx);
-	void exitEquality_operator(SymbolsParser.Equality_operatorContext ctx);
-
 	void enterNo_curlies(SymbolsParser.No_curliesContext ctx);
 	void exitNo_curlies(SymbolsParser.No_curliesContext ctx);
 
-	void enterExpr(SymbolsParser.ExprContext ctx);
-	void exitExpr(SymbolsParser.ExprContext ctx);
+	void enterEquality_operator(SymbolsParser.Equality_operatorContext ctx);
+	void exitEquality_operator(SymbolsParser.Equality_operatorContext ctx);
 
 	void enterParam_type_list(SymbolsParser.Param_type_listContext ctx);
 	void exitParam_type_list(SymbolsParser.Param_type_listContext ctx);
 
-	void enterRelational_expression(SymbolsParser.Relational_expressionContext ctx);
-	void exitRelational_expression(SymbolsParser.Relational_expressionContext ctx);
+	void enterExpr(SymbolsParser.ExprContext ctx);
+	void exitExpr(SymbolsParser.ExprContext ctx);
 
 	void enterClass_name(SymbolsParser.Class_nameContext ctx);
 	void exitClass_name(SymbolsParser.Class_nameContext ctx);
+
+	void enterRelational_expression(SymbolsParser.Relational_expressionContext ctx);
+	void exitRelational_expression(SymbolsParser.Relational_expressionContext ctx);
 
 	void enterSimple_decl(SymbolsParser.Simple_declContext ctx);
 	void exitSimple_decl(SymbolsParser.Simple_declContext ctx);
@@ -168,17 +168,20 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterPtrs(SymbolsParser.PtrsContext ctx);
 	void exitPtrs(SymbolsParser.PtrsContext ctx);
 
+	void enterCoarse_elem(SymbolsParser.Coarse_elemContext ctx);
+	void exitCoarse_elem(SymbolsParser.Coarse_elemContext ctx);
+
 	void enterConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx);
 	void exitConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx);
 
 	void enterWater(SymbolsParser.WaterContext ctx);
 	void exitWater(SymbolsParser.WaterContext ctx);
 
-	void enterOr_expression(SymbolsParser.Or_expressionContext ctx);
-	void exitOr_expression(SymbolsParser.Or_expressionContext ctx);
-
 	void enterConstant(SymbolsParser.ConstantContext ctx);
 	void exitConstant(SymbolsParser.ConstantContext ctx);
+
+	void enterOr_expression(SymbolsParser.Or_expressionContext ctx);
+	void exitOr_expression(SymbolsParser.Or_expressionContext ctx);
 
 	void enterAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx);
 	void exitAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx);
@@ -224,6 +227,9 @@ public interface SymbolsListener extends ParseTreeListener {
 
 	void enterBit_and_expression(SymbolsParser.Bit_and_expressionContext ctx);
 	void exitBit_and_expression(SymbolsParser.Bit_and_expressionContext ctx);
+
+	void enterInitializer(SymbolsParser.InitializerContext ctx);
+	void exitInitializer(SymbolsParser.InitializerContext ctx);
 
 	void enterAssign_water(SymbolsParser.Assign_waterContext ctx);
 	void exitAssign_water(SymbolsParser.Assign_waterContext ctx);

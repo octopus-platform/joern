@@ -9,7 +9,7 @@ import org.junit.Test;
 import CoarseFunctionParser.CoarseFunctionParser;
 
 public class CoarseFunctionParserTest {
-
+	
 	@Test
 	public void testCall()
 	{

@@ -1,11 +1,16 @@
 grammar Symbols;
-import CodeSensorLex, SimpleDecl, Common, Expressions;
+
+import CodeSensorLex, Common, Expressions, SimpleDecl;
 
 @header{
 	package antlr;
 }
 
 
-coarse_content: (simple_decl | function_call | field | water)*;
+coarse_content: coarse_elem* EOF;
 
-function_call: field function_call_tail;
+coarse_elem: unary_expression
+            | simple_decl
+            | water
+;
+

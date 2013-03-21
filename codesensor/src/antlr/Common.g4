@@ -1,7 +1,5 @@
 grammar Common;
 
-import Expressions;
-
 @header{
   import java.util.Stack;
 }

@@ -24,9 +24,10 @@ unary_expression: postfix_expression
                 | (unary_operator+ postfix_expression)
 ;
 
-postfix_expression: field #fieldOnly
-		  | field function_call_tail #funcCall
-		  ;
+postfix_expression: // field #fieldOnly
+		  field function_call_tail #funcCall
+          | field #fieldOnly
+          ;
 
 field: (primary_expression postfix*);
 

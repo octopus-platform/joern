@@ -1,4 +1,5 @@
 grammar FunctionDef;
+import CodeSensorLex;
 
 function_def : template_decl_start? return_type? function_name
             function_param_list ctor_list? compound_statement;

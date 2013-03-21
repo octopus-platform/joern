@@ -21,11 +21,11 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx) { }
 	@Override public void exitTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx) { }
 
-	@Override public void enterFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx) { }
-	@Override public void exitFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx) { }
-
 	@Override public void enterType_suffix(FunctionGrammarParser.Type_suffixContext ctx) { }
 	@Override public void exitType_suffix(FunctionGrammarParser.Type_suffixContext ctx) { }
+
+	@Override public void enterFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx) { }
+	@Override public void exitFunction_argument_list(FunctionGrammarParser.Function_argument_listContext ctx) { }
 
 	@Override public void enterNo_squares_or_semicolon(FunctionGrammarParser.No_squares_or_semicolonContext ctx) { }
 	@Override public void exitNo_squares_or_semicolon(FunctionGrammarParser.No_squares_or_semicolonContext ctx) { }
@@ -168,6 +168,9 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterAssign_water(FunctionGrammarParser.Assign_waterContext ctx) { }
 	@Override public void exitAssign_water(FunctionGrammarParser.Assign_waterContext ctx) { }
 
+	@Override public void enterInitializer(FunctionGrammarParser.InitializerContext ctx) { }
+	@Override public void exitInitializer(FunctionGrammarParser.InitializerContext ctx) { }
+
 	@Override public void enterFunction_decl_specifiers(FunctionGrammarParser.Function_decl_specifiersContext ctx) { }
 	@Override public void exitFunction_decl_specifiers(FunctionGrammarParser.Function_decl_specifiersContext ctx) { }
 
@@ -236,6 +239,9 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 
 	@Override public void enterAdditive_expression(FunctionGrammarParser.Additive_expressionContext ctx) { }
 	@Override public void exitAdditive_expression(FunctionGrammarParser.Additive_expressionContext ctx) { }
+
+	@Override public void enterInitializer_list(FunctionGrammarParser.Initializer_listContext ctx) { }
+	@Override public void exitInitializer_list(FunctionGrammarParser.Initializer_listContext ctx) { }
 
 	@Override public void enterUnary_operator(FunctionGrammarParser.Unary_operatorContext ctx) { }
 	@Override public void exitUnary_operator(FunctionGrammarParser.Unary_operatorContext ctx) { }

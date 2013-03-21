@@ -8,9 +8,6 @@ var_decl : type_name init_declarator_list #declByType
 
 init_declarator_list: init_declarator (',' init_declarator)* ';';
 
-// this rule is buggy: we can't match int (foo); or int (*foo)(bar *);
-// let's get it running as-is first and then fix bugs.
-
 init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr_w_))?;
 
 assign_expr_w_: assign_water*
@@ -20,13 +17,13 @@ assign_expr_w_: assign_water*
 assign_expr_w__l2: assign_water_l2* (('{' assign_expr_w__l2 '}' | '(' assign_expr_w__l2 ')' | '[' assign_expr_w__l2 ']')
              assign_water_l2*)*;
 
+constant_expr_w_: no_squares* ('[' constant_expr_w_ ']' no_squares*)*;
 
-/*
 initializer: assign_expr
            | '{' initializer_list '}'
 ;
 initializer_list: initializer (',' initializer)*;
-*/
+
 
 class_def: class_key class_name? base_classes? OPENING_CURLY {skipToEndOfObject(); } ;
 class_name: identifier;
@@ -39,9 +36,6 @@ type_name : (CV_QUALIFIER* (class_key | UNSIGNED | SIGNED)?
 
 type_suffix : ('[' constant_expr_w_ ']') | param_type_list;
 base_type: (ALPHA_NUMERIC | VOID | LONG | LONG LONG);
-
-// this one is new
-constant_expr_w_: no_squares* ('[' constant_expr_w_ ']' no_squares*)*;
 
 // Parameters
 

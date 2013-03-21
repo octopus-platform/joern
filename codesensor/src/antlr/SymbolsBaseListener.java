@@ -21,11 +21,11 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx) { }
 	@Override public void exitFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx) { }
 
-	@Override public void enterFunction_argument_list(SymbolsParser.Function_argument_listContext ctx) { }
-	@Override public void exitFunction_argument_list(SymbolsParser.Function_argument_listContext ctx) { }
-
 	@Override public void enterType_suffix(SymbolsParser.Type_suffixContext ctx) { }
 	@Override public void exitType_suffix(SymbolsParser.Type_suffixContext ctx) { }
+
+	@Override public void enterFunction_argument_list(SymbolsParser.Function_argument_listContext ctx) { }
+	@Override public void exitFunction_argument_list(SymbolsParser.Function_argument_listContext ctx) { }
 
 	@Override public void enterMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx) { }
 	@Override public void exitMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx) { }
@@ -48,11 +48,11 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx) { }
 	@Override public void exitNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx) { }
 
-	@Override public void enterCall_template_list(SymbolsParser.Call_template_listContext ctx) { }
-	@Override public void exitCall_template_list(SymbolsParser.Call_template_listContext ctx) { }
-
 	@Override public void enterFunction_call_tail(SymbolsParser.Function_call_tailContext ctx) { }
 	@Override public void exitFunction_call_tail(SymbolsParser.Function_call_tailContext ctx) { }
+
+	@Override public void enterCall_template_list(SymbolsParser.Call_template_listContext ctx) { }
+	@Override public void exitCall_template_list(SymbolsParser.Call_template_listContext ctx) { }
 
 	@Override public void enterBase_class(SymbolsParser.Base_classContext ctx) { }
 	@Override public void exitBase_class(SymbolsParser.Base_classContext ctx) { }
@@ -87,8 +87,14 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterParam_type_id(SymbolsParser.Param_type_idContext ctx) { }
 	@Override public void exitParam_type_id(SymbolsParser.Param_type_idContext ctx) { }
 
+	@Override public void enterInitializer_list(SymbolsParser.Initializer_listContext ctx) { }
+	@Override public void exitInitializer_list(SymbolsParser.Initializer_listContext ctx) { }
+
 	@Override public void enterAdditive_expression(SymbolsParser.Additive_expressionContext ctx) { }
 	@Override public void exitAdditive_expression(SymbolsParser.Additive_expressionContext ctx) { }
+
+	@Override public void enterNo_squares(SymbolsParser.No_squaresContext ctx) { }
+	@Override public void exitNo_squares(SymbolsParser.No_squaresContext ctx) { }
 
 	@Override public void enterCoarse_content(SymbolsParser.Coarse_contentContext ctx) { }
 	@Override public void exitCoarse_content(SymbolsParser.Coarse_contentContext ctx) { }
@@ -96,17 +102,11 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterUnary_operator(SymbolsParser.Unary_operatorContext ctx) { }
 	@Override public void exitUnary_operator(SymbolsParser.Unary_operatorContext ctx) { }
 
-	@Override public void enterNo_squares(SymbolsParser.No_squaresContext ctx) { }
-	@Override public void exitNo_squares(SymbolsParser.No_squaresContext ctx) { }
+	@Override public void enterDeclByClass(SymbolsParser.DeclByClassContext ctx) { }
+	@Override public void exitDeclByClass(SymbolsParser.DeclByClassContext ctx) { }
 
 	@Override public void enterShift_expression(SymbolsParser.Shift_expressionContext ctx) { }
 	@Override public void exitShift_expression(SymbolsParser.Shift_expressionContext ctx) { }
-
-	@Override public void enterFunction_call(SymbolsParser.Function_callContext ctx) { }
-	@Override public void exitFunction_call(SymbolsParser.Function_callContext ctx) { }
-
-	@Override public void enterDeclByClass(SymbolsParser.DeclByClassContext ctx) { }
-	@Override public void exitDeclByClass(SymbolsParser.DeclByClassContext ctx) { }
 
 	@Override public void enterType_name(SymbolsParser.Type_nameContext ctx) { }
 	@Override public void exitType_name(SymbolsParser.Type_nameContext ctx) { }
@@ -114,11 +114,11 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterNo_brackets_curlies_or_squares(SymbolsParser.No_brackets_curlies_or_squaresContext ctx) { }
 	@Override public void exitNo_brackets_curlies_or_squares(SymbolsParser.No_brackets_curlies_or_squaresContext ctx) { }
 
-	@Override public void enterFuncCall(SymbolsParser.FuncCallContext ctx) { }
-	@Override public void exitFuncCall(SymbolsParser.FuncCallContext ctx) { }
-
 	@Override public void enterIdentifier(SymbolsParser.IdentifierContext ctx) { }
 	@Override public void exitIdentifier(SymbolsParser.IdentifierContext ctx) { }
+
+	@Override public void enterFuncCall(SymbolsParser.FuncCallContext ctx) { }
+	@Override public void exitFuncCall(SymbolsParser.FuncCallContext ctx) { }
 
 	@Override public void enterInclusive_or_expression(SymbolsParser.Inclusive_or_expressionContext ctx) { }
 	@Override public void exitInclusive_or_expression(SymbolsParser.Inclusive_or_expressionContext ctx) { }
@@ -129,23 +129,23 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterBase_classes(SymbolsParser.Base_classesContext ctx) { }
 	@Override public void exitBase_classes(SymbolsParser.Base_classesContext ctx) { }
 
-	@Override public void enterEquality_operator(SymbolsParser.Equality_operatorContext ctx) { }
-	@Override public void exitEquality_operator(SymbolsParser.Equality_operatorContext ctx) { }
-
 	@Override public void enterNo_curlies(SymbolsParser.No_curliesContext ctx) { }
 	@Override public void exitNo_curlies(SymbolsParser.No_curliesContext ctx) { }
 
-	@Override public void enterExpr(SymbolsParser.ExprContext ctx) { }
-	@Override public void exitExpr(SymbolsParser.ExprContext ctx) { }
+	@Override public void enterEquality_operator(SymbolsParser.Equality_operatorContext ctx) { }
+	@Override public void exitEquality_operator(SymbolsParser.Equality_operatorContext ctx) { }
 
 	@Override public void enterParam_type_list(SymbolsParser.Param_type_listContext ctx) { }
 	@Override public void exitParam_type_list(SymbolsParser.Param_type_listContext ctx) { }
 
-	@Override public void enterRelational_expression(SymbolsParser.Relational_expressionContext ctx) { }
-	@Override public void exitRelational_expression(SymbolsParser.Relational_expressionContext ctx) { }
+	@Override public void enterExpr(SymbolsParser.ExprContext ctx) { }
+	@Override public void exitExpr(SymbolsParser.ExprContext ctx) { }
 
 	@Override public void enterClass_name(SymbolsParser.Class_nameContext ctx) { }
 	@Override public void exitClass_name(SymbolsParser.Class_nameContext ctx) { }
+
+	@Override public void enterRelational_expression(SymbolsParser.Relational_expressionContext ctx) { }
+	@Override public void exitRelational_expression(SymbolsParser.Relational_expressionContext ctx) { }
 
 	@Override public void enterSimple_decl(SymbolsParser.Simple_declContext ctx) { }
 	@Override public void exitSimple_decl(SymbolsParser.Simple_declContext ctx) { }
@@ -171,17 +171,20 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterPtrs(SymbolsParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(SymbolsParser.PtrsContext ctx) { }
 
+	@Override public void enterCoarse_elem(SymbolsParser.Coarse_elemContext ctx) { }
+	@Override public void exitCoarse_elem(SymbolsParser.Coarse_elemContext ctx) { }
+
 	@Override public void enterConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx) { }
 	@Override public void exitConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx) { }
 
 	@Override public void enterWater(SymbolsParser.WaterContext ctx) { }
 	@Override public void exitWater(SymbolsParser.WaterContext ctx) { }
 
-	@Override public void enterOr_expression(SymbolsParser.Or_expressionContext ctx) { }
-	@Override public void exitOr_expression(SymbolsParser.Or_expressionContext ctx) { }
-
 	@Override public void enterConstant(SymbolsParser.ConstantContext ctx) { }
 	@Override public void exitConstant(SymbolsParser.ConstantContext ctx) { }
+
+	@Override public void enterOr_expression(SymbolsParser.Or_expressionContext ctx) { }
+	@Override public void exitOr_expression(SymbolsParser.Or_expressionContext ctx) { }
 
 	@Override public void enterAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx) { }
 	@Override public void exitAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx) { }
@@ -227,6 +230,9 @@ public class SymbolsBaseListener implements SymbolsListener {
 
 	@Override public void enterBit_and_expression(SymbolsParser.Bit_and_expressionContext ctx) { }
 	@Override public void exitBit_and_expression(SymbolsParser.Bit_and_expressionContext ctx) { }
+
+	@Override public void enterInitializer(SymbolsParser.InitializerContext ctx) { }
+	@Override public void exitInitializer(SymbolsParser.InitializerContext ctx) { }
 
 	@Override public void enterAssign_water(SymbolsParser.Assign_waterContext ctx) { }
 	@Override public void exitAssign_water(SymbolsParser.Assign_waterContext ctx) { }
