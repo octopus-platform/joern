@@ -8,19 +8,16 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import antlr.CodeSensorParser.Block_starterContext;
 import antlr.CodeSensorParser.Closing_curlyContext;
 import antlr.CodeSensorParser.Else_statementContext;
-import antlr.CodeSensorParser.FuncCallContext;
 import antlr.CodeSensorParser.If_statementContext;
 import antlr.CodeSensorParser.Opening_curlyContext;
 import antlr.CodeSensorParser.StatementContext;
 import antlr.CodeSensorParser.StatementsContext;
 
+import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.expressions.CallItem;
-import main.codeitems.expressions.FieldItem;
-
 public class FunctionContentBuilder extends CodeItemBuilder
 {
-	Stack<StatementItem> itemStack = new Stack<StatementItem>();
+	Stack<CodeItem> itemStack = new Stack<CodeItem>();
 	CompoundItem rootItem;
 	
 	@Override
@@ -96,7 +93,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		if(itemStack.size() == 0)
 			throw new RuntimeException();
 	
-		StatementItem itemToRemove = itemStack.peek();
+		CodeItem itemToRemove = itemStack.peek();
 		
 		if(itemToRemove instanceof CloseBlockItem){
 			closeCompoundStatement();
