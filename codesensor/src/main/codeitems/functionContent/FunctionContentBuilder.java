@@ -74,6 +74,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		replaceTopOfStack(new CloseBlockItem());
 	}
 
+	/*
 	public void enterFuncCall(FuncCallContext ctx)
 	{
 		CallItem callItem = new CallItem();
@@ -82,6 +83,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		callItem.callee.initializeFromContext(ctx.field());
 		replaceTopOfStack(callItem);
 	}
+	*/
 	
 	private void replaceTopOfStack(StatementItem item)
 	{

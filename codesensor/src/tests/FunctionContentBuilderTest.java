@@ -106,15 +106,6 @@ public class FunctionContentBuilderTest {
 		assert(ctx.stop.getLine() == 3);
 	}
 	
-	@Test
-	public void testFuncCallCallee()
-	{
-		String input = "foo(x,y,z+1);";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		CallItem item = (CallItem) contentItem.statements.get(0);
-		assertTrue(item.callee.getCodeStr().equals("foo"));
-	}
 	
 	private List<CodeItem> parseAndWalk(String input)
 	{

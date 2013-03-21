@@ -1,8 +1,6 @@
 package main.codeitems.expressions;
 
-import main.codeitems.functionContent.StatementItem;
-
-public class CallItem extends StatementItem
+public class CallItem extends ExpressionItem
 {
 
 	public FieldItem callee;
