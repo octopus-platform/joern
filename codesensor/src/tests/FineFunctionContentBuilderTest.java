@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import main.TokenSubStream;
-import main.FunctionParser.FunctionParser;
+import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.CodeItem;
 import main.codeitems.expressions.CallItem;
 import main.codeitems.functionContent.CompoundItem;
@@ -18,7 +18,7 @@ import org.junit.Test;
 import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser.StatementsContext;
 
-public class FunctionContentBuilderTest {
+public class FineFunctionContentBuilderTest {
 
 	@Test
 	public void emptyContent()
@@ -109,7 +109,7 @@ public class FunctionContentBuilderTest {
 	
 	private List<CodeItem> parseAndWalk(String input)
 	{
-		FunctionParser parser = new FunctionParser();		
+		FineFunctionParser parser = new FineFunctionParser();		
 		parser.setProcessor(new TestProcessor());
 		TokenSubStream tokens = tokenStreamFromString(input);
 		
@@ -121,7 +121,7 @@ public class FunctionContentBuilderTest {
 		
 	private ParseTree parse(String input)
 	{
-		FunctionParser parser = new FunctionParser();
+		FineFunctionParser parser = new FineFunctionParser();
 		return parser.parseString(input);
 	}
 

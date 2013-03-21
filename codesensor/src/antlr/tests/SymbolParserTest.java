@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import SymbolParser.SymbolParser;
+import CoarseFunctionParser.CoarseFunctionParser;
 
 public class SymbolParserTest {
 
@@ -14,7 +14,7 @@ public class SymbolParserTest {
 	public void testCall()
 	{
 		String input = "foo();";
-		SymbolParser parser = new SymbolParser();
+		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);
@@ -25,7 +25,7 @@ public class SymbolParserTest {
 	public void testFieldCall()
 	{
 		String input = "foo->bar();";
-		SymbolParser parser = new SymbolParser();
+		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);
@@ -36,7 +36,7 @@ public class SymbolParserTest {
 	public void testCallExprArg()
 	{
 		String input = "foo->bar((x + 10 < 20) ? 1: 0);";
-		SymbolParser parser = new SymbolParser();
+		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);
@@ -47,7 +47,7 @@ public class SymbolParserTest {
 	public void testCallInCall()
 	{
 		String input = "foo(bar());";
-		SymbolParser parser = new SymbolParser();
+		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);

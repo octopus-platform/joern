@@ -1,21 +1,14 @@
-package main.FunctionParser;
-
-import main.CommonParser;
-import main.TokenSubStream;
+package CoarseFunctionParser;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.CodeSensorParser;
 
-public class FunctionParser extends CommonParser
-{
-	
-	public FunctionParser()
-	{
-		super();
-		listener = new FunctionParseTreeListener();
-	}
-	
+import main.CommonParser;
+import main.TokenSubStream;
+
+public class CoarseFunctionParser extends CommonParser {
+
 	@Override
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
@@ -24,17 +17,17 @@ public class FunctionParser extends CommonParser
         
         try {
     		setSLLMode(parser);
-        	tree = parser.statements();
+        	tree = parser.symbols();
         } catch (RuntimeException ex) {
         	if (isRecognitionException(ex))
         	{
         		tokens.reset();
         		setLLStarMode(parser);
-        		tree = parser.statements();
+        		tree = parser.symbols();
         	}
         
         }
 		return tree;
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-package main.FunctionParser;
+package main.FineFunctionParser;
 
 import java.util.Stack;
 
@@ -11,7 +11,7 @@ import main.processors.CSVPrinter;
 import main.processors.Processor;
 import antlr.CodeSensorParser;
 
-public class FunctionParseTreeListener extends CommonCodeSensorListener
+public class FineFunctionParseTreeListener extends CommonCodeSensorListener
 {
 	
 	@Override

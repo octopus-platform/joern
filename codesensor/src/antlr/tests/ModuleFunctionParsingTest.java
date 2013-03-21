@@ -2,7 +2,7 @@ package antlr.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import main.FunctionParser.FunctionParser;
+import main.FineFunctionParser.FineFunctionParser;
 import main.ModuleParser.ModuleParser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;

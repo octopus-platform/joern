@@ -6,7 +6,7 @@ import java.util.Stack;
 import main.CommonCodeSensorListener;
 import main.TokenSubStream;
 
-import main.FunctionParser.FunctionParser;
+import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDeclBuilder;
@@ -61,7 +61,7 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 	private void parseFunctionContents(Function_defContext ctx)
 	{
 		restrictStreamToFunctionContent(ctx);
-		FunctionParser parser = new FunctionParser();
+		FineFunctionParser parser = new FineFunctionParser();
 		
 		try{
 			parser.parseAndWalkStream(stream);
