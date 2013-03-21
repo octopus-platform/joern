@@ -1,4 +1,4 @@
-package CoarseFunctionParser;
+package main.CoarseFunctionParser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;

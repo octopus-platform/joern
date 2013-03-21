@@ -1,4 +1,4 @@
-package CoarseFunctionParser;
+package main.CoarseFunctionParser;
 
 import main.CommonParser;
 import antlr.SymbolsBaseListener;

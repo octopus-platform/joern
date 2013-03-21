@@ -1,8 +1,8 @@
 package main.FunctionParser;
 
-import CoarseFunctionParser.CoarseFunctionParser;
 import main.CommonParser;
 import main.TokenSubStream;
+import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.FineFunctionParser.FineFunctionParser;
 
 public class FunctionParser
