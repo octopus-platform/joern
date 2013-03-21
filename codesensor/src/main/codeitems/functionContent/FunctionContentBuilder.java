@@ -15,6 +15,8 @@ import antlr.CodeSensorParser.StatementContext;
 import antlr.CodeSensorParser.StatementsContext;
 
 import main.codeitems.CodeItemBuilder;
+import main.codeitems.expressions.CallItem;
+import main.codeitems.expressions.FieldItem;
 
 public class FunctionContentBuilder extends CodeItemBuilder
 {
