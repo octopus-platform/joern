@@ -2,9 +2,8 @@ package main.ModuleParser;
 
 import java.util.Iterator;
 
-import main.CommonCodeSensorListener;
+import main.CommonParser;
 
-import main.FineFunctionParser.FineFunctionParser;
 import main.FunctionParser.FunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
@@ -12,14 +11,17 @@ import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.function.FunctionDefBuilder;
 
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 
+import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Function_defContext;
@@ -28,18 +30,25 @@ import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
 
-public class ModuleParseTreeListener extends CommonCodeSensorListener
+public class ModuleParseTreeListener extends CodeSensorBaseListener
 {
+	
+	CommonParser p;
+	
+	ModuleParseTreeListener(CommonParser aP)
+	{
+		p = aP;
+	}
 	
 	@Override
 	public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
-		processor.startOfUnit(ctx, filename);
+		p.processor.startOfUnit(ctx, p.filename);
 	}
 	
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
 	{
-		processor.endOfUnit(ctx, filename);
+		p.processor.endOfUnit(ctx, p.filename);
 	}	
 	
 	// Function Definitions
@@ -50,70 +59,72 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 		
 		FunctionDefBuilder builder = new FunctionDefBuilder();
 		builder.createNew(ctx);
-		itemStack.push(builder);
+		p.itemStack.push(builder);
 	
 		parseFunctionContents(ctx);
 	}
 
+	
+	private String getCompoundStmtAsString(
+			CodeSensorParser.Function_defContext ctx)
+	{
+		Compound_statementContext compound_statement = ctx.compound_statement();
+		
+		CharStream inputStream = compound_statement.start.getInputStream();
+		int startIndex = compound_statement.start.getStopIndex();
+		int stopIndex = compound_statement.stop.getStopIndex();
+		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
+	}
+	
+	
 	private void parseFunctionContents(Function_defContext ctx)
 	{
-		restrictStreamToFunctionContent(ctx);
+		String text = getCompoundStmtAsString(ctx);
+		
 		FunctionParser parser = new FunctionParser();
 		parser.enableFineParsing();
 		
 		try{
-			parser.parseAndWalkStream(stream);
+			parser.parseAndWalkString(text);
 		}catch(RuntimeException ex){
 			System.err.println("Error parsing function " +
 							  ctx.function_name().getText()
 							  + ". skipping.");
 		}
-			
-		stream.resetRestriction();
 	}
 
-	private void restrictStreamToFunctionContent(
-			CodeSensorParser.Function_defContext ctx)
-	{
-		Compound_statementContext compound = ctx.compound_statement();
-		
-		int startIndex = compound.OPENING_CURLY().getSymbol().getTokenIndex();
-		int stopIndex = compound.stop.getTokenIndex();
-		stream.restrict(startIndex+1, stopIndex);
-	}
-	
 	@Override
 	public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
-		builder.setReturnType(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
+		builder.setReturnType(ctx, p.itemStack);
 	}
 	
 	@Override
 	public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
-		builder.setName(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
+		builder.setName(ctx, p.itemStack);
 	}
 	
 	@Override
 	public void enterFunction_param_list(CodeSensorParser.Function_param_listContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
-		builder.setParameterList(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
+		builder.setParameterList(ctx, p.itemStack);
 	}
 	
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.peek();
-		builder.addParameter(ctx, itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
+		builder.addParameter(ctx, p.itemStack);
 	}
 	
 	@Override
 	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) itemStack.pop();
-		processor.processItem(builder.getItem(), itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.pop();
+		p.processor.processItem(builder.getItem(), p.itemStack);
 	}	
 	
 	// Class/Structure Definitions
@@ -130,13 +141,13 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 	{
 		ClassDefBuilder builder = new ClassDefBuilder();
 		builder.createNew(ctx);
-		itemStack.push(builder);		
+		p.itemStack.push(builder);		
 	}
 
 	@Override
 	public void enterClass_name(CodeSensorParser.Class_nameContext ctx)
 	{
-		ClassDefBuilder builder = (ClassDefBuilder) itemStack.peek();
+		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.peek();
 		builder.setName(ctx);
 	}
 	
@@ -172,15 +183,15 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 			builder.setName(decl_ctx);
 			builder.setType(decl_ctx, typeName);
 			
-			processor.processItem(builder.getItem(), itemStack);
+			p.processor.processItem(builder.getItem(), p.itemStack);
 		}
 	}
 		
 	@Override
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
-		CodeItemBuilder builder = itemStack.pop();
-		processor.processItem(builder.getItem(), itemStack);
+		CodeItemBuilder builder = p.itemStack.pop();
+		p.processor.processItem(builder.getItem(), p.itemStack);
 		
 		parseClassContent(ctx);
 	
@@ -191,15 +202,15 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 	{
 		ModuleParser shallowParser = createNewShallowParser();
 		restrictStreamToClassContent(ctx);
-		shallowParser.parseAndWalkStream(stream);
-		stream.resetRestriction();
+		shallowParser.parseAndWalkStream(p.stream);
+		p.stream.resetRestriction();
 	}
 
 	private ModuleParser createNewShallowParser()
 	{
 		ModuleParser shallowParser = new ModuleParser();
-		shallowParser.setStack(itemStack);
-		shallowParser.setProcessor(processor);
+		shallowParser.setStack(p.itemStack);
+		shallowParser.setProcessor(p.processor);
 		return shallowParser;
 	}
 	
@@ -209,7 +220,7 @@ public class ModuleParseTreeListener extends CommonCodeSensorListener
 		Class_defContext class_def = ctx.class_def();
 		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
 		int stopIndex = class_def.stop.getTokenIndex();
-		stream.restrict(startIndex+1, stopIndex);
+		p.stream.restrict(startIndex+1, stopIndex);
 	}
 	
 }

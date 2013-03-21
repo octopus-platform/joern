@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Stack;
 
 import main.codeitems.CodeItemBuilder;
+import main.processors.CSVPrinter;
 import main.processors.Processor;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
@@ -11,24 +12,33 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.ConsoleErrorListener;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import antlr.CodeSensorLexer;
-import antlr.CodeSensorParser;
 
 abstract public class CommonParser
 {
 
-	public CodeSensorParser parser;
-	public CommonCodeSensorListener listener;
-	protected CommonParserContext context = null;
+	public Parser parser;
+	public ParseTreeListener listener;
+	public CommonParserContext context = null;
+	
+	public Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
+	public Processor processor = new CSVPrinter();
+	public TokenSubStream stream;
+	public String filename;
 	
 	abstract public ParseTree parseTokenStream(TokenSubStream tokens);
-
+	
+	abstract public Lexer createLexer(ANTLRInputStream input);
+	
+	
 	public CommonParser()
 	{
 		super();
@@ -45,7 +55,7 @@ abstract public class CommonParser
 	{
 		char[] charArray = input.toCharArray();
 		ANTLRInputStream inputStream = new ANTLRInputStream(charArray, charArray.length);
-		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
+		Lexer lex = createLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		ParseTree tree = parseTokenStream(tokens);
 		return tree;
@@ -59,17 +69,17 @@ abstract public class CommonParser
 	
 	public void parseAndWalkStream(TokenSubStream tokens)
 	{
-		listener.filename = "";
-		listener.stream = tokens;
+		filename = "";
+		stream = tokens;
 		ParseTree tree = parseTokenStream(tokens);
 		walkTree(tree);
 	}
 	
-	protected static TokenSubStream createTokenStreamFromFile(String filename)
+	protected TokenSubStream createTokenStreamFromFile(String filename)
 	throws IOException
 	{
 		ANTLRInputStream input = new ANTLRFileStream(filename);
-    	CodeSensorLexer lexer = new CodeSensorLexer(input);
+    	Lexer lexer = createLexer(input);
         TokenSubStream tokens = new TokenSubStream(lexer);
 		return tokens;
 	}
@@ -88,27 +98,7 @@ abstract public class CommonParser
 		context = new CommonParserContext();
 		context.filename = filename;
 		context.stream = stream;
-		listener.initializeContext(context);
-	}
-	
-	/*
-	private void initializeContextWithStream(TokenSubStream stream)
-	{
-		context = new CommonParserContext();
-		context.filename = null;
-		context.stream = stream;
-		listener.initializeContext(context);
-	}
-	*/
-	
-	public void setProcessor(Processor processor)
-	{
-		listener.setProcessor(processor);
-	}
-	
-	public void setStack(Stack<CodeItemBuilder> aStack)
-	{
-		listener.setStack(aStack);;
+		initializeContext(context);
 	}
 	
 	protected static boolean isRecognitionException(RuntimeException ex)
@@ -131,4 +121,25 @@ abstract public class CommonParser
 	    parser.setErrorHandler(new BailErrorStrategy());
 	}
 
+	public void initializeContext(CommonParserContext context)
+	{
+		filename = context.filename;
+		stream = context.stream;
+	}
+	
+	public void setStack(Stack<CodeItemBuilder> aStack)
+	{
+		itemStack = aStack;
+	}
+	
+	public void setProcessor(Processor aProcessor)
+	{
+		processor = aProcessor;
+	}
+
+	public Processor getProcessor() 
+	{
+		return processor;
+	}
+	
 }

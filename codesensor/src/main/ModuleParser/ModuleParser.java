@@ -2,7 +2,12 @@ package main.ModuleParser;
 
 import main.CommonParser;
 import main.TokenSubStream;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser;
 
 public class ModuleParser extends CommonParser
@@ -10,7 +15,7 @@ public class ModuleParser extends CommonParser
 	public ModuleParser()
 	{
 		super();
-		listener = new ModuleParseTreeListener();
+		listener = new ModuleParseTreeListener(this);
 	}
 
 	@Override
@@ -31,6 +36,12 @@ public class ModuleParser extends CommonParser
         	}
         }
 		return tree;
+	}
+
+	@Override
+	public Lexer createLexer(ANTLRInputStream input)
+	{
+		return new CodeSensorLexer(input);
 	}
 	
 	

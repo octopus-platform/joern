@@ -173,7 +173,7 @@ public class ModuleBuildersTest {
 		TokenSubStream tokens = new TokenSubStream(lex);
 		
 		parser.parseAndWalkStream(tokens);
-		TestProcessor processor = (TestProcessor) parser.listener.getProcessor();
+		TestProcessor processor = (TestProcessor) parser.getProcessor();
 		return processor.codeItems;
 	}
 

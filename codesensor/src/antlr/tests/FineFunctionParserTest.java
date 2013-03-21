@@ -6,7 +6,7 @@ import main.FineFunctionParser.FineFunctionParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-public class FunctionParserTest {
+public class FineFunctionParserTest {
 
 	@Test
 	public void testIf()

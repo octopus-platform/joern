@@ -29,4 +29,10 @@ public class FunctionParser
 		parser.parseAndWalkStream(tokens);
 	}
 	
+	public void parseAndWalkString(String input)
+	{
+		parser.parseAndWalkString(input);
+	}
+	
+	
 }

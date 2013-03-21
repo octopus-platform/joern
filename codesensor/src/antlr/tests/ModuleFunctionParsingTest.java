@@ -211,6 +211,7 @@ public class ModuleFunctionParsingTest {
 		assertTrue(output.contains("(water abc)"));
 	}
 	
+	/* TODO: Adapt and move this test to FineParsing
 	@Test
 	public void testEscaping()
 	{
@@ -221,7 +222,7 @@ public class ModuleFunctionParsingTest {
 		System.out.println(output);
 		assertTrue(output.contains("block_starter"));
 	}
-	
+	*/
 	
 }
 

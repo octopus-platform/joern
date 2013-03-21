@@ -1,5 +1,9 @@
 grammar FunctionGrammar;
-import Expressions, Symbols;
+import CodeSensorLex, Common, SimpleDecl;
+
+@header{
+	package antlr;
+}
 
 statements: (pre_opener
             | pre_closer
@@ -12,6 +16,8 @@ statement: opening_curly
          | expr_statement
          | statement_water
         ;
+
+statement_water: .;
 
 pre_opener: PRE_IF;
 pre_else: PRE_ELSE;
@@ -85,5 +91,4 @@ label: (('case'? (identifier | number) ) | access_specifier) ':' ;
 
 expr_statement: expr ';';
 
-statement_water: . ;
 condition: expr;

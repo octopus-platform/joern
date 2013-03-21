@@ -1,6 +1,6 @@
 grammar Common;
 
-import FunctionGrammar;
+import Expressions;
 
 @header{
   import java.util.Stack;
@@ -126,4 +126,5 @@ no_comma_or_semicolon: ~(',' | ';');
 assign_water: ~('(' | ')' | '{' | '}' | '[' | ']' | ';' | ',');
 assign_water_l2: ~('(' | ')' | '{' | '}' | '[' | ']');
 
-water : ~OTHER;
+// water : ~OTHER;
+water: .;

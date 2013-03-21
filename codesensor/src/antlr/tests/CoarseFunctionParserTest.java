@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import CoarseFunctionParser.CoarseFunctionParser;
 
-public class SymbolParserTest {
+public class CoarseFunctionParserTest {
 
 	@Test
 	public void testCall()
@@ -18,7 +18,7 @@ public class SymbolParserTest {
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);
-		assert(output.contains("function_argument_list"));
+		assertTrue(output.contains("function_argument_list"));
 	}
 
 	@Test
@@ -29,7 +29,7 @@ public class SymbolParserTest {
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);
-		assert(output.contains("function_argument_list"));
+		assertTrue(output.contains("function_argument_list"));
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class SymbolParserTest {
 		ParseTree tree = parser.parseString(input);
 		String output = tree.toStringTree(parser.parser);
 		System.out.println(output);
-		assert(output.contains("function_argument_list"));
+		assertTrue(output.contains("function_argument_list"));
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class SymbolParserTest {
 		System.out.println(output);
 		
 		int occ = countOccurrences("function_argument_list", output);
-		assert(occ == 2);
+		assertTrue(occ == 2);
 	}
 	
 	private int countOccurrences(String needle, String haystack)

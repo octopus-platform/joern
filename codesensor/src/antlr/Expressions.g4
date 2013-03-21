@@ -1,5 +1,4 @@
 grammar Expressions;
-import CodeSensorLex;
 
 expr: assign_expr (',' assign_expr)?;
 assign_expr: conditional_expression (assignment_operator assign_expr)?;

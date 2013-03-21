@@ -5,13 +5,13 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.CodeSensorParser.Block_starterContext;
-import antlr.CodeSensorParser.Closing_curlyContext;
-import antlr.CodeSensorParser.Else_statementContext;
-import antlr.CodeSensorParser.If_statementContext;
-import antlr.CodeSensorParser.Opening_curlyContext;
-import antlr.CodeSensorParser.StatementContext;
-import antlr.CodeSensorParser.StatementsContext;
+import antlr.FunctionGrammarParser.Block_starterContext;
+import antlr.FunctionGrammarParser.Closing_curlyContext;
+import antlr.FunctionGrammarParser.Else_statementContext;
+import antlr.FunctionGrammarParser.If_statementContext;
+import antlr.FunctionGrammarParser.Opening_curlyContext;
+import antlr.FunctionGrammarParser.StatementContext;
+import antlr.FunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;

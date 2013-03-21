@@ -1,11 +1,11 @@
 grammar Symbols;
+import CodeSensorLex, SimpleDecl, Common, Expressions;
 
-import Expressions;
+@header{
+	package antlr;
+}
 
-symbols: symbol*;
 
-symbol:  simple_decl
-	 | postfix_expression
-	 ;
+coarse_content: (simple_decl | function_call | field | water)*;
 
-symbol_water: .;
+function_call: field function_call_tail;

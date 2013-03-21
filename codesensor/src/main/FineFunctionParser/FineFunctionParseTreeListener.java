@@ -2,83 +2,83 @@ package main.FineFunctionParser;
 
 import java.util.Stack;
 
-import main.CommonCodeSensorListener;
+import main.CommonParser;
 import main.CommonParserContext;
 import main.TokenSubStream;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.functionContent.FunctionContentBuilder;
 import main.processors.CSVPrinter;
-import main.processors.Processor;
-import antlr.CodeSensorParser;
+import antlr.FunctionGrammarParser;
+import antlr.FunctionGrammarBaseListener;
 
-public class FineFunctionParseTreeListener extends CommonCodeSensorListener
+public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 {
+	CommonParser p;
+	
+	FineFunctionParseTreeListener(CommonParser aP)
+	{
+		p = aP;
+	}
 	
 	@Override
-	public void enterStatements(CodeSensorParser.StatementsContext ctx)
+	public void enterStatements(FunctionGrammarParser.StatementsContext ctx)
 	{
 		FunctionContentBuilder builder = new FunctionContentBuilder();
 		builder.createNew(ctx);
-		itemStack.push(builder);
+		p.itemStack.push(builder);
 	}
 	
 	@Override
-	public void exitStatements(CodeSensorParser.StatementsContext ctx)
+	public void exitStatements(FunctionGrammarParser.StatementsContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.pop();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.pop();
 		builder.exitStatements(ctx);
-		processor.processItem(builder.getItem(), itemStack);
+		p.processor.processItem(builder.getItem(), p.itemStack);
 	}
 	
-	@Override public void enterStatement(CodeSensorParser.StatementContext ctx)
+	@Override public void enterStatement(FunctionGrammarParser.StatementContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterStatement(ctx);
 	}
 	
-	@Override public void exitStatement(CodeSensorParser.StatementContext ctx)
+	@Override public void exitStatement(FunctionGrammarParser.StatementContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.exitStatement(ctx);
 	}
 	
-	@Override public void enterElse_statement(CodeSensorParser.Else_statementContext ctx)
+	@Override public void enterElse_statement(FunctionGrammarParser.Else_statementContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterElse(ctx);
 	}
 	
-	@Override public void enterIf_statement(CodeSensorParser.If_statementContext ctx)
+	@Override public void enterIf_statement(FunctionGrammarParser.If_statementContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterIf(ctx);
 	}
 	
 	@Override
-	public void enterBlock_starter(CodeSensorParser.Block_starterContext ctx)
+	public void enterBlock_starter(FunctionGrammarParser.Block_starterContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterBlockStarter(ctx);
 	}
 	
 	@Override
-	public void enterOpening_curly(CodeSensorParser.Opening_curlyContext ctx)
+	public void enterOpening_curly(FunctionGrammarParser.Opening_curlyContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterOpeningCurly(ctx);
 	}
 	
 	@Override
-	public void enterClosing_curly(CodeSensorParser.Closing_curlyContext ctx)
+	public void enterClosing_curly(FunctionGrammarParser.Closing_curlyContext ctx)
 	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterClosingCurly(ctx);
-	}
-	
-	@Override public void enterFuncCall(CodeSensorParser.FuncCallContext ctx)
-	{
-		FunctionContentBuilder builder = (FunctionContentBuilder) itemStack.peek();
-		// builder.enterFuncCall(ctx);
 	}
 	
 }
