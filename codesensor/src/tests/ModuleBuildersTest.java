@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import main.TokenSubStream;
-import main.ShallowParser.ShallowParser;
+import main.ModuleParser.ModuleParser;
 import main.codeitems.CodeItem;
 import main.codeitems.Name;
 import main.codeitems.declarations.ClassDef;
@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import antlr.CodeSensorLexer;
 
-public class ShallowBuildersTest {
+public class ModuleBuildersTest {
 
 	@Test
 	public void testNestedStructs()
@@ -165,7 +165,7 @@ public class ShallowBuildersTest {
 	
 	private List<CodeItem> parseInput(String input)
 	{
-		ShallowParser parser = new ShallowParser();		
+		ModuleParser parser = new ModuleParser();		
 		parser.setProcessor(new TestProcessor());
 		
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);

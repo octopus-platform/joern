@@ -10,7 +10,7 @@ import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 
-public class CodeSensorClassParserTest {
+public class ModuleClassParsingTest {
 
 	private CodeSensorParser createParser(String input)
 	{

@@ -5,12 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import main.CommandLine.CommandLineInterface;
-import main.ShallowParser.ShallowParser;
+import main.ModuleParser.ModuleParser;
 
 
 public class CodeSensor {
     
-	private static ShallowParser parser = new ShallowParser();
+	private static ModuleParser parser = new ModuleParser();
 	private static CommandLineInterface cmd = new CommandLineInterface();
 	
     public static void main(String[] args)

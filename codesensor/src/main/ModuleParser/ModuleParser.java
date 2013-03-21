@@ -1,16 +1,16 @@
-package main.ShallowParser;
+package main.ModuleParser;
 
 import main.CommonParser;
 import main.TokenSubStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import antlr.CodeSensorParser;
 
-public class ShallowParser extends CommonParser
+public class ModuleParser extends CommonParser
 {	
-	public ShallowParser()
+	public ModuleParser()
 	{
 		super();
-		listener = new ShallowParseTreeListener();
+		listener = new ModuleParseTreeListener();
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package antlr.tests;
 import static org.junit.Assert.assertTrue;
 
 import main.FunctionParser.FunctionParser;
-import main.ShallowParser.ShallowParser;
+import main.ModuleParser.ModuleParser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser;
 
-public class CodeSensorFunctionParserTest {
+public class ModuleFunctionParsingTest {
 
 	private CodeSensorParser createParser(String input)
 	{

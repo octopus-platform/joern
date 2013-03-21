@@ -1,4 +1,4 @@
-package main.ShallowParser;
+package main.ModuleParser;
 
 import java.util.Iterator;
 import java.util.Stack;
@@ -31,7 +31,7 @@ import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
 
-public class ShallowParseTreeListener extends CommonCodeSensorListener
+public class ModuleParseTreeListener extends CommonCodeSensorListener
 {
 	
 	@Override
@@ -191,15 +191,15 @@ public class ShallowParseTreeListener extends CommonCodeSensorListener
 
 	private void parseClassContent(CodeSensorParser.DeclByClassContext ctx)
 	{
-		ShallowParser shallowParser = createNewShallowParser();
+		ModuleParser shallowParser = createNewShallowParser();
 		restrictStreamToClassContent(ctx);
 		shallowParser.parseAndWalkStream(stream);
 		stream.resetRestriction();
 	}
 
-	private ShallowParser createNewShallowParser()
+	private ModuleParser createNewShallowParser()
 	{
-		ShallowParser shallowParser = new ShallowParser();
+		ModuleParser shallowParser = new ModuleParser();
 		shallowParser.setStack(itemStack);
 		shallowParser.setProcessor(processor);
 		return shallowParser;
