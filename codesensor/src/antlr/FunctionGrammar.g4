@@ -66,21 +66,8 @@ break_or_continue: ('break' | 'continue');
 return_statement: 'return' expr?;
 goto_statement: 'goto' identifier;
 
-try_block: TRY; // opening_curly;
-
-//// Workaround
-// if we use 'type_name' here, we get a crash.
-// Seems like a bug in antlr.
+try_block: TRY;
 catch_block: CATCH '(' param_type ')';
-////
-
-// param_type2: param_decl_specifiers2 param_type_id;
-// param_decl_specifiers2 : (AUTO | REGISTER)? type_name2;
-// type_name2 : (CV_QUALIFIER* (class_key | UNSIGNED | SIGNED)?
-//            base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
-//          | (UNSIGNED | SIGNED);
-/////
-
 
 label: (('case'? (identifier | number) ) | access_specifier) ':' ;
 
