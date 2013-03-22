@@ -174,9 +174,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterAssign_expr(FunctionGrammarParser.Assign_exprContext ctx) { }
 	@Override public void exitAssign_expr(FunctionGrammarParser.Assign_exprContext ctx) { }
 
-	@Override public void enterParam_type2(FunctionGrammarParser.Param_type2Context ctx) { }
-	@Override public void exitParam_type2(FunctionGrammarParser.Param_type2Context ctx) { }
-
 	@Override public void enterExpr_statement(FunctionGrammarParser.Expr_statementContext ctx) { }
 	@Override public void exitExpr_statement(FunctionGrammarParser.Expr_statementContext ctx) { }
 
@@ -194,9 +191,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 
 	@Override public void enterAccess_specifier(FunctionGrammarParser.Access_specifierContext ctx) { }
 	@Override public void exitAccess_specifier(FunctionGrammarParser.Access_specifierContext ctx) { }
-
-	@Override public void enterType_name2(FunctionGrammarParser.Type_name2Context ctx) { }
-	@Override public void exitType_name2(FunctionGrammarParser.Type_name2Context ctx) { }
 
 	@Override public void enterAssign_water_l2(FunctionGrammarParser.Assign_water_l2Context ctx) { }
 	@Override public void exitAssign_water_l2(FunctionGrammarParser.Assign_water_l2Context ctx) { }
@@ -246,11 +240,11 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterNo_brackets_or_semicolon(FunctionGrammarParser.No_brackets_or_semicolonContext ctx) { }
 	@Override public void exitNo_brackets_or_semicolon(FunctionGrammarParser.No_brackets_or_semicolonContext ctx) { }
 
-	@Override public void enterEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx) { }
-	@Override public void exitEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx) { }
-
 	@Override public void enterNo_curlies(FunctionGrammarParser.No_curliesContext ctx) { }
 	@Override public void exitNo_curlies(FunctionGrammarParser.No_curliesContext ctx) { }
+
+	@Override public void enterEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx) { }
+	@Override public void exitEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx) { }
 
 	@Override public void enterWhile_statement(FunctionGrammarParser.While_statementContext ctx) { }
 	@Override public void exitWhile_statement(FunctionGrammarParser.While_statementContext ctx) { }
@@ -296,9 +290,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 
 	@Override public void enterPtr_operator(FunctionGrammarParser.Ptr_operatorContext ctx) { }
 	@Override public void exitPtr_operator(FunctionGrammarParser.Ptr_operatorContext ctx) { }
-
-	@Override public void enterParam_decl_specifiers2(FunctionGrammarParser.Param_decl_specifiers2Context ctx) { }
-	@Override public void exitParam_decl_specifiers2(FunctionGrammarParser.Param_decl_specifiers2Context ctx) { }
 
 	@Override public void enterPostfix(FunctionGrammarParser.PostfixContext ctx) { }
 	@Override public void exitPostfix(FunctionGrammarParser.PostfixContext ctx) { }

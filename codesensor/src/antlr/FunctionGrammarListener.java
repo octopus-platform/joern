@@ -171,9 +171,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterAssign_expr(FunctionGrammarParser.Assign_exprContext ctx);
 	void exitAssign_expr(FunctionGrammarParser.Assign_exprContext ctx);
 
-	void enterParam_type2(FunctionGrammarParser.Param_type2Context ctx);
-	void exitParam_type2(FunctionGrammarParser.Param_type2Context ctx);
-
 	void enterExpr_statement(FunctionGrammarParser.Expr_statementContext ctx);
 	void exitExpr_statement(FunctionGrammarParser.Expr_statementContext ctx);
 
@@ -191,9 +188,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 
 	void enterAccess_specifier(FunctionGrammarParser.Access_specifierContext ctx);
 	void exitAccess_specifier(FunctionGrammarParser.Access_specifierContext ctx);
-
-	void enterType_name2(FunctionGrammarParser.Type_name2Context ctx);
-	void exitType_name2(FunctionGrammarParser.Type_name2Context ctx);
 
 	void enterAssign_water_l2(FunctionGrammarParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(FunctionGrammarParser.Assign_water_l2Context ctx);
@@ -243,11 +237,11 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterNo_brackets_or_semicolon(FunctionGrammarParser.No_brackets_or_semicolonContext ctx);
 	void exitNo_brackets_or_semicolon(FunctionGrammarParser.No_brackets_or_semicolonContext ctx);
 
-	void enterEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx);
-	void exitEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx);
-
 	void enterNo_curlies(FunctionGrammarParser.No_curliesContext ctx);
 	void exitNo_curlies(FunctionGrammarParser.No_curliesContext ctx);
+
+	void enterEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx);
+	void exitEquality_operator(FunctionGrammarParser.Equality_operatorContext ctx);
 
 	void enterWhile_statement(FunctionGrammarParser.While_statementContext ctx);
 	void exitWhile_statement(FunctionGrammarParser.While_statementContext ctx);
@@ -293,9 +287,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 
 	void enterPtr_operator(FunctionGrammarParser.Ptr_operatorContext ctx);
 	void exitPtr_operator(FunctionGrammarParser.Ptr_operatorContext ctx);
-
-	void enterParam_decl_specifiers2(FunctionGrammarParser.Param_decl_specifiers2Context ctx);
-	void exitParam_decl_specifiers2(FunctionGrammarParser.Param_decl_specifiers2Context ctx);
 
 	void enterPostfix(FunctionGrammarParser.PostfixContext ctx);
 	void exitPostfix(FunctionGrammarParser.PostfixContext ctx);
