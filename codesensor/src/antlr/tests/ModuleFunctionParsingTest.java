@@ -187,7 +187,7 @@ public class ModuleFunctionParsingTest {
 		CodeSensorParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
-		assertTrue(output.contains("(compound_statement { #ifdef x\\n #ifdef y\\n #else\\n #endif\\n #endif\\n abc ( ) ; }))))"));
+		assertTrue(output.contains("(compound_statement { #ifdef x\\n #ifdef y\\n #else\\n #endif\\n #endif\\n abc ( ) ; }))"));
 	}
 	
 	@Test
@@ -197,7 +197,7 @@ public class ModuleFunctionParsingTest {
 		CodeSensorParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
-		assertTrue(output.contains("(compound_statement { #ifdef x\\n #else\\n #ifdef y\\n #endif\\n #endif\\n abc ( ) ; }))))"));
+		assertTrue(output.contains("(compound_statement { #ifdef x\\n #else\\n #ifdef y\\n #endif\\n #endif\\n abc ( ) ; }))"));
 	}
 	
 	

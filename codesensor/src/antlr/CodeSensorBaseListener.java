@@ -78,9 +78,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterCtor_expr(CodeSensorParser.Ctor_exprContext ctx) { }
 	@Override public void exitCtor_expr(CodeSensorParser.Ctor_exprContext ctx) { }
 
-	@Override public void enterDeclaration(CodeSensorParser.DeclarationContext ctx) { }
-	@Override public void exitDeclaration(CodeSensorParser.DeclarationContext ctx) { }
-
 	@Override public void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx) { }
 	@Override public void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx) { }
 
@@ -269,9 +266,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 
 	@Override public void enterParameter_id(CodeSensorParser.Parameter_idContext ctx) { }
 	@Override public void exitParameter_id(CodeSensorParser.Parameter_idContext ctx) { }
-
-	@Override public void enterPart(CodeSensorParser.PartContext ctx) { }
-	@Override public void exitPart(CodeSensorParser.PartContext ctx) { }
 
 	@Override public void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx) { }

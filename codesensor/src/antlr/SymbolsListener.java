@@ -78,9 +78,6 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterExclusive_or_expression(SymbolsParser.Exclusive_or_expressionContext ctx);
 	void exitExclusive_or_expression(SymbolsParser.Exclusive_or_expressionContext ctx);
 
-	void enterAssign_expr_w_(SymbolsParser.Assign_expr_w_Context ctx);
-	void exitAssign_expr_w_(SymbolsParser.Assign_expr_w_Context ctx);
-
 	void enterParam_type_id(SymbolsParser.Param_type_idContext ctx);
 	void exitParam_type_id(SymbolsParser.Param_type_idContext ctx);
 
@@ -168,12 +165,6 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterPtrs(SymbolsParser.PtrsContext ctx);
 	void exitPtrs(SymbolsParser.PtrsContext ctx);
 
-	void enterCoarse_elem(SymbolsParser.Coarse_elemContext ctx);
-	void exitCoarse_elem(SymbolsParser.Coarse_elemContext ctx);
-
-	void enterConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx);
-	void exitConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx);
-
 	void enterWater(SymbolsParser.WaterContext ctx);
 	void exitWater(SymbolsParser.WaterContext ctx);
 
@@ -182,9 +173,6 @@ public interface SymbolsListener extends ParseTreeListener {
 
 	void enterOr_expression(SymbolsParser.Or_expressionContext ctx);
 	void exitOr_expression(SymbolsParser.Or_expressionContext ctx);
-
-	void enterAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx);
-	void exitAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx);
 
 	void enterRelational_operator(SymbolsParser.Relational_operatorContext ctx);
 	void exitRelational_operator(SymbolsParser.Relational_operatorContext ctx);

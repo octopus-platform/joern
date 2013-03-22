@@ -5,7 +5,7 @@ lexer grammar CodeSensorLex;
 IF: 'if'; ELSE: 'else'; FOR: 'for'; WHILE: 'while';
 
 BREAK: 'break'; CASE: 'case'; CONTINUE: 'continue'; 
-SWITCH: 'switch'; 
+SWITCH: 'switch'; DO: 'do';
 
 GOTO: 'goto'; RETURN: 'return';
 

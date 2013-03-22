@@ -18,18 +18,17 @@ cast_expression: ('(' type_name ptr_operator* ')' cast_expression)
     | unary_expression
     ;
 
-unary_expression: postfix_expression
-                | '--' unary_expression
+unary_expression: '--' unary_expression
                 | '++' unary_expression
-                | (unary_operator+ postfix_expression)
+                | unary_operator* postfix_expression
 ;
 
-postfix_expression: // field #fieldOnly
-		  field function_call_tail #funcCall
+postfix_expression:
+		    field function_call_tail #funcCall
           | field #fieldOnly
           ;
 
-field: (primary_expression postfix*);
+field: primary_expression postfix*;
 
 function_call_tail: call_template_list function_argument_list
                   | function_argument_list
@@ -47,4 +46,5 @@ postfix: ('.' identifier
          | '--'
 ;
 
-primary_expression: ('(' expr ')' | identifier | constant);
+primary_expression: identifier | constant | '(' expr ')';
+// ('(' expr ')' | identifier | constant);

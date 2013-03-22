@@ -124,5 +124,4 @@ no_comma_or_semicolon: ~(',' | ';');
 assign_water: ~('(' | ')' | '{' | '}' | '[' | ']' | ';' | ',');
 assign_water_l2: ~('(' | ')' | '{' | '}' | '[' | ']');
 
-// water : ~OTHER;
 water: .;

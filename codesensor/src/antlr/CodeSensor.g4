@@ -1,6 +1,6 @@
 grammar CodeSensor;
 
-import CodeSensorLex, Expressions, Common, FunctionDef, SimpleDecl;
+import CodeSensorLex, Expressions, Common, FunctionDef, CoarseSimpleDecl;
 
 /*
     Copyright (C) 2013 Fabian 'fabs' Yamaguchi <fabs@phenoelit.de>
@@ -22,15 +22,7 @@ import CodeSensorLex, Expressions, Common, FunctionDef, SimpleDecl;
 	package antlr;
 }
 
-code : part*;
-
-part : declaration
-    | water
-    ;
-
-declaration : function_def
-            | simple_decl
-            | using_directive;
+code : (function_def | simple_decl | using_directive | water)*;
 
 using_directive: USING NAMESPACE identifier ';';
 

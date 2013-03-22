@@ -75,9 +75,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterCtor_expr(CodeSensorParser.Ctor_exprContext ctx);
 	void exitCtor_expr(CodeSensorParser.Ctor_exprContext ctx);
 
-	void enterDeclaration(CodeSensorParser.DeclarationContext ctx);
-	void exitDeclaration(CodeSensorParser.DeclarationContext ctx);
-
 	void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 	void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 
@@ -266,9 +263,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterParameter_id(CodeSensorParser.Parameter_idContext ctx);
 	void exitParameter_id(CodeSensorParser.Parameter_idContext ctx);
-
-	void enterPart(CodeSensorParser.PartContext ctx);
-	void exitPart(CodeSensorParser.PartContext ctx);
 
 	void enterNo_brackets(CodeSensorParser.No_bracketsContext ctx);
 	void exitNo_brackets(CodeSensorParser.No_bracketsContext ctx);

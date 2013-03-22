@@ -38,12 +38,14 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 	
 	@Override public void enterStatement(FunctionGrammarParser.StatementContext ctx)
 	{
+		if(ctx.water() != null || ctx.PRE_ELSE() != null) return;
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterStatement(ctx);
 	}
 	
 	@Override public void exitStatement(FunctionGrammarParser.StatementContext ctx)
 	{
+		if(ctx.water() != null || ctx.PRE_ELSE() != null) return;
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.exitStatement(ctx);
 	}

@@ -81,9 +81,6 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterExclusive_or_expression(SymbolsParser.Exclusive_or_expressionContext ctx) { }
 	@Override public void exitExclusive_or_expression(SymbolsParser.Exclusive_or_expressionContext ctx) { }
 
-	@Override public void enterAssign_expr_w_(SymbolsParser.Assign_expr_w_Context ctx) { }
-	@Override public void exitAssign_expr_w_(SymbolsParser.Assign_expr_w_Context ctx) { }
-
 	@Override public void enterParam_type_id(SymbolsParser.Param_type_idContext ctx) { }
 	@Override public void exitParam_type_id(SymbolsParser.Param_type_idContext ctx) { }
 
@@ -171,12 +168,6 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterPtrs(SymbolsParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(SymbolsParser.PtrsContext ctx) { }
 
-	@Override public void enterCoarse_elem(SymbolsParser.Coarse_elemContext ctx) { }
-	@Override public void exitCoarse_elem(SymbolsParser.Coarse_elemContext ctx) { }
-
-	@Override public void enterConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx) { }
-	@Override public void exitConstant_expr_w_(SymbolsParser.Constant_expr_w_Context ctx) { }
-
 	@Override public void enterWater(SymbolsParser.WaterContext ctx) { }
 	@Override public void exitWater(SymbolsParser.WaterContext ctx) { }
 
@@ -185,9 +176,6 @@ public class SymbolsBaseListener implements SymbolsListener {
 
 	@Override public void enterOr_expression(SymbolsParser.Or_expressionContext ctx) { }
 	@Override public void exitOr_expression(SymbolsParser.Or_expressionContext ctx) { }
-
-	@Override public void enterAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx) { }
-	@Override public void exitAssign_expr_w__l2(SymbolsParser.Assign_expr_w__l2Context ctx) { }
 
 	@Override public void enterRelational_operator(SymbolsParser.Relational_operatorContext ctx) { }
 	@Override public void exitRelational_operator(SymbolsParser.Relational_operatorContext ctx) { }

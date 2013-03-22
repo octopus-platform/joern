@@ -28,18 +28,7 @@ public class FineFunctionParserTest {
 		String output = tree.toStringTree(functionParser.parser);
 		assertTrue(output.contains("class_def"));
 	}
-
-	@Test
-	public void testPreprocIf()
-	{
-		String input = "#if foo\n #endif\n";
-		FineFunctionParser functionParser = new FineFunctionParser();
-		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
-		System.out.println(output);
-		assertTrue(output.equals("(statements (pre_opener #if foo\\n) (pre_closer #endif\\n))"));
-	}
-		
+	
 	@Test
 	public void testFunctionCall()
 	{

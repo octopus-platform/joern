@@ -8,17 +8,6 @@ var_decl : type_name init_declarator_list #declByType
 
 init_declarator_list: init_declarator (',' init_declarator)* ';';
 
-init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr_w_))?;
-
-assign_expr_w_: assign_water*
-        (('{' assign_expr_w__l2 '}' | '(' assign_expr_w__l2 ')' | '[' assign_expr_w__l2 ']')
-             assign_water*)*;
-
-assign_expr_w__l2: assign_water_l2* (('{' assign_expr_w__l2 '}' | '(' assign_expr_w__l2 ')' | '[' assign_expr_w__l2 ']')
-             assign_water_l2*)*;
-
-constant_expr_w_: no_squares* ('[' constant_expr_w_ ']' no_squares*)*;
-
 initializer: assign_expr
            | '{' initializer_list '}'
 ;
@@ -34,7 +23,7 @@ type_name : (CV_QUALIFIER* (class_key | UNSIGNED | SIGNED)?
             base_type  ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>' )?)*)
           | (UNSIGNED | SIGNED);
 
-type_suffix : ('[' constant_expr_w_ ']') | param_type_list;
+
 base_type: (ALPHA_NUMERIC | VOID | LONG | LONG LONG);
 
 // Parameters
