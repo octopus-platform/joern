@@ -3,15 +3,17 @@ package main;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import main.CommandLine.CommandLineInterface;
-import main.ModuleParser.ModuleParser;
 
 
 public class CodeSensor {
-    
-	private static ModuleParser parser = new ModuleParser();
+	
+	
 	private static CommandLineInterface cmd = new CommandLineInterface();
+	private static ExecutorService executor =  Executors.newFixedThreadPool(1);
 	
     public static void main(String[] args)
 	{
@@ -31,19 +33,10 @@ public class CodeSensor {
 		for(Iterator<String> i = filesToProcess.iterator(); i.hasNext();)
 		{
 			String filename = i.next();
-			processSingleFile(filename);
+			Runnable parsingTask = new FileParser(filename);
+			executor.execute(parsingTask);
 		}
+		executor.shutdown();
 	}
-	
-    private static void processSingleFile(String filename)
-    {
-    	try{
-    		System.out.println(filename);
-    		parser.parseAndWalkFile(filename);
-    	}catch(IOException ex){
-    		System.err.println("Error processing file: " + filename);
-    	}
-    }
-    
-    
+	    
 }
