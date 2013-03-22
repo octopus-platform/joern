@@ -32,6 +32,7 @@ public class CSVPrinter extends Processor
     @Override
     public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
     {
+    	
     	switch(item.nodeTypeName){
     	case "FUNCTION_DEF":
     		outputFunctionDef(item, itemStack);
@@ -95,7 +96,7 @@ public class CSVPrinter extends Processor
 	}
     
     private void defaultOut(CodeItem item, int level)
-    {
+    {    	
     	if(item == null) return;
     	
     	String output = item.nodeTypeName + SEPARATOR;

@@ -10,7 +10,6 @@ import main.processors.Processor;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BailErrorStrategy;
-import org.antlr.v4.runtime.ConsoleErrorListener;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
@@ -93,6 +92,16 @@ abstract public class CommonParser
         walkTree(tree);
 	}
 
+	public void parseAndANTLRFileStream(ANTLRFileStream input, String aFilename) throws IOException
+	{
+		filename = aFilename;
+		Lexer lexer = createLexer(input);
+        TokenSubStream stream = new TokenSubStream(lexer);
+		initializeContextWithFile(filename, stream);
+		ParseTree tree = parseTokenStream(stream);
+        walkTree(tree);
+	}
+	
 	protected void initializeContextWithFile(String filename, TokenSubStream stream) throws IOException
 	{
 		context = new CommonParserContext();

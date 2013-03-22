@@ -1,11 +1,7 @@
 package main;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import main.CommandLine.CommandLineInterface;
 
 
@@ -13,30 +9,29 @@ public class CodeSensor {
 	
 	
 	private static CommandLineInterface cmd = new CommandLineInterface();
-	private static ExecutorService executor =  Executors.newFixedThreadPool(1);
+	private static ConcurrentLinkedQueue<FileToParse> queue = new ConcurrentLinkedQueue<FileToParse>();
+	private static String[] userSpecifiedFiles;
 	
     public static void main(String[] args)
 	{
     	cmd.parseCommandLine(args);
+    	userSpecifiedFiles = cmd.getUserSpecifiedFiles();  	    	
     	
-    	try{
-	    	List<String> filesToProcess = cmd.getFilesToProcess();
-	    	processListOfFiles(filesToProcess);
-	    }catch(IOException err){
-			System.err.println("I/O-Error: " + err.getMessage()); 
-	    }
-
+    	createProducerThread();
+    	createConsumerThreads();
 	}
 
-	private static void processListOfFiles(List<String> filesToProcess)
+	private static void createProducerThread()
 	{
-		for(Iterator<String> i = filesToProcess.iterator(); i.hasNext();)
-		{
-			String filename = i.next();
-			Runnable parsingTask = new FileParser(filename);
-			executor.execute(parsingTask);
-		}
-		executor.shutdown();
+		// new Thread(new FilenameProducer(queue, userSpecifiedFiles)).start();
+		new FilenameProducer(queue, userSpecifiedFiles).run();
+	}
+
+	private static void createConsumerThreads()
+	{
+		for(int i = 0; i < 2; i++)
+			new Thread(new FilenameConsumer(queue)).start();
+		// new FilenameConsumer(queue).run();
 	}
 	    
 }
