@@ -15,26 +15,19 @@ additive_expression: multiplicative_expression (('+'| '-') multiplicative_expres
 multiplicative_expression: cast_expression ( ('*'| '/'| '%') cast_expression)*;
 
 cast_expression: ('(' type_name ptr_operator* ')' cast_expression)
-    | unary_expression
-    ;
+               | unary_expression
+;
 
 unary_expression: '--' unary_expression
                 | '++' unary_expression
                 | unary_operator* postfix_expression
 ;
 
-postfix_expression:
-		    field function_call_tail #funcCall
-          | field #fieldOnly
-          ;
+postfix_expression: field (template_param_list? function_argument_list) #funcCall
+                  | field #fieldOnly
+;
 
 field: primary_expression postfix*;
-
-function_call_tail: call_template_list function_argument_list
-                  | function_argument_list
-                  ;
-
-call_template_list: template_param_list;
 
 function_argument_list: '(' ( function_argument (',' function_argument)* )? ')';
 function_argument: assign_expr;

@@ -57,12 +57,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterNo_comma_or_semicolon(FunctionGrammarParser.No_comma_or_semicolonContext ctx) { }
 	@Override public void exitNo_comma_or_semicolon(FunctionGrammarParser.No_comma_or_semicolonContext ctx) { }
 
-	@Override public void enterCall_template_list(FunctionGrammarParser.Call_template_listContext ctx) { }
-	@Override public void exitCall_template_list(FunctionGrammarParser.Call_template_listContext ctx) { }
-
-	@Override public void enterFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx) { }
-	@Override public void exitFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx) { }
-
 	@Override public void enterExpr_statement(FunctionGrammarParser.Expr_statementContext ctx) { }
 	@Override public void exitExpr_statement(FunctionGrammarParser.Expr_statementContext ctx) { }
 

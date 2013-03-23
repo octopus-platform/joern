@@ -21,11 +21,11 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx) { }
 	@Override public void exitFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx) { }
 
-	@Override public void enterType_suffix(SymbolsParser.Type_suffixContext ctx) { }
-	@Override public void exitType_suffix(SymbolsParser.Type_suffixContext ctx) { }
-
 	@Override public void enterFunction_argument_list(SymbolsParser.Function_argument_listContext ctx) { }
 	@Override public void exitFunction_argument_list(SymbolsParser.Function_argument_listContext ctx) { }
+
+	@Override public void enterType_suffix(SymbolsParser.Type_suffixContext ctx) { }
+	@Override public void exitType_suffix(SymbolsParser.Type_suffixContext ctx) { }
 
 	@Override public void enterMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx) { }
 	@Override public void exitMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx) { }
@@ -47,12 +47,6 @@ public class SymbolsBaseListener implements SymbolsListener {
 
 	@Override public void enterNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx) { }
 	@Override public void exitNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx) { }
-
-	@Override public void enterFunction_call_tail(SymbolsParser.Function_call_tailContext ctx) { }
-	@Override public void exitFunction_call_tail(SymbolsParser.Function_call_tailContext ctx) { }
-
-	@Override public void enterCall_template_list(SymbolsParser.Call_template_listContext ctx) { }
-	@Override public void exitCall_template_list(SymbolsParser.Call_template_listContext ctx) { }
 
 	@Override public void enterBase_class(SymbolsParser.Base_classContext ctx) { }
 	@Override public void exitBase_class(SymbolsParser.Base_classContext ctx) { }

@@ -54,12 +54,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx) { }
 	@Override public void exitNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx) { }
 
-	@Override public void enterCall_template_list(CodeSensorParser.Call_template_listContext ctx) { }
-	@Override public void exitCall_template_list(CodeSensorParser.Call_template_listContext ctx) { }
-
-	@Override public void enterFunction_call_tail(CodeSensorParser.Function_call_tailContext ctx) { }
-	@Override public void exitFunction_call_tail(CodeSensorParser.Function_call_tailContext ctx) { }
-
 	@Override public void enterBase_class(CodeSensorParser.Base_classContext ctx) { }
 	@Override public void exitBase_class(CodeSensorParser.Base_classContext ctx) { }
 
@@ -243,11 +237,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterConditional_expression(CodeSensorParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(CodeSensorParser.Conditional_expressionContext ctx) { }
 
-	@Override public void enterAnd_expression(CodeSensorParser.And_expressionContext ctx) { }
-	@Override public void exitAnd_expression(CodeSensorParser.And_expressionContext ctx) { }
-
 	@Override public void enterPrimary_expression(CodeSensorParser.Primary_expressionContext ctx) { }
 	@Override public void exitPrimary_expression(CodeSensorParser.Primary_expressionContext ctx) { }
+
+	@Override public void enterAnd_expression(CodeSensorParser.And_expressionContext ctx) { }
+	@Override public void exitAnd_expression(CodeSensorParser.And_expressionContext ctx) { }
 
 	@Override public void enterException_specification(CodeSensorParser.Exception_specificationContext ctx) { }
 	@Override public void exitException_specification(CodeSensorParser.Exception_specificationContext ctx) { }

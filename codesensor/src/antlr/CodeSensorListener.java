@@ -51,12 +51,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx);
 
-	void enterCall_template_list(CodeSensorParser.Call_template_listContext ctx);
-	void exitCall_template_list(CodeSensorParser.Call_template_listContext ctx);
-
-	void enterFunction_call_tail(CodeSensorParser.Function_call_tailContext ctx);
-	void exitFunction_call_tail(CodeSensorParser.Function_call_tailContext ctx);
-
 	void enterBase_class(CodeSensorParser.Base_classContext ctx);
 	void exitBase_class(CodeSensorParser.Base_classContext ctx);
 
@@ -240,11 +234,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterConditional_expression(CodeSensorParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(CodeSensorParser.Conditional_expressionContext ctx);
 
-	void enterAnd_expression(CodeSensorParser.And_expressionContext ctx);
-	void exitAnd_expression(CodeSensorParser.And_expressionContext ctx);
-
 	void enterPrimary_expression(CodeSensorParser.Primary_expressionContext ctx);
 	void exitPrimary_expression(CodeSensorParser.Primary_expressionContext ctx);
+
+	void enterAnd_expression(CodeSensorParser.And_expressionContext ctx);
+	void exitAnd_expression(CodeSensorParser.And_expressionContext ctx);
 
 	void enterException_specification(CodeSensorParser.Exception_specificationContext ctx);
 	void exitException_specification(CodeSensorParser.Exception_specificationContext ctx);

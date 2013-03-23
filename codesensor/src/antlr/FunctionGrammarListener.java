@@ -54,12 +54,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterNo_comma_or_semicolon(FunctionGrammarParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(FunctionGrammarParser.No_comma_or_semicolonContext ctx);
 
-	void enterCall_template_list(FunctionGrammarParser.Call_template_listContext ctx);
-	void exitCall_template_list(FunctionGrammarParser.Call_template_listContext ctx);
-
-	void enterFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx);
-	void exitFunction_call_tail(FunctionGrammarParser.Function_call_tailContext ctx);
-
 	void enterExpr_statement(FunctionGrammarParser.Expr_statementContext ctx);
 	void exitExpr_statement(FunctionGrammarParser.Expr_statementContext ctx);
 

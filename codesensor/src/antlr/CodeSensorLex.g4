@@ -34,8 +34,6 @@ ALPHA_NUMERIC: [a-zA-Z_~][a-zA-Z0-9_]*;
 
 OPENING_CURLY: '{';
 CLOSING_CURLY: '}';
-SMALLER: '<';
-LARGER: '>';
 
 // pre-processor directives: C/C++
 

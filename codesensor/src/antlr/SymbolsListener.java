@@ -18,11 +18,11 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx);
 	void exitFunction_decl_specifiers(SymbolsParser.Function_decl_specifiersContext ctx);
 
-	void enterType_suffix(SymbolsParser.Type_suffixContext ctx);
-	void exitType_suffix(SymbolsParser.Type_suffixContext ctx);
-
 	void enterFunction_argument_list(SymbolsParser.Function_argument_listContext ctx);
 	void exitFunction_argument_list(SymbolsParser.Function_argument_listContext ctx);
+
+	void enterType_suffix(SymbolsParser.Type_suffixContext ctx);
+	void exitType_suffix(SymbolsParser.Type_suffixContext ctx);
 
 	void enterMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx);
 	void exitMultiplicative_expression(SymbolsParser.Multiplicative_expressionContext ctx);
@@ -44,12 +44,6 @@ public interface SymbolsListener extends ParseTreeListener {
 
 	void enterNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(SymbolsParser.No_comma_or_semicolonContext ctx);
-
-	void enterFunction_call_tail(SymbolsParser.Function_call_tailContext ctx);
-	void exitFunction_call_tail(SymbolsParser.Function_call_tailContext ctx);
-
-	void enterCall_template_list(SymbolsParser.Call_template_listContext ctx);
-	void exitCall_template_list(SymbolsParser.Call_template_listContext ctx);
 
 	void enterBase_class(SymbolsParser.Base_classContext ctx);
 	void exitBase_class(SymbolsParser.Base_classContext ctx);
