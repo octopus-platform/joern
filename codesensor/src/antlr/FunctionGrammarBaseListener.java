@@ -15,9 +15,6 @@ public class FunctionGrammarBaseListener implements FunctionGrammarListener {
 	@Override public void enterPre_else(FunctionGrammarParser.Pre_elseContext ctx) { }
 	@Override public void exitPre_else(FunctionGrammarParser.Pre_elseContext ctx) { }
 
-	@Override public void enterOperator_function_id(FunctionGrammarParser.Operator_function_idContext ctx) { }
-	@Override public void exitOperator_function_id(FunctionGrammarParser.Operator_function_idContext ctx) { }
-
 	@Override public void enterTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx) { }
 	@Override public void exitTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx) { }
 

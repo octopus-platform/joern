@@ -12,9 +12,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CodeSensorBaseListener implements CodeSensorListener {
-	@Override public void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }
-	@Override public void exitOperator_function_id(CodeSensorParser.Operator_function_idContext ctx) { }
-
 	@Override public void enterTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx) { }
 	@Override public void exitTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx) { }
 
@@ -90,11 +87,11 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterBase_type(CodeSensorParser.Base_typeContext ctx) { }
 	@Override public void exitBase_type(CodeSensorParser.Base_typeContext ctx) { }
 
-	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx) { }
-	@Override public void exitReturn_type(CodeSensorParser.Return_typeContext ctx) { }
-
 	@Override public void enterCode(CodeSensorParser.CodeContext ctx) { }
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx) { }
+
+	@Override public void enterReturn_type(CodeSensorParser.Return_typeContext ctx) { }
+	@Override public void exitReturn_type(CodeSensorParser.Return_typeContext ctx) { }
 
 	@Override public void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }
 	@Override public void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx) { }

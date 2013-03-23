@@ -9,9 +9,6 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface SymbolsListener extends ParseTreeListener {
-	void enterOperator_function_id(SymbolsParser.Operator_function_idContext ctx);
-	void exitOperator_function_id(SymbolsParser.Operator_function_idContext ctx);
-
 	void enterTemplate_decl_start(SymbolsParser.Template_decl_startContext ctx);
 	void exitTemplate_decl_start(SymbolsParser.Template_decl_startContext ctx);
 

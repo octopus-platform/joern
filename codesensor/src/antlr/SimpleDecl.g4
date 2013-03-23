@@ -9,8 +9,9 @@ var_decl : class_def init_declarator_list? #declByClass
 init_declarator_list: init_declarator (',' init_declarator)* ';';
 
 initializer: assign_expr
-           | '{' initializer_list '}'
+           |'{' initializer_list '}'
 ;
+
 initializer_list: initializer (',' initializer)*;
 
 
@@ -20,7 +21,7 @@ base_classes: ':' base_class (',' base_class)*;
 base_class: VIRTUAL? access_specifier? identifier;
 
 type_name : (CV_QUALIFIER* (CLASS_KEY | UNSIGNED | SIGNED)?
-            base_type  template_param_list? ('::' base_type template_param_list?)*)
+            base_type ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>')? )*)
           | UNSIGNED
           | SIGNED
           ;

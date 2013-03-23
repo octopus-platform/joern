@@ -87,7 +87,6 @@ function_decl_specifiers: ('inline' | 'virtual' | 'explicit' | 'friend' | 'stati
 ptr_operator: ('*' | '&');
 
 access_specifier: ('public' | 'private' | 'protected');
-operator_function_id: OPERATOR operator;
 
 operator: (('new' | 'delete' ) ('[' ']')?)
   | '+' | '-' | '*' | '/' | '%' |'^' | '&' | '|' | '~'
@@ -105,9 +104,9 @@ template_decl_start : TEMPLATE template_param_list;
 
 
 // template water
-template_param_list : '<' (('<' template_param_list '>') |
+template_param_list : (('<' template_param_list '>') |
                        ('(' template_param_list ')') | 
-                       no_angle_brackets_or_brackets)* '>'
+                       no_angle_brackets_or_brackets)+
 ;
 
 // water

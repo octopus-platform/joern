@@ -9,9 +9,6 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface CodeSensorListener extends ParseTreeListener {
-	void enterOperator_function_id(CodeSensorParser.Operator_function_idContext ctx);
-	void exitOperator_function_id(CodeSensorParser.Operator_function_idContext ctx);
-
 	void enterTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx);
 	void exitTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx);
 
@@ -87,11 +84,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterBase_type(CodeSensorParser.Base_typeContext ctx);
 	void exitBase_type(CodeSensorParser.Base_typeContext ctx);
 
-	void enterReturn_type(CodeSensorParser.Return_typeContext ctx);
-	void exitReturn_type(CodeSensorParser.Return_typeContext ctx);
-
 	void enterCode(CodeSensorParser.CodeContext ctx);
 	void exitCode(CodeSensorParser.CodeContext ctx);
+
+	void enterReturn_type(CodeSensorParser.Return_typeContext ctx);
+	void exitReturn_type(CodeSensorParser.Return_typeContext ctx);
 
 	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);

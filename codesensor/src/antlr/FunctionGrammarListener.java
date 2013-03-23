@@ -12,9 +12,6 @@ public interface FunctionGrammarListener extends ParseTreeListener {
 	void enterPre_else(FunctionGrammarParser.Pre_elseContext ctx);
 	void exitPre_else(FunctionGrammarParser.Pre_elseContext ctx);
 
-	void enterOperator_function_id(FunctionGrammarParser.Operator_function_idContext ctx);
-	void exitOperator_function_id(FunctionGrammarParser.Operator_function_idContext ctx);
-
 	void enterTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx);
 	void exitTemplate_decl_start(FunctionGrammarParser.Template_decl_startContext ctx);
 

@@ -1,7 +1,7 @@
 grammar Expressions;
 
 expr: assign_expr (',' assign_expr)?;
-assign_expr: conditional_expression (assignment_operator assign_expr)?;
+assign_expr: conditional_expression (assignment_operator conditional_expression)*;
 conditional_expression: or_expression ('?' expr ':' conditional_expression)?;
 or_expression : and_expression ('||' and_expression)*;
 and_expression : inclusive_or_expression ('&&' inclusive_or_expression)*;
@@ -23,7 +23,7 @@ unary_expression: '--' unary_expression
                 | unary_operator* postfix_expression
 ;
 
-postfix_expression: field (template_param_list? function_argument_list) #funcCall
+postfix_expression: field (('<' template_param_list '>')? function_argument_list) #funcCall
                   | field #fieldOnly
 ;
 

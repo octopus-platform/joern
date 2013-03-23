@@ -12,9 +12,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class SymbolsBaseListener implements SymbolsListener {
-	@Override public void enterOperator_function_id(SymbolsParser.Operator_function_idContext ctx) { }
-	@Override public void exitOperator_function_id(SymbolsParser.Operator_function_idContext ctx) { }
-
 	@Override public void enterTemplate_decl_start(SymbolsParser.Template_decl_startContext ctx) { }
 	@Override public void exitTemplate_decl_start(SymbolsParser.Template_decl_startContext ctx) { }
 
