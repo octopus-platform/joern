@@ -12,13 +12,17 @@ public class CodeSensor {
     
 	private static ModuleParser parser = new ModuleParser();
 	private static CommandLineInterface cmd = new CommandLineInterface();
+	private static FilenameProvider filenameProvider = new FilenameProvider();
 	
     public static void main(String[] args)
 	{
     	cmd.parseCommandLine(args);
+		String[] userSpecifiedFilenames = cmd.getFilenames();
+
     	
     	try{
-	    	List<String> filesToProcess = cmd.getFilesToProcess();
+    		List<String> filesToProcess =
+    				filenameProvider.getFilesToProcess(userSpecifiedFilenames);
 	    	processListOfFiles(filesToProcess);
 	    }catch(IOException err){
 			System.err.println("I/O-Error: " + err.getMessage()); 
