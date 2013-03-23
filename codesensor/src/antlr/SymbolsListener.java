@@ -159,9 +159,6 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterUnary_expression(SymbolsParser.Unary_expressionContext ctx);
 	void exitUnary_expression(SymbolsParser.Unary_expressionContext ctx);
 
-	void enterClass_key(SymbolsParser.Class_keyContext ctx);
-	void exitClass_key(SymbolsParser.Class_keyContext ctx);
-
 	void enterPtrs(SymbolsParser.PtrsContext ctx);
 	void exitPtrs(SymbolsParser.PtrsContext ctx);
 
@@ -195,11 +192,11 @@ public interface SymbolsListener extends ParseTreeListener {
 	void enterConditional_expression(SymbolsParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(SymbolsParser.Conditional_expressionContext ctx);
 
-	void enterPrimary_expression(SymbolsParser.Primary_expressionContext ctx);
-	void exitPrimary_expression(SymbolsParser.Primary_expressionContext ctx);
-
 	void enterAnd_expression(SymbolsParser.And_expressionContext ctx);
 	void exitAnd_expression(SymbolsParser.And_expressionContext ctx);
+
+	void enterPrimary_expression(SymbolsParser.Primary_expressionContext ctx);
+	void exitPrimary_expression(SymbolsParser.Primary_expressionContext ctx);
 
 	void enterTemplate_param_list(SymbolsParser.Template_param_listContext ctx);
 	void exitTemplate_param_list(SymbolsParser.Template_param_listContext ctx);

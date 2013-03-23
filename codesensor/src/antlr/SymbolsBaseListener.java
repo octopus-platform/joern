@@ -162,9 +162,6 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterUnary_expression(SymbolsParser.Unary_expressionContext ctx) { }
 	@Override public void exitUnary_expression(SymbolsParser.Unary_expressionContext ctx) { }
 
-	@Override public void enterClass_key(SymbolsParser.Class_keyContext ctx) { }
-	@Override public void exitClass_key(SymbolsParser.Class_keyContext ctx) { }
-
 	@Override public void enterPtrs(SymbolsParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(SymbolsParser.PtrsContext ctx) { }
 
@@ -198,11 +195,11 @@ public class SymbolsBaseListener implements SymbolsListener {
 	@Override public void enterConditional_expression(SymbolsParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(SymbolsParser.Conditional_expressionContext ctx) { }
 
-	@Override public void enterPrimary_expression(SymbolsParser.Primary_expressionContext ctx) { }
-	@Override public void exitPrimary_expression(SymbolsParser.Primary_expressionContext ctx) { }
-
 	@Override public void enterAnd_expression(SymbolsParser.And_expressionContext ctx) { }
 	@Override public void exitAnd_expression(SymbolsParser.And_expressionContext ctx) { }
+
+	@Override public void enterPrimary_expression(SymbolsParser.Primary_expressionContext ctx) { }
+	@Override public void exitPrimary_expression(SymbolsParser.Primary_expressionContext ctx) { }
 
 	@Override public void enterTemplate_param_list(SymbolsParser.Template_param_listContext ctx) { }
 	@Override public void exitTemplate_param_list(SymbolsParser.Template_param_listContext ctx) { }

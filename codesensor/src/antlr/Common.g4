@@ -84,7 +84,6 @@ constant
 // keywords & operators
 
 function_decl_specifiers: ('inline' | 'virtual' | 'explicit' | 'friend' | 'static');
-class_key: ('struct' | 'class' | 'union' | 'enum');
 ptr_operator: ('*' | '&');
 
 access_specifier: ('public' | 'private' | 'protected');
@@ -102,12 +101,12 @@ operator: (('new' | 'delete' ) ('[' ']')?)
 assignment_operator: '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='; 
 equality_operator: ('=='| '!=');
 
-template_decl_start : TEMPLATE '<' template_param_list '>';
+template_decl_start : TEMPLATE template_param_list;
 
 // template water
-template_param_list : (('<' template_param_list '>') |
+template_param_list : '<' (('<' template_param_list '>') |
                        ('(' template_param_list ')') | 
-                       no_angle_brackets_or_brackets)*
+                       no_angle_brackets_or_brackets)* '>'
 ;
 
 // water

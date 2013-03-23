@@ -192,9 +192,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterUnary_expression(CodeSensorParser.Unary_expressionContext ctx);
 	void exitUnary_expression(CodeSensorParser.Unary_expressionContext ctx);
 
-	void enterClass_key(CodeSensorParser.Class_keyContext ctx);
-	void exitClass_key(CodeSensorParser.Class_keyContext ctx);
-
 	void enterPtrs(CodeSensorParser.PtrsContext ctx);
 	void exitPtrs(CodeSensorParser.PtrsContext ctx);
 

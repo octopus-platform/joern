@@ -34,7 +34,7 @@ function_call_tail: call_template_list function_argument_list
                   | function_argument_list
                   ;
 
-call_template_list: ('<' template_param_list '>' );
+call_template_list: template_param_list;
 
 function_argument_list: '(' ( function_argument (',' function_argument)* )? ')';
 function_argument: assign_expr;
@@ -47,4 +47,4 @@ postfix: ('.' identifier
 ;
 
 primary_expression: identifier | constant | '(' expr ')';
-// ('(' expr ')' | identifier | constant);
+

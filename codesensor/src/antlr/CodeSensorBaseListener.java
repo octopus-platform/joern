@@ -195,9 +195,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterUnary_expression(CodeSensorParser.Unary_expressionContext ctx) { }
 	@Override public void exitUnary_expression(CodeSensorParser.Unary_expressionContext ctx) { }
 
-	@Override public void enterClass_key(CodeSensorParser.Class_keyContext ctx) { }
-	@Override public void exitClass_key(CodeSensorParser.Class_keyContext ctx) { }
-
 	@Override public void enterPtrs(CodeSensorParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(CodeSensorParser.PtrsContext ctx) { }
 

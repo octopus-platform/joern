@@ -51,7 +51,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		replaceTopOfStack(new BlockStarterItem());
 	}
 
-		public void enterIf(If_statementContext ctx)
+	public void enterIf(If_statementContext ctx)
 	{
 		replaceTopOfStack(new IfItem());
 	}

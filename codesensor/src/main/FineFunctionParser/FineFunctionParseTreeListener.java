@@ -50,6 +50,7 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 		builder.exitStatement(ctx);
 	}
 	
+	
 	@Override public void enterElse_statement(FunctionGrammarParser.Else_statementContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
@@ -61,6 +62,7 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterIf(ctx);
 	}
+	
 	
 	@Override
 	public void enterBlock_starter(FunctionGrammarParser.Block_starterContext ctx)

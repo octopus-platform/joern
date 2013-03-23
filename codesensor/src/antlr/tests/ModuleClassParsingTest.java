@@ -28,7 +28,8 @@ public class ModuleClassParsingTest {
 		
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier foo))"));
+		System.out.println(output);
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def struct (class_name (identifier foo))"));
 	}
 	
 	@Test
@@ -38,7 +39,7 @@ public class ModuleClassParsingTest {
 		
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) {"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def struct {"));
 	}
 		
 	@Test
@@ -61,7 +62,7 @@ public class ModuleClassParsingTest {
 		String input = "struct foo{ int x; } y;";			
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);		
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def (class_key struct) (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (identifier y)) ;)))"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def struct (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (identifier y)) ;)))"));
 	}
 	
 	@Test
