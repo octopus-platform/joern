@@ -16,7 +16,7 @@ public class FineFunctionParserTest {
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.parser);
 		System.out.println(output);
-		assertTrue(output.contains("(if_statement"));
+		assertTrue(output.contains("(selection_or_iteration if"));
 	}
 
 	@Test
