@@ -12,9 +12,6 @@ import main.codeitems.Name;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.CodeSensorParser.IdentifierContext;
-import antlr.CodeSensorParser.Init_declaratorContext;
-
 public class IdentifierDeclBuilder extends CodeItemBuilder
 {
 	IdentifierDecl thisItem;
@@ -51,8 +48,8 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 		thisItem.name.initializeFromContext(identifier);
 	}
 	
-	public List<IdentifierDecl> getDeclarations(
-			ParserRuleContext decl_list, ParserRuleContext typeName)
+	public List<IdentifierDecl> getDeclarations(ParserRuleContext decl_list,
+												ParserRuleContext typeName)
 	{
 		List<IdentifierDecl> declarations = new LinkedList<IdentifierDecl>();
 		InitDeclContextWrapper decl_ctx;
@@ -71,5 +68,6 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 		}
 		return declarations;
 	}
+	
 	
 }

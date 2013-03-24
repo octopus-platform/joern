@@ -1,7 +1,6 @@
 package main.ModuleParser;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import main.CommonParser;
@@ -18,8 +17,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.tree.ParseTree;
-
 
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
@@ -28,7 +25,6 @@ import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Function_defContext;
-import antlr.CodeSensorParser.Init_declaratorContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
 
@@ -68,8 +64,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 
 	
-	private String getCompoundStmtAsString(
-			CodeSensorParser.Function_defContext ctx)
+	private String getCompoundStmtAsString(CodeSensorParser.Function_defContext ctx)
 	{
 		Compound_statementContext compound_statement = ctx.compound_statement();
 		
@@ -131,7 +126,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		p.processor.processItem(builder.getItem(), p.itemStack);
 	}	
 	
-	// Class/Structure Definitions
+	// DeclByType
 	
 	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
 	{
@@ -139,6 +134,21 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
 	}
+	
+	private void emitDeclarations(ParserRuleContext decl_list,
+			  ParserRuleContext typeName)
+	{
+		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
+		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
+
+		Iterator<IdentifierDecl> it = declarations.iterator();
+		while(it.hasNext()){
+			IdentifierDecl decl = it.next();
+			p.processor.processItem(decl, p.itemStack);
+		}		
+	}
+	
+	// DeclByClass
 	
 	@Override
 	public void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx)
@@ -157,6 +167,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	
 	private void emitDeclarationsForClass(DeclByClassContext ctx)
 	{
+		
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();		
 		if(decl_list == null)
 			return;
@@ -165,19 +176,6 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		emitDeclarations(decl_list, typeName);
 	}
 	
-	private void emitDeclarations(Init_declarator_listContext decl_list,
-								  ParserRuleContext typeName)
-	{
-		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
-		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
-	
-		Iterator<IdentifierDecl> it = declarations.iterator();
-		while(it.hasNext()){
-			IdentifierDecl decl = it.next();
-			p.processor.processItem(decl, p.itemStack);
-		}
-		
-	}
 	
 	@Override
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
@@ -186,7 +184,6 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		p.processor.processItem(builder.getItem(), p.itemStack);
 		
 		parseClassContent(ctx);
-	
 		emitDeclarationsForClass(ctx);
 	}
 
@@ -198,14 +195,6 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		p.stream.resetRestriction();
 	}
 
-	private ModuleParser createNewShallowParser()
-	{
-		ModuleParser shallowParser = new ModuleParser();
-		shallowParser.setStack(p.itemStack);
-		shallowParser.setProcessor(p.processor);
-		return shallowParser;
-	}
-	
 	private void restrictStreamToClassContent(
 			CodeSensorParser.DeclByClassContext ctx)
 	{
@@ -213,6 +202,14 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
 		int stopIndex = class_def.stop.getTokenIndex();
 		p.stream.restrict(startIndex+1, stopIndex);
+	}
+
+	private ModuleParser createNewShallowParser()
+	{
+		ModuleParser shallowParser = new ModuleParser();
+		shallowParser.setStack(p.itemStack);
+		shallowParser.setProcessor(p.processor);
+		return shallowParser;
 	}
 	
 }

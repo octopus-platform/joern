@@ -3,16 +3,11 @@ package main.codeitems.function;
 import java.util.Stack;
 
 import main.ParseTreeUtils;
-import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.Interval;
 
-import antlr.CodeSensorParser;
-import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.Function_nameContext;
 import antlr.CodeSensorParser.Function_param_listContext;
 import antlr.CodeSensorParser.Parameter_declContext;
