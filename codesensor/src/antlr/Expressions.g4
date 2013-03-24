@@ -18,13 +18,10 @@ cast_expression: ('(' type_name ptr_operator* ')' cast_expression)
                | unary_expression
 ;
 
-unary_expression: '--' unary_expression
-                | '++' unary_expression
-                | unary_operator* postfix_expression
-;
-
-postfix_expression: field (('<' template_param_list '>')? function_argument_list) #funcCall
-                  | field #fieldOnly
+unary_expression: '--' unary_expression # u1
+                | '++' unary_expression # u2
+                | unary_operator* field (('<' template_param_list '>')? function_argument_list) #funcCall
+                | unary_operator* field #fieldOnly
 ;
 
 field: primary_expression postfix*;

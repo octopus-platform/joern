@@ -60,6 +60,12 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx) { }
 	@Override public void exitAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx) { }
 
+	@Override public void enterU2(CoarseFunctionGrammarParser.U2Context ctx) { }
+	@Override public void exitU2(CoarseFunctionGrammarParser.U2Context ctx) { }
+
+	@Override public void enterU1(CoarseFunctionGrammarParser.U1Context ctx) { }
+	@Override public void exitU1(CoarseFunctionGrammarParser.U1Context ctx) { }
+
 	@Override public void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 	@Override public void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 
@@ -149,9 +155,6 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 
 	@Override public void enterFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx) { }
 	@Override public void exitFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx) { }
-
-	@Override public void enterUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx) { }
-	@Override public void exitUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx) { }
 
 	@Override public void enterPtrs(CoarseFunctionGrammarParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(CoarseFunctionGrammarParser.PtrsContext ctx) { }

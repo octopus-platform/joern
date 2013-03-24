@@ -72,11 +72,17 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterInit_declarator_list(FineFunctionGrammarParser.Init_declarator_listContext ctx);
 	void exitInit_declarator_list(FineFunctionGrammarParser.Init_declarator_listContext ctx);
 
+	void enterU2(FineFunctionGrammarParser.U2Context ctx);
+	void exitU2(FineFunctionGrammarParser.U2Context ctx);
+
 	void enterAssign_water_l2(FineFunctionGrammarParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(FineFunctionGrammarParser.Assign_water_l2Context ctx);
 
 	void enterInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx);
 	void exitInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx);
+
+	void enterU1(FineFunctionGrammarParser.U1Context ctx);
+	void exitU1(FineFunctionGrammarParser.U1Context ctx);
 
 	void enterCondition(FineFunctionGrammarParser.ConditionContext ctx);
 	void exitCondition(FineFunctionGrammarParser.ConditionContext ctx);
@@ -197,9 +203,6 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 
 	void enterFunction_argument(FineFunctionGrammarParser.Function_argumentContext ctx);
 	void exitFunction_argument(FineFunctionGrammarParser.Function_argumentContext ctx);
-
-	void enterUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx);
-	void exitUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx);
 
 	void enterStatements(FineFunctionGrammarParser.StatementsContext ctx);
 	void exitStatements(FineFunctionGrammarParser.StatementsContext ctx);

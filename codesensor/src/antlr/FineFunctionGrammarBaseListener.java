@@ -75,11 +75,17 @@ public class FineFunctionGrammarBaseListener implements FineFunctionGrammarListe
 	@Override public void enterInit_declarator_list(FineFunctionGrammarParser.Init_declarator_listContext ctx) { }
 	@Override public void exitInit_declarator_list(FineFunctionGrammarParser.Init_declarator_listContext ctx) { }
 
+	@Override public void enterU2(FineFunctionGrammarParser.U2Context ctx) { }
+	@Override public void exitU2(FineFunctionGrammarParser.U2Context ctx) { }
+
 	@Override public void enterAssign_water_l2(FineFunctionGrammarParser.Assign_water_l2Context ctx) { }
 	@Override public void exitAssign_water_l2(FineFunctionGrammarParser.Assign_water_l2Context ctx) { }
 
 	@Override public void enterInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx) { }
 	@Override public void exitInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx) { }
+
+	@Override public void enterU1(FineFunctionGrammarParser.U1Context ctx) { }
+	@Override public void exitU1(FineFunctionGrammarParser.U1Context ctx) { }
 
 	@Override public void enterCondition(FineFunctionGrammarParser.ConditionContext ctx) { }
 	@Override public void exitCondition(FineFunctionGrammarParser.ConditionContext ctx) { }
@@ -200,9 +206,6 @@ public class FineFunctionGrammarBaseListener implements FineFunctionGrammarListe
 
 	@Override public void enterFunction_argument(FineFunctionGrammarParser.Function_argumentContext ctx) { }
 	@Override public void exitFunction_argument(FineFunctionGrammarParser.Function_argumentContext ctx) { }
-
-	@Override public void enterUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx) { }
-	@Override public void exitUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx) { }
 
 	@Override public void enterStatements(FineFunctionGrammarParser.StatementsContext ctx) { }
 	@Override public void exitStatements(FineFunctionGrammarParser.StatementsContext ctx) { }

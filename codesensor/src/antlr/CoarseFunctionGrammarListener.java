@@ -57,6 +57,12 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx);
 
+	void enterU2(CoarseFunctionGrammarParser.U2Context ctx);
+	void exitU2(CoarseFunctionGrammarParser.U2Context ctx);
+
+	void enterU1(CoarseFunctionGrammarParser.U1Context ctx);
+	void exitU1(CoarseFunctionGrammarParser.U1Context ctx);
+
 	void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 
@@ -146,9 +152,6 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx);
 	void exitFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx);
-
-	void enterUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx);
-	void exitUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx);
 
 	void enterPtrs(CoarseFunctionGrammarParser.PtrsContext ctx);
 	void exitPtrs(CoarseFunctionGrammarParser.PtrsContext ctx);
