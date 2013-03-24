@@ -4,8 +4,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.SymbolsLexer;
-import antlr.SymbolsParser;
+import antlr.CoarseFunctionGrammarLexer;
+import antlr.CoarseFunctionGrammarParser;
 
 import main.CommonParser;
 import main.TokenSubStream;
@@ -21,14 +21,14 @@ public class CoarseFunctionParser extends CommonParser {
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
-		return new SymbolsLexer(input);
+		return new CoarseFunctionGrammarLexer(input);
 	}
 	
 	@Override
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
-		parser = new SymbolsParser(tokens);
-        SymbolsParser thisParser = (SymbolsParser) parser;
+		parser = new CoarseFunctionGrammarParser(tokens);
+        CoarseFunctionGrammarParser thisParser = (CoarseFunctionGrammarParser) parser;
 		ParseTree tree = null;
        
         try {

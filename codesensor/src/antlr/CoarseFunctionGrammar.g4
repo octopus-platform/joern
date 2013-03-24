@@ -1,4 +1,4 @@
-grammar Symbols;
+grammar CoarseFunctionGrammar;
 
 import CodeSensorLex, Common, Expressions, FineSimpleDecl;
 

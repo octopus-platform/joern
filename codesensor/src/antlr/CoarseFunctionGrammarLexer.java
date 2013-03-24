@@ -1,4 +1,4 @@
-// Generated from ./Symbols.g4 by ANTLR 4.0
+// Generated from ./CoarseFunctionGrammar.g4 by ANTLR 4.0
 
 	package antlr;
 
@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class SymbolsLexer extends Lexer {
+public class CoarseFunctionGrammarLexer extends Lexer {
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -74,13 +74,13 @@ public class SymbolsLexer extends Lexer {
 	};
 
 
-	public SymbolsLexer(CharStream input) {
+	public CoarseFunctionGrammarLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Symbols.g4"; }
+	public String getGrammarFileName() { return "CoarseFunctionGrammar.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

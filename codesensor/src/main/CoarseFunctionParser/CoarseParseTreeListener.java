@@ -1,10 +1,10 @@
 package main.CoarseFunctionParser;
 
 import main.CommonParser;
-import antlr.SymbolsBaseListener;
+import antlr.CoarseFunctionGrammarBaseListener;
 
 
-public class CoarseParseTreeListener extends SymbolsBaseListener
+public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 {
 	CommonParser p;
 	

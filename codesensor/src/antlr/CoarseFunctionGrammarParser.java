@@ -1,4 +1,4 @@
-// Generated from ./Symbols.g4 by ANTLR 4.0
+// Generated from ./CoarseFunctionGrammar.g4 by ANTLR 4.0
 
 	package antlr;
 
@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class SymbolsParser extends Parser {
+public class CoarseFunctionGrammarParser extends Parser {
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -93,7 +93,7 @@ public class SymbolsParser extends Parser {
 	};
 
 	@Override
-	public String getGrammarFileName() { return "Symbols.g4"; }
+	public String getGrammarFileName() { return "CoarseFunctionGrammar.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }
@@ -166,7 +166,7 @@ public class SymbolsParser extends Parser {
 	   }
 
 
-	public SymbolsParser(TokenStream input) {
+	public CoarseFunctionGrammarParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
@@ -180,7 +180,7 @@ public class SymbolsParser extends Parser {
 		public Simple_declContext simple_decl(int i) {
 			return getRuleContext(Simple_declContext.class,i);
 		}
-		public TerminalNode EOF() { return getToken(SymbolsParser.EOF, 0); }
+		public TerminalNode EOF() { return getToken(CoarseFunctionGrammarParser.EOF, 0); }
 		public List<Simple_declContext> simple_decl() {
 			return getRuleContexts(Simple_declContext.class);
 		}
@@ -196,11 +196,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_coarse_content; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterCoarse_content(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterCoarse_content(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitCoarse_content(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitCoarse_content(this);
 		}
 	}
 
@@ -262,11 +262,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_unary_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterUnary_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterUnary_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitUnary_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitUnary_operator(this);
 		}
 	}
 
@@ -303,11 +303,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_relational_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterRelational_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterRelational_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitRelational_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitRelational_operator(this);
 		}
 	}
 
@@ -338,23 +338,23 @@ public class SymbolsParser extends Parser {
 	}
 
 	public static class ConstantContext extends ParserRuleContext {
-		public TerminalNode CHAR() { return getToken(SymbolsParser.CHAR, 0); }
-		public TerminalNode OCTAL_LITERAL() { return getToken(SymbolsParser.OCTAL_LITERAL, 0); }
-		public TerminalNode HEX_LITERAL() { return getToken(SymbolsParser.HEX_LITERAL, 0); }
-		public TerminalNode FLOATING_POINT_LITERAL() { return getToken(SymbolsParser.FLOATING_POINT_LITERAL, 0); }
-		public TerminalNode DECIMAL_LITERAL() { return getToken(SymbolsParser.DECIMAL_LITERAL, 0); }
-		public TerminalNode STRING() { return getToken(SymbolsParser.STRING, 0); }
+		public TerminalNode CHAR() { return getToken(CoarseFunctionGrammarParser.CHAR, 0); }
+		public TerminalNode OCTAL_LITERAL() { return getToken(CoarseFunctionGrammarParser.OCTAL_LITERAL, 0); }
+		public TerminalNode HEX_LITERAL() { return getToken(CoarseFunctionGrammarParser.HEX_LITERAL, 0); }
+		public TerminalNode FLOATING_POINT_LITERAL() { return getToken(CoarseFunctionGrammarParser.FLOATING_POINT_LITERAL, 0); }
+		public TerminalNode DECIMAL_LITERAL() { return getToken(CoarseFunctionGrammarParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode STRING() { return getToken(CoarseFunctionGrammarParser.STRING, 0); }
 		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constant; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterConstant(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterConstant(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitConstant(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitConstant(this);
 		}
 	}
 
@@ -391,11 +391,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_function_decl_specifiers; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterFunction_decl_specifiers(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterFunction_decl_specifiers(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitFunction_decl_specifiers(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitFunction_decl_specifiers(this);
 		}
 	}
 
@@ -432,11 +432,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ptr_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterPtr_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterPtr_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitPtr_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitPtr_operator(this);
 		}
 	}
 
@@ -473,11 +473,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_access_specifier; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAccess_specifier(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAccess_specifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAccess_specifier(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAccess_specifier(this);
 		}
 	}
 
@@ -514,11 +514,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterOperator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitOperator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitOperator(this);
 		}
 	}
 
@@ -804,11 +804,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assignment_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAssignment_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAssignment_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAssignment_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAssignment_operator(this);
 		}
 	}
 
@@ -845,11 +845,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_equality_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterEquality_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterEquality_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitEquality_operator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitEquality_operator(this);
 		}
 	}
 
@@ -883,18 +883,18 @@ public class SymbolsParser extends Parser {
 		public Template_param_listContext template_param_list() {
 			return getRuleContext(Template_param_listContext.class,0);
 		}
-		public TerminalNode TEMPLATE() { return getToken(SymbolsParser.TEMPLATE, 0); }
+		public TerminalNode TEMPLATE() { return getToken(CoarseFunctionGrammarParser.TEMPLATE, 0); }
 		public Template_decl_startContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_template_decl_start; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterTemplate_decl_start(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterTemplate_decl_start(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitTemplate_decl_start(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitTemplate_decl_start(this);
 		}
 	}
 
@@ -938,11 +938,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_template_param_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterTemplate_param_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterTemplate_param_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitTemplate_param_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitTemplate_param_list(this);
 		}
 	}
 
@@ -1110,11 +1110,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_brackets; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_brackets(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_brackets(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_brackets(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_brackets(this);
 		}
 	}
 
@@ -1151,11 +1151,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_brackets_curlies_or_squares; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_brackets_curlies_or_squares(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_brackets_curlies_or_squares(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_brackets_curlies_or_squares(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_brackets_curlies_or_squares(this);
 		}
 	}
 
@@ -1192,11 +1192,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_brackets_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_brackets_or_semicolon(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_brackets_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_brackets_or_semicolon(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_brackets_or_semicolon(this);
 		}
 	}
 
@@ -1233,11 +1233,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_angle_brackets_or_brackets; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_angle_brackets_or_brackets(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_angle_brackets_or_brackets(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_angle_brackets_or_brackets(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_angle_brackets_or_brackets(this);
 		}
 	}
 
@@ -1274,11 +1274,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_curlies; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_curlies(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_curlies(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_curlies(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_curlies(this);
 		}
 	}
 
@@ -1315,11 +1315,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_squares; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_squares(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_squares(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_squares(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_squares(this);
 		}
 	}
 
@@ -1356,11 +1356,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_squares_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_squares_or_semicolon(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_squares_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_squares_or_semicolon(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_squares_or_semicolon(this);
 		}
 	}
 
@@ -1397,11 +1397,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_comma_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNo_comma_or_semicolon(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNo_comma_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNo_comma_or_semicolon(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNo_comma_or_semicolon(this);
 		}
 	}
 
@@ -1438,11 +1438,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assign_water; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAssign_water(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAssign_water(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAssign_water(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAssign_water(this);
 		}
 	}
 
@@ -1479,11 +1479,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assign_water_l2; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAssign_water_l2(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAssign_water_l2(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAssign_water_l2(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAssign_water_l2(this);
 		}
 	}
 
@@ -1520,11 +1520,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_water; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterWater(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterWater(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitWater(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitWater(this);
 		}
 	}
 
@@ -1562,11 +1562,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterExpr(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitExpr(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitExpr(this);
 		}
 	}
 
@@ -1619,11 +1619,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assign_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAssign_expr(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAssign_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAssign_expr(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAssign_expr(this);
 		}
 	}
 
@@ -1678,11 +1678,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_conditional_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterConditional_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterConditional_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitConditional_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitConditional_expression(this);
 		}
 	}
 
@@ -1731,11 +1731,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterOr_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterOr_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitOr_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitOr_expression(this);
 		}
 	}
 
@@ -1787,11 +1787,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_and_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAnd_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAnd_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAnd_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAnd_expression(this);
 		}
 	}
 
@@ -1843,11 +1843,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_inclusive_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterInclusive_or_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterInclusive_or_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitInclusive_or_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitInclusive_or_expression(this);
 		}
 	}
 
@@ -1899,11 +1899,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_exclusive_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterExclusive_or_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterExclusive_or_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitExclusive_or_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitExclusive_or_expression(this);
 		}
 	}
 
@@ -1955,11 +1955,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_bit_and_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterBit_and_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterBit_and_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitBit_and_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitBit_and_expression(this);
 		}
 	}
 
@@ -2017,11 +2017,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_equality_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterEquality_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterEquality_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitEquality_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitEquality_expression(this);
 		}
 	}
 
@@ -2079,11 +2079,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_relational_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterRelational_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterRelational_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitRelational_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitRelational_expression(this);
 		}
 	}
 
@@ -2135,11 +2135,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_shift_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterShift_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterShift_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitShift_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitShift_expression(this);
 		}
 	}
 
@@ -2196,11 +2196,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_additive_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterAdditive_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterAdditive_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitAdditive_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitAdditive_expression(this);
 		}
 	}
 
@@ -2257,11 +2257,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_multiplicative_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterMultiplicative_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterMultiplicative_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitMultiplicative_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitMultiplicative_expression(this);
 		}
 	}
 
@@ -2327,11 +2327,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_cast_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterCast_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterCast_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitCast_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitCast_expression(this);
 		}
 	}
 
@@ -2405,11 +2405,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_unary_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterUnary_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterUnary_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitUnary_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitUnary_expression(this);
 		}
 	}
 
@@ -2499,11 +2499,11 @@ public class SymbolsParser extends Parser {
 		public FieldOnlyContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterFieldOnly(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterFieldOnly(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitFieldOnly(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitFieldOnly(this);
 		}
 	}
 	public static class FuncCallContext extends Postfix_expressionContext {
@@ -2519,11 +2519,11 @@ public class SymbolsParser extends Parser {
 		public FuncCallContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterFuncCall(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterFuncCall(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitFuncCall(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitFuncCall(this);
 		}
 	}
 
@@ -2591,11 +2591,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_field; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterField(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterField(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitField(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitField(this);
 		}
 	}
 
@@ -2648,11 +2648,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_function_argument_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterFunction_argument_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterFunction_argument_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitFunction_argument_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitFunction_argument_list(this);
 		}
 	}
 
@@ -2710,11 +2710,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_function_argument; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterFunction_argument(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterFunction_argument(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitFunction_argument(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitFunction_argument(this);
 		}
 	}
 
@@ -2751,11 +2751,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_postfix; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterPostfix(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterPostfix(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitPostfix(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitPostfix(this);
 		}
 	}
 
@@ -2839,11 +2839,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_primary_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterPrimary_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterPrimary_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitPrimary_expression(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitPrimary_expression(this);
 		}
 	}
 
@@ -2915,11 +2915,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_init_declarator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterInit_declarator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterInit_declarator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitInit_declarator(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitInit_declarator(this);
 		}
 	}
 
@@ -3007,11 +3007,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_type_suffix; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterType_suffix(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterType_suffix(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitType_suffix(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitType_suffix(this);
 		}
 	}
 
@@ -3064,7 +3064,7 @@ public class SymbolsParser extends Parser {
 		public Template_decl_startContext template_decl_start() {
 			return getRuleContext(Template_decl_startContext.class,0);
 		}
-		public TerminalNode TYPEDEF() { return getToken(SymbolsParser.TYPEDEF, 0); }
+		public TerminalNode TYPEDEF() { return getToken(CoarseFunctionGrammarParser.TYPEDEF, 0); }
 		public Var_declContext var_decl() {
 			return getRuleContext(Var_declContext.class,0);
 		}
@@ -3074,11 +3074,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_simple_decl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterSimple_decl(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterSimple_decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitSimple_decl(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitSimple_decl(this);
 		}
 	}
 
@@ -3142,11 +3142,11 @@ public class SymbolsParser extends Parser {
 		public DeclByClassContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterDeclByClass(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterDeclByClass(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitDeclByClass(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitDeclByClass(this);
 		}
 	}
 	public static class DeclByTypeContext extends Var_declContext {
@@ -3159,11 +3159,11 @@ public class SymbolsParser extends Parser {
 		public DeclByTypeContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterDeclByType(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterDeclByType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitDeclByType(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitDeclByType(this);
 		}
 	}
 
@@ -3223,11 +3223,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_init_declarator_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterInit_declarator_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterInit_declarator_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitInit_declarator_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitInit_declarator_list(this);
 		}
 	}
 
@@ -3280,11 +3280,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_initializer; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterInitializer(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterInitializer(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitInitializer(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitInitializer(this);
 		}
 	}
 
@@ -3351,11 +3351,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_initializer_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterInitializer_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterInitializer_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitInitializer_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitInitializer_list(this);
 		}
 	}
 
@@ -3401,19 +3401,19 @@ public class SymbolsParser extends Parser {
 		public Class_nameContext class_name() {
 			return getRuleContext(Class_nameContext.class,0);
 		}
-		public TerminalNode CLASS_KEY() { return getToken(SymbolsParser.CLASS_KEY, 0); }
-		public TerminalNode OPENING_CURLY() { return getToken(SymbolsParser.OPENING_CURLY, 0); }
+		public TerminalNode CLASS_KEY() { return getToken(CoarseFunctionGrammarParser.CLASS_KEY, 0); }
+		public TerminalNode OPENING_CURLY() { return getToken(CoarseFunctionGrammarParser.OPENING_CURLY, 0); }
 		public Class_defContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_class_def; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterClass_def(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterClass_def(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitClass_def(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitClass_def(this);
 		}
 	}
 
@@ -3466,11 +3466,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_class_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterClass_name(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterClass_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitClass_name(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitClass_name(this);
 		}
 	}
 
@@ -3507,11 +3507,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_base_classes; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterBase_classes(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterBase_classes(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitBase_classes(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitBase_classes(this);
 		}
 	}
 
@@ -3552,7 +3552,7 @@ public class SymbolsParser extends Parser {
 	}
 
 	public static class Base_classContext extends ParserRuleContext {
-		public TerminalNode VIRTUAL() { return getToken(SymbolsParser.VIRTUAL, 0); }
+		public TerminalNode VIRTUAL() { return getToken(CoarseFunctionGrammarParser.VIRTUAL, 0); }
 		public Access_specifierContext access_specifier() {
 			return getRuleContext(Access_specifierContext.class,0);
 		}
@@ -3565,11 +3565,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_base_class; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterBase_class(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterBase_class(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitBase_class(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitBase_class(this);
 		}
 	}
 
@@ -3611,12 +3611,12 @@ public class SymbolsParser extends Parser {
 	}
 
 	public static class Type_nameContext extends ParserRuleContext {
-		public List<TerminalNode> CV_QUALIFIER() { return getTokens(SymbolsParser.CV_QUALIFIER); }
+		public List<TerminalNode> CV_QUALIFIER() { return getTokens(CoarseFunctionGrammarParser.CV_QUALIFIER); }
 		public Template_param_listContext template_param_list(int i) {
 			return getRuleContext(Template_param_listContext.class,i);
 		}
-		public TerminalNode SIGNED() { return getToken(SymbolsParser.SIGNED, 0); }
-		public TerminalNode UNSIGNED() { return getToken(SymbolsParser.UNSIGNED, 0); }
+		public TerminalNode SIGNED() { return getToken(CoarseFunctionGrammarParser.SIGNED, 0); }
+		public TerminalNode UNSIGNED() { return getToken(CoarseFunctionGrammarParser.UNSIGNED, 0); }
 		public List<Template_param_listContext> template_param_list() {
 			return getRuleContexts(Template_param_listContext.class);
 		}
@@ -3627,20 +3627,20 @@ public class SymbolsParser extends Parser {
 			return getRuleContexts(Base_typeContext.class);
 		}
 		public TerminalNode CV_QUALIFIER(int i) {
-			return getToken(SymbolsParser.CV_QUALIFIER, i);
+			return getToken(CoarseFunctionGrammarParser.CV_QUALIFIER, i);
 		}
-		public TerminalNode CLASS_KEY() { return getToken(SymbolsParser.CLASS_KEY, 0); }
+		public TerminalNode CLASS_KEY() { return getToken(CoarseFunctionGrammarParser.CLASS_KEY, 0); }
 		public Type_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterType_name(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterType_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitType_name(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitType_name(this);
 		}
 	}
 
@@ -3747,23 +3747,23 @@ public class SymbolsParser extends Parser {
 	}
 
 	public static class Base_typeContext extends ParserRuleContext {
-		public TerminalNode VOID() { return getToken(SymbolsParser.VOID, 0); }
-		public TerminalNode ALPHA_NUMERIC() { return getToken(SymbolsParser.ALPHA_NUMERIC, 0); }
+		public TerminalNode VOID() { return getToken(CoarseFunctionGrammarParser.VOID, 0); }
+		public TerminalNode ALPHA_NUMERIC() { return getToken(CoarseFunctionGrammarParser.ALPHA_NUMERIC, 0); }
 		public TerminalNode LONG(int i) {
-			return getToken(SymbolsParser.LONG, i);
+			return getToken(CoarseFunctionGrammarParser.LONG, i);
 		}
-		public List<TerminalNode> LONG() { return getTokens(SymbolsParser.LONG); }
+		public List<TerminalNode> LONG() { return getTokens(CoarseFunctionGrammarParser.LONG); }
 		public Base_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_base_type; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterBase_type(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterBase_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitBase_type(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitBase_type(this);
 		}
 	}
 
@@ -3817,19 +3817,19 @@ public class SymbolsParser extends Parser {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
-		public TerminalNode REGISTER() { return getToken(SymbolsParser.REGISTER, 0); }
-		public TerminalNode AUTO() { return getToken(SymbolsParser.AUTO, 0); }
+		public TerminalNode REGISTER() { return getToken(CoarseFunctionGrammarParser.REGISTER, 0); }
+		public TerminalNode AUTO() { return getToken(CoarseFunctionGrammarParser.AUTO, 0); }
 		public Param_decl_specifiersContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_decl_specifiers; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterParam_decl_specifiers(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterParam_decl_specifiers(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitParam_decl_specifiers(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitParam_decl_specifiers(this);
 		}
 	}
 
@@ -3880,11 +3880,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_parameter_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterParameter_name(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterParameter_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitParameter_name(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitParameter_name(this);
 		}
 	}
 
@@ -3930,18 +3930,18 @@ public class SymbolsParser extends Parser {
 		public List<Param_typeContext> param_type() {
 			return getRuleContexts(Param_typeContext.class);
 		}
-		public TerminalNode VOID() { return getToken(SymbolsParser.VOID, 0); }
+		public TerminalNode VOID() { return getToken(CoarseFunctionGrammarParser.VOID, 0); }
 		public Param_type_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_type_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterParam_type_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterParam_type_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitParam_type_list(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitParam_type_list(this);
 		}
 	}
 
@@ -4016,11 +4016,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_param_type; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterParam_type(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterParam_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitParam_type(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitParam_type(this);
 		}
 	}
 
@@ -4064,11 +4064,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_param_type_id; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterParam_type_id(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterParam_type_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitParam_type_id(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitParam_type_id(this);
 		}
 	}
 
@@ -4133,20 +4133,20 @@ public class SymbolsParser extends Parser {
 
 	public static class IdentifierContext extends ParserRuleContext {
 		public TerminalNode ALPHA_NUMERIC(int i) {
-			return getToken(SymbolsParser.ALPHA_NUMERIC, i);
+			return getToken(CoarseFunctionGrammarParser.ALPHA_NUMERIC, i);
 		}
-		public List<TerminalNode> ALPHA_NUMERIC() { return getTokens(SymbolsParser.ALPHA_NUMERIC); }
+		public List<TerminalNode> ALPHA_NUMERIC() { return getTokens(CoarseFunctionGrammarParser.ALPHA_NUMERIC); }
 		public IdentifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterIdentifier(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterIdentifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitIdentifier(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitIdentifier(this);
 		}
 	}
 
@@ -4188,20 +4188,20 @@ public class SymbolsParser extends Parser {
 	}
 
 	public static class NumberContext extends ParserRuleContext {
-		public TerminalNode OCTAL_LITERAL() { return getToken(SymbolsParser.OCTAL_LITERAL, 0); }
-		public TerminalNode HEX_LITERAL() { return getToken(SymbolsParser.HEX_LITERAL, 0); }
-		public TerminalNode DECIMAL_LITERAL() { return getToken(SymbolsParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode OCTAL_LITERAL() { return getToken(CoarseFunctionGrammarParser.OCTAL_LITERAL, 0); }
+		public TerminalNode HEX_LITERAL() { return getToken(CoarseFunctionGrammarParser.HEX_LITERAL, 0); }
+		public TerminalNode DECIMAL_LITERAL() { return getToken(CoarseFunctionGrammarParser.DECIMAL_LITERAL, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_number; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterNumber(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterNumber(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitNumber(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitNumber(this);
 		}
 	}
 
@@ -4244,11 +4244,11 @@ public class SymbolsParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ptrs; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).enterPtrs(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).enterPtrs(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SymbolsListener ) ((SymbolsListener)listener).exitPtrs(this);
+			if ( listener instanceof CoarseFunctionGrammarListener ) ((CoarseFunctionGrammarListener)listener).exitPtrs(this);
 		}
 	}
 
