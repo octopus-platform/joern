@@ -1,10 +1,19 @@
 package main.FineFunctionParser;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import main.CommonParser;
+import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.functionContent.FineFunctionContentBuilder;
 
 import antlr.FineFunctionGrammarParser;
 import antlr.FineFunctionGrammarBaseListener;
+import antlr.FineFunctionGrammarParser.Init_declarator_listContext;
+import antlr.FineFunctionGrammarParser.Type_nameContext;
 
 public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListener
 {
@@ -79,5 +88,32 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.enterClosingCurly(ctx);
 	}
+	
+	@Override
+	public void enterDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterDeclByType();
+		
+		Init_declarator_listContext decl_list = ctx.init_declarator_list();
+		Type_nameContext typeName = ctx.type_name();
+		emitDeclarations(decl_list, typeName);
+	}
+	
+	private void emitDeclarations(ParserRuleContext decl_list,
+			  ParserRuleContext typeName)
+	{
+		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
+		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
+
+		FineFunctionContentBuilder contentBuilder = (FineFunctionContentBuilder) p.itemStack.peek();
+		
+		Iterator<IdentifierDecl> it = declarations.iterator();
+		while(it.hasNext()){
+			IdentifierDecl decl = it.next();
+			contentBuilder.addLocalDecl(decl);
+		}		
+	}
+	
 	
 }

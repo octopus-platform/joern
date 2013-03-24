@@ -30,12 +30,12 @@ block_starter: selection_or_iteration;
 
 selection_or_iteration: TRY                      #Try_statement
                       | CATCH '(' param_type ')' #Catch_statement
-                      | IF '(' condition ')' #If_statement
-                      | ELSE                 #Else_statement
+                      | IF '(' condition ')'     #If_statement
+                      | ELSE                     #Else_statement
                       | SWITCH '(' condition ')' #Switch_statement
                       | FOR '(' for_init_statement condition ';'  expr? ')' #For_statement
-                      | DO #Do_statement
-                      | WHILE '(' condition ')' #While_statement
+                      | DO                       #Do_statement
+                      | WHILE '(' condition ')'  #While_statement
 ;
 
 // Don't know why, but: introducing this unused rule results

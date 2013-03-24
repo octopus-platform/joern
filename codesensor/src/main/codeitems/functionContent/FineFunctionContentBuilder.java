@@ -1,12 +1,10 @@
 package main.codeitems.functionContent;
 
 import java.util.Iterator;
-import java.util.Stack;
-
-import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
+import antlr.FineFunctionGrammarParser.DeclByTypeContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
@@ -15,7 +13,6 @@ import antlr.FineFunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
 
-import main.codeitems.declarations.IdentifierDecl;
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {
 	
@@ -32,7 +29,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		StatementItem statementItem = new StatementItem();
 		statementItem.initializeFromContext(ctx);
 		itemStack.push(statementItem);
-	
 	}
 	
 	public void enterBlockStarter(Block_starterContext ctx)
@@ -58,12 +54,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void enterClosingCurly(Closing_curlyContext ctx)
 	{
 		replaceTopOfStack(new CloseBlockItem());
-	}
-	
-	private void replaceTopOfStack(StatementItem item)
-	{
-		itemStack.pop();
-		itemStack.push(item);
 	}
 	
 	public void exitStatement(StatementContext ctx)

@@ -69,17 +69,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 	void exitInit_declarator_list(CodeSensorParser.Init_declarator_listContext ctx);
 
-	void enterU2(CodeSensorParser.U2Context ctx);
-	void exitU2(CodeSensorParser.U2Context ctx);
-
 	void enterAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(CodeSensorParser.Assign_water_l2Context ctx);
 
 	void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
-
-	void enterU1(CodeSensorParser.U1Context ctx);
-	void exitU1(CodeSensorParser.U1Context ctx);
 
 	void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx);
 	void exitParameter_decl(CodeSensorParser.Parameter_declContext ctx);
@@ -90,11 +84,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterBase_type(CodeSensorParser.Base_typeContext ctx);
 	void exitBase_type(CodeSensorParser.Base_typeContext ctx);
 
-	void enterReturn_type(CodeSensorParser.Return_typeContext ctx);
-	void exitReturn_type(CodeSensorParser.Return_typeContext ctx);
-
 	void enterCode(CodeSensorParser.CodeContext ctx);
 	void exitCode(CodeSensorParser.CodeContext ctx);
+
+	void enterReturn_type(CodeSensorParser.Return_typeContext ctx);
+	void exitReturn_type(CodeSensorParser.Return_typeContext ctx);
 
 	void enterCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
 	void exitCtor_initializer(CodeSensorParser.Ctor_initializerContext ctx);
@@ -234,11 +228,11 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterConditional_expression(CodeSensorParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(CodeSensorParser.Conditional_expressionContext ctx);
 
-	void enterAnd_expression(CodeSensorParser.And_expressionContext ctx);
-	void exitAnd_expression(CodeSensorParser.And_expressionContext ctx);
-
 	void enterPrimary_expression(CodeSensorParser.Primary_expressionContext ctx);
 	void exitPrimary_expression(CodeSensorParser.Primary_expressionContext ctx);
+
+	void enterAnd_expression(CodeSensorParser.And_expressionContext ctx);
+	void exitAnd_expression(CodeSensorParser.And_expressionContext ctx);
 
 	void enterException_specification(CodeSensorParser.Exception_specificationContext ctx);
 	void exitException_specification(CodeSensorParser.Exception_specificationContext ctx);

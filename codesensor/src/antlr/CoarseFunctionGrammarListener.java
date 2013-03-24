@@ -57,12 +57,6 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx);
 
-	void enterU2(CoarseFunctionGrammarParser.U2Context ctx);
-	void exitU2(CoarseFunctionGrammarParser.U2Context ctx);
-
-	void enterU1(CoarseFunctionGrammarParser.U1Context ctx);
-	void exitU1(CoarseFunctionGrammarParser.U1Context ctx);
-
 	void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 
@@ -93,11 +87,11 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx);
 	void exitUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx);
 
-	void enterDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx);
-	void exitDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx);
-
 	void enterShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx);
 	void exitShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx);
+
+	void enterDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx);
+	void exitDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx);
 
 	void enterType_name(CoarseFunctionGrammarParser.Type_nameContext ctx);
 	void exitType_name(CoarseFunctionGrammarParser.Type_nameContext ctx);

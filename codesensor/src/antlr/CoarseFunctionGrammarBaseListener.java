@@ -60,12 +60,6 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx) { }
 	@Override public void exitAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx) { }
 
-	@Override public void enterU2(CoarseFunctionGrammarParser.U2Context ctx) { }
-	@Override public void exitU2(CoarseFunctionGrammarParser.U2Context ctx) { }
-
-	@Override public void enterU1(CoarseFunctionGrammarParser.U1Context ctx) { }
-	@Override public void exitU1(CoarseFunctionGrammarParser.U1Context ctx) { }
-
 	@Override public void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 	@Override public void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 
@@ -96,11 +90,11 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx) { }
 	@Override public void exitUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx) { }
 
-	@Override public void enterDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx) { }
-	@Override public void exitDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx) { }
-
 	@Override public void enterShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx) { }
 	@Override public void exitShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx) { }
+
+	@Override public void enterDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx) { }
+	@Override public void exitDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx) { }
 
 	@Override public void enterType_name(CoarseFunctionGrammarParser.Type_nameContext ctx) { }
 	@Override public void exitType_name(CoarseFunctionGrammarParser.Type_nameContext ctx) { }
