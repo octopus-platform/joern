@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import main.InitDeclContextWrapper;
 import main.ParseTreeUtils;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
@@ -13,7 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.CodeSensorParser.IdentifierContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
-import antlr.CodeSensorParser.Init_declarator_listContext;
 
 public class IdentifierDeclBuilder extends CodeItemBuilder
 {
@@ -27,7 +27,7 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 		item.initializeFromContext(ctx);
 	}
 
-	public void setType(Init_declaratorContext decl_ctx,
+	public void setType(InitDeclContextWrapper decl_ctx,
 						ParserRuleContext typeName)
 	{
 		String baseType = "";
@@ -44,30 +44,27 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 		thisItem.type.completeType = completeType;
 	}
 
-	public void setName(Init_declaratorContext decl_ctx)
+	public void setName(InitDeclContextWrapper decl_ctx)
 	{
-		IdentifierContext identifier = decl_ctx.identifier();
+		ParserRuleContext identifier = decl_ctx.identifier();
 		thisItem.name = new Name();
 		thisItem.name.initializeFromContext(identifier);
 	}
 	
 	public List<IdentifierDecl> getDeclarations(
-			Init_declarator_listContext decl_list, ParserRuleContext typeName)
+			ParserRuleContext decl_list, ParserRuleContext typeName)
 	{
 		List<IdentifierDecl> declarations = new LinkedList<IdentifierDecl>();
-		Init_declaratorContext decl_ctx;
+		InitDeclContextWrapper decl_ctx;
 		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
 		{
-			try{
-				decl_ctx = (Init_declaratorContext) i.next();
-			}catch(java.lang.ClassCastException e)
-			{
-				// this is perfectly normal:
-				// not all child-nodes are init-declarators
-				continue;
-			}
 			
-			createNew(decl_ctx);
+			decl_ctx = new InitDeclContextWrapper(i.next());
+			// for ','s
+			if(decl_ctx.getWrappedObject() == null) continue;
+			
+			
+			createNew(decl_ctx.getWrappedObject());
 			setName(decl_ctx);
 			setType(decl_ctx, typeName);
 			declarations.add((IdentifierDecl) getItem());
