@@ -1,12 +1,15 @@
 package main.ModuleParser;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import main.CommonParser;
 
 import main.FunctionParser.FunctionParser;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDefBuilder;
+import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.function.FunctionDefBuilder;
 
@@ -165,29 +168,17 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	private void emitDeclarations(Init_declarator_listContext decl_list,
 								  ParserRuleContext typeName)
 	{
-		
-		Init_declaratorContext decl_ctx;
-		
-		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
-		{
-			try{
-				decl_ctx = (Init_declaratorContext) i.next();
-			}catch(java.lang.ClassCastException e)
-			{
-				// this is perfectly normal:
-				// not all child-nodes are init-declarators
-				continue;
-			}
-			
-			IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
-			builder.createNew(decl_ctx);
-			builder.setName(decl_ctx);
-			builder.setType(decl_ctx, typeName);
-			
-			p.processor.processItem(builder.getItem(), p.itemStack);
+		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
+		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
+	
+		Iterator<IdentifierDecl> it = declarations.iterator();
+		while(it.hasNext()){
+			IdentifierDecl decl = it.next();
+			p.processor.processItem(decl, p.itemStack);
 		}
-	}
 		
+	}
+	
 	@Override
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{

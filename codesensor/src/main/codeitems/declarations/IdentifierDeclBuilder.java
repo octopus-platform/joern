@@ -1,13 +1,19 @@
 package main.codeitems.declarations;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import main.ParseTreeUtils;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.CodeSensorParser.IdentifierContext;
 import antlr.CodeSensorParser.Init_declaratorContext;
+import antlr.CodeSensorParser.Init_declarator_listContext;
 
 public class IdentifierDeclBuilder extends CodeItemBuilder
 {
@@ -43,6 +49,30 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 		IdentifierContext identifier = decl_ctx.identifier();
 		thisItem.name = new Name();
 		thisItem.name.initializeFromContext(identifier);
+	}
+	
+	public List<IdentifierDecl> getDeclarations(
+			Init_declarator_listContext decl_list, ParserRuleContext typeName)
+	{
+		List<IdentifierDecl> declarations = new LinkedList<IdentifierDecl>();
+		Init_declaratorContext decl_ctx;
+		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
+		{
+			try{
+				decl_ctx = (Init_declaratorContext) i.next();
+			}catch(java.lang.ClassCastException e)
+			{
+				// this is perfectly normal:
+				// not all child-nodes are init-declarators
+				continue;
+			}
+			
+			createNew(decl_ctx);
+			setName(decl_ctx);
+			setType(decl_ctx, typeName);
+			declarations.add((IdentifierDecl) getItem());
+		}
+		return declarations;
 	}
 	
 }

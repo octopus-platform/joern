@@ -33,7 +33,13 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	}
 
 	@Override
-	public void enterField(CoarseFunctionGrammarParser.FieldContext ctx)
+	public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
+	{
+		
+	}
+	
+	@Override
+	public void enterPrimary_expression(CoarseFunctionGrammarParser.Primary_expressionContext ctx)
 	{
 		
 	}
