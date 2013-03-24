@@ -1,4 +1,4 @@
-grammar FunctionGrammar;
+grammar FineFunctionGrammar;
 import CodeSensorLex, Common, Expressions, FineSimpleDecl;
 
 @header{

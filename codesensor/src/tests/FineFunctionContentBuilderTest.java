@@ -16,8 +16,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import antlr.CodeSensorLexer;
-import antlr.FunctionGrammarLexer;
-import antlr.FunctionGrammarParser.StatementsContext;
+import antlr.FineFunctionGrammarLexer;
+import antlr.FineFunctionGrammarParser.StatementsContext;
 
 public class FineFunctionContentBuilderTest {
 
@@ -129,7 +129,7 @@ public class FineFunctionContentBuilderTest {
 	private TokenSubStream tokenStreamFromString(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
-		FunctionGrammarLexer lex = new FunctionGrammarLexer(inputStream);
+		FineFunctionGrammarLexer lex = new FineFunctionGrammarLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		return tokens;
 	}

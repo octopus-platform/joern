@@ -8,10 +8,10 @@ import main.TokenSubStream;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.functionContent.FunctionContentBuilder;
 import main.processors.CSVPrinter;
-import antlr.FunctionGrammarParser;
-import antlr.FunctionGrammarBaseListener;
+import antlr.FineFunctionGrammarParser;
+import antlr.FineFunctionGrammarBaseListener;
 
-public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
+public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListener
 {
 	CommonParser p;
 	
@@ -21,7 +21,7 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 	}
 	
 	@Override
-	public void enterStatements(FunctionGrammarParser.StatementsContext ctx)
+	public void enterStatements(FineFunctionGrammarParser.StatementsContext ctx)
 	{
 		FunctionContentBuilder builder = new FunctionContentBuilder();
 		builder.createNew(ctx);
@@ -29,21 +29,21 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 	}
 	
 	@Override
-	public void exitStatements(FunctionGrammarParser.StatementsContext ctx)
+	public void exitStatements(FineFunctionGrammarParser.StatementsContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.pop();
 		builder.exitStatements(ctx);
 		p.processor.processItem(builder.getItem(), p.itemStack);
 	}
 	
-	@Override public void enterStatement(FunctionGrammarParser.StatementContext ctx)
+	@Override public void enterStatement(FineFunctionGrammarParser.StatementContext ctx)
 	{
 		
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterStatement(ctx);
 	}
 	
-	@Override public void exitStatement(FunctionGrammarParser.StatementContext ctx)
+	@Override public void exitStatement(FineFunctionGrammarParser.StatementContext ctx)
 	{
 		
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
@@ -51,13 +51,13 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 	}
 	
 	
-	@Override public void enterElse_statement(FunctionGrammarParser.Else_statementContext ctx)
+	@Override public void enterElse_statement(FineFunctionGrammarParser.Else_statementContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterElse(ctx);
 	}
 	
-	@Override public void enterIf_statement(FunctionGrammarParser.If_statementContext ctx)
+	@Override public void enterIf_statement(FineFunctionGrammarParser.If_statementContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterIf(ctx);
@@ -65,21 +65,21 @@ public class FineFunctionParseTreeListener extends FunctionGrammarBaseListener
 	
 	
 	@Override
-	public void enterBlock_starter(FunctionGrammarParser.Block_starterContext ctx)
+	public void enterBlock_starter(FineFunctionGrammarParser.Block_starterContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterBlockStarter(ctx);
 	}
 	
 	@Override
-	public void enterOpening_curly(FunctionGrammarParser.Opening_curlyContext ctx)
+	public void enterOpening_curly(FineFunctionGrammarParser.Opening_curlyContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterOpeningCurly(ctx);
 	}
 	
 	@Override
-	public void enterClosing_curly(FunctionGrammarParser.Closing_curlyContext ctx)
+	public void enterClosing_curly(FineFunctionGrammarParser.Closing_curlyContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.itemStack.peek();
 		builder.enterClosingCurly(ctx);

@@ -7,8 +7,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.FunctionGrammarLexer;
-import antlr.FunctionGrammarParser;
+import antlr.FineFunctionGrammarLexer;
+import antlr.FineFunctionGrammarParser;
 
 public class FineFunctionParser extends CommonParser
 {
@@ -22,14 +22,14 @@ public class FineFunctionParser extends CommonParser
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
-		return new FunctionGrammarLexer(input);
+		return new FineFunctionGrammarLexer(input);
 	}
 	
 	@Override
 	public ParseTree parseTokenStream(TokenSubStream tokens)
 	{
-		parser = new FunctionGrammarParser(tokens);
-        FunctionGrammarParser thisParser = (FunctionGrammarParser) parser;
+		parser = new FineFunctionGrammarParser(tokens);
+        FineFunctionGrammarParser thisParser = (FineFunctionGrammarParser) parser;
 		ParseTree tree = null;
         
         try {

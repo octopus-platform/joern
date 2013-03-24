@@ -1,4 +1,4 @@
-// Generated from ./FunctionGrammar.g4 by ANTLR 4.0
+// Generated from ./FineFunctionGrammar.g4 by ANTLR 4.0
 
 	package antlr;
 
@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class FunctionGrammarLexer extends Lexer {
+public class FineFunctionGrammarLexer extends Lexer {
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -74,13 +74,13 @@ public class FunctionGrammarLexer extends Lexer {
 	};
 
 
-	public FunctionGrammarLexer(CharStream input) {
+	public FineFunctionGrammarLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "FunctionGrammar.g4"; }
+	public String getGrammarFileName() { return "FineFunctionGrammar.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

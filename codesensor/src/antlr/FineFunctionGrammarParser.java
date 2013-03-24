@@ -1,4 +1,4 @@
-// Generated from ./FunctionGrammar.g4 by ANTLR 4.0
+// Generated from ./FineFunctionGrammar.g4 by ANTLR 4.0
 
 	package antlr;
 
@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class FunctionGrammarParser extends Parser {
+public class FineFunctionGrammarParser extends Parser {
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -102,7 +102,7 @@ public class FunctionGrammarParser extends Parser {
 	};
 
 	@Override
-	public String getGrammarFileName() { return "FunctionGrammar.g4"; }
+	public String getGrammarFileName() { return "FineFunctionGrammar.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }
@@ -175,7 +175,7 @@ public class FunctionGrammarParser extends Parser {
 	   }
 
 
-	public FunctionGrammarParser(TokenStream input) {
+	public FineFunctionGrammarParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
@@ -210,11 +210,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_statements; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterStatements(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterStatements(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitStatements(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitStatements(this);
 		}
 	}
 
@@ -306,11 +306,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterStatement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitStatement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitStatement(this);
 		}
 	}
 
@@ -389,18 +389,18 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Pre_openerContext extends ParserRuleContext {
-		public TerminalNode PRE_IF() { return getToken(FunctionGrammarParser.PRE_IF, 0); }
+		public TerminalNode PRE_IF() { return getToken(FineFunctionGrammarParser.PRE_IF, 0); }
 		public Pre_openerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_pre_opener; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPre_opener(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPre_opener(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPre_opener(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPre_opener(this);
 		}
 	}
 
@@ -425,18 +425,18 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Pre_elseContext extends ParserRuleContext {
-		public TerminalNode PRE_ELSE() { return getToken(FunctionGrammarParser.PRE_ELSE, 0); }
+		public TerminalNode PRE_ELSE() { return getToken(FineFunctionGrammarParser.PRE_ELSE, 0); }
 		public Pre_elseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_pre_else; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPre_else(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPre_else(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPre_else(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPre_else(this);
 		}
 	}
 
@@ -461,18 +461,18 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Pre_closerContext extends ParserRuleContext {
-		public TerminalNode PRE_ENDIF() { return getToken(FunctionGrammarParser.PRE_ENDIF, 0); }
+		public TerminalNode PRE_ENDIF() { return getToken(FineFunctionGrammarParser.PRE_ENDIF, 0); }
 		public Pre_closerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_pre_closer; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPre_closer(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPre_closer(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPre_closer(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPre_closer(this);
 		}
 	}
 
@@ -503,11 +503,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_opening_curly; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterOpening_curly(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterOpening_curly(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitOpening_curly(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitOpening_curly(this);
 		}
 	}
 
@@ -538,11 +538,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_closing_curly; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterClosing_curly(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterClosing_curly(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitClosing_curly(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitClosing_curly(this);
 		}
 	}
 
@@ -576,11 +576,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_block_starter; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterBlock_starter(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBlock_starter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitBlock_starter(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBlock_starter(this);
 		}
 	}
 
@@ -619,88 +619,88 @@ public class FunctionGrammarParser extends Parser {
 		public Param_typeContext param_type() {
 			return getRuleContext(Param_typeContext.class,0);
 		}
-		public TerminalNode CATCH() { return getToken(FunctionGrammarParser.CATCH, 0); }
+		public TerminalNode CATCH() { return getToken(FineFunctionGrammarParser.CATCH, 0); }
 		public Catch_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterCatch_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterCatch_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitCatch_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitCatch_statement(this);
 		}
 	}
 	public static class Else_statementContext extends Selection_or_iterationContext {
-		public TerminalNode ELSE() { return getToken(FunctionGrammarParser.ELSE, 0); }
+		public TerminalNode ELSE() { return getToken(FineFunctionGrammarParser.ELSE, 0); }
 		public Else_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterElse_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterElse_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitElse_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitElse_statement(this);
 		}
 	}
 	public static class Switch_statementContext extends Selection_or_iterationContext {
 		public ConditionContext condition() {
 			return getRuleContext(ConditionContext.class,0);
 		}
-		public TerminalNode SWITCH() { return getToken(FunctionGrammarParser.SWITCH, 0); }
+		public TerminalNode SWITCH() { return getToken(FineFunctionGrammarParser.SWITCH, 0); }
 		public Switch_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterSwitch_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterSwitch_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitSwitch_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitSwitch_statement(this);
 		}
 	}
 	public static class Do_statementContext extends Selection_or_iterationContext {
-		public TerminalNode DO() { return getToken(FunctionGrammarParser.DO, 0); }
+		public TerminalNode DO() { return getToken(FineFunctionGrammarParser.DO, 0); }
 		public Do_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterDo_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterDo_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitDo_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitDo_statement(this);
 		}
 	}
 	public static class If_statementContext extends Selection_or_iterationContext {
 		public ConditionContext condition() {
 			return getRuleContext(ConditionContext.class,0);
 		}
-		public TerminalNode IF() { return getToken(FunctionGrammarParser.IF, 0); }
+		public TerminalNode IF() { return getToken(FineFunctionGrammarParser.IF, 0); }
 		public If_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterIf_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterIf_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitIf_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitIf_statement(this);
 		}
 	}
 	public static class While_statementContext extends Selection_or_iterationContext {
 		public ConditionContext condition() {
 			return getRuleContext(ConditionContext.class,0);
 		}
-		public TerminalNode WHILE() { return getToken(FunctionGrammarParser.WHILE, 0); }
+		public TerminalNode WHILE() { return getToken(FineFunctionGrammarParser.WHILE, 0); }
 		public While_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterWhile_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterWhile_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitWhile_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitWhile_statement(this);
 		}
 	}
 	public static class For_statementContext extends Selection_or_iterationContext {
-		public TerminalNode FOR() { return getToken(FunctionGrammarParser.FOR, 0); }
+		public TerminalNode FOR() { return getToken(FineFunctionGrammarParser.FOR, 0); }
 		public For_init_statementContext for_init_statement() {
 			return getRuleContext(For_init_statementContext.class,0);
 		}
@@ -713,23 +713,23 @@ public class FunctionGrammarParser extends Parser {
 		public For_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFor_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFor_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFor_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFor_statement(this);
 		}
 	}
 	public static class Try_statementContext extends Selection_or_iterationContext {
-		public TerminalNode TRY() { return getToken(FunctionGrammarParser.TRY, 0); }
+		public TerminalNode TRY() { return getToken(FineFunctionGrammarParser.TRY, 0); }
 		public Try_statementContext(Selection_or_iterationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterTry_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterTry_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitTry_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitTry_statement(this);
 		}
 	}
 
@@ -840,8 +840,8 @@ public class FunctionGrammarParser extends Parser {
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
-		public TerminalNode DO() { return getToken(FunctionGrammarParser.DO, 0); }
-		public TerminalNode WHILE() { return getToken(FunctionGrammarParser.WHILE, 0); }
+		public TerminalNode DO() { return getToken(FineFunctionGrammarParser.DO, 0); }
+		public TerminalNode WHILE() { return getToken(FineFunctionGrammarParser.WHILE, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -851,11 +851,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_do_statement1; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterDo_statement1(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterDo_statement1(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitDo_statement1(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitDo_statement1(this);
 		}
 	}
 
@@ -897,11 +897,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_for_init_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFor_init_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFor_init_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFor_init_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFor_init_statement(this);
 		}
 	}
 
@@ -962,11 +962,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_jump_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterJump_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterJump_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitJump_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitJump_statement(this);
 		}
 	}
 
@@ -1012,19 +1012,19 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Break_or_continueContext extends ParserRuleContext {
-		public TerminalNode CONTINUE() { return getToken(FunctionGrammarParser.CONTINUE, 0); }
-		public TerminalNode BREAK() { return getToken(FunctionGrammarParser.BREAK, 0); }
+		public TerminalNode CONTINUE() { return getToken(FineFunctionGrammarParser.CONTINUE, 0); }
+		public TerminalNode BREAK() { return getToken(FineFunctionGrammarParser.BREAK, 0); }
 		public Break_or_continueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_break_or_continue; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterBreak_or_continue(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBreak_or_continue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitBreak_or_continue(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBreak_or_continue(this);
 		}
 	}
 
@@ -1058,18 +1058,18 @@ public class FunctionGrammarParser extends Parser {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public TerminalNode RETURN() { return getToken(FunctionGrammarParser.RETURN, 0); }
+		public TerminalNode RETURN() { return getToken(FineFunctionGrammarParser.RETURN, 0); }
 		public Return_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_return_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterReturn_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterReturn_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitReturn_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitReturn_statement(this);
 		}
 	}
 
@@ -1103,7 +1103,7 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Goto_statementContext extends ParserRuleContext {
-		public TerminalNode GOTO() { return getToken(FunctionGrammarParser.GOTO, 0); }
+		public TerminalNode GOTO() { return getToken(FineFunctionGrammarParser.GOTO, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
@@ -1113,11 +1113,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_goto_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterGoto_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterGoto_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitGoto_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitGoto_statement(this);
 		}
 	}
 
@@ -1152,18 +1152,18 @@ public class FunctionGrammarParser extends Parser {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public TerminalNode CASE() { return getToken(FunctionGrammarParser.CASE, 0); }
+		public TerminalNode CASE() { return getToken(FineFunctionGrammarParser.CASE, 0); }
 		public LabelContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_label; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterLabel(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterLabel(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitLabel(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitLabel(this);
 		}
 	}
 
@@ -1245,11 +1245,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expr_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterExpr_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterExpr_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitExpr_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitExpr_statement(this);
 		}
 	}
 
@@ -1284,11 +1284,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_condition; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterCondition(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterCondition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitCondition(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitCondition(this);
 		}
 	}
 
@@ -1319,11 +1319,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_unary_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterUnary_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterUnary_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitUnary_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitUnary_operator(this);
 		}
 	}
 
@@ -1360,11 +1360,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_relational_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterRelational_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterRelational_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitRelational_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitRelational_operator(this);
 		}
 	}
 
@@ -1395,23 +1395,23 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class ConstantContext extends ParserRuleContext {
-		public TerminalNode CHAR() { return getToken(FunctionGrammarParser.CHAR, 0); }
-		public TerminalNode OCTAL_LITERAL() { return getToken(FunctionGrammarParser.OCTAL_LITERAL, 0); }
-		public TerminalNode HEX_LITERAL() { return getToken(FunctionGrammarParser.HEX_LITERAL, 0); }
-		public TerminalNode FLOATING_POINT_LITERAL() { return getToken(FunctionGrammarParser.FLOATING_POINT_LITERAL, 0); }
-		public TerminalNode DECIMAL_LITERAL() { return getToken(FunctionGrammarParser.DECIMAL_LITERAL, 0); }
-		public TerminalNode STRING() { return getToken(FunctionGrammarParser.STRING, 0); }
+		public TerminalNode CHAR() { return getToken(FineFunctionGrammarParser.CHAR, 0); }
+		public TerminalNode OCTAL_LITERAL() { return getToken(FineFunctionGrammarParser.OCTAL_LITERAL, 0); }
+		public TerminalNode HEX_LITERAL() { return getToken(FineFunctionGrammarParser.HEX_LITERAL, 0); }
+		public TerminalNode FLOATING_POINT_LITERAL() { return getToken(FineFunctionGrammarParser.FLOATING_POINT_LITERAL, 0); }
+		public TerminalNode DECIMAL_LITERAL() { return getToken(FineFunctionGrammarParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode STRING() { return getToken(FineFunctionGrammarParser.STRING, 0); }
 		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constant; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterConstant(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterConstant(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitConstant(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitConstant(this);
 		}
 	}
 
@@ -1448,11 +1448,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_function_decl_specifiers; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFunction_decl_specifiers(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFunction_decl_specifiers(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFunction_decl_specifiers(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFunction_decl_specifiers(this);
 		}
 	}
 
@@ -1489,11 +1489,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ptr_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPtr_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPtr_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPtr_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPtr_operator(this);
 		}
 	}
 
@@ -1530,11 +1530,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_access_specifier; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAccess_specifier(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAccess_specifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAccess_specifier(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAccess_specifier(this);
 		}
 	}
 
@@ -1571,11 +1571,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterOperator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitOperator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitOperator(this);
 		}
 	}
 
@@ -1861,11 +1861,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assignment_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAssignment_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAssignment_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAssignment_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAssignment_operator(this);
 		}
 	}
 
@@ -1902,11 +1902,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_equality_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterEquality_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterEquality_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitEquality_operator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitEquality_operator(this);
 		}
 	}
 
@@ -1940,18 +1940,18 @@ public class FunctionGrammarParser extends Parser {
 		public Template_param_listContext template_param_list() {
 			return getRuleContext(Template_param_listContext.class,0);
 		}
-		public TerminalNode TEMPLATE() { return getToken(FunctionGrammarParser.TEMPLATE, 0); }
+		public TerminalNode TEMPLATE() { return getToken(FineFunctionGrammarParser.TEMPLATE, 0); }
 		public Template_decl_startContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_template_decl_start; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterTemplate_decl_start(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterTemplate_decl_start(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitTemplate_decl_start(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitTemplate_decl_start(this);
 		}
 	}
 
@@ -1995,11 +1995,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_template_param_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterTemplate_param_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterTemplate_param_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitTemplate_param_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitTemplate_param_list(this);
 		}
 	}
 
@@ -2167,11 +2167,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_brackets; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_brackets(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_brackets(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_brackets(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_brackets(this);
 		}
 	}
 
@@ -2208,11 +2208,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_brackets_curlies_or_squares; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_brackets_curlies_or_squares(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_brackets_curlies_or_squares(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_brackets_curlies_or_squares(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_brackets_curlies_or_squares(this);
 		}
 	}
 
@@ -2249,11 +2249,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_brackets_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_brackets_or_semicolon(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_brackets_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_brackets_or_semicolon(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_brackets_or_semicolon(this);
 		}
 	}
 
@@ -2290,11 +2290,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_angle_brackets_or_brackets; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_angle_brackets_or_brackets(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_angle_brackets_or_brackets(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_angle_brackets_or_brackets(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_angle_brackets_or_brackets(this);
 		}
 	}
 
@@ -2331,11 +2331,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_curlies; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_curlies(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_curlies(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_curlies(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_curlies(this);
 		}
 	}
 
@@ -2372,11 +2372,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_squares; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_squares(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_squares(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_squares(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_squares(this);
 		}
 	}
 
@@ -2413,11 +2413,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_squares_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_squares_or_semicolon(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_squares_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_squares_or_semicolon(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_squares_or_semicolon(this);
 		}
 	}
 
@@ -2454,11 +2454,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_no_comma_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNo_comma_or_semicolon(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNo_comma_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNo_comma_or_semicolon(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNo_comma_or_semicolon(this);
 		}
 	}
 
@@ -2495,11 +2495,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assign_water; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAssign_water(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAssign_water(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAssign_water(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAssign_water(this);
 		}
 	}
 
@@ -2536,11 +2536,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assign_water_l2; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAssign_water_l2(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAssign_water_l2(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAssign_water_l2(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAssign_water_l2(this);
 		}
 	}
 
@@ -2577,11 +2577,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_water; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterWater(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterWater(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitWater(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitWater(this);
 		}
 	}
 
@@ -2619,11 +2619,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterExpr(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitExpr(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitExpr(this);
 		}
 	}
 
@@ -2676,11 +2676,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assign_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAssign_expr(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAssign_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAssign_expr(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAssign_expr(this);
 		}
 	}
 
@@ -2735,11 +2735,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_conditional_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterConditional_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterConditional_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitConditional_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitConditional_expression(this);
 		}
 	}
 
@@ -2788,11 +2788,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterOr_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterOr_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitOr_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitOr_expression(this);
 		}
 	}
 
@@ -2844,11 +2844,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_and_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAnd_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAnd_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAnd_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAnd_expression(this);
 		}
 	}
 
@@ -2900,11 +2900,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_inclusive_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterInclusive_or_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterInclusive_or_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitInclusive_or_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitInclusive_or_expression(this);
 		}
 	}
 
@@ -2956,11 +2956,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_exclusive_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterExclusive_or_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterExclusive_or_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitExclusive_or_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitExclusive_or_expression(this);
 		}
 	}
 
@@ -3012,11 +3012,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_bit_and_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterBit_and_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBit_and_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitBit_and_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBit_and_expression(this);
 		}
 	}
 
@@ -3074,11 +3074,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_equality_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterEquality_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterEquality_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitEquality_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitEquality_expression(this);
 		}
 	}
 
@@ -3136,11 +3136,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_relational_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterRelational_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterRelational_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitRelational_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitRelational_expression(this);
 		}
 	}
 
@@ -3192,11 +3192,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_shift_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterShift_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterShift_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitShift_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitShift_expression(this);
 		}
 	}
 
@@ -3253,11 +3253,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_additive_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterAdditive_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterAdditive_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitAdditive_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitAdditive_expression(this);
 		}
 	}
 
@@ -3314,11 +3314,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_multiplicative_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterMultiplicative_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterMultiplicative_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitMultiplicative_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitMultiplicative_expression(this);
 		}
 	}
 
@@ -3384,11 +3384,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_cast_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterCast_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterCast_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitCast_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitCast_expression(this);
 		}
 	}
 
@@ -3462,11 +3462,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_unary_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterUnary_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterUnary_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitUnary_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitUnary_expression(this);
 		}
 	}
 
@@ -3556,11 +3556,11 @@ public class FunctionGrammarParser extends Parser {
 		public FieldOnlyContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFieldOnly(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFieldOnly(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFieldOnly(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFieldOnly(this);
 		}
 	}
 	public static class FuncCallContext extends Postfix_expressionContext {
@@ -3576,11 +3576,11 @@ public class FunctionGrammarParser extends Parser {
 		public FuncCallContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFuncCall(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFuncCall(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFuncCall(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFuncCall(this);
 		}
 	}
 
@@ -3648,11 +3648,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_field; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterField(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterField(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitField(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitField(this);
 		}
 	}
 
@@ -3703,11 +3703,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_function_argument_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFunction_argument_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFunction_argument_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFunction_argument_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFunction_argument_list(this);
 		}
 	}
 
@@ -3765,11 +3765,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_function_argument; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterFunction_argument(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterFunction_argument(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitFunction_argument(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitFunction_argument(this);
 		}
 	}
 
@@ -3806,11 +3806,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_postfix; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPostfix(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPostfix(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPostfix(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPostfix(this);
 		}
 	}
 
@@ -3894,11 +3894,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_primary_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPrimary_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPrimary_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPrimary_expression(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPrimary_expression(this);
 		}
 	}
 
@@ -3970,11 +3970,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_init_declarator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterInit_declarator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterInit_declarator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitInit_declarator(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitInit_declarator(this);
 		}
 	}
 
@@ -4062,11 +4062,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_type_suffix; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterType_suffix(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterType_suffix(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitType_suffix(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitType_suffix(this);
 		}
 	}
 
@@ -4119,7 +4119,7 @@ public class FunctionGrammarParser extends Parser {
 		public Template_decl_startContext template_decl_start() {
 			return getRuleContext(Template_decl_startContext.class,0);
 		}
-		public TerminalNode TYPEDEF() { return getToken(FunctionGrammarParser.TYPEDEF, 0); }
+		public TerminalNode TYPEDEF() { return getToken(FineFunctionGrammarParser.TYPEDEF, 0); }
 		public Var_declContext var_decl() {
 			return getRuleContext(Var_declContext.class,0);
 		}
@@ -4129,11 +4129,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_simple_decl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterSimple_decl(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterSimple_decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitSimple_decl(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitSimple_decl(this);
 		}
 	}
 
@@ -4197,11 +4197,11 @@ public class FunctionGrammarParser extends Parser {
 		public DeclByClassContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterDeclByClass(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterDeclByClass(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitDeclByClass(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitDeclByClass(this);
 		}
 	}
 	public static class DeclByTypeContext extends Var_declContext {
@@ -4214,11 +4214,11 @@ public class FunctionGrammarParser extends Parser {
 		public DeclByTypeContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterDeclByType(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterDeclByType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitDeclByType(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitDeclByType(this);
 		}
 	}
 
@@ -4278,11 +4278,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_init_declarator_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterInit_declarator_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterInit_declarator_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitInit_declarator_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitInit_declarator_list(this);
 		}
 	}
 
@@ -4335,11 +4335,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_initializer; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterInitializer(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterInitializer(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitInitializer(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitInitializer(this);
 		}
 	}
 
@@ -4406,11 +4406,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_initializer_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterInitializer_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterInitializer_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitInitializer_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitInitializer_list(this);
 		}
 	}
 
@@ -4456,19 +4456,19 @@ public class FunctionGrammarParser extends Parser {
 		public Class_nameContext class_name() {
 			return getRuleContext(Class_nameContext.class,0);
 		}
-		public TerminalNode CLASS_KEY() { return getToken(FunctionGrammarParser.CLASS_KEY, 0); }
-		public TerminalNode OPENING_CURLY() { return getToken(FunctionGrammarParser.OPENING_CURLY, 0); }
+		public TerminalNode CLASS_KEY() { return getToken(FineFunctionGrammarParser.CLASS_KEY, 0); }
+		public TerminalNode OPENING_CURLY() { return getToken(FineFunctionGrammarParser.OPENING_CURLY, 0); }
 		public Class_defContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_class_def; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterClass_def(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterClass_def(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitClass_def(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitClass_def(this);
 		}
 	}
 
@@ -4521,11 +4521,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_class_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterClass_name(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterClass_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitClass_name(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitClass_name(this);
 		}
 	}
 
@@ -4562,11 +4562,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_base_classes; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterBase_classes(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBase_classes(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitBase_classes(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBase_classes(this);
 		}
 	}
 
@@ -4607,7 +4607,7 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Base_classContext extends ParserRuleContext {
-		public TerminalNode VIRTUAL() { return getToken(FunctionGrammarParser.VIRTUAL, 0); }
+		public TerminalNode VIRTUAL() { return getToken(FineFunctionGrammarParser.VIRTUAL, 0); }
 		public Access_specifierContext access_specifier() {
 			return getRuleContext(Access_specifierContext.class,0);
 		}
@@ -4620,11 +4620,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_base_class; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterBase_class(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBase_class(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitBase_class(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBase_class(this);
 		}
 	}
 
@@ -4666,12 +4666,12 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Type_nameContext extends ParserRuleContext {
-		public List<TerminalNode> CV_QUALIFIER() { return getTokens(FunctionGrammarParser.CV_QUALIFIER); }
+		public List<TerminalNode> CV_QUALIFIER() { return getTokens(FineFunctionGrammarParser.CV_QUALIFIER); }
 		public Template_param_listContext template_param_list(int i) {
 			return getRuleContext(Template_param_listContext.class,i);
 		}
-		public TerminalNode SIGNED() { return getToken(FunctionGrammarParser.SIGNED, 0); }
-		public TerminalNode UNSIGNED() { return getToken(FunctionGrammarParser.UNSIGNED, 0); }
+		public TerminalNode SIGNED() { return getToken(FineFunctionGrammarParser.SIGNED, 0); }
+		public TerminalNode UNSIGNED() { return getToken(FineFunctionGrammarParser.UNSIGNED, 0); }
 		public List<Template_param_listContext> template_param_list() {
 			return getRuleContexts(Template_param_listContext.class);
 		}
@@ -4682,20 +4682,20 @@ public class FunctionGrammarParser extends Parser {
 			return getRuleContexts(Base_typeContext.class);
 		}
 		public TerminalNode CV_QUALIFIER(int i) {
-			return getToken(FunctionGrammarParser.CV_QUALIFIER, i);
+			return getToken(FineFunctionGrammarParser.CV_QUALIFIER, i);
 		}
-		public TerminalNode CLASS_KEY() { return getToken(FunctionGrammarParser.CLASS_KEY, 0); }
+		public TerminalNode CLASS_KEY() { return getToken(FineFunctionGrammarParser.CLASS_KEY, 0); }
 		public Type_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterType_name(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterType_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitType_name(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitType_name(this);
 		}
 	}
 
@@ -4802,23 +4802,23 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class Base_typeContext extends ParserRuleContext {
-		public TerminalNode VOID() { return getToken(FunctionGrammarParser.VOID, 0); }
-		public TerminalNode ALPHA_NUMERIC() { return getToken(FunctionGrammarParser.ALPHA_NUMERIC, 0); }
+		public TerminalNode VOID() { return getToken(FineFunctionGrammarParser.VOID, 0); }
+		public TerminalNode ALPHA_NUMERIC() { return getToken(FineFunctionGrammarParser.ALPHA_NUMERIC, 0); }
 		public TerminalNode LONG(int i) {
-			return getToken(FunctionGrammarParser.LONG, i);
+			return getToken(FineFunctionGrammarParser.LONG, i);
 		}
-		public List<TerminalNode> LONG() { return getTokens(FunctionGrammarParser.LONG); }
+		public List<TerminalNode> LONG() { return getTokens(FineFunctionGrammarParser.LONG); }
 		public Base_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_base_type; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterBase_type(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBase_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitBase_type(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBase_type(this);
 		}
 	}
 
@@ -4872,19 +4872,19 @@ public class FunctionGrammarParser extends Parser {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
-		public TerminalNode REGISTER() { return getToken(FunctionGrammarParser.REGISTER, 0); }
-		public TerminalNode AUTO() { return getToken(FunctionGrammarParser.AUTO, 0); }
+		public TerminalNode REGISTER() { return getToken(FineFunctionGrammarParser.REGISTER, 0); }
+		public TerminalNode AUTO() { return getToken(FineFunctionGrammarParser.AUTO, 0); }
 		public Param_decl_specifiersContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_decl_specifiers; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterParam_decl_specifiers(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterParam_decl_specifiers(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitParam_decl_specifiers(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitParam_decl_specifiers(this);
 		}
 	}
 
@@ -4935,11 +4935,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_parameter_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterParameter_name(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterParameter_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitParameter_name(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitParameter_name(this);
 		}
 	}
 
@@ -4985,18 +4985,18 @@ public class FunctionGrammarParser extends Parser {
 		public List<Param_typeContext> param_type() {
 			return getRuleContexts(Param_typeContext.class);
 		}
-		public TerminalNode VOID() { return getToken(FunctionGrammarParser.VOID, 0); }
+		public TerminalNode VOID() { return getToken(FineFunctionGrammarParser.VOID, 0); }
 		public Param_type_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_type_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterParam_type_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterParam_type_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitParam_type_list(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitParam_type_list(this);
 		}
 	}
 
@@ -5071,11 +5071,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_param_type; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterParam_type(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterParam_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitParam_type(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitParam_type(this);
 		}
 	}
 
@@ -5119,11 +5119,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_param_type_id; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterParam_type_id(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterParam_type_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitParam_type_id(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitParam_type_id(this);
 		}
 	}
 
@@ -5188,20 +5188,20 @@ public class FunctionGrammarParser extends Parser {
 
 	public static class IdentifierContext extends ParserRuleContext {
 		public TerminalNode ALPHA_NUMERIC(int i) {
-			return getToken(FunctionGrammarParser.ALPHA_NUMERIC, i);
+			return getToken(FineFunctionGrammarParser.ALPHA_NUMERIC, i);
 		}
-		public List<TerminalNode> ALPHA_NUMERIC() { return getTokens(FunctionGrammarParser.ALPHA_NUMERIC); }
+		public List<TerminalNode> ALPHA_NUMERIC() { return getTokens(FineFunctionGrammarParser.ALPHA_NUMERIC); }
 		public IdentifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterIdentifier(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterIdentifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitIdentifier(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitIdentifier(this);
 		}
 	}
 
@@ -5241,20 +5241,20 @@ public class FunctionGrammarParser extends Parser {
 	}
 
 	public static class NumberContext extends ParserRuleContext {
-		public TerminalNode OCTAL_LITERAL() { return getToken(FunctionGrammarParser.OCTAL_LITERAL, 0); }
-		public TerminalNode HEX_LITERAL() { return getToken(FunctionGrammarParser.HEX_LITERAL, 0); }
-		public TerminalNode DECIMAL_LITERAL() { return getToken(FunctionGrammarParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode OCTAL_LITERAL() { return getToken(FineFunctionGrammarParser.OCTAL_LITERAL, 0); }
+		public TerminalNode HEX_LITERAL() { return getToken(FineFunctionGrammarParser.HEX_LITERAL, 0); }
+		public TerminalNode DECIMAL_LITERAL() { return getToken(FineFunctionGrammarParser.DECIMAL_LITERAL, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_number; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterNumber(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterNumber(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitNumber(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitNumber(this);
 		}
 	}
 
@@ -5297,11 +5297,11 @@ public class FunctionGrammarParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ptrs; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).enterPtrs(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterPtrs(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FunctionGrammarListener ) ((FunctionGrammarListener)listener).exitPtrs(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitPtrs(this);
 		}
 	}
 
