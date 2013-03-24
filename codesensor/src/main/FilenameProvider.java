@@ -38,10 +38,10 @@ public class FilenameProvider
 		return retList;
 	}
 	
-	public BatchOfFiles [] getBatchesToProcess(String [] userSpecifiedFilenames) throws IOException
+	public BatchOfFiles [] getBatchesToProcess(String [] userSpecifiedFilenames, int nBatches) throws IOException
 	{
 		List<String> filesToProcess = getFilesToProcess(userSpecifiedFilenames);
-		return partitionList(filesToProcess, 2);
+		return partitionList(filesToProcess, nBatches);
 	}
 	
 	private BatchOfFiles [] partitionList(List<String> filesToProcess, int nBatches)
@@ -50,6 +50,8 @@ public class FilenameProvider
 		// It's not efficient but probably not worth optimizing
 		// since the number of items in the list is small.
 		BatchOfFiles [] batches = new BatchOfFiles[nBatches];
+		for(int i = 0; i < nBatches; i++)
+			batches[i] = new BatchOfFiles();
 		
 		Iterator<String> it = filesToProcess.iterator();
 		int curBatch = 0;

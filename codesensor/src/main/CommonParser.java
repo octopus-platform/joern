@@ -110,7 +110,7 @@ abstract public class CommonParser
 		initializeContext(context);
 	}
 	
-	protected static boolean isRecognitionException(RuntimeException ex)
+	protected boolean isRecognitionException(RuntimeException ex)
 	{
 		// return ex.getClass() == RuntimeException.class &&
 		//		ex.getCause() instanceof RecognitionException;
@@ -121,7 +121,7 @@ abstract public class CommonParser
 	
 	}
 
-	protected static void setLLStarMode(Parser parser)
+	protected void setLLStarMode(Parser parser)
 	{
 		parser.removeErrorListeners();
 		// parser.addErrorListener(ConsoleErrorListener.INSTANCE);
@@ -129,7 +129,7 @@ abstract public class CommonParser
 		parser.getInterpreter().setPredictionMode(PredictionMode.LL);
 	}
 
-	protected static void setSLLMode(Parser parser)
+	protected void setSLLMode(Parser parser)
 	{
 		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 	    parser.removeErrorListeners();

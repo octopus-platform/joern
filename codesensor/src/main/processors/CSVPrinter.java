@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 public class CSVPrinter extends Processor
 {
     
-    private static final String SEPARATOR = "\t";
+    private final String SEPARATOR = "\t";
     
     @Override
     public void startOfUnit(ParserRuleContext ctx, String filename)

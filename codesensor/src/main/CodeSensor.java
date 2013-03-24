@@ -1,53 +1,37 @@
 package main;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import main.CommandLine.CommandLineInterface;
-import main.ModuleParser.ModuleParser;
-
 
 public class CodeSensor {
-    
-	private static ModuleParser parser = new ModuleParser();
+
+	private static final int nCores = 1;
 	private static CommandLineInterface cmd = new CommandLineInterface();
 	private static FilenameProvider filenameProvider = new FilenameProvider();
+	private static ExecutorService executor =  Executors.newFixedThreadPool(nCores);
 	
     public static void main(String[] args)
 	{
     	cmd.parseCommandLine(args);
 		String[] userSpecifiedFilenames = cmd.getFilenames();
-
     	
     	try{
-    		List<String> filesToProcess =
-    				filenameProvider.getFilesToProcess(userSpecifiedFilenames);
-	    	processListOfFiles(filesToProcess);
+    		
+    		BatchOfFiles[] batches = filenameProvider.getBatchesToProcess(userSpecifiedFilenames, nCores);
+    		
+    		for(int i = 0; i < nCores; i++){
+    			BatchParser batchParser = new BatchParser(batches[i]);
+    			executor.execute(batchParser);
+    		}
+    		
 	    }catch(IOException err){
 			System.err.println("I/O-Error: " + err.getMessage()); 
 	    }
 
+    	executor.shutdown();
 	}
-
-	private static void processListOfFiles(List<String> filesToProcess)
-	{
-		for(Iterator<String> i = filesToProcess.iterator(); i.hasNext();)
-		{
-			String filename = i.next();
-			processSingleFile(filename);
-		}
-	}
-	
-    private static void processSingleFile(String filename)
-    {
-    	try{
-    		System.out.println(filename);
-    		parser.parseAndWalkFile(filename);
-    	}catch(IOException ex){
-    		System.err.println("Error processing file: " + filename);
-    	}
-    }
-    
     
 }
