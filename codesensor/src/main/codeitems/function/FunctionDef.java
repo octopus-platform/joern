@@ -5,7 +5,8 @@ import main.codeitems.Name;
 import main.codeitems.functionContent.CompoundItem;
 
 
-public class FunctionDef extends CodeItem{
+public class FunctionDef extends CodeItem
+{
 
 	public Name name;
 	public ParameterList parameterList = new ParameterList();

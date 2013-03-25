@@ -10,6 +10,12 @@ public class CodeLocation {
 	
 	final private int NOT_SET = -1;
 	
+	@Override
+	public String toString()
+	{
+		return String.format( "%d:%d:%d:%d", startLine, startPos, startIndex, stopIndex); 
+	}
+	
 	public CodeLocation(ParserRuleContext ctx)
 	{
 		initializeFromContext(ctx);

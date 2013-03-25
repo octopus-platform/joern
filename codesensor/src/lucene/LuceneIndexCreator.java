@@ -13,8 +13,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
+
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -23,8 +22,8 @@ import org.apache.lucene.util.Version;
 
 public class LuceneIndexCreator extends Processor {
 
+	// PatternAnalyzer a = new PatternAnalyzer(TEST_VERSION_CURRENT, Pattern.compile(","), false, null)
 	Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
-			
 	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_42, analyzer);
 	IndexWriter indexWriter;
 	
@@ -33,12 +32,6 @@ public class LuceneIndexCreator extends Processor {
 	{
 		String directoryName = "/home/fabs/tmp/lucene/";
 		createIndexWriter(directoryName);
-	}
-
-	@Override
-	public void end()
-	{
-		closeIndexWriter();
 	}
 	
 
@@ -52,6 +45,13 @@ public class LuceneIndexCreator extends Processor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@Override
+	public void end()
+	{
+		closeIndexWriter();
 	}
 	
 	
@@ -81,19 +81,16 @@ public class LuceneIndexCreator extends Processor {
 	public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
 	{
 		
-		if(!(item instanceof FunctionDef)) return;
-		
-		Document doc = new Document();
-		String codeStr = ((FunctionDef) item).name.getCodeStr();
-		
 		try {
-			Field pathField = new StringField("path", codeStr, Field.Store.YES);
-			doc.add(pathField);
-			indexWriter.addDocument(doc);
+			if((item instanceof FunctionDef)){
+				Document doc = CodeItemToDocumentConverter.convert((FunctionDef)item, ""); 
+				indexWriter.addDocument(doc);
+			}		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 }

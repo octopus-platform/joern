@@ -16,8 +16,4 @@ public class CompoundItem extends StatementItem
 		statements.add(stmt);
 	}
 	
-	public void setStatements(LinkedList<StatementItem> aStatements)
-	{
-		statements = aStatements;
-	}
 }

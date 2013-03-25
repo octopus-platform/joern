@@ -82,7 +82,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		String text = getCompoundStmtAsString(ctx);
 		
 		FunctionParser parser = new FunctionParser();
-		parser.enableFineParsing();
+		// parser.enableFineParsing();
 		
 		try{
 			parser.parseAndWalkString(text);
