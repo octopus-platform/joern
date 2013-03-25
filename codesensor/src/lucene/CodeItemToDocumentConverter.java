@@ -10,16 +10,10 @@ import org.apache.lucene.document.TextField;
 import main.codeitems.CodeItem;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
-import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.StatementItem;
 
 public class CodeItemToDocumentConverter
 {
-	// For all items:
-	// Type
-	// Filename
-	// Location
-
 		
 	public static Document convert(FunctionDef item, String filename)
 	{	
@@ -39,17 +33,14 @@ public class CodeItemToDocumentConverter
 
 	private static void addFunctionContent(FunctionDef item, Document d)
 	{
-		// LocalType
-		// LocalName
-		// Call
-		// Field
+		StatementInfoExtractor infoExtractor = new StatementInfoExtractor();
+		infoExtractor.setDocument(d);
 		
 		LinkedList<StatementItem> statements = item.content.statements;
 		Iterator<StatementItem> it = statements.iterator();
-		System.out.println(statements.size());
 		while(it.hasNext()){
 			StatementItem statement = it.next();
-			System.out.println(statement.getClass());
+			statement.accept(infoExtractor);
 		}
 		
 	}

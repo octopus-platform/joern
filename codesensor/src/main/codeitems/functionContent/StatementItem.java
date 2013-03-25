@@ -12,4 +12,6 @@ public class StatementItem extends CodeItem
 		codeStr = "";
 		return codeStr;
 	}
+
+	public void accept(StatementVisitor visitor){ visitor.visit(this); }
 }

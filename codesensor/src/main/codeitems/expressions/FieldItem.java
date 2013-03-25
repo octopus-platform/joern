@@ -1,5 +1,6 @@
 package main.codeitems.expressions;
 
-public class FieldItem extends ExpressionItem {
+public class FieldItem extends ExpressionItem
+{
 
 }

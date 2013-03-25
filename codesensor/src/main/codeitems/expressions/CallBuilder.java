@@ -16,7 +16,7 @@ public class CallBuilder extends CodeItemBuilder {
 		item.initializeFromContext(ctx);
 	}
 	
-	void setCallee(String aCallee)
+	public void setCallee(String aCallee)
 	{
 		thisItem.setCallee(aCallee);
 	}

@@ -43,7 +43,6 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
 	}
-	
 			
 	private void emitDeclarations(ParserRuleContext decl_list,
 			  ParserRuleContext typeName)

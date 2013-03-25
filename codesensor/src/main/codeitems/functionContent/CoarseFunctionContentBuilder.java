@@ -15,6 +15,7 @@ public class CoarseFunctionContentBuilder extends FunctionContentBuilder
 	{
 		CallBuilder builder = new CallBuilder();
 		builder.createNew(ctx);
+		builder.setCallee(ctx.field().getText());
 		rootItem.addStatement((StatementItem) builder.getItem());
 	}
 

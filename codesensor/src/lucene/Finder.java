@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
@@ -52,9 +53,17 @@ public class Finder
 		try {
 			Query query = parser.parse(queryString, defaultField);
 			TopDocs topDocs = searcher.search(query, maxHits);
-			return topDocs.scoreDocs;
 			
+
+			for(ScoreDoc doc : topDocs.scoreDocs){
 				
+				Document document = searcher.doc(doc.doc);
+				String codeStr = document.getField("code").stringValue();				
+				System.out.println(codeStr);
+			}
+			
+			
+			
 		} catch (QueryNodeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
