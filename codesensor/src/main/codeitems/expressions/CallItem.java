@@ -1,8 +1,15 @@
 package main.codeitems.expressions;
 
-public class CallItem extends ExpressionItem
-{
+import main.codeitems.functionContent.ExprStatementItem;
 
-	public FieldItem callee;
-	
+public class CallItem extends ExprStatementItem
+{
+	String callee;
+	FunctionArgumentList arguments;
+
+	public void setCallee(String aCallee)
+	{
+		callee = aCallee;
+	}
+
 }

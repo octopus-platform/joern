@@ -84,6 +84,9 @@ public class FineFunctionGrammarBaseListener implements FineFunctionGrammarListe
 	@Override public void enterCondition(FineFunctionGrammarParser.ConditionContext ctx) { }
 	@Override public void exitCondition(FineFunctionGrammarParser.ConditionContext ctx) { }
 
+	@Override public void enterUnary_operators(FineFunctionGrammarParser.Unary_operatorsContext ctx) { }
+	@Override public void exitUnary_operators(FineFunctionGrammarParser.Unary_operatorsContext ctx) { }
+
 	@Override public void enterCatch_statement(FineFunctionGrammarParser.Catch_statementContext ctx) { }
 	@Override public void exitCatch_statement(FineFunctionGrammarParser.Catch_statementContext ctx) { }
 
@@ -248,6 +251,9 @@ public class FineFunctionGrammarBaseListener implements FineFunctionGrammarListe
 
 	@Override public void enterClass_def(FineFunctionGrammarParser.Class_defContext ctx) { }
 	@Override public void exitClass_def(FineFunctionGrammarParser.Class_defContext ctx) { }
+
+	@Override public void enterInc_dec(FineFunctionGrammarParser.Inc_decContext ctx) { }
+	@Override public void exitInc_dec(FineFunctionGrammarParser.Inc_decContext ctx) { }
 
 	@Override public void enterConditional_expression(FineFunctionGrammarParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(FineFunctionGrammarParser.Conditional_expressionContext ctx) { }

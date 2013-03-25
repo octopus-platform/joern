@@ -9,10 +9,9 @@ import main.CommonParser;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.functionContent.CoarseFunctionContentBuilder;
-import main.codeitems.functionContent.FineFunctionContentBuilder;
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
-import antlr.FineFunctionGrammarParser;
+
 
 import antlr.CoarseFunctionGrammarParser.Init_declarator_listContext;
 import antlr.CoarseFunctionGrammarParser.Type_nameContext;
@@ -83,6 +82,8 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	@Override
 	public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
 	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterFieldOnly(ctx);
 		
 	}
 	

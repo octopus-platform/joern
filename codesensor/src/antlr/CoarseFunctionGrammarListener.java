@@ -60,6 +60,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 
+	void enterUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx);
+	void exitUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx);
+
 	void enterNumber(CoarseFunctionGrammarParser.NumberContext ctx);
 	void exitNumber(CoarseFunctionGrammarParser.NumberContext ctx);
 
@@ -87,11 +90,11 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx);
 	void exitUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx);
 
-	void enterShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx);
-	void exitShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx);
-
 	void enterDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx);
 	void exitDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx);
+
+	void enterShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx);
+	void exitShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx);
 
 	void enterType_name(CoarseFunctionGrammarParser.Type_nameContext ctx);
 	void exitType_name(CoarseFunctionGrammarParser.Type_nameContext ctx);
@@ -176,6 +179,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterClass_def(CoarseFunctionGrammarParser.Class_defContext ctx);
 	void exitClass_def(CoarseFunctionGrammarParser.Class_defContext ctx);
+
+	void enterInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx);
+	void exitInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx);
 
 	void enterConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx);

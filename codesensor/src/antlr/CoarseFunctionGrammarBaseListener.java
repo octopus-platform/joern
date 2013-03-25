@@ -63,6 +63,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 	@Override public void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 
+	@Override public void enterUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx) { }
+	@Override public void exitUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx) { }
+
 	@Override public void enterNumber(CoarseFunctionGrammarParser.NumberContext ctx) { }
 	@Override public void exitNumber(CoarseFunctionGrammarParser.NumberContext ctx) { }
 
@@ -90,11 +93,11 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx) { }
 	@Override public void exitUnary_operator(CoarseFunctionGrammarParser.Unary_operatorContext ctx) { }
 
-	@Override public void enterShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx) { }
-	@Override public void exitShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx) { }
-
 	@Override public void enterDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx) { }
 	@Override public void exitDeclByClass(CoarseFunctionGrammarParser.DeclByClassContext ctx) { }
+
+	@Override public void enterShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx) { }
+	@Override public void exitShift_expression(CoarseFunctionGrammarParser.Shift_expressionContext ctx) { }
 
 	@Override public void enterType_name(CoarseFunctionGrammarParser.Type_nameContext ctx) { }
 	@Override public void exitType_name(CoarseFunctionGrammarParser.Type_nameContext ctx) { }
@@ -179,6 +182,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 
 	@Override public void enterClass_def(CoarseFunctionGrammarParser.Class_defContext ctx) { }
 	@Override public void exitClass_def(CoarseFunctionGrammarParser.Class_defContext ctx) { }
+
+	@Override public void enterInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx) { }
+	@Override public void exitInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx) { }
 
 	@Override public void enterConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx) { }

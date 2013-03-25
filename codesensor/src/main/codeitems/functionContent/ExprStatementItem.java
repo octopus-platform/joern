@@ -1,5 +1,7 @@
 package main.codeitems.functionContent;
 
-public class ExprStatementItem extends StatementItem {
+import main.codeitems.expressions.ExpressionItem;
 
+public class ExprStatementItem extends StatementItem {
+	ExpressionItem expr;
 }
