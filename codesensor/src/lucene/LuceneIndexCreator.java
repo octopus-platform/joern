@@ -11,7 +11,7 @@ import main.processors.Processor;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 
 import org.apache.lucene.index.IndexWriter;
@@ -22,8 +22,7 @@ import org.apache.lucene.util.Version;
 
 public class LuceneIndexCreator extends Processor {
 
-	// PatternAnalyzer a = new PatternAnalyzer(TEST_VERSION_CURRENT, Pattern.compile(","), false, null)
-	Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
+	Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_42);
 	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_42, analyzer);
 	IndexWriter indexWriter;
 	

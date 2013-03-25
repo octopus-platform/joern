@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
@@ -21,7 +20,7 @@ import org.apache.lucene.util.Version;
 public class Finder
 {
 	IndexReader indexReader;
-	Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_42);
+	Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_42);
 	StandardQueryParser parser = new StandardQueryParser(analyzer);
 	IndexSearcher searcher;
 	
@@ -30,9 +29,8 @@ public class Finder
 	private static final int maxHits = 100;
 	
 	
-	Finder()
+	Finder(String directoryName)
 	{
-		String directoryName = "/home/fabs/tmp/lucene/";
 		createIndexReader(directoryName);
 	}
 	
@@ -49,18 +47,14 @@ public class Finder
 		}
 	}
 
-	public void find(String queryString)
+	public ScoreDoc[] find(String queryString)
 	{
 		try {
 			Query query = parser.parse(queryString, defaultField);
 			TopDocs topDocs = searcher.search(query, maxHits);
-			ScoreDoc[] docs = topDocs.scoreDocs;
+			return topDocs.scoreDocs;
 			
-			for(ScoreDoc doc : docs){
-				Document doc2 = searcher.doc(doc.doc);
-				System.out.println(doc2.getField("name").stringValue() + "\t" + doc.doc + "\t" + doc.score);
-			}
-			
+				
 		} catch (QueryNodeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,6 +62,7 @@ public class Finder
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 }

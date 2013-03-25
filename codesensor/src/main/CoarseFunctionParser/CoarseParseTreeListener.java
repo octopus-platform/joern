@@ -9,6 +9,7 @@ import main.CommonParser;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.functionContent.CoarseFunctionContentBuilder;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
 
@@ -20,7 +21,7 @@ import antlr.CoarseFunctionGrammarParser.Type_nameContext;
 public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 {
 	CommonParser p;
-	
+	CoarseFunctionContentBuilder builder;
 	
 	public CoarseParseTreeListener(CoarseFunctionParser aP)
 	{
@@ -30,24 +31,14 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	@Override
 	public void enterCoarse_content(CoarseFunctionGrammarParser.Coarse_contentContext ctx)
 	{
-		CoarseFunctionContentBuilder builder = new CoarseFunctionContentBuilder();
+		builder = new CoarseFunctionContentBuilder();
 		builder.createNew(ctx);
 		p.itemStack.push(builder);
 	}
 	
 	@Override
-	public void exitCoarse_content(CoarseFunctionGrammarParser.Coarse_contentContext ctx)
-	{
-		// Nothing to do, just leave the result on the stack.
-	}
-
-	// Duplication
-	@Override
 	public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx)
 	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterDeclByType();
-		
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
@@ -57,32 +48,33 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	private void emitDeclarations(ParserRuleContext decl_list,
 			  ParserRuleContext typeName)
 	{
-		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
-		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
-
-		CoarseFunctionContentBuilder contentBuilder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		IdentifierDeclBuilder idBuilder = new IdentifierDeclBuilder();
+		List<IdentifierDecl> declarations = idBuilder.getDeclarations(decl_list, typeName);
+		
+		
+		IdentifierDeclStatement statement = new IdentifierDeclStatement();
+		
 		
 		Iterator<IdentifierDecl> it = declarations.iterator();
 		while(it.hasNext()){
 			IdentifierDecl decl = it.next();
-			contentBuilder.addLocalDecl(decl);
+			statement.addDeclaration(decl);
 		}		
+		builder.addDeclStatement(statement);
 	}
-	// Duplication End
-	
 	
 	@Override
 	public void enterFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx)
 	{
 		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterFunctionCall(ctx);
+		builder.addFunctionCall(ctx);
 	}
 	
 	@Override
 	public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
 	{
 		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterFieldOnly(ctx);
+		builder.addFieldOnly(ctx);
 		
 	}
 	
