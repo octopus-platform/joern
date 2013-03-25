@@ -2,6 +2,7 @@ package main.codeitems.function;
 
 import main.codeitems.CodeItem;
 import main.codeitems.Name;
+import main.codeitems.functionContent.CompoundItem;
 
 
 public class FunctionDef extends CodeItem{
@@ -9,6 +10,7 @@ public class FunctionDef extends CodeItem{
 	public Name name;
 	public ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = null;
+	public CompoundItem content;
 	
 	public FunctionDef()
 	{
@@ -33,6 +35,11 @@ public class FunctionDef extends CodeItem{
 		else
 			retval += " ()";
 		return retval;
+	}
+
+	public void setContent(CompoundItem functionContent)
+	{
+		content = functionContent;
 	}
 	
 }

@@ -11,6 +11,7 @@ import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclBuilder;
 import main.codeitems.function.FunctionDefBuilder;
+import main.codeitems.functionContent.CompoundItem;
 
 
 import org.antlr.v4.runtime.CharStream;
@@ -60,7 +61,8 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		builder.createNew(ctx);
 		p.itemStack.push(builder);
 	
-		parseFunctionContents(ctx);
+		CompoundItem functionContent = parseFunctionContents(ctx);
+		builder.setContent(functionContent);
 	}
 
 	
@@ -75,12 +77,12 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 	
 	
-	private void parseFunctionContents(Function_defContext ctx)
+	private CompoundItem parseFunctionContents(Function_defContext ctx)
 	{
 		String text = getCompoundStmtAsString(ctx);
 		
 		FunctionParser parser = new FunctionParser();
-		// parser.enableFineParsing();
+		parser.enableFineParsing();
 		
 		try{
 			parser.parseAndWalkString(text);
@@ -90,6 +92,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 							  ctx.function_name().getText()
 							  + ". skipping.");
 		}
+		return parser.getResult();
 	}
 
 	@Override

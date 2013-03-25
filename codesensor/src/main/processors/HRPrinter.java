@@ -38,4 +38,16 @@ public class HRPrinter extends Processor{
 		// TODO Auto-generated method stub		
 	}
 
+	@Override
+	public void begin() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void end() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

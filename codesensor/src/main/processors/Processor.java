@@ -12,4 +12,7 @@ public abstract class Processor
 	public abstract void startOfUnit(ParserRuleContext ctx, String filename);
 	public abstract void endOfUnit(ParserRuleContext ctx, String filename);
 	public abstract void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack);
+	public abstract void begin();
+	public abstract void end();
+
 }

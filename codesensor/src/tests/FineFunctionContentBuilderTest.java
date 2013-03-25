@@ -23,8 +23,7 @@ public class FineFunctionContentBuilderTest {
 	public void emptyContent()
 	{
 		String input = "";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem item = (CompoundItem) codeItems.get(0);
+		CompoundItem item = (CompoundItem) parseAndWalk(input);
 		assert(item.statements.size() == 0);
 	}
 	
@@ -32,66 +31,61 @@ public class FineFunctionContentBuilderTest {
 	public void compoundWithoutBlockStart()
 	{
 		String input = "bar(); {}";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		assertTrue(contentItem.statements.size() == 2);
+		CompoundItem item = (CompoundItem) parseAndWalk(input);
+		assertTrue(item.statements.size() == 2);
 	}
 	
 	@Test
 	public void ifBlockCompound()
 	{
 		String input = "if(foo){}";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		assertTrue(contentItem.statements.size() == 1);
+		CompoundItem item = (CompoundItem) parseAndWalk(input);
+		assertTrue(item.statements.size() == 1);
 	}
 	
 	@Test
 	public void ifBlockNoCompound()
 	{
 		String input = "if(foo) bar();";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		assertTrue(contentItem.statements.size() == 1);
+		CompoundItem item = (CompoundItem) parseAndWalk(input);
+		assertTrue(item.statements.size() == 1);
 	}
 	
 	@Test
 	public void NestedIfndefs()
 	{
 		String input = "#ifdef foo\n#else\n #ifdef foo\n#else\n#endif\n#endif";
-		
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		assertTrue(contentItem.statements.size() == 0);
+		CompoundItem item = (CompoundItem) parseAndWalk(input);
+		assertTrue(item.statements.size() == 0);
 	}
 	
 	@Test
 	public void nestedIfBlocksNoCompound()
 	{
 		String input = "if(foo) if(fooAgain) bar();";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
-		assertTrue(contentItem.statements.size() == 1);
+		CompoundItem item = (CompoundItem) parseAndWalk(input);
+		assertTrue(item.statements.size() == 1);
 	}
 	
 	@Test
 	public void ifElse()
 	{
 		String input = "if(foo) foo(); else bar();";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
+		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
 		IfItem ifItem = (IfItem) contentItem.statements.get(0);
 		
-		assertTrue(contentItem.statements.size() == 1);
+		System.out.println(contentItem.statements.size());
+		
 		assertTrue(ifItem.elseItem != null);
+		assertTrue(contentItem.statements.size() == 1);
+		
 	}
 	
 	@Test
 	public void testPreElseSkipping()
 	{
 		String input = "#if foo\n bar(); #else\n foo(); foo(); #endif";
-		List<CodeItem> codeItems = parseAndWalk(input);
-		CompoundItem contentItem = (CompoundItem) codeItems.get(0);
+		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
 		System.out.println(contentItem.statements.size());
 		assertTrue(contentItem.statements.size() == 1);
 	}
@@ -106,15 +100,13 @@ public class FineFunctionContentBuilderTest {
 	}
 	
 	
-	private List<CodeItem> parseAndWalk(String input)
+	private CodeItem parseAndWalk(String input)
 	{
 		FineFunctionParser parser = new FineFunctionParser();		
-		parser.setProcessor(new TestProcessor());
 		TokenSubStream tokens = tokenStreamFromString(input);
 		
 		parser.parseAndWalkStream(tokens);
-		TestProcessor processor = (TestProcessor) parser.getProcessor();
-		return processor.codeItems;
+		return parser.itemStack.peek().getItem();
 	}
 	
 		

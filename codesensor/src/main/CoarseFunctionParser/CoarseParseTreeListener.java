@@ -38,8 +38,7 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	@Override
 	public void exitCoarse_content(CoarseFunctionGrammarParser.Coarse_contentContext ctx)
 	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.pop();
-		p.processor.processItem(builder.getItem(), p.itemStack);
+		// Nothing to do, just leave the result on the stack.
 	}
 
 	// Duplication

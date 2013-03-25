@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import lucene.LuceneIndexCreator;
 import main.ModuleParser.ModuleParser;
 
 public class BatchParser implements Runnable
@@ -19,11 +20,14 @@ public class BatchParser implements Runnable
 	@Override
 	public void run()
 	{
+		// parser.setProcessor(new LuceneIndexCreator());
 		processBatch();
 	}
 	
 	public void processBatch()
 	{
+		parser.begin();
+		
 		List<String> filenames = batchToProcess.getFilenames();
 
 		Iterator<String> it = filenames.iterator();
@@ -31,6 +35,8 @@ public class BatchParser implements Runnable
 			String filename = it.next();
 			processSingleFile(filename);
 		}
+		
+		parser.end();
 		
 	}
 	

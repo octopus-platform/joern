@@ -5,6 +5,7 @@ import java.util.Stack;
 import main.ParseTreeUtils;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
+import main.codeitems.functionContent.CompoundItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -55,6 +56,11 @@ public class FunctionDefBuilder extends CodeItemBuilder {
 							 Stack<CodeItemBuilder> itemStack)
 	{
 		paramListBuilder.addParameter(ctx, itemStack);
+	}
+
+	public void setContent(CompoundItem functionContent)
+	{
+		thisItem.setContent(functionContent);
 	}
 	
 }

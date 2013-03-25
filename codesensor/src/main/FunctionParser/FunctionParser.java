@@ -4,6 +4,7 @@ import main.CommonParser;
 import main.TokenSubStream;
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.FineFunctionParser.FineFunctionParser;
+import main.codeitems.functionContent.CompoundItem;
 
 public class FunctionParser
 {
@@ -32,6 +33,12 @@ public class FunctionParser
 	public void parseAndWalkString(String input)
 	{
 		parser.parseAndWalkString(input);
+	}
+
+	public CompoundItem getResult()
+	{
+		// The result is what's left on the stack in the end
+		return (CompoundItem) parser.itemStack.peek().getItem();
 	}
 	
 	

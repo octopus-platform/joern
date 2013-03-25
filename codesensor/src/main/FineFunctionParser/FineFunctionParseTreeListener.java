@@ -35,9 +35,9 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	@Override
 	public void exitStatements(FineFunctionGrammarParser.StatementsContext ctx)
 	{
-		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.pop();
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.exitStatements(ctx);
-		p.processor.processItem(builder.getItem(), p.itemStack);
+		// p.processor.processItem(builder.getItem(), p.itemStack);
 	}
 	
 	@Override public void enterStatement(FineFunctionGrammarParser.StatementContext ctx)

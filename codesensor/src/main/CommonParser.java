@@ -157,4 +157,14 @@ abstract public class CommonParser
 		return processor;
 	}
 	
+	public void begin()
+	{
+		processor.begin();
+	}
+
+	public void end()
+	{
+		processor.end();
+	}
+
 }
