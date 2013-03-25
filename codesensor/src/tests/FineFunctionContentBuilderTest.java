@@ -7,7 +7,6 @@ import java.util.List;
 import main.TokenSubStream;
 import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.CodeItem;
-import main.codeitems.expressions.CallItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.IfItem;
 import main.processors.TestProcessor;
@@ -15,7 +14,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import antlr.CodeSensorLexer;
 import antlr.FineFunctionGrammarLexer;
 import antlr.FineFunctionGrammarParser.StatementsContext;
 

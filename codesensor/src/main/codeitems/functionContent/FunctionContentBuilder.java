@@ -33,7 +33,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		replaceTopOfStack(new IdentifierDeclStatement());
 	}
 	
-	protected void replaceTopOfStack(StatementItem item)
+	protected void replaceTopOfStack(CodeItem item)
 	{
 		itemStack.pop();
 		itemStack.push(item);

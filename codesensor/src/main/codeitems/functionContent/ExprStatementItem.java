@@ -1,5 +1,5 @@
 package main.codeitems.functionContent;
 
-public class ExprStatementItem {
+public class ExprStatementItem extends StatementItem {
 
 }
