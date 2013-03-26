@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import main.CommonParser;
+import tools.index.CommonParser;
+
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.builders.IdentifierDeclBuilder;
 import main.codeitems.functionContent.IdentifierDeclStatement;

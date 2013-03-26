@@ -1,11 +1,12 @@
 package main.ModuleParser;
 
-import main.CommonParser;
-import main.TokenSubStream;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import tools.index.CommonParser;
+import tools.index.TokenSubStream;
 
 import antlr.CodeSensorLexer;
 import antlr.CodeSensorParser;

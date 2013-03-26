@@ -48,7 +48,7 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 										 Document d)
 	{
 		addLocationFields(d, item, filename);
-		addTypeField(d, "function");
+		addTypeField(d, item.nodeTypeName);
 		addCodeString(item, d);
 	}
 	

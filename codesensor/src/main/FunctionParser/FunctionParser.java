@@ -1,7 +1,7 @@
 package main.FunctionParser;
 
-import main.CommonParser;
-import main.TokenSubStream;
+import tools.index.CommonParser;
+import tools.index.TokenSubStream;
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.functionContent.CompoundItem;

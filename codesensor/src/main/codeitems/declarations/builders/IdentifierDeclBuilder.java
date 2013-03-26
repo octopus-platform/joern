@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import main.InitDeclContextWrapper;
-import main.ParseTreeUtils;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
 import main.codeitems.declarations.IdentifierDecl;
@@ -13,6 +11,9 @@ import main.codeitems.declarations.IdentifierDeclType;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import tools.index.InitDeclContextWrapper;
+import tools.index.ParseTreeUtils;
 
 public class IdentifierDeclBuilder extends CodeItemBuilder
 {

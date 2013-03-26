@@ -3,7 +3,6 @@ package main.ModuleParser;
 import java.util.Iterator;
 import java.util.List;
 
-import main.CommonParser;
 
 import main.FunctionParser.FunctionParser;
 import main.codeitems.declarations.IdentifierDecl;
@@ -20,6 +19,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import org.antlr.v4.runtime.misc.Interval;
+
+import tools.index.CommonParser;
 
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;

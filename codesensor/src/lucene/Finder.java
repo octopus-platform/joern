@@ -30,7 +30,7 @@ public class Finder
 	private static final int maxHits = 100;
 	
 	
-	Finder(String directoryName)
+	public Finder(String directoryName)
 	{
 		createIndexReader(directoryName);
 	}

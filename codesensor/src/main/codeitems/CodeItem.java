@@ -1,8 +1,9 @@
 package main.codeitems;
 
-import main.ParseTreeUtils;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+
+import tools.index.ParseTreeUtils;
 
 
 public class CodeItem {

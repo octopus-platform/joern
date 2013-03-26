@@ -1,4 +1,4 @@
-package main;
+package tools.index;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;

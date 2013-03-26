@@ -1,4 +1,6 @@
-package lucene;
+package tools.retrieve;
+
+import lucene.Finder;
 
 public class CodeSensorFind
 {

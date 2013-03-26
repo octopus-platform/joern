@@ -2,7 +2,6 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import main.TokenSubStream;
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.codeitems.CodeItem;
 import main.codeitems.expressions.CallItem;
@@ -11,6 +10,8 @@ import main.codeitems.functionContent.CompoundItem;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
+
+import tools.index.TokenSubStream;
 
 import antlr.CoarseFunctionGrammarLexer;
 

@@ -1,10 +1,11 @@
 package main.codeitems.function;
 
-import main.ParseTreeUtils;
 import main.codeitems.CodeItem;
 import main.codeitems.Name;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+
+import tools.index.ParseTreeUtils;
 
 import antlr.CodeSensorParser.Parameter_declContext;
 import antlr.CodeSensorParser.Parameter_idContext;

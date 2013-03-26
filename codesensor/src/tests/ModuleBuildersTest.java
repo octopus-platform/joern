@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import main.TokenSubStream;
 import main.ModuleParser.ModuleParser;
 import main.codeitems.CodeItem;
 import main.codeitems.Name;
@@ -18,6 +17,8 @@ import main.processors.TestProcessor;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
+
+import tools.index.TokenSubStream;
 
 import antlr.CodeSensorLexer;
 
