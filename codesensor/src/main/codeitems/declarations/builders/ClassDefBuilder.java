@@ -3,6 +3,7 @@ package main.codeitems.declarations.builders;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
 import main.codeitems.declarations.ClassDef;
+import main.codeitems.functionContent.CompoundItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -24,6 +25,11 @@ public class ClassDefBuilder extends CodeItemBuilder
 	{
 		thisItem.name = new Name();
 		thisItem.name.initializeFromContext(ctx);
+	}
+
+	public void setContent(CompoundItem content)
+	{
+		thisItem.content = content;
 	}
 	
 }

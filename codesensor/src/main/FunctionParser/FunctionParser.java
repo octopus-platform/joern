@@ -38,7 +38,7 @@ public class FunctionParser
 	public CompoundItem getResult()
 	{
 		// The result is what's left on the stack in the end
-		return (CompoundItem) parser.itemStack.peek().getItem();
+		return parser.getResult();
 	}
 	
 	

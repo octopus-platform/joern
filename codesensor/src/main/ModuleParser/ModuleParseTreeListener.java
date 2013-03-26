@@ -6,12 +6,14 @@ import java.util.List;
 import main.CommonParser;
 
 import main.FunctionParser.FunctionParser;
-import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.builders.ClassDefBuilder;
 import main.codeitems.declarations.builders.IdentifierDeclBuilder;
 import main.codeitems.function.builders.FunctionDefBuilder;
 import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
+import main.processors.CompoundItemGenerator;
 
 
 import org.antlr.v4.runtime.CharStream;
@@ -137,18 +139,22 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
 	}
-	
+		
 	private void emitDeclarations(ParserRuleContext decl_list,
 			  ParserRuleContext typeName)
 	{
 		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
 		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
 
+		IdentifierDeclStatement stmt = new IdentifierDeclStatement();
+		
 		Iterator<IdentifierDecl> it = declarations.iterator();
 		while(it.hasNext()){
 			IdentifierDecl decl = it.next();
-			p.processor.processItem(decl, p.itemStack);
+			stmt.addDeclaration(decl);
 		}		
+	
+		p.processor.processItem(stmt, p.itemStack);
 	}
 	
 	// DeclByClass
@@ -183,19 +189,23 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	@Override
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
-		CodeItemBuilder builder = p.itemStack.pop();
+		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.pop();
+		CompoundItem content = parseClassContent(ctx);
+		builder.setContent(content);
 		p.processor.processItem(builder.getItem(), p.itemStack);
 		
-		parseClassContent(ctx);
 		emitDeclarationsForClass(ctx);
 	}
 
-	private void parseClassContent(CodeSensorParser.DeclByClassContext ctx)
+	private CompoundItem parseClassContent(CodeSensorParser.DeclByClassContext ctx)
 	{
 		ModuleParser shallowParser = createNewShallowParser();
+		CompoundItemGenerator generator = new CompoundItemGenerator();
+		shallowParser.setProcessor(generator);
 		restrictStreamToClassContent(ctx);
 		shallowParser.parseAndWalkStream(p.stream);
 		p.stream.resetRestriction();
+		return generator.getCompoundItem();
 	}
 
 	private void restrictStreamToClassContent(

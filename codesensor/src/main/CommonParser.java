@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Stack;
 
 import main.codeitems.CodeItemBuilder;
+import main.codeitems.functionContent.CompoundItem;
 import main.processors.CSVPrinter;
 import main.processors.Processor;
 
@@ -165,6 +166,11 @@ abstract public class CommonParser
 	public void end()
 	{
 		processor.end();
+	}
+
+	public CompoundItem getResult()
+	{
+		return (CompoundItem) itemStack.peek().getItem();
 	}
 
 }

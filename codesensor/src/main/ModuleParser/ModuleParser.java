@@ -12,6 +12,7 @@ import antlr.CodeSensorParser;
 
 public class ModuleParser extends CommonParser
 {	
+	
 	public ModuleParser()
 	{
 		super();
@@ -43,6 +44,5 @@ public class ModuleParser extends CommonParser
 	{
 		return new CodeSensorLexer(input);
 	}
-	
 	
 }

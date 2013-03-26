@@ -37,7 +37,6 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.exitStatements(ctx);
-		// p.processor.processItem(builder.getItem(), p.itemStack);
 	}
 	
 	@Override public void enterStatement(FineFunctionGrammarParser.StatementContext ctx)
@@ -69,7 +68,6 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.enterIf(ctx);
 	}
-	
 	
 	@Override
 	public void enterBlock_starter(FineFunctionGrammarParser.Block_starterContext ctx)

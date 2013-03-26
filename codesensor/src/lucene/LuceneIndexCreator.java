@@ -6,7 +6,6 @@ import java.util.Stack;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.function.FunctionDef;
 import main.processors.Processor;
 
 import org.antlr.v4.runtime.ParserRuleContext;

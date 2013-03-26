@@ -13,6 +13,7 @@ import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
 import main.codeitems.function.ParameterType;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 import main.processors.TestProcessor;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -27,7 +28,13 @@ public class ModuleBuildersTest {
 	{
 		String input = "struct x{ struct y { struct z{}; }; };";
 		List<CodeItem> codeItems = parseInput(input);
-		assertTrue(codeItems.size() == 3);
+		ClassDef classDef = (ClassDef) codeItems.get(0);
+		ClassDef yClass = (ClassDef) classDef.content.statements.get(0);
+		ClassDef zClass = (ClassDef) yClass.content.statements.get(0);
+		
+		assertTrue(codeItems.size() == 1);
+		assertTrue(yClass.name.getCodeStr().equals("y"));
+		assertTrue(zClass.name.getCodeStr().equals("z"));
 	}
 	
 	@Test
@@ -40,12 +47,22 @@ public class ModuleBuildersTest {
 	}
 	
 	@Test
+	public void testStructContent()
+	{
+		String input = "struct foo{};";
+		List<CodeItem> codeItems = parseInput(input);
+		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		assertTrue(codeItem.content != null);
+	}
+	
+	@Test
 	public void testDecl()
 	{
 		String input = "int foo;";
 		List<CodeItem> codeItems = parseInput(input);
-		IdentifierDecl codeItem = (IdentifierDecl) codeItems.get(0);
-		assertTrue(codeItem.name.getCodeStr().equals("foo"));
+		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(0);
+		IdentifierDecl decl = codeItem.identifierDeclList.get(0);
+		assertTrue(decl.name.getCodeStr().equals("foo"));
 	}
 
 	@Test
@@ -53,9 +70,10 @@ public class ModuleBuildersTest {
 	{
 		String input = "class foo{int x;} y;";
 		List<CodeItem> codeItems = parseInput(input);
-		IdentifierDecl codeItem = (IdentifierDecl) codeItems.get(codeItems.size() - 1);
-		System.out.println(codeItem.name.getCodeStr());
-		assertTrue(codeItem.name.getCodeStr().equals("y"));
+		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(codeItems.size() - 1);
+		IdentifierDecl decl = codeItem.identifierDeclList.get(0);
+		System.out.println(decl.name.getCodeStr());
+		assertTrue(decl.name.getCodeStr().equals("y"));
 	}
 	
 	@Test
@@ -65,10 +83,11 @@ public class ModuleBuildersTest {
 		List<CodeItem> codeItems = parseInput(input);
 		
 		ClassDef classCodeItem = (ClassDef) codeItems.get(0);
-		IdentifierDecl identifierCodeItem = (IdentifierDecl) codeItems.get(1);
+		IdentifierDeclStatement identifierCodeItem = (IdentifierDeclStatement) classCodeItem.content.statements.get(0);
+		IdentifierDecl decl = identifierCodeItem.identifierDeclList.get(0);
 		
 		assertTrue(classCodeItem.name.getCodeStr().equals("foo"));
-		assertTrue(identifierCodeItem.name.getCodeStr().equals("x"));
+		assertTrue(decl.name.getCodeStr().equals("x"));
 	}
 	
 	@Test
