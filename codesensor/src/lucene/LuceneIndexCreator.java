@@ -80,11 +80,15 @@ public class LuceneIndexCreator extends Processor {
 	public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
 	{
 		
+		CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
+		converter.setFilename("");
+		
+		item.accept(converter);
+		Document doc = converter.getDocument();
+		if(doc == null) return;
+		
 		try {
-			if((item instanceof FunctionDef)){
-				Document doc = CodeItemToDocumentConverter.convert((FunctionDef)item, ""); 
-				indexWriter.addDocument(doc);
-			}		
+			indexWriter.addDocument(doc);		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

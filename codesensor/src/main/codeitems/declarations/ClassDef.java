@@ -1,6 +1,7 @@
 package main.codeitems.declarations;
 
 import main.codeitems.CodeItem;
+import main.codeitems.CodeItemVisitor;
 import main.codeitems.Name;
 
 public class ClassDef extends CodeItem{
@@ -17,5 +18,7 @@ public class ClassDef extends CodeItem{
 	{
 		return name;
 	}
+
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 	
 }

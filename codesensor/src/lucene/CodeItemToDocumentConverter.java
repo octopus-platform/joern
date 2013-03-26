@@ -8,16 +8,27 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 
 import main.codeitems.CodeItem;
+import main.codeitems.CodeItemVisitor;
+import main.codeitems.declarations.ClassDef;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
 import main.codeitems.functionContent.StatementItem;
 
-public class CodeItemToDocumentConverter
+public class CodeItemToDocumentConverter implements CodeItemVisitor
 {
-		
-	public static Document convert(FunctionDef item, String filename)
+	
+	String filename = "";
+	Document d;
+	
+	@Override
+	public void visit(FunctionDef item)
+	{
+		convert(item);
+	}
+	
+	public void convert(FunctionDef item)
 	{	
-		Document d = new Document();
+		d = new Document();
 		addLocationFields(d, item, filename);
 		addTypeField(d, "function");
 		addCodeString(item, d);
@@ -28,10 +39,9 @@ public class CodeItemToDocumentConverter
 		addParameters(item, d);
 		addFunctionContent(item, d);
 		
-		return d;
 	}
 
-	private static void addFunctionContent(FunctionDef item, Document d)
+	private void addFunctionContent(FunctionDef item, Document d)
 	{
 		StatementInfoExtractor infoExtractor = new StatementInfoExtractor();
 		infoExtractor.setDocument(d);
@@ -44,13 +54,15 @@ public class CodeItemToDocumentConverter
 		}
 		
 	}
-
-	private static void addCodeString(CodeItem item, Document d)
+	
+	@Override
+	public void visit(ClassDef item)
 	{
-		d.add(new TextField("code", item.getCodeStr(), Field.Store.YES));
+		// TODO Auto-generated method stub
+		
 	}
-
-	private static void addParameters(FunctionDef item, Document d)
+	
+	private void addParameters(FunctionDef item, Document d)
 	{
 		Iterator<Parameter> it = item.parameterList.parameters.iterator();
 		while(it.hasNext()){
@@ -60,17 +72,34 @@ public class CodeItemToDocumentConverter
 			d.add(new TextField("parameterName", paramName, Field.Store.YES));
 			d.add(new TextField("parameterType", paramType, Field.Store.YES));
 		}
+	}	
+	
+	private void addCodeString(CodeItem item, Document d)
+	{
+		d.add(new TextField("code", item.getCodeStr(), Field.Store.YES));
 	}
 	
-	private static void addTypeField(Document d, String typeName)
+	private void addTypeField(Document d, String typeName)
 	{
 		d.add(new TextField("type", typeName, Field.Store.YES));
 	}
 
-	private static void addLocationFields(Document d, CodeItem item, String filename)
+	private void addLocationFields(Document d, CodeItem item, String filename)
 	{
-		d.add(new TextField("filename", filename, Field.Store.NO));
-		d.add(new TextField("location", item.location.toString(), Field.Store.NO));
+		d.add(new TextField("filename", filename, Field.Store.YES));
+		d.add(new TextField("location", item.location.toString(), Field.Store.YES));
 	}
 
+	public void setFilename(String aFilename)
+	{
+		filename = aFilename;
+	}
+	
+	public Document getDocument()
+	{
+		return d;
+	}
+
+	@Override public void visit(CodeItem item) {}
+	
 }

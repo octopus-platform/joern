@@ -49,9 +49,6 @@ public class StatementInfoExtractor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(StatementItem statementItem)
-	{
-		
-	}
+	public void visit(StatementItem statementItem){}
 	
 }

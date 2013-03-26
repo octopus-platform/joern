@@ -59,7 +59,8 @@ public class Finder
 				
 				Document document = searcher.doc(doc.doc);
 				String codeStr = document.getField("code").stringValue();				
-				System.out.println(codeStr);
+				System.out.println(codeStr);			
+				// System.out.println(document.getField("location").stringValue());
 			}
 			
 			

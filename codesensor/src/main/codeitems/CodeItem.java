@@ -37,5 +37,7 @@ public class CodeItem {
 		codeStr = ParseTreeUtils.childTokenString(rootRule);
 		return codeStr;
 	}
-		
+	
+	public void accept(CodeItemVisitor visitor){}
+	
 }

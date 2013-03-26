@@ -1,6 +1,7 @@
 package main.codeitems.function;
 
 import main.codeitems.CodeItem;
+import main.codeitems.CodeItemVisitor;
 import main.codeitems.Name;
 import main.codeitems.functionContent.CompoundItem;
 
@@ -42,5 +43,7 @@ public class FunctionDef extends CodeItem
 	{
 		content = functionContent;
 	}
+	
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 	
 }
