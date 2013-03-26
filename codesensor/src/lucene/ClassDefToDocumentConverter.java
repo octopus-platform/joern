@@ -1,5 +1,6 @@
 package lucene;
 
+
 import main.codeitems.declarations.ClassDef;
 
 import org.apache.lucene.document.Document;
@@ -19,8 +20,7 @@ public class ClassDefToDocumentConverter
 			className = item.getName().getCodeStr();
 			d.add(new TextField("name", className, Field.Store.YES));
 		
-		// field names
-		// field types
+		CodeItemToDocumentConverter.addContent(item.content, d);
 	}
 	
 }

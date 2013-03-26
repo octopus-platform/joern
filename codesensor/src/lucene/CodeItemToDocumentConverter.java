@@ -11,6 +11,8 @@ import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.function.FunctionDef;
+import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.StatementItem;
 
 public class CodeItemToDocumentConverter implements CodeItemVisitor
 {
@@ -64,6 +66,20 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	{
 		d.add(new TextField("filename", filename, Field.Store.YES));
 		d.add(new TextField("location", item.location.toString(), Field.Store.YES));
+	}
+
+	public static void addContent(CompoundItem item, Document d)
+	{
+		StatementInfoExtractor infoExtractor = new StatementInfoExtractor();
+		infoExtractor.setDocument(d);
+		
+		LinkedList<StatementItem> statements = item.statements;
+		Iterator<StatementItem> it = statements.iterator();
+		while(it.hasNext()){
+			StatementItem statement = it.next();
+			statement.accept(infoExtractor);
+		}
+		
 	}
 	
 }

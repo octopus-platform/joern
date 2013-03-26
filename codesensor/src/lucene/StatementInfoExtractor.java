@@ -6,6 +6,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 
+import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.CallItem;
 import main.codeitems.functionContent.ExprStatementItem;
@@ -41,6 +42,13 @@ public class StatementInfoExtractor implements StatementVisitor
 		}
 	}
 
+	@Override
+	public void visit(ClassDef statementItem)
+	{
+		String name = statementItem.getName().getCodeStr();
+		d.add(new TextField("subClassName", name, Field.Store.YES));
+	}
+	
 	@Override
 	public void visit(ExprStatementItem statementItem)
 	{

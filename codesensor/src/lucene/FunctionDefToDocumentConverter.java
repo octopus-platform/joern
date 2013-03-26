@@ -1,11 +1,9 @@
 package lucene;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
-import main.codeitems.functionContent.StatementItem;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -22,7 +20,7 @@ public class FunctionDefToDocumentConverter
 		d.add(new TextField("returnType", item.returnType.getCodeStr(), Field.Store.YES));
 		
 		addParameters(item, d);
-		addFunctionContent(item, d);		
+		CodeItemToDocumentConverter.addContent(item.content, d);		
 	}
 
 	private static void addParameters(FunctionDef item, Document d)
@@ -37,18 +35,5 @@ public class FunctionDefToDocumentConverter
 		}
 	}	
 
-	private static void addFunctionContent(FunctionDef item, Document d)
-	{
-		StatementInfoExtractor infoExtractor = new StatementInfoExtractor();
-		infoExtractor.setDocument(d);
-		
-		LinkedList<StatementItem> statements = item.content.statements;
-		Iterator<StatementItem> it = statements.iterator();
-		while(it.hasNext()){
-			StatementItem statement = it.next();
-			statement.accept(infoExtractor);
-		}
-		
-	}
 
 }
