@@ -7,9 +7,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import main.CommonParser;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.IdentifierDeclBuilder;
-import main.codeitems.functionContent.CoarseFunctionContentBuilder;
+import main.codeitems.declarations.builders.IdentifierDeclBuilder;
 import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.functionContent.builders.CoarseFunctionContentBuilder;
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
 

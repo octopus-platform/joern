@@ -7,10 +7,10 @@ import main.CommonParser;
 
 import main.FunctionParser.FunctionParser;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.declarations.ClassDefBuilder;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.IdentifierDeclBuilder;
-import main.codeitems.function.FunctionDefBuilder;
+import main.codeitems.declarations.builders.ClassDefBuilder;
+import main.codeitems.declarations.builders.IdentifierDeclBuilder;
+import main.codeitems.function.builders.FunctionDefBuilder;
 import main.codeitems.functionContent.CompoundItem;
 
 

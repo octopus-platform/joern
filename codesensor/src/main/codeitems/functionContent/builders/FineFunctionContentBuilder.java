@@ -1,7 +1,8 @@
-package main.codeitems.functionContent;
+package main.codeitems.functionContent.builders;
 
 import java.util.Iterator;
 
+import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 import antlr.FineFunctionGrammarParser.DeclByTypeContext;
@@ -12,6 +13,14 @@ import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
+import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.functionContent.BlockStarterItem;
+import main.codeitems.functionContent.CloseBlockItem;
+import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.ElseItem;
+import main.codeitems.functionContent.ExprStatementItem;
+import main.codeitems.functionContent.IfItem;
+import main.codeitems.functionContent.StatementItem;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {
@@ -36,6 +45,14 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		replaceTopOfStack(new BlockStarterItem());
 	}
 
+	public void enterAssignment(Assign_exprContext ctx)
+	{
+		ExprStatementItem exprStmt = new ExprStatementItem();
+		exprStmt.expr = new AssignmentExpr();
+		exprStmt.expr.initializeFromContext(ctx);
+		replaceTopOfStack(exprStmt);
+	}
+	
 	public void enterIf(If_statementContext ctx)
 	{
 		replaceTopOfStack(new IfItem());

@@ -7,8 +7,12 @@ import java.util.List;
 import main.TokenSubStream;
 import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.CodeItem;
+import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.expressions.ExpressionItem;
 import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IfItem;
+import main.codeitems.functionContent.StatementItem;
 import main.processors.TestProcessor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -88,6 +92,16 @@ public class FineFunctionContentBuilderTest {
 		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
 		System.out.println(contentItem.statements.size());
 		assertTrue(contentItem.statements.size() == 1);
+	}
+	
+	@Test
+	public void testMostBasicAssignment()
+	{
+		String input = "x = y;";
+		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		AssignmentExpr expr = (AssignmentExpr) statementItem.expr;
+		assertTrue(expr.assignments.size() == 1);
 	}
 	
 	@Test

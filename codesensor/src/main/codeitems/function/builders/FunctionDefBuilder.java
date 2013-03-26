@@ -1,10 +1,13 @@
-package main.codeitems.function;
+package main.codeitems.function.builders;
 
 import java.util.Stack;
 
 import main.ParseTreeUtils;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
+import main.codeitems.function.FunctionDef;
+import main.codeitems.function.ParameterList;
+import main.codeitems.function.ReturnType;
 import main.codeitems.functionContent.CompoundItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;

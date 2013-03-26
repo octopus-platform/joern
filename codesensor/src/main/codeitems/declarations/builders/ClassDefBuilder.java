@@ -1,7 +1,8 @@
-package main.codeitems.declarations;
+package main.codeitems.declarations.builders;
 
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
+import main.codeitems.declarations.ClassDef;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 

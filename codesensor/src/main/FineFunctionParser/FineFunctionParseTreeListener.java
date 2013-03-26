@@ -7,8 +7,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import main.CommonParser;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.IdentifierDeclBuilder;
-import main.codeitems.functionContent.FineFunctionContentBuilder;
+import main.codeitems.declarations.builders.IdentifierDeclBuilder;
+import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
 
 import antlr.FineFunctionGrammarParser;
 import antlr.FineFunctionGrammarBaseListener;
@@ -48,12 +48,16 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	}
 	
 	@Override public void exitStatement(FineFunctionGrammarParser.StatementContext ctx)
-	{
-		
+	{	
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.exitStatement(ctx);
 	}
 	
+	@Override public void enterAssign_expr(FineFunctionGrammarParser.Assign_exprContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterAssignment(ctx);
+	}
 	
 	@Override public void enterElse_statement(FineFunctionGrammarParser.Else_statementContext ctx)
 	{

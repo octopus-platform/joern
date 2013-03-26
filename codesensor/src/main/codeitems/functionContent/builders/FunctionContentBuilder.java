@@ -1,4 +1,4 @@
-package main.codeitems.functionContent;
+package main.codeitems.functionContent.builders;
 
 import java.util.Stack;
 
@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 
 public class FunctionContentBuilder extends CodeItemBuilder
 {

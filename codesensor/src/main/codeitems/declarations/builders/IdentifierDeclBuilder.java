@@ -1,4 +1,4 @@
-package main.codeitems.declarations;
+package main.codeitems.declarations.builders;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -8,6 +8,8 @@ import main.InitDeclContextWrapper;
 import main.ParseTreeUtils;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.Name;
+import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.declarations.IdentifierDeclType;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
