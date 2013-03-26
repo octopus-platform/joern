@@ -1,11 +1,13 @@
 package main.codeitems.functionContent.builders;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
-import antlr.FineFunctionGrammarParser.DeclByTypeContext;
+import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
@@ -50,10 +52,33 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		if(ctx.assignment_operator().size() == 0)
 			return;
 		
-		ExprStatementItem exprStmt = new ExprStatementItem();
-		exprStmt.expr = new AssignmentExpr();
-		exprStmt.expr.initializeFromContext(ctx);
+		ExprStatementItem exprStmt = createAssignmentExprFromContext(ctx);
 		replaceTopOfStack(exprStmt);
+	}
+
+	private ExprStatementItem createAssignmentExprFromContext(
+			Assign_exprContext ctx)
+	{
+		ExprStatementItem exprStmt = new ExprStatementItem();
+		AssignmentExpr assignExpr = new AssignmentExpr();
+		exprStmt.expr = assignExpr;
+
+		exprStmt.expr.initializeFromContext(ctx);
+		
+		List<Conditional_expressionContext> vals = ctx.conditional_expression();
+		ListIterator<Conditional_expressionContext> it = vals.listIterator(vals.size());
+		
+		
+		// There must be at least a right-most valye since the 
+		// assignment-operator was matched
+		
+		Conditional_expressionContext rvalExpr = it.previous();
+		while(it.hasPrevious()){
+			Conditional_expressionContext lvalExpr = it.previous();
+			assignExpr.addAssignment(lvalExpr, rvalExpr);
+		}
+		
+		return exprStmt;
 	}
 	
 	public void enterIf(If_statementContext ctx)
