@@ -33,8 +33,8 @@ public class ModuleBuildersTest {
 		ClassDef zClass = (ClassDef) yClass.content.statements.get(0);
 		
 		assertTrue(codeItems.size() == 1);
-		assertTrue(yClass.name.getCodeStr().equals("y"));
-		assertTrue(zClass.name.getCodeStr().equals("z"));
+		assertTrue(yClass.getName().getCodeStr().equals("y"));
+		assertTrue(zClass.getName().getCodeStr().equals("z"));
 	}
 	
 	@Test
@@ -185,15 +185,15 @@ public class ModuleBuildersTest {
 	private List<CodeItem> parseInput(String input)
 	{
 		ModuleParser parser = new ModuleParser();		
-		parser.setProcessor(new TestProcessor());
+		TestProcessor testProcessor = new TestProcessor();
+		parser.addObserver(testProcessor);
 		
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
 		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		
 		parser.parseAndWalkStream(tokens);
-		TestProcessor processor = (TestProcessor) parser.getProcessor();
-		return processor.codeItems;
+		return testProcessor.codeItems;
 	}
 
 }

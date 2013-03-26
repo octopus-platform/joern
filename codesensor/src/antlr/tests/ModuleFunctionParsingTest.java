@@ -2,12 +2,8 @@ package antlr.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import main.FineFunctionParser.FineFunctionParser;
-import main.ModuleParser.ModuleParser;
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import antlr.CodeSensorLexer;

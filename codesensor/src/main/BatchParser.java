@@ -20,7 +20,7 @@ public class BatchParser implements Runnable
 	@Override
 	public void run()
 	{
-		parser.setProcessor(new LuceneIndexCreator());
+		parser.addObserver(new LuceneIndexCreator());
 		processBatch();
 	}
 	

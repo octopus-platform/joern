@@ -45,13 +45,13 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	@Override
 	public void enterCode(CodeSensorParser.CodeContext ctx)
 	{
-		p.processor.startOfUnit(ctx, p.filename);
+		p.notifyObserversOfUnitStart(ctx);
 	}
 	
 	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
 	{
-		p.processor.endOfUnit(ctx, p.filename);
-	}	
+		p.notifyObserversOfUnitEnd(ctx);
+	}
 	
 	// Function Definitions
 	
@@ -128,7 +128,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.pop();
-		p.processor.processItem(builder.getItem(), p.itemStack);
+		p.notifyObserversOfItem(builder.getItem());
 	}	
 	
 	// DeclByType
@@ -154,7 +154,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 			stmt.addDeclaration(decl);
 		}		
 	
-		p.processor.processItem(stmt, p.itemStack);
+		p.notifyObserversOfItem(stmt);
 	}
 	
 	// DeclByClass
@@ -192,8 +192,8 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.pop();
 		CompoundItem content = parseClassContent(ctx);
 		builder.setContent(content);
-		p.processor.processItem(builder.getItem(), p.itemStack);
 		
+		p.notifyObserversOfItem(builder.getItem());		
 		emitDeclarationsForClass(ctx);
 	}
 
@@ -201,7 +201,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	{
 		ModuleParser shallowParser = createNewShallowParser();
 		CompoundItemGenerator generator = new CompoundItemGenerator();
-		shallowParser.setProcessor(generator);
+		shallowParser.addObserver(generator);
 		restrictStreamToClassContent(ctx);
 		shallowParser.parseAndWalkStream(p.stream);
 		p.stream.resetRestriction();
@@ -221,7 +221,6 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	{
 		ModuleParser shallowParser = new ModuleParser();
 		shallowParser.setStack(p.itemStack);
-		shallowParser.setProcessor(p.processor);
 		return shallowParser;
 	}
 	

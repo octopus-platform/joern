@@ -1,12 +1,13 @@
 package main;
 
 import java.io.IOException;
+import java.util.Observable;
 import java.util.Stack;
 
+import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.functionContent.CompoundItem;
-import main.processors.CSVPrinter;
-import main.processors.Processor;
+import main.processors.ParserEvent;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -14,6 +15,7 @@ import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -22,7 +24,7 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
-abstract public class CommonParser
+abstract public class CommonParser extends Observable
 {
 
 	public Parser parser;
@@ -30,7 +32,6 @@ abstract public class CommonParser
 	public CommonParserContext context = null;
 	
 	public Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
-	public Processor processor = new CSVPrinter();
 	public TokenSubStream stream;
 	public String filename;
 	
@@ -113,8 +114,6 @@ abstract public class CommonParser
 	
 	protected boolean isRecognitionException(RuntimeException ex)
 	{
-		// return ex.getClass() == RuntimeException.class &&
-		//		ex.getCause() instanceof RecognitionException;
 		
 		return ex.getClass() == ParseCancellationException.class &&
 			   ex.getCause() instanceof RecognitionException;
@@ -148,26 +147,59 @@ abstract public class CommonParser
 		itemStack = aStack;
 	}
 	
-	public void setProcessor(Processor aProcessor)
-	{
-		processor = aProcessor;
-	}
-
-	public Processor getProcessor() 
-	{
-		return processor;
-	}
 	
 	public void begin()
 	{
-		processor.begin();
+		notifyObserversOfBegin();
 	}
 
 	public void end()
 	{
-		processor.end();
+		notifyObserversOfEnd();
 	}
 
+	
+	public void notifyObserversOfBegin()
+	{
+		ParserEvent event = new ParserEvent(ParserEvent.eventID.BEGIN);
+		setChanged();
+		notifyObservers(event);
+	}
+
+	public void notifyObserversOfEnd()
+	{
+		ParserEvent event = new ParserEvent(ParserEvent.eventID.END);
+		setChanged();
+		notifyObservers(event);
+	}
+	
+	public void notifyObserversOfUnitStart(ParserRuleContext ctx)
+	{
+		ParserEvent event = new ParserEvent(ParserEvent.eventID.START_OF_UNIT);
+		event.ctx = ctx;
+		event.filename = filename;
+		setChanged();
+		notifyObservers(event);
+	}
+	
+	public void notifyObserversOfUnitEnd(ParserRuleContext ctx)
+	{
+		ParserEvent event = new ParserEvent(ParserEvent.eventID.END_OF_UNIT);
+		event.ctx = ctx;
+		event.filename = filename;
+		setChanged();
+		notifyObservers(event);
+	}
+	
+	public void notifyObserversOfItem(CodeItem aItem)
+	{
+		ParserEvent event = new ParserEvent(ParserEvent.eventID.PROCESS_ITEM);
+		event.item = aItem;
+		event.itemStack = itemStack;
+		setChanged();
+		notifyObservers(event);
+	}
+	
 	public CompoundItem getResult()
 	{
 		return (CompoundItem) itemStack.peek().getItem();

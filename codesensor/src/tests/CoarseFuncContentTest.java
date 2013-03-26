@@ -42,11 +42,6 @@ public class CoarseFuncContentTest
 		return parser.itemStack.peek().getItem();
 	}
 		
-	static ParseTree parse(String input)
-	{
-		CoarseFunctionParser parser = new CoarseFunctionParser();
-		return parser.parseString(input);
-	}
 
 	private static TokenSubStream tokenStreamFromString(String input)
 	{
