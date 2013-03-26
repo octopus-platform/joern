@@ -47,6 +47,9 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 
 	public void enterAssignment(Assign_exprContext ctx)
 	{
+		if(ctx.assignment_operator().size() == 0)
+			return;
+		
 		ExprStatementItem exprStmt = new ExprStatementItem();
 		exprStmt.expr = new AssignmentExpr();
 		exprStmt.expr.initializeFromContext(ctx);
