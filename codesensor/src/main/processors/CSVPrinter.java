@@ -10,6 +10,7 @@ import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -86,13 +87,18 @@ public class CSVPrinter extends Processor
 
     private void outputDecl(CodeItem aItem, Stack<CodeItemBuilder> itemStack)
 	{
-    	IdentifierDecl item = (IdentifierDecl) aItem;
-    	int level = itemStack.size();
+    	IdentifierDeclStatement stmt = (IdentifierDeclStatement) aItem;
     	
-    	item.setCodeStr(item.name.getCodeStr());
-    	if(item.type.completeType != "")
-    		item.setCodeStr(item.type.completeType + " " + item.name.getCodeStr());
-    	defaultOut(item, level);
+    	Iterator<IdentifierDecl> it = stmt.identifierDeclList.iterator();
+    	while(it.hasNext()){
+    		IdentifierDecl item = it.next();
+    		int level = itemStack.size();
+        	
+        	item.setCodeStr(item.name.getCodeStr());
+        	if(item.type.completeType != "")
+        		item.setCodeStr(item.type.completeType + " " + item.name.getCodeStr());
+        	defaultOut(item, level);
+    	}
 	}
     
     private void defaultOut(CodeItem item, int level)

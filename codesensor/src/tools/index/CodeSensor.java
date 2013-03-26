@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import main.CommandLine.CommandLineInterface;
 
 public class CodeSensor {
 

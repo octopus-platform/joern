@@ -13,7 +13,6 @@ public class FunctionDefToDocumentConverter
 {
 	public static void convert(FunctionDef item, String filename, Document d)
 	{	
-		d = new Document();
 		CodeItemToDocumentConverter.addStandardFields(item, filename, d);
 		
 		d.add(new TextField("name", item.name.getCodeStr(), Field.Store.YES));

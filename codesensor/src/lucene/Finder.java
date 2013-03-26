@@ -35,6 +35,11 @@ public class Finder
 		createIndexReader(directoryName);
 	}
 	
+	public Document getDocumentById(int docID) throws IOException
+	{
+		return searcher.doc(docID);
+	}
+	
 	private void createIndexReader(String directoryName)
 	{
 		Directory directory;
@@ -48,31 +53,11 @@ public class Finder
 		}
 	}
 
-	public ScoreDoc[] find(String queryString)
+	public ScoreDoc[] find(String queryString) throws QueryNodeException, IOException
 	{
-		try {
-			Query query = parser.parse(queryString, defaultField);
-			TopDocs topDocs = searcher.search(query, maxHits);
-			
-
-			for(ScoreDoc doc : topDocs.scoreDocs){
-				
-				Document document = searcher.doc(doc.doc);
-				String codeStr = document.getField("code").stringValue();				
-				System.out.println(codeStr);			
-				// System.out.println(document.getField("location").stringValue());
-			}
-			
-			
-			
-		} catch (QueryNodeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		Query query = parser.parse(queryString, defaultField);
+		TopDocs topDocs = searcher.search(query, maxHits);
+		return topDocs.scoreDocs;
 	}
 
 }

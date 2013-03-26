@@ -24,6 +24,7 @@ public class LuceneIndexCreator extends Processor {
 	Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_42);
 	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_42, analyzer);
 	IndexWriter indexWriter;
+	String filename = "";
 	
 	@Override
 	public void begin()
@@ -54,9 +55,9 @@ public class LuceneIndexCreator extends Processor {
 	
 	
 	@Override
-	public void startOfUnit(ParserRuleContext ctx, String filename)
+	public void startOfUnit(ParserRuleContext ctx, String aFilename)
 	{
-		
+		filename = aFilename;
 	}
 
 	@Override
@@ -80,13 +81,14 @@ public class LuceneIndexCreator extends Processor {
 	{
 		
 		CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
-		converter.setFilename("");
+		converter.setFilename(filename);
 		
 		item.accept(converter);
 		Document doc = converter.getDocument();
 		if(doc == null) return;
 		
 		try {
+			
 			indexWriter.addDocument(doc);		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

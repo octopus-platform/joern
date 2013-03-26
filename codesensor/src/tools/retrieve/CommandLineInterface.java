@@ -1,4 +1,4 @@
-package main.CommandLine;
+package tools.retrieve;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -15,11 +15,19 @@ public class CommandLineInterface
 	private CommandLineParser parser = new BasicParser();
 	private HelpFormatter formater = new HelpFormatter();
 	private CommandLine cmd = null;
-	private String [] filenames;
+
+	private String query;
+	private String indexDir;
 	
-	public String [] getFilenames()
+	
+	public String getQuery()
 	{
-		return filenames;
+		return query;
+	}
+	
+	public String getIndexDir()
+	{
+		return indexDir;
 	}
 	
 	public CommandLineInterface()
@@ -35,19 +43,19 @@ public class CommandLineInterface
 	
 	public void outputHelp()
 	{	
-		formater.printHelp("codesensor [OPTION]... [FILE] ...", options);
+		formater.printHelp("retrieve [OPTION]... <query> <indexDir>", options);
 	}
 
-	public void parseCommandLine(String [] args)
+	public void parseCommandLine(String [] args) throws RuntimeException, ParseException
 	{
-		try {
-			cmd = parser.parse(options, args);
-			filenames = cmd.getArgs();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		cmd = parser.parse(options, args);	
+		String[] arguments = cmd.getArgs();
+		if(arguments.length != 2){
+			throw new RuntimeException("Not enough arguments");
 		}
 	
+		query = arguments[0];
+		indexDir = arguments[1];
 	}
 	
 }

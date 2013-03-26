@@ -6,6 +6,7 @@ import java.util.List;
 
 import lucene.LuceneIndexCreator;
 import main.ModuleParser.ModuleParser;
+import main.processors.CSVPrinter;
 
 public class BatchParser implements Runnable
 {
@@ -20,7 +21,8 @@ public class BatchParser implements Runnable
 	@Override
 	public void run()
 	{
-		parser.addObserver(new LuceneIndexCreator());
+		// parser.addObserver(new LuceneIndexCreator());
+		parser.addObserver(new CSVPrinter());
 		processBatch();
 	}
 	

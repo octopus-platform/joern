@@ -35,12 +35,14 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	@Override
 	public void visit(FunctionDef item)
 	{
+		d = new Document();
 		FunctionDefToDocumentConverter.convert(item, filename, d);
 	}
 	
 	@Override
 	public void visit(ClassDef item)
 	{
+		d = new Document();
 		ClassDefToDocumentConverter.convert(item, filename, d);
 	}
 	
