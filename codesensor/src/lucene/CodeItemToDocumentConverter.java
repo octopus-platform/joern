@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
@@ -56,18 +54,18 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	
 	static void addCodeString(CodeItem item, Document d)
 	{
-		d.add(new TextField("code", item.getCodeStr(), Field.Store.YES));
+		d.add(LuceneUtils.createField("code", item.getCodeStr()));
 	}
 	
 	static void addTypeField(Document d, String typeName)
 	{
-		d.add(new TextField("type", typeName, Field.Store.YES));
+		d.add(LuceneUtils.createField("type", typeName));
 	}
 
 	static void addLocationFields(Document d, CodeItem item, String filename)
 	{
-		d.add(new TextField("filename", filename, Field.Store.YES));
-		d.add(new TextField("location", item.location.toString(), Field.Store.YES));
+		d.add(LuceneUtils.createField("filename", filename));
+		d.add(LuceneUtils.createField("location", item.location.toString()));
 	}
 
 	public static void addContent(CompoundItem item, Document d)

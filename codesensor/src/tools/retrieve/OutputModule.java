@@ -10,14 +10,14 @@ import java.util.TreeMap;
 import lucene.Finder;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.search.ScoreDoc;
 
-public class LocationPrinter
+public class OutputModule
 {
 	Finder finder;
 	
-	public LocationPrinter(Finder aFinder)
+	public OutputModule(Finder aFinder)
 	{
 		finder = aFinder;
 	}
@@ -61,27 +61,34 @@ public class LocationPrinter
 	private Map<String, StringBuilder> getFieldMap(Document document)
 	{
 		Map<String, StringBuilder> map = new TreeMap<String, StringBuilder>();
-		List<IndexableField> fields = document.getFields();
-		Iterator<IndexableField> it = fields.iterator();
+		
+		List<Fieldable> fields = document.getFields();
+		Iterator<Fieldable> it = fields.iterator();
 		
 		while(it.hasNext())
 		{
-			IndexableField field = it.next();
+			Fieldable field = it.next();
 			String name = field.name();
 			String fieldValue = field.stringValue();
-			StringBuilder stringBuilder = map.get(name);
-			
-			if(stringBuilder == null){
-				stringBuilder = new StringBuilder("\"" + fieldValue + "\"");
-				map.put(name, stringBuilder);
-			}else{			
-				stringBuilder.append(", \"");
-				fieldValue = fieldValue.replace("\"", "\\\"");
-				stringBuilder.append(fieldValue);
-				stringBuilder.append("\"");
-			}				
+			addFieldValueToMap(map, name, fieldValue);				
 		}
 		return map;
+	}
+
+	private void addFieldValueToMap(Map<String, StringBuilder> map,
+			String name, String fieldValue)
+	{
+		StringBuilder stringBuilder = map.get(name);
+		
+		if(stringBuilder == null){
+			stringBuilder = new StringBuilder("\"" + fieldValue + "\"");
+			map.put(name, stringBuilder);
+		}else{			
+			stringBuilder.append(", \"");
+			fieldValue = fieldValue.replace("\"", "\\\"");
+			stringBuilder.append(fieldValue);
+			stringBuilder.append("\"");
+		}
 	}
 	
 }

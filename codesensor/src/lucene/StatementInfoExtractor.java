@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
@@ -26,7 +25,7 @@ public class StatementInfoExtractor implements StatementVisitor
 	@Override
 	public void visit(CallItem statementItem)
 	{
-		d.add(new TextField("call", statementItem.callee, Field.Store.YES));
+		d.add(LuceneUtils.createField("call", statementItem.callee));
 	}
 
 	@Override
@@ -37,8 +36,8 @@ public class StatementInfoExtractor implements StatementVisitor
 			IdentifierDecl idDecl = it.next();
 			String name = idDecl.name.getCodeStr();
 			String completeType = idDecl.type.completeType;
-			d.add(new TextField("localName", name, Field.Store.YES));
-			d.add(new TextField("localType", completeType, Field.Store.YES));
+			d.add(LuceneUtils.createField("localName", name));
+			d.add(LuceneUtils.createField("localType", completeType));
 		}
 	}
 
@@ -46,7 +45,7 @@ public class StatementInfoExtractor implements StatementVisitor
 	public void visit(ClassDef statementItem)
 	{
 		String name = statementItem.getName().getCodeStr();
-		d.add(new TextField("subClassName", name, Field.Store.YES));
+		d.add(LuceneUtils.createField("subClassName", name));
 	}
 	
 	@Override
@@ -54,7 +53,7 @@ public class StatementInfoExtractor implements StatementVisitor
 	{
 		// TODO: fix this
 		String codeStr = statementItem.getCodeStr();
-		d.add(new TextField("field", codeStr, Field.Store.YES));
+		d.add(LuceneUtils.createField("field", codeStr));
 	}
 
 	@Override

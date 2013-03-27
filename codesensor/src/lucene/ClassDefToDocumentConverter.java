@@ -4,8 +4,6 @@ package lucene;
 import main.codeitems.declarations.ClassDef;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 
 public class ClassDefToDocumentConverter
 {
@@ -17,7 +15,9 @@ public class ClassDefToDocumentConverter
 		String className = "";
 		if(item.name != null)
 			className = item.getName().getCodeStr();
-			d.add(new TextField("name", className, Field.Store.YES));
+		
+		
+		d.add(LuceneUtils.createField("name", className));
 		
 		CodeItemToDocumentConverter.addContent(item.content, d);
 	}

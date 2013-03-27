@@ -3,7 +3,8 @@ package tools.retrieve;
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+
+import org.apache.lucene.queryParser.core.QueryNodeException;
 import org.apache.lucene.search.ScoreDoc;
 
 import lucene.Finder;
@@ -29,14 +30,16 @@ public class CodeSensorFind
 		Finder finder = new Finder(directoryName);
 		ScoreDoc[] documents;
 		
+		
 		try {
 			documents = finder.find(queryString);
 		} catch (QueryNodeException | IOException e) {
-			System.err.println(e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return;
 		}
-				
-		LocationPrinter locationPrinter = new LocationPrinter(finder);
+	
+		OutputModule locationPrinter = new OutputModule(finder);
 		locationPrinter.print(documents);
 	
 	}
