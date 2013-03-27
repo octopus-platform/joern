@@ -53,8 +53,8 @@ public class StatementInfoExtractor implements StatementVisitor
 	public void visit(ExprStatementItem statementItem)
 	{
 		// TODO: fix this
-		// String codeStr = statementItem.getCodeStr();
-		// d.add(new TextField("field", codeStr, Field.Store.YES));
+		String codeStr = statementItem.getCodeStr();
+		d.add(new TextField("field", codeStr, Field.Store.YES));
 	}
 
 	@Override

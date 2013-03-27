@@ -27,6 +27,7 @@ public class CoarseFunctionContentBuilder extends FunctionContentBuilder
 		ExpressionBuilder builder = new ExpressionBuilder();
 		builder.createUnaryExpression(new FieldOnlyWrapper(ctx));
 		ExprStatementItem stmt = new ExprStatementItem();
+		stmt.initializeFromContext(ctx);
 		stmt.expr =  (ExpressionItem) builder.getItem();
 		rootItem.addStatement(stmt);
 	}

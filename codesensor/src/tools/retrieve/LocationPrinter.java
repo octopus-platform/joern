@@ -1,11 +1,10 @@
 package tools.retrieve;
 
 import java.io.IOException;
-import java.util.HashMap;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import lucene.Finder;
@@ -73,11 +72,13 @@ public class LocationPrinter
 			StringBuilder stringBuilder = map.get(name);
 			
 			if(stringBuilder == null){
-				stringBuilder = new StringBuilder(fieldValue);
+				stringBuilder = new StringBuilder("\"" + fieldValue + "\"");
 				map.put(name, stringBuilder);
 			}else{			
-				stringBuilder.append(", ");
+				stringBuilder.append(", \"");
+				fieldValue = fieldValue.replace("\"", "\\\"");
 				stringBuilder.append(fieldValue);
+				stringBuilder.append("\"");
 			}				
 		}
 		return map;
