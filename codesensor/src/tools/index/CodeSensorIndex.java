@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class CodeSensor {
+public class CodeSensorIndex {
 
 	private static final int nCores = 1;
 	private static CommandLineInterface cmd = new CommandLineInterface();

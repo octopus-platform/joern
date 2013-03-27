@@ -12,7 +12,6 @@ public class ClassDefToDocumentConverter
 
 	public static void convert(ClassDef item, String filename, Document d)
 	{
-		d = new Document();
 		CodeItemToDocumentConverter.addStandardFields(item, filename, d);	
 	
 		String className = "";

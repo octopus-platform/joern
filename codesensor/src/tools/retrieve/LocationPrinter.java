@@ -23,8 +23,9 @@ public class LocationPrinter
 				Document document = finder.getDocumentById(doc.doc);
 				String filename = document.getField("filename").stringValue();
 				String stringValue = document.getField("location").stringValue();
+				String name = document.getField("name").stringValue();
 				// String codeStr = document.getField("code").stringValue();				
-				System.out.println(filename + ":" + stringValue);
+				System.out.println(filename + ":" + stringValue + " " + name);				
 			}
 		
 		} catch (IOException e)
@@ -32,5 +33,7 @@ public class LocationPrinter
 			System.err.println(e.getMessage());
 		}
 	}
+	
+	
 	
 }

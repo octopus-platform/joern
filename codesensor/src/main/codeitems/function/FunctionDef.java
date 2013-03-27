@@ -16,7 +16,7 @@ public class FunctionDef extends CodeItem
 	
 	public FunctionDef()
 	{
-		nodeTypeName = "FUNCTION_DEF";
+		nodeTypeName = "function";
 	}
 	
 	@Override

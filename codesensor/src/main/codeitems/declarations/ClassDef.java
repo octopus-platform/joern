@@ -12,7 +12,7 @@ public class ClassDef extends StatementItem{
 	
 	public ClassDef()
 	{
-		nodeTypeName = "CLASS_DEF";
+		nodeTypeName = "class";
 		codeStr = "";
 	}
 	

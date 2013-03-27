@@ -27,7 +27,7 @@ public class Finder
 	
 	// Probably want this to be content.
 	private static final String defaultField = "name";
-	private static final int maxHits = 100;
+	private static final int maxHits = 10000;
 	
 	
 	public Finder(String directoryName)
@@ -46,6 +46,7 @@ public class Finder
 		try {
 			directory = FSDirectory.open(new File(directoryName));
 			indexReader = DirectoryReader.open(directory);
+			
 			searcher = new IndexSearcher(indexReader);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

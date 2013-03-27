@@ -21,6 +21,7 @@ import org.apache.lucene.util.Version;
 
 public class LuceneIndexCreator extends Processor {
 
+	// Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_42);
 	Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_42);
 	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_42, analyzer);
 	IndexWriter indexWriter;
@@ -88,7 +89,6 @@ public class LuceneIndexCreator extends Processor {
 		if(doc == null) return;
 		
 		try {
-			
 			indexWriter.addDocument(doc);		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
