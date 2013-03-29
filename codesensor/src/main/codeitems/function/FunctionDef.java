@@ -11,7 +11,7 @@ public class FunctionDef extends CodeItem
 
 	public Name name;
 	public ParameterList parameterList = new ParameterList();
-	public ReturnType returnType = null;
+	public ReturnType returnType = new DummyReturnType();
 	public CompoundItem content;
 	
 	public FunctionDef()
