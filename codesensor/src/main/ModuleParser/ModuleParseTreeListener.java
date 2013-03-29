@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 
 import tools.index.CommonParser;
+import tools.index.ParseTreeUtils;
 import tools.index.ParserException;
 
 import antlr.CodeSensorParser;
@@ -68,6 +69,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	
 		CompoundItem functionContent = parseFunctionContents(ctx);
 		builder.setContent(functionContent);
+		
 	}
 
 	
@@ -221,6 +223,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		Class_defContext class_def = ctx.class_def();
 		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
 		int stopIndex = class_def.stop.getTokenIndex();
+		
 		p.stream.restrict(startIndex+1, stopIndex);
 	}
 

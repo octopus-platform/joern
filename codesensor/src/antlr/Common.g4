@@ -100,7 +100,7 @@ operator: (('new' | 'delete' ) ('[' ']')?)
 assignment_operator: '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='; 
 equality_operator: ('=='| '!=');
 
-template_decl_start : TEMPLATE template_param_list;
+template_decl_start : TEMPLATE '<' template_param_list '>';
 
 
 // template water
