@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import main.FunctionParser.FunctionParser;
+import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.builders.ClassDefBuilder;
 import main.codeitems.declarations.builders.IdentifierDeclBuilder;
@@ -21,6 +22,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 
 import tools.index.CommonParser;
+import tools.index.ParserException;
 
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
@@ -192,6 +194,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
 	{
 		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.pop();
+		
 		CompoundItem content = parseClassContent(ctx);
 		builder.setContent(content);
 		
@@ -204,9 +207,11 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		ModuleParser shallowParser = createNewShallowParser();
 		CompoundItemGenerator generator = new CompoundItemGenerator();
 		shallowParser.addObserver(generator);
+
 		restrictStreamToClassContent(ctx);
 		shallowParser.parseAndWalkStream(p.stream);
 		p.stream.resetRestriction();
+		
 		return generator.getCompoundItem();
 	}
 

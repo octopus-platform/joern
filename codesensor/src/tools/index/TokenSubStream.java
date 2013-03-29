@@ -1,5 +1,7 @@
 package tools.index;
 
+import java.util.Stack;
+
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
@@ -8,7 +10,11 @@ import org.antlr.v4.runtime.TokenSource;
 public class TokenSubStream extends BufferedTokenStream
 {
 	protected int stopIndex = -1;
-	protected int lastStartIndex = -1;
+	protected int startIndex = 0;
+	
+	protected Stack<Integer> stopIndexStack = new Stack<Integer>();
+	protected Stack<Integer> startIndexStack = new Stack<Integer>();
+
 	
 	public TokenSubStream(TokenSource tokenSource)
 	{
@@ -17,15 +23,25 @@ public class TokenSubStream extends BufferedTokenStream
 		
 	public void restrict(int aStartIndex, int aStopIndex)
 	{
-		lastStartIndex = index();
+		startIndexStack.push(index());
+		stopIndexStack.push(stopIndex);
+
+		startIndex = aStartIndex;
 		stopIndex = aStopIndex;
 		seek(aStartIndex);
 	}
 	
 	public void resetRestriction()
 	{
-		stopIndex = -1;
-		seek(lastStartIndex);
+		stopIndex = stopIndexStack.pop();
+		startIndex = startIndexStack.pop();
+		seek(startIndex);
+	}
+	
+	@Override
+	public void reset()
+	{
+		seek(startIndex);
 	}
 	
 	@Override

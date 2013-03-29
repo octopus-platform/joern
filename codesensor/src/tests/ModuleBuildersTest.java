@@ -27,7 +27,7 @@ public class ModuleBuildersTest {
 	@Test
 	public void testNestedStructs()
 	{
-		String input = "struct x{ struct y { struct z{}; }; };";
+		String input = "struct x{ struct y { struct z{}; }; }; abc";
 		List<CodeItem> codeItems = parseInput(input);
 		ClassDef classDef = (ClassDef) codeItems.get(0);
 		ClassDef yClass = (ClassDef) classDef.content.statements.get(0);
@@ -71,9 +71,9 @@ public class ModuleBuildersTest {
 		String input = "class foo{ bar(){} };";
 		List<CodeItem> codeItems = parseInput(input);
 		ClassDef codeItem = (ClassDef) codeItems.get(0);
-		assertTrue(codeItem.content != null);
+		FunctionDef funcItem = (FunctionDef) codeItem.content.statements.get(0);
+		assertTrue(funcItem.name.getCodeStr().equals("bar"));
 	}
-	
 	
 	@Test
 	public void testDecl()

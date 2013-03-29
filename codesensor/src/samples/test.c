@@ -1,5 +1,8 @@
 #include <foo.h>
 
+
+
+
 void
 set_chdir(struct bsdtar *bsdtar, const char *newdir)
 {
