@@ -2,13 +2,14 @@ package main.codeitems.declarations;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
+import main.codeitems.DummyName;
 import main.codeitems.Name;
 import main.codeitems.functionContent.CompoundItem;
 
 public class ClassDef extends CodeItem
 {
 	
-	public Name name;
+	public Name name = new DummyName();
 	public CompoundItem content;
 	
 	public ClassDef()

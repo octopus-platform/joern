@@ -21,8 +21,8 @@ public class BatchParser implements Runnable
 	@Override
 	public void run()
 	{
-		// parser.addObserver(new LuceneIndexCreator());
-		parser.addObserver(new CSVPrinter());
+		parser.addObserver(new LuceneIndexCreator());
+		// parser.addObserver(new CSVPrinter());
 		processBatch();
 	}
 	

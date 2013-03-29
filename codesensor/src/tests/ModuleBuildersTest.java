@@ -48,6 +48,15 @@ public class ModuleBuildersTest {
 	}
 	
 	@Test
+	public void testUnnamedStruct()
+	{
+		String input = "struct {int x; } a;";
+		List<CodeItem> codeItems = parseInput(input);
+		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		assertTrue(codeItem.name.getCodeStr().equals("<unnamed>"));
+	}
+	
+	@Test
 	public void testStructContent()
 	{
 		String input = "struct foo{};";
