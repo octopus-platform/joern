@@ -1,7 +1,8 @@
 package main.codeitems.expressions;
 
+import main.codeitems.CodeItemVisitor;
 import main.codeitems.functionContent.ExprStatementItem;
-import main.codeitems.functionContent.StatementVisitor;
+
 
 public class CallItem extends ExprStatementItem
 {
@@ -13,6 +14,6 @@ public class CallItem extends ExprStatementItem
 		callee = aCallee;
 	}
 
-	public void accept(StatementVisitor visitor){ visitor.visit(this); }
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 
 }

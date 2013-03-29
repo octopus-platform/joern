@@ -5,7 +5,7 @@ import org.apache.lucene.document.Field;
 public class LuceneUtils
 {
 	public static Field createField(String name, String value)
-	{
-		return new Field(name, value, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES);
+	{		
+		return new Field(name, value, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
 	}
 }

@@ -57,6 +57,16 @@ public class ModuleBuildersTest {
 	}
 	
 	@Test
+	public void testFunctionInClass()
+	{
+		String input = "class foo{ bar(){} };";
+		List<CodeItem> codeItems = parseInput(input);
+		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		assertTrue(codeItem.content != null);
+	}
+	
+	
+	@Test
 	public void testDecl()
 	{
 		String input = "int foo;";

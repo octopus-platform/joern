@@ -35,9 +35,9 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 			baseType = ParseTreeUtils.childTokenString(typeName);
 		String completeType = baseType;
 		if(decl_ctx.ptrs() != null)
-			completeType += ParseTreeUtils.childTokenString(decl_ctx.ptrs());
+			completeType += " " + ParseTreeUtils.childTokenString(decl_ctx.ptrs());
 		if(decl_ctx.type_suffix() != null)
-			completeType += ParseTreeUtils.childTokenString(decl_ctx.type_suffix());
+			completeType += " " + ParseTreeUtils.childTokenString(decl_ctx.type_suffix());
 		
 		thisItem.type = new IdentifierDeclType();
 		thisItem.type.baseType = baseType;

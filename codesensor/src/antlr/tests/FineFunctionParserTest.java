@@ -14,7 +14,7 @@ public class FineFunctionParserTest {
 		String input = "if(foo){}";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("(selection_or_iteration if"));
 	}
@@ -25,7 +25,7 @@ public class FineFunctionParserTest {
 		String input = "class foo{ int x; };";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		assertTrue(output.contains("class_def"));
 	}
 	
@@ -35,7 +35,7 @@ public class FineFunctionParserTest {
 		String input = "foo(x);";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
@@ -45,7 +45,7 @@ public class FineFunctionParserTest {
 		String input = "ptr->foo(x);";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
@@ -55,7 +55,7 @@ public class FineFunctionParserTest {
 		String input = "foo(x == 1, x++);";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
@@ -65,7 +65,7 @@ public class FineFunctionParserTest {
 		String input = "x = y + 1;";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}
@@ -76,7 +76,7 @@ public class FineFunctionParserTest {
 		String input = "k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c];";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}
@@ -87,7 +87,7 @@ public class FineFunctionParserTest {
 		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";
 		FineFunctionParser functionParser = new FineFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.parser);
+		String output = tree.toStringTree(functionParser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}

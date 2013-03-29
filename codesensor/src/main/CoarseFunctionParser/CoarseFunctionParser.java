@@ -16,7 +16,7 @@ public class CoarseFunctionParser extends CommonParser {
 	public CoarseFunctionParser()
 	{
 		super();
-		listener = new CoarseParseTreeListener(this);
+		setListener(new CoarseParseTreeListener(this));
 	}
 
 	@Override
@@ -26,20 +26,20 @@ public class CoarseFunctionParser extends CommonParser {
 	}
 	
 	@Override
-	public ParseTree parseTokenStream(TokenSubStream tokens)
+	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
-		parser = new CoarseFunctionGrammarParser(tokens);
-        CoarseFunctionGrammarParser thisParser = (CoarseFunctionGrammarParser) parser;
+		setParser(new CoarseFunctionGrammarParser(tokens));
+        CoarseFunctionGrammarParser thisParser = (CoarseFunctionGrammarParser) getParser();
 		ParseTree tree = null;
        
         try {
-        	setSLLMode(parser);
+        	setSLLMode(getParser());
         	tree = thisParser.coarse_content();
         } catch (RuntimeException ex) {
         	if (isRecognitionException(ex))
         	{
         		tokens.reset();
-        		setLLStarMode(parser);
+        		setLLStarMode(getParser());
         		tree = thisParser.coarse_content();
         		
         	}

@@ -27,32 +27,39 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 abstract public class CommonParser extends Observable
 {
 
-	public Parser parser;
-	public ParseTreeListener listener;
-	public CommonParserContext context = null;
-	
 	public Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
 	public TokenSubStream stream;
 	public String filename;
 	
-	abstract public ParseTree parseTokenStream(TokenSubStream tokens);
+	private Parser parser;
+	private ParseTreeListener listener;
+	private CommonParserContext context = null;
+	
+	abstract public ParseTree parseTokenStreamImpl(TokenSubStream tokens);
+	
+	public ParseTree parseTokenStream(TokenSubStream tokens) throws ParserException
+	{
+		ParseTree returnTree = parseTokenStreamImpl(tokens);
+		if(returnTree == null)
+			throw new ParserException();
+		return returnTree;
+	}
 	
 	abstract public Lexer createLexer(ANTLRInputStream input);
-	
 	
 	public CommonParser()
 	{
 		super();
 	}
 	
-	public ParseTree parseAndWalkString(String input)
+	public ParseTree parseAndWalkString(String input) throws ParserException
 	{
 		ParseTree tree = parseString(input);
 		walkTree(tree);
 		return tree;
 	}
 	
-	public ParseTree parseString(String input)
+	public ParseTree parseString(String input) throws ParserException
 	{
 		char[] charArray = input.toCharArray();
 		ANTLRInputStream inputStream = new ANTLRInputStream(charArray, charArray.length);
@@ -65,10 +72,10 @@ abstract public class CommonParser extends Observable
 	protected void walkTree(ParseTree tree)
 	{
         ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(listener, tree);
+        walker.walk(getListener(), tree);
 	}
 	
-	public void parseAndWalkStream(TokenSubStream tokens)
+	public void parseAndWalkStream(TokenSubStream tokens) throws ParserException
 	{
 		filename = "";
 		stream = tokens;
@@ -76,22 +83,29 @@ abstract public class CommonParser extends Observable
 		walkTree(tree);
 	}
 	
-	protected TokenSubStream createTokenStreamFromFile(String filename)
-	throws IOException
+	protected TokenSubStream createTokenStreamFromFile(String filename) throws ParserException
 	{
-		ANTLRInputStream input = new ANTLRFileStream(filename);
-    	Lexer lexer = createLexer(input);
+		
+		ANTLRInputStream input;
+		try {
+			input = new ANTLRFileStream(filename);
+		} catch (IOException e) {
+			throw new ParserException();
+		}
+    	
+		Lexer lexer = createLexer(input);
         TokenSubStream tokens = new TokenSubStream(lexer);
 		return tokens;
+		
 	}
 	
-	public void parseAndWalkFile(String filename) throws IOException
+	public void parseAndWalkFile(String filename) throws ParserException
 	{
 		TokenSubStream stream = createTokenStreamFromFile(filename);
 		initializeContextWithFile(filename, stream);
 		
-		ParseTree tree = parseTokenStream(stream);
-        walkTree(tree);
+		ParseTree tree = parseTokenStream(stream);		
+		walkTree(tree);
 	}
 
 	public void parseAndANTLRFileStream(ANTLRFileStream input, String aFilename) throws IOException
@@ -104,12 +118,12 @@ abstract public class CommonParser extends Observable
         walkTree(tree);
 	}
 	
-	protected void initializeContextWithFile(String filename, TokenSubStream stream) throws IOException
+	protected void initializeContextWithFile(String filename, TokenSubStream stream)
 	{
-		context = new CommonParserContext();
-		context.filename = filename;
-		context.stream = stream;
-		initializeContext(context);
+		setContext(new CommonParserContext());
+		getContext().filename = filename;
+		getContext().stream = stream;
+		initializeContext(getContext());
 	}
 	
 	protected boolean isRecognitionException(RuntimeException ex)
@@ -203,6 +217,30 @@ abstract public class CommonParser extends Observable
 	public CompoundItem getResult()
 	{
 		return (CompoundItem) itemStack.peek().getItem();
+	}
+
+	public Parser getParser() {
+		return parser;
+	}
+
+	public void setParser(Parser parser) {
+		this.parser = parser;
+	}
+
+	public ParseTreeListener getListener() {
+		return listener;
+	}
+
+	public void setListener(ParseTreeListener listener) {
+		this.listener = listener;
+	}
+
+	public CommonParserContext getContext() {
+		return context;
+	}
+
+	public void setContext(CommonParserContext context) {
+		this.context = context;
 	}
 
 }

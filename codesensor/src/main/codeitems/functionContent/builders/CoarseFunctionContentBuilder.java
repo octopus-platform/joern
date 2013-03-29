@@ -7,7 +7,6 @@ import main.codeitems.expressions.builders.CallBuilder;
 import main.codeitems.expressions.builders.ExpressionBuilder;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
-import main.codeitems.functionContent.StatementItem;
 import antlr.CoarseFunctionGrammarParser.FieldOnlyContext;
 import antlr.CoarseFunctionGrammarParser.FuncCallContext;
 
@@ -19,7 +18,7 @@ public class CoarseFunctionContentBuilder extends FunctionContentBuilder
 		CallBuilder builder = new CallBuilder();
 		builder.createNew(ctx);
 		builder.setCallee(ctx.field().getText());
-		rootItem.addStatement((StatementItem) builder.getItem());
+		rootItem.addStatement(builder.getItem());
 	}
 
 	public void addFieldOnly(FieldOnlyContext ctx)

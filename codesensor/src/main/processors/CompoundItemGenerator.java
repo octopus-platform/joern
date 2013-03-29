@@ -5,13 +5,12 @@ import java.util.Stack;
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.StatementItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class CompoundItemGenerator extends Processor {
 
-	CompoundItem compoundItem;
+	private CompoundItem compoundItem;
 	
 	public CompoundItem getCompoundItem(){ return compoundItem; }
 	
@@ -27,7 +26,7 @@ public class CompoundItemGenerator extends Processor {
 	@Override
 	public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
 	{
-		compoundItem.addStatement((StatementItem) item);
+		compoundItem.addStatement(item);
 	}
 
 	@Override public void begin(){}

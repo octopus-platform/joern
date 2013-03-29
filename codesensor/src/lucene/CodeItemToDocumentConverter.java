@@ -8,9 +8,11 @@ import org.apache.lucene.document.Document;
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
+import main.codeitems.expressions.CallItem;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.StatementItem;
+import main.codeitems.functionContent.ExprStatementItem;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 
 public class CodeItemToDocumentConverter implements CodeItemVisitor
 {
@@ -73,12 +75,30 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 		StatementInfoExtractor infoExtractor = new StatementInfoExtractor();
 		infoExtractor.setDocument(d);
 		
-		LinkedList<StatementItem> statements = item.statements;
-		Iterator<StatementItem> it = statements.iterator();
+		LinkedList<CodeItem> statements = item.statements;
+		Iterator<CodeItem> it = statements.iterator();
 		while(it.hasNext()){
-			StatementItem statement = it.next();
+			CodeItem statement = it.next();
 			statement.accept(infoExtractor);
 		}
+		
+	}
+
+	@Override
+	public void visit(CallItem statementItem) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(IdentifierDeclStatement statementItem) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(ExprStatementItem statementItem) {
+		// TODO Auto-generated method stub
 		
 	}
 	

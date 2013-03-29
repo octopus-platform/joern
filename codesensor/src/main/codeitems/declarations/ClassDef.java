@@ -1,11 +1,12 @@
 package main.codeitems.declarations;
 
+import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.Name;
 import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.StatementItem;
 
-public class ClassDef extends StatementItem{
+public class ClassDef extends CodeItem
+{
 	
 	public Name name;
 	public CompoundItem content;

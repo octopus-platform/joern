@@ -3,17 +3,18 @@ package lucene;
 import java.util.Iterator;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 
+import main.codeitems.CodeItem;
+import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.CallItem;
+import main.codeitems.function.FunctionDef;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
-import main.codeitems.functionContent.StatementItem;
-import main.codeitems.functionContent.StatementVisitor;
 
-public class StatementInfoExtractor implements StatementVisitor
+
+public class StatementInfoExtractor implements CodeItemVisitor
 {
 	Document d;
 
@@ -57,6 +58,12 @@ public class StatementInfoExtractor implements StatementVisitor
 	}
 
 	@Override
-	public void visit(StatementItem statementItem){}
-	
+	public void visit(CodeItem statementItem){}
+
+	@Override
+	public void visit(FunctionDef item) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

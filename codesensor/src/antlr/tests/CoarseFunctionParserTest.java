@@ -17,7 +17,7 @@ public class CoarseFunctionParserTest {
 		String input = "foo();";
 		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
-		String output = tree.toStringTree(parser.parser);
+		String output = tree.toStringTree(parser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("function_argument_list"));
 	}
@@ -28,7 +28,7 @@ public class CoarseFunctionParserTest {
 		String input = "foo->bar();";
 		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
-		String output = tree.toStringTree(parser.parser);
+		String output = tree.toStringTree(parser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("function_argument_list"));
 	}
@@ -39,7 +39,7 @@ public class CoarseFunctionParserTest {
 		String input = "foo->bar((x + 10 < 20) ? 1: 0);";
 		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
-		String output = tree.toStringTree(parser.parser);
+		String output = tree.toStringTree(parser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("function_argument_list"));
 	}
@@ -50,7 +50,7 @@ public class CoarseFunctionParserTest {
 		String input = "foo(bar());";
 		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
-		String output = tree.toStringTree(parser.parser);
+		String output = tree.toStringTree(parser.getParser());
 		System.out.println(output);
 		
 		int occ = countOccurrences("function_argument_list", output);
@@ -63,7 +63,7 @@ public class CoarseFunctionParserTest {
 		String input = "int x;";
 		CoarseFunctionParser parser = new CoarseFunctionParser();
 		ParseTree tree = parser.parseString(input);
-		String output = tree.toStringTree(parser.parser);
+		String output = tree.toStringTree(parser.getParser());
 		System.out.println(output);
 		assertTrue(output.contains("simple_decl"));
 	}

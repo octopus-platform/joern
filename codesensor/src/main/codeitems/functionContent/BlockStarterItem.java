@@ -1,12 +1,14 @@
 package main.codeitems.functionContent;
 
+import main.codeitems.CodeItem;
 
-public class BlockStarterItem extends StatementItem
+
+public class BlockStarterItem extends CodeItem
 {
-	StatementItem statement = null;
+	CodeItem statement = null;
 	ConditionItem condition = null;
 
-	public void setStatement(StatementItem aStatement)
+	public void setStatement(CodeItem aStatement)
 	{
 		statement = aStatement;
 	}

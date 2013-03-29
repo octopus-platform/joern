@@ -2,16 +2,18 @@ package main.codeitems.functionContent;
 
 import java.util.LinkedList;
 
-public class CompoundItem extends StatementItem
+import main.codeitems.CodeItem;
+
+public class CompoundItem extends CodeItem
 {
-	public LinkedList<StatementItem> statements = new LinkedList<StatementItem>();
+	public LinkedList<CodeItem> statements = new LinkedList<CodeItem>();
 	
 	public CompoundItem()
 	{
 		nodeTypeName = "STATEMENTS";	
 	}
 	
-	public void addStatement(StatementItem stmt)
+	public void addStatement(CodeItem stmt)
 	{
 		statements.add(stmt);
 	}

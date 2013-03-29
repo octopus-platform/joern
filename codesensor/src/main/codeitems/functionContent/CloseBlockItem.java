@@ -1,6 +1,8 @@
 package main.codeitems.functionContent;
 
-public class CloseBlockItem extends StatementItem
+import main.codeitems.CodeItem;
+
+public class CloseBlockItem extends CodeItem
 {
 
 }

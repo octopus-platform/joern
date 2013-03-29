@@ -22,7 +22,6 @@ import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ElseItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IfItem;
-import main.codeitems.functionContent.StatementItem;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {
@@ -37,7 +36,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	public void enterStatement(StatementContext ctx)
 	{
-		StatementItem statementItem = new StatementItem();
+		CodeItem statementItem = new CodeItem();
 		statementItem.initializeFromContext(ctx);
 		itemStack.push(statementItem);
 	}
@@ -69,7 +68,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		ListIterator<Conditional_expressionContext> it = vals.listIterator(vals.size());
 		
 		
-		// There must be at least a right-most valye since the 
+		// There must be at least a right-most value since the 
 		// assignment-operator was matched
 		
 		Conditional_expressionContext rvalExpr = it.previous();
@@ -134,11 +133,11 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	private void consolidateIfElse(CompoundItem compoundItem)
 	{
-		Iterator<StatementItem> it = compoundItem.statements.iterator();
-		StatementItem prev = null;
+		Iterator<CodeItem> it = compoundItem.statements.iterator();
+		CodeItem prev = null;
 		while(it.hasNext()){
 			
-			StatementItem cur = it.next();
+			CodeItem cur = it.next();
 			if(prev != null && cur instanceof ElseItem){
 				if(prev instanceof IfItem){
 					IfItem ifItem = (IfItem) prev;
@@ -150,7 +149,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		}
 	}
 
-	private void consolidateBlockStarters(StatementItem topOfStack)
+	private void consolidateBlockStarters(CodeItem topOfStack)
 	{
 		while(true){
 			try{
@@ -169,11 +168,11 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	private void consolidate()
 	{
 		
-		StatementItem stmt = (StatementItem) itemStack.pop();
-		StatementItem topOfStack = null;
+		CodeItem stmt = itemStack.pop();
+		CodeItem topOfStack = null;
 		
 		if(itemStack.size() > 0)
-			topOfStack = (StatementItem) itemStack.peek();
+			topOfStack = itemStack.peek();
 		
 		if(topOfStack instanceof CompoundItem){
 			CompoundItem compound = (CompoundItem)topOfStack;

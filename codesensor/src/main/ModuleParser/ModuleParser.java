@@ -17,11 +17,11 @@ public class ModuleParser extends CommonParser
 	public ModuleParser()
 	{
 		super();
-		listener = new ModuleParseTreeListener(this);
+		setListener(new ModuleParseTreeListener(this));
 	}
 
 	@Override
-	public ParseTree parseTokenStream(TokenSubStream tokens)
+	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
 		CodeSensorParser parser = new CodeSensorParser(tokens);
         ParseTree tree = null;

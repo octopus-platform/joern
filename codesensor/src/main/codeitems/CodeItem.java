@@ -1,6 +1,5 @@
 package main.codeitems;
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import tools.index.ParseTreeUtils;
@@ -39,6 +38,6 @@ public class CodeItem {
 		return codeStr;
 	}
 	
-	public void accept(CodeItemVisitor visitor){}
-	
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
+		
 }

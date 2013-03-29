@@ -1,12 +1,14 @@
 package main.codeitems.functionContent;
 
+import main.codeitems.CodeItem;
+import main.codeitems.CodeItemVisitor;
 import main.codeitems.expressions.ExpressionItem;
 
-public class ExprStatementItem extends StatementItem
+public class ExprStatementItem extends CodeItem
 {
 	public ExpressionItem expr;
 
-	public void accept(StatementVisitor visitor){ visitor.visit(this); }
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 
 	public String getCodeStr()
 	{

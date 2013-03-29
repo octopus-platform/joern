@@ -3,6 +3,7 @@ package lucene;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 
@@ -12,12 +13,11 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 
-import org.apache.lucene.util.Version;
-
 public class Finder extends LuceneIndexAccessor
 {
 	
-	Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_36);
+	Analyzer analyzer = new KeywordAnalyzer();
+	// Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_36);
 	StandardQueryParser parser = new StandardQueryParser(analyzer);
 		
 	// Probably want this to be content.

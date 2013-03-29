@@ -17,7 +17,7 @@ public class FineFunctionParser extends CommonParser
 	public FineFunctionParser()
 	{
 		super();
-		listener = new FineFunctionParseTreeListener(this);
+		setListener(new FineFunctionParseTreeListener(this));
 	}
 	
 	@Override
@@ -27,20 +27,20 @@ public class FineFunctionParser extends CommonParser
 	}
 	
 	@Override
-	public ParseTree parseTokenStream(TokenSubStream tokens)
+	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
-		parser = new FineFunctionGrammarParser(tokens);
-        FineFunctionGrammarParser thisParser = (FineFunctionGrammarParser) parser;
+		setParser(new FineFunctionGrammarParser(tokens));
+        FineFunctionGrammarParser thisParser = (FineFunctionGrammarParser) getParser();
 		ParseTree tree = null;
         
         try {
-    		setSLLMode(parser);
+    		setSLLMode(getParser());
         	tree = thisParser.statements();
         } catch (RuntimeException ex) {
         	if (isRecognitionException(ex))
         	{
         		tokens.reset();
-        		setLLStarMode(parser);
+        		setLLStarMode(getParser());
         		tree = thisParser.statements();
         	}
         
