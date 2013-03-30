@@ -8,21 +8,27 @@ import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 
+import antlr.FineFunctionGrammarParser.And_expressionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
+import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
+import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.Or_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
+import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.ConditionalExpression;
+import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.Expression;
+import main.codeitems.expressions.InclusiveOrExpression;
 import main.codeitems.expressions.OrExpression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CloseBlockItem;
@@ -227,6 +233,40 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 	
+	public void enterAndExpression(And_expressionContext ctx)
+	{
+		AndExpression expr = new AndExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitAndExpression(And_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterInclusiveOrExpression(Inclusive_or_expressionContext ctx)
+	{
+		InclusiveOrExpression expr = new InclusiveOrExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitInclusiveOrExpression(Inclusive_or_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterExclusiveOrExpression(Exclusive_or_expressionContext ctx)
+	{
+		ExclusiveOrExpression expr = new ExclusiveOrExpression();
+		itemStack.push(expr);
+
+	}
+
+	public void exitExclusiveOrExpression(Exclusive_or_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
 	private void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();
@@ -249,5 +289,5 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			((Expression) topOfStack).addChildExpression(expression);
 		}
 	}
-	
+
 }

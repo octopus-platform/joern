@@ -3,8 +3,11 @@ package tests;
 import static org.junit.Assert.*;
 
 import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.ConditionalExpression;
+import main.codeitems.expressions.InclusiveOrExpression;
+import main.codeitems.expressions.OrExpression;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
@@ -54,7 +57,37 @@ public class ExpressionParsingTest {
 		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.expr;
 		ConditionalExpression right = (ConditionalExpression) expr.getRight();
-		assertTrue(right != null);
+		assertTrue(right.getCondition().getCodeStr().equals("cond"));
+	}
+	
+	@Test
+	public void testOrExpr()
+	{
+		String input = "x || y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		OrExpression expr = (OrExpression) statementItem.expr;
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void testAndExpr()
+	{
+		String input = "x && y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		AndExpression expr = (AndExpression) statementItem.expr;
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void testInclusiveOrExpr()
+	{
+		String input = "x | y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		InclusiveOrExpression expr = (InclusiveOrExpression) statementItem.expr;
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
 	
 }

@@ -167,4 +167,42 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitrOrExpression(ctx);
 	}
 	
+	@Override public void enterAnd_expression(FineFunctionGrammarParser.And_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterAndExpression(ctx);
+	}
+	
+	@Override public void exitAnd_expression(FineFunctionGrammarParser.And_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitAndExpression(ctx);
+	}
+	
+
+	@Override public void enterInclusive_or_expression(FineFunctionGrammarParser.Inclusive_or_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterInclusiveOrExpression(ctx);
+	}
+	
+	@Override public void exitInclusive_or_expression(FineFunctionGrammarParser.Inclusive_or_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitInclusiveOrExpression(ctx);
+	}
+
+	@Override public void enterExclusive_or_expression(FineFunctionGrammarParser.Exclusive_or_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterExclusiveOrExpression(ctx);
+	}
+	
+	@Override public void exitExclusive_or_expression(FineFunctionGrammarParser.Exclusive_or_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitExclusiveOrExpression(ctx);
+	}
+
+	
 }
