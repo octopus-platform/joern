@@ -4,15 +4,66 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import main.codeitems.CodeItem;
+import main.codeitems.Name;
 
 public class ParameterList extends CodeItem
 {
-	public LinkedList<Parameter> parameters = new LinkedList<Parameter>();
-
 	public ParameterList()
 	{
 		nodeTypeName = "PARAMETER_LIST";
 	}
+	
+	// TODO: we don't want to give back a reference to the list,
+	// we need to provide iterators for type and name
+	
+	public LinkedList<Parameter> getParameters()
+	{
+		return parameters;
+	}
+	
+	public void addParameter(Parameter aParam)
+	{
+		parameters.add(aParam);
+	}
+	
+	public Name [] getNames()
+	{
+		Name retNames [] = new Name[parameters.size()];
+		for(int i = 0; i < parameters.size(); i++){
+			retNames[i] = parameters.get(i).name;
+		}
+		return retNames;
+	}
+	
+	public String [] getNameStrings()
+	{
+		String retStrings [] = new String[parameters.size()];
+		for(int i = 0; i < parameters.size(); i++){
+			retStrings[i] = parameters.get(i).name.getCodeStr();
+		}
+		return retStrings;
+	}
+	
+	public ParameterType [] getTypes()
+	{
+		ParameterType retTypes [] = new ParameterType[parameters.size()];
+		for(int i = 0; i < parameters.size(); i++){
+			retTypes[i] = parameters.get(i).type;
+		}
+		return retTypes;
+	}
+	
+	public String [] getTypeStrings()
+	{
+		String retStrings [] = new String[parameters.size()];
+		for(int i = 0; i < parameters.size(); i++){
+			retStrings[i] = parameters.get(i).type.getCodeStr();
+		}
+		return retStrings;
+	}
+	
+	private LinkedList<Parameter> parameters = new LinkedList<Parameter>();
+
 	
 	@Override
 	public String getCodeStr()

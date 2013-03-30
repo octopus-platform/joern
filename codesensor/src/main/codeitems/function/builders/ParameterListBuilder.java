@@ -40,7 +40,7 @@ public class ParameterListBuilder extends CodeItemBuilder {
 		param.type.setBaseType(baseType);
 		param.type.setCompleteType(completeType);
 		
-		thisItem.parameters.add(param);
+		thisItem.addParameter(param);
 	}
 	
 	public String determineCompleteType(Parameter_idContext parameter_id,

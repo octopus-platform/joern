@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 public class ParameterType extends CodeItem
 {
-	String completeType;
-	String baseType;
+	String completeType = "";
+	String baseType = "";
 
 	public String getCodeStr()
 	{

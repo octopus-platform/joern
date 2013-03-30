@@ -8,6 +8,9 @@ public class ParseTreeUtils
 	 {
 	    	// TODO: use a StringBuilder here.
 	    	
+		 	if(ctx == null)
+		 		return "";
+		 
 	    	int nChildren = ctx.getChildCount();
 	    	
 	    	if(nChildren == 0){

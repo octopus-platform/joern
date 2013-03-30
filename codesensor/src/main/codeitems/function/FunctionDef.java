@@ -2,6 +2,7 @@ package main.codeitems.function;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
+import main.codeitems.DummyName;
 import main.codeitems.Name;
 import main.codeitems.functionContent.CompoundItem;
 
@@ -9,14 +10,19 @@ import main.codeitems.functionContent.CompoundItem;
 public class FunctionDef extends CodeItem
 {
 
-	public Name name;
+	public Name name = new DummyName();
 	public ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = new DummyReturnType();
-	public CompoundItem content;
+	public CompoundItem content = new CompoundItem();
 	
 	public FunctionDef()
 	{
 		nodeTypeName = "function";
+	}
+	
+	public void addParameter(Parameter aParameter)
+	{
+		parameterList.addParameter(aParameter);
 	}
 	
 	@Override

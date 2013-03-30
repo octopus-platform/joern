@@ -11,7 +11,10 @@ public class Name extends CodeItem
 	{
 		if(codeStr != null)
 			return codeStr;
-		codeStr = rootRule.getText();
+		if(rootRule != null)
+			codeStr = rootRule.getText();
+		else
+			codeStr = "";
 		return codeStr;
 	}
 	

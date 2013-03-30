@@ -60,7 +60,7 @@ public class CSVPrinter extends Processor
     	defaultOut(item.name, level + 1);
     	if(item.parameterList != null){
     		defaultOut(item.parameterList, level + 1);
-    		Iterator<Parameter> i = item.parameterList.parameters.iterator();
+    		Iterator<Parameter> i = item.parameterList.getParameters().iterator();
     		for(; i.hasNext();){
     			Parameter p = i.next();
     			defaultOut(p, level+2);
@@ -106,7 +106,7 @@ public class CSVPrinter extends Processor
     	if(item == null) return;
     	
     	String output = item.nodeTypeName + SEPARATOR;
-    	output += createLocationString(item) + SEPARATOR + level;
+    	output += item.getLocationString(item) + SEPARATOR + level;
     	String codeStr = item.getCodeStr();
     	if(codeStr != null)
     		output += SEPARATOR + escapeCodeStr(codeStr);
@@ -114,15 +114,7 @@ public class CSVPrinter extends Processor
     		output += SEPARATOR + "";
     	System.out.println(output);
     }
-    
-    private String createLocationString(CodeItem item)
-    {
-    	CodeLocation loc = item.location;
-    	String startLoc = loc.startLine + ":" + loc.startPos;
-    	String indices = loc.startIndex + ":" + loc.stopIndex;
-    	return startLoc + SEPARATOR + indices;
-    }
-    
+      
     private String escapeCodeStr(String codeStr)
     {
     	String retval = codeStr;

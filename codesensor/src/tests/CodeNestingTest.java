@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import antlr.FineFunctionGrammarParser.StatementsContext;
 
-public class TestCodeNesting {
+public class CodeNestingTest {
 
 	@Test
 	public void testLineNumbers()

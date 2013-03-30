@@ -22,14 +22,16 @@ public class FunctionDefToDocumentConverter
 
 	private static void addParameters(FunctionDef item, Document d)
 	{
-		Iterator<Parameter> it = item.parameterList.parameters.iterator();
-		while(it.hasNext()){
-			Parameter param = it.next();
-			String paramName = param.name.getCodeStr();
-			String paramType = param.type.getCodeStr();
+		
+		String[] names = item.parameterList.getNameStrings();
+		for(String paramName : names){
 			d.add(LuceneUtils.createField("parameterName", paramName));
-			d.add(LuceneUtils.createField("parameterType", paramType));
 		}
+		
+		String[] types = item.parameterList.getTypeStrings();
+		for(String paramType : types){
+			d.add(LuceneUtils.createField("parameterType", paramType));
+		}	
 	}	
 
 

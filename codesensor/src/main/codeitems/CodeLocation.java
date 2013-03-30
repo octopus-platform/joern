@@ -3,18 +3,14 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 public class CodeLocation {
 
-	public int startLine;
-	public int startPos;
-	public int startIndex;
-	public int stopIndex;
-	
 	final private int NOT_SET = -1;
 	
-	@Override
-	public String toString()
-	{
-		return String.format( "%d:%d:%d:%d", startLine, startPos, startIndex, stopIndex); 
-	}
+	int startLine = NOT_SET;
+	int startPos = NOT_SET;
+	int startIndex = NOT_SET;
+	int stopIndex = NOT_SET;
+	
+	public CodeLocation(){}
 	
 	public CodeLocation(ParserRuleContext ctx)
 	{
@@ -31,5 +27,11 @@ public class CodeLocation {
 		else
 			stopIndex = NOT_SET;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return String.format( "%d:%d:%d:%d", startLine, startPos, startIndex, stopIndex); 
+	}
+	
 }

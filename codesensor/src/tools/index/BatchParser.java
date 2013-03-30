@@ -1,6 +1,5 @@
 package tools.index;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +20,10 @@ public class BatchParser implements Runnable
 	@Override
 	public void run()
 	{
-		// parser.addObserver(new LuceneIndexCreator());
+		LuceneIndexCreator indexCreator = new LuceneIndexCreator();
+		indexCreator.setDirectoryName("/home/fabs/tmp/lucene/");
+		parser.addObserver(indexCreator);
+		
 		parser.addObserver(new CSVPrinter());
 		processBatch();
 	}

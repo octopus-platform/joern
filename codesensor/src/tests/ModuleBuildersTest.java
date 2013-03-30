@@ -147,7 +147,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(char *myParam, myType x){}";
 		List<CodeItem> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		Parameter parameter = codeItem.parameterList.parameters.get(0);
+		Parameter parameter = codeItem.parameterList.getParameters().get(0);
 		String codeStr = parameter.getCodeStr();
 		System.out.println(codeStr);
 		assertTrue(codeStr.equals("char * myParam"));
@@ -159,7 +159,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(myType myParam){}";
 		List<CodeItem> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		Name name = codeItem.parameterList.parameters.get(0).name;
+		Name name = codeItem.parameterList.getParameters().get(0).name;
 		assertTrue(name.getCodeStr().equals("myParam"));
 	}
 	
@@ -169,7 +169,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(char *myParam){}";
 		List<CodeItem> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		ParameterType type = codeItem.parameterList.parameters.get(0).type;
+		ParameterType type = codeItem.parameterList.getParameters().get(0).type;
 		System.out.println(type.getCodeStr());
 		assertTrue(type.getCodeStr().equals("char *"));
 	}

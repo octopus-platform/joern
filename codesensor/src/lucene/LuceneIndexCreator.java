@@ -11,7 +11,6 @@ import main.processors.Processor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 
 import org.apache.lucene.index.IndexWriter;
@@ -20,41 +19,48 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-public class LuceneIndexCreator extends Processor {
-
-	// Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_42);
-	// Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_36);
+public class LuceneIndexCreator extends Processor
+{
+	
 	Analyzer analyzer = new KeywordAnalyzer();
 	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 	
 	IndexWriter indexWriter;
 	String filename = "";
+	String directoryName = null;
+	
+	public void setDirectoryName(String aName)
+	{
+		directoryName = aName;
+	}
 	
 	@Override
 	public void begin()
 	{
-		String directoryName = "/home/fabs/tmp/lucene/";
-		createIndexWriter(directoryName);
-	}
-	
-
-	private void createIndexWriter(String directoryName)
-	{
-		Directory directory;
+		if(directoryName == null)
+			throw new RuntimeException("Directory name for index not set");
+		
 		try {
-			directory = FSDirectory.open(new File(directoryName));
-			indexWriter = new IndexWriter(directory, iwc);
+			createIndexWriter(directoryName);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException("Error writing to: " + directoryName);
 		}
 	}
 	
+	private void createIndexWriter(String directoryName) throws IOException
+	{
+		Directory directory = FSDirectory.open(new File(directoryName));
+		indexWriter = new IndexWriter(directory, iwc);
+	}
 	
 	@Override
 	public void end()
 	{
-		closeIndexWriter();
+		try {
+			closeIndexWriter();
+		} catch (IOException e) {
+			throw new RuntimeException("Error when closing handle to: " + directoryName);
+		}
 	}
 	
 	
@@ -64,20 +70,9 @@ public class LuceneIndexCreator extends Processor {
 		filename = aFilename;
 	}
 
-	@Override
-	public void endOfUnit(ParserRuleContext ctx, String filename)
+	private void closeIndexWriter() throws IOException
 	{
-		
-	}
-	
-	private void closeIndexWriter()
-	{
-		try {
-			indexWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		indexWriter.close();
 	}
 
 	@Override
@@ -86,18 +81,21 @@ public class LuceneIndexCreator extends Processor {
 		
 		CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
 		converter.setFilename(filename);
-		
 		item.accept(converter);
+		
+		// TODO: Converter should not return NULL by raise an error instead
 		Document doc = converter.getDocument();
-		if(doc == null) return;
+		
+		if(doc == null)
+			return;
 		
 		try {
-			indexWriter.addDocument(doc);		
+			indexWriter.addDocument(doc);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException("Error writing to: " + directoryName);
 		}
 		
 	}
 
+	@Override public void endOfUnit(ParserRuleContext ctx, String filename){}
 }
