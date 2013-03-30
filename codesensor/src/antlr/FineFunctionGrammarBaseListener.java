@@ -285,6 +285,9 @@ public class FineFunctionGrammarBaseListener implements FineFunctionGrammarListe
 	@Override public void enterInitializer(FineFunctionGrammarParser.InitializerContext ctx) { }
 	@Override public void exitInitializer(FineFunctionGrammarParser.InitializerContext ctx) { }
 
+	@Override public void enterCast_target(FineFunctionGrammarParser.Cast_targetContext ctx) { }
+	@Override public void exitCast_target(FineFunctionGrammarParser.Cast_targetContext ctx) { }
+
 	@Override public void enterAssign_water(FineFunctionGrammarParser.Assign_waterContext ctx) { }
 	@Override public void exitAssign_water(FineFunctionGrammarParser.Assign_waterContext ctx) { }
 

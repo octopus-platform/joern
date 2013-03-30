@@ -12,6 +12,7 @@ import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;
 import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
 import antlr.FineFunctionGrammarParser.Cast_expressionContext;
+import antlr.FineFunctionGrammarParser.Cast_targetContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
@@ -35,6 +36,7 @@ import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.CastExpression;
+import main.codeitems.expressions.CastTarget;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
@@ -359,6 +361,17 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 
+	public void enterCast_target(Cast_targetContext ctx)
+	{
+		CastTarget expr = new CastTarget();
+		itemStack.push(expr);
+	}
+
+	public void exitCast_target(Cast_targetContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
 	private void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();

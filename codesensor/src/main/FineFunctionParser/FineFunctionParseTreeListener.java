@@ -289,4 +289,16 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitCastExpression(ctx);
 	}
 	
+	@Override public void enterCast_target(FineFunctionGrammarParser.Cast_targetContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterCast_target(ctx);
+	}
+	
+	@Override public void exitCast_target(FineFunctionGrammarParser.Cast_targetContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitCast_target(ctx);
+	}
+	
 }

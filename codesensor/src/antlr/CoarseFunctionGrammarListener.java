@@ -15,11 +15,11 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterFunction_decl_specifiers(CoarseFunctionGrammarParser.Function_decl_specifiersContext ctx);
 	void exitFunction_decl_specifiers(CoarseFunctionGrammarParser.Function_decl_specifiersContext ctx);
 
-	void enterFunction_argument_list(CoarseFunctionGrammarParser.Function_argument_listContext ctx);
-	void exitFunction_argument_list(CoarseFunctionGrammarParser.Function_argument_listContext ctx);
-
 	void enterType_suffix(CoarseFunctionGrammarParser.Type_suffixContext ctx);
 	void exitType_suffix(CoarseFunctionGrammarParser.Type_suffixContext ctx);
+
+	void enterFunction_argument_list(CoarseFunctionGrammarParser.Function_argument_listContext ctx);
+	void exitFunction_argument_list(CoarseFunctionGrammarParser.Function_argument_listContext ctx);
 
 	void enterMultiplicative_expression(CoarseFunctionGrammarParser.Multiplicative_expressionContext ctx);
 	void exitMultiplicative_expression(CoarseFunctionGrammarParser.Multiplicative_expressionContext ctx);
@@ -212,4 +212,7 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterAssign_water(CoarseFunctionGrammarParser.Assign_waterContext ctx);
 	void exitAssign_water(CoarseFunctionGrammarParser.Assign_waterContext ctx);
+
+	void enterCast_target(CoarseFunctionGrammarParser.Cast_targetContext ctx);
+	void exitCast_target(CoarseFunctionGrammarParser.Cast_targetContext ctx);
 }

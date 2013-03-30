@@ -14,9 +14,11 @@ shift_expression: additive_expression ( ('<<'|'>>') shift_expression)?;
 additive_expression: multiplicative_expression (('+'| '-') additive_expression)?;
 multiplicative_expression: cast_expression ( ('*'| '/'| '%') multiplicative_expression)?;
 
-cast_expression: ('(' type_name ptr_operator* ')' cast_expression)
+cast_expression: ('(' cast_target ')' cast_expression)
                | unary_expression
 ;
+
+cast_target: type_name ptr_operator*;
 
 unary_expression: inc_dec unary_operators field (('<' template_param_list '>')? function_argument_list) #funcCall
                 | inc_dec unary_operators field #fieldOnly

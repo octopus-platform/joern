@@ -282,6 +282,9 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterInitializer(FineFunctionGrammarParser.InitializerContext ctx);
 	void exitInitializer(FineFunctionGrammarParser.InitializerContext ctx);
 
+	void enterCast_target(FineFunctionGrammarParser.Cast_targetContext ctx);
+	void exitCast_target(FineFunctionGrammarParser.Cast_targetContext ctx);
+
 	void enterAssign_water(FineFunctionGrammarParser.Assign_waterContext ctx);
 	void exitAssign_water(FineFunctionGrammarParser.Assign_waterContext ctx);
 }

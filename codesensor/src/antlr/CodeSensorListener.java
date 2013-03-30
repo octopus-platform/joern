@@ -264,6 +264,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterInitializer(CodeSensorParser.InitializerContext ctx);
 	void exitInitializer(CodeSensorParser.InitializerContext ctx);
 
+	void enterCast_target(CodeSensorParser.Cast_targetContext ctx);
+	void exitCast_target(CodeSensorParser.Cast_targetContext ctx);
+
 	void enterAssign_water(CodeSensorParser.Assign_waterContext ctx);
 	void exitAssign_water(CodeSensorParser.Assign_waterContext ctx);
 }

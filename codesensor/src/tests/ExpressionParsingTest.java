@@ -169,7 +169,7 @@ public class ExpressionParsingTest {
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
 
-	/*
+	
 	@Test
 	public void CastExpr()
 	{
@@ -177,8 +177,8 @@ public class ExpressionParsingTest {
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
 		CastExpression expr = (CastExpression) starter.getCondition();
-		assertTrue(expr.getTargetType().getCodeStr().equals("x"));
+		assertTrue(expr.getCastTarget().getCodeStr().equals("some_type"));
 	}
-	*/
+	
 	
 }

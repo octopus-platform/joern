@@ -267,6 +267,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterInitializer(CodeSensorParser.InitializerContext ctx) { }
 	@Override public void exitInitializer(CodeSensorParser.InitializerContext ctx) { }
 
+	@Override public void enterCast_target(CodeSensorParser.Cast_targetContext ctx) { }
+	@Override public void exitCast_target(CodeSensorParser.Cast_targetContext ctx) { }
+
 	@Override public void enterAssign_water(CodeSensorParser.Assign_waterContext ctx) { }
 	@Override public void exitAssign_water(CodeSensorParser.Assign_waterContext ctx) { }
 
