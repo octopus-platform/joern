@@ -8,6 +8,7 @@ import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 
+import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;
 import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
@@ -20,10 +21,13 @@ import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.Or_expressionContext;
+import antlr.FineFunctionGrammarParser.Relational_expressionContext;
+import antlr.FineFunctionGrammarParser.Shift_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
+import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BinaryExpression;
@@ -34,6 +38,8 @@ import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.Expression;
 import main.codeitems.expressions.InclusiveOrExpression;
 import main.codeitems.expressions.OrExpression;
+import main.codeitems.expressions.RelationalExpression;
+import main.codeitems.expressions.ShiftExpression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CloseBlockItem;
 import main.codeitems.functionContent.CompoundItem;
@@ -287,8 +293,40 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 
-	
 	public void exitBitAndExpression(Bit_and_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}	
+	
+	public void enterRelationalExpression(Relational_expressionContext ctx)
+	{
+		RelationalExpression expr = new RelationalExpression();
+		itemStack.push(expr);
+	}
+	
+	public void exitRelationalExpression(Relational_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
+	public void enterShiftExpression(Shift_expressionContext ctx)
+	{
+		ShiftExpression expr = new ShiftExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitShiftExpression(Shift_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterAdditiveExpression(Additive_expressionContext ctx)
+	{
+		AdditiveExpression expr = new AdditiveExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitAdditiveExpression(Additive_expressionContext ctx)
 	{
 		consolidateSubExpression(ctx);
 	}	
@@ -315,4 +353,5 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			((Expression) topOfStack).addChildExpression(expression);
 		}
 	}
+
 }

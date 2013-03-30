@@ -229,4 +229,40 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	}
 	
 	
+	@Override public void enterRelational_expression(FineFunctionGrammarParser.Relational_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterRelationalExpression(ctx);
+	}
+	
+	@Override public void exitRelational_expression(FineFunctionGrammarParser.Relational_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitRelationalExpression(ctx);
+	}
+	
+	@Override public void enterShift_expression(FineFunctionGrammarParser.Shift_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterShiftExpression(ctx);
+	}
+	
+	@Override public void exitShift_expression(FineFunctionGrammarParser.Shift_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitShiftExpression(ctx);
+	}
+	
+	@Override public void enterAdditive_expression(FineFunctionGrammarParser.Additive_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterAdditiveExpression(ctx);
+	}
+	
+	@Override public void exitAdditive_expression(FineFunctionGrammarParser.Additive_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitAdditiveExpression(ctx);
+	}
+	
 }

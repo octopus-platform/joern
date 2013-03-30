@@ -7,9 +7,12 @@ import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.ConditionalExpression;
+import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.InclusiveOrExpression;
 import main.codeitems.expressions.OrExpression;
+import main.codeitems.expressions.RelationalExpression;
+import main.codeitems.expressions.ShiftExpression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ExprStatementItem;
@@ -113,4 +116,33 @@ public class ExpressionParsingTest {
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
 	
+	@Test
+	public void EqualityExpr()
+	{
+		String input = "if(x == y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		EqualityExpression expr = (EqualityExpression) starter.getCondition();
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void RelationalExpr()
+	{
+		String input = "if(x < y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		RelationalExpression expr = (RelationalExpression) starter.getCondition();
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void ShiftExpr()
+	{
+		String input = "if(x >> y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		ShiftExpression expr = (ShiftExpression) starter.getCondition();
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
 }
