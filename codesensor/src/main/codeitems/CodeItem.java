@@ -9,7 +9,7 @@ import tools.index.ParseTreeUtils;
 public class CodeItem {
 
 	public String nodeTypeName = "unnamed";
-	public CodeLocation location = new CodeLocation();
+	private CodeLocation location = new CodeLocation();
 	
 	protected String codeStr = null;
 			
@@ -17,12 +17,12 @@ public class CodeItem {
 	
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
-		setLocation(ctx);
 		parseTreeNodeContext = ctx;
 	}
 	
 	public void setLocation(ParserRuleContext ctx)
 	{
+		if(ctx == null) return;
 		location = new CodeLocation(ctx);
 	}
 	
@@ -40,8 +40,9 @@ public class CodeItem {
 		return codeStr;
 	}
 	
-	  public String getLocationString(CodeItem item)
+	  public String getLocationString()
 	  {
+		  setLocation(parseTreeNodeContext);
 		  return location.toString();
 	  }
 	

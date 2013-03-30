@@ -1,15 +1,11 @@
 package main.codeitems.expressions;
 
-public class UnaryExpression extends Expression
-{	
-	public String unaryOperators;
-	public String incrementDecrement;
-	public String field;
-	
+public class CastExpression extends Expression {
+
 	@Override
 	public void addChildExpression(Expression expression)
 	{
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -23,4 +19,5 @@ public class UnaryExpression extends Expression
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

@@ -1,15 +1,15 @@
 package main.codeitems.functionContent;
 
 import main.codeitems.CodeItem;
-import main.codeitems.expressions.ExpressionItem;
+import main.codeitems.expressions.Expression;
 
 
 public class BlockStarterItem extends CodeItem
 {
 	CodeItem statement = null;
-	ExpressionItem condition = null;
+	Expression condition = null;
 
-	public ExpressionItem getCondition()
+	public Expression getCondition()
 	{
 		return condition;
 	}
@@ -19,7 +19,7 @@ public class BlockStarterItem extends CodeItem
 		statement = aStatement;
 	}
 
-	public void setCondition(ExpressionItem expression)
+	public void setCondition(Expression expression)
 	{
 		condition = expression;
 	}

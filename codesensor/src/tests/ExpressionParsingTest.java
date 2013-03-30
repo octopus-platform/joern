@@ -4,13 +4,14 @@ import static org.junit.Assert.*;
 
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.junit.Test;
 
-public class FineFunctionParsingTest {
+public class ExpressionParsingTest {
 
 	@Test
 	public void testMostBasicAssignment()
@@ -19,7 +20,9 @@ public class FineFunctionParsingTest {
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.expr;
-		assertTrue(expr.assignments.size() == 1);
+	
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getRight().getCodeStr().equals("y"));
 	}
 
 	@Test
@@ -29,7 +32,8 @@ public class FineFunctionParsingTest {
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.expr;
-		assertTrue(expr.assignments.size() == 2);
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getRight().getCodeStr().equals("y = z"));
 	}
 	
 	@Test
@@ -40,6 +44,17 @@ public class FineFunctionParsingTest {
 		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.statements.get(0);
 		IdentifierDecl identifierDecl = statementItem.identifierDeclList.get(0);
 		assertTrue(identifierDecl.name.getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void testConditionalExpr()
+	{
+		String input = "foo = cond? x : y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		AssignmentExpr expr = (AssignmentExpr) statementItem.expr;
+		ConditionalExpression right = (ConditionalExpression) expr.getRight();
+		assertTrue(right != null);
 	}
 	
 }

@@ -1,25 +1,29 @@
 package main.codeitems.functionContent.builders;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+
+import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
-import antlr.FineFunctionGrammarParser.ConditionContext;
+
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
+import antlr.FineFunctionGrammarParser.Or_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
 import main.codeitems.expressions.AssignmentExpr;
-import main.codeitems.expressions.ExpressionItem;
+import main.codeitems.expressions.BinaryExpression;
+import main.codeitems.expressions.ConditionalExpression;
+import main.codeitems.expressions.Expression;
+import main.codeitems.expressions.OrExpression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CloseBlockItem;
 import main.codeitems.functionContent.CompoundItem;
@@ -30,6 +34,9 @@ import main.codeitems.functionContent.IfItem;
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {
 	
+	// exitStatements is called when the entire
+	// function-content has been walked
+	
 	public void exitStatements(StatementsContext ctx)
 	{
 		if(itemStack.size() != 1)
@@ -38,6 +45,11 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateIfElse(rootItem);
 	}
 	
+	// For all statements, begin by pushing a CodeItem
+	// onto the stack. Once we have implemented
+	// handling for all statement types, this can
+	// be removed
+	
 	public void enterStatement(StatementContext ctx)
 	{
 		CodeItem statementItem = new CodeItem();
@@ -45,61 +57,29 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		itemStack.push(statementItem);
 	}
 	
+	// Mapping of grammar-rules to CodeItems.
+	
+	public void enterOpeningCurly(Opening_curlyContext ctx)
+	{
+		replaceTopOfStack(new CompoundItem());
+	}
+	
+	public void enterClosingCurly(Closing_curlyContext ctx)
+	{
+		replaceTopOfStack(new CloseBlockItem());
+	}
+	
 	public void enterBlockStarter(Block_starterContext ctx)
 	{
 		replaceTopOfStack(new BlockStarterItem());
 	}
 
-	public void enterExpression(ExprContext ctx)
-	{
-		ExpressionItem expression = new ExpressionItem();
-		expression.initializeFromContext(ctx);
-		itemStack.push(expression);
-	}
-
-	public void exitExpression(ExprContext ctx)
-	{
-		ExpressionItem expression = (ExpressionItem) itemStack.pop();
-		
-		CodeItem topOfStack = itemStack.peek();
-		if(topOfStack instanceof BlockStarterItem)
-			((BlockStarterItem) topOfStack).setCondition(expression);
-		else if (topOfStack instanceof ExprStatementItem){
-			((ExprStatementItem) topOfStack).expr = expression;
-		}else if (topOfStack instanceof ExpressionItem){
-			((ExpressionItem) topOfStack).addSubExpression(expression);
-		}
-	}
+	// TODO: Still missing:
+	// jump-statement, simple-decl, label, water
 	
-	public void enterAssignment(Assign_exprContext ctx)
+	public void enterExprStatement(Expr_statementContext ctx)
 	{
-		if(ctx.assignment_operator().size() == 0)
-			return;
-		
-		ExpressionItem expr = createAssignmentExprFromContext(ctx);
-		replaceTopOfStack(expr);
-	}
-
-	private ExpressionItem createAssignmentExprFromContext(
-			Assign_exprContext ctx)
-	{
-		
-		AssignmentExpr assignExpr = new AssignmentExpr();
-		
-		List<Conditional_expressionContext> vals = ctx.conditional_expression();
-		ListIterator<Conditional_expressionContext> it = vals.listIterator(vals.size());
-		
-		
-		// There must be at least a right-most value since the 
-		// assignment-operator was matched
-		
-		Conditional_expressionContext rvalExpr = it.previous();
-		while(it.hasPrevious()){
-			Conditional_expressionContext lvalExpr = it.previous();
-			assignExpr.addAssignment(lvalExpr, rvalExpr);
-		}
-		
-		return assignExpr;
+		replaceTopOfStack(new ExprStatementItem());
 	}
 	
 	public void enterIf(If_statementContext ctx)
@@ -110,16 +90,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void enterElse(Else_statementContext ctx)
 	{
 		replaceTopOfStack(new ElseItem());
-	}
-
-	public void enterOpeningCurly(Opening_curlyContext ctx)
-	{
-		replaceTopOfStack(new CompoundItem());
-	}
-	
-	public void enterClosingCurly(Closing_curlyContext ctx)
-	{
-		replaceTopOfStack(new CloseBlockItem());
 	}
 	
 	public void exitStatement(StatementContext ctx)
@@ -153,6 +123,9 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateBlockStarters(compoundItem);		
 	}
 	
+	// Scans a compoundItem for sequences of if-/else.
+	// When found attaches else to if.
+	
 	private void consolidateIfElse(CompoundItem compoundItem)
 	{
 		Iterator<CodeItem> it = compoundItem.statements.iterator();
@@ -171,6 +144,8 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		}
 	}
 
+	// Joins consecutive BlockStarters on the stack
+	
 	private void consolidateBlockStarters(CodeItem topOfStack)
 	{
 		while(true){
@@ -204,10 +179,75 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		}
 		
 	}
+	
 
-	public void enterExprStatement(Expr_statementContext ctx)
+	// Expression handling
+	
+	public void enterExpression(ExprContext ctx)
 	{
-		replaceTopOfStack(new ExprStatementItem());
+		Expression expression = new Expression();
+		itemStack.push(expression);
+	}
+
+	public void exitExpression(ExprContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterAssignment(Assign_exprContext ctx)
+	{	
+		AssignmentExpr expr = new AssignmentExpr();
+		itemStack.push(expr);
+	}
+	
+	public void exitAssignment(Assign_exprContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterConditionalExpr(Conditional_expressionContext ctx)
+	{
+		ConditionalExpression expr = new ConditionalExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitConditionalExpr(Conditional_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterOrExpression(Or_expressionContext ctx)
+	{
+		OrExpression expr = new OrExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitrOrExpression(Or_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
+	private void consolidateSubExpression(ParserRuleContext ctx)
+	{
+		Expression expression = (Expression) itemStack.pop();
+		
+		if(expression.getChildCount() == 1)
+			expression = expression.getChild(0);
+		
+		expression.initializeFromContext(ctx);
+		consolidateExpression(expression);
+	}
+
+	private void consolidateExpression(Expression expression)
+	{
+		CodeItem topOfStack = itemStack.peek();
+		if(topOfStack instanceof BlockStarterItem)
+			((BlockStarterItem) topOfStack).setCondition(expression);
+		else if (topOfStack instanceof ExprStatementItem){
+			((ExprStatementItem) topOfStack).expr = expression;
+		}else if (topOfStack instanceof Expression){
+			((Expression) topOfStack).addChildExpression(expression);
+		}
 	}
 	
 }

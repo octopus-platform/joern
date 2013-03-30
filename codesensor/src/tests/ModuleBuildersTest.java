@@ -199,7 +199,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(){}";
 		List<CodeItem> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.parameterList.location != null);
+		assertTrue(codeItem.parameterList.getParameters().size() == 0);
 	}
 	
 	private List<CodeItem> parseInput(String input)

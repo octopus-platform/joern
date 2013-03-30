@@ -85,6 +85,13 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.enterClosingCurly(ctx);
 	}
 	
+	@Override public void enterExpr_statement(FineFunctionGrammarParser.Expr_statementContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterExprStatement(ctx);
+	}
+	
+	
 	@Override
 	public void enterDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx)
 	{
@@ -112,12 +119,6 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	}
 	
 	
-	@Override public void enterExpr_statement(FineFunctionGrammarParser.Expr_statementContext ctx)
-	{
-		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterExprStatement(ctx);
-	}
-		
 	@Override public void enterExpr(FineFunctionGrammarParser.ExprContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
@@ -134,6 +135,36 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.enterAssignment(ctx);
+	}
+	
+	@Override public void exitAssign_expr(FineFunctionGrammarParser.Assign_exprContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitAssignment(ctx);
+	}
+	
+	@Override public void enterConditional_expression(FineFunctionGrammarParser.Conditional_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterConditionalExpr(ctx);
+	}
+	
+	@Override public void exitConditional_expression(FineFunctionGrammarParser.Conditional_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitConditionalExpr(ctx);
+	}
+	
+	@Override public void enterOr_expression(FineFunctionGrammarParser.Or_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterOrExpression(ctx);
+	}
+	
+	@Override public void exitOr_expression(FineFunctionGrammarParser.Or_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitrOrExpression(ctx);
 	}
 	
 }

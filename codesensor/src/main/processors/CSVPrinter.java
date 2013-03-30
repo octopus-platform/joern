@@ -5,7 +5,6 @@ import java.util.Stack;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.CodeLocation;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.function.FunctionDef;
@@ -25,7 +24,7 @@ public class CSVPrinter extends Processor
     	if(filename == null) return;
     	CodeItem item = new CodeItem();
     	item.nodeTypeName = "SOURCE_FILE";
-    	item.location = new CodeLocation(ctx);
+    	item.setLocation(ctx);
     	item.setCodeStr(filename);	
     	defaultOut(item, 0);
     }
@@ -106,7 +105,7 @@ public class CSVPrinter extends Processor
     	if(item == null) return;
     	
     	String output = item.nodeTypeName + SEPARATOR;
-    	output += item.getLocationString(item) + SEPARATOR + level;
+    	output += item.getLocationString() + SEPARATOR + level;
     	String codeStr = item.getCodeStr();
     	if(codeStr != null)
     		output += SEPARATOR + escapeCodeStr(codeStr);

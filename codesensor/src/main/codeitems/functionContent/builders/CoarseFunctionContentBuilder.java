@@ -1,7 +1,7 @@
 package main.codeitems.functionContent.builders;
 
 
-import main.codeitems.expressions.ExpressionItem;
+import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.FieldOnlyWrapper;
 import main.codeitems.expressions.builders.CallBuilder;
 import main.codeitems.expressions.builders.ExpressionBuilder;
@@ -27,7 +27,7 @@ public class CoarseFunctionContentBuilder extends FunctionContentBuilder
 		builder.createUnaryExpression(new FieldOnlyWrapper(ctx));
 		ExprStatementItem stmt = new ExprStatementItem();
 		stmt.initializeFromContext(ctx);
-		stmt.expr =  (ExpressionItem) builder.getItem();
+		stmt.expr =  (BinaryExpression) builder.getItem();
 		rootItem.addStatement(stmt);
 	}
 

@@ -2,7 +2,9 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import main.codeitems.expressions.ExpressionItem;
+import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.expressions.BinaryExpression;
+import main.codeitems.expressions.Expression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.IfItem;
@@ -77,12 +79,22 @@ public class CodeNestingTest {
 		String input = "if(foo){}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarterItem starter = (BlockStarterItem) item.statements.get(0);
-		ExpressionItem condition = starter.getCondition();
+		Expression condition = starter.getCondition();
 		System.out.println(condition.getCodeStr());
 		assertTrue(condition.getCodeStr().equals("foo"));
 	}
 	
-	
+	@Test
+	public void assignmentInCondition()
+	{
+		String input = "if(foo = bar){}";
+		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) item.statements.get(0);
+		AssignmentExpr condition = (AssignmentExpr) starter.getCondition();
+		System.out.println(condition.getCodeStr());
+		assertTrue(condition.getCodeStr().equals("foo = bar"));
+	}
+		
 	@Test
 	public void ifElse()
 	{

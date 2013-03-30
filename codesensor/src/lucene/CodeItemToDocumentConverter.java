@@ -67,7 +67,7 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	static void addLocationFields(Document d, CodeItem item, String filename)
 	{
 		d.add(LuceneUtils.createField("filename", filename));
-		d.add(LuceneUtils.createField("location", item.location.toString()));
+		d.add(LuceneUtils.createField("location", item.getLocationString()));
 	}
 
 	public static void addContent(CompoundItem item, Document d)

@@ -1,0 +1,5 @@
+package main.codeitems.expressions;
+
+public class ShiftExpression extends BinaryExpression {
+
+}
