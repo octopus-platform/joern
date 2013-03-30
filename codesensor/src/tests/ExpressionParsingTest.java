@@ -13,6 +13,7 @@ import main.codeitems.expressions.CastExpression;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
+import main.codeitems.expressions.FieldExpression;
 import main.codeitems.expressions.InclusiveOrExpression;
 import main.codeitems.expressions.MultiplicativeExpression;
 import main.codeitems.expressions.OrExpression;
@@ -190,6 +191,16 @@ public class ExpressionParsingTest {
 		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
 		CallExpression expr = (CallExpression) starter.getCondition();
 		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+	}
+	
+	@Test
+	public void fieldOnly()
+	{
+		String input = "if(foo->bar){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		FieldExpression expr = (FieldExpression) starter.getCondition();
+		assertTrue(expr.getCodeStr().equals("foo -> bar"));
 	}
 	
 }

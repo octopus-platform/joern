@@ -337,4 +337,16 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitArgumentList(ctx);	
 	}
 	
+	@Override public void enterFieldOnly(FineFunctionGrammarParser.FieldOnlyContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterFieldOnly(ctx);
+	}
+	
+	@Override public void exitFieldOnly(FineFunctionGrammarParser.FieldOnlyContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitFieldOnly(ctx);
+	}
+	
 }

@@ -20,6 +20,7 @@ import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.FieldContext;
+import antlr.FineFunctionGrammarParser.FieldOnlyContext;
 import antlr.FineFunctionGrammarParser.FuncCallContext;
 import antlr.FineFunctionGrammarParser.Function_argument_listContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
@@ -411,6 +412,17 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 	
+	public void enterFieldOnly(FieldOnlyContext ctx)
+	{
+		FieldExpression expr = new FieldExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitFieldOnly(FieldOnlyContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
 	private void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();
@@ -433,4 +445,5 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			((Expression) topOfStack).addChildExpression(expression);
 		}
 	}
+	
 }
