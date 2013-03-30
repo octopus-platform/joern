@@ -53,8 +53,8 @@ public class StatementInfoExtractor implements CodeItemVisitor
 	public void visit(ExprStatementItem statementItem)
 	{
 		// TODO: fix this
-		String codeStr = statementItem.getCodeStr();
-		d.add(LuceneUtils.createField("field", codeStr));
+		// String codeStr = statementItem.getCodeStr();
+		// d.add(LuceneUtils.createField("field", codeStr));
 	}
 
 	@Override

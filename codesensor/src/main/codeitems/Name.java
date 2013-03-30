@@ -11,8 +11,8 @@ public class Name extends CodeItem
 	{
 		if(codeStr != null)
 			return codeStr;
-		if(rootRule != null)
-			codeStr = rootRule.getText();
+		if(parseTreeNodeContext != null)
+			codeStr = parseTreeNodeContext.getText();
 		else
 			codeStr = "";
 		return codeStr;

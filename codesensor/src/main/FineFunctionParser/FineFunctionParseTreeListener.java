@@ -52,12 +52,6 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitStatement(ctx);
 	}
 	
-	@Override public void enterAssign_expr(FineFunctionGrammarParser.Assign_exprContext ctx)
-	{
-		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterAssignment(ctx);
-	}
-	
 	@Override public void enterElse_statement(FineFunctionGrammarParser.Else_statementContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
@@ -117,5 +111,29 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		}		
 	}
 	
+	
+	@Override public void enterExpr_statement(FineFunctionGrammarParser.Expr_statementContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterExprStatement(ctx);
+	}
+		
+	@Override public void enterExpr(FineFunctionGrammarParser.ExprContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterExpression(ctx);
+	}
+	
+	@Override public void exitExpr(FineFunctionGrammarParser.ExprContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitExpression(ctx);
+	}
+	
+	@Override public void enterAssign_expr(FineFunctionGrammarParser.Assign_exprContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterAssignment(ctx);
+	}
 	
 }

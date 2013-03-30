@@ -20,8 +20,11 @@ public class ParseTreeUtils
 	    	String retval = "";
 	    	for(int i = 0; i < nChildren; i++){
 	    		ParseTree child = ctx.getChild(i);
-	    		retval += childTokenString(child);
-	    		retval += " ";
+	    		String childText = childTokenString(child);
+	    		if(!childText.equals("")){
+	    			retval += childText;
+	    			retval += " ";
+	    		}
 	    	}
 	    	retval = retval.substring(0, retval.length()-1);
 	    	return retval;

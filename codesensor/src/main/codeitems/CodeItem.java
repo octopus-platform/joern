@@ -1,5 +1,6 @@
 package main.codeitems;
 
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import tools.index.ParseTreeUtils;
@@ -11,12 +12,13 @@ public class CodeItem {
 	public CodeLocation location = new CodeLocation();
 	
 	protected String codeStr = null;
-	protected ParserRuleContext rootRule;
+			
+	protected ParserRuleContext parseTreeNodeContext;
 	
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
 		setLocation(ctx);
-		rootRule = ctx;
+		parseTreeNodeContext = ctx;
 	}
 	
 	public void setLocation(ParserRuleContext ctx)
@@ -34,7 +36,7 @@ public class CodeItem {
 		if(codeStr != null)
 			return codeStr;
 		
-		codeStr = ParseTreeUtils.childTokenString(rootRule);
+		codeStr = ParseTreeUtils.childTokenString(parseTreeNodeContext);
 		return codeStr;
 	}
 	

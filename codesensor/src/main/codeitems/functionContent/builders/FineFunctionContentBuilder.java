@@ -7,8 +7,11 @@ import java.util.ListIterator;
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
+import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
+import antlr.FineFunctionGrammarParser.ExprContext;
+import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
@@ -16,6 +19,7 @@ import antlr.FineFunctionGrammarParser.StatementsContext;
 
 import main.codeitems.CodeItem;
 import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.expressions.ExpressionItem;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CloseBlockItem;
 import main.codeitems.functionContent.CompoundItem;
@@ -46,23 +50,41 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		replaceTopOfStack(new BlockStarterItem());
 	}
 
+	public void enterExpression(ExprContext ctx)
+	{
+		ExpressionItem expression = new ExpressionItem();
+		expression.initializeFromContext(ctx);
+		itemStack.push(expression);
+	}
+
+	public void exitExpression(ExprContext ctx)
+	{
+		ExpressionItem expression = (ExpressionItem) itemStack.pop();
+		
+		CodeItem topOfStack = itemStack.peek();
+		if(topOfStack instanceof BlockStarterItem)
+			((BlockStarterItem) topOfStack).setCondition(expression);
+		else if (topOfStack instanceof ExprStatementItem){
+			((ExprStatementItem) topOfStack).expr = expression;
+		}else if (topOfStack instanceof ExpressionItem){
+			((ExpressionItem) topOfStack).addSubExpression(expression);
+		}
+	}
+	
 	public void enterAssignment(Assign_exprContext ctx)
 	{
 		if(ctx.assignment_operator().size() == 0)
 			return;
 		
-		ExprStatementItem exprStmt = createAssignmentExprFromContext(ctx);
-		replaceTopOfStack(exprStmt);
+		ExpressionItem expr = createAssignmentExprFromContext(ctx);
+		replaceTopOfStack(expr);
 	}
 
-	private ExprStatementItem createAssignmentExprFromContext(
+	private ExpressionItem createAssignmentExprFromContext(
 			Assign_exprContext ctx)
 	{
-		ExprStatementItem exprStmt = new ExprStatementItem();
+		
 		AssignmentExpr assignExpr = new AssignmentExpr();
-		exprStmt.expr = assignExpr;
-
-		exprStmt.expr.initializeFromContext(ctx);
 		
 		List<Conditional_expressionContext> vals = ctx.conditional_expression();
 		ListIterator<Conditional_expressionContext> it = vals.listIterator(vals.size());
@@ -77,7 +99,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			assignExpr.addAssignment(lvalExpr, rvalExpr);
 		}
 		
-		return exprStmt;
+		return assignExpr;
 	}
 	
 	public void enterIf(If_statementContext ctx)
@@ -181,6 +203,11 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			consolidateBlockStarters(topOfStack);
 		}
 		
+	}
+
+	public void enterExprStatement(Expr_statementContext ctx)
+	{
+		replaceTopOfStack(new ExprStatementItem());
 	}
 	
 }

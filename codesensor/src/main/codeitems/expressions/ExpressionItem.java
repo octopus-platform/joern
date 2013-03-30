@@ -8,5 +8,10 @@ public class ExpressionItem extends CodeItem
 {
 	protected LinkedList<ExpressionItem>
 		subExpressions = new LinkedList<ExpressionItem>();
+
+	public void addSubExpression(ExpressionItem expression)
+	{
+		subExpressions.add(expression);
+	}
 	
 }

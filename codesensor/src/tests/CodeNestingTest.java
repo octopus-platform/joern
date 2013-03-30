@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import main.codeitems.expressions.ExpressionItem;
+import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.IfItem;
 
@@ -68,6 +70,18 @@ public class CodeNestingTest {
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		assertTrue(item.statements.size() == 1);
 	}
+	
+	@Test
+	public void condition()
+	{
+		String input = "if(foo){}";
+		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) item.statements.get(0);
+		ExpressionItem condition = starter.getCondition();
+		System.out.println(condition.getCodeStr());
+		assertTrue(condition.getCodeStr().equals("foo"));
+	}
+	
 	
 	@Test
 	public void ifElse()
