@@ -5,9 +5,12 @@ import static org.junit.Assert.*;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.ConditionalExpression;
+import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.InclusiveOrExpression;
 import main.codeitems.expressions.OrExpression;
+import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
@@ -87,6 +90,26 @@ public class ExpressionParsingTest {
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
 		InclusiveOrExpression expr = (InclusiveOrExpression) statementItem.expr;
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void testExclusiveOrExpr()
+	{
+		String input = "x ^ y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		ExclusiveOrExpression expr = (ExclusiveOrExpression) statementItem.expr;
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void testBitAndExpr()
+	{
+		String input = "if(x & y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		BitAndExpression expr = (BitAndExpression) starter.getCondition();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
 	

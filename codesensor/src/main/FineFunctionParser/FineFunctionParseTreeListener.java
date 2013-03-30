@@ -204,5 +204,29 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitExclusiveOrExpression(ctx);
 	}
 
+	@Override public void enterBit_and_expression(FineFunctionGrammarParser.Bit_and_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterBitAndExpression(ctx);
+	}
+	
+	@Override public void exitBit_and_expression(FineFunctionGrammarParser.Bit_and_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitBitAndExpression(ctx);
+	}
+	
+	@Override public void enterEquality_expression(FineFunctionGrammarParser.Equality_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterEqualityExpression(ctx);
+	}
+	
+	@Override public void exitEquality_expression(FineFunctionGrammarParser.Equality_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitEqualityExpression(ctx);
+	}
+	
 	
 }

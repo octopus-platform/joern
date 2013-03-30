@@ -9,8 +9,10 @@ import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 
 import antlr.FineFunctionGrammarParser.And_expressionContext;
+import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
+import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
@@ -25,7 +27,9 @@ import main.codeitems.CodeItem;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BinaryExpression;
+import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.ConditionalExpression;
+import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.Expression;
 import main.codeitems.expressions.InclusiveOrExpression;
@@ -259,13 +263,35 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	{
 		ExclusiveOrExpression expr = new ExclusiveOrExpression();
 		itemStack.push(expr);
-
 	}
 
 	public void exitExclusiveOrExpression(Exclusive_or_expressionContext ctx)
 	{
 		consolidateSubExpression(ctx);
 	}
+	
+	public void enterBitAndExpression(Bit_and_expressionContext ctx)
+	{
+		BitAndExpression expr = new BitAndExpression();
+		itemStack.push(expr);
+	}
+
+	public void enterEqualityExpression(Equality_expressionContext ctx)
+	{
+		EqualityExpression expr = new EqualityExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitEqualityExpression(Equality_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	
+	public void exitBitAndExpression(Bit_and_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}	
 	
 	private void consolidateSubExpression(ParserRuleContext ctx)
 	{
@@ -289,5 +315,4 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			((Expression) topOfStack).addChildExpression(expression);
 		}
 	}
-
 }
