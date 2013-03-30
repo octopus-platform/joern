@@ -265,4 +265,28 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitAdditiveExpression(ctx);
 	}
 	
+	@Override public void enterMultiplicative_expression(FineFunctionGrammarParser.Multiplicative_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterMultiplicativeExpression(ctx);
+	}
+	
+	@Override public void exitMultiplicative_expression(FineFunctionGrammarParser.Multiplicative_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitMultiplicativeExpression(ctx);
+	}
+	
+	@Override public void enterCast_expression(FineFunctionGrammarParser.Cast_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterCastExpression(ctx);
+	}
+	
+	@Override public void exitCast_expression(FineFunctionGrammarParser.Cast_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitCastExpression(ctx);
+	}
+	
 }

@@ -11,6 +11,7 @@ import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;
 import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
+import antlr.FineFunctionGrammarParser.Cast_expressionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
@@ -19,6 +20,7 @@ import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
+import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.Or_expressionContext;
 import antlr.FineFunctionGrammarParser.Relational_expressionContext;
@@ -32,11 +34,13 @@ import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.BitAndExpression;
+import main.codeitems.expressions.CastExpression;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.Expression;
 import main.codeitems.expressions.InclusiveOrExpression;
+import main.codeitems.expressions.MultiplicativeExpression;
 import main.codeitems.expressions.OrExpression;
 import main.codeitems.expressions.RelationalExpression;
 import main.codeitems.expressions.ShiftExpression;
@@ -331,6 +335,30 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}	
 	
+	public void enterMultiplicativeExpression(
+			Multiplicative_expressionContext ctx)
+	{
+		MultiplicativeExpression expr = new MultiplicativeExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitMultiplicativeExpression(
+			Multiplicative_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterCastExpression(Cast_expressionContext ctx)
+	{
+		CastExpression expr = new CastExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitCastExpression(Cast_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
 	private void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();

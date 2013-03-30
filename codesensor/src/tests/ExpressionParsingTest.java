@@ -3,13 +3,16 @@ package tests;
 import static org.junit.Assert.*;
 
 import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BitAndExpression;
+import main.codeitems.expressions.CastExpression;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.InclusiveOrExpression;
+import main.codeitems.expressions.MultiplicativeExpression;
 import main.codeitems.expressions.OrExpression;
 import main.codeitems.expressions.RelationalExpression;
 import main.codeitems.expressions.ShiftExpression;
@@ -145,4 +148,37 @@ public class ExpressionParsingTest {
 		ShiftExpression expr = (ShiftExpression) starter.getCondition();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
+
+	@Test
+	public void AdditiveExpr()
+	{
+		String input = "if(x + y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		AdditiveExpression expr = (AdditiveExpression) starter.getCondition();
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+
+	@Test
+	public void MultiplicativeExpr()
+	{
+		String input = "if(x * y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		MultiplicativeExpression expr = (MultiplicativeExpression) starter.getCondition();
+		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+	}
+
+	/*
+	@Test
+	public void CastExpr()
+	{
+		String input = "if((some_type) y){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		CastExpression expr = (CastExpression) starter.getCondition();
+		assertTrue(expr.getTargetType().getCodeStr().equals("x"));
+	}
+	*/
+	
 }
