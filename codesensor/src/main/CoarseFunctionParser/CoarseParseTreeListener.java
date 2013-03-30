@@ -60,22 +60,21 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 			IdentifierDecl decl = it.next();
 			statement.addDeclaration(decl);
 		}		
-		builder.addDeclStatement(statement);
+		// builder.addDeclStatement(statement);
 	}
 	
 	@Override
 	public void enterFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx)
 	{
 		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.addFunctionCall(ctx);
+		// builder.addFunctionCall(ctx);
 	}
 	
 	@Override
 	public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
 	{
 		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.addFieldOnly(ctx);
-		
+		// builder.addFieldOnly(ctx);
 	}
 	
 	@Override

@@ -7,6 +7,8 @@ import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BitAndExpression;
+import main.codeitems.expressions.CallExpression;
+import main.codeitems.expressions.CallItem;
 import main.codeitems.expressions.CastExpression;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
@@ -180,5 +182,14 @@ public class ExpressionParsingTest {
 		assertTrue(expr.getCastTarget().getCodeStr().equals("some_type"));
 	}
 	
+	@Test
+	public void funCall()
+	{
+		String input = "if(foo()){};";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		BlockStarterItem starter = (BlockStarterItem) contentItem.statements.get(0);
+		CallExpression expr = (CallExpression) starter.getCondition();
+		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+	}
 	
 }

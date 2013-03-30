@@ -301,4 +301,40 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitCast_target(ctx);
 	}
 	
+	@Override public void enterFuncCall(FineFunctionGrammarParser.FuncCallContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterFuncCall(ctx);
+	}
+	
+	@Override public void exitFuncCall(FineFunctionGrammarParser.FuncCallContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitFuncCall(ctx);
+	}
+
+	@Override public void enterField(FineFunctionGrammarParser.FieldContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterField(ctx);
+	}
+	
+	@Override public void exitField(FineFunctionGrammarParser.FieldContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitField(ctx);
+	}
+
+	@Override public void enterFunction_argument_list(FineFunctionGrammarParser.Function_argument_listContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterArgumentList(ctx);
+	}
+	
+	@Override public void exitFunction_argument_list(FineFunctionGrammarParser.Function_argument_listContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitArgumentList(ctx);	
+	}
+	
 }

@@ -19,6 +19,9 @@ import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
+import antlr.FineFunctionGrammarParser.FieldContext;
+import antlr.FineFunctionGrammarParser.FuncCallContext;
+import antlr.FineFunctionGrammarParser.Function_argument_listContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
@@ -32,15 +35,18 @@ import antlr.FineFunctionGrammarParser.StatementsContext;
 import main.codeitems.CodeItem;
 import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
+import main.codeitems.expressions.ArgumentList;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.BitAndExpression;
+import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.CastExpression;
 import main.codeitems.expressions.CastTarget;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.Expression;
+import main.codeitems.expressions.FieldExpression;
 import main.codeitems.expressions.InclusiveOrExpression;
 import main.codeitems.expressions.MultiplicativeExpression;
 import main.codeitems.expressions.OrExpression;
@@ -372,6 +378,39 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 	
+	public void enterFuncCall(FuncCallContext ctx)
+	{
+		CallExpression expr = new CallExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitFuncCall(FuncCallContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
+	public void enterField(FieldContext ctx)
+	{
+		FieldExpression expr = new FieldExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitField(FieldContext ctx)
+	{
+		consolidateSubExpression(ctx);	
+	}
+	
+	public void enterArgumentList(Function_argument_listContext ctx)
+	{
+		ArgumentList expr = new ArgumentList();
+		itemStack.push(expr);
+	}
+
+	public void exitArgumentList(Function_argument_listContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
 	private void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();
@@ -394,5 +433,4 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			((Expression) topOfStack).addChildExpression(expression);
 		}
 	}
-
 }
