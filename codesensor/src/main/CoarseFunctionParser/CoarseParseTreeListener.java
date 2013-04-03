@@ -102,10 +102,13 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 		builder.exitField(ctx);
 	}
 	
-	/*
+	
 	@Override
 	public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx)
 	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterDeclByType();
+		
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		Type_nameContext typeName = ctx.type_name();
 		emitDeclarations(decl_list, typeName);
@@ -114,19 +117,20 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	private void emitDeclarations(ParserRuleContext decl_list,
 			  ParserRuleContext typeName)
 	{
-		IdentifierDeclBuilder idBuilder = new IdentifierDeclBuilder();
-		List<IdentifierDecl> declarations = idBuilder.getDeclarations(decl_list, typeName);
 		
-		
-		IdentifierDeclStatement statement = new IdentifierDeclStatement();
-		
+		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
+		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
+
+		CoarseFunctionContentBuilder contentBuilder = (CoarseFunctionContentBuilder) p.itemStack.peek();
 		
 		Iterator<IdentifierDecl> it = declarations.iterator();
 		while(it.hasNext()){
 			IdentifierDecl decl = it.next();
-			statement.addDeclaration(decl);
+			contentBuilder.addLocalDecl(decl);
 		}		
-		// builder.addDeclStatement(statement);
+	
+	
+	
 	}
-	*/
+	
 }

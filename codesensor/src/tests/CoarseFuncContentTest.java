@@ -4,10 +4,12 @@ import static org.junit.Assert.*;
 
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.codeitems.CodeItem;
+import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.CallItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ExprStatementItem;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 
@@ -37,6 +39,17 @@ public class CoarseFuncContentTest
 		CallExpression call = (CallExpression) statementItem.expr;
 		assertTrue(call.getTarget().getCodeStr().equals("foo"));
 	}
+	
+	@Test
+	public void testMostBasicDecl()
+	{
+		String input = "int x;";
+		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
+		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.statements.get(0);
+		IdentifierDecl identifierDecl = statementItem.identifierDeclList.get(0);
+		assertTrue(identifierDecl.name.getCodeStr().equals("x"));
+	}
+	
 	
 	static CodeItem parseAndWalk(String input)
 	{
