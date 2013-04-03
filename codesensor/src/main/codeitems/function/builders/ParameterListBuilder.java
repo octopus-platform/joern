@@ -9,7 +9,6 @@ import main.codeitems.function.ParameterList;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import tools.index.ParseTreeUtils;
-
 import antlr.CodeSensorParser.Parameter_declContext;
 import antlr.CodeSensorParser.Parameter_idContext;
 

@@ -12,7 +12,6 @@ import main.codeitems.functionContent.CompoundItem;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import tools.index.ParseTreeUtils;
-
 import antlr.CodeSensorParser.Function_nameContext;
 import antlr.CodeSensorParser.Function_param_listContext;
 import antlr.CodeSensorParser.Parameter_declContext;

@@ -6,7 +6,6 @@ import lucene.LuceneIndexCreator;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.function.FunctionDef;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class LuceneIndexCreatorTest {

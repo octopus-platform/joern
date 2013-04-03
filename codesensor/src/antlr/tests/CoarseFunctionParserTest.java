@@ -1,8 +1,6 @@
 package antlr.tests;
 
-import static org.junit.Assert.*;
-
-
+import static org.junit.Assert.assertTrue;
 import main.CoarseFunctionParser.CoarseFunctionParser;
 
 import org.antlr.v4.runtime.tree.ParseTree;

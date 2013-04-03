@@ -2,9 +2,8 @@ package main.codeitems.expressions;
 
 
 
-import java.util.Iterator;
-
 import org.antlr.v4.runtime.ParserRuleContext;
+
 import antlr.CoarseFunctionGrammarParser;
 import antlr.FineFunctionGrammarParser;
 

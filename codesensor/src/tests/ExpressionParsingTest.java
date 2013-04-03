@@ -1,14 +1,12 @@
 package tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.CallExpression;
-import main.codeitems.expressions.CallItem;
 import main.codeitems.expressions.CastExpression;
 import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;

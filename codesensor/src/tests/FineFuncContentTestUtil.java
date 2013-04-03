@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import tools.index.TokenSubStream;
-
 import antlr.FineFunctionGrammarLexer;
 
 public class FineFuncContentTestUtil {

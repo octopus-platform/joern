@@ -19,7 +19,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
 import tools.index.TokenSubStream;
-
 import antlr.CodeSensorLexer;
 
 public class ModuleBuildersTest {

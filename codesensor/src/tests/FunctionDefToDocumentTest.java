@@ -1,11 +1,9 @@
 package tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import lucene.FunctionDefToDocumentConverter;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
-
 
 import org.apache.lucene.document.Document;
 import org.junit.Before;

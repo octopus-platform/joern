@@ -1,10 +1,10 @@
 package main.FunctionParser;
 
-import tools.index.CommonParser;
-import tools.index.TokenSubStream;
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.FineFunctionParser.FineFunctionParser;
 import main.codeitems.functionContent.CompoundItem;
+import tools.index.CommonParser;
+import tools.index.TokenSubStream;
 
 public class FunctionParser
 {

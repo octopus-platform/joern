@@ -1,22 +1,18 @@
 package tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.codeitems.CodeItem;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.CallExpression;
-import main.codeitems.expressions.CallItem;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
-
 import org.junit.Test;
 
 import tools.index.TokenSubStream;
-
 import antlr.CoarseFunctionGrammarLexer;
 
 public class CoarseFuncContentTest

@@ -1,8 +1,8 @@
 package main.codeitems.functionContent.builders;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 import main.codeitems.CodeItemBuilder;
+
+import org.antlr.v4.runtime.ParserRuleContext;
 
 public class AssignmentExprBuilder extends CodeItemBuilder
 {

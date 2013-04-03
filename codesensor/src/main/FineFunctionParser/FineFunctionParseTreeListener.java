@@ -3,16 +3,15 @@ package main.FineFunctionParser;
 import java.util.Iterator;
 import java.util.List;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
-import tools.index.CommonParser;
-
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.builders.IdentifierDeclBuilder;
 import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
 
-import antlr.FineFunctionGrammarParser;
+import org.antlr.v4.runtime.ParserRuleContext;
+
+import tools.index.CommonParser;
 import antlr.FineFunctionGrammarBaseListener;
+import antlr.FineFunctionGrammarParser;
 import antlr.FineFunctionGrammarParser.Init_declarator_listContext;
 import antlr.FineFunctionGrammarParser.Type_nameContext;
 

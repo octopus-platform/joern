@@ -2,35 +2,6 @@ package main.codeitems.functionContent.builders;
 
 import java.util.Iterator;
 
-import antlr.FineFunctionGrammarParser.Assign_exprContext;
-import antlr.FineFunctionGrammarParser.Block_starterContext;
-import antlr.FineFunctionGrammarParser.Closing_curlyContext;
-
-import antlr.FineFunctionGrammarParser.Additive_expressionContext;
-import antlr.FineFunctionGrammarParser.And_expressionContext;
-import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
-import antlr.FineFunctionGrammarParser.Cast_expressionContext;
-import antlr.FineFunctionGrammarParser.Cast_targetContext;
-import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
-import antlr.FineFunctionGrammarParser.Else_statementContext;
-import antlr.FineFunctionGrammarParser.Equality_expressionContext;
-import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
-import antlr.FineFunctionGrammarParser.ExprContext;
-import antlr.FineFunctionGrammarParser.Expr_statementContext;
-import antlr.FineFunctionGrammarParser.FieldContext;
-import antlr.FineFunctionGrammarParser.FieldOnlyContext;
-import antlr.FineFunctionGrammarParser.FuncCallContext;
-import antlr.FineFunctionGrammarParser.Function_argument_listContext;
-import antlr.FineFunctionGrammarParser.If_statementContext;
-import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
-import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
-import antlr.FineFunctionGrammarParser.Opening_curlyContext;
-import antlr.FineFunctionGrammarParser.Or_expressionContext;
-import antlr.FineFunctionGrammarParser.Relational_expressionContext;
-import antlr.FineFunctionGrammarParser.Shift_expressionContext;
-import antlr.FineFunctionGrammarParser.StatementContext;
-import antlr.FineFunctionGrammarParser.StatementsContext;
-
 import main.codeitems.CodeItem;
 import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
@@ -56,6 +27,33 @@ import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.ElseItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IfItem;
+import antlr.FineFunctionGrammarParser.Additive_expressionContext;
+import antlr.FineFunctionGrammarParser.And_expressionContext;
+import antlr.FineFunctionGrammarParser.Assign_exprContext;
+import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
+import antlr.FineFunctionGrammarParser.Block_starterContext;
+import antlr.FineFunctionGrammarParser.Cast_expressionContext;
+import antlr.FineFunctionGrammarParser.Cast_targetContext;
+import antlr.FineFunctionGrammarParser.Closing_curlyContext;
+import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
+import antlr.FineFunctionGrammarParser.Else_statementContext;
+import antlr.FineFunctionGrammarParser.Equality_expressionContext;
+import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
+import antlr.FineFunctionGrammarParser.ExprContext;
+import antlr.FineFunctionGrammarParser.Expr_statementContext;
+import antlr.FineFunctionGrammarParser.FieldContext;
+import antlr.FineFunctionGrammarParser.FieldOnlyContext;
+import antlr.FineFunctionGrammarParser.FuncCallContext;
+import antlr.FineFunctionGrammarParser.Function_argument_listContext;
+import antlr.FineFunctionGrammarParser.If_statementContext;
+import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
+import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
+import antlr.FineFunctionGrammarParser.Opening_curlyContext;
+import antlr.FineFunctionGrammarParser.Or_expressionContext;
+import antlr.FineFunctionGrammarParser.Relational_expressionContext;
+import antlr.FineFunctionGrammarParser.Shift_expressionContext;
+import antlr.FineFunctionGrammarParser.StatementContext;
+import antlr.FineFunctionGrammarParser.StatementsContext;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {

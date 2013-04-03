@@ -3,13 +3,9 @@
 	package antlr;
 
 
-  import java.util.Stack;
-
-
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.TerminalNode;
+  import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx) { }

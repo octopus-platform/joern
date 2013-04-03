@@ -3,32 +3,23 @@ package main.ModuleParser;
 import java.util.Iterator;
 import java.util.List;
 
-
 import main.FunctionParser.FunctionParser;
-import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.builders.ClassDefBuilder;
 import main.codeitems.declarations.builders.IdentifierDeclBuilder;
 import main.codeitems.function.builders.FunctionDefBuilder;
 import main.codeitems.functionContent.CompoundItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
-import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
 import main.processors.CompoundItemGenerator;
-
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-
 import org.antlr.v4.runtime.misc.Interval;
 
 import tools.index.CommonParser;
-import tools.index.ParseTreeUtils;
-import tools.index.ParserException;
-
+import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
-
-import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
 import antlr.CodeSensorParser.Function_defContext;

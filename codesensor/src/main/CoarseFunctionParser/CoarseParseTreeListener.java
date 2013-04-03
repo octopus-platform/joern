@@ -3,20 +3,15 @@ package main.CoarseFunctionParser;
 import java.util.Iterator;
 import java.util.List;
 
+import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.declarations.builders.IdentifierDeclBuilder;
+import main.codeitems.functionContent.builders.CoarseFunctionContentBuilder;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import tools.index.CommonParser;
-
-import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.builders.IdentifierDeclBuilder;
-import main.codeitems.functionContent.IdentifierDeclStatement;
-import main.codeitems.functionContent.builders.CoarseFunctionContentBuilder;
-import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
-import antlr.FineFunctionGrammarParser;
-
-
 import antlr.CoarseFunctionGrammarParser.Init_declarator_listContext;
 import antlr.CoarseFunctionGrammarParser.Type_nameContext;
 

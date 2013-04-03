@@ -2,12 +2,11 @@ package tools.retrieve;
 
 import java.io.IOException;
 
-import org.apache.commons.cli.ParseException;
+import lucene.Finder;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.lucene.queryParser.core.QueryNodeException;
 import org.apache.lucene.search.ScoreDoc;
-
-import lucene.Finder;
 
 public class CodeSensorFind
 {

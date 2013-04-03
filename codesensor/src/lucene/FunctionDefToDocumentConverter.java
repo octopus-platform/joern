@@ -1,9 +1,7 @@
 package lucene;
 
-import java.util.Iterator;
 
 import main.codeitems.function.FunctionDef;
-import main.codeitems.function.Parameter;
 
 import org.apache.lucene.document.Document;
 

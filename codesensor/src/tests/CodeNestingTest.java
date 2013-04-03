@@ -1,9 +1,7 @@
 package tests;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import main.codeitems.expressions.AssignmentExpr;
-import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.Expression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CompoundItem;
