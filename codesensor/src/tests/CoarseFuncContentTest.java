@@ -4,8 +4,10 @@ import static org.junit.Assert.*;
 
 import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.codeitems.CodeItem;
+import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.CallItem;
 import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.ExprStatementItem;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 
@@ -31,8 +33,9 @@ public class CoarseFuncContentTest
 	{
 		String input = "foo();";
 		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
-		CallItem statementItem = (CallItem) contentItem.statements.get(0);
-		assertTrue(statementItem.callee.equals("foo"));
+		ExprStatementItem statementItem = (ExprStatementItem) contentItem.statements.get(0);
+		CallExpression call = (CallExpression) statementItem.expr;
+		assertTrue(call.getTarget().getCodeStr().equals("foo"));
 	}
 	
 	static CodeItem parseAndWalk(String input)

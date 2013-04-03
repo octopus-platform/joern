@@ -12,6 +12,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarListener {
+	@Override public void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx) { }
+	@Override public void exitCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx) { }
+
 	@Override public void enterTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx) { }
 	@Override public void exitTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx) { }
 

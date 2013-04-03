@@ -2,8 +2,6 @@ package main.codeitems.functionContent.builders;
 
 import java.util.Iterator;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
@@ -38,7 +36,6 @@ import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.ArgumentList;
 import main.codeitems.expressions.AssignmentExpr;
-import main.codeitems.expressions.BinaryExpression;
 import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.CastExpression;
@@ -172,43 +169,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			prev = cur;
 		}
 	}
-
-	// Joins consecutive BlockStarters on the stack
-	
-	private void consolidateBlockStarters(CodeItem topOfStack)
-	{
-		while(true){
-			try{
-				BlockStarterItem bItem = (BlockStarterItem) itemStack.peek();
-				bItem = (BlockStarterItem) itemStack.pop();
-				bItem.setStatement(topOfStack);
-				topOfStack = bItem;
-			}catch(ClassCastException ex){
-				break;
-			}
-		}
-		CompoundItem root = (CompoundItem) itemStack.peek();
-		root.addStatement(topOfStack);
-	}
-	
-	private void consolidate()
-	{
-		
-		CodeItem stmt = itemStack.pop();
-		CodeItem topOfStack = null;
-		
-		if(itemStack.size() > 0)
-			topOfStack = itemStack.peek();
-		
-		if(topOfStack instanceof CompoundItem){
-			CompoundItem compound = (CompoundItem)topOfStack;
-			compound.addStatement(stmt);
-		}else{
-			consolidateBlockStarters(topOfStack);
-		}
-		
-	}
-	
 
 	// Expression handling
 	
@@ -344,15 +304,13 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}	
 	
-	public void enterMultiplicativeExpression(
-			Multiplicative_expressionContext ctx)
+	public void enterMultiplicativeExpression(Multiplicative_expressionContext ctx)
 	{
 		MultiplicativeExpression expr = new MultiplicativeExpression();
 		itemStack.push(expr);
 	}
 
-	public void exitMultiplicativeExpression(
-			Multiplicative_expressionContext ctx)
+	public void exitMultiplicativeExpression(Multiplicative_expressionContext ctx)
 	{
 		consolidateSubExpression(ctx);
 	}
@@ -421,29 +379,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void exitFieldOnly(FieldOnlyContext ctx)
 	{
 		consolidateSubExpression(ctx);
-	}
-	
-	private void consolidateSubExpression(ParserRuleContext ctx)
-	{
-		Expression expression = (Expression) itemStack.pop();
-		
-		if(expression.getChildCount() == 1)
-			expression = expression.getChild(0);
-		
-		expression.initializeFromContext(ctx);
-		consolidateExpression(expression);
-	}
-
-	private void consolidateExpression(Expression expression)
-	{
-		CodeItem topOfStack = itemStack.peek();
-		if(topOfStack instanceof BlockStarterItem)
-			((BlockStarterItem) topOfStack).setCondition(expression);
-		else if (topOfStack instanceof ExprStatementItem){
-			((ExprStatementItem) topOfStack).expr = expression;
-		}else if (topOfStack instanceof Expression){
-			((Expression) topOfStack).addChildExpression(expression);
-		}
 	}
 	
 }

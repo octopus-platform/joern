@@ -9,6 +9,9 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface CoarseFunctionGrammarListener extends ParseTreeListener {
+	void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx);
+	void exitCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx);
+
 	void enterTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx);
 	void exitTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx);
 

@@ -11,8 +11,10 @@ import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.builders.IdentifierDeclBuilder;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 import main.codeitems.functionContent.builders.CoarseFunctionContentBuilder;
+import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
+import antlr.FineFunctionGrammarParser;
 
 
 import antlr.CoarseFunctionGrammarParser.Init_declarator_listContext;
@@ -32,11 +34,75 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	@Override
 	public void enterCoarse_content(CoarseFunctionGrammarParser.Coarse_contentContext ctx)
 	{
-		builder = new CoarseFunctionContentBuilder();
+		CoarseFunctionContentBuilder builder = new CoarseFunctionContentBuilder();
 		builder.createNew(ctx);
 		p.itemStack.push(builder);
 	}
 	
+	@Override
+	public void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterCoarseContentElem(ctx);
+	}
+	
+	@Override
+	public void exitCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.exitCoarseContentElem(ctx);
+	}
+	
+	@Override public void enterFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterFuncCall(ctx);
+	}
+	
+	@Override public void exitFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.exitFuncCall(ctx);
+	}
+	
+	@Override public void enterFunction_argument_list(CoarseFunctionGrammarParser.Function_argument_listContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterArgumentList(ctx);
+	}
+	
+	@Override public void exitFunction_argument_list(CoarseFunctionGrammarParser.Function_argument_listContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.exitArgumentList(ctx);	
+	}
+	
+	
+	@Override public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterFieldOnly(ctx);
+	}
+	
+	@Override public void exitFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.exitFieldOnly(ctx);
+	}
+
+	@Override public void enterField(CoarseFunctionGrammarParser.FieldContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.enterField(ctx);
+	}
+	
+	@Override public void exitField(CoarseFunctionGrammarParser.FieldContext ctx)
+	{
+		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		builder.exitField(ctx);
+	}
+	
+	/*
 	@Override
 	public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx)
 	{
@@ -62,25 +128,5 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 		}		
 		// builder.addDeclStatement(statement);
 	}
-	
-	@Override
-	public void enterFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx)
-	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		// builder.addFunctionCall(ctx);
-	}
-	
-	@Override
-	public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
-	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		// builder.addFieldOnly(ctx);
-	}
-	
-	@Override
-	public void enterPrimary_expression(CoarseFunctionGrammarParser.Primary_expressionContext ctx)
-	{
-		
-	}
-	
+	*/
 }
