@@ -13,12 +13,27 @@ import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 
 public class CodeItemToDocumentConverter implements CodeItemVisitor
 {
 	
 	String filename = "";
-	Document d;
+	Document currentDocument;
+	int currentDocumentId = 0;
+	
+	public void reset()
+	{
+		filename = "";
+		currentDocument = null;
+	}
+	
+	private void createNewDocument()
+	{
+		currentDocument = new Document();
+		currentDocumentId++;
+	}
 	
 	public void setFilename(String aFilename)
 	{
@@ -27,7 +42,15 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	
 	public Document getDocument()
 	{
-		return d;
+		markDocumentWithId();
+		return currentDocument;
+	}
+
+	private void markDocumentWithId()
+	{
+		if(currentDocument.getField("id") != null)
+			return;
+		currentDocument.add(new NumericField("id", Field.Store.YES, true).setIntValue(currentDocumentId));
 	}
 	
 	@Override public void visit(CodeItem item) {}
@@ -35,15 +58,15 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	@Override
 	public void visit(FunctionDef item)
 	{
-		d = new Document();
-		FunctionDefToDocumentConverter.convert(item, filename, d);
+		createNewDocument();
+		FunctionDefToDocumentConverter.convert(item, filename, currentDocument);
 	}
 	
 	@Override
 	public void visit(ClassDef item)
 	{
-		d = new Document();
-		ClassDefToDocumentConverter.convert(item, filename, d);
+		createNewDocument();
+		ClassDefToDocumentConverter.convert(item, filename, currentDocument);
 	}
 	
 	public static void addStandardFields(CodeItem item, String filename,
@@ -85,10 +108,7 @@ public class CodeItemToDocumentConverter implements CodeItemVisitor
 	}
 
 	@Override
-	public void visit(CallItem statementItem) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void visit(CallItem statementItem) {}
 
 	@Override
 	public void visit(IdentifierDeclStatement statementItem) {

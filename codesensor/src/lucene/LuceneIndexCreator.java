@@ -23,6 +23,7 @@ public class LuceneIndexCreator extends Processor
 	
 	Analyzer analyzer = new KeywordAnalyzer();
 	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+	CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
 	
 	IndexWriter indexWriter;
 	String filename = "";
@@ -78,11 +79,11 @@ public class LuceneIndexCreator extends Processor
 	public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
 	{
 		
-		CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
+		converter.reset();
 		converter.setFilename(filename);
 		item.accept(converter);
 		
-		// TODO: Converter should not return NULL by raise an error instead
+		// TODO: Converter should not return NULL but raise an error instead
 		Document doc = converter.getDocument();
 		
 		if(doc == null)

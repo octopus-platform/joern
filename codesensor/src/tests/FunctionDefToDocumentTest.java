@@ -39,12 +39,21 @@ public class FunctionDefToDocumentTest
 	}
 	
 	@Test
-	public void testSingleParam()
+	public void testSingleParamName()
 	{		
 		FunctionDef item = new FunctionDef();
 		item.addParameter(new Parameter());
 		FunctionDefToDocumentConverter.convert(item, "", document);
 		assertTrue(document.getField("parameterName") != null);
+	}
+	
+	@Test
+	public void testSingleParamType()
+	{		
+		FunctionDef item = new FunctionDef();
+		item.addParameter(new Parameter());
+		FunctionDefToDocumentConverter.convert(item, "", document);
+		assertTrue(document.getField("parameterType") != null);
 	}
 	
 }
