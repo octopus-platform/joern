@@ -14,7 +14,7 @@ import org.apache.lucene.document.Document;
 public class LuceneIndexCreator extends Processor
 {
 	
-	CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
+	LuceneCodeItemVisitor converter = new LuceneCodeItemVisitor();
 	Analyzer analyzer = new KeywordAnalyzer();
 	String filename = "";
 	LuceneIndexWriter writer = new LuceneIndexWriter(analyzer); 

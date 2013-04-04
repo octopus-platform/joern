@@ -9,13 +9,13 @@ public class FunctionDefToDocumentConverter
 {
 	public static void convert(FunctionDef item, String filename, Document d)
 	{	
-		CodeItemToDocumentConverter.addStandardFields(item, filename, d);
+		CommonCodeItemToDocument.addStandardFields(item, filename, d);
 		
 		d.add(LuceneUtils.createField("name", item.name.getCodeStr()));
 		d.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
 		
 		addParameters(item, d);
-		CodeItemToDocumentConverter.addContent(item.content, d);		
+		LuceneCodeItemVisitor.addContent(item.content, d);		
 	}
 
 	private static void addParameters(FunctionDef item, Document d)

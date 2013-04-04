@@ -10,7 +10,7 @@ public class ClassDefToDocumentConverter
 
 	public static void convert(ClassDef item, String filename, Document d)
 	{
-		CodeItemToDocumentConverter.addStandardFields(item, filename, d);	
+		CommonCodeItemToDocument.addStandardFields(item, filename, d);	
 	
 		String className = "";
 		if(item.name != null)
@@ -19,7 +19,7 @@ public class ClassDefToDocumentConverter
 		
 		d.add(LuceneUtils.createField("name", className));
 		
-		CodeItemToDocumentConverter.addContent(item.content, d);
+		LuceneCodeItemVisitor.addContent(item.content, d);
 	}
 	
 }
