@@ -1,21 +1,24 @@
 package lucene;
 
 
+import java.util.LinkedList;
+
 import main.codeitems.function.FunctionDef;
 
 import org.apache.lucene.document.Document;
 
 public class FunctionDefToDocumentConverter
 {
-	public static void convert(FunctionDef item, String filename, Document d)
+	public static void convert(FunctionDef item, String filename, LinkedList<Document> documents)
 	{	
-		CommonCodeItemToDocument.addStandardFields(item, filename, d);
+		Document functionDoc = documents.peek();
 		
-		d.add(LuceneUtils.createField("name", item.name.getCodeStr()));
-		d.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
+		CommonCodeItemToDocument.addStandardFields(item, filename, functionDoc);
+		functionDoc.add(LuceneUtils.createField("name", item.name.getCodeStr()));
+		functionDoc.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
 		
-		addParameters(item, d);
-		LuceneCodeItemVisitor.addContent(item.content, d);		
+		addParameters(item, functionDoc);
+		CommonCodeItemToDocument.addCompound(item.content, functionDoc);		
 	}
 
 	private static void addParameters(FunctionDef item, Document d)

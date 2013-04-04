@@ -1,6 +1,9 @@
 package tests;
 
 import static org.junit.Assert.assertTrue;
+
+import java.util.LinkedList;
+
 import lucene.FunctionDefToDocumentConverter;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
@@ -13,11 +16,13 @@ import org.junit.Test;
 public class FunctionDefToDocumentTest
 {
 	Document document;
+	LinkedList<Document> documents = new LinkedList<Document>();
 	
 	@Before
 	public void initialize()
 	{
 		document = new Document();
+		documents.add(document);
 	}
 
 
@@ -25,7 +30,7 @@ public class FunctionDefToDocumentTest
 	public void testUnnamedFunction()
 	{		
 		FunctionDef item = new FunctionDef();
-		FunctionDefToDocumentConverter.convert(item, "", document);
+		FunctionDefToDocumentConverter.convert(item, "", documents);
 		String nameInDoc = document.getField("name").stringValue();
 		assertTrue(nameInDoc.equals("<unnamed>"));
 	}	
@@ -34,7 +39,7 @@ public class FunctionDefToDocumentTest
 	public void testNoParams()
 	{		
 		FunctionDef item = new FunctionDef();
-		FunctionDefToDocumentConverter.convert(item, "", document);
+		FunctionDefToDocumentConverter.convert(item, "", documents);
 		assertTrue(document.getField("parameterName") == null);
 	}
 	
@@ -43,7 +48,7 @@ public class FunctionDefToDocumentTest
 	{		
 		FunctionDef item = new FunctionDef();
 		item.addParameter(new Parameter());
-		FunctionDefToDocumentConverter.convert(item, "", document);
+		FunctionDefToDocumentConverter.convert(item, "", documents);
 		assertTrue(document.getField("parameterName") != null);
 	}
 	
@@ -52,7 +57,7 @@ public class FunctionDefToDocumentTest
 	{		
 		FunctionDef item = new FunctionDef();
 		item.addParameter(new Parameter());
-		FunctionDefToDocumentConverter.convert(item, "", document);
+		FunctionDefToDocumentConverter.convert(item, "", documents);
 		assertTrue(document.getField("parameterType") != null);
 	}
 	

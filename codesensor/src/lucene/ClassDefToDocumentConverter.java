@@ -1,6 +1,8 @@
 package lucene;
 
 
+import java.util.LinkedList;
+
 import main.codeitems.declarations.ClassDef;
 
 import org.apache.lucene.document.Document;
@@ -8,18 +10,19 @@ import org.apache.lucene.document.Document;
 public class ClassDefToDocumentConverter
 {
 
-	public static void convert(ClassDef item, String filename, Document d)
+	public static void convert(ClassDef item, String filename, LinkedList<Document> documents)
 	{
-		CommonCodeItemToDocument.addStandardFields(item, filename, d);	
+		Document document = documents.peek();
+		CommonCodeItemToDocument.addStandardFields(item, filename, document);	
 	
 		String className = "";
 		if(item.name != null)
 			className = item.getName().getCodeStr();
 		
 		
-		d.add(LuceneUtils.createField("name", className));
+		document.add(LuceneUtils.createField("name", className));
 		
-		LuceneCodeItemVisitor.addContent(item.content, d);
+		CommonCodeItemToDocument.addCompound(item.content, document);
 	}
 	
 }

@@ -2,7 +2,7 @@ package tests;
 
 import java.util.Stack;
 
-import lucene.LuceneIndexCreator;
+import lucene.LuceneIndexCreatorMain;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.function.FunctionDef;
 
@@ -10,9 +10,9 @@ import org.junit.Test;
 
 public class LuceneIndexCreatorTest {
 
-	public static LuceneIndexCreator createValidIndexCreator()
+	public static LuceneIndexCreatorMain createValidIndexCreator()
 	{
-		LuceneIndexCreator indexCreator = new LuceneIndexCreator();
+		LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
 		indexCreator.setIndexDirectoryName("/tmp/foo/bar");
 		indexCreator.begin();
 		return indexCreator;
@@ -21,21 +21,21 @@ public class LuceneIndexCreatorTest {
 	@Test(expected=RuntimeException.class)
 	public void testDirectoryNameUnset()
 	{
-		LuceneIndexCreator indexCreator = new LuceneIndexCreator();
+		LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
 		indexCreator.begin();
 	}
 
 	@Test
 	public void testEmptyIndex()
 	{
-		LuceneIndexCreator indexCreator = createValidIndexCreator();
+		LuceneIndexCreatorMain indexCreator = createValidIndexCreator();
 		indexCreator.end();
 	}
 	
 	@Test
 	public void testInsert()
 	{
-		LuceneIndexCreator indexCreator = createValidIndexCreator();
+		LuceneIndexCreatorMain indexCreator = createValidIndexCreator();
 		indexCreator.processItem(new FunctionDef(), new Stack<CodeItemBuilder>());
 		indexCreator.end();
 	}

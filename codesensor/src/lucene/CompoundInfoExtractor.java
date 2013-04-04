@@ -14,7 +14,7 @@ import main.codeitems.functionContent.IdentifierDeclStatement;
 import org.apache.lucene.document.Document;
 
 
-public class StatementInfoExtractor implements CodeItemVisitor
+public class CompoundInfoExtractor implements CodeItemVisitor
 {
 	Document d;
 
@@ -57,13 +57,8 @@ public class StatementInfoExtractor implements CodeItemVisitor
 		// d.add(LuceneUtils.createField("field", codeStr));
 	}
 
-	@Override
-	public void visit(CodeItem statementItem){}
+	@Override public void visit(CodeItem statementItem){}
 
-	@Override
-	public void visit(FunctionDef item) {
-		// TODO Auto-generated method stub
-		
-	}
+	@Override public void visit(FunctionDef item) {}
 
 }

@@ -2,6 +2,8 @@ package lucene;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -36,6 +38,15 @@ public class LuceneIndexWriter
 			createIndexWriter(indexDirectoryName);
 		} catch (IOException e) {
 			throw new RuntimeException("Error writing to: " + indexDirectoryName);
+		}
+	}
+	
+	public void addDocumentsToIndex(List<Document> documents)
+	{
+		Iterator<Document> it = documents.iterator();
+		while(it.hasNext()){
+			Document doc = it.next();
+			addDocumentToIndex(doc);
 		}
 	}
 	

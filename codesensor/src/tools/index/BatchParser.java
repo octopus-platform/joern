@@ -3,7 +3,7 @@ package tools.index;
 import java.util.Iterator;
 import java.util.List;
 
-import lucene.LuceneIndexCreator;
+import lucene.LuceneIndexCreatorMain;
 import main.ModuleParser.ModuleParser;
 import main.processors.CSVPrinter;
 
@@ -20,7 +20,7 @@ public class BatchParser implements Runnable
 	@Override
 	public void run()
 	{
-		LuceneIndexCreator indexCreator = new LuceneIndexCreator();
+		LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
 		indexCreator.setIndexDirectoryName("/home/fabs/tmp/lucene/");
 		parser.addObserver(indexCreator);
 		

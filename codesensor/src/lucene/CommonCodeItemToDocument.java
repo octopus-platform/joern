@@ -1,6 +1,10 @@
 package lucene;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import main.codeitems.CodeItem;
+import main.codeitems.functionContent.CompoundItem;
 
 import org.apache.lucene.document.Document;
 
@@ -14,6 +18,20 @@ public class CommonCodeItemToDocument
 		addCodeString(item, d);
 	}
 
+	public static void addCompound(CompoundItem item, Document d)
+	{
+		CompoundInfoExtractor infoExtractor = new CompoundInfoExtractor();
+		infoExtractor.setDocument(d);
+		
+		LinkedList<CodeItem> statements = item.statements;
+		Iterator<CodeItem> it = statements.iterator();
+		while(it.hasNext()){
+			CodeItem statement = it.next();
+			statement.accept(infoExtractor);
+		}
+		
+	}
+	
 	private static void addCodeString(CodeItem item, Document d)
 	{
 		d.add(LuceneUtils.createField("code", item.getCodeStr()));
