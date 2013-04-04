@@ -21,8 +21,6 @@ public class ClassDefToDocumentConverter
 		
 		
 		document.add(LuceneUtils.createField("name", className));
-		
-		CommonCodeItemToDocument.addCompound(item.content, document);
 	}
 	
 }

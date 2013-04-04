@@ -15,10 +15,19 @@ public class FunctionDef extends CodeItem
 	public ReturnType returnType = new DummyReturnType();
 	public CompoundItem content = new CompoundItem();
 	
+	public void addStatement(CodeItem statement)
+	{
+		content.addStatement(statement);
+	}
+	
 	public FunctionDef()
 	{
 		setNodeTypeName("function");
 	}
+	
+	// let the content item be the only child
+	public int getChildCount() { return 1; }
+	public CodeItem getChild(int i){ return content; }
 	
 	public void addParameter(Parameter aParameter)
 	{

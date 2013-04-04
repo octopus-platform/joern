@@ -8,7 +8,7 @@ import main.codeitems.functionContent.IdentifierDeclStatement;
 
 public class CodeItemVisitor
 {
-	public void visit(CodeItem item) {}
+	public void visit(CodeItem item) { defaultHandler(item); }
 	
 	public void visit(FunctionDef item) { defaultHandler(item); }
 	public void visit(ClassDef item){ defaultHandler(item); }

@@ -17,11 +17,14 @@ public class ClassDef extends CodeItem
 		setNodeTypeName("class");
 		codeStr = "";
 	}
-	
+		
 	public Name getName()
 	{
 		return name;
 	}
+
+	public int getChildCount() { return 1; }
+	public CodeItem getChild(int i){ return content; }
 
 	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 	

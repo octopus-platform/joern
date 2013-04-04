@@ -5,8 +5,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 
 import lucene.FunctionDefToDocumentConverter;
+import main.codeitems.Name;
+import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
+import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.apache.lucene.document.Document;
 import org.junit.Before;

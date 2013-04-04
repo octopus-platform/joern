@@ -9,6 +9,11 @@ public class CompoundItem extends CodeItem
 
 	LinkedList<CodeItem> statements = new LinkedList<CodeItem>();
 	
+	public void addChild(CodeItem stmt){ addStatement(stmt); }
+	public int getChildCount() { return statements.size(); }
+	public CodeItem getChild(int i){ return statements.get(i); }
+	
+	
 	public CompoundItem()
 	{
 		setNodeTypeName("STATEMENTS");	
