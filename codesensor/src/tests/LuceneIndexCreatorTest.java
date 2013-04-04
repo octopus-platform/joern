@@ -13,7 +13,7 @@ public class LuceneIndexCreatorTest {
 	public static LuceneIndexCreator createValidIndexCreator()
 	{
 		LuceneIndexCreator indexCreator = new LuceneIndexCreator();
-		indexCreator.setDirectoryName("/tmp/foo/bar");
+		indexCreator.setIndexDirectoryName("/tmp/foo/bar");
 		indexCreator.begin();
 		return indexCreator;
 	}

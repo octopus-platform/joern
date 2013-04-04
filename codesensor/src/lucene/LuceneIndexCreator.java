@@ -1,7 +1,5 @@
 package lucene;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Stack;
 
 import main.codeitems.CodeItem;
@@ -12,67 +10,35 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 public class LuceneIndexCreator extends Processor
 {
 	
-	Analyzer analyzer = new KeywordAnalyzer();
-	IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 	CodeItemToDocumentConverter converter = new CodeItemToDocumentConverter();
-	
-	IndexWriter indexWriter;
+	Analyzer analyzer = new KeywordAnalyzer();
 	String filename = "";
-	String directoryName = null;
-	
-	public void setDirectoryName(String aName)
-	{
-		directoryName = aName;
-	}
-	
+	LuceneIndexWriter writer = new LuceneIndexWriter(analyzer); 
 	@Override
 	public void begin()
 	{
-		if(directoryName == null)
-			throw new RuntimeException("Directory name for index not set");
-		
-		try {
-			createIndexWriter(directoryName);
-		} catch (IOException e) {
-			throw new RuntimeException("Error writing to: " + directoryName);
-		}
+		writer.initialize();
 	}
 	
-	private void createIndexWriter(String directoryName) throws IOException
+	public void setIndexDirectoryName(String dirName)
 	{
-		Directory directory = FSDirectory.open(new File(directoryName));
-		indexWriter = new IndexWriter(directory, iwc);
+		writer.setIndexDirectoryName(dirName);
 	}
 	
 	@Override
 	public void end()
 	{
-		try {
-			closeIndexWriter();
-		} catch (IOException e) {
-			throw new RuntimeException("Error when closing handle to: " + directoryName);
-		}
+		writer.shutdown();
 	}
-	
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String aFilename)
 	{
 		filename = aFilename;
-	}
-
-	private void closeIndexWriter() throws IOException
-	{
-		indexWriter.close();
 	}
 
 	@Override
@@ -84,16 +50,13 @@ public class LuceneIndexCreator extends Processor
 		item.accept(converter);
 		
 		// TODO: Converter should not return NULL but raise an error instead
+		// TODO: change to getDocuments and then write all documents
 		Document doc = converter.getDocument();
 		
 		if(doc == null)
 			return;
 		
-		try {
-			indexWriter.addDocument(doc);
-		} catch (IOException e) {
-			throw new RuntimeException("Error writing to: " + directoryName);
-		}
+		writer.addDocumentToIndex(doc);
 		
 	}
 

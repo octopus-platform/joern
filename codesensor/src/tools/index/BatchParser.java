@@ -21,7 +21,7 @@ public class BatchParser implements Runnable
 	public void run()
 	{
 		LuceneIndexCreator indexCreator = new LuceneIndexCreator();
-		indexCreator.setDirectoryName("/home/fabs/tmp/lucene/");
+		indexCreator.setIndexDirectoryName("/home/fabs/tmp/lucene/");
 		parser.addObserver(indexCreator);
 		
 		parser.addObserver(new CSVPrinter());
