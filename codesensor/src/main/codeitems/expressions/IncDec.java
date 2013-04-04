@@ -5,6 +5,4 @@ package main.codeitems.expressions;
 // be evaluated.
 
 
-public class IncDec extends Expression {
-	
-}
+public class IncDec extends Expression {}

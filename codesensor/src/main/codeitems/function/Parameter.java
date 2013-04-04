@@ -16,7 +16,7 @@ public class Parameter extends CodeItem
 	
 	public Parameter()
 	{
-		nodeTypeName = "PARAMETER";
+		setNodeTypeName("PARAMETER");
 	}
 	
 	@Override

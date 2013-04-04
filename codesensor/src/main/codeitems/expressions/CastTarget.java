@@ -1,5 +1,3 @@
 package main.codeitems.expressions;
 
-public class CastTarget extends Expression {
-
-}
+public class CastTarget extends Expression {}

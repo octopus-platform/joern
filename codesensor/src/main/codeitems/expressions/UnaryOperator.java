@@ -4,6 +4,4 @@ package main.codeitems.expressions;
 // not a standalone expression and can't
 // be evaluated.
 
-public class UnaryOperator extends Expression {
-
-}
+public class UnaryOperator extends Expression {}

@@ -1,5 +1,3 @@
 package main.codeitems.expressions;
 
-public class ArgumentList extends Expression {
-
-}
+public class ArgumentList extends Expression {}

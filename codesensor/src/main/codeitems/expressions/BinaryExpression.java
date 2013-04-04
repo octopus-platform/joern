@@ -1,5 +1,7 @@
 package main.codeitems.expressions;
 
+import main.codeitems.CodeItem;
+
 
 public class BinaryExpression extends Expression
 {
@@ -14,8 +16,10 @@ public class BinaryExpression extends Expression
 	
 	public String getOperator(){ return operator; }
 	
-	public void addChildExpression(Expression expression)
-	{
+	@Override
+	public void addChildExpression(CodeItem item)
+	{	
+		Expression expression = (Expression) item;
 		if(getLeft() == null)
 			setLeft(expression);
 		else
@@ -31,7 +35,7 @@ public class BinaryExpression extends Expression
 		return childCount;
 	}
 	@Override
-	public Expression getChild(int i)
+	public CodeItem getChild(int i)
 	{
 		return subExpressions[i];
 	}

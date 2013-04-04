@@ -2,6 +2,8 @@ package main.codeitems.expressions;
 
 import java.util.LinkedList;
 
+import main.codeitems.CodeItem;
+
 public class UnaryExpression extends Expression
 {	
 	
@@ -13,18 +15,18 @@ public class UnaryExpression extends Expression
 	LinkedList<Expression> children = new LinkedList<Expression>();
 	
 	@Override
-	public void addChildExpression(Expression expression)
+	public void addChildExpression(CodeItem expression)
 	{
 		if(expression instanceof IncDec){
-			incDec = expression;
+			incDec = (Expression) expression;
 		}else if(expression instanceof UnaryOperator){
-			unaryOperators = expression;
+			unaryOperators = (Expression) expression;
 		}else if(expression instanceof FieldExpression){
-			field = expression;
+			field = (Expression) expression;
 		}else{
-			functionArgumentList = expression;
+			functionArgumentList = (Expression) expression;
 		}
-		children.add(expression);
+		children.add((Expression) expression);
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class UnaryExpression extends Expression
 	}
 
 	@Override
-	public Expression getChild(int i)
+	public CodeItem getChild(int i)
 	{
 		return children.get(i);
 	}

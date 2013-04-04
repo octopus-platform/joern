@@ -1,5 +1,7 @@
 package main.codeitems.expressions;
 
+import main.codeitems.CodeItem;
+
 public class ConditionalExpression extends Expression
 {
 	Expression expressions [] = new Expression[3];
@@ -9,14 +11,14 @@ public class ConditionalExpression extends Expression
 	Expression falseExpr;
 	
 	@Override
-	public void addChildExpression(Expression expression)
+	public void addChildExpression(CodeItem expression)
 	{
 		if(getCondition() == null)
-			setCondition(expression);
+			setCondition((Expression) expression);
 		else if(getTrueExpr() == null)
-			setTrueExpr(expression);
+			setTrueExpr((Expression) expression);
 		else
-			setFalseExpression(expression);;
+			setFalseExpression((Expression) expression);
 	}
 
 	private void setCondition(Expression expression)
@@ -60,7 +62,7 @@ public class ConditionalExpression extends Expression
 	}
 
 	@Override
-	public Expression getChild(int i)
+	public CodeItem getChild(int i)
 	{
 		return expressions[i];
 	}

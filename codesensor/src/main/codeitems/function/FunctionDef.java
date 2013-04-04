@@ -17,7 +17,7 @@ public class FunctionDef extends CodeItem
 	
 	public FunctionDef()
 	{
-		nodeTypeName = "function";
+		setNodeTypeName("function");
 	}
 	
 	public void addParameter(Parameter aParameter)

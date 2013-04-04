@@ -9,7 +9,7 @@ public class ReturnType extends CodeItem
 	
 	public ReturnType()
 	{
-		nodeTypeName = "RETURN_TYPE";
+		setNodeTypeName("RETURN_TYPE");
 	}
 	
 	public void setCompleteType(String aCompleteType)

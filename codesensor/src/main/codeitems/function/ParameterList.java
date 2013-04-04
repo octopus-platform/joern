@@ -10,7 +10,7 @@ public class ParameterList extends CodeItem
 {
 	public ParameterList()
 	{
-		nodeTypeName = "PARAMETER_LIST";
+		setNodeTypeName("PARAMETER_LIST");
 	}
 	
 	// TODO: we don't want to give back a reference to the list,

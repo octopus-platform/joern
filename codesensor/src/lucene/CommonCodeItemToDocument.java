@@ -14,7 +14,7 @@ public class CommonCodeItemToDocument
 			 Document d)
 	{
 		addLocationFields(d, item, filename);
-		addTypeField(d, item.nodeTypeName);
+		addTypeField(d, item.getNodeTypeName());
 		addCodeString(item, d);
 	}
 

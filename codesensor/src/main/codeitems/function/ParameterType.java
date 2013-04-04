@@ -29,7 +29,7 @@ public class ParameterType extends CodeItem
 		
 	public ParameterType()
 	{
-		nodeTypeName = "PARAMETER_TYPE";
+		setNodeTypeName("PARAMETER_TYPE");
 	}
 	
 	public void initializeFromContext(ParserRuleContext aCtx)

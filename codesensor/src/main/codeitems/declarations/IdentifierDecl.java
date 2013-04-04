@@ -11,7 +11,7 @@ public class IdentifierDecl extends CodeItem
 	
 	public IdentifierDecl()
 	{
-		nodeTypeName = "var";
+		setNodeTypeName("var");
 	}
 	
 	

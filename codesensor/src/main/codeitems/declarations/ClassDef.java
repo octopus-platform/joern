@@ -14,7 +14,7 @@ public class ClassDef extends CodeItem
 	
 	public ClassDef()
 	{
-		nodeTypeName = "class";
+		setNodeTypeName("class");
 		codeStr = "";
 	}
 	

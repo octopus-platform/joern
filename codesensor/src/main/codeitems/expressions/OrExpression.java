@@ -1,5 +1,3 @@
 package main.codeitems.expressions;
 
-public class OrExpression extends BinaryExpression {
-
-}
+public class OrExpression extends BinaryExpression {}

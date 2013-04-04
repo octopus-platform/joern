@@ -8,12 +8,12 @@ public class CastExpression extends Expression {
 	Expression castExpression = null;
 	
 	@Override
-	public void addChildExpression(Expression expression)
+	public void addChildExpression(CodeItem expression)
 	{
 		if(castTarget == null){
-			castTarget = expression;
+			castTarget = (Expression) expression;
 		}else{
-			castExpression = expression;
+			castExpression = (Expression) expression;
 		}
 	}
 
@@ -27,7 +27,7 @@ public class CastExpression extends Expression {
 	}
 
 	@Override
-	public Expression getChild(int i)
+	public CodeItem getChild(int i)
 	{
 		if(i == 0) return castTarget;
 		return castExpression;

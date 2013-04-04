@@ -4,7 +4,7 @@ public class Name extends CodeItem
 {
 	public Name()
 	{
-		nodeTypeName = "NAME";
+		setNodeTypeName("NAME");
 	}
 	
 	public String getCodeStr()

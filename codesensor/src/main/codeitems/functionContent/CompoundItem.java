@@ -10,7 +10,7 @@ public class CompoundItem extends CodeItem
 	
 	public CompoundItem()
 	{
-		nodeTypeName = "STATEMENTS";	
+		setNodeTypeName("STATEMENTS");	
 	}
 	
 	public void addStatement(CodeItem stmt)

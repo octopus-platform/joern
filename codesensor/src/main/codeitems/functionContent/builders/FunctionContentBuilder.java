@@ -49,7 +49,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		Expression expression = (Expression) itemStack.pop();
 		
 		if(expression.getChildCount() == 1)
-			expression = expression.getChild(0);
+			expression = (Expression) expression.getChild(0);
 		
 		expression.initializeFromContext(ctx);
 		consolidateExpression(expression);

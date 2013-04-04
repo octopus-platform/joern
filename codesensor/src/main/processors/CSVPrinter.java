@@ -23,7 +23,7 @@ public class CSVPrinter extends Processor
     {	
     	if(filename == null) return;
     	CodeItem item = new CodeItem();
-    	item.nodeTypeName = "SOURCE_FILE";
+    	item.setNodeTypeName("SOURCE_FILE");
     	item.setLocation(ctx);
     	item.setCodeStr(filename);	
     	defaultOut(item, 0);
@@ -33,7 +33,7 @@ public class CSVPrinter extends Processor
     public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
     {
     	
-    	switch(item.nodeTypeName){
+    	switch(item.getNodeTypeName()){
     	case "FUNCTION_DEF":
     		outputFunctionDef(item, itemStack);
     		break;
@@ -104,7 +104,7 @@ public class CSVPrinter extends Processor
     {    	
     	if(item == null) return;
     	
-    	String output = item.nodeTypeName + SEPARATOR;
+    	String output = item.getNodeTypeName() + SEPARATOR;
     	output += item.getLocationString() + SEPARATOR + level;
     	String codeStr = item.getCodeStr();
     	if(codeStr != null)
