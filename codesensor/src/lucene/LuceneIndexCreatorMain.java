@@ -1,6 +1,5 @@
 package lucene;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -41,7 +40,6 @@ public class LuceneIndexCreatorMain extends Processor
 		
 		List<Document> documents = converter.getDocuments();
 		writer.addDocumentsToIndex(documents);
-		
 	}
 
 	@Override public void endOfUnit(ParserRuleContext ctx, String filename){}

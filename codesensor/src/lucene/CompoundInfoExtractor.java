@@ -6,7 +6,6 @@ import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.expressions.CallItem;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
@@ -23,12 +22,6 @@ public class CompoundInfoExtractor implements CodeItemVisitor
 		d = aD;
 	}
 	
-	@Override
-	public void visit(CallItem statementItem)
-	{
-		d.add(LuceneUtils.createField("call", statementItem.callee));
-	}
-
 	@Override
 	public void visit(IdentifierDeclStatement statementItem)
 	{
@@ -58,7 +51,6 @@ public class CompoundInfoExtractor implements CodeItemVisitor
 	}
 
 	@Override public void visit(CodeItem statementItem){}
-
 	@Override public void visit(FunctionDef item) {}
 
 }

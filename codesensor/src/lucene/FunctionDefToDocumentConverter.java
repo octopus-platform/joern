@@ -11,7 +11,7 @@ public class FunctionDefToDocumentConverter
 {
 	public static void convert(FunctionDef item, String filename, LinkedList<Document> documents)
 	{	
-		Document functionDoc = documents.peek();
+		Document functionDoc = documents.peekLast();
 		
 		CommonCodeItemToDocument.addStandardFields(item, filename, functionDoc);
 		functionDoc.add(LuceneUtils.createField("name", item.name.getCodeStr()));

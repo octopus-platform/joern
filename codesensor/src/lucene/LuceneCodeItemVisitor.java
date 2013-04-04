@@ -7,7 +7,6 @@ import java.util.List;
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
-import main.codeitems.expressions.CallItem;
 import main.codeitems.function.FunctionDef;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
@@ -49,7 +48,6 @@ public class LuceneCodeItemVisitor implements CodeItemVisitor
 	}
 	
 	@Override public void visit(CodeItem item) {}
-	@Override public void visit(CallItem statementItem) {}
 	@Override public void visit(IdentifierDeclStatement statementItem) {}
 	@Override public void visit(ExprStatementItem statementItem) {}
 

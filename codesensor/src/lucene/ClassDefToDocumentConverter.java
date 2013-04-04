@@ -12,7 +12,7 @@ public class ClassDefToDocumentConverter
 
 	public static void convert(ClassDef item, String filename, LinkedList<Document> documents)
 	{
-		Document document = documents.peek();
+		Document document = documents.peekLast();
 		CommonCodeItemToDocument.addStandardFields(item, filename, document);	
 	
 		String className = "";
