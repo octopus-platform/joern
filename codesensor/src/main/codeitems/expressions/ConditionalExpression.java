@@ -11,7 +11,7 @@ public class ConditionalExpression extends Expression
 	Expression falseExpr;
 	
 	@Override
-	public void addChildExpression(CodeItem expression)
+	public void addChild(CodeItem expression)
 	{
 		if(getCondition() == null)
 			setCondition((Expression) expression);

@@ -1,12 +1,10 @@
 package main.codeitems.functionContent;
 
-import java.util.LinkedList;
-
+import java.util.List;
 import main.codeitems.CodeItem;
 
 public class CompoundItem extends CodeItem
 {
-	public LinkedList<CodeItem> statements = new LinkedList<CodeItem>();
 	
 	public CompoundItem()
 	{
@@ -15,7 +13,12 @@ public class CompoundItem extends CodeItem
 	
 	public void addStatement(CodeItem stmt)
 	{
-		statements.add(stmt);
+		addChild(stmt);
+	}
+	
+	public List<CodeItem> getStatements()
+	{
+		return getChildren();
 	}
 	
 }

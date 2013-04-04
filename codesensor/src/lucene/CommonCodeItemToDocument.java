@@ -1,7 +1,7 @@
 package lucene;
 
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 
 import main.codeitems.CodeItem;
 import main.codeitems.functionContent.CompoundItem;
@@ -23,7 +23,7 @@ public class CommonCodeItemToDocument
 		CompoundInfoExtractor infoExtractor = new CompoundInfoExtractor();
 		infoExtractor.setDocument(d);
 		
-		LinkedList<CodeItem> statements = item.statements;
+		List<CodeItem> statements = item.getStatements();
 		Iterator<CodeItem> it = statements.iterator();
 		while(it.hasNext()){
 			CodeItem statement = it.next();

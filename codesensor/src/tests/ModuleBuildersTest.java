@@ -29,8 +29,8 @@ public class ModuleBuildersTest {
 		String input = "struct x{ struct y { struct z{}; }; }; abc";
 		List<CodeItem> codeItems = parseInput(input);
 		ClassDef classDef = (ClassDef) codeItems.get(0);
-		ClassDef yClass = (ClassDef) classDef.content.statements.get(0);
-		ClassDef zClass = (ClassDef) yClass.content.statements.get(0);
+		ClassDef yClass = (ClassDef) classDef.content.getStatements().get(0);
+		ClassDef zClass = (ClassDef) yClass.content.getStatements().get(0);
 		
 		assertTrue(codeItems.size() == 1);
 		assertTrue(yClass.getName().getCodeStr().equals("y"));
@@ -70,7 +70,7 @@ public class ModuleBuildersTest {
 		String input = "class foo{ bar(){} };";
 		List<CodeItem> codeItems = parseInput(input);
 		ClassDef codeItem = (ClassDef) codeItems.get(0);
-		FunctionDef funcItem = (FunctionDef) codeItem.content.statements.get(0);
+		FunctionDef funcItem = (FunctionDef) codeItem.content.getStatements().get(0);
 		assertTrue(funcItem.name.getCodeStr().equals("bar"));
 	}
 	
@@ -102,7 +102,7 @@ public class ModuleBuildersTest {
 		List<CodeItem> codeItems = parseInput(input);
 		
 		ClassDef classCodeItem = (ClassDef) codeItems.get(0);
-		IdentifierDeclStatement identifierCodeItem = (IdentifierDeclStatement) classCodeItem.content.statements.get(0);
+		IdentifierDeclStatement identifierCodeItem = (IdentifierDeclStatement) classCodeItem.content.getStatements().get(0);
 		IdentifierDecl decl = identifierCodeItem.identifierDeclList.get(0);
 		
 		assertTrue(classCodeItem.name.getCodeStr().equals("foo"));

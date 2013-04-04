@@ -63,7 +63,7 @@ public class FunctionContentBuilder extends CodeItemBuilder
 		else if (topOfStack instanceof ExprStatementItem){
 			((ExprStatementItem) topOfStack).expr = expression;
 		}else if (topOfStack instanceof Expression){
-			((Expression) topOfStack).addChildExpression(expression);
+			((Expression) topOfStack).addChild(expression);
 		}
 	}
 	

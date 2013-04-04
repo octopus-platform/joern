@@ -2,11 +2,9 @@ package main.codeitems;
 
 
 import java.util.LinkedList;
-
-import main.codeitems.expressions.Expression;
+import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-
 import tools.index.ParseTreeUtils;
 
 
@@ -61,13 +59,9 @@ public class CodeItem {
 	
 	LinkedList<CodeItem> children = new LinkedList<CodeItem>();
 	
-	// Child classes must implement this
-	public void addChildExpression(CodeItem expression)
-	{
-		children.add(expression);
-	}
+	public void addChild(CodeItem expression){ children.add(expression); }
 	public int getChildCount() { return children.size(); }
-	public CodeItem getChild(int i){ return (Expression) children.get(i); }
-	
+	public CodeItem getChild(int i){ return children.get(i); }
+	public List<CodeItem> getChildren(){ return children; }
 	
 }

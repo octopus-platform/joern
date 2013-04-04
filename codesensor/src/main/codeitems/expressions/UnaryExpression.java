@@ -15,7 +15,7 @@ public class UnaryExpression extends Expression
 	LinkedList<Expression> children = new LinkedList<Expression>();
 	
 	@Override
-	public void addChildExpression(CodeItem expression)
+	public void addChild(CodeItem expression)
 	{
 		if(expression instanceof IncDec){
 			incDec = (Expression) expression;

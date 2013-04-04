@@ -152,7 +152,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	private void consolidateIfElse(CompoundItem compoundItem)
 	{
-		Iterator<CodeItem> it = compoundItem.statements.iterator();
+		Iterator<CodeItem> it = compoundItem.getStatements().iterator();
 		CodeItem prev = null;
 		while(it.hasNext()){
 			

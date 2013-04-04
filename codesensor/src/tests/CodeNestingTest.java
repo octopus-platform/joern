@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import antlr.FineFunctionGrammarParser.StatementsContext;
 
+
 public class CodeNestingTest {
 
 	@Test
@@ -28,7 +29,7 @@ public class CodeNestingTest {
 	{
 		String input = "";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		assert(item.statements.size() == 0);
+		assert(item.getStatements().size() == 0);
 	}
 	
 	@Test
@@ -36,7 +37,7 @@ public class CodeNestingTest {
 	{
 		String input = "bar(); {}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		assertTrue(item.statements.size() == 2);
+		assertTrue(item.getStatements().size() == 2);
 	}
 	
 	@Test
@@ -44,7 +45,7 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo){}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		assertTrue(item.statements.size() == 1);
+		assertTrue(item.getStatements().size() == 1);
 	}
 	
 	@Test
@@ -52,7 +53,7 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo) bar();";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		assertTrue(item.statements.size() == 1);
+		assertTrue(item.getStatements().size() == 1);
 	}
 	
 	@Test
@@ -60,7 +61,7 @@ public class CodeNestingTest {
 	{
 		String input = "#ifdef foo\n#else\n #ifdef foo\n#else\n#endif\n#endif";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		assertTrue(item.statements.size() == 0);
+		assertTrue(item.getStatements().size() == 0);
 	}
 	
 	@Test
@@ -68,7 +69,7 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo) if(fooAgain) bar();";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		assertTrue(item.statements.size() == 1);
+		assertTrue(item.getStatements().size() == 1);
 	}
 	
 	@Test
@@ -76,7 +77,7 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo){}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		BlockStarterItem starter = (BlockStarterItem) item.statements.get(0);
+		BlockStarterItem starter = (BlockStarterItem) item.getStatements().get(0);
 		Expression condition = starter.getCondition();
 		System.out.println(condition.getCodeStr());
 		assertTrue(condition.getCodeStr().equals("foo"));
@@ -87,7 +88,7 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo = bar){}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		BlockStarterItem starter = (BlockStarterItem) item.statements.get(0);
+		BlockStarterItem starter = (BlockStarterItem) item.getStatements().get(0);
 		AssignmentExpr condition = (AssignmentExpr) starter.getCondition();
 		System.out.println(condition.getCodeStr());
 		assertTrue(condition.getCodeStr().equals("foo = bar"));
@@ -98,12 +99,12 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo) foo(); else bar();";
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		IfItem ifItem = (IfItem) contentItem.statements.get(0);
+		IfItem ifItem = (IfItem) contentItem.getStatements().get(0);
 		
-		System.out.println(contentItem.statements.size());
+		System.out.println(contentItem.getStatements().size());
 		
 		assertTrue(ifItem.elseItem != null);
-		assertTrue(contentItem.statements.size() == 1);
+		assertTrue(contentItem.getStatements().size() == 1);
 		
 	}
 	
@@ -112,8 +113,8 @@ public class CodeNestingTest {
 	{
 		String input = "#if foo\n bar(); #else\n foo(); foo(); #endif";
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
-		System.out.println(contentItem.statements.size());
-		assertTrue(contentItem.statements.size() == 1);
+		System.out.println(contentItem.getStatements().size());
+		assertTrue(contentItem.getStatements().size() == 1);
 	}
 
 }

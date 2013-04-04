@@ -8,7 +8,7 @@ public class CastExpression extends Expression {
 	Expression castExpression = null;
 	
 	@Override
-	public void addChildExpression(CodeItem expression)
+	public void addChild(CodeItem expression)
 	{
 		if(castTarget == null){
 			castTarget = (Expression) expression;

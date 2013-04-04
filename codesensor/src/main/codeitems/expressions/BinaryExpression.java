@@ -17,7 +17,7 @@ public class BinaryExpression extends Expression
 	public String getOperator(){ return operator; }
 	
 	@Override
-	public void addChildExpression(CodeItem item)
+	public void addChild(CodeItem item)
 	{	
 		Expression expression = (Expression) item;
 		if(getLeft() == null)
