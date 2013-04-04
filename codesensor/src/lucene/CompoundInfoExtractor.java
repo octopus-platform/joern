@@ -22,7 +22,7 @@ public class CompoundInfoExtractor extends CodeItemVisitor
 		d = aD;
 	}
 	
-	@Override
+	
 	public void visit(IdentifierDeclStatement statementItem)
 	{
 		Iterator<IdentifierDecl> it = statementItem.identifierDeclList.iterator();
@@ -35,14 +35,14 @@ public class CompoundInfoExtractor extends CodeItemVisitor
 		}
 	}
 
-	@Override
+	
 	public void visit(ClassDef statementItem)
 	{
 		String name = statementItem.getName().getCodeStr();
 		d.add(LuceneUtils.createField("subClassName", name));
 	}
 	
-	@Override
+	
 	public void visit(ExprStatementItem statementItem)
 	{
 		// TODO: fix this
@@ -51,6 +51,6 @@ public class CompoundInfoExtractor extends CodeItemVisitor
 	}
 
 	@Override public void visit(CodeItem statementItem){}
-	@Override public void visit(FunctionDef item) {}
+	public void visit(FunctionDef item) {}
 
 }

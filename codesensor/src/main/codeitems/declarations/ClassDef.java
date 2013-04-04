@@ -10,7 +10,7 @@ public class ClassDef extends CodeItem
 {
 	
 	public Name name = new DummyName();
-	public CompoundItem content;
+	public CompoundItem content = new CompoundItem();
 	
 	public ClassDef()
 	{

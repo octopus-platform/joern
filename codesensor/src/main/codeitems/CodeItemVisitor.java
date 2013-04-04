@@ -6,14 +6,19 @@ import main.codeitems.function.FunctionDef;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 
-public abstract class CodeItemVisitor
+public class CodeItemVisitor
 {
-	public abstract void visit(CodeItem item);
-	public abstract void visit(FunctionDef item);
-	public abstract void visit(ClassDef item);
-	public abstract void visit(IdentifierDeclStatement statementItem);
-	public abstract void visit(ExprStatementItem statementItem);
+	public void visit(CodeItem item) {}
 	
+	public void visit(FunctionDef item) { defaultHandler(item); }
+	public void visit(ClassDef item){ defaultHandler(item); }
+	public void visit(IdentifierDeclStatement statementItem){ defaultHandler(statementItem); }
+	public void visit(ExprStatementItem statementItem){ defaultHandler(statementItem); }
+	
+	public void defaultHandler(CodeItem item)
+	{
+		visitChildren(item);
+	}
 	
 	public void visitChildren(CodeItem item)
 	{
