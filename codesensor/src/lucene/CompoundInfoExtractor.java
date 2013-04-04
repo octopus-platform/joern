@@ -13,7 +13,7 @@ import main.codeitems.functionContent.IdentifierDeclStatement;
 import org.apache.lucene.document.Document;
 
 
-public class CompoundInfoExtractor implements CodeItemVisitor
+public class CompoundInfoExtractor extends CodeItemVisitor
 {
 	Document d;
 

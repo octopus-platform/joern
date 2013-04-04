@@ -8,5 +8,18 @@ public class ExprStatementItem extends CodeItem
 {
 	public Expression expr;
 
+	public void addChild(CodeItem expression){ }
+	
+	public int getChildCount()
+	{
+		if(expr == null)
+			throw new RuntimeException("Invalid Expression Statement");
+		return 1;
+	}
+	public CodeItem getChild(int i)
+	{
+		return expr;
+	}
+	
 	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 }

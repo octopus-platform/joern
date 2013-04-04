@@ -1,9 +1,5 @@
 package main.codeitems;
 
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import tools.index.ParseTreeUtils;
 
@@ -14,6 +10,14 @@ public class CodeItem {
 	protected ParserRuleContext parseTreeNodeContext;
 	private String nodeTypeName = "unnamed";
 	private CodeLocation location = new CodeLocation();
+	
+	// Overload the following three to
+	// allow placement of CodeItem in a tree
+	
+	public void addChild(CodeItem expression){  }
+	public int getChildCount() { return 0; }
+	public CodeItem getChild(int i){ return null; }
+	
 	
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
@@ -55,13 +59,5 @@ public class CodeItem {
 	public void setNodeTypeName(String nodeTypeName) {
 		this.nodeTypeName = nodeTypeName;
 	}
-	
-	
-	LinkedList<CodeItem> children = new LinkedList<CodeItem>();
-	
-	public void addChild(CodeItem expression){ children.add(expression); }
-	public int getChildCount() { return children.size(); }
-	public CodeItem getChild(int i){ return children.get(i); }
-	public List<CodeItem> getChildren(){ return children; }
 	
 }

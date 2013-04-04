@@ -16,6 +16,15 @@ public class IdentifierDeclStatement extends CodeItem
 		identifierDeclList.add(decl);
 	}
 
+	public void addChild(CodeItem item)
+	{ 
+		addDeclaration((IdentifierDecl) item);
+	}
+	
+	public int getChildCount() { return identifierDeclList.size(); }
+	public CodeItem getChild(int i){ return identifierDeclList.get(i); }
+	
+	
 	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 	
 }

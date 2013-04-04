@@ -6,12 +6,24 @@ import main.codeitems.function.FunctionDef;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 
-public interface CodeItemVisitor
+public abstract class CodeItemVisitor
 {
-	public void visit(CodeItem item);
-	public void visit(FunctionDef item);
-	public void visit(ClassDef item);
-	public void visit(IdentifierDeclStatement statementItem);
-	public void visit(ExprStatementItem statementItem);
+	public abstract void visit(CodeItem item);
+	public abstract void visit(FunctionDef item);
+	public abstract void visit(ClassDef item);
+	public abstract void visit(IdentifierDeclStatement statementItem);
+	public abstract void visit(ExprStatementItem statementItem);
+	
+	
+	public void visitChildren(CodeItem item)
+	{
+		int nChildren = item.getChildCount();
+		
+		for(int i = 0; i < nChildren; i++){
+			CodeItem child = item.getChild(i);
+			child.accept(this);
+		}
+		
+	}
 	
 }

@@ -1,6 +1,5 @@
 package lucene;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.apache.lucene.document.Document;
 
-public class LuceneCodeItemVisitor implements CodeItemVisitor
+public class LuceneCodeItemVisitor extends CodeItemVisitor
 {
 	
 	String filename = "";
