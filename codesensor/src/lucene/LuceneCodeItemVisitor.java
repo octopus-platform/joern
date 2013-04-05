@@ -1,7 +1,6 @@
 package lucene;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Stack;
 
 import lucene.DocumentFactory.DocumentType;
@@ -23,8 +22,12 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 	
 	Stack<Document> documents = new Stack<Document>();
 	Analyzer analyzer = new KeywordAnalyzer();
-	LuceneIndexWriter writer = new LuceneIndexWriter(analyzer);
+	IDocumentWriter writer = new LuceneIndexWriter(analyzer);
 	
+	public void setDocumentWriter(IDocumentWriter aWriter)
+	{
+		writer = aWriter;
+	}
 	
 	public void setFilename(String aFilename)
 	{
@@ -43,14 +46,20 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 		documents.push(newDocument);
 		FunctionDefToDocumentConverter.convert(item, filename, documents);
 		visitChildren(item);
+		
+		documents.pop();
+		writer.addDocumentToIndex(newDocument);
 	}
 	
 	public void visit(ClassDef item)
 	{
 		Document newDocument = DocumentFactory.createNewDocument(DocumentType.TYPE);
-		documents.add(newDocument);
+		documents.push(newDocument);
 		ClassDefToDocumentConverter.convert(item, filename, documents);
 		visitChildren(item);
+	
+		documents.pop();
+		writer.addDocumentToIndex(newDocument);
 	}
 	
 	public void visit(IdentifierDeclStatement statementItem)
@@ -74,11 +83,6 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 		visitChildren(statementItem);
 	}
 	
-	public List<Document> getDocuments()
-	{
-		return documents;
-	}
-
 	public void shutdown()
 	{
 		writer.shutdown();

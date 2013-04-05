@@ -13,7 +13,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-public class LuceneIndexWriter
+public class LuceneIndexWriter implements IDocumentWriter
 {
 	
 	IndexWriterConfig iwc;
@@ -25,11 +25,13 @@ public class LuceneIndexWriter
 		iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 	}
 	
+	@Override
 	public void setIndexDirectoryName(String aName)
 	{
 		indexDirectoryName = aName;
 	}
 	
+	@Override
 	public void initialize(){
 		if(indexDirectoryName == null)
 			throw new RuntimeException("Directory name for index not set");
@@ -41,6 +43,7 @@ public class LuceneIndexWriter
 		}
 	}
 	
+	@Override
 	public void addDocumentsToIndex(List<Document> documents)
 	{
 		Iterator<Document> it = documents.iterator();
@@ -50,6 +53,7 @@ public class LuceneIndexWriter
 		}
 	}
 	
+	@Override
 	public void addDocumentToIndex(Document doc)
 	{
 		try {
@@ -59,6 +63,7 @@ public class LuceneIndexWriter
 		}
 	}
 	
+	@Override
 	public void shutdown()
 	{
 		try {
