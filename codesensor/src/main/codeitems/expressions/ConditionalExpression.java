@@ -1,12 +1,13 @@
 package main.codeitems.expressions;
 
 import main.codeitems.CodeItem;
+import main.codeitems.functionContent.Condition;
 
 public class ConditionalExpression extends Expression
 {
 	Expression expressions [] = new Expression[3];
 
-	Expression condition;
+	Condition condition;
 	Expression trueExpr;
 	Expression falseExpr;
 	

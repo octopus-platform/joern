@@ -8,7 +8,9 @@ import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.Expression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.Condition;
 import main.codeitems.functionContent.ExprStatementItem;
+import main.codeitems.functionContent.ExpressionHolder;
 import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -59,9 +61,9 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	{
 		CodeItem topOfStack = itemStack.peek();
 		if(topOfStack instanceof BlockStarterItem)
-			((BlockStarterItem) topOfStack).setCondition(expression);
-		else if (topOfStack instanceof ExprStatementItem){
-			((ExprStatementItem) topOfStack).expr = expression;
+			((BlockStarterItem) topOfStack).setCondition(new Condition(expression));
+		else if (topOfStack instanceof ExpressionHolder){
+			((ExpressionHolder) topOfStack).expr = expression;
 		}else if (topOfStack instanceof Expression){
 			((Expression) topOfStack).addChild(expression);
 		}

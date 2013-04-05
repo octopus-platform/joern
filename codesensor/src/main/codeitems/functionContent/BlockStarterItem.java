@@ -7,9 +7,9 @@ import main.codeitems.expressions.Expression;
 public class BlockStarterItem extends CodeItem
 {
 	CodeItem statement = null;
-	Expression condition = null;
+	Condition condition = null;
 	
-	public Expression getCondition()
+	public Condition getCondition()
 	{
 		return condition;
 	}
@@ -19,7 +19,7 @@ public class BlockStarterItem extends CodeItem
 		statement = aStatement;
 	}
 
-	public void setCondition(Expression expression)
+	public void setCondition(Condition expression)
 	{
 		condition = expression;
 	}

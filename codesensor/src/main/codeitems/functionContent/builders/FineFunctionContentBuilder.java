@@ -24,6 +24,7 @@ import main.codeitems.expressions.ShiftExpression;
 import main.codeitems.functionContent.BlockStarterItem;
 import main.codeitems.functionContent.CloseBlockItem;
 import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.functionContent.Condition;
 import main.codeitems.functionContent.ElseItem;
 import main.codeitems.functionContent.ExprStatementItem;
 import main.codeitems.functionContent.IfItem;
@@ -35,6 +36,7 @@ import antlr.FineFunctionGrammarParser.Block_starterContext;
 import antlr.FineFunctionGrammarParser.Cast_expressionContext;
 import antlr.FineFunctionGrammarParser.Cast_targetContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
+import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
@@ -377,6 +379,22 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void exitFieldOnly(FieldOnlyContext ctx)
 	{
 		consolidateSubExpression(ctx);
+	}
+
+	public void enterCondition(ConditionContext ctx)
+	{
+		Condition expr = new Condition();
+		itemStack.push(expr);
+	}
+
+	public void exitCondition(ConditionContext ctx)
+	{
+		Condition cond = (Condition) itemStack.pop();
+		CodeItem topOfStack = itemStack.peek();
+		if(topOfStack instanceof BlockStarterItem)
+			((BlockStarterItem) topOfStack).setCondition(cond);
+		else
+			((ConditionalExpression) topOfStack).addChild(cond);
 	}
 	
 }

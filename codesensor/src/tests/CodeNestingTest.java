@@ -78,7 +78,7 @@ public class CodeNestingTest {
 		String input = "if(foo){}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarterItem starter = (BlockStarterItem) item.getStatements().get(0);
-		Expression condition = starter.getCondition();
+		Expression condition = starter.getCondition().getExpression();
 		System.out.println(condition.getCodeStr());
 		assertTrue(condition.getCodeStr().equals("foo"));
 	}
@@ -89,7 +89,7 @@ public class CodeNestingTest {
 		String input = "if(foo = bar){}";
 		CompoundItem item = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarterItem starter = (BlockStarterItem) item.getStatements().get(0);
-		AssignmentExpr condition = (AssignmentExpr) starter.getCondition();
+		AssignmentExpr condition = (AssignmentExpr) starter.getCondition().getExpression();
 		System.out.println(condition.getCodeStr());
 		assertTrue(condition.getCodeStr().equals("foo = bar"));
 	}

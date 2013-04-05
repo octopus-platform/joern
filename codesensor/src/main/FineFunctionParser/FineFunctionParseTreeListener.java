@@ -117,6 +117,18 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		}		
 	}
 	
+	@Override public void enterCondition(FineFunctionGrammarParser.ConditionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterCondition(ctx);
+	}
+	
+	@Override public void exitCondition(FineFunctionGrammarParser.ConditionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitCondition(ctx);
+	}
+	
 	
 	@Override public void enterExpr(FineFunctionGrammarParser.ExprContext ctx)
 	{
