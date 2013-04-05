@@ -45,7 +45,7 @@ public class DocumentFactory {
 
 	private static void markDocumentWithId(Document doc)
 	{
-		if(doc.getField("id") != null)
+		if(doc.getFieldable("id") != null)
 			return;
 		doc.add(new NumericField("id", Field.Store.YES, true).setIntValue(currentDocumentId));
 	}

@@ -14,8 +14,6 @@ import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.apache.lucene.document.Document;
 
-
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
@@ -29,8 +27,8 @@ public class LuceneCodeItemVisitorTest {
 		FunctionDef functionDef = new FunctionDef();
 		functionDef.accept(visitor);
 		Document document = visitor.getDocuments().get(0);
-		System.out.println(document.getField("type").stringValue());
-		assertTrue(document.getField("type").stringValue().equals("function"));
+		System.out.println(document.getFieldable("type").stringValue());
+		assertTrue(document.getFieldable("type").stringValue().equals("function"));
 	}
 		
 	@Test
@@ -40,8 +38,8 @@ public class LuceneCodeItemVisitorTest {
 		ClassDef functionDef = new ClassDef();
 		functionDef.accept(visitor);
 		Document document = visitor.getDocuments().get(0);
-		System.out.println(document.getField("type").stringValue());
-		assertTrue(document.getField("type").stringValue().equals("type"));
+		System.out.println(document.getFieldable("type").stringValue());
+		assertTrue(document.getFieldable("type").stringValue().equals("type"));
 	}
 	
 	@Test
@@ -52,8 +50,8 @@ public class LuceneCodeItemVisitorTest {
 		expression.addChild(new FunctionDef());
 		expression.accept(visitor);
 		Document document = visitor.getDocuments().get(0);
-		System.out.println(document.getField("type").stringValue());
-		assertTrue(document.getField("type").stringValue().equals("function"));
+		System.out.println(document.getFieldable("type").stringValue());
+		assertTrue(document.getFieldable("type").stringValue().equals("function"));
 	}
 	
 	@Test
@@ -70,6 +68,6 @@ public class LuceneCodeItemVisitorTest {
 		
 		item.addStatement(declStatement);
 		item.accept(visitor);		
-		assertTrue(visitor.getDocuments().get(0).getField("localName") != null);
+		assertTrue(visitor.getDocuments().get(0).getFieldable("localName") != null);
 	}
 }

@@ -38,8 +38,8 @@ public class OutputModule
 	
 	private String getLocationString(Document document)
 	{
-		String filename = document.getField("filename").stringValue();
-		String positionStr = document.getField("location").stringValue();				
+		String filename = document.getFieldable("filename").stringValue();
+		String positionStr = document.getFieldable("location").stringValue();				
 		return filename + ":" + positionStr;
 	}
 	

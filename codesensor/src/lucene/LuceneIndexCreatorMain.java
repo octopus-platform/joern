@@ -1,6 +1,5 @@
 package lucene;
 
-import java.util.List;
 import java.util.Stack;
 
 import main.codeitems.CodeItem;
@@ -8,9 +7,6 @@ import main.codeitems.CodeItemBuilder;
 import main.processors.Processor;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.KeywordAnalyzer;
-import org.apache.lucene.document.Document;
 
 public class LuceneIndexCreatorMain extends Processor
 {
