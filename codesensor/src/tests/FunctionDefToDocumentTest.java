@@ -2,14 +2,12 @@ package tests;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
 
+import java.util.Stack;
 import lucene.FunctionDefToDocumentConverter;
-import main.codeitems.Name;
-import main.codeitems.declarations.IdentifierDecl;
+
 import main.codeitems.function.FunctionDef;
 import main.codeitems.function.Parameter;
-import main.codeitems.functionContent.IdentifierDeclStatement;
 
 import org.apache.lucene.document.Document;
 import org.junit.Before;
@@ -19,7 +17,7 @@ import org.junit.Test;
 public class FunctionDefToDocumentTest
 {
 	Document document;
-	LinkedList<Document> documents = new LinkedList<Document>();
+	Stack<Document> documents = new Stack<Document>();
 	
 	@Before
 	public void initialize()
@@ -27,8 +25,7 @@ public class FunctionDefToDocumentTest
 		document = new Document();
 		documents.add(document);
 	}
-
-
+	
 	@Test
 	public void testUnnamedFunction()
 	{		

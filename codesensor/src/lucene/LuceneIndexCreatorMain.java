@@ -15,15 +15,11 @@ import org.apache.lucene.document.Document;
 public class LuceneIndexCreatorMain extends Processor
 {
 	
-	Analyzer analyzer = new KeywordAnalyzer();
-	String filename = "";
-	LuceneIndexWriter writer = new LuceneIndexWriter(analyzer); 
 	
-	@Override
-	public void begin()
-	{
-		writer.initialize();
-	}
+	String filename = "";
+	LuceneCodeItemVisitor converter = new LuceneCodeItemVisitor();
+	
+	@Override public void begin(){}
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String aFilename)
@@ -34,25 +30,22 @@ public class LuceneIndexCreatorMain extends Processor
 	@Override
 	public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
 	{
-		LuceneCodeItemVisitor converter = new LuceneCodeItemVisitor();
 		converter.setFilename(filename);
 		item.accept(converter);
-		
-		List<Document> documents = converter.getDocuments();
-		writer.addDocumentsToIndex(documents);
 	}
 
 	@Override public void endOfUnit(ParserRuleContext ctx, String filename){}
 	
 	public void setIndexDirectoryName(String dirName)
 	{
-		writer.setIndexDirectoryName(dirName);
+		converter.setIndexDirectoryName(dirName);
 	}
 	
 	@Override
 	public void end()
 	{
-		writer.shutdown();
+		converter.shutdown();
 	}
+	
 	
 }

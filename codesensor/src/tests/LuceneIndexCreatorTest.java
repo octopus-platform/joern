@@ -18,13 +18,6 @@ public class LuceneIndexCreatorTest {
 		return indexCreator;
 	}
 	
-	@Test(expected=RuntimeException.class)
-	public void testDirectoryNameUnset()
-	{
-		LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
-		indexCreator.begin();
-	}
-
 	@Test
 	public void testEmptyIndex()
 	{

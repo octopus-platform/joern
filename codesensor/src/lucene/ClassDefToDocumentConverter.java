@@ -1,18 +1,15 @@
 package lucene;
 
-
-import java.util.LinkedList;
-
+import java.util.Stack;
 import main.codeitems.declarations.ClassDef;
-
 import org.apache.lucene.document.Document;
 
 public class ClassDefToDocumentConverter
 {
 
-	public static void convert(ClassDef item, String filename, LinkedList<Document> documents)
+	public static void convert(ClassDef item, String filename, Stack<Document> documents)
 	{
-		Document document = documents.peekLast();
+		Document document = documents.peek();
 		CommonCodeItemToDocument.addStandardFields(item, filename, document);	
 	
 		String className = "";

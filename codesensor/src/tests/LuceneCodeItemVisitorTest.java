@@ -41,7 +41,7 @@ public class LuceneCodeItemVisitorTest {
 		functionDef.accept(visitor);
 		Document document = visitor.getDocuments().get(0);
 		System.out.println(document.getField("type").stringValue());
-		assertTrue(document.getField("type").stringValue().equals("class"));
+		assertTrue(document.getField("type").stringValue().equals("type"));
 	}
 	
 	@Test

@@ -1,17 +1,14 @@
 package lucene;
 
-
-import java.util.LinkedList;
-
+import java.util.Stack;
 import main.codeitems.function.FunctionDef;
-
 import org.apache.lucene.document.Document;
 
 public class FunctionDefToDocumentConverter
 {
-	public static void convert(FunctionDef item, String filename, LinkedList<Document> documents)
+	public static void convert(FunctionDef item, String filename, Stack<Document> documents)
 	{	
-		Document functionDoc = documents.peekLast();
+		Document functionDoc = documents.peek();
 		
 		CommonCodeItemToDocument.addStandardFields(item, filename, functionDoc);
 		functionDoc.add(LuceneUtils.createField("name", item.name.getCodeStr()));
