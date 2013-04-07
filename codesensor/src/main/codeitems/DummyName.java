@@ -1,6 +1,6 @@
 package main.codeitems;
 
-public class DummyName extends Name
+public class DummyName extends Identifier
 {
 	public DummyName(){ super(); }
 	

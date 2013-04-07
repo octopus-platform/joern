@@ -1,10 +1,11 @@
 package main.codeitems;
 
 import main.codeitems.declarations.ClassDef;
+import main.codeitems.expressions.CallExpression;
 
-import main.codeitems.function.FunctionDef;
-import main.codeitems.functionContent.ExprStatementItem;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.functionDef.FunctionDef;
+import main.codeitems.statements.ExprStatementItem;
+import main.codeitems.statements.IdentifierDeclStatement;
 
 public class CodeItemVisitor
 {
@@ -14,6 +15,7 @@ public class CodeItemVisitor
 	public void visit(ClassDef item){ defaultHandler(item); }
 	public void visit(IdentifierDeclStatement statementItem){ defaultHandler(statementItem); }
 	public void visit(ExprStatementItem statementItem){ defaultHandler(statementItem); }
+	public void visit(CallExpression expression) {}
 	
 	public void defaultHandler(CodeItem item)
 	{

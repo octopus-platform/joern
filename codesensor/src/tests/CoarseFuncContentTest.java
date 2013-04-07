@@ -5,9 +5,9 @@ import main.CoarseFunctionParser.CoarseFunctionParser;
 import main.codeitems.CodeItem;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.CallExpression;
-import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.ExprStatementItem;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.statements.CompoundItem;
+import main.codeitems.statements.ExprStatementItem;
+import main.codeitems.statements.IdentifierDeclStatement;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class CoarseFuncContentTest
 		String input = "foo();";
 		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
 		ExprStatementItem statementItem = (ExprStatementItem) contentItem.getStatements().get(0);
-		CallExpression call = (CallExpression) statementItem.expr;
+		CallExpression call = (CallExpression) statementItem.getExpression();
 		assertTrue(call.getTarget().getCodeStr().equals("foo"));
 	}
 	
@@ -42,7 +42,7 @@ public class CoarseFuncContentTest
 		String input = "int x;";
 		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
 		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.getStatements().get(0);
-		IdentifierDecl identifierDecl = statementItem.identifierDeclList.get(0);
+		IdentifierDecl identifierDecl = (IdentifierDecl) statementItem.getIdentifierDeclList().get(0);
 		assertTrue(identifierDecl.name.getCodeStr().equals("x"));
 	}
 	

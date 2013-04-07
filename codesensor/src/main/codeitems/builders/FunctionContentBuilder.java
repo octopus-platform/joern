@@ -1,4 +1,4 @@
-package main.codeitems.functionContent.builders;
+package main.codeitems.builders;
 
 import java.util.Stack;
 
@@ -6,14 +6,17 @@ import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.Expression;
-import main.codeitems.functionContent.BlockStarterItem;
-import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.Condition;
-import main.codeitems.functionContent.ExprStatementItem;
-import main.codeitems.functionContent.ExpressionHolder;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.statements.BlockStarterItem;
+import main.codeitems.statements.CompoundItem;
+import main.codeitems.statements.Condition;
+import main.codeitems.statements.ExprStatementItem;
+import main.codeitems.statements.ExpressionHolder;
+import main.codeitems.statements.IdentifierDeclStatement;
+import main.codeitems.statements.Statement;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+
+import antlr.CoarseFunctionGrammarParser.Type_nameContext;
 
 public class FunctionContentBuilder extends CodeItemBuilder
 {
@@ -32,12 +35,22 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	public void addLocalDecl(IdentifierDecl decl)
 	{
 		IdentifierDeclStatement declStmt = (IdentifierDeclStatement) itemStack.peek();
-		declStmt.addDeclaration(decl);
+		declStmt.addChild(decl);
 	}
 
-	public void enterDeclByType()
+	public void enterDeclByType(ParserRuleContext ctx)
 	{
-		replaceTopOfStack(new IdentifierDeclStatement());
+		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
+		declStmt.setTypeNameContext(ctx);
+		if(itemStack.peek() instanceof Statement)
+			replaceTopOfStack(declStmt);
+		else
+			itemStack.push(declStmt);
+	}
+	
+	public void exitDeclByType()
+	{
+		consolidate();
 	}
 	
 	protected void replaceTopOfStack(CodeItem item)
@@ -49,24 +62,22 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	protected void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();
-		
-		if(expression.getChildCount() == 1)
-			expression = (Expression) expression.getChild(0);
-		
+		expression = pullUpOnlyChild(expression);
 		expression.initializeFromContext(ctx);
-		consolidateExpression(expression);
+		addItemToParent(expression);
 	}
 
-	protected void consolidateExpression(Expression expression)
+	private Expression pullUpOnlyChild(Expression expression)
+	{
+		if(expression.getChildCount() == 1)
+			expression = (Expression) expression.getChild(0);
+		return expression;
+	}
+
+	protected void addItemToParent(CodeItem expression)
 	{
 		CodeItem topOfStack = itemStack.peek();
-		if(topOfStack instanceof BlockStarterItem)
-			((BlockStarterItem) topOfStack).setCondition(new Condition(expression));
-		else if (topOfStack instanceof ExpressionHolder){
-			((ExpressionHolder) topOfStack).expr = expression;
-		}else if (topOfStack instanceof Expression){
-			((Expression) topOfStack).addChild(expression);
-		}
+		topOfStack.addChild(expression);
 	}
 	
 	protected void consolidate()
@@ -82,27 +93,29 @@ public class FunctionContentBuilder extends CodeItemBuilder
 			CompoundItem compound = (CompoundItem)topOfStack;
 			compound.addStatement(stmt);
 		}else{
-			consolidateBlockStarters(topOfStack);
+			consolidateBlockStarters(stmt);
 		}
 		
 	}
 	
 	// Joins consecutive BlockStarters on the stack
 	
-	protected void consolidateBlockStarters(CodeItem topOfStack)
+	protected void consolidateBlockStarters(CodeItem stmt)
 	{
+		
 		while(true){
 			try{
 				BlockStarterItem bItem = (BlockStarterItem) itemStack.peek();
 				bItem = (BlockStarterItem) itemStack.pop();
-				bItem.setStatement(topOfStack);
-				topOfStack = bItem;
+				bItem.addChild(stmt);
+				stmt = bItem;
 			}catch(ClassCastException ex){
 				break;
 			}
 		}
+		// Finally, add chain to top compound-item
 		CompoundItem root = (CompoundItem) itemStack.peek();
-		root.addStatement(topOfStack);
+		root.addStatement(stmt);
 	}
 	
 }

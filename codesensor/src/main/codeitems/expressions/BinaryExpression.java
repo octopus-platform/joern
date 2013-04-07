@@ -22,8 +22,10 @@ public class BinaryExpression extends Expression
 		Expression expression = (Expression) item;
 		if(getLeft() == null)
 			setLeft(expression);
-		else
+		else if(getRight() == null)
 			setRight(expression);
+		else
+			throw new RuntimeException("Error: attempting to add third child to binary expression");
 	}
 	
 	@Override

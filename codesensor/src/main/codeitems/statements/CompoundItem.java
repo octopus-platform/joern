@@ -1,10 +1,10 @@
-package main.codeitems.functionContent;
+package main.codeitems.statements;
 
 import java.util.LinkedList;
 import java.util.List;
 import main.codeitems.CodeItem;
 
-public class CompoundItem extends CodeItem
+public class CompoundItem extends Statement
 {
 
 	LinkedList<CodeItem> statements = new LinkedList<CodeItem>();

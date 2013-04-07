@@ -1,6 +1,5 @@
-package main.codeitems.functionContent;
+package main.codeitems.statements;
 
 public class ElseItem extends BlockStarterItem
 {
-	
 }

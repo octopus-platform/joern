@@ -1,4 +1,4 @@
-package main.codeitems.function;
+package main.codeitems.functionDef;
 
 public class DummyReturnType extends ReturnType
 {

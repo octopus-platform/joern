@@ -1,10 +1,12 @@
 package main.codeitems;
 
-public class Name extends CodeItem
+import org.antlr.v4.runtime.ParserRuleContext;
+
+public class Identifier extends CodeItem
 {
-	public Name()
+	public Identifier()
 	{
-		setNodeTypeName("NAME");
+		setNodeTypeName("IDENTIFIER");
 	}
 	
 	public String getCodeStr()
@@ -16,6 +18,11 @@ public class Name extends CodeItem
 		else
 			codeStr = "";
 		return codeStr;
+	}
+
+	public ParserRuleContext getParseTreeNodeContext()
+	{
+		return parseTreeNodeContext;
 	}
 	
 }

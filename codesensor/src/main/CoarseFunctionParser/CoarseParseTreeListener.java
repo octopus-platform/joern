@@ -3,9 +3,9 @@ package main.CoarseFunctionParser;
 import java.util.Iterator;
 import java.util.List;
 
+import main.codeitems.builders.CoarseFunctionContentBuilder;
+import main.codeitems.builders.IdentifierDeclBuilder;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.builders.IdentifierDeclBuilder;
-import main.codeitems.functionContent.builders.CoarseFunctionContentBuilder;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -102,7 +102,7 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx)
 	{
 		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterDeclByType();
+		builder.enterDeclByType(ctx.type_name());
 		
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		Type_nameContext typeName = ctx.type_name();

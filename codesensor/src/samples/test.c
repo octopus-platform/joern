@@ -1,7 +1,14 @@
 #include <foo.h>
 
 
-
+struct lafe_line_reader *
+lafe_line_reader(const char *pathname, int nullSeparator)
+{
+	if (strcmp(pathname, "-") == 0)
+		lr->f = stdin;
+	else
+		lr->f = fopen(pathname, "r");
+}
 
 void
 set_chdir(struct bsdtar *bsdtar, const char *newdir)

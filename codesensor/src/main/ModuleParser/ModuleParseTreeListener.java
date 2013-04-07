@@ -4,12 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import main.FunctionParser.FunctionParser;
+import main.codeitems.builders.ClassDefBuilder;
+import main.codeitems.builders.FunctionDefBuilder;
+import main.codeitems.builders.IdentifierDeclBuilder;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.builders.ClassDefBuilder;
-import main.codeitems.declarations.builders.IdentifierDeclBuilder;
-import main.codeitems.function.builders.FunctionDefBuilder;
-import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.statements.CompoundItem;
+import main.codeitems.statements.IdentifierDeclStatement;
 import main.processors.CompoundItemGenerator;
 
 import org.antlr.v4.runtime.CharStream;
@@ -148,7 +148,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		Iterator<IdentifierDecl> it = declarations.iterator();
 		while(it.hasNext()){
 			IdentifierDecl decl = it.next();
-			stmt.addDeclaration(decl);
+			stmt.addChild(decl);
 		}		
 	
 		p.notifyObserversOfItem(stmt);

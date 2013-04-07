@@ -1,11 +1,17 @@
 package tests;
 
 import static org.junit.Assert.assertTrue;
+import main.codeitems.CodeItem;
+import main.codeitems.declarations.ClassDef;
+import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.Expression;
-import main.codeitems.functionContent.BlockStarterItem;
-import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.IfItem;
+import main.codeitems.statements.BlockStarterItem;
+import main.codeitems.statements.CompoundItem;
+import main.codeitems.statements.Condition;
+import main.codeitems.statements.ForItem;
+import main.codeitems.statements.IdentifierDeclStatement;
+import main.codeitems.statements.IfItem;
 
 import org.junit.Test;
 
@@ -97,15 +103,88 @@ public class CodeNestingTest {
 	@Test
 	public void ifElse()
 	{
-		String input = "if(foo) foo(); else bar();";
+		String input = "if(foo) lr->f = stdin; else lr->f = fopen(pathname, \"r\");";
 		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
 		IfItem ifItem = (IfItem) contentItem.getStatements().get(0);
 		
 		System.out.println(contentItem.getStatements().size());
 		
 		assertTrue(ifItem.elseItem != null);
+		assertTrue(ifItem.elseItem.getChild(1) != null);
 		assertTrue(contentItem.getStatements().size() == 1);
+	}
+	
+	@Test
+	public void testIf()
+	{
+		String input = "if(a == b) foo();";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		IfItem ifItem = (IfItem) contentItem.getStatements().get(0);
+		Condition condition = ifItem.getCondition();
+		Expression expression = condition.getExpression();
+		CodeItem firstChild = expression.getChild(0);
+		assertTrue(firstChild.getChildCount() == 0);
+	}
+
+	@Test
+	public void testFor()
+	{
+		String input = "for(i = 0; i < 10; i++){}";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ForItem forItem = (ForItem) contentItem.getStatements().get(0);
 		
+		String condExprString = forItem.getCondition().getExpression().getCodeStr();
+		assertTrue(condExprString.equals("i < 10"));
+		
+	}
+	
+	@Test
+	public void testVarDeclName()
+	{
+		String input = "int x = 2*y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
+		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
+		assertTrue(decl.name.getCodeStr().equals("x"));
+	}
+	
+	@Test
+	public void testVarDeclType()
+	{
+		String input = "int x = 2*y;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
+		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
+		System.out.println(decl.type.getCodeStr());
+		assertTrue(decl.type.getCodeStr().equals("int"));
+	}
+	
+	@Test
+	public void testDeclRightAfterStruct()
+	{
+		String input = "struct foo{ int x; } foo;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		assertTrue(contentItem.getChildCount() == 1);
+		ClassDef classDef = (ClassDef) contentItem.getChild(0);
+		assertTrue(classDef.getChildCount() == 1);
+		IdentifierDecl decl = (IdentifierDecl) classDef.getChild(0);
+		assertTrue(decl.name.getCodeStr().equals("foo"));
+	}
+	
+	@Test
+	public void testConditionalExpr()
+	{
+		String input = "for (int k = m; k < l; k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]){}";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		
+		System.out.println(contentItem.getStatements().size());
+		System.out.println(contentItem.getStatements().get(0).getClass());
+		System.out.println(contentItem.getStatements().get(1).getClass());
+		
+		// BlockStarterItem forItem = (BlockStarterItem) contentItem.getStatements().get(0);
+		// Condition condition = forItem.getCondition();
+		// System.out.println(forItem.getChild(0).getCodeStr());
+		// System.out.println(condition.getExpression().getCodeStr());
 	}
 	
 	@Test

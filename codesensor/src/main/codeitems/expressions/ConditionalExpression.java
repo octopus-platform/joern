@@ -1,7 +1,7 @@
 package main.codeitems.expressions;
 
 import main.codeitems.CodeItem;
-import main.codeitems.functionContent.Condition;
+import main.codeitems.statements.Condition;
 
 public class ConditionalExpression extends Expression
 {

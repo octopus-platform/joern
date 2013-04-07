@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.statements.CompoundItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 

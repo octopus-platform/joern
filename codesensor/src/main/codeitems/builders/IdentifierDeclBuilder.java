@@ -1,11 +1,11 @@
-package main.codeitems.declarations.builders;
+package main.codeitems.builders;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.Name;
+import main.codeitems.Identifier;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclType;
 
@@ -47,7 +47,7 @@ public class IdentifierDeclBuilder extends CodeItemBuilder
 	public void setName(InitDeclContextWrapper decl_ctx)
 	{
 		ParserRuleContext identifier = decl_ctx.identifier();
-		thisItem.name = new Name();
+		thisItem.name = new Identifier();
 		thisItem.name.initializeFromContext(identifier);
 	}
 	

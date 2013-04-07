@@ -1,19 +1,17 @@
 package lucene;
 
-import java.util.Stack;
-import main.codeitems.function.FunctionDef;
+import main.codeitems.functionDef.FunctionDef;
+
 import org.apache.lucene.document.Document;
 
 public class FunctionDefToDocumentConverter
 {
-	public static void convert(FunctionDef item, String filename, Stack<Document> documents)
-	{	
-		Document functionDoc = documents.peek();
-		
-		CommonCodeItemToDocument.addStandardFields(item, filename, functionDoc);
-		functionDoc.add(LuceneUtils.createField("name", item.name.getCodeStr()));
-		functionDoc.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
-		addParameters(item, functionDoc);		
+	public static void convert(FunctionDef item, String filename, Document d)
+	{			
+		CommonCodeItemToDocument.addStandardFields(item, filename, d);
+		d.add(LuceneUtils.createField("name", item.name.getCodeStr()));
+		d.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
+		addParameters(item, d);		
 	}
 
 	private static void addParameters(FunctionDef item, Document d)

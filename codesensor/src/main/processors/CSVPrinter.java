@@ -7,9 +7,9 @@ import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.function.FunctionDef;
-import main.codeitems.function.Parameter;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.functionDef.FunctionDef;
+import main.codeitems.functionDef.Parameter;
+import main.codeitems.statements.IdentifierDeclStatement;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -88,9 +88,9 @@ public class CSVPrinter extends Processor
 	{
     	IdentifierDeclStatement stmt = (IdentifierDeclStatement) aItem;
     	
-    	Iterator<IdentifierDecl> it = stmt.identifierDeclList.iterator();
+    	Iterator<CodeItem> it = stmt.getIdentifierDeclList().iterator();
     	while(it.hasNext()){
-    		IdentifierDecl item = it.next();
+    		IdentifierDecl item = (IdentifierDecl) it.next();
     		int level = itemStack.size();
         	
         	item.setCodeStr(item.name.getCodeStr());

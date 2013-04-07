@@ -1,16 +1,16 @@
-package main.codeitems.function;
+package main.codeitems.functionDef;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.DummyName;
-import main.codeitems.Name;
-import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.Identifier;
+import main.codeitems.statements.CompoundItem;
 
 
 public class FunctionDef extends CodeItem
 {
 
-	public Name name = new DummyName();
+	public Identifier name = new DummyName();
 	public ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = new DummyReturnType();
 	public CompoundItem content = new CompoundItem();

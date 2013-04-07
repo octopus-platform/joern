@@ -1,7 +1,7 @@
-package main.codeitems.function;
+package main.codeitems.functionDef;
 
 import main.codeitems.CodeItem;
-import main.codeitems.Name;
+import main.codeitems.Identifier;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -12,7 +12,7 @@ import antlr.CodeSensorParser.Parameter_nameContext;
 public class Parameter extends CodeItem
 {
 	public ParameterType type = new ParameterType();
-	public Name name = new Name();
+	public Identifier name = new Identifier();
 	
 	public Parameter()
 	{

@@ -3,9 +3,9 @@ package main.FineFunctionParser;
 import java.util.Iterator;
 import java.util.List;
 
+import main.codeitems.builders.FineFunctionContentBuilder;
+import main.codeitems.builders.IdentifierDeclBuilder;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.declarations.builders.IdentifierDeclBuilder;
-import main.codeitems.functionContent.builders.FineFunctionContentBuilder;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -63,6 +63,12 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.enterIf(ctx);
 	}
 	
+	@Override public void enterFor_statement(FineFunctionGrammarParser.For_statementContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterFor(ctx);
+	}
+	
 	@Override
 	public void enterBlock_starter(FineFunctionGrammarParser.Block_starterContext ctx)
 	{
@@ -95,27 +101,40 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	public void enterDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterDeclByType();
-		
-		Init_declarator_listContext decl_list = ctx.init_declarator_list();
-		Type_nameContext typeName = ctx.type_name();
-		emitDeclarations(decl_list, typeName);
+		builder.enterDeclByType(ctx.type_name());
 	}
 	
-	private void emitDeclarations(ParserRuleContext decl_list,
-			  ParserRuleContext typeName)
+	@Override
+	public void exitDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx)
 	{
-		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
-		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
-
-		FineFunctionContentBuilder contentBuilder = (FineFunctionContentBuilder) p.itemStack.peek();
-		
-		Iterator<IdentifierDecl> it = declarations.iterator();
-		while(it.hasNext()){
-			IdentifierDecl decl = it.next();
-			contentBuilder.addLocalDecl(decl);
-		}		
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitDeclByType();
 	}
+	
+	@Override public void enterDeclByClass(FineFunctionGrammarParser.DeclByClassContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterDeclByClass(ctx);
+	}
+	
+	@Override public void exitDeclByClass(FineFunctionGrammarParser.DeclByClassContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitDeclByClass();
+	}
+	
+	@Override public void enterInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterInitDeclarator(ctx);
+	}
+	
+	@Override public void exitInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitInitDeclarator();
+	}
+	
 	
 	@Override public void enterCondition(FineFunctionGrammarParser.ConditionContext ctx)
 	{

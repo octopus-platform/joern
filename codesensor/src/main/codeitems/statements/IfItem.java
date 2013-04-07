@@ -1,4 +1,4 @@
-package main.codeitems.functionContent;
+package main.codeitems.statements;
 
 import main.codeitems.CodeItem;
 
@@ -11,6 +11,7 @@ public class IfItem extends BlockStarterItem {
 	public int getChildCount()
 	{
 		int childCount = super.getChildCount();
+		
 		if(elseItem != null) childCount++;
 		return childCount;
 	}
@@ -21,6 +22,8 @@ public class IfItem extends BlockStarterItem {
 			return condition;
 		else if (i == 1)
 			return statement;
-		return elseItem;
+		else if(i == 2)
+			return elseItem;
+		throw new RuntimeException("Invalid IfItem");
 	}
 }

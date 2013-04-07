@@ -1,4 +1,4 @@
-package main.codeitems.functionContent.builders;
+package main.codeitems.builders;
 
 import main.codeitems.CodeItemBuilder;
 

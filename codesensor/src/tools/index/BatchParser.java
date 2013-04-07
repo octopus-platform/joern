@@ -23,8 +23,7 @@ public class BatchParser implements Runnable
 		LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
 		indexCreator.setIndexDirectoryName("/home/fabs/tmp/lucene/");
 		parser.addObserver(indexCreator);
-		
-		parser.addObserver(new CSVPrinter());
+		// parser.addObserver(new CSVPrinter());
 		processBatch();
 	}
 	

@@ -1,10 +1,10 @@
-package main.codeitems.function.builders;
+package main.codeitems.builders;
 
 import java.util.Stack;
 
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.function.Parameter;
-import main.codeitems.function.ParameterList;
+import main.codeitems.functionDef.Parameter;
+import main.codeitems.functionDef.ParameterList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 

@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.statements.CompoundItem;
 import main.processors.ParserEvent;
 
 import org.antlr.v4.runtime.ANTLRFileStream;

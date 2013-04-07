@@ -1,8 +1,14 @@
-package main.codeitems.functionContent.builders;
+package main.codeitems.builders;
 
 import java.util.Iterator;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
+import tools.index.InitDeclContextWrapper;
+
 import main.codeitems.CodeItem;
+import main.codeitems.declarations.ClassDef;
+import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.ArgumentList;
@@ -21,13 +27,16 @@ import main.codeitems.expressions.MultiplicativeExpression;
 import main.codeitems.expressions.OrExpression;
 import main.codeitems.expressions.RelationalExpression;
 import main.codeitems.expressions.ShiftExpression;
-import main.codeitems.functionContent.BlockStarterItem;
-import main.codeitems.functionContent.CloseBlockItem;
-import main.codeitems.functionContent.CompoundItem;
-import main.codeitems.functionContent.Condition;
-import main.codeitems.functionContent.ElseItem;
-import main.codeitems.functionContent.ExprStatementItem;
-import main.codeitems.functionContent.IfItem;
+import main.codeitems.statements.BlockStarterItem;
+import main.codeitems.statements.CloseBlockItem;
+import main.codeitems.statements.CompoundItem;
+import main.codeitems.statements.Condition;
+import main.codeitems.statements.ElseItem;
+import main.codeitems.statements.ExprStatementItem;
+import main.codeitems.statements.ForItem;
+import main.codeitems.statements.IdentifierDeclStatement;
+import main.codeitems.statements.IfItem;
+import main.codeitems.statements.Statement;
 import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
@@ -38,6 +47,7 @@ import antlr.FineFunctionGrammarParser.Cast_targetContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
+import antlr.FineFunctionGrammarParser.DeclByClassContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
@@ -45,10 +55,12 @@ import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.FieldContext;
 import antlr.FineFunctionGrammarParser.FieldOnlyContext;
+import antlr.FineFunctionGrammarParser.For_statementContext;
 import antlr.FineFunctionGrammarParser.FuncCallContext;
 import antlr.FineFunctionGrammarParser.Function_argument_listContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
+import antlr.FineFunctionGrammarParser.Init_declaratorContext;
 import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.Or_expressionContext;
@@ -78,7 +90,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	public void enterStatement(StatementContext ctx)
 	{
-		CodeItem statementItem = new CodeItem();
+		CodeItem statementItem = new Statement();
 		statementItem.initializeFromContext(ctx);
 		itemStack.push(statementItem);
 	}
@@ -111,6 +123,11 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void enterIf(If_statementContext ctx)
 	{
 		replaceTopOfStack(new IfItem());
+	}
+	
+	public void enterFor(For_statementContext ctx)
+	{
+		replaceTopOfStack(new ForItem());
 	}
 	
 	public void enterElse(Else_statementContext ctx)
@@ -388,13 +405,55 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	}
 
 	public void exitCondition(ConditionContext ctx)
-	{
+	{	
 		Condition cond = (Condition) itemStack.pop();
-		CodeItem topOfStack = itemStack.peek();
-		if(topOfStack instanceof BlockStarterItem)
-			((BlockStarterItem) topOfStack).setCondition(cond);
-		else
-			((ConditionalExpression) topOfStack).addChild(cond);
+		addItemToParent(cond);
+	}
+
+	public void enterDeclByClass(DeclByClassContext ctx)
+	{
+		ClassDefBuilder classDefBuilder = new ClassDefBuilder();
+		classDefBuilder.createNew(ctx);
+		classDefBuilder.setName(ctx.class_def().class_name());
+		replaceTopOfStack(classDefBuilder.getItem());
+	}
+
+	public void exitDeclByClass()
+	{
+		consolidate();
 	}
 	
+	public void enterInitDeclarator(Init_declaratorContext ctx)
+	{		
+				
+		InitDeclContextWrapper wrappedContext = new InitDeclContextWrapper(ctx);
+		IdentifierDeclBuilder declBuilder = new IdentifierDeclBuilder();
+		
+		
+		CodeItem parentItem =  itemStack.peek();
+		
+		ParserRuleContext typeName;
+		
+		if(parentItem instanceof IdentifierDeclStatement)
+			typeName = ((IdentifierDeclStatement) parentItem).getTypeNameContext();
+		else if (parentItem instanceof ClassDef)
+			typeName = ((ClassDef) parentItem).getName().getParseTreeNodeContext();
+		else
+			throw new RuntimeException("No matching declaration statement/class definiton for init declarator");
+		
+		declBuilder.createNew(ctx);
+		declBuilder.setName(wrappedContext);
+		declBuilder.setType(wrappedContext, typeName);
+		
+		CodeItem identifierDecl = declBuilder.getItem();
+		itemStack.push(identifierDecl);	
+	}
+
+	public void exitInitDeclarator()
+	{
+		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
+		CodeItem stmt =  itemStack.peek();
+		stmt.addChild(identifierDecl);
+	}
+
 }

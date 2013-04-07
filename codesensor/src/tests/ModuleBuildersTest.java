@@ -6,13 +6,13 @@ import java.util.List;
 
 import main.ModuleParser.ModuleParser;
 import main.codeitems.CodeItem;
-import main.codeitems.Name;
+import main.codeitems.Identifier;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.function.FunctionDef;
-import main.codeitems.function.Parameter;
-import main.codeitems.function.ParameterType;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.functionDef.FunctionDef;
+import main.codeitems.functionDef.Parameter;
+import main.codeitems.functionDef.ParameterType;
+import main.codeitems.statements.IdentifierDeclStatement;
 import main.processors.TestProcessor;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -80,7 +80,7 @@ public class ModuleBuildersTest {
 		String input = "int foo;";
 		List<CodeItem> codeItems = parseInput(input);
 		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(0);
-		IdentifierDecl decl = codeItem.identifierDeclList.get(0);
+		IdentifierDecl decl = (IdentifierDecl) codeItem.getIdentifierDeclList().get(0);
 		assertTrue(decl.name.getCodeStr().equals("foo"));
 	}
 
@@ -90,7 +90,7 @@ public class ModuleBuildersTest {
 		String input = "class foo{int x;} y;";
 		List<CodeItem> codeItems = parseInput(input);
 		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(codeItems.size() - 1);
-		IdentifierDecl decl = codeItem.identifierDeclList.get(0);
+		IdentifierDecl decl = (IdentifierDecl) codeItem.getIdentifierDeclList().get(0);
 		System.out.println(decl.name.getCodeStr());
 		assertTrue(decl.name.getCodeStr().equals("y"));
 	}
@@ -103,7 +103,7 @@ public class ModuleBuildersTest {
 		
 		ClassDef classCodeItem = (ClassDef) codeItems.get(0);
 		IdentifierDeclStatement identifierCodeItem = (IdentifierDeclStatement) classCodeItem.content.getStatements().get(0);
-		IdentifierDecl decl = identifierCodeItem.identifierDeclList.get(0);
+		IdentifierDecl decl = (IdentifierDecl) identifierCodeItem.getIdentifierDeclList().get(0);
 		
 		assertTrue(classCodeItem.name.getCodeStr().equals("foo"));
 		assertTrue(decl.name.getCodeStr().equals("x"));
@@ -158,7 +158,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(myType myParam){}";
 		List<CodeItem> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		Name name = codeItem.parameterList.getParameters().get(0).name;
+		Identifier name = codeItem.parameterList.getParameters().get(0).name;
 		assertTrue(name.getCodeStr().equals("myParam"));
 	}
 	

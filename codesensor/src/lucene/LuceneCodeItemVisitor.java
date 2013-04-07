@@ -4,12 +4,14 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import lucene.DocumentFactory.DocumentType;
+import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.function.FunctionDef;
-import main.codeitems.functionContent.ExprStatementItem;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.expressions.CallExpression;
+import main.codeitems.functionDef.FunctionDef;
+import main.codeitems.statements.ExprStatementItem;
+import main.codeitems.statements.IdentifierDeclStatement;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -42,39 +44,52 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 	
 	public void visit(FunctionDef item)
 	{
-		Document newDocument = DocumentFactory.createNewDocument(DocumentType.FUNCTION);
-		documents.push(newDocument);
-		FunctionDefToDocumentConverter.convert(item, filename, documents);
-		visitChildren(item);
-		
-		documents.pop();
-		writer.addDocumentToIndex(newDocument);
+		Document d = DocumentFactory.createNewDocument(DocumentType.FUNCTION);
+		FunctionDefToDocumentConverter.convert(item, filename, d);
+		visitChildrenAndWrite(item, d);
 	}
 	
 	public void visit(ClassDef item)
 	{
-		Document newDocument = DocumentFactory.createNewDocument(DocumentType.TYPE);
-		documents.push(newDocument);
-		ClassDefToDocumentConverter.convert(item, filename, documents);
-		visitChildren(item);
-	
-		documents.pop();
-		writer.addDocumentToIndex(newDocument);
+		Document d = DocumentFactory.createNewDocument(DocumentType.TYPE);
+		ClassDefToDocumentConverter.convert(item, filename, d);
+		visitChildrenAndWrite(item, d);
 	}
 	
 	public void visit(IdentifierDeclStatement statementItem)
 	{
+		
+		// TODO: execute this only when there is a function on the stack
+		/*
 		Document d = documents.peek();
-		Iterator<IdentifierDecl> it = statementItem.identifierDeclList.iterator();
+		
+		Iterator<CodeItem> it = statementItem.getIdentifierDeclList().iterator();
 		while(it.hasNext()){
-			IdentifierDecl idDecl = it.next();
+			IdentifierDecl idDecl = (IdentifierDecl) it.next();
 			String name = idDecl.name.getCodeStr();
 			String completeType = idDecl.type.completeType;
 			d.add(LuceneUtils.createField("localName", name));
 			d.add(LuceneUtils.createField("localType", completeType));
 		}
-	
+		*/
 		visitChildren(statementItem);
+	}
+	
+	@Override
+	public void visit(CallExpression expression)
+	{
+		Document d = DocumentFactory.createNewDocument(DocumentType.EXPRESSION);
+		String callExprString = expression.getCodeStr();
+		d.add(LuceneUtils.createField("exprType", callExprString));
+		visitChildrenAndWrite(expression, d);
+	}
+
+	private void visitChildrenAndWrite(CodeItem expression, Document d)
+	{
+		documents.push(d);
+		visitChildren(expression);
+		documents.pop();
+		writer.addDocumentToIndex(d);
 	}
 	
 	public void visit(ExprStatementItem statementItem)

@@ -1,13 +1,13 @@
-package main.codeitems.function.builders;
+package main.codeitems.builders;
 
 import java.util.Stack;
 
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.Name;
-import main.codeitems.function.FunctionDef;
-import main.codeitems.function.ParameterList;
-import main.codeitems.function.ReturnType;
-import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.Identifier;
+import main.codeitems.functionDef.FunctionDef;
+import main.codeitems.functionDef.ParameterList;
+import main.codeitems.functionDef.ReturnType;
+import main.codeitems.statements.CompoundItem;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -33,7 +33,7 @@ public class FunctionDefBuilder extends CodeItemBuilder {
 	public void setName(Function_nameContext ctx,
 			Stack<CodeItemBuilder> itemStack)
 	{
-		thisItem.name = new Name();
+		thisItem.name = new Identifier();
 		thisItem.name.initializeFromContext(ctx);
 	}
 	

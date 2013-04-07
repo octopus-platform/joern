@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import lucene.LuceneIndexCreatorMain;
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.function.FunctionDef;
+import main.codeitems.functionDef.FunctionDef;
 
 import org.junit.Test;
 

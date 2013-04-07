@@ -1,10 +1,10 @@
-package main.codeitems.function;
+package main.codeitems.functionDef;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import main.codeitems.CodeItem;
-import main.codeitems.Name;
+import main.codeitems.Identifier;
 
 public class ParameterList extends CodeItem
 {
@@ -26,9 +26,9 @@ public class ParameterList extends CodeItem
 		parameters.add(aParam);
 	}
 	
-	public Name [] getNames()
+	public Identifier [] getNames()
 	{
-		Name retNames [] = new Name[parameters.size()];
+		Identifier retNames [] = new Identifier[parameters.size()];
 		for(int i = 0; i < parameters.size(); i++){
 			retNames[i] = parameters.get(i).name;
 		}

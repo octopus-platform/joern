@@ -1,15 +1,17 @@
 package main.codeitems.declarations;
 
+import java.util.LinkedList;
+
 import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.DummyName;
-import main.codeitems.Name;
-import main.codeitems.functionContent.CompoundItem;
+import main.codeitems.Identifier;
+import main.codeitems.statements.CompoundItem;
 
 public class ClassDef extends CodeItem
 {
 	
-	public Name name = new DummyName();
+	public Identifier name = new DummyName();
 	public CompoundItem content = new CompoundItem();
 	
 	public ClassDef()
@@ -18,14 +20,18 @@ public class ClassDef extends CodeItem
 		codeStr = "";
 	}
 		
-	public Name getName()
+	public Identifier getName()
 	{
 		return name;
 	}
 
-	public int getChildCount() { return 1; }
-	public CodeItem getChild(int i){ return content; }
-
+	public void addChild(CodeItem expression)
+	{ 
+		if(expression instanceof Identifier)
+			name = (Identifier) expression;
+		super.addChild(expression);
+	}
+	
 	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
 	
 }

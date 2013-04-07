@@ -2,13 +2,19 @@ package tests;
 
 import lucene.LuceneCodeItemVisitor;
 import lucene.TestDocumentWriter;
-import main.codeitems.Name;
+import main.codeitems.CodeItem;
+import main.codeitems.Identifier;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclType;
+import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.Expression;
-import main.codeitems.function.FunctionDef;
-import main.codeitems.functionContent.IdentifierDeclStatement;
+import main.codeitems.functionDef.FunctionDef;
+import main.codeitems.statements.Condition;
+import main.codeitems.statements.ExprStatementItem;
+import main.codeitems.statements.IdentifierDeclStatement;
+import main.codeitems.statements.IfItem;
+import main.codeitems.statements.Statement;
 
 import org.apache.lucene.document.Document;
 
@@ -62,18 +68,46 @@ public class LuceneCodeItemVisitorTest {
 	}
 	
 	@Test
+	public void testVisitCall()
+	{
+		FunctionDef item = new FunctionDef();
+		
+		ExprStatementItem exprStatement = new ExprStatementItem();
+		CallExpression callExpression = new CallExpression();
+		exprStatement.addChild(callExpression);
+		item.addStatement(exprStatement);	
+		item.accept(visitor);
+		Document d = writer.getDocuments().get(0);
+		assertTrue(d.getFieldable("exprType") != null);
+	}
+	
+	@Test
+	public void testVisitIfTerminates()
+	{
+		FunctionDef item = new FunctionDef();
+		
+		IfItem ifItem = new IfItem();
+		Condition condition = new Condition();
+		condition.addChild(new Expression());
+		ifItem.setCondition(condition);
+		ifItem.addChild(new Statement());
+		item.addStatement(ifItem);	
+		item.accept(visitor);
+	}
+	
+	@Test
 	public void testLocalVar()
 	{	
 		FunctionDef item = new FunctionDef();
 		IdentifierDeclStatement declStatement = new IdentifierDeclStatement();
 		IdentifierDecl decl = new IdentifierDecl();
-		decl.name = new Name();
+		decl.name = new Identifier();
 		decl.type = new IdentifierDeclType();
 		decl.type.completeType = "";
-		declStatement.identifierDeclList.add(decl);
+		declStatement.addChild(decl);
 		
 		item.addStatement(declStatement);
-		item.accept(visitor);		
+		item.accept(visitor);
 		assertTrue(writer.getDocuments().get(0).getFieldable("localName") != null);
 	}
 }
