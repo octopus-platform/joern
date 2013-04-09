@@ -3,12 +3,10 @@ package lucene;
 import java.util.EnumMap;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumericField;
 
 public class DocumentFactory {
 	
-	public enum DocumentType { FILE, FUNCTION, EXPRESSION, TYPE, VARIABLE, ASSIGNMENT, CONDITION };
+	public enum DocumentType { FILE, FUNCTION, EXPRESSION, TYPE, VARIABLE, ASSIGNMENT, CONDITION, ARGUMENT };
 	
 	static int currentDocumentId = 0;
 	static EnumMap<DocumentType, String> typeToStringMap;
@@ -27,8 +25,9 @@ public class DocumentFactory {
 		typeToStringMap.put(DocumentType.EXPRESSION, "expression");
 		typeToStringMap.put(DocumentType.TYPE, "type");
 		typeToStringMap.put(DocumentType.VARIABLE, "variable");
-		typeToStringMap.put(DocumentType.VARIABLE, "assignment");
+		typeToStringMap.put(DocumentType.ASSIGNMENT, "assignment");
 		typeToStringMap.put(DocumentType.CONDITION, "condition");
+		typeToStringMap.put(DocumentType.ARGUMENT, "argument");
 	}
 			 
 	public static Document createNewDocument(DocumentType docType)

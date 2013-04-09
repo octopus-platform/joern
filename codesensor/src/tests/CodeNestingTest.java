@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 import main.codeitems.CodeItem;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.expressions.Argument;
+import main.codeitems.expressions.ArgumentList;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.Expression;
@@ -181,6 +183,8 @@ public class CodeNestingTest {
 		ExprStatementItem stmt = (ExprStatementItem) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+		ArgumentList argList = (ArgumentList) expr.getChild(1);
+		Argument arg = (Argument) argList.getChild(0);
 	}
 	
 	@Test

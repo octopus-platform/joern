@@ -1,6 +1,7 @@
 package main.codeitems;
 
 import main.codeitems.declarations.ClassDef;
+import main.codeitems.expressions.Argument;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.MemberAccess;
@@ -27,6 +28,7 @@ public class CodeItemVisitor
 	public void visit(PrimaryExpression expression) { defaultHandler(expression); }
 	public void visit(MemberAccess expression) { defaultHandler(expression); }
 	public void visit(UnaryExpression expression) { defaultHandler(expression); }
+	public void visit(Argument expression) { defaultHandler(expression); }
 	
 	
 	public void defaultHandler(CodeItem item)

@@ -11,6 +11,7 @@ import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
+import main.codeitems.expressions.Argument;
 import main.codeitems.expressions.ArgumentList;
 import main.codeitems.expressions.ArrayIndexing;
 import main.codeitems.expressions.AssignmentExpr;
@@ -63,6 +64,7 @@ import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
 import antlr.FineFunctionGrammarParser.For_statementContext;
 import antlr.FineFunctionGrammarParser.FuncCallContext;
+import antlr.FineFunctionGrammarParser.Function_argumentContext;
 import antlr.FineFunctionGrammarParser.Function_argument_listContext;
 import antlr.FineFunctionGrammarParser.IdentifierContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
@@ -531,6 +533,17 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	}
 
 	public void exitIdentifier(IdentifierContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterArgument(Function_argumentContext ctx)
+	{
+		Argument expr = new Argument();
+		itemStack.push(expr);
+	}
+
+	public void exitArgument(Function_argumentContext ctx)
 	{
 		consolidateSubExpression(ctx);
 	}

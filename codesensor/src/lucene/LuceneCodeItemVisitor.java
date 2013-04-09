@@ -9,6 +9,7 @@ import main.codeitems.CodeItem;
 import main.codeitems.CodeItemVisitor;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.expressions.Argument;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.MemberAccess;
@@ -154,13 +155,22 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 
 	public void visit(AssignmentExpr expression)
 	{ 
-		Document d = DocumentFactory.createNewDocument(DocumentType.EXPRESSION);
+		Document d = DocumentFactory.createNewDocument(DocumentType.ASSIGNMENT);
 		
 		d.add(LuceneUtils.createField("lval", expression.getLeft().getCodeStr()));
 		d.add(LuceneUtils.createField("rval", expression.getRight().getCodeStr()));
 		
 		addFieldToParentsAndLink(d, "assignment", expression.getCodeStr());
+		visitChildrenAndWrite(expression, d);
+	}
+	
+	public void visit(Argument expression)
+	{ 
+		Document d = DocumentFactory.createNewDocument(DocumentType.ARGUMENT);
 		
+		d.add(LuceneUtils.createField("code", expression.getCodeStr()));
+		
+		addFieldToParentsAndLink(d, "argument", expression.getCodeStr());
 		visitChildrenAndWrite(expression, d);
 	}
 	
