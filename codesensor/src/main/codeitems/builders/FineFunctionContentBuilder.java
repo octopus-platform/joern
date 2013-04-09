@@ -12,6 +12,7 @@ import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AdditiveExpression;
 import main.codeitems.expressions.AndExpression;
 import main.codeitems.expressions.ArgumentList;
+import main.codeitems.expressions.ArrayIndexing;
 import main.codeitems.expressions.AssignmentExpr;
 import main.codeitems.expressions.BitAndExpression;
 import main.codeitems.expressions.CallExpression;
@@ -21,12 +22,18 @@ import main.codeitems.expressions.ConditionalExpression;
 import main.codeitems.expressions.EqualityExpression;
 import main.codeitems.expressions.ExclusiveOrExpression;
 import main.codeitems.expressions.Expression;
-import main.codeitems.expressions.FieldExpression;
+import main.codeitems.expressions.Identifier;
+import main.codeitems.expressions.IncDec;
+import main.codeitems.expressions.IncDecOp;
 import main.codeitems.expressions.InclusiveOrExpression;
+import main.codeitems.expressions.MemberAccess;
 import main.codeitems.expressions.MultiplicativeExpression;
 import main.codeitems.expressions.OrExpression;
+import main.codeitems.expressions.PrimaryExpression;
 import main.codeitems.expressions.RelationalExpression;
 import main.codeitems.expressions.ShiftExpression;
+import main.codeitems.expressions.UnaryExpression;
+import main.codeitems.expressions.UnaryOperators;
 import main.codeitems.statements.BlockStarterItem;
 import main.codeitems.statements.CloseBlockItem;
 import main.codeitems.statements.CompoundItem;
@@ -39,6 +46,7 @@ import main.codeitems.statements.IfItem;
 import main.codeitems.statements.Statement;
 import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;
+import antlr.FineFunctionGrammarParser.ArrayIndexingContext;
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
@@ -53,21 +61,26 @@ import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
-import antlr.FineFunctionGrammarParser.FieldContext;
-import antlr.FineFunctionGrammarParser.FieldOnlyContext;
 import antlr.FineFunctionGrammarParser.For_statementContext;
 import antlr.FineFunctionGrammarParser.FuncCallContext;
 import antlr.FineFunctionGrammarParser.Function_argument_listContext;
+import antlr.FineFunctionGrammarParser.IdentifierContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
+import antlr.FineFunctionGrammarParser.IncDecOpContext;
+import antlr.FineFunctionGrammarParser.Inc_decContext;
 import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.Init_declaratorContext;
+import antlr.FineFunctionGrammarParser.MemberAccessContext;
 import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.Or_expressionContext;
+import antlr.FineFunctionGrammarParser.Primary_expressionContext;
 import antlr.FineFunctionGrammarParser.Relational_expressionContext;
 import antlr.FineFunctionGrammarParser.Shift_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
+import antlr.FineFunctionGrammarParser.Unary_expressionContext;
+import antlr.FineFunctionGrammarParser.Unary_operatorsContext;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {
@@ -365,17 +378,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 	
-	public void enterField(FieldContext ctx)
-	{
-		FieldExpression expr = new FieldExpression();
-		itemStack.push(expr);
-	}
-
-	public void exitField(FieldContext ctx)
-	{
-		consolidateSubExpression(ctx);	
-	}
-	
 	public void enterArgumentList(Function_argument_listContext ctx)
 	{
 		ArgumentList expr = new ArgumentList();
@@ -387,17 +389,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 	
-	public void enterFieldOnly(FieldOnlyContext ctx)
-	{
-		FieldExpression expr = new FieldExpression();
-		itemStack.push(expr);
-	}
-
-	public void exitFieldOnly(FieldOnlyContext ctx)
-	{
-		consolidateSubExpression(ctx);
-	}
-
 	public void enterCondition(ConditionContext ctx)
 	{
 		Condition expr = new Condition();
@@ -454,6 +445,94 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
 		CodeItem stmt =  itemStack.peek();
 		stmt.addChild(identifierDecl);
+	}
+
+	public void enterIncDec(Inc_decContext ctx)
+	{
+		IncDec expr = new IncDec();
+		itemStack.push(expr);
+	}
+
+	public void exitIncDec(Inc_decContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterUnaryOperators(Unary_operatorsContext ctx)
+	{
+		UnaryOperators expr = new UnaryOperators();
+		itemStack.push(expr);
+	}
+
+	public void exitUnaryOperators(Unary_operatorsContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterArrayIndexing(ArrayIndexingContext ctx)
+	{
+		ArrayIndexing expr = new ArrayIndexing();
+		itemStack.push(expr);
+	}
+
+	public void exitArrayIndexing(ArrayIndexingContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterMemberAccess(MemberAccessContext ctx)
+	{
+		MemberAccess expr = new MemberAccess();
+		itemStack.push(expr);
+	}
+
+	public void exitMemberAccess(MemberAccessContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterIncDecOp(IncDecOpContext ctx)
+	{
+		IncDecOp expr = new IncDecOp();
+		itemStack.push(expr);
+	}
+
+	public void exitIncDecOp(IncDecOpContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterPrimary(Primary_expressionContext ctx)
+	{
+		PrimaryExpression expr = new PrimaryExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitPrimary(Primary_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterUnaryExpression(Unary_expressionContext ctx)
+	{
+		UnaryExpression expr = new UnaryExpression();
+		itemStack.push(expr);
+	}
+
+	public void exitUnaryExpression(Unary_expressionContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterIdentifier(IdentifierContext ctx)
+	{
+		Identifier expr = new Identifier();
+		itemStack.push(expr);
+	}
+
+	public void exitIdentifier(IdentifierContext ctx)
+	{
+		consolidateSubExpression(ctx);
 	}
 
 }

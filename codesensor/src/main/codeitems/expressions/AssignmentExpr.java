@@ -1,3 +1,8 @@
 package main.codeitems.expressions;
 
-public class AssignmentExpr extends BinaryExpression{}
+import main.codeitems.CodeItemVisitor;
+
+public class AssignmentExpr extends BinaryExpression
+{
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
+}

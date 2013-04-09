@@ -2,11 +2,12 @@ package main.codeitems.expressions;
 
 import main.codeitems.CodeItemVisitor;
 
-public class CallExpression extends UnaryExpression {
+public class CallExpression extends PostfixExpression {
 
 	public Expression getTarget()
 	{
-		return field;
+		if(children == null) return null;
+		return (Expression) children.get(0);
 	}
 
 	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }

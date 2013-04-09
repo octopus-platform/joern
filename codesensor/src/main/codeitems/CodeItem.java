@@ -60,8 +60,6 @@ public class CodeItem {
 		  return location.toString();
 	  }
 	
-	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }
-
 	public String getNodeTypeName() {
 		return nodeTypeName;
 	}
@@ -70,4 +68,5 @@ public class CodeItem {
 		this.nodeTypeName = nodeTypeName;
 	}
 	
+	public void accept(CodeItemVisitor visitor){ visitor.visit(this); }	
 }

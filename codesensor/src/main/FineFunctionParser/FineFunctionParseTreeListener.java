@@ -343,18 +343,6 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitFuncCall(ctx);
 	}
 
-	@Override public void enterField(FineFunctionGrammarParser.FieldContext ctx)
-	{
-		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterField(ctx);
-	}
-	
-	@Override public void exitField(FineFunctionGrammarParser.FieldContext ctx)
-	{
-		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.exitField(ctx);
-	}
-
 	@Override public void enterFunction_argument_list(FineFunctionGrammarParser.Function_argument_listContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
@@ -367,16 +355,113 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitArgumentList(ctx);	
 	}
 	
-	@Override public void enterFieldOnly(FineFunctionGrammarParser.FieldOnlyContext ctx)
+	@Override
+	public void enterInc_dec(FineFunctionGrammarParser.Inc_decContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterFieldOnly(ctx);
+		builder.enterIncDec(ctx);
 	}
 	
-	@Override public void exitFieldOnly(FineFunctionGrammarParser.FieldOnlyContext ctx)
+	@Override public void exitInc_dec(FineFunctionGrammarParser.Inc_decContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.exitFieldOnly(ctx);
+		builder.exitIncDec(ctx);
+	}
+
+	@Override public void enterUnary_operators(FineFunctionGrammarParser.Unary_operatorsContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterUnaryOperators(ctx);
+	}
+	
+	@Override public void exitUnary_operators(FineFunctionGrammarParser.Unary_operatorsContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitUnaryOperators(ctx);
+	}
+	
+	@Override
+	public void enterArrayIndexing(FineFunctionGrammarParser.ArrayIndexingContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterArrayIndexing(ctx);
+	}
+	
+	@Override
+	public void exitArrayIndexing(FineFunctionGrammarParser.ArrayIndexingContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitArrayIndexing(ctx);
+	}
+	
+	@Override
+	public void enterMemberAccess(FineFunctionGrammarParser.MemberAccessContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterMemberAccess(ctx);
+	}
+	
+	@Override
+	public void exitMemberAccess(FineFunctionGrammarParser.MemberAccessContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitMemberAccess(ctx);
+	}
+	
+	@Override
+	public void enterIncDecOp(FineFunctionGrammarParser.IncDecOpContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterIncDecOp(ctx);
+	}
+	
+	@Override
+	public void exitIncDecOp(FineFunctionGrammarParser.IncDecOpContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitIncDecOp(ctx);
+	}
+	
+	@Override
+	public void enterPrimary_expression(FineFunctionGrammarParser.Primary_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterPrimary(ctx);
+	}
+	
+	@Override
+	public void exitPrimary_expression(FineFunctionGrammarParser.Primary_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitPrimary(ctx);
+	}
+	
+	@Override
+	public void enterUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterUnaryExpression(ctx);
+	}
+	
+	@Override
+	public void exitUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitUnaryExpression(ctx);
+	}
+	
+	@Override
+	public void enterIdentifier(FineFunctionGrammarParser.IdentifierContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterIdentifier(ctx);
+	}
+	
+	@Override
+	public void exitIdentifier(FineFunctionGrammarParser.IdentifierContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitIdentifier(ctx);
 	}
 	
 }

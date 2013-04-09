@@ -62,7 +62,8 @@ public class FunctionContentBuilder extends CodeItemBuilder
 	protected void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();
-		expression = pullUpOnlyChild(expression);
+		if(!(expression instanceof ExpressionHolder))
+			expression = pullUpOnlyChild(expression);
 		expression.initializeFromContext(ctx);
 		addItemToParent(expression);
 	}

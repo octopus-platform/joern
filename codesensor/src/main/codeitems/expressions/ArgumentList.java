@@ -1,3 +1,5 @@
 package main.codeitems.expressions;
 
-public class ArgumentList extends Expression {}
+import main.codeitems.statements.ExpressionHolder;
+
+public class ArgumentList extends ExpressionHolder {}

@@ -6,7 +6,7 @@ import main.codeitems.CodeItem;
 
 public class Expression extends CodeItem
 {
-	LinkedList<CodeItem> children;
+	protected LinkedList<CodeItem> children;
 	
 	public void addChild(CodeItem expression)
 	{

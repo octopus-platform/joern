@@ -3,9 +3,13 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
+  import java.util.Stack;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarListener {
 	@Override public void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx) { }
@@ -44,6 +48,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterNo_comma_or_semicolon(CoarseFunctionGrammarParser.No_comma_or_semicolonContext ctx) { }
 	@Override public void exitNo_comma_or_semicolon(CoarseFunctionGrammarParser.No_comma_or_semicolonContext ctx) { }
 
+	@Override public void enterMemberAccess(CoarseFunctionGrammarParser.MemberAccessContext ctx) { }
+	@Override public void exitMemberAccess(CoarseFunctionGrammarParser.MemberAccessContext ctx) { }
+
 	@Override public void enterBase_class(CoarseFunctionGrammarParser.Base_classContext ctx) { }
 	@Override public void exitBase_class(CoarseFunctionGrammarParser.Base_classContext ctx) { }
 
@@ -61,6 +68,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 
 	@Override public void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
 	@Override public void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
+
+	@Override public void enterArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx) { }
+	@Override public void exitArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx) { }
 
 	@Override public void enterUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx) { }
 	@Override public void exitUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx) { }
@@ -110,6 +120,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx) { }
 	@Override public void exitFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx) { }
 
+	@Override public void enterPrimaryOnly(CoarseFunctionGrammarParser.PrimaryOnlyContext ctx) { }
+	@Override public void exitPrimaryOnly(CoarseFunctionGrammarParser.PrimaryOnlyContext ctx) { }
+
 	@Override public void enterInclusive_or_expression(CoarseFunctionGrammarParser.Inclusive_or_expressionContext ctx) { }
 	@Override public void exitInclusive_or_expression(CoarseFunctionGrammarParser.Inclusive_or_expressionContext ctx) { }
 
@@ -118,6 +131,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 
 	@Override public void enterBase_classes(CoarseFunctionGrammarParser.Base_classesContext ctx) { }
 	@Override public void exitBase_classes(CoarseFunctionGrammarParser.Base_classesContext ctx) { }
+
+	@Override public void enterIncDecOp(CoarseFunctionGrammarParser.IncDecOpContext ctx) { }
+	@Override public void exitIncDecOp(CoarseFunctionGrammarParser.IncDecOpContext ctx) { }
 
 	@Override public void enterNo_curlies(CoarseFunctionGrammarParser.No_curliesContext ctx) { }
 	@Override public void exitNo_curlies(CoarseFunctionGrammarParser.No_curliesContext ctx) { }
@@ -152,6 +168,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx) { }
 	@Override public void exitFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx) { }
 
+	@Override public void enterUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx) { }
+	@Override public void exitUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx) { }
+
 	@Override public void enterPtrs(CoarseFunctionGrammarParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(CoarseFunctionGrammarParser.PtrsContext ctx) { }
 
@@ -173,12 +192,6 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterOperator(CoarseFunctionGrammarParser.OperatorContext ctx) { }
 	@Override public void exitOperator(CoarseFunctionGrammarParser.OperatorContext ctx) { }
 
-	@Override public void enterField(CoarseFunctionGrammarParser.FieldContext ctx) { }
-	@Override public void exitField(CoarseFunctionGrammarParser.FieldContext ctx) { }
-
-	@Override public void enterPostfix(CoarseFunctionGrammarParser.PostfixContext ctx) { }
-	@Override public void exitPostfix(CoarseFunctionGrammarParser.PostfixContext ctx) { }
-
 	@Override public void enterClass_def(CoarseFunctionGrammarParser.Class_defContext ctx) { }
 	@Override public void exitClass_def(CoarseFunctionGrammarParser.Class_defContext ctx) { }
 
@@ -188,20 +201,17 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx) { }
 
-	@Override public void enterAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx) { }
-	@Override public void exitAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx) { }
-
 	@Override public void enterPrimary_expression(CoarseFunctionGrammarParser.Primary_expressionContext ctx) { }
 	@Override public void exitPrimary_expression(CoarseFunctionGrammarParser.Primary_expressionContext ctx) { }
+
+	@Override public void enterAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx) { }
+	@Override public void exitAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx) { }
 
 	@Override public void enterTemplate_param_list(CoarseFunctionGrammarParser.Template_param_listContext ctx) { }
 	@Override public void exitTemplate_param_list(CoarseFunctionGrammarParser.Template_param_listContext ctx) { }
 
 	@Override public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx) { }
 	@Override public void exitDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx) { }
-
-	@Override public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx) { }
-	@Override public void exitFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx) { }
 
 	@Override public void enterNo_brackets(CoarseFunctionGrammarParser.No_bracketsContext ctx) { }
 	@Override public void exitNo_brackets(CoarseFunctionGrammarParser.No_bracketsContext ctx) { }

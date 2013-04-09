@@ -6,9 +6,9 @@ import java.util.List;
 
 import main.ModuleParser.ModuleParser;
 import main.codeitems.CodeItem;
-import main.codeitems.Identifier;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
+import main.codeitems.expressions.Identifier;
 import main.codeitems.functionDef.FunctionDef;
 import main.codeitems.functionDef.Parameter;
 import main.codeitems.functionDef.ParameterType;

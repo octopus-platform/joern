@@ -3,7 +3,10 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.tree.ParseTreeListener;
+  import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.Token;
 
 public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterPre_else(FineFunctionGrammarParser.Pre_elseContext ctx);
@@ -48,6 +51,9 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterNo_comma_or_semicolon(FineFunctionGrammarParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(FineFunctionGrammarParser.No_comma_or_semicolonContext ctx);
 
+	void enterMemberAccess(FineFunctionGrammarParser.MemberAccessContext ctx);
+	void exitMemberAccess(FineFunctionGrammarParser.MemberAccessContext ctx);
+
 	void enterExpr_statement(FineFunctionGrammarParser.Expr_statementContext ctx);
 	void exitExpr_statement(FineFunctionGrammarParser.Expr_statementContext ctx);
 
@@ -74,6 +80,9 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 
 	void enterInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx);
 	void exitInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx);
+
+	void enterArrayIndexing(FineFunctionGrammarParser.ArrayIndexingContext ctx);
+	void exitArrayIndexing(FineFunctionGrammarParser.ArrayIndexingContext ctx);
 
 	void enterCondition(FineFunctionGrammarParser.ConditionContext ctx);
 	void exitCondition(FineFunctionGrammarParser.ConditionContext ctx);
@@ -147,6 +156,9 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterFuncCall(FineFunctionGrammarParser.FuncCallContext ctx);
 	void exitFuncCall(FineFunctionGrammarParser.FuncCallContext ctx);
 
+	void enterPrimaryOnly(FineFunctionGrammarParser.PrimaryOnlyContext ctx);
+	void exitPrimaryOnly(FineFunctionGrammarParser.PrimaryOnlyContext ctx);
+
 	void enterInclusive_or_expression(FineFunctionGrammarParser.Inclusive_or_expressionContext ctx);
 	void exitInclusive_or_expression(FineFunctionGrammarParser.Inclusive_or_expressionContext ctx);
 
@@ -155,6 +167,9 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 
 	void enterBase_classes(FineFunctionGrammarParser.Base_classesContext ctx);
 	void exitBase_classes(FineFunctionGrammarParser.Base_classesContext ctx);
+
+	void enterIncDecOp(FineFunctionGrammarParser.IncDecOpContext ctx);
+	void exitIncDecOp(FineFunctionGrammarParser.IncDecOpContext ctx);
 
 	void enterPre_closer(FineFunctionGrammarParser.Pre_closerContext ctx);
 	void exitPre_closer(FineFunctionGrammarParser.Pre_closerContext ctx);
@@ -198,6 +213,9 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterFunction_argument(FineFunctionGrammarParser.Function_argumentContext ctx);
 	void exitFunction_argument(FineFunctionGrammarParser.Function_argumentContext ctx);
 
+	void enterUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx);
+	void exitUnary_expression(FineFunctionGrammarParser.Unary_expressionContext ctx);
+
 	void enterStatements(FineFunctionGrammarParser.StatementsContext ctx);
 	void exitStatements(FineFunctionGrammarParser.StatementsContext ctx);
 
@@ -237,12 +255,6 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterOperator(FineFunctionGrammarParser.OperatorContext ctx);
 	void exitOperator(FineFunctionGrammarParser.OperatorContext ctx);
 
-	void enterField(FineFunctionGrammarParser.FieldContext ctx);
-	void exitField(FineFunctionGrammarParser.FieldContext ctx);
-
-	void enterPostfix(FineFunctionGrammarParser.PostfixContext ctx);
-	void exitPostfix(FineFunctionGrammarParser.PostfixContext ctx);
-
 	void enterClass_def(FineFunctionGrammarParser.Class_defContext ctx);
 	void exitClass_def(FineFunctionGrammarParser.Class_defContext ctx);
 
@@ -266,9 +278,6 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 
 	void enterDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx);
 	void exitDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx);
-
-	void enterFieldOnly(FineFunctionGrammarParser.FieldOnlyContext ctx);
-	void exitFieldOnly(FineFunctionGrammarParser.FieldOnlyContext ctx);
 
 	void enterNo_brackets(FineFunctionGrammarParser.No_bracketsContext ctx);
 	void exitNo_brackets(FineFunctionGrammarParser.No_bracketsContext ctx);

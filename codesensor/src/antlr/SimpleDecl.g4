@@ -45,6 +45,7 @@ param_type_list: '(' VOID ')'
 param_type: param_decl_specifiers param_type_id;
 param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 
+// operator-identifiers not implemented
 identifier : ALPHA_NUMERIC ('::' ALPHA_NUMERIC)*;
 number: HEX_LITERAL | DECIMAL_LITERAL | OCTAL_LITERAL;
 

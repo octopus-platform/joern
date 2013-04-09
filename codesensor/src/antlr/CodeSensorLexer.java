@@ -3,14 +3,16 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.CharStream;
+  import java.util.Stack;
+
 import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNSimulator;
-import org.antlr.v4.runtime.atn.LexerATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CodeSensorLexer extends Lexer {
@@ -39,7 +41,7 @@ public class CodeSensorLexer extends Lexer {
 
 	public static final String[] tokenNames = {
 		"<INVALID>",
-		"'&'", "'['", "'*'", "'<'", "'--'", "'!='", "'<='", "'<<'", "'%'", "'->'", 
+		"'&'", "'*'", "'['", "'<'", "'--'", "'!='", "'<='", "'<<'", "'%'", "'->'", 
 		"'*='", "')'", "'explicit'", "'inline'", "'::'", "'='", "'|='", "'new'", 
 		"'|'", "'!'", "']'", "'<<='", "'-='", "'->*'", "'public'", "','", "'-'", 
 		"':'", "'('", "'&='", "'private'", "'?'", "'>>='", "'...'", "'+='", "'^='", 
@@ -234,7 +236,7 @@ public class CodeSensorLexer extends Lexer {
 		"\u0323\3\2\2\2\u00c7\u0329\3\2\2\2\u00c9\u0334\3\2\2\2\u00cb\u0336\3\2"+
 		"\2\2\u00cd\u033d\3\2\2\2\u00cf\u033f\3\2\2\2\u00d1\u034e\3\2\2\2\u00d3"+
 		"\u0354\3\2\2\2\u00d5\u0364\3\2\2\2\u00d7\u00d8\7(\2\2\u00d8\4\3\2\2\2"+
-		"\u00d9\u00da\7]\2\2\u00da\6\3\2\2\2\u00db\u00dc\7,\2\2\u00dc\b\3\2\2\2"+
+		"\u00d9\u00da\7,\2\2\u00da\6\3\2\2\2\u00db\u00dc\7]\2\2\u00dc\b\3\2\2\2"+
 		"\u00dd\u00de\7>\2\2\u00de\n\3\2\2\2\u00df\u00e0\7/\2\2\u00e0\u00e1\7/"+
 		"\2\2\u00e1\f\3\2\2\2\u00e2\u00e3\7#\2\2\u00e3\u00e4\7?\2\2\u00e4\16\3"+
 		"\2\2\2\u00e5\u00e6\7>\2\2\u00e6\u00e7\7?\2\2\u00e7\20\3\2\2\2\u00e8\u00e9"+

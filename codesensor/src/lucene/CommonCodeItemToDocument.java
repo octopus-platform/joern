@@ -11,18 +11,12 @@ public class CommonCodeItemToDocument
 			 Document d)
 	{
 		addLocationFields(d, item, filename);
-		addTypeField(d, item.getNodeTypeName());
 		addCodeString(item, d);
 	}
 
 	private static void addCodeString(CodeItem item, Document d)
 	{
 		d.add(LuceneUtils.createField("code", item.getCodeStr()));
-	}
-
-	private static void addTypeField(Document d, String typeName)
-	{
-		d.add(LuceneUtils.createField("type", typeName));
 	}
 
 	private static void addLocationFields(Document d, CodeItem item, String filename)

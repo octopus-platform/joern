@@ -2,7 +2,7 @@ package main.codeitems.declarations;
 
 import antlr.FineFunctionGrammarParser.IdentifierContext;
 import main.codeitems.CodeItem;
-import main.codeitems.Identifier;
+import main.codeitems.expressions.Identifier;
 
 
 public class IdentifierDecl extends CodeItem

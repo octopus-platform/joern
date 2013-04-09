@@ -5,10 +5,12 @@ import main.codeitems.CodeItem;
 import main.codeitems.declarations.ClassDef;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.expressions.AssignmentExpr;
+import main.codeitems.expressions.CallExpression;
 import main.codeitems.expressions.Expression;
 import main.codeitems.statements.BlockStarterItem;
 import main.codeitems.statements.CompoundItem;
 import main.codeitems.statements.Condition;
+import main.codeitems.statements.ExprStatementItem;
 import main.codeitems.statements.ForItem;
 import main.codeitems.statements.IdentifierDeclStatement;
 import main.codeitems.statements.IfItem;
@@ -172,6 +174,39 @@ public class CodeNestingTest {
 	}
 	
 	@Test
+	public void testCall()
+	{
+		String input = "foo(x);";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem stmt = (ExprStatementItem) contentItem.getStatements().get(0);
+		CallExpression expr = (CallExpression) stmt.getChild(0);
+		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+	}
+	
+	@Test
+	public void testCallWithTwoArguments()
+	{
+		String input = "foo(x,y);";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		ExprStatementItem stmt = (ExprStatementItem) contentItem.getStatements().get(0);
+		CallExpression expr = (CallExpression) stmt.getChild(0);
+		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+	}
+	
+	@Test
+	public void testClassContent()
+	{
+		// TODO: implement content-parsing for classes defined inside functions
+		String input = "struct foo{ int x; } foo;";
+		CompoundItem contentItem = (CompoundItem) FineFuncContentTestUtil.parseAndWalk(input);
+		assertTrue(contentItem.getChildCount() == 1);
+		ClassDef classDef = (ClassDef) contentItem.getChild(0);
+		assertTrue(classDef.content.getChildCount() == 1);
+		IdentifierDeclStatement declStmt = (IdentifierDeclStatement) classDef.content.getChild(0);
+		assertTrue(declStmt.getChildCount() == 1);
+	}
+	
+	@Test
 	public void testConditionalExpr()
 	{
 		String input = "for (int k = m; k < l; k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]){}";
@@ -186,7 +221,7 @@ public class CodeNestingTest {
 		// System.out.println(forItem.getChild(0).getCodeStr());
 		// System.out.println(condition.getExpression().getCodeStr());
 	}
-	
+		
 	@Test
 	public void testPreElseSkipping()
 	{

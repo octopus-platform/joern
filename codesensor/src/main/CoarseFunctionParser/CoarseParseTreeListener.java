@@ -72,32 +72,6 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 		builder.exitArgumentList(ctx);	
 	}
 	
-	
-	@Override public void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
-	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterFieldOnly(ctx);
-	}
-	
-	@Override public void exitFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx)
-	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.exitFieldOnly(ctx);
-	}
-
-	@Override public void enterField(CoarseFunctionGrammarParser.FieldContext ctx)
-	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterField(ctx);
-	}
-	
-	@Override public void exitField(CoarseFunctionGrammarParser.FieldContext ctx)
-	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.exitField(ctx);
-	}
-	
-	
 	@Override
 	public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx)
 	{

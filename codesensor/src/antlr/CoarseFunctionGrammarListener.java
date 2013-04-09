@@ -3,7 +3,10 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.tree.ParseTreeListener;
+  import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.Token;
 
 public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx);
@@ -42,6 +45,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterNo_comma_or_semicolon(CoarseFunctionGrammarParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(CoarseFunctionGrammarParser.No_comma_or_semicolonContext ctx);
 
+	void enterMemberAccess(CoarseFunctionGrammarParser.MemberAccessContext ctx);
+	void exitMemberAccess(CoarseFunctionGrammarParser.MemberAccessContext ctx);
+
 	void enterBase_class(CoarseFunctionGrammarParser.Base_classContext ctx);
 	void exitBase_class(CoarseFunctionGrammarParser.Base_classContext ctx);
 
@@ -59,6 +65,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
+
+	void enterArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx);
+	void exitArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx);
 
 	void enterUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx);
 	void exitUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx);
@@ -108,6 +117,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx);
 	void exitFuncCall(CoarseFunctionGrammarParser.FuncCallContext ctx);
 
+	void enterPrimaryOnly(CoarseFunctionGrammarParser.PrimaryOnlyContext ctx);
+	void exitPrimaryOnly(CoarseFunctionGrammarParser.PrimaryOnlyContext ctx);
+
 	void enterInclusive_or_expression(CoarseFunctionGrammarParser.Inclusive_or_expressionContext ctx);
 	void exitInclusive_or_expression(CoarseFunctionGrammarParser.Inclusive_or_expressionContext ctx);
 
@@ -116,6 +128,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterBase_classes(CoarseFunctionGrammarParser.Base_classesContext ctx);
 	void exitBase_classes(CoarseFunctionGrammarParser.Base_classesContext ctx);
+
+	void enterIncDecOp(CoarseFunctionGrammarParser.IncDecOpContext ctx);
+	void exitIncDecOp(CoarseFunctionGrammarParser.IncDecOpContext ctx);
 
 	void enterNo_curlies(CoarseFunctionGrammarParser.No_curliesContext ctx);
 	void exitNo_curlies(CoarseFunctionGrammarParser.No_curliesContext ctx);
@@ -150,6 +165,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx);
 	void exitFunction_argument(CoarseFunctionGrammarParser.Function_argumentContext ctx);
 
+	void enterUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx);
+	void exitUnary_expression(CoarseFunctionGrammarParser.Unary_expressionContext ctx);
+
 	void enterPtrs(CoarseFunctionGrammarParser.PtrsContext ctx);
 	void exitPtrs(CoarseFunctionGrammarParser.PtrsContext ctx);
 
@@ -171,12 +189,6 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterOperator(CoarseFunctionGrammarParser.OperatorContext ctx);
 	void exitOperator(CoarseFunctionGrammarParser.OperatorContext ctx);
 
-	void enterField(CoarseFunctionGrammarParser.FieldContext ctx);
-	void exitField(CoarseFunctionGrammarParser.FieldContext ctx);
-
-	void enterPostfix(CoarseFunctionGrammarParser.PostfixContext ctx);
-	void exitPostfix(CoarseFunctionGrammarParser.PostfixContext ctx);
-
 	void enterClass_def(CoarseFunctionGrammarParser.Class_defContext ctx);
 	void exitClass_def(CoarseFunctionGrammarParser.Class_defContext ctx);
 
@@ -186,20 +198,17 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx);
 
-	void enterAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx);
-	void exitAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx);
-
 	void enterPrimary_expression(CoarseFunctionGrammarParser.Primary_expressionContext ctx);
 	void exitPrimary_expression(CoarseFunctionGrammarParser.Primary_expressionContext ctx);
+
+	void enterAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx);
+	void exitAnd_expression(CoarseFunctionGrammarParser.And_expressionContext ctx);
 
 	void enterTemplate_param_list(CoarseFunctionGrammarParser.Template_param_listContext ctx);
 	void exitTemplate_param_list(CoarseFunctionGrammarParser.Template_param_listContext ctx);
 
 	void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx);
 	void exitDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx);
-
-	void enterFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx);
-	void exitFieldOnly(CoarseFunctionGrammarParser.FieldOnlyContext ctx);
 
 	void enterNo_brackets(CoarseFunctionGrammarParser.No_bracketsContext ctx);
 	void exitNo_brackets(CoarseFunctionGrammarParser.No_bracketsContext ctx);

@@ -20,25 +20,26 @@ cast_expression: ('(' cast_target ')' cast_expression)
 
 cast_target: type_name ptr_operator*;
 
-unary_expression: inc_dec? unary_operators? field (('<' template_param_list '>')? function_argument_list) #funcCall
-                | inc_dec? unary_operators? field #fieldOnly
-;
+// currently does not implement new/delete
 
+unary_expression: inc_dec cast_expression
+                | unary_operator cast_expression
+                | postfix_expression
+                ;
 
-inc_dec: ('--' | '++')+;
+inc_dec: ('--' | '++');
 unary_operators: unary_operator+; 
 
-field: primary_expression postfix*;
+postfix_expression: postfix_expression '[' expr ']' #arrayIndexing
+                  | postfix_expression '(' function_argument_list ')' #funcCall
+                  | postfix_expression ('.' | '->') TEMPLATE? identifier #memberAccess
+                  | postfix_expression inc_dec #incDecOp
+                  | primary_expression # primaryOnly
+                  ;
 
-function_argument_list: '(' ( function_argument (',' function_argument)* )? ')';
+function_argument_list: ( function_argument (',' function_argument)* )?;
 function_argument: assign_expr;
 
-postfix: ('.' identifier
-       	 | '->' identifier
-       	 | '[' expr ']')
-         | '++'
-         | '--'
-;
 
 primary_expression: identifier | constant | '(' expr ')';
 

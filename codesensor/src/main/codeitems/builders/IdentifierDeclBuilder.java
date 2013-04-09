@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import main.codeitems.CodeItemBuilder;
-import main.codeitems.Identifier;
 import main.codeitems.declarations.IdentifierDecl;
 import main.codeitems.declarations.IdentifierDeclType;
+import main.codeitems.expressions.Identifier;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;

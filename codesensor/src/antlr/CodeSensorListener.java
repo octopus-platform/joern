@@ -3,7 +3,10 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.tree.ParseTreeListener;
+  import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.Token;
 
 public interface CodeSensorListener extends ParseTreeListener {
 	void enterTemplate_decl_start(CodeSensorParser.Template_decl_startContext ctx);
@@ -45,6 +48,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx);
 	void exitNo_comma_or_semicolon(CodeSensorParser.No_comma_or_semicolonContext ctx);
 
+	void enterMemberAccess(CodeSensorParser.MemberAccessContext ctx);
+	void exitMemberAccess(CodeSensorParser.MemberAccessContext ctx);
+
 	void enterBase_class(CodeSensorParser.Base_classContext ctx);
 	void exitBase_class(CodeSensorParser.Base_classContext ctx);
 
@@ -71,6 +77,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
 	void exitInit_declarator(CodeSensorParser.Init_declaratorContext ctx);
+
+	void enterArrayIndexing(CodeSensorParser.ArrayIndexingContext ctx);
+	void exitArrayIndexing(CodeSensorParser.ArrayIndexingContext ctx);
 
 	void enterUnary_operators(CodeSensorParser.Unary_operatorsContext ctx);
 	void exitUnary_operators(CodeSensorParser.Unary_operatorsContext ctx);
@@ -132,6 +141,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterFuncCall(CodeSensorParser.FuncCallContext ctx);
 	void exitFuncCall(CodeSensorParser.FuncCallContext ctx);
 
+	void enterPrimaryOnly(CodeSensorParser.PrimaryOnlyContext ctx);
+	void exitPrimaryOnly(CodeSensorParser.PrimaryOnlyContext ctx);
+
 	void enterInclusive_or_expression(CodeSensorParser.Inclusive_or_expressionContext ctx);
 	void exitInclusive_or_expression(CodeSensorParser.Inclusive_or_expressionContext ctx);
 
@@ -143,6 +155,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterBase_classes(CodeSensorParser.Base_classesContext ctx);
 	void exitBase_classes(CodeSensorParser.Base_classesContext ctx);
+
+	void enterIncDecOp(CodeSensorParser.IncDecOpContext ctx);
+	void exitIncDecOp(CodeSensorParser.IncDecOpContext ctx);
 
 	void enterEquality_operator(CodeSensorParser.Equality_operatorContext ctx);
 	void exitEquality_operator(CodeSensorParser.Equality_operatorContext ctx);
@@ -180,6 +195,9 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterFunction_argument(CodeSensorParser.Function_argumentContext ctx);
 	void exitFunction_argument(CodeSensorParser.Function_argumentContext ctx);
 
+	void enterUnary_expression(CodeSensorParser.Unary_expressionContext ctx);
+	void exitUnary_expression(CodeSensorParser.Unary_expressionContext ctx);
+
 	void enterPtrs(CodeSensorParser.PtrsContext ctx);
 	void exitPtrs(CodeSensorParser.PtrsContext ctx);
 
@@ -213,12 +231,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterOperator(CodeSensorParser.OperatorContext ctx);
 	void exitOperator(CodeSensorParser.OperatorContext ctx);
 
-	void enterField(CodeSensorParser.FieldContext ctx);
-	void exitField(CodeSensorParser.FieldContext ctx);
-
-	void enterPostfix(CodeSensorParser.PostfixContext ctx);
-	void exitPostfix(CodeSensorParser.PostfixContext ctx);
-
 	void enterClass_def(CodeSensorParser.Class_defContext ctx);
 	void exitClass_def(CodeSensorParser.Class_defContext ctx);
 
@@ -245,9 +257,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 
 	void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx);
 	void exitDeclByType(CodeSensorParser.DeclByTypeContext ctx);
-
-	void enterFieldOnly(CodeSensorParser.FieldOnlyContext ctx);
-	void exitFieldOnly(CodeSensorParser.FieldOnlyContext ctx);
 
 	void enterParameter_id(CodeSensorParser.Parameter_idContext ctx);
 	void exitParameter_id(CodeSensorParser.Parameter_idContext ctx);
