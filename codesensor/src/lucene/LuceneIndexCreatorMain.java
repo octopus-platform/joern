@@ -2,13 +2,14 @@ package lucene;
 
 import java.util.Stack;
 
-import main.codeitems.CodeItem;
-import main.codeitems.CodeItemBuilder;
-import main.processors.Processor;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-public class LuceneIndexCreatorMain extends Processor
+import astnodes.ASTNode;
+import astnodes.ASTNodeBuilder;
+import astwalking.ASTWalker;
+
+public class LuceneIndexCreatorMain extends ASTWalker
 {
 	
 	
@@ -24,7 +25,7 @@ public class LuceneIndexCreatorMain extends Processor
 	}
 
 	@Override
-	public void processItem(CodeItem item, Stack<CodeItemBuilder> itemStack)
+	public void processItem(ASTNode item, Stack<ASTNodeBuilder> itemStack)
 	{
 		converter.setFilename(filename);
 		item.accept(converter);

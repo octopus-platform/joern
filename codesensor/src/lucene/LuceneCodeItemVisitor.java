@@ -5,20 +5,6 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import lucene.DocumentFactory.DocumentType;
-import main.codeitems.CodeItem;
-import main.codeitems.CodeItemVisitor;
-import main.codeitems.declarations.ClassDef;
-import main.codeitems.declarations.IdentifierDecl;
-import main.codeitems.expressions.Argument;
-import main.codeitems.expressions.AssignmentExpr;
-import main.codeitems.expressions.CallExpression;
-import main.codeitems.expressions.MemberAccess;
-import main.codeitems.expressions.PrimaryExpression;
-import main.codeitems.expressions.UnaryExpression;
-import main.codeitems.functionDef.FunctionDef;
-import main.codeitems.statements.Condition;
-import main.codeitems.statements.ExprStatementItem;
-import main.codeitems.statements.IdentifierDeclStatement;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -26,7 +12,22 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.util.Version;
 
-public class LuceneCodeItemVisitor extends CodeItemVisitor
+import astnodes.ASTNode;
+import astnodes.ASTNodeVisitor;
+import astnodes.declarations.ClassDef;
+import astnodes.declarations.IdentifierDecl;
+import astnodes.expressions.Argument;
+import astnodes.expressions.AssignmentExpr;
+import astnodes.expressions.CallExpression;
+import astnodes.expressions.MemberAccess;
+import astnodes.expressions.PrimaryExpression;
+import astnodes.expressions.UnaryExpression;
+import astnodes.functionDef.FunctionDef;
+import astnodes.statements.Condition;
+import astnodes.statements.ExprStatementItem;
+import astnodes.statements.IdentifierDeclStatement;
+
+public class LuceneCodeItemVisitor extends ASTNodeVisitor
 {
 	
 	String filename = "";
@@ -78,7 +79,7 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 			return;
 		}
 			
-		Iterator<CodeItem> it = statementItem.getIdentifierDeclList().iterator();
+		Iterator<ASTNode> it = statementItem.getIdentifierDeclList().iterator();
 		while(it.hasNext()){
 			IdentifierDecl idDecl = (IdentifierDecl) it.next();
 			String name = idDecl.name.getCodeStr();
@@ -184,7 +185,7 @@ public class LuceneCodeItemVisitor extends CodeItemVisitor
 		}
 	}
 	
-	private void visitChildrenAndWrite(CodeItem expression, Document d)
+	private void visitChildrenAndWrite(ASTNode expression, Document d)
 	{
 		documents.push(d);
 		visitChildren(expression);

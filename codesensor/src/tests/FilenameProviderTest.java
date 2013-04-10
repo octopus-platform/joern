@@ -16,12 +16,12 @@ public class FilenameProviderTest {
 	@Test
 	public void testRecursiveDirSearch()
 	{
-		String [] args = {"src/samples/"};
+		String [] args = {"src/tests/samples/"};
 		
 		FilenameProvider provider = new FilenameProvider();
 		
 		try {
-			String expected = "[src/samples/test.c, src/samples/tiff.cpp, src/samples/subdir/test.c]";
+			String expected = "[src/tests/samples/test.c, src/tests/samples/tiff.cpp, src/tests/samples/subdir/test.c]";
 			List<String> filesProvided = provider.getFilesToProcess(args);
 			assertTrue(expected.equals(filesProvided.toString()));
 		} catch (IOException e) {

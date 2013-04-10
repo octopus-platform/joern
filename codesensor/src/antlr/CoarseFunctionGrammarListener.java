@@ -69,9 +69,6 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx);
 	void exitArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx);
 
-	void enterUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx);
-	void exitUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx);
-
 	void enterNumber(CoarseFunctionGrammarParser.NumberContext ctx);
 	void exitNumber(CoarseFunctionGrammarParser.NumberContext ctx);
 

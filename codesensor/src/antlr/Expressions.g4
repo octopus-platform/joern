@@ -28,7 +28,6 @@ unary_expression: inc_dec cast_expression
                 ;
 
 inc_dec: ('--' | '++');
-unary_operators: unary_operator+; 
 
 postfix_expression: postfix_expression '[' expr ']' #arrayIndexing
                   | postfix_expression '(' function_argument_list ')' #funcCall

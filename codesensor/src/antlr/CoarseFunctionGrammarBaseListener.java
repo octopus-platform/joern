@@ -72,9 +72,6 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx) { }
 	@Override public void exitArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx) { }
 
-	@Override public void enterUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx) { }
-	@Override public void exitUnary_operators(CoarseFunctionGrammarParser.Unary_operatorsContext ctx) { }
-
 	@Override public void enterNumber(CoarseFunctionGrammarParser.NumberContext ctx) { }
 	@Override public void exitNumber(CoarseFunctionGrammarParser.NumberContext ctx) { }
 

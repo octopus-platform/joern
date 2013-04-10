@@ -1,0 +1,43 @@
+package astnodes.functionDef;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
+
+import astnodes.ASTNode;
+
+public class ParameterType extends ASTNode
+{
+	String completeType = "";
+	String baseType = "";
+
+	public String getCodeStr()
+	{
+		if(codeStr != null)
+			return codeStr;
+		codeStr = completeType;
+		return codeStr;
+	}
+	
+	public void setCompleteType(String aCompleteType)
+	{
+		completeType = aCompleteType;
+	}
+
+	public void setBaseType(String aBaseType)
+	{
+		baseType = aBaseType;
+	}
+		
+	public ParameterType()
+	{
+		setNodeTypeName("PARAMETER_TYPE");
+	}
+	
+	public void initializeFromContext(ParserRuleContext aCtx)
+	{	
+		// use entire parameter as location. It's the best
+		// we can do right now.
+		super.initializeFromContext(aCtx);
+	}	
+
+}

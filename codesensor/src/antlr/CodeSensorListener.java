@@ -81,9 +81,6 @@ public interface CodeSensorListener extends ParseTreeListener {
 	void enterArrayIndexing(CodeSensorParser.ArrayIndexingContext ctx);
 	void exitArrayIndexing(CodeSensorParser.ArrayIndexingContext ctx);
 
-	void enterUnary_operators(CodeSensorParser.Unary_operatorsContext ctx);
-	void exitUnary_operators(CodeSensorParser.Unary_operatorsContext ctx);
-
 	void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx);
 	void exitParameter_decl(CodeSensorParser.Parameter_declContext ctx);
 

@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Stack;
 
-import main.codeitems.CodeItem;
-import main.codeitems.CodeItemBuilder;
-import main.codeitems.statements.CompoundItem;
-import main.processors.ParserEvent;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -23,11 +19,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import astnodes.ASTNode;
+import astnodes.ASTNodeBuilder;
+import astnodes.statements.CompoundItem;
+import astwalking.ASTWalkerEvent;
+
 
 abstract public class CommonParser extends Observable
 {
 
-	public Stack<CodeItemBuilder> itemStack = new Stack<CodeItemBuilder>();
+	public Stack<ASTNodeBuilder> itemStack = new Stack<ASTNodeBuilder>();
 	public TokenSubStream stream;
 	public String filename;
 	
@@ -156,7 +157,7 @@ abstract public class CommonParser extends Observable
 		stream = context.stream;
 	}
 	
-	public void setStack(Stack<CodeItemBuilder> aStack)
+	public void setStack(Stack<ASTNodeBuilder> aStack)
 	{
 		itemStack = aStack;
 	}
@@ -175,21 +176,21 @@ abstract public class CommonParser extends Observable
 	
 	public void notifyObserversOfBegin()
 	{
-		ParserEvent event = new ParserEvent(ParserEvent.eventID.BEGIN);
+		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.BEGIN);
 		setChanged();
 		notifyObservers(event);
 	}
 
 	public void notifyObserversOfEnd()
 	{
-		ParserEvent event = new ParserEvent(ParserEvent.eventID.END);
+		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.END);
 		setChanged();
 		notifyObservers(event);
 	}
 	
 	public void notifyObserversOfUnitStart(ParserRuleContext ctx)
 	{
-		ParserEvent event = new ParserEvent(ParserEvent.eventID.START_OF_UNIT);
+		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.START_OF_UNIT);
 		event.ctx = ctx;
 		event.filename = filename;
 		setChanged();
@@ -198,16 +199,16 @@ abstract public class CommonParser extends Observable
 	
 	public void notifyObserversOfUnitEnd(ParserRuleContext ctx)
 	{
-		ParserEvent event = new ParserEvent(ParserEvent.eventID.END_OF_UNIT);
+		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.END_OF_UNIT);
 		event.ctx = ctx;
 		event.filename = filename;
 		setChanged();
 		notifyObservers(event);
 	}
 	
-	public void notifyObserversOfItem(CodeItem aItem)
+	public void notifyObserversOfItem(ASTNode aItem)
 	{
-		ParserEvent event = new ParserEvent(ParserEvent.eventID.PROCESS_ITEM);
+		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.PROCESS_ITEM);
 		event.item = aItem;
 		event.itemStack = itemStack;
 		setChanged();

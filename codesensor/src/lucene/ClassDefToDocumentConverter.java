@@ -1,7 +1,9 @@
 package lucene;
 
-import main.codeitems.declarations.ClassDef;
+
 import org.apache.lucene.document.Document;
+
+import astnodes.declarations.ClassDef;
 
 public class ClassDefToDocumentConverter
 {

@@ -3,9 +3,12 @@ package tools.index;
 import java.util.Iterator;
 import java.util.List;
 
+import output.CSVPrinter;
+
+
+import parsing.ModuleParser;
+
 import lucene.LuceneIndexCreatorMain;
-import main.ModuleParser.ModuleParser;
-import main.processors.CSVPrinter;
 
 public class BatchParser implements Runnable
 {

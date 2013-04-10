@@ -84,9 +84,6 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterArrayIndexing(CodeSensorParser.ArrayIndexingContext ctx) { }
 	@Override public void exitArrayIndexing(CodeSensorParser.ArrayIndexingContext ctx) { }
 
-	@Override public void enterUnary_operators(CodeSensorParser.Unary_operatorsContext ctx) { }
-	@Override public void exitUnary_operators(CodeSensorParser.Unary_operatorsContext ctx) { }
-
 	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx) { }
 	@Override public void exitParameter_decl(CodeSensorParser.Parameter_declContext ctx) { }
 

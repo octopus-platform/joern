@@ -87,9 +87,6 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterCondition(FineFunctionGrammarParser.ConditionContext ctx);
 	void exitCondition(FineFunctionGrammarParser.ConditionContext ctx);
 
-	void enterUnary_operators(FineFunctionGrammarParser.Unary_operatorsContext ctx);
-	void exitUnary_operators(FineFunctionGrammarParser.Unary_operatorsContext ctx);
-
 	void enterCatch_statement(FineFunctionGrammarParser.Catch_statementContext ctx);
 	void exitCatch_statement(FineFunctionGrammarParser.Catch_statementContext ctx);
 
