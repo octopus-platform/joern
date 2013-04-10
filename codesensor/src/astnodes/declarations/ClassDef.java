@@ -3,17 +3,17 @@ package astnodes.declarations;
 import java.util.LinkedList;
 
 import astnodes.ASTNode;
-import astnodes.DummyName;
+import astnodes.DummyNameNode;
 import astnodes.expressions.Identifier;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 import astwalking.ASTNodeVisitor;
 
 
 public class ClassDef extends ASTNode
 {
 	
-	public Identifier name = new DummyName();
-	public CompoundItem content = new CompoundItem();
+	public Identifier name = new DummyNameNode();
+	public CompoundStatement content = new CompoundStatement();
 	
 	public ClassDef()
 	{

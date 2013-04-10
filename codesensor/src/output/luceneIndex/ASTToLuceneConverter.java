@@ -1,9 +1,13 @@
-package lucene;
+package output.luceneIndex;
 
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.Stack;
 
+import lucene.DocumentFactory;
+import lucene.IDocumentWriter;
+import lucene.LuceneIndexWriter;
+import lucene.LuceneUtils;
 import lucene.DocumentFactory.DocumentType;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -23,11 +27,11 @@ import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.UnaryExpression;
 import astnodes.functionDef.FunctionDef;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatementItem;
+import astnodes.statements.ExprStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astwalking.ASTNodeVisitor;
 
-public class LuceneASTVisitor extends ASTNodeVisitor
+public class ASTToLuceneConverter extends ASTNodeVisitor
 {
 	
 	String filename = "";
@@ -194,7 +198,7 @@ public class LuceneASTVisitor extends ASTNodeVisitor
 	}
 	
 	@Override
-	public void visit(ExprStatementItem statementItem)
+	public void visit(ExprStatement statementItem)
 	{
 		// TODO: implement me
 		visitChildren(statementItem);

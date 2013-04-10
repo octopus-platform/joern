@@ -1,7 +1,9 @@
-package lucene;
+package tests.lucene;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import lucene.IDocumentWriter;
 
 import org.apache.lucene.document.Document;
 

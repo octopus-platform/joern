@@ -1,12 +1,12 @@
 package tests.lucene;
 
-import lucene.LuceneASTVisitor;
-import lucene.TestDocumentWriter;
 
 import org.apache.lucene.document.Document;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import output.luceneIndex.ASTToLuceneConverter;
 
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;
@@ -17,22 +17,22 @@ import astnodes.expressions.Expression;
 import astnodes.expressions.Identifier;
 import astnodes.functionDef.FunctionDef;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatementItem;
+import astnodes.statements.ExprStatement;
 import astnodes.statements.IdentifierDeclStatement;
-import astnodes.statements.IfItem;
+import astnodes.statements.IfStatement;
 import astnodes.statements.Statement;
 import static org.junit.Assert.assertTrue;
 
 
 public class LuceneCodeItemVisitorTest {
 	
-	LuceneASTVisitor visitor;
+	ASTToLuceneConverter visitor;
 	TestDocumentWriter writer;
 	
 	@Before
 	public void initialize()
 	{
-		visitor = new LuceneASTVisitor();
+		visitor = new ASTToLuceneConverter();
 		writer = new TestDocumentWriter();
 		visitor.setDocumentWriter(writer);
 	}
@@ -73,7 +73,7 @@ public class LuceneCodeItemVisitorTest {
 	{
 		FunctionDef item = new FunctionDef();
 		
-		ExprStatementItem exprStatement = new ExprStatementItem();
+		ExprStatement exprStatement = new ExprStatement();
 		CallExpression callExpression = new CallExpression();
 		exprStatement.addChild(callExpression);
 		item.addStatement(exprStatement);	
@@ -87,7 +87,7 @@ public class LuceneCodeItemVisitorTest {
 	{
 		FunctionDef item = new FunctionDef();
 		
-		IfItem ifItem = new IfItem();
+		IfStatement ifItem = new IfStatement();
 		Condition condition = new Condition();
 		condition.addChild(new Expression());
 		ifItem.setCondition(condition);

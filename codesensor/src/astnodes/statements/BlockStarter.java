@@ -4,12 +4,12 @@ import astnodes.ASTNode;
 import astnodes.expressions.Expression;
 
 
-public class BlockStarterItem extends Statement
+public class BlockStarter extends Statement
 {
 	ASTNode statement = null;
 	Condition condition = null;
 	
-	public BlockStarterItem()
+	public BlockStarter()
 	{
 		super();
 		condition = new Condition();

@@ -2,9 +2,9 @@ package astnodes;
 
 import astnodes.expressions.Identifier;
 
-public class DummyName extends Identifier
+public class DummyNameNode extends Identifier
 {
-	public DummyName(){ super(); }
+	public DummyNameNode(){ super(); }
 	
 	public String getCodeStr()
 	{

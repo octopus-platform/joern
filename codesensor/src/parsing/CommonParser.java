@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 import astwalking.ASTWalkerEvent;
 
 
@@ -216,9 +216,9 @@ abstract public class CommonParser extends Observable
 		notifyObservers(event);
 	}
 	
-	public CompoundItem getResult()
+	public CompoundStatement getResult()
 	{
-		return (CompoundItem) itemStack.peek().getItem();
+		return (CompoundStatement) itemStack.peek().getItem();
 	}
 
 	public Parser getParser() {

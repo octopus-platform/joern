@@ -21,7 +21,7 @@ import astnodes.builders.ClassDefBuilder;
 import astnodes.builders.FunctionDefBuilder;
 import astnodes.builders.IdentifierDeclBuilder;
 import astnodes.declarations.IdentifierDecl;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 
@@ -56,7 +56,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		builder.createNew(ctx);
 		p.itemStack.push(builder);
 	
-		CompoundItem functionContent = parseFunctionContents(ctx);
+		CompoundStatement functionContent = parseFunctionContents(ctx);
 		builder.setContent(functionContent);
 		
 	}
@@ -73,7 +73,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 	
 	
-	private CompoundItem parseFunctionContents(Function_defContext ctx)
+	private CompoundStatement parseFunctionContents(Function_defContext ctx)
 	{
 		String text = getCompoundStmtAsString(ctx);
 		
@@ -186,14 +186,14 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	{
 		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.pop();
 		
-		CompoundItem content = parseClassContent(ctx);
+		CompoundStatement content = parseClassContent(ctx);
 		builder.setContent(content);
 		
 		p.notifyObserversOfItem(builder.getItem());		
 		emitDeclarationsForClass(ctx);
 	}
 
-	private CompoundItem parseClassContent(CodeSensorParser.DeclByClassContext ctx)
+	private CompoundStatement parseClassContent(CodeSensorParser.DeclByClassContext ctx)
 	{
 		ModuleParser shallowParser = createNewShallowParser();
 		CompoundItemAssembler generator = new CompoundItemAssembler();

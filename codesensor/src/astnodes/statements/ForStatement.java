@@ -1,12 +1,12 @@
 package astnodes.statements;
 
 import astnodes.ASTNode;
-import astnodes.DummyItem;
+import astnodes.DummyNode;
 
-public class ForItem extends BlockStarterItem
+public class ForStatement extends BlockStarter
 {
-	private ASTNode forInitStatement = new DummyItem();
-	private ASTNode expression = new DummyItem();
+	private ASTNode forInitStatement = new DummyNode();
+	private ASTNode expression = new DummyNode();
 	
 	public ASTNode getForInitStatement()
 	{
@@ -31,9 +31,9 @@ public class ForItem extends BlockStarterItem
 	@Override
 	public void addChild(ASTNode item)
 	{	
-		if(forInitStatement instanceof DummyItem)
+		if(forInitStatement instanceof DummyNode)
 			forInitStatement = item;
-		else if(expression instanceof DummyItem)
+		else if(expression instanceof DummyNode)
 			expression = item;
 		super.addChild(item);
 	}

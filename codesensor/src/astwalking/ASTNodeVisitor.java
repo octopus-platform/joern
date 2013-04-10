@@ -10,7 +10,7 @@ import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.UnaryExpression;
 import astnodes.functionDef.FunctionDef;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatementItem;
+import astnodes.statements.ExprStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 
@@ -21,7 +21,7 @@ public class ASTNodeVisitor
 	public void visit(FunctionDef item) { defaultHandler(item); }
 	public void visit(ClassDef item){ defaultHandler(item); }
 	public void visit(IdentifierDeclStatement statementItem){ defaultHandler(statementItem); }
-	public void visit(ExprStatementItem statementItem){ defaultHandler(statementItem); }
+	public void visit(ExprStatement statementItem){ defaultHandler(statementItem); }
 	public void visit(CallExpression expression) { defaultHandler(expression); }
 	public void visit(Condition expression) { defaultHandler(expression); }
 	public void visit(AssignmentExpr expression) { defaultHandler(expression); }

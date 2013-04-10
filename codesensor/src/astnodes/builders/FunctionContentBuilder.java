@@ -10,10 +10,10 @@ import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Expression;
-import astnodes.statements.BlockStarterItem;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.BlockStarter;
+import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatementItem;
+import astnodes.statements.ExprStatement;
 import astnodes.statements.ExpressionHolder;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.Statement;
@@ -21,13 +21,13 @@ import astnodes.statements.Statement;
 public class FunctionContentBuilder extends ASTNodeBuilder
 {
 	Stack<ASTNode> itemStack = new Stack<ASTNode>();
-	CompoundItem rootItem;
+	CompoundStatement rootItem;
 	
 	@Override
 	public void createNew(ParserRuleContext ctx)
 	{
-		item = new CompoundItem();
-		rootItem = (CompoundItem) item;
+		item = new CompoundStatement();
+		rootItem = (CompoundStatement) item;
 		item.initializeFromContext(ctx);
 		itemStack.push(rootItem);
 	}
@@ -90,8 +90,8 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		if(itemStack.size() > 0)
 			topOfStack = itemStack.peek();
 		
-		if(topOfStack instanceof CompoundItem){
-			CompoundItem compound = (CompoundItem)topOfStack;
+		if(topOfStack instanceof CompoundStatement){
+			CompoundStatement compound = (CompoundStatement)topOfStack;
 			compound.addStatement(stmt);
 		}else{
 			consolidateBlockStarters(stmt);
@@ -106,8 +106,8 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		
 		while(true){
 			try{
-				BlockStarterItem bItem = (BlockStarterItem) itemStack.peek();
-				bItem = (BlockStarterItem) itemStack.pop();
+				BlockStarter bItem = (BlockStarter) itemStack.peek();
+				bItem = (BlockStarter) itemStack.pop();
 				bItem.addChild(stmt);
 				stmt = bItem;
 			}catch(ClassCastException ex){
@@ -115,7 +115,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			}
 		}
 		// Finally, add chain to top compound-item
-		CompoundItem root = (CompoundItem) itemStack.peek();
+		CompoundStatement root = (CompoundStatement) itemStack.peek();
 		root.addStatement(stmt);
 	}
 	

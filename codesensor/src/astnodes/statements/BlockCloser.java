@@ -2,4 +2,4 @@ package astnodes.statements;
 
 import astnodes.ASTNode;
 
-public class CloseBlockItem extends Statement{}
+public class BlockCloser extends Statement{}

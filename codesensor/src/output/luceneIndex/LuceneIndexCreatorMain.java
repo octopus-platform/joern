@@ -1,6 +1,7 @@
-package lucene;
+package output.luceneIndex;
 
 import java.util.Stack;
+
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -12,7 +13,7 @@ import astwalking.ASTWalker;
 public class LuceneIndexCreatorMain extends ASTWalker
 {
 	String filename = "";
-	LuceneASTVisitor converter = new LuceneASTVisitor();
+	ASTToLuceneConverter converter = new ASTToLuceneConverter();
 	
 	@Override public void begin(){}
 	

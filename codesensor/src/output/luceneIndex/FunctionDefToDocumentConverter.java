@@ -1,7 +1,10 @@
-package lucene;
+package output.luceneIndex;
 
+
+import lucene.LuceneUtils;
 
 import org.apache.lucene.document.Document;
+
 
 import astnodes.functionDef.FunctionDef;
 

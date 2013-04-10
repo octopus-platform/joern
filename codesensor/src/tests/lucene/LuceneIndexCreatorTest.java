@@ -2,9 +2,10 @@ package tests.lucene;
 
 import java.util.Stack;
 
-import lucene.LuceneIndexCreatorMain;
 
 import org.junit.Test;
+
+import output.luceneIndex.LuceneIndexCreatorMain;
 
 import astnodes.ASTNodeBuilder;
 import astnodes.functionDef.FunctionDef;

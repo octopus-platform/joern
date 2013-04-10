@@ -7,19 +7,19 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 import astwalking.ASTWalker;
 
 public class CompoundItemAssembler extends ASTWalker {
 
-	private CompoundItem compoundItem;
+	private CompoundStatement compoundItem;
 	
-	public CompoundItem getCompoundItem(){ return compoundItem; }
+	public CompoundStatement getCompoundItem(){ return compoundItem; }
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-		compoundItem = new CompoundItem();
+		compoundItem = new CompoundStatement();
 	}
 
 	@Override

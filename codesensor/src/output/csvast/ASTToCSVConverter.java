@@ -1,4 +1,4 @@
-package output;
+package output.csvast;
 
 import astnodes.ASTNode;
 import astwalking.ASTNodeVisitor;

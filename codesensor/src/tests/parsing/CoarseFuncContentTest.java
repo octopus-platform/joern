@@ -12,8 +12,8 @@ import antlr.CoarseFunctionGrammarLexer;
 import astnodes.ASTNode;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.CallExpression;
-import astnodes.statements.CompoundItem;
-import astnodes.statements.ExprStatementItem;
+import astnodes.statements.CompoundStatement;
+import astnodes.statements.ExprStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 public class CoarseFuncContentTest
@@ -23,7 +23,7 @@ public class CoarseFuncContentTest
 	public void emptyContent()
 	{
 		String input = "";
-		CompoundItem item = (CompoundItem) parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) parseAndWalk(input);
 		assert(item.getStatements().size() == 0);
 	}
 	
@@ -31,8 +31,8 @@ public class CoarseFuncContentTest
 	public void testMostBasicCall()
 	{
 		String input = "foo();";
-		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
-		ExprStatementItem statementItem = (ExprStatementItem) contentItem.getStatements().get(0);
+		CompoundStatement contentItem = (CompoundStatement) parseAndWalk(input);
+		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
 		CallExpression call = (CallExpression) statementItem.getExpression();
 		assertTrue(call.getTarget().getCodeStr().equals("foo"));
 	}
@@ -41,7 +41,7 @@ public class CoarseFuncContentTest
 	public void testMostBasicDecl()
 	{
 		String input = "int x;";
-		CompoundItem contentItem = (CompoundItem) parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) parseAndWalk(input);
 		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.getStatements().get(0);
 		IdentifierDecl identifierDecl = (IdentifierDecl) statementItem.getIdentifierDeclList().get(0);
 		assertTrue(identifierDecl.name.getCodeStr().equals("x"));

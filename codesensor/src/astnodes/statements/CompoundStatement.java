@@ -6,7 +6,7 @@ import java.util.List;
 import astnodes.ASTNode;
 
 
-public class CompoundItem extends Statement
+public class CompoundStatement extends Statement
 {
 
 	LinkedList<ASTNode> statements = new LinkedList<ASTNode>();
@@ -16,7 +16,7 @@ public class CompoundItem extends Statement
 	public ASTNode getChild(int i){ return statements.get(i); }
 	
 	
-	public CompoundItem()
+	public CompoundStatement()
 	{
 		setNodeTypeName("STATEMENTS");	
 	}

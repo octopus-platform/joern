@@ -4,9 +4,9 @@ import astnodes.ASTNode;
 
 
 
-public class IfItem extends BlockStarterItem {
+public class IfStatement extends BlockStarter {
 	
-	public ElseItem elseItem = null;
+	public ElseStatement elseItem = null;
 
 	public int getChildCount()
 	{

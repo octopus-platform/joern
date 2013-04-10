@@ -16,7 +16,7 @@ import astnodes.expressions.Identifier;
 import astnodes.functionDef.FunctionDef;
 import astnodes.functionDef.ParameterList;
 import astnodes.functionDef.ReturnType;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 
 public class FunctionDefBuilder extends ASTNodeBuilder {
 
@@ -62,7 +62,7 @@ public class FunctionDefBuilder extends ASTNodeBuilder {
 		paramListBuilder.addParameter(ctx, itemStack);
 	}
 
-	public void setContent(CompoundItem functionContent)
+	public void setContent(CompoundStatement functionContent)
 	{
 		thisItem.setContent(functionContent);
 	}

@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import output.luceneIndex.LuceneIndexCreatorMain;
+
 import parsing.BatchOfFiles;
 import parsing.Parser;
 
-import lucene.LuceneIndexCreatorMain;
 
 
 public class CodeSensorIndex {

@@ -7,7 +7,7 @@ import antlr.CodeSensorParser.Class_nameContext;
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.ClassDef;
 import astnodes.expressions.Identifier;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 
 public class ClassDefBuilder extends ASTNodeBuilder
 {
@@ -35,7 +35,7 @@ public class ClassDefBuilder extends ASTNodeBuilder
 		thisItem.name.initializeFromContext(ctx);
 	}
 	
-	public void setContent(CompoundItem content)
+	public void setContent(CompoundStatement content)
 	{
 		thisItem.content = content;
 	}

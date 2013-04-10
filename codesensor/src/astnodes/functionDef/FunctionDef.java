@@ -1,19 +1,19 @@
 package astnodes.functionDef;
 
 import astnodes.ASTNode;
-import astnodes.DummyName;
+import astnodes.DummyNameNode;
 import astnodes.expressions.Identifier;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 import astwalking.ASTNodeVisitor;
 
 
 public class FunctionDef extends ASTNode
 {
 
-	public Identifier name = new DummyName();
+	public Identifier name = new DummyNameNode();
 	public ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = new DummyReturnType();
-	public CompoundItem content = new CompoundItem();
+	public CompoundStatement content = new CompoundStatement();
 	
 	public void addStatement(ASTNode statement)
 	{
@@ -54,7 +54,7 @@ public class FunctionDef extends ASTNode
 		return retval;
 	}
 
-	public void setContent(CompoundItem functionContent)
+	public void setContent(CompoundStatement functionContent)
 	{
 		content = functionContent;
 	}

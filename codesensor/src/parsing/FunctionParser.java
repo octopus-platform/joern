@@ -1,6 +1,6 @@
 package parsing;
 
-import astnodes.statements.CompoundItem;
+import astnodes.statements.CompoundStatement;
 
 public class FunctionParser
 {
@@ -31,7 +31,7 @@ public class FunctionParser
 		parser.parseAndWalkString(input);
 	}
 
-	public CompoundItem getResult()
+	public CompoundStatement getResult()
 	{
 		// The result is what's left on the stack in the end
 		return parser.getResult();

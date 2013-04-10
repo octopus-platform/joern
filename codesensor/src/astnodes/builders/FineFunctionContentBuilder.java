@@ -72,15 +72,15 @@ import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.RelationalExpression;
 import astnodes.expressions.ShiftExpression;
 import astnodes.expressions.UnaryExpression;
-import astnodes.statements.BlockStarterItem;
-import astnodes.statements.CloseBlockItem;
-import astnodes.statements.CompoundItem;
+import astnodes.statements.BlockStarter;
+import astnodes.statements.BlockCloser;
+import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
-import astnodes.statements.ElseItem;
-import astnodes.statements.ExprStatementItem;
-import astnodes.statements.ForItem;
+import astnodes.statements.ElseStatement;
+import astnodes.statements.ExprStatement;
+import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
-import astnodes.statements.IfItem;
+import astnodes.statements.IfStatement;
 import astnodes.statements.Statement;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
@@ -113,17 +113,17 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	public void enterOpeningCurly(Opening_curlyContext ctx)
 	{
-		replaceTopOfStack(new CompoundItem());
+		replaceTopOfStack(new CompoundStatement());
 	}
 	
 	public void enterClosingCurly(Closing_curlyContext ctx)
 	{
-		replaceTopOfStack(new CloseBlockItem());
+		replaceTopOfStack(new BlockCloser());
 	}
 	
 	public void enterBlockStarter(Block_starterContext ctx)
 	{
-		replaceTopOfStack(new BlockStarterItem());
+		replaceTopOfStack(new BlockStarter());
 	}
 
 	// TODO: Still missing:
@@ -131,22 +131,22 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	public void enterExprStatement(Expr_statementContext ctx)
 	{
-		replaceTopOfStack(new ExprStatementItem());
+		replaceTopOfStack(new ExprStatement());
 	}
 	
 	public void enterIf(If_statementContext ctx)
 	{
-		replaceTopOfStack(new IfItem());
+		replaceTopOfStack(new IfStatement());
 	}
 	
 	public void enterFor(For_statementContext ctx)
 	{
-		replaceTopOfStack(new ForItem());
+		replaceTopOfStack(new ForStatement());
 	}
 	
 	public void enterElse(Else_statementContext ctx)
 	{
-		replaceTopOfStack(new ElseItem());
+		replaceTopOfStack(new ElseStatement());
 	}
 	
 	public void exitStatement(StatementContext ctx)
@@ -156,7 +156,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 		ASTNode itemToRemove = itemStack.peek();
 		
-		if(itemToRemove instanceof CloseBlockItem){
+		if(itemToRemove instanceof BlockCloser){
 			closeCompoundStatement();
 			return;
 		}
@@ -164,8 +164,8 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		// We keep Block-starters and compound items
 		// on the stack. They are removed by following
 		// statements.
-		if(itemToRemove instanceof BlockStarterItem ||
-		   itemToRemove instanceof CompoundItem)
+		if(itemToRemove instanceof BlockStarter ||
+		   itemToRemove instanceof CompoundStatement)
 			return;
 		
 		consolidate();	
@@ -175,7 +175,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	{
 		itemStack.pop(); // remove 'CloseBlock'
 		
-		CompoundItem compoundItem = (CompoundItem) itemStack.pop();
+		CompoundStatement compoundItem = (CompoundStatement) itemStack.pop();
 		consolidateIfElse(compoundItem);
 		consolidateBlockStarters(compoundItem);		
 	}
@@ -183,17 +183,17 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	// Scans a compoundItem for sequences of if-/else.
 	// When found attaches else to if.
 	
-	private void consolidateIfElse(CompoundItem compoundItem)
+	private void consolidateIfElse(CompoundStatement compoundItem)
 	{
 		Iterator<ASTNode> it = compoundItem.getStatements().iterator();
 		ASTNode prev = null;
 		while(it.hasNext()){
 			
 			ASTNode cur = it.next();
-			if(prev != null && cur instanceof ElseItem){
-				if(prev instanceof IfItem){
-					IfItem ifItem = (IfItem) prev;
-					ifItem.elseItem = (ElseItem) cur;
+			if(prev != null && cur instanceof ElseStatement){
+				if(prev instanceof IfStatement){
+					IfStatement ifItem = (IfStatement) prev;
+					ifItem.elseItem = (ElseStatement) cur;
 					it.remove();
 				}
 			}
