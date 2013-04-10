@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import tools.index.CommonParser;
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
 import antlr.CoarseFunctionGrammarParser.Init_declarator_listContext;

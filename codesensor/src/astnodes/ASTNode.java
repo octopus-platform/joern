@@ -3,7 +3,10 @@ package astnodes;
 import java.util.LinkedList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import tools.index.ParseTreeUtils;
+
+import parsing.ParseTreeUtils;
+
+import astwalking.ASTNodeVisitor;
 
 
 public class ASTNode {

@@ -9,8 +9,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
 import parsing.ModuleParser;
+import parsing.TokenSubStream;
 
-import tools.index.TokenSubStream;
 import antlr.CodeSensorLexer;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;

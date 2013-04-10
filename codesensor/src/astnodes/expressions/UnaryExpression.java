@@ -1,6 +1,6 @@
 package astnodes.expressions;
 
-import astnodes.ASTNodeVisitor;
+import astwalking.ASTNodeVisitor;
 
 public class UnaryExpression extends Expression
 {

@@ -8,13 +8,14 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import parsing.InitDeclContextWrapper;
+import parsing.ParseTreeUtils;
+
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.declarations.IdentifierDeclType;
 import astnodes.expressions.Identifier;
 
-import tools.index.InitDeclContextWrapper;
-import tools.index.ParseTreeUtils;
 
 public class IdentifierDeclBuilder extends ASTNodeBuilder
 {

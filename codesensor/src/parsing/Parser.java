@@ -1,36 +1,32 @@
-package tools.index;
+package parsing;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observer;
 
-import output.CSVPrinter;
 
-
-import parsing.ModuleParser;
-
-import lucene.LuceneIndexCreatorMain;
-
-public class BatchParser implements Runnable
+public class Parser implements Runnable
 {
 	ModuleParser parser = new ModuleParser();
-	BatchOfFiles batchToProcess;
-	
-	BatchParser(BatchOfFiles batch)
-	{
-		batchToProcess = batch;
-	}
+	private BatchOfFiles batchOfFiles;
 	
 	@Override
 	public void run()
 	{
-		LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
-		indexCreator.setIndexDirectoryName("/home/fabs/tmp/lucene/");
-		parser.addObserver(indexCreator);
-		// parser.addObserver(new CSVPrinter());
-		processBatch();
+		processBatch(batchOfFiles);
 	}
 	
-	public void processBatch()
+	public void addObserver(Observer anObserver)
+	{
+		parser.addObserver(anObserver);
+	}
+	
+	public void setBatch(BatchOfFiles aBatchOfFiles)
+	{
+		batchOfFiles = aBatchOfFiles;
+	}
+	
+	public void processBatch(BatchOfFiles batchToProcess)
 	{
 		parser.begin();
 		
@@ -43,7 +39,6 @@ public class BatchParser implements Runnable
 		}
 		
 		parser.end();
-		
 	}
 	
     private void processSingleFile(String filename)
@@ -54,5 +49,4 @@ public class BatchParser implements Runnable
     		System.err.println("Error processing file: " + filename);
     	}
     }
-    
 }

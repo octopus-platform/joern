@@ -5,7 +5,8 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import tools.index.ParseTreeUtils;
+import parsing.ParseTreeUtils;
+
 import antlr.CodeSensorParser.Function_nameContext;
 import antlr.CodeSensorParser.Function_param_listContext;
 import antlr.CodeSensorParser.Parameter_declContext;

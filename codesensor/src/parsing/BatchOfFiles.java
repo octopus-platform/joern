@@ -1,4 +1,4 @@
-package tools.index;
+package parsing;
 
 import java.util.LinkedList;
 import java.util.List;

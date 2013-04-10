@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import parsing.BatchOfFiles;
+import parsing.Parser;
+
+import lucene.LuceneIndexCreatorMain;
+
 
 public class CodeSensorIndex {
 
@@ -22,7 +27,11 @@ public class CodeSensorIndex {
     		BatchOfFiles[] batches = filenameProvider.getBatchesToProcess(userSpecifiedFilenames, nCores);
     		
     		for(int i = 0; i < nCores; i++){
-    			BatchParser batchParser = new BatchParser(batches[i]);
+    			Parser batchParser = new Parser();
+    			LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
+    			indexCreator.setIndexDirectoryName("/home/fabs/tmp/lucene/");
+    			batchParser.addObserver(indexCreator);
+    			batchParser.setBatch(batches[i]);
     			executor.execute(batchParser);
     		}
     		

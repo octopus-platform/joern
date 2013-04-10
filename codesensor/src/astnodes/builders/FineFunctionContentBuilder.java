@@ -4,7 +4,8 @@ import java.util.Iterator;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import tools.index.InitDeclContextWrapper;
+import parsing.InitDeclContextWrapper;
+
 
 import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;

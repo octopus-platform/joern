@@ -1,6 +1,6 @@
 package tests.lucene;
 
-import lucene.LuceneCodeItemVisitor;
+import lucene.LuceneASTVisitor;
 import lucene.TestDocumentWriter;
 
 import org.apache.lucene.document.Document;
@@ -26,13 +26,13 @@ import static org.junit.Assert.assertTrue;
 
 public class LuceneCodeItemVisitorTest {
 	
-	LuceneCodeItemVisitor visitor;
+	LuceneASTVisitor visitor;
 	TestDocumentWriter writer;
 	
 	@Before
 	public void initialize()
 	{
-		visitor = new LuceneCodeItemVisitor();
+		visitor = new LuceneASTVisitor();
 		writer = new TestDocumentWriter();
 		visitor.setDocumentWriter(writer);
 	}

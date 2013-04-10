@@ -1,5 +1,6 @@
-package astnodes;
+package astwalking;
 
+import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;
 import astnodes.expressions.Argument;
 import astnodes.expressions.AssignmentExpr;
@@ -15,7 +16,7 @@ import astnodes.statements.IdentifierDeclStatement;
 
 public class ASTNodeVisitor
 {
-	public void visit(ASTNode item) { defaultHandler(item); }
+	public void visit(ASTNode item) { visitChildren(item); }
 	
 	public void visit(FunctionDef item) { defaultHandler(item); }
 	public void visit(ClassDef item){ defaultHandler(item); }
@@ -33,7 +34,7 @@ public class ASTNodeVisitor
 	
 	public void defaultHandler(ASTNode item)
 	{
-		visitChildren(item);
+		visit((ASTNode) item);
 	}
 	
 	public void visitChildren(ASTNode item)

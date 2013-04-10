@@ -6,8 +6,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import tools.index.CommonParser;
-import tools.index.TokenSubStream;
 import antlr.FineFunctionGrammarLexer;
 import antlr.FineFunctionGrammarParser;
 

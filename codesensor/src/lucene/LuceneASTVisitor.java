@@ -13,7 +13,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.util.Version;
 
 import astnodes.ASTNode;
-import astnodes.ASTNodeVisitor;
 import astnodes.declarations.ClassDef;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Argument;
@@ -26,8 +25,9 @@ import astnodes.functionDef.FunctionDef;
 import astnodes.statements.Condition;
 import astnodes.statements.ExprStatementItem;
 import astnodes.statements.IdentifierDeclStatement;
+import astwalking.ASTNodeVisitor;
 
-public class LuceneCodeItemVisitor extends ASTNodeVisitor
+public class LuceneASTVisitor extends ASTNodeVisitor
 {
 	
 	String filename = "";

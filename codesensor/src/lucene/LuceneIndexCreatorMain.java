@@ -11,10 +11,8 @@ import astwalking.ASTWalker;
 
 public class LuceneIndexCreatorMain extends ASTWalker
 {
-	
-	
 	String filename = "";
-	LuceneCodeItemVisitor converter = new LuceneCodeItemVisitor();
+	LuceneASTVisitor converter = new LuceneASTVisitor();
 	
 	@Override public void begin(){}
 	

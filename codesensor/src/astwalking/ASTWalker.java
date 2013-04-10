@@ -27,7 +27,7 @@ public abstract class ASTWalker implements Observer
 	
 	public abstract void startOfUnit(ParserRuleContext ctx, String filename);
 	public abstract void endOfUnit(ParserRuleContext ctx, String filename);
-	public abstract void processItem(ASTNode item, Stack<ASTNodeBuilder> itemStack);
+	public abstract void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack);
 	public abstract void begin();
 	public abstract void end();
 

@@ -1,10 +1,10 @@
 package astnodes.functionDef;
 
 import astnodes.ASTNode;
-import astnodes.ASTNodeVisitor;
 import astnodes.DummyName;
 import astnodes.expressions.Identifier;
 import astnodes.statements.CompoundItem;
+import astwalking.ASTNodeVisitor;
 
 
 public class FunctionDef extends ASTNode

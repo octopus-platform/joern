@@ -3,10 +3,10 @@ package astnodes.declarations;
 import java.util.LinkedList;
 
 import astnodes.ASTNode;
-import astnodes.ASTNodeVisitor;
 import astnodes.DummyName;
 import astnodes.expressions.Identifier;
 import astnodes.statements.CompoundItem;
+import astwalking.ASTNodeVisitor;
 
 
 public class ClassDef extends ASTNode

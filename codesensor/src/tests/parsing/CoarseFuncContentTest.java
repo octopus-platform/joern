@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
 import parsing.CoarseFunctionParser;
+import parsing.TokenSubStream;
 
-import tools.index.TokenSubStream;
 import antlr.CoarseFunctionGrammarLexer;
 import astnodes.ASTNode;
 import astnodes.declarations.IdentifierDecl;

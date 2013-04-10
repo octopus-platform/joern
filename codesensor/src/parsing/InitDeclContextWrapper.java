@@ -1,4 +1,4 @@
-package tools.index;
+package parsing;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;

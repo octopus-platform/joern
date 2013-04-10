@@ -1,4 +1,4 @@
-package tools.index;
+package parsing;
 
 public class ParserException extends RuntimeException {
 

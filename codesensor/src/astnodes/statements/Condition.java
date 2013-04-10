@@ -1,7 +1,7 @@
 package astnodes.statements;
 
-import astnodes.ASTNodeVisitor;
-import tools.index.ParseTreeUtils;
+import parsing.ParseTreeUtils;
+import astwalking.ASTNodeVisitor;
 
 public class Condition extends ExpressionHolder
 {	

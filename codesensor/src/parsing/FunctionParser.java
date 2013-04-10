@@ -1,8 +1,6 @@
 package parsing;
 
 import astnodes.statements.CompoundItem;
-import tools.index.CommonParser;
-import tools.index.TokenSubStream;
 
 public class FunctionParser
 {
