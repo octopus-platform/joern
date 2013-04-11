@@ -1,6 +1,7 @@
 package lucene;
 
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.document.NumericField;
 
 public class LuceneUtils
@@ -13,5 +14,10 @@ public class LuceneUtils
 	public static NumericField createIDField(String name, int id)
 	{
 		return new NumericField(name, Field.Store.YES, true).setIntValue(id);
+	}
+
+	public static Fieldable createUnindexField(String name, String value)
+	{
+		return new Field(name, value, Field.Store.YES, Field.Index.NO);
 	}
 }

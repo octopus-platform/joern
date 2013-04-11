@@ -5,6 +5,8 @@ import lucene.LuceneUtils;
 
 import org.apache.lucene.document.Document;
 
+import output.csvast.ASTToCSVConverter;
+
 import astnodes.functionDef.FunctionDef;
 
 public class FunctionDefToDocumentConverter
@@ -15,6 +17,14 @@ public class FunctionDefToDocumentConverter
 		d.add(LuceneUtils.createField("name", item.name.getCodeStr()));
 		d.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
 		addParameters(item, d);		
+		addAst(item, d);
+	}
+
+	private static void addAst(FunctionDef node, Document d)
+	{
+		ASTToCSVConverter astToCSV = new ASTToCSVConverter();
+		node.accept(astToCSV);
+		d.add(LuceneUtils.createUnindexField("ast", astToCSV.getResult()));
 	}
 
 	private static void addParameters(FunctionDef item, Document d)

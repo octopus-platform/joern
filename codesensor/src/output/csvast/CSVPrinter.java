@@ -32,9 +32,11 @@ public class CSVPrinter extends ASTWalker
 	{
 		visitor.setFunctionNodeVisitor(converter);
 		node.accept(visitor);
+		
 		String result = converter.getResult();
-		System.out.println(result);
 		converter.reset();
+		
+		System.out.println(result);
 	}
 
 	@Override

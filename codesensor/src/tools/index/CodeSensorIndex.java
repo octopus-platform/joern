@@ -32,10 +32,7 @@ public class CodeSensorIndex {
     			
     			LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
     			indexCreator.setIndexDirectoryName("/home/fabs/tmp/lucene/");
-    			// batchParser.addObserver(indexCreator);
-    			
-    			batchParser.addObserver(new CSVPrinter());
-    			
+    			batchParser.addObserver(indexCreator);
     			batchParser.setBatch(batches[i]);
     			executor.execute(batchParser);
     		}
