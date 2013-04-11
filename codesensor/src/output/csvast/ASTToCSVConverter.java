@@ -3,6 +3,7 @@ package output.csvast;
 import java.util.Stack;
 
 import astnodes.ASTNode;
+import astnodes.expressions.BinaryExpression;
 import astwalking.ASTNodeVisitor;
 
 public class ASTToCSVConverter extends ASTNodeVisitor
@@ -42,8 +43,10 @@ public class ASTToCSVConverter extends ASTNodeVisitor
 				 node.getLocationString() + SEPARATOR + level;
 
 		 String codeStr = null;
-		 
-		 if((node.getChildCount() == 0) && !NodeBlacklist.isBlackListed(nodeTypeName))
+		  
+		 if(node instanceof BinaryExpression && node.getChildCount() > 0)
+			 codeStr = ((BinaryExpression) node).getOperator();
+		 else if(!NodeBlacklist.isBlackListed(nodeTypeName))
 			 codeStr = node.getCodeStr();
 		 
 		 if(codeStr != null)

@@ -408,6 +408,21 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	}
 	
 	@Override
+	public void enterPtrMemberAccess(FineFunctionGrammarParser.PtrMemberAccessContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterPtrMemberAccess(ctx);
+	}
+	
+	@Override
+	public void exitPtrMemberAccess(FineFunctionGrammarParser.PtrMemberAccessContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitPtrMemberAccess(ctx);
+	}
+	
+	
+	@Override
 	public void enterIncDecOp(FineFunctionGrammarParser.IncDecOpContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();

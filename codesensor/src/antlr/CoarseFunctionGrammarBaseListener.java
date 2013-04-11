@@ -87,6 +87,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx) { }
 	@Override public void exitInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx) { }
 
+	@Override public void enterPtrMemberAccess(CoarseFunctionGrammarParser.PtrMemberAccessContext ctx) { }
+	@Override public void exitPtrMemberAccess(CoarseFunctionGrammarParser.PtrMemberAccessContext ctx) { }
+
 	@Override public void enterInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx) { }
 	@Override public void exitInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx) { }
 

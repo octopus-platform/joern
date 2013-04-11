@@ -31,7 +31,8 @@ inc_dec: ('--' | '++');
 
 postfix_expression: postfix_expression '[' expr ']' #arrayIndexing
                   | postfix_expression '(' function_argument_list ')' #funcCall
-                  | postfix_expression ('.' | '->') TEMPLATE? identifier #memberAccess
+                  | postfix_expression '.' TEMPLATE? identifier #memberAccess
+                  | postfix_expression '->' TEMPLATE? identifier #ptrMemberAccess
                   | postfix_expression inc_dec #incDecOp
                   | primary_expression # primaryOnly
                   ;

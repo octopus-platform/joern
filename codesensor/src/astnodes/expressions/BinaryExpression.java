@@ -1,11 +1,14 @@
 package astnodes.expressions;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import astnodes.ASTNode;
 
 
 public class BinaryExpression extends Expression
 {
 	Expression subExpressions [] = new Expression[2];
+	private String operator = "";
 		
 	
 	public Expression getLeft() { return subExpressions[0]; }
@@ -37,6 +40,24 @@ public class BinaryExpression extends Expression
 	public ASTNode getChild(int i)
 	{
 		return subExpressions[i];
+	}
+
+	@Override
+	public void initializeFromContext(ParserRuleContext ctx)
+	{
+		super.initializeFromContext(ctx);
+		
+		if(ctx.getChildCount() == 3)
+			setOperator(ctx.getChild(1).getText()); 
+	}
+	private void setOperator(String text)
+	{
+		operator = text;
+	}
+	
+	public String getOperator()
+	{
+		return operator;
 	}
 	
 }

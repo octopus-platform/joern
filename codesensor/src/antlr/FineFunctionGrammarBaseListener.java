@@ -51,11 +51,14 @@ public class FineFunctionGrammarBaseListener implements FineFunctionGrammarListe
 	@Override public void enterTry_statement(FineFunctionGrammarParser.Try_statementContext ctx) { }
 	@Override public void exitTry_statement(FineFunctionGrammarParser.Try_statementContext ctx) { }
 
+	@Override public void enterNumber(FineFunctionGrammarParser.NumberContext ctx) { }
+	@Override public void exitNumber(FineFunctionGrammarParser.NumberContext ctx) { }
+
 	@Override public void enterBase_type(FineFunctionGrammarParser.Base_typeContext ctx) { }
 	@Override public void exitBase_type(FineFunctionGrammarParser.Base_typeContext ctx) { }
 
-	@Override public void enterNumber(FineFunctionGrammarParser.NumberContext ctx) { }
-	@Override public void exitNumber(FineFunctionGrammarParser.NumberContext ctx) { }
+	@Override public void enterPtrMemberAccess(FineFunctionGrammarParser.PtrMemberAccessContext ctx) { }
+	@Override public void exitPtrMemberAccess(FineFunctionGrammarParser.PtrMemberAccessContext ctx) { }
 
 	@Override public void enterPre_opener(FineFunctionGrammarParser.Pre_openerContext ctx) { }
 	@Override public void exitPre_opener(FineFunctionGrammarParser.Pre_openerContext ctx) { }

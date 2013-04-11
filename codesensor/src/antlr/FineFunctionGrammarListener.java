@@ -48,11 +48,14 @@ public interface FineFunctionGrammarListener extends ParseTreeListener {
 	void enterTry_statement(FineFunctionGrammarParser.Try_statementContext ctx);
 	void exitTry_statement(FineFunctionGrammarParser.Try_statementContext ctx);
 
+	void enterNumber(FineFunctionGrammarParser.NumberContext ctx);
+	void exitNumber(FineFunctionGrammarParser.NumberContext ctx);
+
 	void enterBase_type(FineFunctionGrammarParser.Base_typeContext ctx);
 	void exitBase_type(FineFunctionGrammarParser.Base_typeContext ctx);
 
-	void enterNumber(FineFunctionGrammarParser.NumberContext ctx);
-	void exitNumber(FineFunctionGrammarParser.NumberContext ctx);
+	void enterPtrMemberAccess(FineFunctionGrammarParser.PtrMemberAccessContext ctx);
+	void exitPtrMemberAccess(FineFunctionGrammarParser.PtrMemberAccessContext ctx);
 
 	void enterPre_opener(FineFunctionGrammarParser.Pre_openerContext ctx);
 	void exitPre_opener(FineFunctionGrammarParser.Pre_openerContext ctx);

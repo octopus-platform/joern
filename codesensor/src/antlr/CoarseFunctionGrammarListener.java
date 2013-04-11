@@ -84,6 +84,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx);
 	void exitInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx);
 
+	void enterPtrMemberAccess(CoarseFunctionGrammarParser.PtrMemberAccessContext ctx);
+	void exitPtrMemberAccess(CoarseFunctionGrammarParser.PtrMemberAccessContext ctx);
+
 	void enterInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx);
 	void exitInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx);
 

@@ -43,6 +43,7 @@ import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
 import antlr.FineFunctionGrammarParser.Or_expressionContext;
 import antlr.FineFunctionGrammarParser.Primary_expressionContext;
+import antlr.FineFunctionGrammarParser.PtrMemberAccessContext;
 import antlr.FineFunctionGrammarParser.Relational_expressionContext;
 import antlr.FineFunctionGrammarParser.Shift_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
@@ -74,6 +75,7 @@ import astnodes.expressions.MemberAccess;
 import astnodes.expressions.MultiplicativeExpression;
 import astnodes.expressions.OrExpression;
 import astnodes.expressions.PrimaryExpression;
+import astnodes.expressions.PtrMemberAccess;
 import astnodes.expressions.RelationalExpression;
 import astnodes.expressions.ShiftExpression;
 import astnodes.expressions.UnaryExpression;
@@ -593,6 +595,17 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	}
 
 	public void exitInitializerList(Initializer_listContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+
+	public void enterPtrMemberAccess(PtrMemberAccessContext ctx)
+	{
+		PtrMemberAccess expr = new PtrMemberAccess();
+		itemStack.push(expr);
+	}
+
+	public void exitPtrMemberAccess(PtrMemberAccessContext ctx)
 	{
 		consolidateSubExpression(ctx);
 	}

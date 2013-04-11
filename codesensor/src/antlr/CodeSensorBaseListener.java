@@ -114,6 +114,9 @@ public class CodeSensorBaseListener implements CodeSensorListener {
 	@Override public void enterParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
 	@Override public void exitParam_type_id(CodeSensorParser.Param_type_idContext ctx) { }
 
+	@Override public void enterPtrMemberAccess(CodeSensorParser.PtrMemberAccessContext ctx) { }
+	@Override public void exitPtrMemberAccess(CodeSensorParser.PtrMemberAccessContext ctx) { }
+
 	@Override public void enterInitializer_list(CodeSensorParser.Initializer_listContext ctx) { }
 	@Override public void exitInitializer_list(CodeSensorParser.Initializer_listContext ctx) { }
 

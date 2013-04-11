@@ -5,7 +5,8 @@ import java.util.HashMap;
 public class NodeBlacklist {
 
 	static final String [] nodeTypeBlacklist = {
-	        "CompoundStatement"
+	        "CompoundStatement", "ArrayIndexing", "MemberAccess", "PtrMemberAccess",
+	        "IncDecOp", "FunctionCall"
 	 };
 	
 	static HashMap<String,Integer> nodeBlacklist;

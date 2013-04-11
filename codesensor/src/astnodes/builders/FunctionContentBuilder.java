@@ -60,9 +60,9 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	protected void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) itemStack.pop();
+		expression.initializeFromContext(ctx);
 		if(!(expression instanceof ExpressionHolder))
 			expression = pullUpOnlyChild(expression);
-		expression.initializeFromContext(ctx);
 		addItemToParent(expression);
 	}
 
