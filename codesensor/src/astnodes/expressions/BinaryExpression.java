@@ -7,14 +7,11 @@ public class BinaryExpression extends Expression
 {
 	Expression subExpressions [] = new Expression[2];
 		
-	protected String operator = "";
 	
 	public Expression getLeft() { return subExpressions[0]; }
 	public Expression getRight() { return subExpressions[1];}
 	public void setLeft(Expression aLeft) { subExpressions[0] = aLeft; }
 	public void setRight(Expression aRight) {subExpressions[1] = aRight; }
-	
-	public String getOperator(){ return operator; }
 	
 	@Override
 	public void addChild(ASTNode item)

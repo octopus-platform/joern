@@ -12,7 +12,6 @@ import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
-import antlr.CodeSensorParser.DeclByTypeContext;
 import antlr.CodeSensorParser.Function_defContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;

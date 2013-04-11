@@ -149,8 +149,8 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
-		assertTrue(decl.name.getCodeStr().equals("x"));
-	}
+		assertTrue(decl.getName().getCodeStr().equals("x"));
+	}	
 	
 	@Test
 	public void testVarDeclType()
@@ -159,8 +159,21 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
-		System.out.println(decl.type.getCodeStr());
-		assertTrue(decl.type.getCodeStr().equals("int"));
+		System.out.println(decl.getType().getCodeStr());
+		assertTrue(decl.getType().getCodeStr().equals("int"));
+	}
+	
+	@Test
+	public void testAssignment()
+	{
+		String input = "const char *m = \"Usage: untar [-tvx] [-f file] [file]\\n\";";
+		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
+		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);	
+		
+		AssignmentExpr assign = (AssignmentExpr) decl.getChild(decl.getChildCount() -1);
+		assertTrue(assign.getLeft().getCodeStr().equals("m"));
+		assertTrue(assign.getRight().getCodeStr().equals("\"Usage: untar [-tvx] [-f file] [file]\\n\""));
 	}
 	
 	@Test
@@ -172,7 +185,7 @@ public class CodeNestingTest {
 		ClassDef classDef = (ClassDef) contentItem.getChild(0);
 		assertTrue(classDef.getChildCount() == 1);
 		IdentifierDecl decl = (IdentifierDecl) classDef.getChild(0);
-		assertTrue(decl.name.getCodeStr().equals("foo"));
+		assertTrue(decl.getName().getCodeStr().equals("foo"));
 	}
 	
 	@Test

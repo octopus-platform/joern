@@ -88,8 +88,8 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 		Iterator<ASTNode> it = statementItem.getIdentifierDeclList().iterator();
 		while(it.hasNext()){
 			IdentifierDecl idDecl = (IdentifierDecl) it.next();
-			String name = idDecl.name.getCodeStr();
-			String completeType = idDecl.type.completeType;
+			String name = idDecl.getName().getCodeStr();
+			String completeType = idDecl.getType().completeType;
 			parentDoc.add(LuceneUtils.createField("localName", name));
 			parentDoc.add(LuceneUtils.createField("localType", completeType));
 		}

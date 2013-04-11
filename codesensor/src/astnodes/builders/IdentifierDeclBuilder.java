@@ -39,16 +39,19 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 		if(decl_ctx.type_suffix() != null)
 			completeType += " " + ParseTreeUtils.childTokenString(decl_ctx.type_suffix());
 		
-		thisItem.type = new IdentifierDeclType();
-		thisItem.type.baseType = baseType;
-		thisItem.type.completeType = completeType;
+		IdentifierDeclType newType = new IdentifierDeclType();
+		newType.initializeFromContext(decl_ctx.getWrappedObject());
+		newType.baseType = baseType;
+		newType.completeType = completeType;
+		thisItem.setType(newType);
 	}
 
 	public void setName(InitDeclContextWrapper decl_ctx)
 	{
 		ParserRuleContext identifier = decl_ctx.identifier();
-		thisItem.name = new Identifier();
-		thisItem.name.initializeFromContext(identifier);
+		Identifier newName = new Identifier();
+		newName.initializeFromContext(identifier);
+		thisItem.setName(newName);
 	}
 	
 	public List<IdentifierDecl> getDeclarations(ParserRuleContext decl_list,
@@ -63,10 +66,10 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 			// for ','s
 			if(decl_ctx.getWrappedObject() == null) continue;
 			
-			
 			createNew(decl_ctx.getWrappedObject());
 			setName(decl_ctx);
 			setType(decl_ctx, typeName);
+			
 			declarations.add((IdentifierDecl) getItem());
 		}
 		return declarations;

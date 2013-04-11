@@ -102,9 +102,9 @@ public class ASTToLuceneConverterTest {
 		FunctionDef item = new FunctionDef();
 		IdentifierDeclStatement declStatement = new IdentifierDeclStatement();
 		IdentifierDecl decl = new IdentifierDecl();
-		decl.name = new Identifier();
-		decl.type = new IdentifierDeclType();
-		decl.type.completeType = "";
+		decl.setName(new Identifier());
+		decl.setType(new IdentifierDeclType());
+		decl.getType().completeType = "";
 		declStatement.addChild(decl);
 		
 		item.addStatement(declStatement);

@@ -17,6 +17,7 @@ import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.DeclByClassContext;
+import antlr.FineFunctionGrammarParser.DeclaratorContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
@@ -31,7 +32,12 @@ import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.IncDecOpContext;
 import antlr.FineFunctionGrammarParser.Inc_decContext;
 import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
+import antlr.FineFunctionGrammarParser.InitDeclSimpleContext;
+import antlr.FineFunctionGrammarParser.InitDeclWithAssignContext;
+import antlr.FineFunctionGrammarParser.InitDeclWithCallContext;
 import antlr.FineFunctionGrammarParser.Init_declaratorContext;
+import antlr.FineFunctionGrammarParser.InitializerContext;
+import antlr.FineFunctionGrammarParser.Initializer_listContext;
 import antlr.FineFunctionGrammarParser.MemberAccessContext;
 import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
@@ -63,6 +69,7 @@ import astnodes.expressions.Identifier;
 import astnodes.expressions.IncDec;
 import astnodes.expressions.IncDecOp;
 import astnodes.expressions.InclusiveOrExpression;
+import astnodes.expressions.InitializerList;
 import astnodes.expressions.MemberAccess;
 import astnodes.expressions.MultiplicativeExpression;
 import astnodes.expressions.OrExpression;
@@ -415,39 +422,82 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidate();
 	}
 	
-	public void enterInitDeclarator(Init_declaratorContext ctx)
-	{		
-				
-		InitDeclContextWrapper wrappedContext = new InitDeclContextWrapper(ctx);
-		IdentifierDeclBuilder declBuilder = new IdentifierDeclBuilder();
-		
-		
-		ASTNode parentItem =  itemStack.peek();
-		
-		ParserRuleContext typeName;
-		
-		if(parentItem instanceof IdentifierDeclStatement)
-			typeName = ((IdentifierDeclStatement) parentItem).getTypeNameContext();
-		else if (parentItem instanceof ClassDef)
-			typeName = ((ClassDef) parentItem).getName().getParseTreeNodeContext();
-		else
-			throw new RuntimeException("No matching declaration statement/class definiton for init declarator");
-		
-		declBuilder.createNew(ctx);
-		declBuilder.setName(wrappedContext);
-		declBuilder.setType(wrappedContext, typeName);
-		
-		ASTNode identifierDecl = declBuilder.getItem();
+	public void enterInitDeclSimple(InitDeclSimpleContext ctx)
+	{				
+		ASTNode identifierDecl = buildDeclarator(ctx);
 		itemStack.push(identifierDecl);	
 	}
 
-	public void exitInitDeclarator()
+	public void exitInitDeclSimple()
 	{
 		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
 		ASTNode stmt =  itemStack.peek();
 		stmt.addChild(identifierDecl);
 	}
 
+	public void enterInitDeclWithAssign(InitDeclWithAssignContext ctx)
+	{
+		IdentifierDecl identifierDecl = buildDeclarator(ctx);				
+		itemStack.push(identifierDecl);	
+	}
+
+	public void exitInitDeclWithAssign(InitDeclWithAssignContext ctx)
+	{
+		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
+		
+		Expression lastChild = (Expression) identifierDecl.popLastChild();
+		AssignmentExpr assign = new AssignmentExpr();
+		assign.initializeFromContext(ctx);
+		
+		// watchout here, we're not making a copy.
+		// This is also a bit of a hack. As we go up,
+		// we introduce an artifical assignment-node.
+		
+		assign.setLeft(identifierDecl.getName());
+		assign.setRight(lastChild);
+		identifierDecl.addChild(assign);
+		
+		ASTNode stmt =  itemStack.peek();
+		stmt.addChild(identifierDecl);
+	}
+
+	public void enterInitDeclWithCall(InitDeclWithCallContext ctx)
+	{
+		ASTNode identifierDecl = buildDeclarator(ctx);
+		itemStack.push(identifierDecl);	
+	}
+
+	public void exitInitDeclWithCall()
+	{
+		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
+		ASTNode stmt =  itemStack.peek();
+		stmt.addChild(identifierDecl);
+	}
+	
+	private IdentifierDecl buildDeclarator(ParserRuleContext ctx)
+	{
+		InitDeclContextWrapper wrappedContext = new InitDeclContextWrapper(ctx);
+		ParserRuleContext typeName = getTypeFromParent();
+		IdentifierDeclBuilder declBuilder = new IdentifierDeclBuilder();
+		declBuilder.createNew(ctx);
+		declBuilder.setType(wrappedContext, typeName);
+		IdentifierDecl identifierDecl = (IdentifierDecl) declBuilder.getItem();
+		return identifierDecl;
+	}
+
+	private ParserRuleContext getTypeFromParent()
+	{
+		ASTNode parentItem =  itemStack.peek();
+		ParserRuleContext typeName;
+		if(parentItem instanceof IdentifierDeclStatement)
+			typeName = ((IdentifierDeclStatement) parentItem).getTypeNameContext();
+		else if (parentItem instanceof ClassDef)
+			typeName = ((ClassDef) parentItem).getName().getParseTreeNodeContext();
+		else
+			throw new RuntimeException("No matching declaration statement/class definiton for init declarator");
+		return typeName;
+	}
+	
 	public void enterIncDec(Inc_decContext ctx)
 	{
 		IncDec expr = new IncDec();
@@ -536,4 +586,15 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		consolidateSubExpression(ctx);
 	}
 
+	public void enterInitializerList(Initializer_listContext ctx)
+	{
+		InitializerList expr = new InitializerList();
+		itemStack.push(expr);
+	}
+
+	public void exitInitializerList(Initializer_listContext ctx)
+	{
+		consolidateSubExpression(ctx);
+	}
+	
 }

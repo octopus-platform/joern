@@ -43,7 +43,7 @@ public class CoarseFuncContentTest
 		CompoundStatement contentItem = (CompoundStatement) parseAndWalk(input);
 		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.getStatements().get(0);
 		IdentifierDecl identifierDecl = (IdentifierDecl) statementItem.getIdentifierDeclList().get(0);
-		assertTrue(identifierDecl.name.getCodeStr().equals("x"));
+		assertTrue(identifierDecl.getName().getCodeStr().equals("x"));
 	}
 	
 	

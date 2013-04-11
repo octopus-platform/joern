@@ -39,6 +39,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
 		declStmt.initializeFromContext(ctx);
 		declStmt.setTypeNameContext(ctx);
+		
 		if(itemStack.peek() instanceof Statement)
 			replaceTopOfStack(declStmt);
 		else

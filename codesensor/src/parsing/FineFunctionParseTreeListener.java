@@ -112,18 +112,40 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.exitDeclByClass();
 	}
 	
-	@Override public void enterInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx)
+	@Override public void enterInitDeclSimple(FineFunctionGrammarParser.InitDeclSimpleContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterInitDeclarator(ctx);
+		builder.enterInitDeclSimple(ctx);
 	}
 	
-	@Override public void exitInit_declarator(FineFunctionGrammarParser.Init_declaratorContext ctx)
+	@Override public void exitInitDeclSimple(FineFunctionGrammarParser.InitDeclSimpleContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.exitInitDeclarator();
+		builder.exitInitDeclSimple();
 	}
 	
+	@Override public void enterInitDeclWithAssign(FineFunctionGrammarParser.InitDeclWithAssignContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterInitDeclWithAssign(ctx);
+	}
+	
+	@Override public void exitInitDeclWithAssign(FineFunctionGrammarParser.InitDeclWithAssignContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitInitDeclWithAssign(ctx);
+	}
+	
+	@Override public void enterInitDeclWithCall(FineFunctionGrammarParser.InitDeclWithCallContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterInitDeclWithCall(ctx);
+	}	
+	@Override public void exitInitDeclWithCall(FineFunctionGrammarParser.InitDeclWithCallContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitInitDeclWithCall();
+	}
 	
 	@Override public void enterCondition(FineFunctionGrammarParser.ConditionContext ctx)
 	{
@@ -453,6 +475,18 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
 		builder.exitArgument(ctx);
+	}
+	
+	@Override public void enterInitializer_list(FineFunctionGrammarParser.Initializer_listContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterInitializerList(ctx);
+	}
+	
+	@Override public void exitInitializer_list(FineFunctionGrammarParser.Initializer_listContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitInitializerList(ctx);
 	}
 	
 }

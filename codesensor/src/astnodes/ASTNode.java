@@ -31,6 +31,8 @@ public class ASTNode {
 	public int getChildCount(){ if(children == null) return 0; return children.size(); }
 	public ASTNode getChild(int i){ if(children == null) return null; return children.get(i); }
 	
+	public ASTNode popLastChild(){ return children.removeLast(); }
+	
 	private void setChildNumber(int num)
 	{
 		childNumber = num;

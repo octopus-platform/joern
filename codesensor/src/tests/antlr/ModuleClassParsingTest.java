@@ -53,7 +53,7 @@ public class ModuleClassParsingTest {
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
 		
-		assertTrue(output.contains("(assign_water_l2 archive_contents_sparse2)"));
+		assertTrue(output.contains("assign_expr"));
 	}
 
 	@Test
@@ -62,7 +62,8 @@ public class ModuleClassParsingTest {
 		String input = "struct foo{ int x; } y;";			
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);		
-		assertTrue(output.startsWith("(simple_decl (var_decl (class_def struct (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (identifier y)) ;)))"));
+		System.out.println(output);
+		assertTrue(output.startsWith("(simple_decl (var_decl (class_def struct (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (declarator (identifier y))) ;)))"));
 	}
 	
 	@Test
@@ -72,7 +73,7 @@ public class ModuleClassParsingTest {
 		CodeSensorParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);		
 		System.out.println(output);
-		assertTrue(output.startsWith("(simple_decl (var_decl (type_name (base_type int)) (init_declarator_list (init_declarator (identifier foo) (type_suffix (param_type_list ( (param_type"));
+		assertTrue(output.startsWith("(simple_decl (var_decl (type_name (base_type int)) (init_declarator_list (init_declarator (declarator (identifier foo) (type_suffix (param_type_list ( (param_type"));
 	}
 	
 	

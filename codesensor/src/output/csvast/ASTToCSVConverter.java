@@ -26,7 +26,7 @@ public class ASTToCSVConverter extends ASTNodeVisitor
 	public void visit(ASTNode node)
 	{
 		int level = levelStack.size();
-		defaultOut(node, level);
+		defaultOut(node, level);		
 		levelStack.push(o);
 		visitChildren(node);
 		levelStack.pop();
@@ -42,7 +42,8 @@ public class ASTToCSVConverter extends ASTNodeVisitor
 				 node.getLocationString() + SEPARATOR + level;
 
 		 String codeStr = null;
-		 if(!NodeBlacklist.isBlackListed(nodeTypeName))
+		 
+		 if((node.getChildCount() == 0) && !NodeBlacklist.isBlackListed(nodeTypeName))
 			 codeStr = node.getCodeStr();
 		 
 		 if(codeStr != null)

@@ -3,11 +3,17 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.tree.ParseTreeListener;
+  import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.Token;
 
 public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx);
 	void exitCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx);
+
+	void enterDeclarator(CoarseFunctionGrammarParser.DeclaratorContext ctx);
+	void exitDeclarator(CoarseFunctionGrammarParser.DeclaratorContext ctx);
 
 	void enterTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx);
 	void exitTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx);
@@ -60,9 +66,6 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx);
 	void exitAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx);
 
-	void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
-	void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx);
-
 	void enterArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx);
 	void exitArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx);
 
@@ -77,6 +80,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterParam_type_id(CoarseFunctionGrammarParser.Param_type_idContext ctx);
 	void exitParam_type_id(CoarseFunctionGrammarParser.Param_type_idContext ctx);
+
+	void enterInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx);
+	void exitInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx);
 
 	void enterInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx);
 	void exitInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx);
@@ -165,6 +171,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterPtrs(CoarseFunctionGrammarParser.PtrsContext ctx);
 	void exitPtrs(CoarseFunctionGrammarParser.PtrsContext ctx);
 
+	void enterInitDeclWithAssign(CoarseFunctionGrammarParser.InitDeclWithAssignContext ctx);
+	void exitInitDeclWithAssign(CoarseFunctionGrammarParser.InitDeclWithAssignContext ctx);
+
 	void enterWater(CoarseFunctionGrammarParser.WaterContext ctx);
 	void exitWater(CoarseFunctionGrammarParser.WaterContext ctx);
 
@@ -188,6 +197,9 @@ public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 
 	void enterInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx);
 	void exitInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx);
+
+	void enterInitDeclSimple(CoarseFunctionGrammarParser.InitDeclSimpleContext ctx);
+	void exitInitDeclSimple(CoarseFunctionGrammarParser.InitDeclSimpleContext ctx);
 
 	void enterConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx);
 	void exitConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx);

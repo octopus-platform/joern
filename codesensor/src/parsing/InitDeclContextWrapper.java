@@ -9,24 +9,24 @@ import antlr.FineFunctionGrammarParser;
 
 public class InitDeclContextWrapper
 {
-	CodeSensorParser.Init_declaratorContext ctxCodeSensor = null;
-	CoarseFunctionGrammarParser.Init_declaratorContext ctxCoarse = null;
-	FineFunctionGrammarParser.Init_declaratorContext ctxFine = null;
+	CodeSensorParser.DeclaratorContext ctxCodeSensor = null;
+	CoarseFunctionGrammarParser.DeclaratorContext ctxCoarse = null;
+	FineFunctionGrammarParser.DeclaratorContext ctxFine = null;
 	int contextInUse;
 	
-	public InitDeclContextWrapper(CodeSensorParser.Init_declaratorContext ctx)
+	public InitDeclContextWrapper(CodeSensorParser.DeclaratorContext ctx)
 	{
 		ctxCodeSensor = ctx;
 		contextInUse = 0;
 	}
 
-	public InitDeclContextWrapper(CoarseFunctionGrammarParser.Init_declaratorContext ctx)
+	public InitDeclContextWrapper(CoarseFunctionGrammarParser.DeclaratorContext ctx)
 	{
-		ctxCoarse = ctx;
+		ctxCoarse = ctx;		
 		contextInUse = 1;
 	}
 
-	public InitDeclContextWrapper(FineFunctionGrammarParser.Init_declaratorContext ctx)
+	public InitDeclContextWrapper(FineFunctionGrammarParser.DeclaratorContext ctx)
 	{
 		ctxFine = ctx;
 		contextInUse = 2;
@@ -35,13 +35,13 @@ public class InitDeclContextWrapper
 	public InitDeclContextWrapper(ParseTree objToWrap)
 	{
 		if(objToWrap instanceof CodeSensorParser.Init_declaratorContext){
-			ctxCodeSensor = (CodeSensorParser.Init_declaratorContext) objToWrap;
+			ctxCodeSensor = (CodeSensorParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 0;
 		}else if(objToWrap instanceof CoarseFunctionGrammarParser.Init_declaratorContext){
-			ctxCoarse = (CoarseFunctionGrammarParser.Init_declaratorContext) objToWrap;
+			ctxCoarse = (CoarseFunctionGrammarParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 1;
 		}else if(objToWrap instanceof FineFunctionGrammarParser.Init_declaratorContext){
-			ctxFine = (FineFunctionGrammarParser.Init_declaratorContext) objToWrap;
+			ctxFine = (FineFunctionGrammarParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 2;
 		}
 	}

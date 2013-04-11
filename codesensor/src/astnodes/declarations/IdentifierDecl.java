@@ -1,26 +1,42 @@
 package astnodes.declarations;
 
-import antlr.FineFunctionGrammarParser.IdentifierContext;
+
 import astnodes.ASTNode;
 import astnodes.expressions.Identifier;
 
 
 public class IdentifierDecl extends ASTNode
 {
-	public IdentifierDeclType type;
-	public Identifier name;
-	
-	public void addChild(ASTNode expression)
+	private IdentifierDeclType type;
+	private Identifier name;
+
+	public void addChild(ASTNode node)
 	{ 
-		// TODO: implement handling of type_suffix and initializer here
-		super.addChild(expression);
+		if(node instanceof Identifier)
+			setName((Identifier) node);
+		
+		super.addChild(node);
 	}
 	
-	public void setName(IdentifierContext ctx)
+	public void setName(Identifier name)
 	{
-		name = new Identifier();
-		name.initializeFromContext(ctx);
+		this.name = name;
 	}
 	
+	public void setType(IdentifierDeclType type)
+	{
+		this.type = type;
+		super.addChild(type);
+	}
+	
+	public Identifier getName()
+	{
+		return name;
+	}
+	
+	public IdentifierDeclType getType()
+	{
+		return type;
+	}
 	
 }

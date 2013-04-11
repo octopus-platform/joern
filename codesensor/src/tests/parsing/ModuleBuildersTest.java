@@ -79,7 +79,7 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(0);
 		IdentifierDecl decl = (IdentifierDecl) codeItem.getIdentifierDeclList().get(0);
-		assertTrue(decl.name.getCodeStr().equals("foo"));
+		assertTrue(decl.getName().getCodeStr().equals("foo"));
 	}
 
 	@Test
@@ -89,8 +89,8 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(codeItems.size() - 1);
 		IdentifierDecl decl = (IdentifierDecl) codeItem.getIdentifierDeclList().get(0);
-		System.out.println(decl.name.getCodeStr());
-		assertTrue(decl.name.getCodeStr().equals("y"));
+		System.out.println(decl.getName().getCodeStr());
+		assertTrue(decl.getName().getCodeStr().equals("y"));
 	}
 	
 	@Test
@@ -104,7 +104,7 @@ public class ModuleBuildersTest {
 		IdentifierDecl decl = (IdentifierDecl) identifierCodeItem.getIdentifierDeclList().get(0);
 		
 		assertTrue(classCodeItem.name.getCodeStr().equals("foo"));
-		assertTrue(decl.name.getCodeStr().equals("x"));
+		assertTrue(decl.getName().getCodeStr().equals("x"));
 	}
 	
 	@Test

@@ -4,7 +4,10 @@ import SimpleDecl;
 
 // The following two contain 'water'-rules for expressions
 
-init_declarator : (ptrs? identifier type_suffix?) (('(' expr? ')') | ('=' assign_expr_w_))?;
+init_declarator : declarator (('(' expr? ')') | ('=' assign_expr_w_))?;
+declarator: ptrs? identifier type_suffix?;
+
+
 type_suffix : ('[' constant_expr_w_ ']') | param_type_list;
 
 // water rules for expressions

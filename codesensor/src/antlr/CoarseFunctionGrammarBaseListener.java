@@ -3,13 +3,20 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
+  import java.util.Stack;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarListener {
 	@Override public void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx) { }
 	@Override public void exitCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx) { }
+
+	@Override public void enterDeclarator(CoarseFunctionGrammarParser.DeclaratorContext ctx) { }
+	@Override public void exitDeclarator(CoarseFunctionGrammarParser.DeclaratorContext ctx) { }
 
 	@Override public void enterTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx) { }
 	@Override public void exitTemplate_decl_start(CoarseFunctionGrammarParser.Template_decl_startContext ctx) { }
@@ -62,9 +69,6 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx) { }
 	@Override public void exitAssign_water_l2(CoarseFunctionGrammarParser.Assign_water_l2Context ctx) { }
 
-	@Override public void enterInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
-	@Override public void exitInit_declarator(CoarseFunctionGrammarParser.Init_declaratorContext ctx) { }
-
 	@Override public void enterArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx) { }
 	@Override public void exitArrayIndexing(CoarseFunctionGrammarParser.ArrayIndexingContext ctx) { }
 
@@ -79,6 +83,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 
 	@Override public void enterParam_type_id(CoarseFunctionGrammarParser.Param_type_idContext ctx) { }
 	@Override public void exitParam_type_id(CoarseFunctionGrammarParser.Param_type_idContext ctx) { }
+
+	@Override public void enterInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx) { }
+	@Override public void exitInitDeclWithCall(CoarseFunctionGrammarParser.InitDeclWithCallContext ctx) { }
 
 	@Override public void enterInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx) { }
 	@Override public void exitInitializer_list(CoarseFunctionGrammarParser.Initializer_listContext ctx) { }
@@ -167,6 +174,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 	@Override public void enterPtrs(CoarseFunctionGrammarParser.PtrsContext ctx) { }
 	@Override public void exitPtrs(CoarseFunctionGrammarParser.PtrsContext ctx) { }
 
+	@Override public void enterInitDeclWithAssign(CoarseFunctionGrammarParser.InitDeclWithAssignContext ctx) { }
+	@Override public void exitInitDeclWithAssign(CoarseFunctionGrammarParser.InitDeclWithAssignContext ctx) { }
+
 	@Override public void enterWater(CoarseFunctionGrammarParser.WaterContext ctx) { }
 	@Override public void exitWater(CoarseFunctionGrammarParser.WaterContext ctx) { }
 
@@ -190,6 +200,9 @@ public class CoarseFunctionGrammarBaseListener implements CoarseFunctionGrammarL
 
 	@Override public void enterInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx) { }
 	@Override public void exitInc_dec(CoarseFunctionGrammarParser.Inc_decContext ctx) { }
+
+	@Override public void enterInitDeclSimple(CoarseFunctionGrammarParser.InitDeclSimpleContext ctx) { }
+	@Override public void exitInitDeclSimple(CoarseFunctionGrammarParser.InitDeclSimpleContext ctx) { }
 
 	@Override public void enterConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx) { }
 	@Override public void exitConditional_expression(CoarseFunctionGrammarParser.Conditional_expressionContext ctx) { }
