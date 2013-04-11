@@ -5,8 +5,6 @@ import java.util.Iterator;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.InitDeclContextWrapper;
-
-
 import antlr.FineFunctionGrammarParser.Additive_expressionContext;
 import antlr.FineFunctionGrammarParser.And_expressionContext;
 import antlr.FineFunctionGrammarParser.ArrayIndexingContext;
@@ -72,12 +70,12 @@ import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.RelationalExpression;
 import astnodes.expressions.ShiftExpression;
 import astnodes.expressions.UnaryExpression;
-import astnodes.statements.BlockStarter;
 import astnodes.statements.BlockCloser;
+import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
 import astnodes.statements.ElseStatement;
-import astnodes.statements.ExprStatement;
+import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
@@ -131,7 +129,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	
 	public void enterExprStatement(Expr_statementContext ctx)
 	{
-		replaceTopOfStack(new ExprStatement());
+		replaceTopOfStack(new ExpressionStatement());
 	}
 	
 	public void enterIf(If_statementContext ctx)
@@ -155,6 +153,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			throw new RuntimeException();
 	
 		ASTNode itemToRemove = itemStack.peek();
+		itemToRemove.initializeFromContext(ctx);
 		
 		if(itemToRemove instanceof BlockCloser){
 			closeCompoundStatement();
@@ -399,6 +398,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void exitCondition(ConditionContext ctx)
 	{	
 		Condition cond = (Condition) itemStack.pop();
+		cond.initializeFromContext(ctx);
 		addItemToParent(cond);
 	}
 

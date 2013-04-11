@@ -1,30 +1,30 @@
 package tests.lucene;
 
 
-import org.apache.lucene.document.Document;
+import static org.junit.Assert.assertTrue;
 
+import org.apache.lucene.document.Document;
 import org.junit.Before;
 import org.junit.Test;
 
 import output.luceneIndex.ASTToLuceneConverter;
-
-import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.declarations.IdentifierDeclType;
+import astnodes.expressions.Argument;
+import astnodes.expressions.ArgumentList;
 import astnodes.expressions.CallExpression;
 import astnodes.expressions.Expression;
 import astnodes.expressions.Identifier;
 import astnodes.functionDef.FunctionDef;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatement;
+import astnodes.statements.ExpressionStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
 import astnodes.statements.Statement;
-import static org.junit.Assert.assertTrue;
 
 
-public class LuceneCodeItemVisitorTest {
+public class ASTToLuceneConverterTest {
 	
 	ASTToLuceneConverter visitor;
 	TestDocumentWriter writer;
@@ -73,7 +73,7 @@ public class LuceneCodeItemVisitorTest {
 	{
 		FunctionDef item = new FunctionDef();
 		
-		ExprStatement exprStatement = new ExprStatement();
+		ExpressionStatement exprStatement = new ExpressionStatement();
 		CallExpression callExpression = new CallExpression();
 		exprStatement.addChild(callExpression);
 		item.addStatement(exprStatement);	

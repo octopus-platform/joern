@@ -7,11 +7,6 @@ public class ReturnType extends ASTNode
 	String completeType;
 	String baseType;
 	
-	public ReturnType()
-	{
-		setNodeTypeName("RETURN_TYPE");
-	}
-	
 	public void setCompleteType(String aCompleteType)
 	{
 		completeType = aCompleteType;

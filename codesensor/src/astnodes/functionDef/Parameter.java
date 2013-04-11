@@ -14,11 +14,6 @@ public class Parameter extends ASTNode
 	public ParameterType type = new ParameterType();
 	public Identifier name = new Identifier();
 	
-	public Parameter()
-	{
-		setNodeTypeName("PARAMETER");
-	}
-	
 	@Override
 	public void initializeFromContext(ParserRuleContext ctx)
 	{

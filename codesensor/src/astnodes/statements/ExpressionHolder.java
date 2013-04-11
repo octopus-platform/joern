@@ -1,6 +1,5 @@
 package astnodes.statements;
 
-import astnodes.ASTNode;
 import astnodes.expressions.Expression;
 
 // By default, Expressions holding only a single
@@ -14,12 +13,16 @@ public class ExpressionHolder extends Expression
 		if(codeStr != null)
 			return codeStr;
 		
-		codeStr = getExpression().getCodeStr();
+		Expression expr = getExpression();
+		if(expr == null) return "";
+		
+		codeStr = expr.getCodeStr();
 		return codeStr;
 	}
 	
 	public Expression getExpression()
 	{
+		if(children == null) return null;
 		return (Expression) children.get(0);
 	}
 	

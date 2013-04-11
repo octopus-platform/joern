@@ -27,11 +27,6 @@ public class ParameterType extends ASTNode
 	{
 		baseType = aBaseType;
 	}
-		
-	public ParameterType()
-	{
-		setNodeTypeName("PARAMETER_TYPE");
-	}
 	
 	public void initializeFromContext(ParserRuleContext aCtx)
 	{	

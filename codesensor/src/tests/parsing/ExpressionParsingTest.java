@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.AdditiveExpression;
 import astnodes.expressions.AndExpression;
@@ -22,7 +21,7 @@ import astnodes.expressions.RelationalExpression;
 import astnodes.expressions.ShiftExpression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
-import astnodes.statements.ExprStatement;
+import astnodes.statements.ExpressionStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 public class ExpressionParsingTest {
@@ -32,7 +31,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "x = y;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
 	
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
@@ -44,7 +43,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "x = y = z;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 		assertTrue(expr.getRight().getCodeStr().equals("y = z"));
@@ -65,7 +64,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "foo = cond? x : y;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
 		ConditionalExpression right = (ConditionalExpression) expr.getRight();
 		assertTrue(right.getCondition().getCodeStr().equals("cond"));
@@ -76,7 +75,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "x || y;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		OrExpression expr = (OrExpression) statementItem.getExpression();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
@@ -86,7 +85,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "x && y;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AndExpression expr = (AndExpression) statementItem.getExpression();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
@@ -96,7 +95,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "x | y;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		InclusiveOrExpression expr = (InclusiveOrExpression) statementItem.getExpression();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}
@@ -106,7 +105,7 @@ public class ExpressionParsingTest {
 	{
 		String input = "x ^ y;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		ExclusiveOrExpression expr = (ExclusiveOrExpression) statementItem.getExpression();
 		assertTrue(expr.getLeft().getCodeStr().equals("x"));
 	}

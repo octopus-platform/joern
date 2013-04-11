@@ -1,18 +1,8 @@
 package parsing;
 
-import java.util.Iterator;
-import java.util.List;
-
-
-import org.antlr.v4.runtime.ParserRuleContext;
-
 import antlr.FineFunctionGrammarBaseListener;
 import antlr.FineFunctionGrammarParser;
-import antlr.FineFunctionGrammarParser.Init_declarator_listContext;
-import antlr.FineFunctionGrammarParser.Type_nameContext;
 import astnodes.builders.FineFunctionContentBuilder;
-import astnodes.builders.IdentifierDeclBuilder;
-import astnodes.declarations.IdentifierDecl;
 
 public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListener
 {

@@ -2,8 +2,6 @@ package output.luceneIndex;
 
 import java.util.Stack;
 
-
-
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import astnodes.ASTNode;

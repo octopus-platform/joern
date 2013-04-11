@@ -2,16 +2,13 @@ package tests.lucene;
 
 import static org.junit.Assert.assertTrue;
 
-
 import java.util.Stack;
-
 
 import org.apache.lucene.document.Document;
 import org.junit.Before;
 import org.junit.Test;
 
 import output.luceneIndex.FunctionDefToDocumentConverter;
-
 import astnodes.functionDef.FunctionDef;
 import astnodes.functionDef.Parameter;
 

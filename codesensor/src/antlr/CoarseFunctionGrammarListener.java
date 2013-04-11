@@ -3,10 +3,7 @@
 	package antlr;
 
 
-  import java.util.Stack;
-
-import org.antlr.v4.runtime.tree.*;
-import org.antlr.v4.runtime.Token;
+  import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 public interface CoarseFunctionGrammarListener extends ParseTreeListener {
 	void enterCoarse_content_elem(CoarseFunctionGrammarParser.Coarse_content_elemContext ctx);

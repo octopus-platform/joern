@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-
 import antlr.FineFunctionGrammarParser.StatementsContext;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;
@@ -17,7 +16,7 @@ import astnodes.expressions.Expression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatement;
+import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
@@ -181,7 +180,7 @@ public class CodeNestingTest {
 	{
 		String input = "foo(x);";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement stmt = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement stmt = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
 		ArgumentList argList = (ArgumentList) expr.getChild(1);
@@ -193,7 +192,7 @@ public class CodeNestingTest {
 	{
 		String input = "foo(x,y);";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		ExprStatement stmt = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement stmt = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
 	}

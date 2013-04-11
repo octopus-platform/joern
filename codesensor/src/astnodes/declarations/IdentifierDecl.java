@@ -16,11 +16,6 @@ public class IdentifierDecl extends ASTNode
 		super.addChild(expression);
 	}
 	
-	public IdentifierDecl()
-	{
-		setNodeTypeName("var");
-	}
-
 	public void setName(IdentifierContext ctx)
 	{
 		name = new Identifier();

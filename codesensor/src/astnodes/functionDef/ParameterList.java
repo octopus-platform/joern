@@ -9,10 +9,6 @@ import astnodes.expressions.Identifier;
 
 public class ParameterList extends ASTNode
 {
-	public ParameterList()
-	{
-		setNodeTypeName("PARAMETER_LIST");
-	}
 	
 	// TODO: we don't want to give back a reference to the list,
 	// we need to provide iterators for type and name

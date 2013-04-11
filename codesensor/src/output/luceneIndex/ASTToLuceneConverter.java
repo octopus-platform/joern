@@ -2,16 +2,17 @@ package output.luceneIndex;
 
 import java.util.EmptyStackException;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Stack;
 
 import lucene.DocumentFactory;
+import lucene.DocumentFactory.DocumentType;
 import lucene.IDocumentWriter;
 import lucene.LuceneIndexWriter;
 import lucene.LuceneUtils;
-import lucene.DocumentFactory.DocumentType;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.util.Version;
@@ -22,12 +23,13 @@ import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Argument;
 import astnodes.expressions.AssignmentExpr;
 import astnodes.expressions.CallExpression;
+import astnodes.expressions.Identifier;
 import astnodes.expressions.MemberAccess;
 import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.UnaryExpression;
 import astnodes.functionDef.FunctionDef;
 import astnodes.statements.Condition;
-import astnodes.statements.ExprStatement;
+import astnodes.statements.ExpressionStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astwalking.ASTNodeVisitor;
 
@@ -106,7 +108,7 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	@Override
 	public void visit(CallExpression expression)
 	{
-		Document d = DocumentFactory.createNewDocument(DocumentType.EXPRESSION);
+		Document d = DocumentFactory.createNewDocument(DocumentType.CALL);
 		
 		String callExprString = expression.getCodeStr();
 		String callTarget = "";
@@ -128,6 +130,12 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 		visitChildren(expression);
 	}
 	
+	public void visit(Identifier expression)
+	{
+		addFieldToParentsAndLink(null, "identifier", expression.getCodeStr());
+		visitChildren(expression);
+	}
+	
 	public void visit(MemberAccess expression)
 	{
 		addFieldToParentsAndLink(null, "access", expression.getCodeStr());
@@ -142,20 +150,24 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	
 	private void addFieldToParentsAndLink(Document thisDocument, String key, String value)
 	{
+		LinkedList<String> parentIds = new LinkedList<String>();
+		
 		Document parentDoc;
 		Iterator<Document> it = documents.iterator();
 		while(it.hasNext())
 		{
 			parentDoc = it.next();
 			parentDoc.add(LuceneUtils.createField(key, value));
+			String parentId = parentDoc.getFieldable("id").stringValue();
+			parentIds.add(parentId);
 		}
 	
-		parentDoc = getParentDocument();
-		if(parentDoc != null && thisDocument != null){
-			String parentId = "<unset>";
-			parentId = parentDoc.getFieldable("id").stringValue();
-			thisDocument.add(LuceneUtils.createIDField("parentid",Integer.parseInt(parentId)));
+		if(thisDocument != null)
+		{
+			for(String parentId : parentIds)
+				thisDocument.add(LuceneUtils.createIDField("parentid",Integer.parseInt(parentId)));
 		}
+		
 	}
 
 	public void visit(AssignmentExpr expression)
@@ -173,12 +185,35 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	{ 
 		Document d = DocumentFactory.createNewDocument(DocumentType.ARGUMENT);
 		
+		Document callDoc = getFirstParentWithType(DocumentFactory.DocumentType.CALL);
+		
+		if(callDoc != null){
+			String callTarget = callDoc.getFieldable("target").stringValue();
+			d.add(LuceneUtils.createField("target", callTarget));
+		}
+		
+		int childNumber = expression.getChildNumber();
+		
+		d.add(LuceneUtils.createField("number", String.valueOf(childNumber)));
 		d.add(LuceneUtils.createField("code", expression.getCodeStr()));
 		
 		addFieldToParentsAndLink(d, "argument", expression.getCodeStr());
 		visitChildrenAndWrite(expression, d);
 	}
 	
+	private Document getFirstParentWithType(DocumentFactory.DocumentType type)
+	{
+		ListIterator<Document> it = documents.listIterator(documents.size());
+				
+		while(it.hasPrevious())
+		{
+			Document parentDoc = it.previous();
+			if(DocumentFactory.docHasType(parentDoc, type))
+				return parentDoc;
+		}
+		return null;
+	}
+
 	private Document getParentDocument()
 	{
 		try{
@@ -198,7 +233,7 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	}
 	
 	@Override
-	public void visit(ExprStatement statementItem)
+	public void visit(ExpressionStatement statementItem)
 	{
 		// TODO: implement me
 		visitChildren(statementItem);

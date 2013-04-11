@@ -4,13 +4,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
 import parsing.ModuleParser;
 import parsing.TokenSubStream;
-
 import antlr.CodeSensorLexer;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;

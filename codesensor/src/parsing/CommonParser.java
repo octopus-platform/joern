@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Stack;
 
-
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BailErrorStrategy;
@@ -18,7 +17,6 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;

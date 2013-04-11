@@ -3,17 +3,16 @@ package parsing;
 import java.util.Iterator;
 import java.util.List;
 
-
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
-
 
 import antlr.CodeSensorBaseListener;
 import antlr.CodeSensorParser;
 import antlr.CodeSensorParser.Class_defContext;
 import antlr.CodeSensorParser.Compound_statementContext;
 import antlr.CodeSensorParser.DeclByClassContext;
+import antlr.CodeSensorParser.DeclByTypeContext;
 import antlr.CodeSensorParser.Function_defContext;
 import antlr.CodeSensorParser.Init_declarator_listContext;
 import antlr.CodeSensorParser.Type_nameContext;
@@ -131,17 +130,17 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	{
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		Type_nameContext typeName = ctx.type_name();
-		emitDeclarations(decl_list, typeName);
+		emitDeclarations(decl_list, typeName, ctx);
 	}
 		
 	private void emitDeclarations(ParserRuleContext decl_list,
-			  ParserRuleContext typeName)
+			  ParserRuleContext typeName, ParserRuleContext ctx)
 	{
 		IdentifierDeclBuilder builder = new IdentifierDeclBuilder();
 		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
 
 		IdentifierDeclStatement stmt = new IdentifierDeclStatement();
-		stmt.setNodeTypeName("DECL");
+		stmt.initializeFromContext(ctx);
 		
 		Iterator<IdentifierDecl> it = declarations.iterator();
 		while(it.hasNext()){
@@ -177,7 +176,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 			return;
 		
 		ParserRuleContext typeName = ctx.class_def().class_name();
-		emitDeclarations(decl_list, typeName);
+		emitDeclarations(decl_list, typeName, ctx);
 	}
 	
 	

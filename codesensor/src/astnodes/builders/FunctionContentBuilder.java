@@ -2,18 +2,14 @@ package astnodes.builders;
 
 import java.util.Stack;
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.CoarseFunctionGrammarParser.Type_nameContext;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Expression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
-import astnodes.statements.Condition;
-import astnodes.statements.ExprStatement;
 import astnodes.statements.ExpressionHolder;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.Statement;
@@ -41,6 +37,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterDeclByType(ParserRuleContext ctx)
 	{
 		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
+		declStmt.initializeFromContext(ctx);
 		declStmt.setTypeNameContext(ctx);
 		if(itemStack.peek() instanceof Statement)
 			replaceTopOfStack(declStmt);

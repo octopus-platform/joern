@@ -4,13 +4,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import parsing.InitDeclContextWrapper;
 import parsing.ParseTreeUtils;
-
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.declarations.IdentifierDeclType;

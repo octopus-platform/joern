@@ -7,13 +7,12 @@ import org.junit.Test;
 
 import parsing.CoarseFunctionParser;
 import parsing.TokenSubStream;
-
 import antlr.CoarseFunctionGrammarLexer;
 import astnodes.ASTNode;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.CallExpression;
 import astnodes.statements.CompoundStatement;
-import astnodes.statements.ExprStatement;
+import astnodes.statements.ExpressionStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 public class CoarseFuncContentTest
@@ -32,7 +31,7 @@ public class CoarseFuncContentTest
 	{
 		String input = "foo();";
 		CompoundStatement contentItem = (CompoundStatement) parseAndWalk(input);
-		ExprStatement statementItem = (ExprStatement) contentItem.getStatements().get(0);
+		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression call = (CallExpression) statementItem.getExpression();
 		assertTrue(call.getTarget().getCodeStr().equals("foo"));
 	}

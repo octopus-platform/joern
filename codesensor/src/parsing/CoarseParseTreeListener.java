@@ -3,7 +3,6 @@ package parsing;
 import java.util.Iterator;
 import java.util.List;
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CoarseFunctionGrammarBaseListener;

@@ -1,29 +1,55 @@
 package output.csvast;
 
+import java.util.Stack;
+
 import astnodes.ASTNode;
 import astwalking.ASTNodeVisitor;
 
 public class ASTToCSVConverter extends ASTNodeVisitor
 {
 	private final String SEPARATOR = "\t";
+	Stack<Object> levelStack = new Stack<Object>();
+	Object o = new Object();
 	
-	public void visit(ASTNode item)
+	StringBuilder builder = new StringBuilder();
+	
+	public void reset()
 	{
-		visitChildren(item);
+		builder = new StringBuilder();
+	}
+
+	public String getResult()
+	{
+		return builder.toString();
+	} 
+	
+	public void visit(ASTNode node)
+	{
+		int level = levelStack.size();
+		defaultOut(node, level);
+		levelStack.push(o);
+		visitChildren(node);
+		levelStack.pop();
 	}
 	
 	private void defaultOut(ASTNode node, int level)
 	{    	
-		 if(node == null) return;
+		 if(node == null)
+			 return;
 		 
-		 String output = node.getNodeTypeName() + SEPARATOR;
-		 output += node.getLocationString() + SEPARATOR + level;
-		 String codeStr = node.getCodeStr();
+		 String nodeTypeName = node.getClass().getSimpleName();
+		 String output = nodeTypeName + SEPARATOR +
+				 node.getLocationString() + SEPARATOR + level;
+
+		 String codeStr = null;
+		 if(!NodeBlacklist.isBlackListed(nodeTypeName))
+			 codeStr = node.getCodeStr();
+		 
 		 if(codeStr != null)
 			 output += SEPARATOR + escapeCodeStr(codeStr);
 	     else
 	    	 output += SEPARATOR + "";
-		 System.out.println(output);
+		 builder.append(output + "\n");
 	 }
 	 
 	 private String escapeCodeStr(String codeStr)
@@ -33,4 +59,5 @@ public class ASTToCSVConverter extends ASTNodeVisitor
 		 retval = retval.replace("\t", "\\t");
 		 return retval;
 	 }
+	 
 }

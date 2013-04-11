@@ -5,30 +5,18 @@ import java.util.List;
 
 import astnodes.ASTNode;
 
-
 public class CompoundStatement extends Statement
 {
 
-	LinkedList<ASTNode> statements = new LinkedList<ASTNode>();
-	
-	public void addChild(ASTNode stmt){ addStatement(stmt); }
-	public int getChildCount() { return statements.size(); }
-	public ASTNode getChild(int i){ return statements.get(i); }
-	
-	
-	public CompoundStatement()
-	{
-		setNodeTypeName("STATEMENTS");	
-	}
-	
 	public void addStatement(ASTNode stmt)
 	{
-		statements.add(stmt);
+		super.addChild(stmt);
 	}
 	
 	public List<ASTNode> getStatements()
 	{
-		return statements;
+		if(children == null)
+			return emptyList;
+		return children;
 	}
-	
 }

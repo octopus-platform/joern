@@ -6,14 +6,15 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
-import astwalking.ASTNodeVisitor;
 import astwalking.ASTWalker;
+import astwalking.FunctionNodeVisitor;
 
 public class CSVPrinter extends ASTWalker
 {
     
-    private ASTToCSVConverter converter = new ASTToCSVConverter();
-    
+	private ASTToCSVConverter converter = new ASTToCSVConverter();
+    FunctionNodeVisitor visitor = new FunctionNodeVisitor();
+	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
@@ -29,7 +30,11 @@ public class CSVPrinter extends ASTWalker
 	@Override
 	public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
 	{
-		node.accept(converter);
+		visitor.setFunctionNodeVisitor(converter);
+		node.accept(visitor);
+		String result = converter.getResult();
+		System.out.println(result);
+		converter.reset();
 	}
 
 	@Override
