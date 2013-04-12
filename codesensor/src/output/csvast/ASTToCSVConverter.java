@@ -46,8 +46,10 @@ public class ASTToCSVConverter extends ASTNodeVisitor
 		  
 		 if(node instanceof BinaryExpression && node.getChildCount() > 0)
 			 codeStr = ((BinaryExpression) node).getOperator();
-		 else if(!NodeBlacklist.isBlackListed(nodeTypeName))
+		 else if(node.getChildCount() == 0)
 			 codeStr = node.getCodeStr();
+
+		 // !NodeBlacklist.isBlackListed(nodeTypeName)
 		 
 		 if(codeStr != null)
 			 output += SEPARATOR + escapeCodeStr(codeStr);
