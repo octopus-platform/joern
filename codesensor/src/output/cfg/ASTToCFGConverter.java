@@ -8,7 +8,9 @@ import astnodes.functionDef.FunctionDef;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
+import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
+import astnodes.statements.ForStatement;
 import astnodes.statements.IfStatement;
 import astnodes.statements.Statement;
 import astnodes.statements.WhileStatement;
@@ -62,11 +64,15 @@ public class ASTToCFGConverter {
 		if(node instanceof WhileStatement)
 			return convertWhileStatement((WhileStatement) node);
 		
+		if(node instanceof DoStatement)
+			return convertDoStatement((DoStatement) node);
+		
+		if(node instanceof ForStatement)
+			return convertForStatement((ForStatement) node);
 		
 		return defaultStatementConverter(node);
 	}
 
-	
 	private CFG convertIfStatement(IfStatement node)
 	{
 		CFG cfg = new CFG();
@@ -92,14 +98,6 @@ public class ASTToCFGConverter {
 		return cfg;
 	}
 
-
-	private BasicBlock addEmptyBlock(CFG cfg)
-	{
-		BasicBlock emptyBlock = new BasicBlock();
-		cfg.addBasicBlock(emptyBlock);
-		return emptyBlock;
-	}
-
 	private CFG convertWhileStatement(WhileStatement node)
 	{
 		CFG cfg = new CFG();
@@ -115,6 +113,49 @@ public class ASTToCFGConverter {
 		return cfg;
 	}
 
+	private CFG convertDoStatement(DoStatement node)
+	{
+		CFG cfg = new CFG();
+
+		BasicBlock emptyBlock = addEmptyBlock(cfg);
+		CFG statementCFG = addStatementBlock(node, cfg);
+		BasicBlock conditionBlock = addConditionBlock(node, cfg);
+		
+		cfg.addEdge(emptyBlock, statementCFG.getFirstBlock());
+		cfg.addEdge(statementCFG.getLastBlock(), conditionBlock);
+		cfg.addEdge(conditionBlock, emptyBlock);
+		
+		return cfg;
+	}
+	
+	private CFG convertForStatement(ForStatement node)
+	{
+		CFG cfg = new CFG();
+		
+		BasicBlock initBlock = addEmptyBlock(cfg);
+		initBlock.appendNode(node.getForInitStatement());
+		
+		BasicBlock conditionBlock = addConditionBlock(node, cfg);
+		CFG statementCFG = addStatementBlock(node, cfg);
+		
+		BasicBlock exprBlock = addEmptyBlock(cfg);
+		exprBlock.appendNode(node.getExpression());
+		
+		cfg.addEdge(initBlock, conditionBlock);
+		cfg.addEdge(conditionBlock, statementCFG.getFirstBlock());
+		cfg.addEdge(statementCFG.getLastBlock(), exprBlock);		
+		cfg.addEdge(exprBlock, conditionBlock);
+		
+		return cfg;
+	}
+	
+	private BasicBlock addEmptyBlock(CFG cfg)
+	{
+		BasicBlock emptyBlock = new BasicBlock();
+		cfg.addBasicBlock(emptyBlock);
+		return emptyBlock;
+	}
+	
 	private BasicBlock addConditionBlock(BlockStarter node, CFG cfg)
 	{
 		Condition condition = node.getCondition();

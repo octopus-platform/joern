@@ -33,7 +33,7 @@ public class ForStatement extends BlockStarter
 	{	
 		if(forInitStatement instanceof DummyNode)
 			forInitStatement = item;
-		else if(expression instanceof DummyNode)
+		else if(expression instanceof DummyNode && condition != null)
 			expression = item;
 		super.addChild(item);
 	}

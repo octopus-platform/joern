@@ -1,20 +1,12 @@
 package astnodes.statements;
 
 import astnodes.ASTNode;
-import astnodes.expressions.Expression;
 
 
 public class BlockStarter extends Statement
 {
 	Statement statement = null;
 	Condition condition = null;
-	
-	public BlockStarter()
-	{
-		super();
-		condition = new Condition();
-		condition.addChild(new Expression());
-	}
 	
 	public Statement getStatement()
 	{
@@ -41,7 +33,7 @@ public class BlockStarter extends Statement
 	{
 		if(node instanceof Condition)
 			setCondition((Condition) node);
-		if(node instanceof Statement)
+		else if(node instanceof Statement)
 			setStatement((Statement)node);
 		super.addChild(node);			
 	}
@@ -52,15 +44,6 @@ public class BlockStarter extends Statement
 		if(condition == null || statement == null)
 			throw new RuntimeException("Invalid Blockstarter");
 		
-		return 2;
-	}
-	
-	@Override
-	public ASTNode getChild(int i)
-	{
-		if(i == 0) return condition;
-		if(i == 1) return statement;
-		throw new RuntimeException("Invalid Blockstarter");
-	}
-	
+		return super.getChildCount();
+	}	
 }

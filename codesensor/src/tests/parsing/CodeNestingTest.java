@@ -115,7 +115,7 @@ public class CodeNestingTest {
 		System.out.println(contentItem.getStatements().size());
 		
 		assertTrue(ifItem.getElseNode() != null);
-		assertTrue(ifItem.getElseNode().getChild(1) != null);
+		assertTrue(ifItem.getElseNode().getChild(0) != null);
 		assertTrue(contentItem.getStatements().size() == 1);
 	}
 	
@@ -142,6 +142,21 @@ public class CodeNestingTest {
 		assertTrue(condExprString.equals("i < 10"));
 		
 	}
+	
+	@Test
+	public void testDeclInFor()
+	{
+		String input = "for(int i = 0; i < 10; i++){}";
+		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		ForStatement forItem = (ForStatement) contentItem.getStatements().get(0);
+		
+		System.out.println(forItem.getChildCount());
+		
+		String condExprString = forItem.getCondition().getExpression().getCodeStr();
+		assertTrue(condExprString.equals("i < 10"));
+		
+	}
+	
 	
 	@Test
 	public void testDoWhile()

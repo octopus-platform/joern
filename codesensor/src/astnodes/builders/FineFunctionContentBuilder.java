@@ -24,6 +24,7 @@ import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.ExprContext;
 import antlr.FineFunctionGrammarParser.Expr_statementContext;
+import antlr.FineFunctionGrammarParser.For_init_statementContext;
 import antlr.FineFunctionGrammarParser.For_statementContext;
 import antlr.FineFunctionGrammarParser.FuncCallContext;
 import antlr.FineFunctionGrammarParser.Function_argumentContext;
@@ -88,6 +89,7 @@ import astnodes.statements.Condition;
 import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
 import astnodes.statements.ExpressionStatement;
+import astnodes.statements.ForInit;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
@@ -488,7 +490,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		
 		// watchout here, we're not making a copy.
 		// This is also a bit of a hack. As we go up,
-		// we introduce an artifical assignment-node.
+		// we introduce an artificial assignment-node.
 		
 		assign.setLeft(identifierDecl.getName());
 		assign.setRight(lastChild);
@@ -643,6 +645,20 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void exitPtrMemberAccess(PtrMemberAccessContext ctx)
 	{
 		consolidateSubExpression(ctx);
+	}
+
+	public void enterInitFor(For_init_statementContext ctx)
+	{
+		ForInit expr = new ForInit();
+		itemStack.push(expr);
+	}
+
+	public void exitInitFor(For_init_statementContext ctx)
+	{
+		ASTNode node = itemStack.pop();
+		node.initializeFromContext(ctx);
+		ForStatement forStatement = (ForStatement) itemStack.peek();
+		forStatement.addChild(node);
 	}
 
 }

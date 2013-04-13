@@ -106,6 +106,23 @@ public class CFGCreatorTest
 		assertTrue(cfg.getBasicBlocks().size() == 3);
 	}
 	
+	@Test
+	public void testDoNumberOfBlocks()
+	{
+		String input = "do{ bar(); }while(foo);";
+		CFG cfg = getCFGForCode(input);
+		assertTrue(cfg.getBasicBlocks().size() == 3);
+	}
+	
+
+	@Test
+	public void testForNumberOfBlocks()
+	{
+		String input = "for(i = 0; i < 10; i ++){ foo(); }";
+		CFG cfg = getCFGForCode(input);
+		assertTrue(cfg.getBasicBlocks().size() == 4);
+	}
+	
 	private ASTNode getConditionNode(CFG cfg)
 	{
 		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();

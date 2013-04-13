@@ -83,6 +83,17 @@ public class FineFunctionParserTest {
 	}
 	
 	@Test
+	public void testDeclInFor()
+	{
+		String input = "for(int k = 0; k < 10; k++ ){}";
+		FineFunctionParser functionParser = new FineFunctionParser();
+		ParseTree tree = functionParser.parseString(input);
+		String output = tree.toStringTree(functionParser.getParser());
+		System.out.println(output);
+		assertTrue(output.contains("for ( (for_init_statement (simple_decl (var_decl (type_name (base_type int))"));
+	}
+	
+	@Test
 	public void testComplexFor()
 	{
 		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";

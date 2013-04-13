@@ -58,6 +58,18 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 		builder.enterFor(ctx);
 	}
 	
+	@Override public void enterFor_init_statement(FineFunctionGrammarParser.For_init_statementContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.enterInitFor(ctx);
+	}
+	
+	@Override public void exitFor_init_statement(FineFunctionGrammarParser.For_init_statementContext ctx)
+	{
+		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
+		builder.exitInitFor(ctx);
+	}
+	
 	@Override public void enterWhile_statement(FineFunctionGrammarParser.While_statementContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
