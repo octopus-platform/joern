@@ -74,5 +74,10 @@ public class ASTNode {
 		return location.toString();
 	 }
 	
-	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }	
+	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+
+	public boolean isLeaf()
+	{
+		return (children.size() == 0);
+	}	
 }

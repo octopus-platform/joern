@@ -13,7 +13,7 @@ import astnodes.ASTNode;
 public class FineFuncContentTestUtil {
 
 	
-	static ASTNode parseAndWalk(String input)
+	public static ASTNode parseAndWalk(String input)
 	{
 		FineFunctionParser parser = new FineFunctionParser();		
 		TokenSubStream tokens = tokenStreamFromString(input);

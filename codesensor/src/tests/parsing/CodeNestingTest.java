@@ -16,6 +16,7 @@ import astnodes.expressions.Expression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
+import astnodes.statements.DoStatement;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
@@ -113,8 +114,8 @@ public class CodeNestingTest {
 		
 		System.out.println(contentItem.getStatements().size());
 		
-		assertTrue(ifItem.elseItem != null);
-		assertTrue(ifItem.elseItem.getChild(1) != null);
+		assertTrue(ifItem.getElseNode() != null);
+		assertTrue(ifItem.getElseNode().getChild(1) != null);
 		assertTrue(contentItem.getStatements().size() == 1);
 	}
 	
@@ -141,6 +142,20 @@ public class CodeNestingTest {
 		assertTrue(condExprString.equals("i < 10"));
 		
 	}
+	
+	@Test
+	public void testDoWhile()
+	{
+		String input = "do{ foo(); }while(bar);";
+		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
+		
+		String condExprString = doItem.getCondition().getExpression().getCodeStr();
+		System.out.println(condExprString);
+		assertTrue(condExprString.equals("bar"));
+		
+	}
+	
 	
 	@Test
 	public void testVarDeclName()
@@ -223,21 +238,6 @@ public class CodeNestingTest {
 		assertTrue(declStmt.getChildCount() == 1);
 	}
 	
-	@Test
-	public void testConditionalExpr()
-	{
-		String input = "for (int k = m; k < l; k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]){}";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
-		
-		System.out.println(contentItem.getStatements().size());
-		System.out.println(contentItem.getStatements().get(0).getClass());
-		System.out.println(contentItem.getStatements().get(1).getClass());
-		
-		// BlockStarterItem forItem = (BlockStarterItem) contentItem.getStatements().get(0);
-		// Condition condition = forItem.getCondition();
-		// System.out.println(forItem.getChild(0).getCodeStr());
-		// System.out.println(condition.getExpression().getCodeStr());
-	}
 		
 	@Test
 	public void testPreElseSkipping()

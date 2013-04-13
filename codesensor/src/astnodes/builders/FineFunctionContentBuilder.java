@@ -18,6 +18,7 @@ import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.DeclByClassContext;
 import antlr.FineFunctionGrammarParser.DeclaratorContext;
+import antlr.FineFunctionGrammarParser.Do_statementContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
 import antlr.FineFunctionGrammarParser.Exclusive_or_expressionContext;
@@ -49,6 +50,7 @@ import antlr.FineFunctionGrammarParser.Shift_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
 import antlr.FineFunctionGrammarParser.Unary_expressionContext;
+import antlr.FineFunctionGrammarParser.While_statementContext;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDef;
 import astnodes.declarations.IdentifierDecl;
@@ -83,12 +85,14 @@ import astnodes.statements.BlockCloser;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
+import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
 import astnodes.statements.Statement;
+import astnodes.statements.WhileStatement;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
 {
@@ -102,13 +106,14 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			throw new RuntimeException("Broken stack while parsing");
 	
 		consolidateIfElse(rootItem);
+		consolidateDoWhile(rootItem);
 	}
 	
 	// For all statements, begin by pushing a CodeItem
 	// onto the stack. Once we have implemented
 	// handling for all statement types, this can
 	// be removed
-	
+
 	public void enterStatement(StatementContext ctx)
 	{
 		ASTNode statementItem = new Statement();
@@ -149,6 +154,16 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void enterFor(For_statementContext ctx)
 	{
 		replaceTopOfStack(new ForStatement());
+	}
+	
+	public void enterWhile(While_statementContext ctx)
+	{
+		replaceTopOfStack(new WhileStatement());
+	}
+
+	public void enterDo(Do_statementContext ctx)
+	{
+		replaceTopOfStack(new DoStatement());
 	}
 	
 	public void enterElse(Else_statementContext ctx)
@@ -201,7 +216,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			if(prev != null && cur instanceof ElseStatement){
 				if(prev instanceof IfStatement){
 					IfStatement ifItem = (IfStatement) prev;
-					ifItem.elseItem = (ElseStatement) cur;
+					ifItem.setElseNode((ElseStatement) cur);
 					it.remove();
 				}
 			}
@@ -209,6 +224,26 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		}
 	}
 
+	
+	// Attach Whiles to Dos
+	private void consolidateDoWhile(CompoundStatement compoundItem)
+	{
+		Iterator<ASTNode> it = compoundItem.getStatements().iterator();
+		ASTNode prev = null;
+		while(it.hasNext()){
+			
+			ASTNode cur = it.next();
+			if(prev != null && cur instanceof WhileStatement){
+				if(prev instanceof DoStatement){
+					DoStatement doItem = (DoStatement) prev;
+					doItem.setCondition(((WhileStatement) cur).getCondition());
+					it.remove();
+				}
+			}
+			prev = cur;
+		}
+	}
+	
 	// Expression handling
 	
 	public void enterExpression(ExprContext ctx)
@@ -609,5 +644,5 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	{
 		consolidateSubExpression(ctx);
 	}
-	
+
 }

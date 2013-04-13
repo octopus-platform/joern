@@ -13,7 +13,13 @@ public class FunctionDef extends ASTNode
 	public Identifier name = new DummyNameNode();
 	public ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = new DummyReturnType();
-	public CompoundStatement content = new CompoundStatement();
+	
+	CompoundStatement content = new CompoundStatement();
+	
+	public CompoundStatement getContent()
+	{
+		return content;
+	}
 	
 	public void addStatement(ASTNode statement)
 	{

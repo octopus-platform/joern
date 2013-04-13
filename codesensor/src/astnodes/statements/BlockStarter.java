@@ -6,7 +6,7 @@ import astnodes.expressions.Expression;
 
 public class BlockStarter extends Statement
 {
-	ASTNode statement = null;
+	Statement statement = null;
 	Condition condition = null;
 	
 	public BlockStarter()
@@ -16,12 +16,17 @@ public class BlockStarter extends Statement
 		condition.addChild(new Expression());
 	}
 	
+	public Statement getStatement()
+	{
+		return statement;
+	}
+	
 	public Condition getCondition()
 	{
 		return condition;
 	}
 	
-	private void setStatement(ASTNode aStatement)
+	private void setStatement(Statement aStatement)
 	{
 		statement = aStatement;
 	}
@@ -32,13 +37,13 @@ public class BlockStarter extends Statement
 	}
 
 	@Override
-	public void addChild(ASTNode expression)
+	public void addChild(ASTNode node)
 	{
-		if(expression instanceof Condition)
-			setCondition((Condition) expression);
-		if(expression instanceof Statement)
-			setStatement(expression);
-		super.addChild(expression);			
+		if(node instanceof Condition)
+			setCondition((Condition) node);
+		if(node instanceof Statement)
+			setStatement((Statement)node);
+		super.addChild(node);			
 	}
 	
 	@Override

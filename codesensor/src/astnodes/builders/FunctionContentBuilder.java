@@ -10,6 +10,7 @@ import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Expression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
+import astnodes.statements.DoStatement;
 import astnodes.statements.ExpressionHolder;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.Statement;
