@@ -1,4 +1,4 @@
-package output.cfg;
+package cfg;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +12,7 @@ import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IfStatement;
+import astnodes.statements.Label;
 import astnodes.statements.Statement;
 import astnodes.statements.WhileStatement;
 
@@ -20,9 +21,10 @@ public class ASTToCFGConverter {
 	
 	public CFG convert(FunctionDef node)
 	{
-		return convertFunctionDef(node);
+		CFG cfg = convertFunctionDef(node);
+		honorJumpStatements(cfg);
+		return cfg;
 	}
-	
 	
 	private CFG convertFunctionDef(FunctionDef node)
 	{
@@ -69,6 +71,9 @@ public class ASTToCFGConverter {
 		
 		if(node instanceof ForStatement)
 			return convertForStatement((ForStatement) node);
+		
+		if(node instanceof Label)
+			return convertLabel((Label) node);
 		
 		return defaultStatementConverter(node);
 	}
@@ -173,13 +178,30 @@ public class ASTToCFGConverter {
 		return statementCFG;
 	}
 	
+	private CFG convertLabel(Label node)
+	{
+		CFG cfg = new CFG();
+		addBasicBlockForNode(node, cfg);
+		cfg.labelBlock(node.getCodeStr(), cfg.getFirstBlock());
+		return cfg;
+	}
+	
 	private CFG defaultStatementConverter(ASTNode child)
 	{
 		CFG cfg = new CFG();
+		addBasicBlockForNode(child, cfg);
+		return cfg;
+	}
+
+	private void addBasicBlockForNode(ASTNode child, CFG cfg) {
 		BasicBlock basicBlock = new BasicBlock();
 		basicBlock.appendNode(child);
 		cfg.addBasicBlock(basicBlock);
-		return cfg;
+	}
+	
+	private void honorJumpStatements(CFG cfg)
+	{
+		// TODO Auto-generated method stub	
 	}
 	
 }

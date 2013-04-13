@@ -1,4 +1,4 @@
-package output.cfg;
+package cfg;
 
 import java.util.LinkedList;
 import java.util.List;

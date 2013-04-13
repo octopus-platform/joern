@@ -2,15 +2,17 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import output.cfg.ASTToCFGConverter;
-import output.cfg.BasicBlock;
-import output.cfg.CFG;
-import output.cfg.Edge;
+import cfg.ASTToCFGConverter;
+import cfg.BasicBlock;
+import cfg.CFG;
+import cfg.Edges;
+
 import tests.parsing.FineFuncContentTestUtil;
 import astnodes.ASTNode;
 import astnodes.expressions.CallExpression;
@@ -63,7 +65,7 @@ public class CFGCreatorTest
 	{
 		String input = "if(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
-		Vector<Edge> edges = cfg.getEdges();
+		Edges edges = cfg.getEdges();
 		assertTrue(edges.size() == 3);
 	}
 	
@@ -121,6 +123,17 @@ public class CFGCreatorTest
 		String input = "for(i = 0; i < 10; i ++){ foo(); }";
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getBasicBlocks().size() == 4);
+	}
+	
+
+	@Test
+	public void testLabel()
+	{
+		String input = "foo: foo();";
+		CFG cfg = getCFGForCode(input);
+		HashMap<String, BasicBlock> labels = cfg.getLabels();
+		System.out.println(labels.size());
+		assertTrue(labels.size() == 1);
 	}
 	
 	private ASTNode getConditionNode(CFG cfg)

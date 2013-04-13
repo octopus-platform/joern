@@ -17,7 +17,6 @@ import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
 import antlr.FineFunctionGrammarParser.DeclByClassContext;
-import antlr.FineFunctionGrammarParser.DeclaratorContext;
 import antlr.FineFunctionGrammarParser.Do_statementContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
 import antlr.FineFunctionGrammarParser.Equality_expressionContext;
@@ -37,9 +36,8 @@ import antlr.FineFunctionGrammarParser.Inclusive_or_expressionContext;
 import antlr.FineFunctionGrammarParser.InitDeclSimpleContext;
 import antlr.FineFunctionGrammarParser.InitDeclWithAssignContext;
 import antlr.FineFunctionGrammarParser.InitDeclWithCallContext;
-import antlr.FineFunctionGrammarParser.Init_declaratorContext;
-import antlr.FineFunctionGrammarParser.InitializerContext;
 import antlr.FineFunctionGrammarParser.Initializer_listContext;
+import antlr.FineFunctionGrammarParser.LabelContext;
 import antlr.FineFunctionGrammarParser.MemberAccessContext;
 import antlr.FineFunctionGrammarParser.Multiplicative_expressionContext;
 import antlr.FineFunctionGrammarParser.Opening_curlyContext;
@@ -50,6 +48,7 @@ import antlr.FineFunctionGrammarParser.Relational_expressionContext;
 import antlr.FineFunctionGrammarParser.Shift_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
+import antlr.FineFunctionGrammarParser.Switch_statementContext;
 import antlr.FineFunctionGrammarParser.Unary_expressionContext;
 import antlr.FineFunctionGrammarParser.While_statementContext;
 import astnodes.ASTNode;
@@ -93,7 +92,9 @@ import astnodes.statements.ForInit;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
+import astnodes.statements.Label;
 import astnodes.statements.Statement;
+import astnodes.statements.SwitchStatement;
 import astnodes.statements.WhileStatement;
 
 public class FineFunctionContentBuilder extends FunctionContentBuilder
@@ -659,6 +660,16 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		node.initializeFromContext(ctx);
 		ForStatement forStatement = (ForStatement) itemStack.peek();
 		forStatement.addChild(node);
+	}
+
+	public void enterSwitchStatement(Switch_statementContext ctx)
+	{
+		replaceTopOfStack(new SwitchStatement());
+	}
+
+	public void enterLabel(LabelContext ctx)
+	{
+		replaceTopOfStack(new Label());
 	}
 
 }
