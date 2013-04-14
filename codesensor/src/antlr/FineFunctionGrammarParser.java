@@ -945,27 +945,68 @@ public class FineFunctionGrammarParser extends Parser {
 	}
 
 	public static class Jump_statementContext extends ParserRuleContext {
-		public TerminalNode GOTO() { return getToken(FineFunctionGrammarParser.GOTO, 0); }
-		public TerminalNode CONTINUE() { return getToken(FineFunctionGrammarParser.CONTINUE, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode BREAK() { return getToken(FineFunctionGrammarParser.BREAK, 0); }
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
-		}
-		public TerminalNode RETURN() { return getToken(FineFunctionGrammarParser.RETURN, 0); }
 		public Jump_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_jump_statement; }
+	 
+		public Jump_statementContext() { }
+		public void copyFrom(Jump_statementContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class GotoStatementContext extends Jump_statementContext {
+		public TerminalNode GOTO() { return getToken(FineFunctionGrammarParser.GOTO, 0); }
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public GotoStatementContext(Jump_statementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterJump_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterGotoStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitJump_statement(this);
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitGotoStatement(this);
+		}
+	}
+	public static class ReturnStatementContext extends Jump_statementContext {
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode RETURN() { return getToken(FineFunctionGrammarParser.RETURN, 0); }
+		public ReturnStatementContext(Jump_statementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterReturnStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitReturnStatement(this);
+		}
+	}
+	public static class BreakStatementContext extends Jump_statementContext {
+		public TerminalNode BREAK() { return getToken(FineFunctionGrammarParser.BREAK, 0); }
+		public BreakStatementContext(Jump_statementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterBreakStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitBreakStatement(this);
+		}
+	}
+	public static class ContinueStatementContext extends Jump_statementContext {
+		public TerminalNode CONTINUE() { return getToken(FineFunctionGrammarParser.CONTINUE, 0); }
+		public ContinueStatementContext(Jump_statementContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).enterContinueStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FineFunctionGrammarListener ) ((FineFunctionGrammarListener)listener).exitContinueStatement(this);
 		}
 	}
 
@@ -977,6 +1018,7 @@ public class FineFunctionGrammarParser extends Parser {
 			setState(255);
 			switch (_input.LA(1)) {
 			case BREAK:
+				_localctx = new BreakStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(242); match(BREAK);
@@ -984,6 +1026,7 @@ public class FineFunctionGrammarParser extends Parser {
 				}
 				break;
 			case CONTINUE:
+				_localctx = new ContinueStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(244); match(CONTINUE);
@@ -991,6 +1034,7 @@ public class FineFunctionGrammarParser extends Parser {
 				}
 				break;
 			case GOTO:
+				_localctx = new GotoStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(246); match(GOTO);
@@ -999,6 +1043,7 @@ public class FineFunctionGrammarParser extends Parser {
 				}
 				break;
 			case RETURN:
+				_localctx = new ReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(250); match(RETURN);

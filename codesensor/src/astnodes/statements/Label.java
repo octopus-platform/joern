@@ -1,3 +1,8 @@
 package astnodes.statements;
 
-public class Label extends Statement {}
+import astwalking.ASTNodeVisitor;
+
+public class Label extends Statement
+{
+	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }	
+}

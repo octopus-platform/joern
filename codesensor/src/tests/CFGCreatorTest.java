@@ -125,7 +125,6 @@ public class CFGCreatorTest
 		assertTrue(cfg.getBasicBlocks().size() == 4);
 	}
 	
-
 	@Test
 	public void testLabel()
 	{
@@ -134,6 +133,15 @@ public class CFGCreatorTest
 		HashMap<String, BasicBlock> labels = cfg.getLabels();
 		System.out.println(labels.size());
 		assertTrue(labels.size() == 1);
+	}
+	
+	@Test
+	public void testSwitchNumberOfEdges()
+	{
+		String input = "switch(foo){ case 1: case2: case 3: }";
+		CFG cfg = getCFGForCode(input);
+		Edges edges = cfg.getEdges();
+		assertTrue(edges.size() == 6);
 	}
 	
 	private ASTNode getConditionNode(CFG cfg)

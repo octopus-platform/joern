@@ -1,5 +1,5 @@
 package astnodes.statements;
 
-public class JumpStatement {
+public class JumpStatement extends Statement {
 
 }

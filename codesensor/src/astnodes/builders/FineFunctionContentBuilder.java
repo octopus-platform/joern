@@ -11,11 +11,13 @@ import antlr.FineFunctionGrammarParser.ArrayIndexingContext;
 import antlr.FineFunctionGrammarParser.Assign_exprContext;
 import antlr.FineFunctionGrammarParser.Bit_and_expressionContext;
 import antlr.FineFunctionGrammarParser.Block_starterContext;
+import antlr.FineFunctionGrammarParser.BreakStatementContext;
 import antlr.FineFunctionGrammarParser.Cast_expressionContext;
 import antlr.FineFunctionGrammarParser.Cast_targetContext;
 import antlr.FineFunctionGrammarParser.Closing_curlyContext;
 import antlr.FineFunctionGrammarParser.ConditionContext;
 import antlr.FineFunctionGrammarParser.Conditional_expressionContext;
+import antlr.FineFunctionGrammarParser.ContinueStatementContext;
 import antlr.FineFunctionGrammarParser.DeclByClassContext;
 import antlr.FineFunctionGrammarParser.Do_statementContext;
 import antlr.FineFunctionGrammarParser.Else_statementContext;
@@ -28,6 +30,7 @@ import antlr.FineFunctionGrammarParser.For_statementContext;
 import antlr.FineFunctionGrammarParser.FuncCallContext;
 import antlr.FineFunctionGrammarParser.Function_argumentContext;
 import antlr.FineFunctionGrammarParser.Function_argument_listContext;
+import antlr.FineFunctionGrammarParser.GotoStatementContext;
 import antlr.FineFunctionGrammarParser.IdentifierContext;
 import antlr.FineFunctionGrammarParser.If_statementContext;
 import antlr.FineFunctionGrammarParser.IncDecOpContext;
@@ -45,6 +48,7 @@ import antlr.FineFunctionGrammarParser.Or_expressionContext;
 import antlr.FineFunctionGrammarParser.Primary_expressionContext;
 import antlr.FineFunctionGrammarParser.PtrMemberAccessContext;
 import antlr.FineFunctionGrammarParser.Relational_expressionContext;
+import antlr.FineFunctionGrammarParser.ReturnStatementContext;
 import antlr.FineFunctionGrammarParser.Shift_expressionContext;
 import antlr.FineFunctionGrammarParser.StatementContext;
 import antlr.FineFunctionGrammarParser.StatementsContext;
@@ -83,16 +87,20 @@ import astnodes.expressions.ShiftExpression;
 import astnodes.expressions.UnaryExpression;
 import astnodes.statements.BlockCloser;
 import astnodes.statements.BlockStarter;
+import astnodes.statements.BreakStatement;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
+import astnodes.statements.ContinueStatement;
 import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForInit;
 import astnodes.statements.ForStatement;
+import astnodes.statements.GotoStatement;
 import astnodes.statements.IdentifierDeclStatement;
 import astnodes.statements.IfStatement;
 import astnodes.statements.Label;
+import astnodes.statements.ReturnStatement;
 import astnodes.statements.Statement;
 import astnodes.statements.SwitchStatement;
 import astnodes.statements.WhileStatement;
@@ -141,9 +149,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		replaceTopOfStack(new BlockStarter());
 	}
 
-	// TODO: Still missing:
-	// jump-statement, simple-decl, label, water
-	
 	public void enterExprStatement(Expr_statementContext ctx)
 	{
 		replaceTopOfStack(new ExpressionStatement());
@@ -670,6 +675,26 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	public void enterLabel(LabelContext ctx)
 	{
 		replaceTopOfStack(new Label());
+	}
+
+	public void enterReturnStatement(ReturnStatementContext ctx)
+	{
+		replaceTopOfStack(new ReturnStatement());
+	}
+
+	public void enterBreakStatement(BreakStatementContext ctx)
+	{
+		replaceTopOfStack(new BreakStatement());
+	}
+
+	public void enterContinueStatement(ContinueStatementContext ctx)
+	{
+		replaceTopOfStack(new ContinueStatement());
+	}
+
+	public void enterGotoStatement(GotoStatementContext ctx)
+	{
+		replaceTopOfStack(new GotoStatement());
 	}
 
 }

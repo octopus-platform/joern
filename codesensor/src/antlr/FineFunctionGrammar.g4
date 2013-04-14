@@ -47,10 +47,10 @@ for_init_statement : simple_decl
                    | expr? ';'
                    ;
 
-jump_statement: BREAK ';'
-              | CONTINUE ';'
-              | GOTO identifier ';'
-              | RETURN expr? ';'
+jump_statement: BREAK ';'		#breakStatement
+              | CONTINUE ';' 		#continueStatement
+              | GOTO identifier ';'	#gotoStatement
+              | RETURN expr? ';'	#returnStatement
               ;
 
 label: CASE? (identifier | number | access_specifier) ':' ;

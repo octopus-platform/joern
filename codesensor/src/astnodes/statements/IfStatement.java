@@ -1,6 +1,7 @@
 package astnodes.statements;
 
 import astnodes.ASTNode;
+import astwalking.ASTNodeVisitor;
 
 
 
@@ -34,4 +35,6 @@ public class IfStatement extends BlockStarter {
 	public void setElseNode(ElseStatement elseNode) {
 		this.elseNode = elseNode;
 	}
+
+	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
 }

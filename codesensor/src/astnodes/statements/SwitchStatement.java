@@ -1,3 +1,8 @@
 package astnodes.statements;
 
-public class SwitchStatement extends BlockStarter {}
+import astwalking.ASTNodeVisitor;
+
+public class SwitchStatement extends BlockStarter
+{
+	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+}

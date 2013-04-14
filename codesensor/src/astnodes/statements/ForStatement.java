@@ -2,6 +2,7 @@ package astnodes.statements;
 
 import astnodes.ASTNode;
 import astnodes.DummyNode;
+import astwalking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter
 {
@@ -38,4 +39,5 @@ public class ForStatement extends BlockStarter
 		super.addChild(item);
 	}
 
+	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
 }
