@@ -43,6 +43,8 @@ public class Parser implements Runnable
 	
     private void processSingleFile(String filename)
     {
+    	System.out.println(filename);
+    	
     	try{
     		parser.parseAndWalkFile(filename);
     	}catch(ParserException ex){

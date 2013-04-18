@@ -38,12 +38,4 @@ public class BlockStarter extends Statement
 		super.addChild(node);			
 	}
 	
-	@Override
-	public int getChildCount()
-	{
-		if(condition == null || statement == null)
-			throw new RuntimeException("Invalid Blockstarter");
-		
-		return super.getChildCount();
-	}	
 }

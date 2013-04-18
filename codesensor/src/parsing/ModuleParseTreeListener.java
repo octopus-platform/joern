@@ -81,7 +81,6 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		try{
 			parser.parseAndWalkString(text);
 		}catch(RuntimeException ex){
-			ex.printStackTrace();
 			System.err.println("Error parsing function " +
 							  ctx.function_name().getText()
 							  + ". skipping.");
