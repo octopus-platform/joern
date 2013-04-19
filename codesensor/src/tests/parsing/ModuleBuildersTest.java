@@ -11,7 +11,7 @@ import parsing.ModuleParser;
 import parsing.TokenSubStream;
 import antlr.CodeSensorLexer;
 import astnodes.ASTNode;
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Identifier;
 import astnodes.functionDef.FunctionDef;
@@ -26,9 +26,9 @@ public class ModuleBuildersTest {
 	{
 		String input = "struct x{ struct y { struct z{}; }; }; abc";
 		List<ASTNode> codeItems = parseInput(input);
-		ClassDef classDef = (ClassDef) codeItems.get(0);
-		ClassDef yClass = (ClassDef) classDef.content.getStatements().get(0);
-		ClassDef zClass = (ClassDef) yClass.content.getStatements().get(0);
+		ClassDefStatement classDef = (ClassDefStatement) codeItems.get(0);
+		ClassDefStatement yClass = (ClassDefStatement) classDef.content.getStatements().get(0);
+		ClassDefStatement zClass = (ClassDefStatement) yClass.content.getStatements().get(0);
 		
 		assertTrue(codeItems.size() == 1);
 		assertTrue(yClass.getName().getCodeStr().equals("y"));
@@ -40,7 +40,7 @@ public class ModuleBuildersTest {
 	{
 		String input = "struct foo{};";
 		List<ASTNode> codeItems = parseInput(input);
-		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		assertTrue(codeItem.name.getCodeStr().equals("foo"));
 	}
 	
@@ -49,7 +49,7 @@ public class ModuleBuildersTest {
 	{
 		String input = "struct {int x; } a;";
 		List<ASTNode> codeItems = parseInput(input);
-		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		assertTrue(codeItem.name.getCodeStr().equals("<unnamed>"));
 	}
 	
@@ -58,7 +58,7 @@ public class ModuleBuildersTest {
 	{
 		String input = "struct foo{};";
 		List<ASTNode> codeItems = parseInput(input);
-		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		assertTrue(codeItem.content != null);
 	}
 	
@@ -67,7 +67,7 @@ public class ModuleBuildersTest {
 	{
 		String input = "class foo{ bar(){} };";
 		List<ASTNode> codeItems = parseInput(input);
-		ClassDef codeItem = (ClassDef) codeItems.get(0);
+		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		FunctionDef funcItem = (FunctionDef) codeItem.content.getStatements().get(0);
 		assertTrue(funcItem.name.getCodeStr().equals("bar"));
 	}
@@ -99,7 +99,7 @@ public class ModuleBuildersTest {
 		String input = "class foo{int x;}";
 		List<ASTNode> codeItems = parseInput(input);
 		
-		ClassDef classCodeItem = (ClassDef) codeItems.get(0);
+		ClassDefStatement classCodeItem = (ClassDefStatement) codeItems.get(0);
 		IdentifierDeclStatement identifierCodeItem = (IdentifierDeclStatement) classCodeItem.content.getStatements().get(0);
 		IdentifierDecl decl = (IdentifierDecl) identifierCodeItem.getIdentifierDeclList().get(0);
 		

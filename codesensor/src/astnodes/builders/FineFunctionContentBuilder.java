@@ -56,7 +56,7 @@ import antlr.FineFunctionGrammarParser.Switch_statementContext;
 import antlr.FineFunctionGrammarParser.Unary_expressionContext;
 import antlr.FineFunctionGrammarParser.While_statementContext;
 import astnodes.ASTNode;
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.AdditiveExpression;
 import astnodes.expressions.AndExpression;
@@ -536,8 +536,8 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		ParserRuleContext typeName;
 		if(parentItem instanceof IdentifierDeclStatement)
 			typeName = ((IdentifierDeclStatement) parentItem).getTypeNameContext();
-		else if (parentItem instanceof ClassDef)
-			typeName = ((ClassDef) parentItem).getName().getParseTreeNodeContext();
+		else if (parentItem instanceof ClassDefStatement)
+			typeName = ((ClassDefStatement) parentItem).getName().getParseTreeNodeContext();
 		else
 			throw new RuntimeException("No matching declaration statement/class definiton for init declarator");
 		return typeName;

@@ -74,16 +74,30 @@ public class CFG {
 		return switchLabels;
 	}
 	
+	public BasicBlock getLastBlock()
+	{
+		if(getNumberOfBasicBlocks() == 0)
+			return new EmptyBasicBlock();
+		return basicBlocks.lastElement();
+	}
+	
+	public BasicBlock getFirstBlock()
+	{
+		if(getNumberOfBasicBlocks() == 0)
+			return new EmptyBasicBlock();
+		return basicBlocks.firstElement();
+	}
+	
 	public void labelBlock(String label, BasicBlock block) { labels.put(label, block); }
 	public void addBasicBlock(BasicBlock newBlock) { basicBlocks.add(newBlock); }
 	public void addEdge(BasicBlock srcBlock,
 			 BasicBlock dstBlock){ edges.addEdge(srcBlock, dstBlock); }
 	
+	public int getNumberOfBasicBlocks(){ return basicBlocks.size(); }
+	
 	public Collection<? extends BasicBlock> getJumpStatements() { return jumpStatements; }
 	public HashMap<String,BasicBlock> getLabels(){ return labels; }
 	public Edges getEdges() { return edges; }
-	public BasicBlock getLastBlock() { return basicBlocks.lastElement(); }
-	public BasicBlock getFirstBlock(){ return basicBlocks.firstElement(); }
 	public Vector<BasicBlock> getBasicBlocks(){ return basicBlocks; }
 	
 }

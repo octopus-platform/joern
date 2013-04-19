@@ -94,6 +94,27 @@ public class FineFunctionParserTest {
 	}
 	
 	@Test
+	public void testEmptyFor()
+	{
+		String input = "for(; ;){}";
+		FineFunctionParser functionParser = new FineFunctionParser();
+		ParseTree tree = functionParser.parseString(input);
+		String output = tree.toStringTree(functionParser.getParser());
+		System.out.println(output);
+		assertTrue(output.contains("for_init_statement"));
+	}
+	
+	@Test
+	public void testSizeofStruct()
+	{
+		String input = "while((buffer + len) > (tmp + sizeof(struct stun_attrib))) {}";
+		FineFunctionParser functionParser = new FineFunctionParser();
+		ParseTree tree = functionParser.parseString(input);
+		String output = tree.toStringTree(functionParser.getParser());
+		assertTrue(output.contains("selection_or_iteration while"));
+	}
+	
+	@Test
 	public void testComplexFor()
 	{
 		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";

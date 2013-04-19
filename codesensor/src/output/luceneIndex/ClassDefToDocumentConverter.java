@@ -5,12 +5,12 @@ import lucene.LuceneUtils;
 
 import org.apache.lucene.document.Document;
 
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 
 public class ClassDefToDocumentConverter
 {
 
-	public static void convert(ClassDef item, String filename, Document d)
+	public static void convert(ClassDefStatement item, String filename, Document d)
 	{
 		CommonCodeItemToDocument.addStandardFields(item, filename, d);	
 	

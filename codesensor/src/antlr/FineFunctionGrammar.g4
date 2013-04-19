@@ -33,7 +33,7 @@ selection_or_iteration: TRY                      #Try_statement
                       | IF '(' condition ')'     #If_statement
                       | ELSE                     #Else_statement
                       | SWITCH '(' condition ')' #Switch_statement
-                      | FOR '(' for_init_statement condition ';'  expr? ')' #For_statement
+                      | FOR '(' for_init_statement condition? ';'  expr? ')' #For_statement
                       | DO                          #Do_statement
                       | WHILE '(' condition ')'     #While_statement
 ;
@@ -57,4 +57,5 @@ label: CASE? (identifier | number | access_specifier) ':' ;
 
 expr_statement: expr? ';';
 
-condition: expr;
+condition: expr
+	 | type_name declarator '=' assign_expr;

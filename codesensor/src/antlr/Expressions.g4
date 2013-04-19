@@ -21,9 +21,12 @@ cast_expression: ('(' cast_target ')' cast_expression)
 cast_target: type_name ptr_operator*;
 
 // currently does not implement new/delete
+//
 
 unary_expression: inc_dec cast_expression
                 | unary_operator cast_expression
+                | 'sizeof' '(' type_name ptr_operator* ')'
+                | 'sizeof' unary_expression
                 | postfix_expression
                 ;
 

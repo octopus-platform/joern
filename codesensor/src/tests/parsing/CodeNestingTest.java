@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import antlr.FineFunctionGrammarParser.StatementsContext;
 import astnodes.ASTNode;
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Argument;
 import astnodes.expressions.ArgumentList;
@@ -212,7 +212,7 @@ public class CodeNestingTest {
 		String input = "struct foo{ int x; } foo;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		assertTrue(contentItem.getChildCount() == 1);
-		ClassDef classDef = (ClassDef) contentItem.getChild(0);
+		ClassDefStatement classDef = (ClassDefStatement) contentItem.getChild(0);
 		assertTrue(classDef.getChildCount() == 1);
 		IdentifierDecl decl = (IdentifierDecl) classDef.getChild(0);
 		assertTrue(decl.getName().getCodeStr().equals("foo"));
@@ -247,7 +247,7 @@ public class CodeNestingTest {
 		String input = "struct foo{ int x; } foo;";
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		assertTrue(contentItem.getChildCount() == 1);
-		ClassDef classDef = (ClassDef) contentItem.getChild(0);
+		ClassDefStatement classDef = (ClassDefStatement) contentItem.getChild(0);
 		assertTrue(classDef.content.getChildCount() == 1);
 		IdentifierDeclStatement declStmt = (IdentifierDeclStatement) classDef.content.getChild(0);
 		assertTrue(declStmt.getChildCount() == 1);

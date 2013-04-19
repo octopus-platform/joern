@@ -26,7 +26,9 @@ public class ParseTreeUtils
 	    			retval += childText + " ";
 	    		}
 	    	}
-	    	retval = retval.substring(0, retval.length()-1);
+	    	
+	    	if(retval.length() > 0)
+	    		retval = retval.substring(0, retval.length()-1);
 	    	return retval;
 	 }
 }

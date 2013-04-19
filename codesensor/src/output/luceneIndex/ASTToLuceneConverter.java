@@ -18,7 +18,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.util.Version;
 
 import astnodes.ASTNode;
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Argument;
 import astnodes.expressions.AssignmentExpr;
@@ -66,7 +66,7 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 		visitChildrenAndWrite(item, d);
 	}
 	
-	public void visit(ClassDef item)
+	public void visit(ClassDefStatement item)
 	{
 		Document d = DocumentFactory.createNewDocument(DocumentType.TYPE);
 		ClassDefToDocumentConverter.convert(item, filename, d);

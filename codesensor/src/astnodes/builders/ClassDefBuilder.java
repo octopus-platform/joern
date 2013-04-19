@@ -5,19 +5,19 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CodeSensorParser.Class_nameContext;
 import astnodes.ASTNodeBuilder;
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.expressions.Identifier;
 import astnodes.statements.CompoundStatement;
 
 public class ClassDefBuilder extends ASTNodeBuilder
 {
-	ClassDef thisItem;
+	ClassDefStatement thisItem;
 	
 	@Override
 	public void createNew(ParserRuleContext ctx)
 	{
-		item = new ClassDef();
-		thisItem = (ClassDef) item;
+		item = new ClassDefStatement();
+		thisItem = (ClassDefStatement) item;
 		thisItem.initializeFromContext(ctx);
 	}
 

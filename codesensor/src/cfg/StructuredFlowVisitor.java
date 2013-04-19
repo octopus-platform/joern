@@ -255,6 +255,8 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	
 	private BasicBlock getSurroundingBlock()
 	{
+		if(loopStack.size() == 0)
+			return null;
 		return loopStack.peek();
 	}
 	

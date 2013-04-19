@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import output.luceneIndex.ASTToLuceneConverter;
-import astnodes.declarations.ClassDef;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.declarations.IdentifierDeclType;
 import astnodes.expressions.Argument;
@@ -50,7 +50,7 @@ public class ASTToLuceneConverterTest {
 	@Test
 	public void testVisitorPatternClass()
 	{
-		ClassDef functionDef = new ClassDef();
+		ClassDefStatement functionDef = new ClassDefStatement();
 		functionDef.accept(visitor);
 		Document document = writer.getDocuments().get(0);
 		System.out.println(document.getFieldable("type").stringValue());

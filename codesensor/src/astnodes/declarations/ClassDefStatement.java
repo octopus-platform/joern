@@ -4,10 +4,11 @@ import astnodes.ASTNode;
 import astnodes.DummyNameNode;
 import astnodes.expressions.Identifier;
 import astnodes.statements.CompoundStatement;
+import astnodes.statements.Statement;
 import astwalking.ASTNodeVisitor;
 
 
-public class ClassDef extends ASTNode
+public class ClassDefStatement extends Statement
 {
 	
 	public Identifier name = new DummyNameNode();

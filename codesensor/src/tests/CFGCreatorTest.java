@@ -15,7 +15,6 @@ import cfg.Edges;
 
 import tests.parsing.FineFuncContentTestUtil;
 import astnodes.ASTNode;
-import astnodes.expressions.CallExpression;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.ExpressionStatement;
 
@@ -90,6 +89,22 @@ public class CFGCreatorTest
 		ExpressionStatement exprStmt =  (ExpressionStatement) bodyBlock.getStatements().get(0);
 		
 		assertTrue(exprStmt.getCodeStr().equals("bar ( )"));
+	}
+	
+	@Test
+	public void testEmptyElse()
+	{
+		String input = "if(foo) bar(); else {}";
+		CFG cfg = getCFGForCode(input);
+		Edges edges = cfg.getEdges();
+	}
+	
+	@Test
+	public void testEmptyIf()
+	{
+		String input = "if(foo){}else bar(); ";
+		CFG cfg = getCFGForCode(input);
+		Edges edges = cfg.getEdges();
 	}
 	
 	@Test
