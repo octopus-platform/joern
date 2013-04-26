@@ -135,7 +135,7 @@ public class CFGCreatorTest
 	@Test
 	public void testIfJoinWithNextCode()
 	{
-		String input = "x = 10; if(foo){ bar(); }";
+		String input = "if(foo){ bar(); } x = 10; ";
 		CFG cfg = getCFGForCode(input);
 		
 		
@@ -229,6 +229,7 @@ public class CFGCreatorTest
 		String input = "switch(foo){ case 1: case2: case 3: }";
 		CFG cfg = getCFGForCode(input);
 		Edges edges = cfg.getEdges();
+		System.out.println(edges.size());
 		assertTrue(edges.size() == 6);
 	}
 	

@@ -26,6 +26,8 @@ public class BinaryExpression extends Expression
 			setRight(expression);
 		else
 			throw new RuntimeException("Error: attempting to add third child to binary expression");
+	
+		super.addChild(item);
 	}
 	
 	@Override
