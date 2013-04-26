@@ -5,7 +5,7 @@ import astnodes.expressions.Expression;
 public class ExpressionHolderStatement extends Statement
 {
 	
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		if(codeStr != null)
 			return codeStr;
@@ -13,7 +13,7 @@ public class ExpressionHolderStatement extends Statement
 		Expression expr = getExpression();
 		if(expr == null) return "";
 		
-		codeStr = expr.getCodeStr();
+		codeStr = expr.getEscapedCodeStr();
 		return codeStr;
 	}
 	

@@ -40,6 +40,7 @@ public class CFG {
 		labels.putAll(otherCFG.getLabels());
 		
 		loopStart.putAll(otherCFG.loopStart);
+		
 	}
 
 	public void replaceCFGBy(CFG otherCFG)
@@ -76,16 +77,22 @@ public class CFG {
 	
 	public BasicBlock getLastBlock()
 	{
-		if(getNumberOfBasicBlocks() == 0)
-			return new EmptyBasicBlock();
-		return basicBlocks.lastElement();
+		try{
+			return basicBlocks.lastElement();
+		}catch(RuntimeException ex)
+		{
+			return null;
+		}
 	}
 	
 	public BasicBlock getFirstBlock()
-	{
-		if(getNumberOfBasicBlocks() == 0)
-			return new EmptyBasicBlock();
-		return basicBlocks.firstElement();
+	{	
+		try{
+			return basicBlocks.firstElement();
+		}catch(RuntimeException ex)
+		{
+			return null;
+		}
 	}
 	
 	public void labelBlock(String label, BasicBlock block) { labels.put(label, block); }

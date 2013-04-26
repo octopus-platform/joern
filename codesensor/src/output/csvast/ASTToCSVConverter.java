@@ -47,23 +47,15 @@ public class ASTToCSVConverter extends ASTNodeVisitor
 		 if(node instanceof BinaryExpression && node.getChildCount() > 0)
 			 codeStr = ((BinaryExpression) node).getOperator();
 		 else if(node.getChildCount() == 0)
-			 codeStr = node.getCodeStr();
+			 codeStr = node.getEscapedCodeStr();
 
 		 // !NodeBlacklist.isBlackListed(nodeTypeName)
 		 
 		 if(codeStr != null)
-			 output += SEPARATOR + escapeCodeStr(codeStr);
+			 output += SEPARATOR + codeStr;
 	     else
 	    	 output += SEPARATOR + "";
 		 builder.append(output + "\n");
-	 }
-	 
-	 private String escapeCodeStr(String codeStr)
-	 {
-		 String retval = codeStr;
-		 retval = retval.replace("\n", "\\n");
-		 retval = retval.replace("\t", "\\t");
-		 return retval;
 	 }
 	 
 }

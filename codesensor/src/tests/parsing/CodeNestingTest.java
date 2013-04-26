@@ -90,8 +90,8 @@ public class CodeNestingTest {
 		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
 		Expression condition = starter.getCondition().getExpression();
-		System.out.println(condition.getCodeStr());
-		assertTrue(condition.getCodeStr().equals("foo"));
+		System.out.println(condition.getEscapedCodeStr());
+		assertTrue(condition.getEscapedCodeStr().equals("foo"));
 	}
 	
 	@Test
@@ -101,8 +101,8 @@ public class CodeNestingTest {
 		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
 		AssignmentExpr condition = (AssignmentExpr) starter.getCondition().getExpression();
-		System.out.println(condition.getCodeStr());
-		assertTrue(condition.getCodeStr().equals("foo = bar"));
+		System.out.println(condition.getEscapedCodeStr());
+		assertTrue(condition.getEscapedCodeStr().equals("foo = bar"));
 	}
 		
 	@Test
@@ -138,7 +138,7 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ForStatement forItem = (ForStatement) contentItem.getStatements().get(0);
 		
-		String condExprString = forItem.getCondition().getExpression().getCodeStr();
+		String condExprString = forItem.getCondition().getExpression().getEscapedCodeStr();
 		assertTrue(condExprString.equals("i < 10"));
 		
 	}
@@ -152,7 +152,7 @@ public class CodeNestingTest {
 		
 		System.out.println(forItem.getChildCount());
 		
-		String condExprString = forItem.getCondition().getExpression().getCodeStr();
+		String condExprString = forItem.getCondition().getExpression().getEscapedCodeStr();
 		assertTrue(condExprString.equals("i < 10"));
 		
 	}
@@ -165,7 +165,7 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
 		
-		String condExprString = doItem.getCondition().getExpression().getCodeStr();
+		String condExprString = doItem.getCondition().getExpression().getEscapedCodeStr();
 		System.out.println(condExprString);
 		assertTrue(condExprString.equals("bar"));
 		
@@ -179,7 +179,7 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
-		assertTrue(decl.getName().getCodeStr().equals("x"));
+		assertTrue(decl.getName().getEscapedCodeStr().equals("x"));
 	}	
 	
 	@Test
@@ -189,8 +189,8 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
-		System.out.println(decl.getType().getCodeStr());
-		assertTrue(decl.getType().getCodeStr().equals("int"));
+		System.out.println(decl.getType().getEscapedCodeStr());
+		assertTrue(decl.getType().getEscapedCodeStr().equals("int"));
 	}
 	
 	@Test
@@ -202,8 +202,8 @@ public class CodeNestingTest {
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);	
 		
 		AssignmentExpr assign = (AssignmentExpr) decl.getChild(decl.getChildCount() -1);
-		assertTrue(assign.getLeft().getCodeStr().equals("m"));
-		assertTrue(assign.getRight().getCodeStr().equals("\"Usage: untar [-tvx] [-f file] [file]\\n\""));
+		assertTrue(assign.getLeft().getEscapedCodeStr().equals("m"));
+		assertTrue(assign.getRight().getEscapedCodeStr().equals("\"Usage: untar [-tvx] [-f file] [file]\\n\""));
 	}
 	
 	@Test
@@ -215,7 +215,7 @@ public class CodeNestingTest {
 		ClassDefStatement classDef = (ClassDefStatement) contentItem.getChild(0);
 		assertTrue(classDef.getChildCount() == 1);
 		IdentifierDecl decl = (IdentifierDecl) classDef.getChild(0);
-		assertTrue(decl.getName().getCodeStr().equals("foo"));
+		assertTrue(decl.getName().getEscapedCodeStr().equals("foo"));
 	}
 	
 	@Test
@@ -225,7 +225,7 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
-		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 		ArgumentList argList = (ArgumentList) expr.getChild(1);
 		Argument arg = (Argument) argList.getChild(0);
 	}
@@ -237,7 +237,7 @@ public class CodeNestingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
-		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 	}
 	
 	@Test

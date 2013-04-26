@@ -20,6 +20,10 @@ public class ASTNode {
 	
 	protected static final List<ASTNode> emptyList = new LinkedList<ASTNode>();
 	
+	// FIXME: this is needed for the neo4j-writer
+	// The writer should wrap this class.
+	public long id = -1;
+	
 	public void addChild(ASTNode node)
 	{ 
 		if(children == null)
@@ -59,14 +63,22 @@ public class ASTNode {
 		codeStr = aCodeStr;
 	}
 	
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		if(codeStr != null)
 			return codeStr;
 		
-		codeStr = ParseTreeUtils.childTokenString(parseTreeNodeContext);
+		codeStr = escapeCodeStr(ParseTreeUtils.childTokenString(parseTreeNodeContext));
 		return codeStr;
 	}
+	
+	private String escapeCodeStr(String codeStr)
+	 {
+		 String retval = codeStr;
+		 retval = retval.replace("\n", "\\n");
+		 retval = retval.replace("\t", "\\t");
+		 return retval;
+	 }
 	
 	public String getLocationString()
 	{
@@ -79,5 +91,10 @@ public class ASTNode {
 	public boolean isLeaf()
 	{
 		return (children.size() == 0);
+	}
+
+	public String getTypeAsString()
+	{
+		return this.getClass().getSimpleName();
 	}	
 }

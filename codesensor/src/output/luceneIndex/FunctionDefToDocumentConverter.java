@@ -16,8 +16,8 @@ public class FunctionDefToDocumentConverter
 	public static void convert(FunctionDef item, String filename, Document d)
 	{			
 		CommonCodeItemToDocument.addStandardFields(item, filename, d);
-		d.add(LuceneUtils.createField("name", item.name.getCodeStr()));
-		d.add(LuceneUtils.createField("returnType", item.returnType.getCodeStr()));
+		d.add(LuceneUtils.createField("name", item.name.getEscapedCodeStr()));
+		d.add(LuceneUtils.createField("returnType", item.returnType.getEscapedCodeStr()));
 		addParameters(item, d);		
 		addAst(item, d);
 	}

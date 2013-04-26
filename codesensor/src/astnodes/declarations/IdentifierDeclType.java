@@ -7,7 +7,7 @@ public class IdentifierDeclType extends ASTNode
 	public String baseType;
 	public String completeType;
 
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		return completeType;
 	}

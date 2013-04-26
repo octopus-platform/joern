@@ -4,5 +4,5 @@ public class DummyReturnType extends ReturnType
 {
 	public DummyReturnType(){ super(); }
 	
-	public String getCodeStr(){ return "<none>"; }
+	public String getEscapedCodeStr(){ return "<none>"; }
 }

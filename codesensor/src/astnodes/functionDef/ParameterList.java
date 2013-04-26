@@ -36,7 +36,7 @@ public class ParameterList extends ASTNode
 	{
 		String retStrings [] = new String[parameters.size()];
 		for(int i = 0; i < parameters.size(); i++){
-			retStrings[i] = parameters.get(i).name.getCodeStr();
+			retStrings[i] = parameters.get(i).name.getEscapedCodeStr();
 		}
 		return retStrings;
 	}
@@ -54,7 +54,7 @@ public class ParameterList extends ASTNode
 	{
 		String retStrings [] = new String[parameters.size()];
 		for(int i = 0; i < parameters.size(); i++){
-			retStrings[i] = parameters.get(i).type.getCodeStr();
+			retStrings[i] = parameters.get(i).type.getEscapedCodeStr();
 		}
 		return retStrings;
 	}
@@ -63,7 +63,7 @@ public class ParameterList extends ASTNode
 
 	
 	@Override
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		if(codeStr != null)
 			return codeStr;
@@ -77,7 +77,7 @@ public class ParameterList extends ASTNode
 		StringBuilder s = new StringBuilder();
 		for(; i.hasNext();){
 			Parameter param = i.next();
-			s.append(param.getCodeStr() + " , ");
+			s.append(param.getEscapedCodeStr() + " , ");
 		}
 		
 		codeStr = s.toString();

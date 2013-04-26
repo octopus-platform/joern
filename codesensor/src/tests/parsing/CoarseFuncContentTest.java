@@ -33,7 +33,7 @@ public class CoarseFuncContentTest
 		CompoundStatement contentItem = (CompoundStatement) parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression call = (CallExpression) statementItem.getExpression();
-		assertTrue(call.getTarget().getCodeStr().equals("foo"));
+		assertTrue(call.getTarget().getEscapedCodeStr().equals("foo"));
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class CoarseFuncContentTest
 		CompoundStatement contentItem = (CompoundStatement) parseAndWalk(input);
 		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.getStatements().get(0);
 		IdentifierDecl identifierDecl = (IdentifierDecl) statementItem.getIdentifierDeclList().get(0);
-		assertTrue(identifierDecl.getName().getCodeStr().equals("x"));
+		assertTrue(identifierDecl.getName().getEscapedCodeStr().equals("x"));
 	}
 	
 	

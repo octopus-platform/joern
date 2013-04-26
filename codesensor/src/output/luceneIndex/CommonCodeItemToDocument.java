@@ -19,7 +19,7 @@ public class CommonCodeItemToDocument
 
 	private static void addCodeString(ASTNode item, Document d)
 	{
-		d.add(LuceneUtils.createField("code", item.getCodeStr()));
+		d.add(LuceneUtils.createField("code", item.getEscapedCodeStr()));
 	}
 
 	private static void addLocationFields(Document d, ASTNode item, String filename)

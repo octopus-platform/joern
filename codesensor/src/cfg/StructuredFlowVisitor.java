@@ -63,13 +63,23 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		while(it.hasNext()){
 			Statement child = (Statement) it.next();
 			CFG childCFG = convertStatement(child);
+			cfg.addEdge(cfg.getLastBlock(), childCFG.getFirstBlock());
 			cfg.addCFG(childCFG);
 		}
 	}
 	
 	public CFG convertStatement(Statement node)
 	{
+		returnCFG = new CFG();
 		node.accept(this);
+		
+		// if no statement is present, return
+		// a CFG containing an empty basic block.
+		if(returnCFG.getNumberOfBasicBlocks() == 0)
+		{
+			returnCFG.addBasicBlock(new EmptyBasicBlock());
+		}
+		
 		return returnCFG;
 	}
 	
@@ -194,7 +204,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		CFG cfg = new CFG();
 		addBasicBlockForNode(node, cfg);
-		String label = node.getCodeStr();
+		String label = node.getEscapedCodeStr();
 		label = label.substring(0, label.length()-1);
 		cfg.labelBlock(label, cfg.getFirstBlock());
 		
@@ -262,7 +272,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	
 	private BasicBlock addEmptyBlock(CFG cfg)
 	{
-		BasicBlock emptyBlock = new LoopBlock();
+		BasicBlock emptyBlock = new EmptyBasicBlock();
 		cfg.addBasicBlock(emptyBlock);
 		return emptyBlock;
 	}

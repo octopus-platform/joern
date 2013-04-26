@@ -6,7 +6,7 @@ public class DummyNameNode extends Identifier
 {
 	public DummyNameNode(){ super(); }
 	
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		return "<unnamed>";
 	}

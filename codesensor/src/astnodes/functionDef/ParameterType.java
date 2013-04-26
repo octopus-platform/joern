@@ -10,7 +10,7 @@ public class ParameterType extends ASTNode
 	String completeType = "";
 	String baseType = "";
 
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		if(codeStr != null)
 			return codeStr;

@@ -36,7 +36,7 @@ public class FunctionDef extends ASTNode
 	}
 	
 	@Override
-	public String getCodeStr()
+	public String getEscapedCodeStr()
 	{
 		// check if codeStr has already been generated
 		if(codeStr != null)
@@ -47,9 +47,9 @@ public class FunctionDef extends ASTNode
 	
 	public String getFunctionSignature()
 	{
-		String retval = name.getCodeStr();
+		String retval = name.getEscapedCodeStr();
 		if(parameterList != null)
-			retval += " (" + parameterList.getCodeStr() + ")";
+			retval += " (" + parameterList.getEscapedCodeStr() + ")";
 		else
 			retval += " ()";
 		return retval;

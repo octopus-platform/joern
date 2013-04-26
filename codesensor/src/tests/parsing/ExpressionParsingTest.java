@@ -34,8 +34,8 @@ public class ExpressionParsingTest {
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
 	
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
-		assertTrue(expr.getRight().getCodeStr().equals("y"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
+		assertTrue(expr.getRight().getEscapedCodeStr().equals("y"));
 	}
 
 	@Test
@@ -45,8 +45,8 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
-		assertTrue(expr.getRight().getCodeStr().equals("y = z"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
+		assertTrue(expr.getRight().getEscapedCodeStr().equals("y = z"));
 	}
 	
 	@Test
@@ -56,7 +56,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement statementItem = (IdentifierDeclStatement) contentItem.getStatements().get(0);
 		IdentifierDecl identifierDecl = (IdentifierDecl) statementItem.getIdentifierDeclList().get(0);
-		assertTrue(identifierDecl.getName().getCodeStr().equals("x"));
+		assertTrue(identifierDecl.getName().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -67,7 +67,7 @@ public class ExpressionParsingTest {
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
 		ConditionalExpression right = (ConditionalExpression) expr.getRight();
-		assertTrue(right.getCondition().getCodeStr().equals("cond"));
+		assertTrue(right.getCondition().getEscapedCodeStr().equals("cond"));
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		OrExpression expr = (OrExpression) statementItem.getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AndExpression expr = (AndExpression) statementItem.getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -97,7 +97,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		InclusiveOrExpression expr = (InclusiveOrExpression) statementItem.getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -107,7 +107,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		ExclusiveOrExpression expr = (ExclusiveOrExpression) statementItem.getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -117,7 +117,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		BitAndExpression expr = (BitAndExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -127,7 +127,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		EqualityExpression expr = (EqualityExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -137,7 +137,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		RelationalExpression expr = (RelationalExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -147,7 +147,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		ShiftExpression expr = (ShiftExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		AdditiveExpression expr = (AdditiveExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 
 	@Test
@@ -167,7 +167,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		MultiplicativeExpression expr = (MultiplicativeExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getLeft().getCodeStr().equals("x"));
+		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 
 	
@@ -178,7 +178,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		CastExpression expr = (CastExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getCastTarget().getCodeStr().equals("some_type"));
+		assertTrue(expr.getCastTarget().getEscapedCodeStr().equals("some_type"));
 	}
 	
 	@Test
@@ -188,7 +188,7 @@ public class ExpressionParsingTest {
 		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) starter.getCondition().getExpression();
-		assertTrue(expr.getTarget().getCodeStr().equals("foo"));
+		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 	}
 	
 }

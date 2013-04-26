@@ -244,7 +244,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 			if(prev != null && cur instanceof WhileStatement){
 				if(prev instanceof DoStatement){
 					DoStatement doItem = (DoStatement) prev;
-					doItem.setCondition(((WhileStatement) cur).getCondition());
+					doItem.addChild(((WhileStatement) cur).getCondition());
 					it.remove();
 				}
 			}
@@ -275,7 +275,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 	{
 		consolidateSubExpression(ctx);
 	}
-
+	
 	public void enterConditionalExpr(Conditional_expressionContext ctx)
 	{
 		ConditionalExpression expr = new ConditionalExpression();

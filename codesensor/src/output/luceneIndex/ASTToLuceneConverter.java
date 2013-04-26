@@ -88,7 +88,7 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 		Iterator<ASTNode> it = statementItem.getIdentifierDeclList().iterator();
 		while(it.hasNext()){
 			IdentifierDecl idDecl = (IdentifierDecl) it.next();
-			String name = idDecl.getName().getCodeStr();
+			String name = idDecl.getName().getEscapedCodeStr();
 			String completeType = idDecl.getType().completeType;
 			parentDoc.add(LuceneUtils.createField("localName", name));
 			parentDoc.add(LuceneUtils.createField("localType", completeType));
@@ -101,7 +101,7 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	public void visit(Condition expression)
 	{
 		Document d = DocumentFactory.createNewDocument(DocumentType.CONDITION);
-		addFieldToParentsAndLink(d, "condition", expression.getCodeStr());
+		addFieldToParentsAndLink(d, "condition", expression.getEscapedCodeStr());
 		visitChildrenAndWrite(expression, d);
 	}
 	
@@ -110,10 +110,10 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	{
 		Document d = DocumentFactory.createNewDocument(DocumentType.CALL);
 		
-		String callExprString = expression.getCodeStr();
+		String callExprString = expression.getEscapedCodeStr();
 		String callTarget = "";
 		if(expression.getTarget() != null)
-			callTarget = expression.getTarget().getCodeStr();
+			callTarget = expression.getTarget().getEscapedCodeStr();
 		
 		// add fields to this document
 		d.add(LuceneUtils.createField("exprType", "call"));
@@ -126,25 +126,25 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	
 	public void visit(PrimaryExpression expression)
 	{
-		addFieldToParentsAndLink(null, "primary", expression.getCodeStr());
+		addFieldToParentsAndLink(null, "primary", expression.getEscapedCodeStr());
 		visitChildren(expression);
 	}
 	
 	public void visit(Identifier expression)
 	{
-		addFieldToParentsAndLink(null, "identifier", expression.getCodeStr());
+		addFieldToParentsAndLink(null, "identifier", expression.getEscapedCodeStr());
 		visitChildren(expression);
 	}
 	
 	public void visit(MemberAccess expression)
 	{
-		addFieldToParentsAndLink(null, "access", expression.getCodeStr());
+		addFieldToParentsAndLink(null, "access", expression.getEscapedCodeStr());
 		visitChildren(expression);
 	}
 	
 	public void visit(UnaryExpression expression)
 	{
-		addFieldToParentsAndLink(null, "unary", expression.getCodeStr());
+		addFieldToParentsAndLink(null, "unary", expression.getEscapedCodeStr());
 		visitChildren(expression);
 	}
 	
@@ -174,10 +174,10 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 	{ 
 		Document d = DocumentFactory.createNewDocument(DocumentType.ASSIGNMENT);
 		
-		d.add(LuceneUtils.createField("lval", expression.getLeft().getCodeStr()));
-		d.add(LuceneUtils.createField("rval", expression.getRight().getCodeStr()));
+		d.add(LuceneUtils.createField("lval", expression.getLeft().getEscapedCodeStr()));
+		d.add(LuceneUtils.createField("rval", expression.getRight().getEscapedCodeStr()));
 		
-		addFieldToParentsAndLink(d, "assignment", expression.getCodeStr());
+		addFieldToParentsAndLink(d, "assignment", expression.getEscapedCodeStr());
 		visitChildrenAndWrite(expression, d);
 	}
 	
@@ -195,9 +195,9 @@ public class ASTToLuceneConverter extends ASTNodeVisitor
 		int childNumber = expression.getChildNumber();
 		
 		d.add(LuceneUtils.createField("number", String.valueOf(childNumber)));
-		d.add(LuceneUtils.createField("code", expression.getCodeStr()));
+		d.add(LuceneUtils.createField("code", expression.getEscapedCodeStr()));
 		
-		addFieldToParentsAndLink(d, "argument", expression.getCodeStr());
+		addFieldToParentsAndLink(d, "argument", expression.getEscapedCodeStr());
 		visitChildrenAndWrite(expression, d);
 	}
 	

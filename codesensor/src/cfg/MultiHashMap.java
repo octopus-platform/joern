@@ -12,6 +12,11 @@ public class MultiHashMap
 	HashMap<Object, List<Object>> hashMap =
 			new HashMap<Object, List<Object>>();
 	
+	public Iterator<Entry<Object, List<Object>>> getEntrySetIterator()
+	{
+		return hashMap.entrySet().iterator();
+	}
+	
 	public void add(Object key, Object val)
 	{
 		List<Object> valList = hashMap.get(key);

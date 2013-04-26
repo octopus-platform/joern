@@ -31,8 +31,8 @@ public class ModuleBuildersTest {
 		ClassDefStatement zClass = (ClassDefStatement) yClass.content.getStatements().get(0);
 		
 		assertTrue(codeItems.size() == 1);
-		assertTrue(yClass.getName().getCodeStr().equals("y"));
-		assertTrue(zClass.getName().getCodeStr().equals("z"));
+		assertTrue(yClass.getName().getEscapedCodeStr().equals("y"));
+		assertTrue(zClass.getName().getEscapedCodeStr().equals("z"));
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class ModuleBuildersTest {
 		String input = "struct foo{};";
 		List<ASTNode> codeItems = parseInput(input);
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
-		assertTrue(codeItem.name.getCodeStr().equals("foo"));
+		assertTrue(codeItem.name.getEscapedCodeStr().equals("foo"));
 	}
 	
 	@Test
@@ -50,7 +50,7 @@ public class ModuleBuildersTest {
 		String input = "struct {int x; } a;";
 		List<ASTNode> codeItems = parseInput(input);
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
-		assertTrue(codeItem.name.getCodeStr().equals("<unnamed>"));
+		assertTrue(codeItem.name.getEscapedCodeStr().equals("<unnamed>"));
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		FunctionDef funcItem = (FunctionDef) codeItem.content.getStatements().get(0);
-		assertTrue(funcItem.name.getCodeStr().equals("bar"));
+		assertTrue(funcItem.name.getEscapedCodeStr().equals("bar"));
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(0);
 		IdentifierDecl decl = (IdentifierDecl) codeItem.getIdentifierDeclList().get(0);
-		assertTrue(decl.getName().getCodeStr().equals("foo"));
+		assertTrue(decl.getName().getEscapedCodeStr().equals("foo"));
 	}
 
 	@Test
@@ -89,8 +89,8 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		IdentifierDeclStatement codeItem = (IdentifierDeclStatement) codeItems.get(codeItems.size() - 1);
 		IdentifierDecl decl = (IdentifierDecl) codeItem.getIdentifierDeclList().get(0);
-		System.out.println(decl.getName().getCodeStr());
-		assertTrue(decl.getName().getCodeStr().equals("y"));
+		System.out.println(decl.getName().getEscapedCodeStr());
+		assertTrue(decl.getName().getEscapedCodeStr().equals("y"));
 	}
 	
 	@Test
@@ -103,8 +103,8 @@ public class ModuleBuildersTest {
 		IdentifierDeclStatement identifierCodeItem = (IdentifierDeclStatement) classCodeItem.content.getStatements().get(0);
 		IdentifierDecl decl = (IdentifierDecl) identifierCodeItem.getIdentifierDeclList().get(0);
 		
-		assertTrue(classCodeItem.name.getCodeStr().equals("foo"));
-		assertTrue(decl.getName().getCodeStr().equals("x"));
+		assertTrue(classCodeItem.name.getEscapedCodeStr().equals("foo"));
+		assertTrue(decl.getName().getEscapedCodeStr().equals("x"));
 	}
 	
 	@Test
@@ -113,7 +113,7 @@ public class ModuleBuildersTest {
 		String input = "void foo(){};";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.name.getCodeStr().equals("foo"));
+		assertTrue(codeItem.name.getEscapedCodeStr().equals("foo"));
 	}
 	
 	@Test
@@ -122,8 +122,8 @@ public class ModuleBuildersTest {
 		String input = "void foo(int x, char **ptr){};";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		System.out.println(codeItem.getCodeStr());
-		assertTrue(codeItem.getCodeStr().equals("foo (int x , char * * ptr)"));
+		System.out.println(codeItem.getEscapedCodeStr());
+		assertTrue(codeItem.getEscapedCodeStr().equals("foo (int x , char * * ptr)"));
 	}
 	
 	
@@ -133,7 +133,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(char *myParam, myType x){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		String codeStr = codeItem.parameterList.getCodeStr();
+		String codeStr = codeItem.parameterList.getEscapedCodeStr();
 		System.out.println(codeStr);
 		assertTrue(codeStr.equals("char * myParam , myType x"));
 	}
@@ -145,7 +145,7 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		Parameter parameter = codeItem.parameterList.getParameters().get(0);
-		String codeStr = parameter.getCodeStr();
+		String codeStr = parameter.getEscapedCodeStr();
 		System.out.println(codeStr);
 		assertTrue(codeStr.equals("char * myParam"));
 	}
@@ -157,7 +157,7 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		Identifier name = codeItem.parameterList.getParameters().get(0).name;
-		assertTrue(name.getCodeStr().equals("myParam"));
+		assertTrue(name.getEscapedCodeStr().equals("myParam"));
 	}
 	
 	@Test
@@ -167,8 +167,8 @@ public class ModuleBuildersTest {
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		ParameterType type = codeItem.parameterList.getParameters().get(0).type;
-		System.out.println(type.getCodeStr());
-		assertTrue(type.getCodeStr().equals("char *"));
+		System.out.println(type.getEscapedCodeStr());
+		assertTrue(type.getEscapedCodeStr().equals("char *"));
 	}
 	
 	@Test
@@ -177,8 +177,8 @@ public class ModuleBuildersTest {
 		String input = "int foo(void (*ptr)(char *)){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		System.out.println(codeItem.getCodeStr());
-		assertTrue(codeItem.name.getCodeStr().equals("foo"));
+		System.out.println(codeItem.getEscapedCodeStr());
+		assertTrue(codeItem.name.getEscapedCodeStr().equals("foo"));
 	}
 
 	@Test
@@ -187,7 +187,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.parameterList.getCodeStr().equals(""));
+		assertTrue(codeItem.parameterList.getEscapedCodeStr().equals(""));
 	}
 	
 	@Test

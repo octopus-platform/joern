@@ -1,6 +1,5 @@
 package cfg;
 
-import java.util.Collection;
 import java.util.List;
 
 import astnodes.statements.BreakStatement;
@@ -28,7 +27,10 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 	{ 
 		Edges edges = thisCFG.getEdges();
 		edges.removeAllEdgesFrom(thisBasicBlock);
-		edges.addEdge(thisBasicBlock, thisCFG.getLastBlock());
+		BasicBlock exitBlock = thisCFG.getLastBlock();
+		if(exitBlock == null)
+			throw new RuntimeException("error attaching return to exitBlock: no exitBlock");
+		edges.addEdge(thisBasicBlock, exitBlock);
 	}
 	
 	public void visit(GotoStatement expression)

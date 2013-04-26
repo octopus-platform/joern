@@ -1,43 +1,65 @@
 package output.neo4j;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
+import java.util.Map;
+
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.helpers.collection.MapUtil;
+import org.neo4j.unsafe.batchinsert.BatchInserter;
+import org.neo4j.unsafe.batchinsert.BatchInserterIndex;
+import org.neo4j.unsafe.batchinsert.BatchInserterIndexProvider;
+import org.neo4j.unsafe.batchinsert.BatchInserters;
+import org.neo4j.unsafe.batchinsert.LuceneBatchInserterIndexProvider;
+
 
 
 public class Neo4JDatabase
 {
-	GraphDatabaseService graphDb;
-	String databaseDirectory = "neo4j-db";
-
-	public void setIndexDirectoryName(String dirName)
+	
+	static BatchInserter inserter;
+	static BatchInserterIndexProvider indexProvider;
+	static BatchInserterIndex typeIndex;
+	
+	static String databaseDirectory = "neo4j-db";
+	
+	public static void setIndexDirectoryName(String dirName)
 	{
 		databaseDirectory = dirName;
 	}
 
-	public void start()
+	public static void start()
 	{
-		graphDb = new EmbeddedGraphDatabase(databaseDirectory);
-		registerShutdownHook(graphDb);
+		inserter = BatchInserters.inserter(databaseDirectory);
+		initializeIndex();		
 	}
 
-	public void shutdown()
+	private static void initializeIndex()
 	{
-		graphDb.shutdown();
+		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
+		typeIndex = indexProvider.nodeIndex( "typeIndex", MapUtil.stringMap( "type", "exact" ) );		
+		typeIndex.setCacheCapacity( "type", 100000 );
 	}
-
-	private static void registerShutdownHook( final GraphDatabaseService graphDb)
+	
+	public static long addNode(Map<String, Object> properties)
 	{
-		// Registers a shutdown hook for the Neo4j instance so that it
-		// shuts down nicely when the VM exits (even if you "Ctrl-C" the
-		// running example before it's completed)
-		Runtime.getRuntime().addShutdownHook( new Thread()
-		{
-			@Override
-			public void run()
-			{
-				graphDb.shutdown();
-			}
-		} );
+		long newNode = inserter.createNode(properties);
+		
+		if(properties != null)
+			typeIndex.add(newNode, properties);
+		
+		return newNode;	
+	}
+	
+	public static void addRelationship(long srcId, long dstId,
+			RelationshipType rel, Map<String, Object> properties)
+	{
+		inserter.createRelationship(srcId, dstId, rel, properties);
+	}
+	
+	public static void shutdown()
+	{
+
+		indexProvider.shutdown();
+		inserter.shutdown();
 	}
 	
 }

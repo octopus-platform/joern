@@ -16,7 +16,7 @@ public class ClassDefToDocumentConverter
 	
 		String className = "";
 		if(item.name != null)
-			className = item.getName().getCodeStr();
+			className = item.getName().getEscapedCodeStr();
 		
 		d.add(LuceneUtils.createField("name", className));
 	}

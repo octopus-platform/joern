@@ -1,3 +1,3 @@
 package cfg;
 
-public class EmptyBasicBlock extends BasicBlock {}
+public class EmptyBasicBlock extends LoopBlock {}
