@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
+import astnodes.statements.ReturnStatement;
+
 // The first node added is the entry node
 // The last node added is the exitNode
 // For nodes with two outgoing edges,
@@ -106,5 +108,10 @@ public class CFG {
 	public HashMap<String,BasicBlock> getLabels(){ return labels; }
 	public Edges getEdges() { return edges; }
 	public Vector<BasicBlock> getBasicBlocks(){ return basicBlocks; }
+
+	public void addJumpStatement(BasicBlock block)
+	{
+		this.jumpStatements.add(block);
+	}
 	
 }

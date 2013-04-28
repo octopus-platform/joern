@@ -21,6 +21,7 @@ import astwalking.ASTNodeVisitor;
 public class ASTToNeo4JConverter extends ASTNodeVisitor
 {
 	GraphNodeStore nodeStore;
+	String filename;
 	
 	public void setIndexDirectoryName(String dirName)
 	{
@@ -30,13 +31,18 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 	public void visit(FunctionDef node)
 	{
 		nodeStore =  new GraphNodeStore();
-		Function function = new Function(node);
-		
+		addFunctionToDatabaseSafe(node);
+	}
+
+	private void addFunctionToDatabaseSafe(FunctionDef node)
+	{
 		try{
+			Function function = new Function(node);
+			function.setFilename(filename);
 			addFunctionToDatabase(function);	
 		}catch(RuntimeException ex)
 		{
-			ex.printStackTrace();
+			// ex.printStackTrace();
 			System.err.println("Error indexing function: " + node.name.getEscapedCodeStr());
 			return;
 		}
@@ -158,12 +164,26 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("type", "Function");
+		properties.put("filename", function.getFilename());
+		properties.put("signature", function.getSignature());
+		properties.put("location", function.getLocation());
+		properties.put("functionName", function.getName());
+		
 		long thisId = nodeStore.addNeo4jNode(function, properties);
 		
+		linkFunctionWithRootASTNode(thisId, function.getASTRoot());
 		linkFunctionWithAllASTNodes(thisId, function.getASTRoot());
 		linkFunctionWithAllCFGNodes(thisId, function.getCFG());
 	}
 	
+	private void linkFunctionWithRootASTNode(long thisId, ASTNode astRoot)
+	{
+
+		RelationshipType rel = DynamicRelationshipType.withName("AST_ROOT");
+		long dstId = astRoot.id;
+		Neo4JDatabase.addRelationship(thisId, dstId, rel, null);
+	}
+
 	private void linkFunctionWithAllASTNodes(long thisId, ASTNode node)
 	{
 		linkParentWithASTNode(thisId, node);
@@ -208,6 +228,11 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 	public void end()
 	{
 		Neo4JDatabase.shutdown();
+	}
+
+	public void setFilename(String aFilename)
+	{
+		filename = aFilename;
 	}
 
 	

@@ -20,7 +20,9 @@ def curNodeId;
 def curCode;
 def curNodeType;
 
-edges = g.astNodes("Function")[0].funcBasicBlocks().sideEffect{
+function = g.idx('functionIndex')[[functionName:args[0]]][0]
+
+edges = function.funcBasicBlocks().sideEffect{
   curNodeId = it.id; nodeIds << curNodeId;
   curCode = it.code; nodeCode << curCode;
   curNodeType = it.type; nodeType << curNodeType;

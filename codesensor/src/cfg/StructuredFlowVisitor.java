@@ -15,6 +15,7 @@ import astnodes.statements.ElseStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IfStatement;
 import astnodes.statements.Label;
+import astnodes.statements.ReturnStatement;
 import astnodes.statements.Statement;
 import astnodes.statements.SwitchStatement;
 import astnodes.statements.WhileStatement;
@@ -39,6 +40,13 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		returnCFG = defaultStatementConverter(expression);
 	}
+	
+	public void visit(ReturnStatement expression)
+	{
+		returnCFG = defaultStatementConverter(expression);
+		returnCFG.addJumpStatement(returnCFG.getLastBlock());
+	}
+
 	
 	public CFG defaultStatementConverter(ASTNode child)
 	{
@@ -240,7 +248,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		returnCFG.loopStart.put(returnCFG.getFirstBlock(), surroundingBlock);
 	}
-	
+		
 	private BasicBlock getSurroundingLoop()
 	{
 		for(int i = loopStack.size() - 1; i>= 0; i--){

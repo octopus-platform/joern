@@ -63,6 +63,11 @@ public class ASTToCFGConverter {
 		Collection<? extends BasicBlock> jumpStatements = cfg.getJumpStatements();
 		Iterator<? extends BasicBlock> it = jumpStatements.iterator();
 		
+		if(jumpStatements.size() > 0){
+			// add an exit-block
+			cfg.addBasicBlock(new EmptyBasicBlock());
+		}
+		
 		while(it.hasNext()){
 			BasicBlock basicBlock = it.next();
 			ASTNode statement = basicBlock.getStatements().get(0);

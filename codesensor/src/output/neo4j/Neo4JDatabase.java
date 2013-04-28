@@ -18,6 +18,7 @@ public class Neo4JDatabase
 	static BatchInserter inserter;
 	static BatchInserterIndexProvider indexProvider;
 	static BatchInserterIndex typeIndex;
+	static BatchInserterIndex functionIndex;
 	
 	static String databaseDirectory = "neo4j-db";
 	
@@ -36,6 +37,7 @@ public class Neo4JDatabase
 	{
 		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
 		typeIndex = indexProvider.nodeIndex( "typeIndex", MapUtil.stringMap( "type", "exact" ) );		
+		functionIndex = indexProvider.nodeIndex( "functionIndex", MapUtil.stringMap( "type", "exact" ) );
 		typeIndex.setCacheCapacity( "type", 100000 );
 	}
 	
@@ -43,8 +45,10 @@ public class Neo4JDatabase
 	{
 		long newNode = inserter.createNode(properties);
 		
-		if(properties != null)
+		if(properties != null){
 			typeIndex.add(newNode, properties);
+			functionIndex.add(newNode, properties);
+		}
 		
 		return newNode;	
 	}

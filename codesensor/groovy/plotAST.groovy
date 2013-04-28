@@ -26,8 +26,11 @@ def printDotAST = { ast ->
 codeDb = new CodeDatabase()
 g = codeDb.getDbLink()
 
+functions = g.idx('functionIndex')[[functionName:args[0]]].out('AST_ROOT')
+ast = functions[0].AST().toList()[0]
+
 // ast = g.astNodes("FunctionDef")[0].AST().toList()[0];
-ast = astNodes("AssignmentExpr").filter{it.code.matches('.*malloc.*')}[2].AST.toList()[0]
+// ast = astNodes("AssignmentExpr").filter{it.code.matches('.*malloc.*')}[2].AST.toList()[0]
 
 printDotAST(ast)
 

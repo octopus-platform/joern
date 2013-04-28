@@ -21,7 +21,7 @@ public class Neo4JDatabaseCreatorMain extends ASTWalker
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-		// TODO Auto-generated method stub
+		converter.setFilename(filename);
 		
 	}
 

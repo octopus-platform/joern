@@ -50,7 +50,6 @@ public class CodeDatabase
     results;
   }
   
-  
   private defineCustomSteps()
   {
     
@@ -61,11 +60,12 @@ public class CodeDatabase
     Gremlin.defineStep('function', [Vertex, Pipe], {_().functionDef().in()})
 
     Gremlin.defineStep('basicBlock', [Vertex,Pipe], { _().in().loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
+
+    Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('AST_CHILD').filter{ it.n.equals("0") }inV()});
     
+    Gremlin.defineStep('pathsToExit', [Vertex,Pipe], { _().out('FLOW_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})
     
-    Gremlin.defineStep('pathsToExit', [Vertex,Pipe], { _().out('FLOW_TO').simplePath().loop(2){it.loops < 500 }{true}.path})
-    
-    Gremlin.defineStep('pathsToEntry', [Vertex,Pipe], { _().in('FLOW_TO').simplePath().loop(2){it.loops < 500}{true}.path})    
+    Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOW_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})    
     
     Gremlin.defineStep("AST", [Vertex,Pipe], outClosure);   
     

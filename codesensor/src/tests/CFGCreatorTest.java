@@ -250,6 +250,15 @@ public class CFGCreatorTest
 		assertTrue(cfg.getEdges().size() == 1);
 	}
 	
+	@Test
+	public void testReturnExitBlock()
+	{
+		String input = "if(!x) return 1; y = x; return 0;";
+		CFG cfg = getCFGForCode(input);
+		
+		BasicBlock exitBlock = cfg.getBasicBlocks().lastElement();		
+		assertTrue(exitBlock.getEscapedCodeStr().equals(""));
+	}
 	
 	@Test
 	public void testAssignmentASTLink()
