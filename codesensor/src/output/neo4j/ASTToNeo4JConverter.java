@@ -60,7 +60,12 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 		addASTNode(node);
 		
 		final int nChildren = node.getChildCount();
-		for(int i = 0; i < nChildren; i++){
+		
+		// not sure why, but adding AST-links backwards
+		// results in the edges being returned in the
+		// correct order by the database.
+		
+		for(int i = nChildren -1; i >=0; i--){
 			ASTNode child = node.getChild(i);
 			addASTToDatabase(child);
 			addASTLink(node.id, child.id, child);
