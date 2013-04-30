@@ -73,12 +73,13 @@ public class CoarseParseTreeListener extends CoarseFunctionGrammarBaseListener
 	@Override
 	public void enterDeclByType(CoarseFunctionGrammarParser.DeclByTypeContext ctx)
 	{
-		CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
-		builder.enterDeclByType(ctx.type_name());
+		// We want to remove the entire Coarse parsing code.
+		// CoarseFunctionContentBuilder builder = (CoarseFunctionContentBuilder) p.itemStack.peek();
+		// builder.enterDeclByType(ctx, ctx.type_name());
 		
-		Init_declarator_listContext decl_list = ctx.init_declarator_list();
-		Type_nameContext typeName = ctx.type_name();
-		emitDeclarations(decl_list, typeName);
+		// Init_declarator_listContext decl_list = ctx.init_declarator_list();
+		// Type_nameContext typeName = ctx.type_name();
+		// emitDeclarations(decl_list, typeName);
 	}
 			
 	private void emitDeclarations(ParserRuleContext decl_list,

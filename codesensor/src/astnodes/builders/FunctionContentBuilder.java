@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 
+import antlr.FineFunctionGrammarParser.Type_nameContext;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.IdentifierDecl;
@@ -37,11 +38,11 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		declStmt.addChild(decl);
 	}
 
-	public void enterDeclByType(ParserRuleContext ctx)
+	public void enterDeclByType(ParserRuleContext ctx, Type_nameContext type_nameContext)
 	{
 		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
 		declStmt.initializeFromContext(ctx);
-		declStmt.setTypeNameContext(ctx);
+		declStmt.setTypeNameContext(type_nameContext);
 		
 		if(itemStack.peek() instanceof Statement)
 			replaceTopOfStack(declStmt);

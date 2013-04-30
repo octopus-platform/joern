@@ -261,6 +261,18 @@ public class CFGCreatorTest
 	}
 	
 	@Test
+	public void testReturnOneExitBlock()
+	{
+		String input = "if(!x) return 1; y = x;";
+		CFG cfg = getCFGForCode(input);
+		
+		BasicBlock yAssignX = cfg.getBasicBlocks().get(3);
+		BasicBlock exitBlock = cfg.getBasicBlocks().lastElement();
+		
+		assertTrue(cfg.getEdges().getEdgesFrom(yAssignX).contains(exitBlock));
+	}
+	
+	@Test
 	public void testAssignmentASTLink()
 	{
 		String input = "x = 10;";

@@ -138,7 +138,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		List<IdentifierDecl> declarations = builder.getDeclarations(decl_list, typeName);
 
 		IdentifierDeclStatement stmt = new IdentifierDeclStatement();
-		stmt.initializeFromContext(ctx);
+		// stmt.initializeFromContext(ctx);
 		
 		Iterator<IdentifierDecl> it = declarations.iterator();
 		while(it.hasNext()){

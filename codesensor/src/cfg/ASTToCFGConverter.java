@@ -65,7 +65,10 @@ public class ASTToCFGConverter {
 		
 		if(jumpStatements.size() > 0){
 			// add an exit-block
-			cfg.addBasicBlock(new EmptyBasicBlock());
+			
+			EmptyBasicBlock emptyBasicBlock = new EmptyBasicBlock();
+			cfg.addEdge(cfg.getLastBlock(), emptyBasicBlock);
+			cfg.addBasicBlock(emptyBasicBlock);
 		}
 		
 		while(it.hasNext()){

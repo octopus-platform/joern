@@ -7,38 +7,15 @@ g = c.getDbLink()
 
 def lvals = []
 
-// All assignments to malloc
-
 mallocAssigns  = astNodes("AssignmentExpr").filter{it.code.matches('.*[^_]malloc.*')}.as('assign')
+r = mallocAssigns.function().sideEffect { storeFunctionInfo() }.back('assign')
+r = r.lval().sideEffect { storeLval() }.back('assign')
 
-// functions containing these assignments
-
-r = mallocAssigns.function().sideEffect
-{
-  filename = it.filename;
-  signature = it.signature
-}.back('assign')
-
-// lvals of assignments
-
-r = r.lval().sideEffect
-{
-  lval = it.code;
-}.back('assign')
-
-// paths to exit from assignment
-
-paths = r.basicBlock().pathsToExit().transform
-{
+paths = r.basicBlock().pathsToExit().transform{
   ret = []
-  it.each()
-  {
-    if(it.code.matches('.*' + Pattern.quote(lval) + ".*"))
-      ret << [it.type, it.code]   
-  }
+  it.each() { if(it.code.matches('.*' + Pattern.quote(lval) + ".*")) ret << [it.type, it.code]    }
   [ret, lval, filename, signature];
 }.toList()
-
 
 for (path in paths)
 {
@@ -52,10 +29,8 @@ for (path in paths)
 
   typeCodeList.remove(0);
 
-  for (elem in typeCodeList){
-    
+  for (elem in typeCodeList){   
     type = elem[0]
-    
     if(type != "ConditionBB"){
       println filename + " " + signature + " " + lval
       break;
@@ -63,6 +38,17 @@ for (path in paths)
     break;
   }
   
+}
+
+def storeFunctionInfo =
+{
+  filename = it.filename;
+  signature = it.signature
+}
+
+def storeLval =
+{
+  lval = it.code;
 }
 
 g.shutdown();

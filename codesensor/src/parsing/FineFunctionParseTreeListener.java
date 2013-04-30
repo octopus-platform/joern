@@ -149,7 +149,7 @@ public class FineFunctionParseTreeListener extends FineFunctionGrammarBaseListen
 	public void enterDeclByType(FineFunctionGrammarParser.DeclByTypeContext ctx)
 	{
 		FineFunctionContentBuilder builder = (FineFunctionContentBuilder) p.itemStack.peek();
-		builder.enterDeclByType(ctx.type_name());
+		builder.enterDeclByType(ctx, ctx.type_name());
 	}
 	
 	@Override
