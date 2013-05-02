@@ -32,12 +32,12 @@ public class FunctionDefToDocumentConverter
 	private static void addParameters(FunctionDef item, Document d)
 	{
 		
-		String[] names = item.parameterList.getNameStrings();
+		String[] names = item.getParameterList().getNameStrings();
 		for(String paramName : names){
 			d.add(LuceneUtils.createField("parameterName", paramName));
 		}
 		
-		String[] types = item.parameterList.getTypeStrings();
+		String[] types = item.getParameterList().getTypeStrings();
 		for(String paramType : types){
 			d.add(LuceneUtils.createField("parameterType", paramType));
 		}	

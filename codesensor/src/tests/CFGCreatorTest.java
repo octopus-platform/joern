@@ -17,6 +17,7 @@ import cfg.LoopBlock;
 import tests.parsing.FineFuncContentTestUtil;
 import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
+import astnodes.statements.DoStatement;
 import astnodes.statements.ExpressionStatement;
 
 
@@ -271,6 +272,21 @@ public class CFGCreatorTest
 		
 		assertTrue(cfg.getEdges().getEdgesFrom(yAssignX).contains(exitBlock));
 	}
+	
+	@Test
+	public void testGoto()
+	{
+		String input = "x = 0; foo: x++; if(x < 10) goto foo;";
+		CFG cfg = getCFGForCode(input);
+		
+		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
+		
+		BasicBlock gotoStmt = basicBlocks.get(4);
+		BasicBlock exitBlock = cfg.getLastBlock();
+		
+		assertFalse(cfg.getEdges().getEdgesFrom(gotoStmt).contains(exitBlock));
+	}
+
 	
 	@Test
 	public void testAssignmentASTLink()

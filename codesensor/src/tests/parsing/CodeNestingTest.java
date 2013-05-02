@@ -170,8 +170,7 @@ public class CodeNestingTest {
 		assertTrue(condExprString.equals("bar"));
 		
 	}
-	
-	
+		
 	@Test
 	public void testVarDeclName()
 	{

@@ -13,6 +13,7 @@ import astnodes.statements.ContinueStatement;
 import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
 import astnodes.statements.ForStatement;
+import astnodes.statements.GotoStatement;
 import astnodes.statements.IfStatement;
 import astnodes.statements.Label;
 import astnodes.statements.ReturnStatement;
@@ -47,6 +48,11 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		returnCFG.addJumpStatement(returnCFG.getLastBlock());
 	}
 
+	public void visit(GotoStatement expression)
+	{
+		returnCFG = defaultStatementConverter(expression);
+		returnCFG.addJumpStatement(returnCFG.getLastBlock());
+	}
 	
 	public CFG defaultStatementConverter(ASTNode child)
 	{
@@ -213,7 +219,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG cfg = new CFG();
 		addBasicBlockForNode(node, cfg);
 		String label = node.getEscapedCodeStr();
-		label = label.substring(0, label.length()-1);
+		label = label.substring(0, label.length()-2);
 		cfg.labelBlock(label, cfg.getFirstBlock());
 		
 		

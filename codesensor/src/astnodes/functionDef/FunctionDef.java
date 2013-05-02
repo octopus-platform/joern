@@ -11,7 +11,7 @@ public class FunctionDef extends ASTNode
 {
 
 	public Identifier name = new DummyNameNode();
-	public ParameterList parameterList = new ParameterList();
+	private ParameterList parameterList = new ParameterList();
 	public ReturnType returnType = new DummyReturnType();
 	
 	CompoundStatement content = new CompoundStatement();
@@ -26,13 +26,9 @@ public class FunctionDef extends ASTNode
 		content.addStatement(statement);
 	}
 	
-	// let the content item be the only child
-	public int getChildCount() { return 1; }
-	public ASTNode getChild(int i){ return content; }
-	
 	public void addParameter(Parameter aParameter)
 	{
-		parameterList.addParameter(aParameter);
+		getParameterList().addParameter(aParameter);
 	}
 	
 	@Override
@@ -48,8 +44,8 @@ public class FunctionDef extends ASTNode
 	public String getFunctionSignature()
 	{
 		String retval = name.getEscapedCodeStr();
-		if(parameterList != null)
-			retval += " (" + parameterList.getEscapedCodeStr() + ")";
+		if(getParameterList() != null)
+			retval += " (" + getParameterList().getEscapedCodeStr() + ")";
 		else
 			retval += " ()";
 		return retval;
@@ -58,8 +54,18 @@ public class FunctionDef extends ASTNode
 	public void setContent(CompoundStatement functionContent)
 	{
 		content = functionContent;
+		addChild(content);
 	}
 	
 	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+
+	public ParameterList getParameterList() {
+		return parameterList;
+	}
+
+	public void setParameterList(ParameterList parameterList) {
+		this.parameterList = parameterList;
+		this.addChild(this.parameterList);
+	}
 	
 }

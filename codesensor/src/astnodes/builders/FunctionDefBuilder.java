@@ -51,7 +51,7 @@ public class FunctionDefBuilder extends ASTNodeBuilder {
 								 Stack<ASTNodeBuilder> itemStack)
 	{
 		paramListBuilder.createNew(ctx);
-		thisItem.parameterList = (ParameterList) paramListBuilder.getItem();
+		thisItem.setParameterList((ParameterList) paramListBuilder.getItem());
 	}
 
 	public void addParameter(Parameter_declContext ctx,

@@ -23,6 +23,9 @@ public class Parameter extends ASTNode
 		type.initializeFromContext(ctx);
 		name.initializeFromContext(paramName);
 		super.initializeFromContext(ctx);
+	
+		super.addChild(type);
+		super.addChild(name);
 	}
 	
 	private Parameter_nameContext getNameOfParameter(Parameter_declContext param_ctx)

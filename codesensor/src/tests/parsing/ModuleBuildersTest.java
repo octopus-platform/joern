@@ -128,12 +128,23 @@ public class ModuleBuildersTest {
 	
 	
 	@Test
+	public void testSimpleParamList()
+	{
+		String input = "int foo(int x){}";
+		List<ASTNode> codeItems = parseInput(input);
+		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
+		
+		System.out.println(codeItem.getChildCount());
+		assertTrue(codeItem.getChildCount() == 2);
+	}
+	
+	@Test
 	public void testParamListGetCodeStr()
 	{
 		String input = "int foo(char *myParam, myType x){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		String codeStr = codeItem.parameterList.getEscapedCodeStr();
+		String codeStr = codeItem.getParameterList().getEscapedCodeStr();
 		System.out.println(codeStr);
 		assertTrue(codeStr.equals("char * myParam , myType x"));
 	}
@@ -144,7 +155,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(char *myParam, myType x){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		Parameter parameter = codeItem.parameterList.getParameters().get(0);
+		Parameter parameter = codeItem.getParameterList().getParameters().get(0);
 		String codeStr = parameter.getEscapedCodeStr();
 		System.out.println(codeStr);
 		assertTrue(codeStr.equals("char * myParam"));
@@ -156,7 +167,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(myType myParam){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		Identifier name = codeItem.parameterList.getParameters().get(0).name;
+		Identifier name = codeItem.getParameterList().getParameters().get(0).name;
 		assertTrue(name.getEscapedCodeStr().equals("myParam"));
 	}
 	
@@ -166,7 +177,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(char *myParam){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		ParameterType type = codeItem.parameterList.getParameters().get(0).type;
+		ParameterType type = codeItem.getParameterList().getParameters().get(0).type;
 		System.out.println(type.getEscapedCodeStr());
 		assertTrue(type.getEscapedCodeStr().equals("char *"));
 	}
@@ -187,7 +198,8 @@ public class ModuleBuildersTest {
 		String input = "int foo(){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.parameterList.getEscapedCodeStr().equals(""));
+		assertTrue(codeItem.getChildCount() == 2);
+		assertTrue(codeItem.getParameterList().getEscapedCodeStr().equals(""));
 	}
 	
 	@Test
@@ -196,7 +208,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.parameterList.getParameters().size() == 0);
+		assertTrue(codeItem.getParameterList().getParameters().size() == 0);
 	}
 	
 	private List<ASTNode> parseInput(String input)

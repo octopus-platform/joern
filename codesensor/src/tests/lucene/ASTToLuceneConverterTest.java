@@ -17,6 +17,7 @@ import astnodes.expressions.CallExpression;
 import astnodes.expressions.Expression;
 import astnodes.expressions.Identifier;
 import astnodes.functionDef.FunctionDef;
+import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.IdentifierDeclStatement;
@@ -76,6 +77,8 @@ public class ASTToLuceneConverterTest {
 		ExpressionStatement exprStatement = new ExpressionStatement();
 		CallExpression callExpression = new CallExpression();
 		exprStatement.addChild(callExpression);
+		CompoundStatement compound = new CompoundStatement();
+		item.setContent(compound);
 		item.addStatement(exprStatement);	
 		item.accept(visitor);
 		Document d = writer.getDocuments().get(0);
@@ -107,6 +110,7 @@ public class ASTToLuceneConverterTest {
 		decl.getType().completeType = "";
 		declStatement.addChild(decl);
 		
+		item.setContent(new CompoundStatement());
 		item.addStatement(declStatement);
 		item.accept(visitor);
 		assertTrue(writer.getDocuments().get(0).getFieldable("localName") != null);

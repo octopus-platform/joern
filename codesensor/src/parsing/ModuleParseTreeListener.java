@@ -118,7 +118,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	@Override
 	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.pop();
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.pop();		
 		p.notifyObserversOfItem(builder.getItem());
 	}	
 	

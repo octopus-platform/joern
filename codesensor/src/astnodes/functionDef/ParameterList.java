@@ -21,6 +21,7 @@ public class ParameterList extends ASTNode
 	public void addParameter(Parameter aParam)
 	{
 		parameters.add(aParam);
+		this.addChild(aParam);
 	}
 	
 	public Identifier [] getNames()

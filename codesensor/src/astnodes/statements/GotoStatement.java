@@ -6,7 +6,7 @@ public class GotoStatement extends JumpStatement
 {
 	public String getTarget()
 	{
-		return parseTreeNodeContext.getChild(1).getText();
+		return getChild(0).getEscapedCodeStr();
 	}
 	
 	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }

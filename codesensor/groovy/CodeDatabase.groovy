@@ -29,7 +29,7 @@ public class CodeDatabase
     typeIndex[[type:typeName]]
   };
 
-  def outClosure = {
+  def getAST = {
     _().transform{ tree(0, [it] ) }
   }
   
@@ -84,7 +84,7 @@ public class CodeDatabase
     // Starting from an AST-node, extract the AST rooted
     // at that node
 
-    Gremlin.defineStep("AST", [Vertex,Pipe], outClosure);   
+    Gremlin.defineStep("AST", [Vertex,Pipe], getAST);   
     
     // Get all basic blocks of a function
 
