@@ -33,7 +33,7 @@ public class CodeSensorIndex {
     			
     			// LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
     			Neo4JDatabaseCreatorMain indexCreator = new Neo4JDatabaseCreatorMain();
-    			indexCreator.setIndexDirectoryName("/home/fabs/tmp/neo4j/");
+    			indexCreator.setIndexDirectoryName(".joernIndex/");
     			batchParser.addObserver(indexCreator);
     			batchParser.setBatch(batches[i]);
     			executor.execute(batchParser);

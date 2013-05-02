@@ -1,15 +1,27 @@
 
 import java.util.regex.Pattern
-
 import CodeDatabase
 c = new CodeDatabase()
 g = c.getDbLink()
 
 def lvals = []
+def filename, signature, lval;
 
-mallocAssigns  = astNodes("AssignmentExpr").filter{it.code.matches('.*[^_]malloc.*')}.as('assign')
-r = mallocAssigns.function().sideEffect { storeFunctionInfo() }.back('assign')
-r = r.lval().sideEffect { storeLval() }.back('assign')
+mallocAssigns  = astNodes("AssignmentExpr").filter
+{
+  it.code.matches('.*[^_]malloc.*')
+}.as('assign')
+
+r = mallocAssigns.function().sideEffect
+{
+  filename = it.filename;
+  signature = it.signature
+}.back('assign')
+
+r = r.lval().sideEffect
+{
+  lval = it.code;
+}.back('assign')
 
 paths = r.basicBlock().pathsToExit().transform{
   ret = []
@@ -38,17 +50,6 @@ for (path in paths)
     break;
   }
   
-}
-
-def storeFunctionInfo =
-{
-  filename = it.filename;
-  signature = it.signature
-}
-
-def storeLval =
-{
-  lval = it.code;
 }
 
 g.shutdown();
