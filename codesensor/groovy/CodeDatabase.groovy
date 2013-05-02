@@ -9,7 +9,7 @@ import org.neo4j.kernel.EmbeddedReadOnlyGraphDatabase
 public class CodeDatabase
 {
   
-  String PATH_TO_DATABASE = '/home/fabs/tmp/neo4j/';
+  String PATH_TO_DATABASE = '/home/fabs/.joernIndex/';
   Graph g;
   Neo4jIndex typeIndex;
   

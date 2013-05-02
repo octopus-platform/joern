@@ -230,7 +230,7 @@ public class CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		Edges edges = cfg.getEdges();
 		System.out.println(edges.size());
-		assertTrue(edges.size() == 6);
+		assertTrue(edges.size() == 8);
 	}
 	
 	@Test
