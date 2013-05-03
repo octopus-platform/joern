@@ -1,0 +1,47 @@
+To build, you need to download the following jars and place them in
+this directory:
+
+antlr-4.0-complete.jar
+commons-cli-1.2.jar
+concurrentlinkedhashmap-lru-1.3.1.jar
+geronimo-jta_1.1_spec-1.1.1.jar
+lucene-analyzers-3.6.2.jar
+lucene-core-3.5.0.jar
+lucene-core-3.6.2.jar
+lucene-queryparser-3.6.2.jar
+neo4j-cypher-1.8.2.jar
+neo4j-graph-algo-1.8.2.jar
+neo4j-graph-matching-1.8.2.jar
+neo4j-jmx-1.8.2.jar
+neo4j-kernel-1.8.2.jar
+neo4j-lucene-index-1.8.2.jar
+neo4j-shell-1.8.2.jar
+neo4j-udc-1.8.2.jar
+org.apache.servicemix.bundles.jline-0.9.94_1.jar
+scala-library-2.9.1-1.jar
+server-api-1.8.2.jar
+
+You can get these jars from the following projects:
+
+Project: Apache Commons CLI
+Version: 1.2
+URL: http://commons.apache.org/proper/commons-cli/
+License: Apache License Version 2
+JARs: commons-cli-1.2.jar
+
+Project: Neo4j Community Edition
+Version: 1.8.2
+URL: http://www.neo4j.org/
+License: (A)GPL3
+JARs: 
+
+Project: ANTLRv4
+Version: 4.0
+URL: http://antlr.org
+License: BSD License
+JARs: antlr-4.0-complete.jar 
+
+Project: Apache Lucene
+Version: 3.6.2
+URL: http://lucene.apache.org/core/
+License: Apache License Version 2
