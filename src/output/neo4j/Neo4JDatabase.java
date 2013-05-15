@@ -36,8 +36,10 @@ public class Neo4JDatabase
 	{
 		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
 		astNodeIndex = indexProvider.nodeIndex( "astNodeIndex", MapUtil.stringMap( "type", "exact" ) );		
+	
 		astNodeIndex.setCacheCapacity( "type", 100000 );
 		astNodeIndex.setCacheCapacity( "functionName", 100000 );
+	
 	}
 	
 	public static long addNode(Map<String, Object> properties)
@@ -62,7 +64,6 @@ public class Neo4JDatabase
 	
 	public static void shutdown()
 	{
-
 		indexProvider.shutdown();
 		inserter.shutdown();
 	}

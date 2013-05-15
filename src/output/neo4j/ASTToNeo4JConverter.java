@@ -51,7 +51,9 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 	private void addFunctionToDatabase(Function function)
 	{
 		addASTToDatabase(function.getASTRoot());
-		addCFGToDatabase(function.getCFG());
+		CFG cfg = function.getCFG();
+		if(cfg != null)
+			addCFGToDatabase(cfg);
 		addFunctionNode(function);
 	}
 
@@ -120,8 +122,8 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 			addLinkFromBasicBlockToAST(block);
 		
 			// index, but do not index code
-			properties.remove("code");
-			nodeStore.indexNode(block.id, properties);
+			// properties.remove("code");
+			// nodeStore.indexNode(block.id, properties);
 		}
 	}
 	
@@ -188,10 +190,13 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 		// index, but do not index location
 		properties.remove("location");
 		nodeStore.indexNode(thisId, properties);
-		
+			
 		linkFunctionWithRootASTNode(thisId, function.getASTRoot());
 		linkFunctionWithAllASTNodes(thisId, function.getASTRoot());
-		linkFunctionWithAllCFGNodes(thisId, function.getCFG());
+		
+		CFG cfg = function.getCFG();
+		if(cfg != null)
+			linkFunctionWithAllCFGNodes(thisId, cfg);
 	}
 	
 	private void linkFunctionWithRootASTNode(long thisId, ASTNode astRoot)
