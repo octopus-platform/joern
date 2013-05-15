@@ -11,8 +11,6 @@ import output.luceneIndex.ASTToLuceneConverter;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.declarations.IdentifierDeclType;
-import astnodes.expressions.Argument;
-import astnodes.expressions.ArgumentList;
 import astnodes.expressions.CallExpression;
 import astnodes.expressions.Expression;
 import astnodes.expressions.Identifier;

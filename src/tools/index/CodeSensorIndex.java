@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import output.csvast.CSVPrinter;
-import output.luceneIndex.LuceneIndexCreatorMain;
 import output.neo4j.Neo4JDatabaseCreatorMain;
 import parsing.BatchOfFiles;
 import parsing.Parser;

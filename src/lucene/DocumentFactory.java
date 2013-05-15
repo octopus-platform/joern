@@ -2,8 +2,6 @@ package lucene;
 
 import java.util.EnumMap;
 
-import lucene.DocumentFactory.DocumentType;
-
 import org.apache.lucene.document.Document;
 
 public class DocumentFactory {

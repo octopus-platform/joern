@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Vector;
 
-import astnodes.statements.ReturnStatement;
-
 // The first node added is the entry node
 // The last node added is the exitNode
 // For nodes with two outgoing edges,

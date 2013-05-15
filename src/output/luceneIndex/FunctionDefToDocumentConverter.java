@@ -6,9 +6,6 @@ import lucene.LuceneUtils;
 import org.apache.lucene.document.Document;
 
 import output.csvast.ASTToCSVConverter;
-
-
-
 import astnodes.functionDef.FunctionDef;
 
 public class FunctionDefToDocumentConverter

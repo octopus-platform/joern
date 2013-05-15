@@ -1,10 +1,9 @@
 package output.neo4j;
 
-import cfg.ASTToCFGConverter;
-import cfg.CFG;
-
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
+import cfg.ASTToCFGConverter;
+import cfg.CFG;
 
 public class Function
 {

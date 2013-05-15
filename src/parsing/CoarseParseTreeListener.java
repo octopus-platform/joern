@@ -7,8 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import antlr.CoarseFunctionGrammarBaseListener;
 import antlr.CoarseFunctionGrammarParser;
-import antlr.CoarseFunctionGrammarParser.Init_declarator_listContext;
-import antlr.CoarseFunctionGrammarParser.Type_nameContext;
 import astnodes.builders.CoarseFunctionContentBuilder;
 import astnodes.builders.IdentifierDeclBuilder;
 import astnodes.declarations.IdentifierDecl;

@@ -10,13 +10,13 @@ import java.util.Vector;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import astnodes.ASTNode;
+import astnodes.functionDef.FunctionDef;
+import astwalking.ASTNodeVisitor;
 import cfg.BasicBlock;
 import cfg.CFG;
 import cfg.Edges;
 import cfg.EmptyBasicBlock;
-import astnodes.ASTNode;
-import astnodes.functionDef.FunctionDef;
-import astwalking.ASTNodeVisitor;
 
 public class ASTToNeo4JConverter extends ASTNodeVisitor
 {
