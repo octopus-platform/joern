@@ -75,17 +75,18 @@ instance and connect to this server using the Python library py2neo.
 Neo4J server configuration file in
 $Neo4jDir/conf/neo4j-server.properties:
 
-	org.neo4j.server.database.location=/$path_to_joern_index/.joernIndex/
+		org.neo4j.server.database.location=/$path_to_joern_index/.joernIndex/
 
 2. Start the database server by issuing the following command:
-   $ $Neo4jDir/bin/neo4j console
+
+   	 $ $Neo4jDir/bin/neo4j console
 
 3. Connect to the database to verify that the data has been loaded by
 pointing your browser to: http://localhost:7474/
 
 4. Run the following Python script to print all assignments:
    
-   from py2neo import neo4j, gremlin
-   graph_db = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
-   for assign in gremlin.execute('g.idx("astNodeIndex")[[type:"AssignmentExpr"]].code', graph_db):
-       print assign
+	from py2neo import neo4j, gremlin
+   	graph_db = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
+   	for assign in gremlin.execute('g.idx("astNodeIndex")[[type:"AssignmentExpr"]].code', graph_db):
+       	    print assign
