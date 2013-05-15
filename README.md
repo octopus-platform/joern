@@ -86,9 +86,10 @@ pointing your browser to: http://localhost:7474/
 
 4. Run the following Python script to print all assignments.
 
-    <code>
-    from py2neo import neo4j, gremlin
+   <code>from py2neo import neo4j, gremlin
+
     graph_db = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
+    
     for assign in gremlin.execute('g.idx("astNodeIndex")[[type:"AssignmentExpr"]].code',graph_db):
-           print assign
+               print assign
     </code>
