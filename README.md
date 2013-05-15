@@ -31,7 +31,7 @@ joern is written entirely in Java and made available as an executable
 Java Archive (JAR) file for convenience. You can download the current
 JAR from:
 
-https://github.com/fabsx00/joern/blob/master/bin/joern.jar
+http://user.informatik.uni-goettingen.de/~fyamagu/joern.jar
 
 Simply place this JAR file somewhere on your disk and installation is
 done. If you are using bash, you can optionally create the following
