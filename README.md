@@ -79,17 +79,16 @@ $Neo4jDir/conf/neo4j-server.properties:
 
 2. Start the database server by issuing the following command:
 
-   	 $ $Neo4jDir/bin/neo4j console
+     <code> $ $Neo4jDir/bin/neo4j console </code>
 
 3. Connect to the database to verify that the data has been loaded by
 pointing your browser to: http://localhost:7474/
 
 4. Run the following Python script to print all assignments.
 
-
+    <code>
     from py2neo import neo4j, gremlin
-    graph_db =
-    neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
+    graph_db = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
     for assign in gremlin.execute('g.idx("astNodeIndex")[[type:"AssignmentExpr"]].code',graph_db):
            print assign
-
+    </code>
