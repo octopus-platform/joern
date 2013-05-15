@@ -11,14 +11,14 @@ public class CodeDatabase
   
   String PATH_TO_DATABASE = '/home/fabs/workspace/joern/.joernIndex/';
   Graph g;
-  Neo4jIndex typeIndex;
+  Neo4jIndex astNodeIndex;
   
   public CodeDatabase(){
     Gremlin.load()
     g = new Neo4jGraph(PATH_TO_DATABASE); 
     // def db = new EmbeddedReadOnlyGraphDatabase(PATH_TO_DATABASE)
     // g = new Neo4jGraph(db)
-    typeIndex = g.idx("typeIndex");
+    astNodeIndex = g.idx("astNodeIndex");
     
     defineCustomSteps();
   
@@ -26,7 +26,7 @@ public class CodeDatabase
   }
   
   def astNodes = { typeName ->
-    typeIndex[[type:typeName]]
+    astNodeIndex[[type:typeName]]
   };
 
   def getAST = {
@@ -97,7 +97,7 @@ public class CodeDatabase
   }
 
   def getDbLink() { g; }
-  def getTypeIndex() { typeIndex; }
+  def getTypeIndex() { astNodeIndex; }
 
 }
 

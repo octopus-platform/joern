@@ -11,4 +11,9 @@ public class GraphNodeStore
 		return nodeId;
 	}
 	
+	public void indexNode(long nodeId, Map<String, Object> properties)
+	{
+		Neo4JDatabase.indexNode(nodeId, properties);
+	}
+	
 }

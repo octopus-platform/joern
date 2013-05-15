@@ -26,7 +26,7 @@ def printDotAST = { ast ->
 codeDb = new CodeDatabase()
 g = codeDb.getDbLink()
 
-functions = g.idx('functionIndex')[[functionName:args[0]]].out('AST_ROOT')
+functions = g.idx('astNodeIndex')[[functionName:args[0]]].out('AST_ROOT')
 ast = functions[0].AST().toList()[0]
 
 printDotAST(ast)

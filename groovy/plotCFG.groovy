@@ -32,7 +32,7 @@ def normalizeCode = { code ->
   code;
 }
 
-function = g.idx('functionIndex')[[functionName:args[0]]][0]
+function = g.idx('astNodeIndex')[[functionName:args[0]]][0]
 
 edges = function.funcBasicBlocks().sideEffect{
   storeBasicBlockInfo(it);

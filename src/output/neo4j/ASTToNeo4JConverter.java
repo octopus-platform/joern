@@ -82,6 +82,11 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 		
 		long thisId = nodeStore.addNeo4jNode(node, properties);
 		node.id = thisId;
+	
+		// index, but do not index code
+		properties.remove("code");
+		nodeStore.indexNode(thisId, properties);
+	
 	}
 
 	private void addASTLink(long srcId, long dstId, ASTNode child)
@@ -113,6 +118,10 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 			
 			block.id = nodeStore.addNeo4jNode(block, properties);
 			addLinkFromBasicBlockToAST(block);
+		
+			// index, but do not index code
+			properties.remove("code");
+			nodeStore.indexNode(block.id, properties);
 		}
 	}
 	
@@ -175,6 +184,10 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 		properties.put("functionName", function.getName());
 		
 		long thisId = nodeStore.addNeo4jNode(function, properties);
+		
+		// index, but do not index location
+		properties.remove("location");
+		nodeStore.indexNode(thisId, properties);
 		
 		linkFunctionWithRootASTNode(thisId, function.getASTRoot());
 		linkFunctionWithAllASTNodes(thisId, function.getASTRoot());
