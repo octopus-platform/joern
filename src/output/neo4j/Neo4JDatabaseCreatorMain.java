@@ -11,7 +11,7 @@ import astwalking.ASTWalker;
 public class Neo4JDatabaseCreatorMain extends ASTWalker
 {
 
-	ASTToNeo4JConverter converter = new ASTToNeo4JConverter();
+	Neo4JImporter converter = new Neo4JImporter();
 	
 	public void setIndexDirectoryName(String dirName)
 	{

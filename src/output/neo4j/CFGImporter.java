@@ -1,0 +1,100 @@
+package output.neo4j;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.Map.Entry;
+
+import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.RelationshipType;
+
+import astnodes.ASTNode;
+import cfg.BasicBlock;
+import cfg.CFG;
+import cfg.Edges;
+import cfg.EmptyBasicBlock;
+
+public class CFGImporter
+{
+	GraphNodeStore nodeStore = new GraphNodeStore();
+	
+	public void addCFGToDatabase(CFG cfg)
+	{
+		if(cfg == null) return;
+		
+		addCFGBasicBlocks(cfg);
+		addCFGEdges(cfg);
+	}
+
+	private void addCFGBasicBlocks(CFG cfg)
+	{
+		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
+		Iterator<BasicBlock> it = basicBlocks.iterator();
+		while(it.hasNext()){
+			BasicBlock block = it.next();
+			
+			Map<String, Object> properties = createPropertiesForBasicBlock(block);
+			block.id = nodeStore.addNeo4jNode(block, properties);
+			addLinkFromBasicBlockToAST(block);
+		}
+	}
+
+	private Map<String, Object> createPropertiesForBasicBlock(BasicBlock block)
+	{
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("code", block.getEscapedCodeStr());
+		properties.put("type", block.getType());
+		return properties;
+	}
+	
+	private void addCFGEdges(CFG cfg)
+	{
+		
+		Edges edges = cfg.getEdges();
+		Iterator<Entry<Object, List<Object>>> it = edges.getEntrySetIterator();
+		while(it.hasNext())
+		{
+			Entry<Object, List<Object>> entry = it.next();
+			Object sourceBlock = entry.getKey();
+			List<Object> dstBlockList = entry.getValue();
+			for(Object dstBlock: dstBlockList){
+				addFlowToLink((BasicBlock)sourceBlock, (BasicBlock)dstBlock);
+			}
+		}
+	}
+
+	private void addFlowToLink(BasicBlock srcBlock, BasicBlock dstBlock)
+	{
+		long srcId = srcBlock.id;
+		long dstId = dstBlock.id;
+		
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.FLOWS_TO);
+		Map<String, Object> properties = null;
+		Neo4JDatabase.addRelationship(srcId, dstId, rel, properties);
+	}
+
+	private void addLinkFromBasicBlockToAST(BasicBlock block)
+	{
+		
+		if(block instanceof EmptyBasicBlock)
+			return;
+		
+		if(block.getStatements().size() == 0)
+			return;
+		
+		ASTNode astNode = block.getStatements().get(0);
+		
+		if(astNode == null)
+			return;
+		
+		long idForASTNode = astNode.id;
+		long idForCFGNode = block.id;
+		
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_BASIC_BLOCK_OF);
+		Map<String, Object> properties = null;
+		Neo4JDatabase.addRelationship(idForCFGNode, idForASTNode, rel, properties);
+		
+	}
+}
