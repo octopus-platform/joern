@@ -1,10 +1,10 @@
-import com.tinkerpop.gremlin.groovy.*
-import com.tinkerpop.blueprints.*
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jIndex
-import com.tinkerpop.pipes.Pipe;
+// import com.tinkerpop.gremlin.groovy.*
+// import com.tinkerpop.blueprints.*
+// import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph
+// import com.tinkerpop.blueprints.impls.neo4j.Neo4jIndex
+// import com.tinkerpop.pipes.Pipe;
 
-import org.neo4j.kernel.EmbeddedReadOnlyGraphDatabase
+// import org.neo4j.kernel.EmbeddedReadOnlyGraphDatabase
   
 public class CodeDatabase
 {
@@ -16,8 +16,9 @@ public class CodeDatabase
   public CodeDatabase(){
     Gremlin.load()
     g = new Neo4jGraph(PATH_TO_DATABASE); 
-    // def db = new EmbeddedReadOnlyGraphDatabase(PATH_TO_DATABASE)
-    // g = new Neo4jGraph(db)
+    
+    // // def db = new EmbeddedReadOnlyGraphDatabase(PATH_TO_DATABASE)
+    // // g = new Neo4jGraph(db)
     astNodeIndex = g.idx("astNodeIndex");
     
     defineCustomSteps();

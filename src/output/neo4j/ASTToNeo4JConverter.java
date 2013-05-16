@@ -93,7 +93,7 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 
 	private void addASTLink(long srcId, long dstId, ASTNode child)
 	{
-		RelationshipType rel = DynamicRelationshipType.withName("AST_CHILD");
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.AST_CHILD);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		String childStr = new Integer(child.getChildNumber()).toString();
 		properties.put("n", childStr);
@@ -148,7 +148,7 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 		long srcId = srcBlock.id;
 		long dstId = dstBlock.id;
 		
-		RelationshipType rel = DynamicRelationshipType.withName("FLOW_TO");
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.FLOW_TO);
 		Map<String, Object> properties = null;
 		Neo4JDatabase.addRelationship(srcId, dstId, rel, properties);
 	}
@@ -170,7 +170,7 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 		long idForASTNode = astNode.id;
 		long idForCFGNode = block.id;
 		
-		RelationshipType rel = DynamicRelationshipType.withName("IS_BASIC_BLOCK_OF");
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_BASIC_BLOCK_OF);
 		Map<String, Object> properties = null;
 		Neo4JDatabase.addRelationship(idForCFGNode, idForASTNode, rel, properties);
 		
@@ -202,7 +202,7 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 	private void linkFunctionWithRootASTNode(long thisId, ASTNode astRoot)
 	{
 
-		RelationshipType rel = DynamicRelationshipType.withName("AST_ROOT");
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.AST_ROOT);
 		long dstId = astRoot.id;
 		Neo4JDatabase.addRelationship(thisId, dstId, rel, null);
 	}
@@ -230,14 +230,14 @@ public class ASTToNeo4JConverter extends ASTNodeVisitor
 	
 	private void linkFunctionWithCFGNode(long functionId, BasicBlock block)
 	{
-		RelationshipType rel = DynamicRelationshipType.withName("BASIC_BLOCK");
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.BASIC_BLOCK);
 		long dstId = block.id;
 		Neo4JDatabase.addRelationship(functionId, dstId, rel, null);
 	}
 
 	private void linkParentWithASTNode(long thisId, ASTNode node)
 	{
-		RelationshipType rel = DynamicRelationshipType.withName("AST_NODE");
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.AST_NODE);
 		long dstId = node.id;
 		Neo4JDatabase.addRelationship(thisId, dstId, rel, null);
 	}
