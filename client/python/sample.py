@@ -1,11 +1,10 @@
 from py2neo import neo4j, gremlin
-import joernsteps
+from joernsteps import JoernSteps
 
-graphDb = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
-joernsteps.loadJoernSteps(graphDb)
+j = JoernSteps()
 
-cmd = "JoernIndex.astNodesByType(g, '%query%AssignmentExpr').toList()"
+cmd = "JoernIndex.astNodesByType(g, 'AssignmentExpr').toList()"
 
-for x in gremlin.execute(cmd, graphDb):
+for x in j.executeGremlinCmd(cmd):
     print x
 
