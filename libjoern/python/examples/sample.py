@@ -1,5 +1,8 @@
 from py2neo import neo4j, gremlin
-from joernsteps import JoernSteps
+
+import sys, os
+sys.path.append(os.getcwd())
+from libjoern import JoernSteps
 
 j = JoernSteps()
 

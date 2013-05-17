@@ -29,16 +29,10 @@ def tree = { parentId, vertices ->
   results;
 }
 
-// For a given AST-node, get the FunctionDef AST node
-// by expanding parents until the node is reached.
 
-Gremlin.defineStep('functionDef', [Vertex,Pipe],{
-		     _().in('AST_CHILD').loop(1){it.object.type != "FunctionDef"} } );
+// For a given AST-node, get the function node
 
-// For a given AST-node, get the function-node by first
-// obtaining the FunctionDef AST-node and then taking the parent
-
-Gremlin.defineStep('function', [Vertex, Pipe], {_().functionDef().in()})
+Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_FUNCTION_OF_AST_NODE') });
 
 // For a given AST-node, get the basic-block this AST-node is part of
 
@@ -46,17 +40,17 @@ Gremlin.defineStep('basicBlock', [Vertex,Pipe], { _().in().loop(1){ it.object.ou
 
 // For an assignment AST-node, get the lval-node
 
-Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('AST_CHILD').filter{ it.n.equals("0") }inV()});
+Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }inV()});
 
 // For a given basic block, get all paths into the exit direction
 // up to and inlcuding a length of 10
 
-Gremlin.defineStep('pathsToExit', [Vertex,Pipe], { _().out('FLOW_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})
+Gremlin.defineStep('pathsToExit', [Vertex,Pipe], { _().out('FLOWS_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})
 
 // For a given basic block, get all paths into the entry direction
 // up to and inlcuding a length of 10
 
-Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOW_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})    
+Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOWS_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})    
 
 // Starting from an AST-node, extract the AST rooted
 // at that node
@@ -69,5 +63,5 @@ Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().outE('BASIC_BLOCK').i
 
 // Get all AST-nodes of a function
 
-Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().outE('AST_NODE').inV()})
+Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().outE('IS_FUNCTION_OF_AST_NODE').inV()})
 

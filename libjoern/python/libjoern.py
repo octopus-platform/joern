@@ -1,4 +1,5 @@
-from py2neo import neo4j, gremlin
+from py2neo import neo4j, gremlin, cypher
+import os
 
 class JoernSteps:
 
@@ -7,7 +8,9 @@ class JoernSteps:
     
     def _initJoernSteps(self):
         self.graphDb = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
-        cmd = file('../gremlin/joernsteps.groovy').read()
+    
+        filename = os.path.join(os.path.dirname(__file__), 'joernsteps.groovy')
+        cmd = file(filename).read()
         gremlin.execute(cmd, self.graphDb)
 
     def executeGremlinScript(self, filename):
@@ -16,4 +19,7 @@ class JoernSteps:
 
     def executeGremlinCmd(self, cmd):
         return gremlin.execute(cmd, self.graphDb)
+    
+    def executeCypherQuery(self, query):
+        return cypher.execute(self.graphDb, query)
     
