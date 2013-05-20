@@ -56,9 +56,9 @@ public class TokenSubStream extends BufferedTokenStream
 		
 		if ( i >= tokens.size() || (stopIndex != -1 && i >= stopIndex)) { // return EOF token
 			// EOF must be last token
-			return tokens.get(tokens.size()-1);
+			return (Token) tokens.get(tokens.size()-1);
 	    }
-	    return tokens.get(i);	
+	    return (Token) tokens.get(i);	
 	 }
 	
 }

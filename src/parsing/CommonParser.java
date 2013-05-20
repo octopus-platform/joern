@@ -140,12 +140,12 @@ abstract public class CommonParser extends Observable
 		parser.removeErrorListeners();
 		// parser.addErrorListener(ConsoleErrorListener.INSTANCE);
 		parser.setErrorHandler(new DefaultErrorStrategy());
-		parser.getInterpreter().setPredictionMode(PredictionMode.LL);
+		// parser.getInterpreter().setPredictionMode(PredictionMode.LL);
 	}
 
 	protected void setSLLMode(Parser parser)
 	{
-		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+		// parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 	    parser.removeErrorListeners();
 	    parser.setErrorHandler(new BailErrorStrategy());
 	}

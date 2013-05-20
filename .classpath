@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="thirdPartyLibs/antlr-4.0-complete.jar"/>
 	<classpathentry kind="lib" path="thirdPartyLibs/lucene-analyzers-3.6.2.jar"/>
 	<classpathentry kind="lib" path="thirdPartyLibs/lucene-core-3.6.2.jar"/>
 	<classpathentry kind="lib" path="thirdPartyLibs/lucene-queryparser-3.6.2.jar"/>
@@ -22,5 +21,6 @@
 	<classpathentry kind="lib" path="thirdPartyLibs/scala-library-2.9.1-1.jar"/>
 	<classpathentry kind="lib" path="thirdPartyLibs/server-api-1.8.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="thirdPartyLibs/antlr4-runtime-4.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
