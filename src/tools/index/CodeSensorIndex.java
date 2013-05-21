@@ -16,12 +16,22 @@ public class CodeSensorIndex {
 	private static CommandLineInterface cmd = new CommandLineInterface();
 	private static FilenameProvider filenameProvider = new FilenameProvider();
 	private static ExecutorService executor =  Executors.newFixedThreadPool(nCores);
+
+	private static void usage()
+	{
+		cmd.outputHelp();
+	}
 	
     public static void main(String[] args)
 	{
     	cmd.parseCommandLine(args);
 		String[] userSpecifiedFilenames = cmd.getFilenames();
     	
+		if(userSpecifiedFilenames.length == 0){
+			usage();
+			return;
+		}
+			
     	try{
     		
     		BatchOfFiles[] batches = filenameProvider.getBatchesToProcess(userSpecifiedFilenames, nCores);
@@ -29,7 +39,6 @@ public class CodeSensorIndex {
     		for(int i = 0; i < nCores; i++){
     			Parser batchParser = new Parser();
     			
-    			// LuceneIndexCreatorMain indexCreator = new LuceneIndexCreatorMain();
     			Neo4JDatabaseCreatorMain indexCreator = new Neo4JDatabaseCreatorMain();
     			indexCreator.setIndexDirectoryName(".joernIndex/");
     			batchParser.addObserver(indexCreator);
@@ -43,5 +52,5 @@ public class CodeSensorIndex {
 
     	executor.shutdown();
 	}
-    
+
 }

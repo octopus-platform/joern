@@ -29,13 +29,12 @@ public class CommandLineInterface
 
 	private void initializeOptions()
 	{
-		Option helpOpt = new Option("h","help", false, "show this help message");
-		options.addOption(helpOpt);
+		
 	}
 	
 	public void outputHelp()
 	{	
-		formater.printHelp("codesensor [OPTION]... [FILE] ...", options);
+		formater.printHelp("joern [SOURCE_DIR1] ...", options);
 	}
 
 	public void parseCommandLine(String [] args)
