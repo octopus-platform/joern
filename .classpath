@@ -5,8 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/antlr4-runtime-4.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-3.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-queryparser-3.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/neo4j-kernel-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/neo4j-lucene-index-1.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
