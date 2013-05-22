@@ -8,19 +8,9 @@ public class FunctionParser
 
 	public FunctionParser()
 	{
-		parser = new CoarseFunctionParser();
-	}
-
-	public void enableFineParsing()
-	{
 		parser = new FineFunctionParser();
 	}
-	
-	public void disableFineParsing()
-	{
-		parser = new CoarseFunctionParser();
-	}
-	
+
 	public void parseAndWalkStream(TokenSubStream tokens)
 	{
 		parser.parseAndWalkStream(tokens);
