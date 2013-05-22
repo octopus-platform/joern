@@ -4,14 +4,18 @@ import astnodes.functionDef.FunctionDef;
 import astwalking.ASTNodeVisitor;
 
 
-public class Neo4JImporter extends ASTNodeVisitor
+public class Neo4ASTVisitor extends ASTNodeVisitor
 {
-	
 	FunctionImporter functionImporter = new FunctionImporter();
 	
 	public void setIndexDirectoryName(String dirName)
 	{
 		Neo4JDatabase.setIndexDirectoryName(dirName);
+	}
+
+	public void setFilename(String aFilename)
+	{
+		functionImporter.setFilename(aFilename);
 	}
 	
 	public void visit(FunctionDef node)
@@ -29,10 +33,4 @@ public class Neo4JImporter extends ASTNodeVisitor
 		Neo4JDatabase.shutdown();
 	}
 
-	public void setFilename(String aFilename)
-	{
-		functionImporter.setFilename(aFilename);
-	}
-
-	
 }

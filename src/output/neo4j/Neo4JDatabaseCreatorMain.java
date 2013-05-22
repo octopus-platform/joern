@@ -11,7 +11,7 @@ import astwalking.ASTWalker;
 public class Neo4JDatabaseCreatorMain extends ASTWalker
 {
 
-	Neo4JImporter converter = new Neo4JImporter();
+	Neo4ASTVisitor converter = new Neo4ASTVisitor();
 	
 	public void setIndexDirectoryName(String dirName)
 	{
@@ -28,7 +28,6 @@ public class Neo4JDatabaseCreatorMain extends ASTWalker
 	public void endOfUnit(ParserRuleContext ctx, String filename)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
