@@ -9,12 +9,6 @@ public class Parser
 {
 	ModuleParser parser = new ModuleParser();
 	
-	
-	public void run(List<String> listOfFiles)
-	{
-		processListOfFiles(listOfFiles);
-	}
-	
 	public void addObserver(Observer anObserver)
 	{
 		parser.addObserver(anObserver);
@@ -33,7 +27,7 @@ public class Parser
 		parser.end();
 	}
 	
-    private void processSingleFile(String filename)
+    public void processSingleFile(String filename)
     {
     	System.out.println(filename);
     	

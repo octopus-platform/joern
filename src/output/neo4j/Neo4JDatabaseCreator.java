@@ -7,7 +7,6 @@ public class Neo4JDatabaseCreator
 		Neo4JDatabase.setIndexDirectoryName(dirName);
 	}
 
-
 	public void openDatabase()
 	{
 		Neo4JDatabase.start();

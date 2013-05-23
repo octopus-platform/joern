@@ -1,4 +1,4 @@
-package output.neo4j;
+package output.neo4j.functionImport;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,9 @@ import java.util.Map;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.EdgeTypes;
+import output.neo4j.GraphNodeStore;
+import output.neo4j.Neo4JDatabase;
 import output.neo4j.nodes.ASTDatabaseNode;
 
 import astnodes.ASTNode;

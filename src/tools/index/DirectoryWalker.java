@@ -12,23 +12,49 @@ import java.util.List;
 class DirectoryWalker extends SimpleFileVisitor<Path>
 {
 	private final PathMatcher matcher;
-    public List<String> filenames = new LinkedList<String>();
+	private List<DirectoryListener> listeners = new LinkedList<DirectoryListener>();
 	
     DirectoryWalker(String pattern)
     {
         matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
     }
 
-    @Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+    public void addListener(DirectoryListener listener)
+    {
+    	listeners.add(listener);    
+    }
+    
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+    {
+    	notifyListenersOfDirEntry(dir);
+    	return FileVisitResult.CONTINUE;
+    }
+    
+    private void notifyListenersOfDirEntry(Path dir)
+    {
+    	for(DirectoryListener listener : listeners){
+			listener.preVisitDirectory(dir);
+		}
+	}
+
+	@Override public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
     {
     	    	
     	if(!fileMatches(file)){
     		return FileVisitResult.CONTINUE;
     	}
     	
-     	filenames.add(file.toString() );
-        return FileVisitResult.CONTINUE;
+     	notifyListenersOfFile(file);
+     	return FileVisitResult.CONTINUE;
     }
+
+	private void notifyListenersOfFile(Path filename)
+	{
+		for(DirectoryListener listener : listeners){
+			listener.visitFile(filename);
+		}
+	}
 
 	private boolean fileMatches(Path file)
 	{

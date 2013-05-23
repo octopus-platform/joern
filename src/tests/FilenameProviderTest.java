@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tools.index.FilenameProvider;
+import tools.index.CodebaseWalker;
 
 
 public class FilenameProviderTest {
@@ -18,12 +18,15 @@ public class FilenameProviderTest {
 	{
 		String [] args = {"src/tests/samples/"};
 		
-		FilenameProvider provider = new FilenameProvider();
+		CodebaseWalker provider = new CodebaseWalker();
 		
 		try {
 			String expected = "[src/tests/samples/test.c, src/tests/samples/tiff.cpp, src/tests/samples/subdir/test.c]";
-			List<String> filesProvided = provider.getFilesToProcess(args);
-			assertTrue(expected.equals(filesProvided.toString()));
+			FilenameAggregator listener = new FilenameAggregator();
+			provider.addListener(listener);
+			provider.walkUserSpecifiedFiles(args);
+			
+			assertTrue(expected.equals(listener.filenames.toString()));
 		} catch (IOException e) {
 			fail("IO Error");
 		}
