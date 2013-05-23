@@ -5,15 +5,14 @@ import java.util.List;
 import java.util.Observer;
 
 
-public class Parser implements Runnable
+public class Parser
 {
 	ModuleParser parser = new ModuleParser();
-	private BatchOfFiles batchOfFiles;
 	
-	@Override
-	public void run()
+	
+	public void run(List<String> listOfFiles)
 	{
-		processBatch(batchOfFiles);
+		processListOfFiles(listOfFiles);
 	}
 	
 	public void addObserver(Observer anObserver)
@@ -21,17 +20,10 @@ public class Parser implements Runnable
 		parser.addObserver(anObserver);
 	}
 	
-	public void setBatch(BatchOfFiles aBatchOfFiles)
-	{
-		batchOfFiles = aBatchOfFiles;
-	}
-	
-	public void processBatch(BatchOfFiles batchToProcess)
+	public void processListOfFiles(List<String> filenames)
 	{
 		parser.begin();
 		
-		List<String> filenames = batchToProcess.getFilenames();
-
 		Iterator<String> it = filenames.iterator();
 		while(it.hasNext()){
 			String filename = it.next();
