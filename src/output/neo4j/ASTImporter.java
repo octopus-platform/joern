@@ -6,6 +6,8 @@ import java.util.Map;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.nodes.ASTDatabaseNode;
+
 import astnodes.ASTNode;
 
 public class ASTImporter
@@ -35,23 +37,15 @@ public class ASTImporter
 
 	private void addASTNode(ASTNode node)
 	{
-		Map<String, Object> properties = createPropertiesForASTNode(node);
-		long thisId = nodeStore.addNeo4jNode(node, properties);
+		ASTDatabaseNode astDatabaseNode = new ASTDatabaseNode();
+		astDatabaseNode.initialize(node);
+		Map<String, Object> properties = astDatabaseNode.createProperties();
+		long thisId = nodeStore.addNeo4jNode(properties);
 		node.id = thisId;
-	
 		indexASTNode(properties, thisId);
 	
 	}
 
-	private Map<String, Object> createPropertiesForASTNode(ASTNode node)
-	{
-		Map<String, Object> properties = new HashMap<String, Object>();
-		String typeString = node.getTypeAsString();
-		properties.put("type", typeString);
-		properties.put("code", node.getEscapedCodeStr());
-		return properties;
-	}
-	
 	private void indexASTNode(Map<String, Object> properties, long thisId)
 	{
 		// index, but do not index code

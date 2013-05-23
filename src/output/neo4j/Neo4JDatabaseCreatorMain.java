@@ -11,17 +11,17 @@ import astwalking.ASTWalker;
 public class Neo4JDatabaseCreatorMain extends ASTWalker
 {
 
-	Neo4ASTVisitor converter = new Neo4ASTVisitor();
+	Neo4JASTVisitor neo4jASTVisitor = new Neo4JASTVisitor();
 	
 	public void setIndexDirectoryName(String dirName)
 	{
-		converter.setIndexDirectoryName(dirName);
+		neo4jASTVisitor.setIndexDirectoryName(dirName);
 	}
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-		converter.setFilename(filename);
+		neo4jASTVisitor.setFilename(filename);
 	}
 
 	@Override
@@ -33,19 +33,19 @@ public class Neo4JDatabaseCreatorMain extends ASTWalker
 	@Override
 	public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
 	{
-		node.accept(converter);
+		node.accept(neo4jASTVisitor);
 	}
 
 	@Override
 	public void begin()
 	{
-		converter.begin();
+		neo4jASTVisitor.begin();
 	}
 
 	@Override
 	public void end()
 	{
-		converter.end();
+		neo4jASTVisitor.end();
 	}
 
 

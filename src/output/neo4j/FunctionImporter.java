@@ -8,6 +8,8 @@ import java.util.Vector;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.nodes.FunctionDatabaseNode;
+
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
 import cfg.BasicBlock;
@@ -24,29 +26,30 @@ public class FunctionImporter
 	public void addFunctionToDatabaseSafe(FunctionDef node)
 	{
 		try{
-			Function function = new Function(node);
+			FunctionDatabaseNode function = new FunctionDatabaseNode();
+			function.initialize(node);
 			function.setFilename(filename);
 			addFunctionToDatabase(function);
 		}catch(RuntimeException ex)
 		{
 			// ex.printStackTrace();
-			System.err.println("Error indexing function: " + node.name.getEscapedCodeStr());
+			System.err.println("Error adding function to database: " + node.name.getEscapedCodeStr());
 			return;
 		}
 	}
 
-	private void addFunctionToDatabase(Function function)
+	private void addFunctionToDatabase(FunctionDatabaseNode function)
 	{
 		astImporter.addASTToDatabase(function.getASTRoot());
 		cfgImporter.addCFGToDatabase(function.getCFG());
 		addFunctionNode(function);
 	}
 	
-	private void addFunctionNode(Function function)
+	private void addFunctionNode(FunctionDatabaseNode function)
 	{
-		Map<String, Object> properties = createPropertiesForFunction(function);
+		Map<String, Object> properties = function.createProperties();
 		
-		long thisId = nodeStore.addNeo4jNode(function, properties);
+		long thisId = nodeStore.addNeo4jNode(properties);
 		
 		// index, but do not index location
 		properties.remove("location");
@@ -60,20 +63,9 @@ public class FunctionImporter
 			linkFunctionWithAllCFGNodes(thisId, cfg);
 	}
 
-	private Map<String, Object> createPropertiesForFunction(Function function)
-	{
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("type", "Function");
-		properties.put("filename", function.getFilename());
-		properties.put("signature", function.getSignature());
-		properties.put("location", function.getLocation());
-		properties.put("functionName", function.getName());
-		return properties;
-	}
 	
 	private void linkFunctionWithRootASTNode(long thisId, ASTNode astRoot)
 	{
-
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST_ROOT);
 		long dstId = astRoot.id;
 		Neo4JDatabase.addRelationship(thisId, dstId, rel, null);

@@ -15,18 +15,11 @@ public class CSVPrinter extends ASTWalker
 	private ASTToCSVConverter converter = new ASTToCSVConverter();
     FunctionNodeVisitor visitor = new FunctionNodeVisitor();
 	
-	@Override
-	public void startOfUnit(ParserRuleContext ctx, String filename)
-	{
-		
-	}
-
-	@Override
-	public void endOfUnit(ParserRuleContext ctx, String filename)
-	{
-		
-	}
-
+	@Override public void startOfUnit(ParserRuleContext ctx, String filename) {}
+	@Override public void endOfUnit(ParserRuleContext ctx, String filename){}
+	@Override public void begin() { }
+	@Override public void end() { }
+	
 	@Override
 	public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
 	{
@@ -37,18 +30,6 @@ public class CSVPrinter extends ASTWalker
 		converter.reset();
 		
 		System.out.println(result);
-	}
-
-	@Override
-	public void begin()
-	{
-		
-	}
-
-	@Override
-	public void end()
-	{
-		
 	}
     
 }

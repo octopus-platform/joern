@@ -5,7 +5,7 @@ import java.util.Map;
 public class GraphNodeStore
 {
 	
-	public long addNeo4jNode(Object o, Map<String, Object> properties)
+	public long addNeo4jNode(Map<String, Object> properties)
 	{
 		long nodeId = Neo4JDatabase.addNode(properties);
 		return nodeId;

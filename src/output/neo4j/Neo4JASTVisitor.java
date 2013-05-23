@@ -4,7 +4,7 @@ import astnodes.functionDef.FunctionDef;
 import astwalking.ASTNodeVisitor;
 
 
-public class Neo4ASTVisitor extends ASTNodeVisitor
+public class Neo4JASTVisitor extends ASTNodeVisitor
 {
 	FunctionImporter functionImporter = new FunctionImporter();
 	

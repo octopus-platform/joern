@@ -10,6 +10,8 @@ import java.util.Vector;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.nodes.BasicBlockDatabaseNode;
+
 import astnodes.ASTNode;
 import cfg.BasicBlock;
 import cfg.CFG;
@@ -35,19 +37,15 @@ public class CFGImporter
 		while(it.hasNext()){
 			BasicBlock block = it.next();
 			
-			Map<String, Object> properties = createPropertiesForBasicBlock(block);
-			block.id = nodeStore.addNeo4jNode(block, properties);
+			BasicBlockDatabaseNode bbDatabaseNode = new BasicBlockDatabaseNode();
+			bbDatabaseNode.initialize(block);
+			Map<String, Object> properties = bbDatabaseNode.createProperties();
+			block.id = nodeStore.addNeo4jNode(properties);
 			addLinkFromBasicBlockToAST(block);
 		}
 	}
 
-	private Map<String, Object> createPropertiesForBasicBlock(BasicBlock block)
-	{
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("code", block.getEscapedCodeStr());
-		properties.put("type", block.getType());
-		return properties;
-	}
+	
 	
 	private void addCFGEdges(CFG cfg)
 	{
