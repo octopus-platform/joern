@@ -15,13 +15,16 @@ import astnodes.functionDef.FunctionDef;
 import cfg.BasicBlock;
 import cfg.CFG;
 
+// Stays alive while importing a function into
+// the database
+
 public class FunctionImporter
 {
 	GraphNodeStore nodeStore = new GraphNodeStore();
-	String filename;
+	ASTImporter astImporter = new ASTImporter(nodeStore);
+	CFGImporter cfgImporter = new CFGImporter(nodeStore);
 	
-	ASTImporter astImporter = new ASTImporter();
-	CFGImporter cfgImporter = new CFGImporter();
+	String filename;
 	
 	public void addFunctionToDatabaseSafe(FunctionDef node)
 	{
@@ -49,61 +52,70 @@ public class FunctionImporter
 	{
 		Map<String, Object> properties = function.createProperties();
 		
-		long thisId = nodeStore.addNeo4jNode(properties);
+		nodeStore.addNeo4jNode(function, properties);
 		
 		// index, but do not index location
 		properties.remove("location");
-		nodeStore.indexNode(thisId, properties);
+		nodeStore.indexNode(function, properties);
 			
-		linkFunctionWithRootASTNode(thisId, function.getASTRoot());
-		linkFunctionWithAllASTNodes(thisId, function.getASTRoot());
+		linkFunctionWithRootASTNode(function, function.getASTRoot());
+		linkFunctionWithAllASTNodes(function, function.getASTRoot());
 		
 		CFG cfg = function.getCFG();
 		if(cfg != null)
-			linkFunctionWithAllCFGNodes(thisId, cfg);
+			linkFunctionWithAllCFGNodes(function, cfg);
 	}
 
 	
-	private void linkFunctionWithRootASTNode(long thisId, ASTNode astRoot)
+	private void linkFunctionWithRootASTNode(FunctionDatabaseNode function, ASTNode astRoot)
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST_ROOT);
-		long dstId = astRoot.id;
-		Neo4JDatabase.addRelationship(thisId, dstId, rel, null);
+		
+		long functionId = nodeStore.getIdForObject(function);
+		long astRootId = nodeStore.getIdForObject(astRoot);
+		
+		Neo4JDatabase.addRelationship(functionId, astRootId, rel, null);
 	}
 
-	private void linkFunctionWithAllASTNodes(long thisId, ASTNode node)
+	private void linkFunctionWithAllASTNodes(FunctionDatabaseNode function, ASTNode node)
 	{
-		linkParentWithASTNode(thisId, node);
+		linkParentWithASTNode(function, node);
 		
 		final int nChildren = node.getChildCount();
 		for(int i = 0; i < nChildren; i++){
 			ASTNode child = node.getChild(i);
-			linkFunctionWithAllASTNodes(thisId, child);
+			linkFunctionWithAllASTNodes(function, child);
 		}
 	}
 
-	private void linkFunctionWithAllCFGNodes(long thisId, CFG cfg)
+	private void linkFunctionWithAllCFGNodes(FunctionDatabaseNode function, CFG cfg)
 	{
 		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
 		Iterator<BasicBlock> it = basicBlocks.iterator();
 		while(it.hasNext()){
 			BasicBlock block = it.next();
-			linkFunctionWithCFGNode(thisId, block);
+			linkFunctionWithCFGNode(function, block);
 		}
 	}
 	
-	private void linkFunctionWithCFGNode(long functionId, BasicBlock block)
+	private void linkFunctionWithCFGNode(FunctionDatabaseNode function, BasicBlock block)
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_BASIC_BLOCK);
-		long dstId = block.id;
+		
+		long functionId = nodeStore.getIdForObject(function);
+		long dstId = nodeStore.getIdForObject(block);
+		
 		Neo4JDatabase.addRelationship(functionId, dstId, rel, null);
 	}
 
-	private void linkParentWithASTNode(long thisId, ASTNode node)
+	private void linkParentWithASTNode(Object parent, ASTNode node)
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST_NODE);
-		long dstId = node.id;
-		Neo4JDatabase.addRelationship(thisId, dstId, rel, null);
+		
+		long parentId = nodeStore.getIdForObject(parent);
+		long nodeId = nodeStore.getIdForObject(node);
+		
+		Neo4JDatabase.addRelationship(parentId, nodeId, rel, null);
 	}
 
 	public void setFilename(String aFilename)

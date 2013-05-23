@@ -9,9 +9,6 @@ public class BasicBlock {
 
 	List<ASTNode> statements = new LinkedList<ASTNode>();
 
-	// FIXME: Only needed by neo4j-writer
-	public long id = -1;
-	
 	public void appendNode(ASTNode node)
 	{
 		statements.add(node);

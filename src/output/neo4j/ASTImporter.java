@@ -12,7 +12,12 @@ import astnodes.ASTNode;
 
 public class ASTImporter
 {
-	GraphNodeStore nodeStore = new GraphNodeStore();
+	GraphNodeStore nodeStore;
+	
+	public ASTImporter(GraphNodeStore aNodeStore)
+	{
+		nodeStore = aNodeStore;
+	}
 	
 	public void addASTToDatabase(ASTNode node)
 	{
@@ -31,7 +36,7 @@ public class ASTImporter
 		for(int i = nChildren -1; i >=0; i--){
 			ASTNode child = node.getChild(i);
 			addASTToDatabase(child);
-			addASTLink(node.id, child.id, child);
+			addASTLink(node, child);
 		}
 	}
 
@@ -40,26 +45,28 @@ public class ASTImporter
 		ASTDatabaseNode astDatabaseNode = new ASTDatabaseNode();
 		astDatabaseNode.initialize(node);
 		Map<String, Object> properties = astDatabaseNode.createProperties();
-		long thisId = nodeStore.addNeo4jNode(properties);
-		node.id = thisId;
-		indexASTNode(properties, thisId);
+		nodeStore.addNeo4jNode(node, properties);
+		
+		indexASTNode(node, properties);
 	
 	}
 
-	private void indexASTNode(Map<String, Object> properties, long thisId)
+	private void indexASTNode(ASTNode node, Map<String, Object> properties)
 	{
 		// index, but do not index code
 		properties.remove("code");
-		nodeStore.indexNode(thisId, properties);
+		nodeStore.indexNode(node, properties);
 	}
 
-	private void addASTLink(long srcId, long dstId, ASTNode child)
+	private void addASTLink(Object parent, ASTNode child)
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_AST_PARENT);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		String childStr = new Integer(child.getChildNumber()).toString();
 		properties.put("n", childStr);
 		
-		Neo4JDatabase.addRelationship(srcId, dstId, rel, properties);
+		long parentId = nodeStore.getIdForObject(parent);
+		long childId = nodeStore.getIdForObject(child);
+		Neo4JDatabase.addRelationship(parentId, childId, rel, properties);
 	}
 }

@@ -20,10 +20,6 @@ public class ASTNode {
 	
 	protected static final List<ASTNode> emptyList = new LinkedList<ASTNode>();
 	
-	// FIXME: this is needed for the neo4j-writer
-	// The writer should wrap this class.
-	public long id = -1;
-	
 	public void addChild(ASTNode node)
 	{ 
 		if(children == null)

@@ -21,7 +21,7 @@ public class Neo4JDatabaseCreatorMain extends ASTWalker
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-		neo4jASTVisitor.setFilename(filename);
+		neo4jASTVisitor.handleStartOfUnit(filename);
 	}
 
 	@Override

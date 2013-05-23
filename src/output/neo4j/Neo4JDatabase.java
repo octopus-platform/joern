@@ -11,7 +11,6 @@ import org.neo4j.unsafe.batchinsert.BatchInserters;
 import org.neo4j.unsafe.batchinsert.LuceneBatchInserterIndexProvider;
 
 
-
 public class Neo4JDatabase
 {
 	

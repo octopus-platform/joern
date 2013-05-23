@@ -20,7 +20,12 @@ import cfg.EmptyBasicBlock;
 
 public class CFGImporter
 {
-	GraphNodeStore nodeStore = new GraphNodeStore();
+	GraphNodeStore nodeStore;
+	
+	public CFGImporter(GraphNodeStore aNodeStore)
+	{
+		nodeStore = aNodeStore;
+	}
 	
 	public void addCFGToDatabase(CFG cfg)
 	{
@@ -40,7 +45,7 @@ public class CFGImporter
 			BasicBlockDatabaseNode bbDatabaseNode = new BasicBlockDatabaseNode();
 			bbDatabaseNode.initialize(block);
 			Map<String, Object> properties = bbDatabaseNode.createProperties();
-			block.id = nodeStore.addNeo4jNode(properties);
+			nodeStore.addNeo4jNode(block, properties);
 			addLinkFromBasicBlockToAST(block);
 		}
 	}
@@ -65,8 +70,8 @@ public class CFGImporter
 
 	private void addFlowToLink(BasicBlock srcBlock, BasicBlock dstBlock)
 	{
-		long srcId = srcBlock.id;
-		long dstId = dstBlock.id;
+		long srcId = nodeStore.getIdForObject(srcBlock);
+		long dstId = nodeStore.getIdForObject(dstBlock);
 		
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.FLOWS_TO);
 		Map<String, Object> properties = null;
@@ -87,8 +92,8 @@ public class CFGImporter
 		if(astNode == null)
 			return;
 		
-		long idForASTNode = astNode.id;
-		long idForCFGNode = block.id;
+		long idForASTNode = nodeStore.getIdForObject(astNode);
+		long idForCFGNode = nodeStore.getIdForObject(block);
 		
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_BASIC_BLOCK_OF);
 		Map<String, Object> properties = null;
