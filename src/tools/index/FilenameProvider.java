@@ -38,12 +38,6 @@ public class FilenameProvider
 		return retList;
 	}
 	
-	public List<String> getListOfFiles(String [] userSpecifiedFilenames) throws IOException
-	{
-		List<String> filesToProcess = getFilesToProcess(userSpecifiedFilenames);
-		return filesToProcess;
-	}
-	
 	private List<String> getFilesInDirectory(String filename) throws IOException
 	{
 		DirectoryWalker walker = new DirectoryWalker("*.{c,cpp,h,cc,hpp}");

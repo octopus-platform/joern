@@ -8,15 +8,10 @@ import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astwalking.ASTWalker;
 
-public class Neo4JDatabaseCreatorMain extends ASTWalker
+public class Neo4JASTWalker extends ASTWalker
 {
 
 	Neo4JASTVisitor neo4jASTVisitor = new Neo4JASTVisitor();
-	
-	public void setIndexDirectoryName(String dirName)
-	{
-		neo4jASTVisitor.setIndexDirectoryName(dirName);
-	}
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
@@ -36,17 +31,8 @@ public class Neo4JDatabaseCreatorMain extends ASTWalker
 		node.accept(neo4jASTVisitor);
 	}
 
-	@Override
-	public void begin()
-	{
-		neo4jASTVisitor.begin();
-	}
-
-	@Override
-	public void end()
-	{
-		neo4jASTVisitor.end();
-	}
+	@Override public void begin(){}
+	@Override public void end(){}
 
 
 }

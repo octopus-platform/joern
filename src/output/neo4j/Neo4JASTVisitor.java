@@ -10,11 +10,6 @@ public class Neo4JASTVisitor extends ASTNodeVisitor
 	FunctionImporter functionImporter;
 	String currentFilename;
 	
-	public void setIndexDirectoryName(String dirName)
-	{
-		Neo4JDatabase.setIndexDirectoryName(dirName);
-	}
-
 	public void handleStartOfUnit(String aFilename)
 	{
 		currentFilename = aFilename;
@@ -33,14 +28,4 @@ public class Neo4JASTVisitor extends ASTNodeVisitor
 		functionImporter.setFilename(currentFilename);
 	}
 	
-	public void begin()
-	{
-		Neo4JDatabase.start();
-	}
-
-	public void end()
-	{
-		Neo4JDatabase.shutdown();
-	}
-
 }

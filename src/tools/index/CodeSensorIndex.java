@@ -3,7 +3,8 @@ package tools.index;
 import java.io.IOException;
 import java.util.List;
 
-import output.neo4j.Neo4JDatabaseCreatorMain;
+import output.neo4j.Neo4JASTWalker;
+import output.neo4j.Neo4JDatabaseCreator;
 import parsing.Parser;
 
 public class CodeSensorIndex {
@@ -21,19 +22,24 @@ public class CodeSensorIndex {
     	
     	String[] userSpecifiedFilenames = parseCommandLine(args);
 		
+    	Neo4JDatabaseCreator creator = new Neo4JDatabaseCreator();
+    	creator.setIndexDirectoryName(".joernIndex/");
+    	creator.openDatabase();
+    	
     	try{
     		
-    		List<String> listOfFiles = filenameProvider.getListOfFiles(userSpecifiedFilenames);
+    		List<String> listOfFiles = filenameProvider.getFilesToProcess(userSpecifiedFilenames);
     		
     		Parser parser = new Parser();
-    		Neo4JDatabaseCreatorMain indexCreator = new Neo4JDatabaseCreatorMain();
-    		indexCreator.setIndexDirectoryName(".joernIndex/");
+    		Neo4JASTWalker neo4JASTWalker = new Neo4JASTWalker();
     			
-    		parser.addObserver(indexCreator);
+    		parser.addObserver(neo4JASTWalker);
     		parser.run(listOfFiles);
     		
 	    }catch(IOException err){
 			System.err.println("I/O-Error: " + err.getMessage()); 
+	    }finally{
+	    	creator.closeDatabase();
 	    }
 
 	}
