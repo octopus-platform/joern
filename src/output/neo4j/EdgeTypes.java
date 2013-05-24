@@ -22,7 +22,7 @@ public class EdgeTypes
 	public static final String IS_FUNCTION_OF_AST_ROOT = "AST_ROOT";
 	
 	/** Connects parent to child directories */
-	public static final String IS_PARENT_DIR = "IS_PARENT_DIR";
+	public static final String IS_PARENT_DIR_OF = "IS_PARENT_DIR_OF";
 
 	/** Connects file to the functions/classes/definitions it contains */
 	public static final String IS_FILE_OF = "IS_FILE_OF";

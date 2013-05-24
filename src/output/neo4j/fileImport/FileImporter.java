@@ -26,12 +26,15 @@ public class FileImporter
 
 	private void linkWithParentDirectory(FileDatabaseNode node)
 	{
+		long srcId;
+		
 		if(directoryStack.size() == 0)
-			return;
+			srcId = 0; // link with reference node
+		else
+			srcId = directoryStack.peek().getId();
 		
 		long dstId = node.getId();
-		long srcId = directoryStack.peek().getId();
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_PARENT_DIR);
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_PARENT_DIR_OF);
 		Neo4JDatabase.addRelationship(srcId, dstId, rel, null);
 	}
 
