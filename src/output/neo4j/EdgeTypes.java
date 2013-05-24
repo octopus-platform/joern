@@ -21,4 +21,6 @@ public class EdgeTypes
 	/** Edges connecting functions with the root AST node */
 	public static final String IS_FUNCTION_OF_AST_ROOT = "AST_ROOT";
 	
+	/** Connects parent to child directories */
+	public static final String IS_PARENT_DIR = "IS_PARENT_DIR";
 }

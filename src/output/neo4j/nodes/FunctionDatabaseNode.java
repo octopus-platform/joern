@@ -12,7 +12,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 {
 	FunctionDef astRoot;
 	CFG cfg;
-	String filename;
+
 	String signature;
 	String name;
 	
@@ -31,7 +31,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("type", "Function");
-		properties.put("filename", this.getFilename());
+		
 		properties.put("signature", this.getSignature());
 		properties.put("location", this.getLocation());
 		properties.put("functionName", this.getName());
@@ -58,16 +58,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 		return cfg;
 	}
 
-	public void setFilename(String aFilename)
-	{
-		filename = aFilename;
-	}
-
-	public String getFilename()
-	{
-		return filename;
-	}
-	
 	public String getLocation()
 	{
 		return astRoot.getLocationString();

@@ -4,6 +4,9 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import output.neo4j.Neo4JImportListener;
+import output.neo4j.nodes.FileDatabaseNode;
+
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astwalking.ASTWalker;
@@ -11,19 +14,18 @@ import astwalking.ASTWalker;
 public class Neo4JASTWalker extends ASTWalker
 {
 
-	Neo4JASTVisitor neo4jASTVisitor = new Neo4JASTVisitor();
+	Neo4JASTNodeVisitor neo4jASTVisitor = new Neo4JASTNodeVisitor();
+	Neo4JImportListener importListener;
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-		neo4jASTVisitor.handleStartOfUnit(filename);
+		FileDatabaseNode currentFileNode = importListener.getCurrentFileNode();
+		neo4jASTVisitor.handleStartOfUnit(currentFileNode);
 	}
 
 	@Override
-	public void endOfUnit(ParserRuleContext ctx, String filename)
-	{
-		// TODO Auto-generated method stub
-	}
+	public void endOfUnit(ParserRuleContext ctx, String filename){}
 
 	@Override
 	public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
@@ -34,5 +36,9 @@ public class Neo4JASTWalker extends ASTWalker
 	@Override public void begin(){}
 	@Override public void end(){}
 
+	public void setImportListener(Neo4JImportListener anImportListener)
+	{
+		importListener = anImportListener;
+	}
 
 }

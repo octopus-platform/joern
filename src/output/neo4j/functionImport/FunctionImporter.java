@@ -26,14 +26,11 @@ public class FunctionImporter
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
 	
-	String filename;
-	
 	public void addFunctionToDatabaseSafe(FunctionDef node)
 	{
 		try{
 			FunctionDatabaseNode function = new FunctionDatabaseNode();
 			function.initialize(node);
-			function.setFilename(filename);
 			addFunctionToDatabase(function);
 		}catch(RuntimeException ex)
 		{
@@ -120,8 +117,4 @@ public class FunctionImporter
 		Neo4JDatabase.addRelationship(parentId, nodeId, rel, null);
 	}
 
-	public void setFilename(String aFilename)
-	{
-		filename = aFilename;
-	}
 }

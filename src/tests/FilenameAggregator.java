@@ -16,6 +16,6 @@ public class FilenameAggregator extends DirectoryListener {
 		filenames.add(filename.toString());
 	}
 
-	@Override
-	public void preVisitDirectory(Path dir) {}
+	@Override public void preVisitDirectory(Path dir) {}
+	@Override public void postVisitDirectory(Path dir) {}
 }

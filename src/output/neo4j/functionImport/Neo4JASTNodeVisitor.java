@@ -1,18 +1,19 @@
 package output.neo4j.functionImport;
 
+import output.neo4j.nodes.FileDatabaseNode;
 import astnodes.functionDef.FunctionDef;
 import astwalking.ASTNodeVisitor;
 
 // Stays alive during the lifetime of the program
 
-public class Neo4JASTVisitor extends ASTNodeVisitor
+public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 {
 	FunctionImporter functionImporter;
-	String currentFilename;
+	FileDatabaseNode currentFileNode;
 	
-	public void handleStartOfUnit(String aFilename)
+	public void handleStartOfUnit(FileDatabaseNode aCurrentFileNode)
 	{
-		currentFilename = aFilename;
+		currentFileNode = aCurrentFileNode;
 	}
 	
 	public void visit(FunctionDef node)
@@ -25,7 +26,6 @@ public class Neo4JASTVisitor extends ASTNodeVisitor
 	private void createNewFunctionImporterForFunction()
 	{
 		functionImporter = new FunctionImporter();
-		functionImporter.setFilename(currentFilename);
 	}
 	
 }

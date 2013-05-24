@@ -1,5 +1,6 @@
 package tools.index;
 
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -35,6 +36,19 @@ class DirectoryWalker extends SimpleFileVisitor<Path>
     {
     	for(DirectoryListener listener : listeners){
 			listener.preVisitDirectory(dir);
+		}
+	}
+
+    @Override public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+    {
+    	notifyListenersOfDirExit(dir);
+    	return FileVisitResult.CONTINUE;
+    }
+    
+	private void notifyListenersOfDirExit(Path dir)
+	{
+		for(DirectoryListener listener : listeners){
+			listener.postVisitDirectory(dir);
 		}
 	}
 
