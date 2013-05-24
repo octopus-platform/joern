@@ -1,11 +1,12 @@
 joern
 ====
 
-joern is a tool for robust analysis of C/C++ code. It generates
-abstract syntax trees (ASTs) and control flow graphs (CFGs) from
-source code without the need for a working build environment. ASTs and
-CFGs are stored in a Neo4J graph database. This allows code bases to
-be searched using complex queries formulated in the graph traversal
+Source code analysis is full of graphs: abstract syntax trees, control
+flow graphs, call graphs, program dependency graphs and directory
+structures, to name a few. Joern analyzes a code base using a robust
+parser for C/C++ and represents the entire code base by one large
+property graph stored in a Neo4J graph database. This allows code to
+be mined using complex queries formulated in the graph traversal
 languages Gremlin and Cypher.
 
 The documentation can be found [here](https://github.com/fabsx00/joern/wiki)
