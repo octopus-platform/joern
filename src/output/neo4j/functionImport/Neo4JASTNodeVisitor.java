@@ -19,7 +19,7 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 	public void visit(FunctionDef node)
 	{
 		createNewFunctionImporterForFunction();
-		functionImporter.addFunctionToDatabaseSafe(node);
+		functionImporter.addFunctionToDatabaseSafe(node, currentFileNode);
 		functionImporter = null;
 	}
 

@@ -10,6 +10,7 @@ import org.neo4j.graphdb.RelationshipType;
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
 import output.neo4j.Neo4JDatabase;
+import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 
 import astnodes.ASTNode;
@@ -26,18 +27,30 @@ public class FunctionImporter
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
 	
-	public void addFunctionToDatabaseSafe(FunctionDef node)
+	public void addFunctionToDatabaseSafe(FunctionDef node, FileDatabaseNode fileNode)
 	{
 		try{
 			FunctionDatabaseNode function = new FunctionDatabaseNode();
 			function.initialize(node);
 			addFunctionToDatabase(function);
+			linkFunctionToFileNode(function, fileNode);
 		}catch(RuntimeException ex)
 		{
 			// ex.printStackTrace();
 			System.err.println("Error adding function to database: " + node.name.getEscapedCodeStr());
 			return;
 		}
+	}
+
+	private void linkFunctionToFileNode(FunctionDatabaseNode function,
+			FileDatabaseNode fileNode)
+	{
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FILE_OF);
+		
+		long fileId = fileNode.getId();
+		long functionId = nodeStore.getIdForObject(function);
+		
+		Neo4JDatabase.addRelationship(fileId, functionId, rel, null);
 	}
 
 	private void addFunctionToDatabase(FunctionDatabaseNode function)

@@ -23,4 +23,7 @@ public class EdgeTypes
 	
 	/** Connects parent to child directories */
 	public static final String IS_PARENT_DIR = "IS_PARENT_DIR";
+
+	/** Connects file to the functions/classes/definitions it contains */
+	public static final String IS_FILE_OF = "IS_FILE_OF";
 }
