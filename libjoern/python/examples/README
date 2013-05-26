@@ -1,0 +1,2 @@
+Please start the scripts from the parent directory so that they find
+libjoern.py in the current working directory.
