@@ -237,9 +237,11 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		BasicBlock surroundingLoop = getSurroundingLoop();
 		
-		if(surroundingLoop == null)
-			throw new RuntimeException("Error: no surrounding loop found for continue-statement");
-		
+		if(surroundingLoop == null){
+			System.err.println("Warning: no surrounding loop found for continue-statement");
+			return;
+		}
+			
 		returnCFG.loopStart.put(returnCFG.getFirstBlock(), surroundingLoop);
 			
 	}
@@ -249,9 +251,12 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		returnCFG = defaultStatementConverter(expression);
 		
 		BasicBlock surroundingBlock = getSurroundingBlock();
-		if(surroundingBlock == null)
-			throw new RuntimeException("Error: no surrounding block for break statement");
 		
+		if(surroundingBlock == null){
+			System.err.println("Warning: no surrounding block found for break-statement");
+			return;
+		}
+			
 		returnCFG.loopStart.put(returnCFG.getFirstBlock(), surroundingBlock);
 	}
 		

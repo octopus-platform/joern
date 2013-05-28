@@ -7,7 +7,7 @@ public class EdgeTypes
 	public static final String IS_AST_PARENT = "IS_AST_PARENT";
 	
 	/** Edges connecting basic blocks with basic blocks they transfer control to*/
-	public static final String FLOWS_TO = "FLOW_TO";
+	public static final String FLOWS_TO = "FLOWS_TO";
 	
 	/** Edges connecting a basic block to its corresponding AST node */
 	public static final String IS_BASIC_BLOCK_OF = "IS_BASIC_BLOCK_OF";
