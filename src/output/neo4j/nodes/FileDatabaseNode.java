@@ -37,7 +37,7 @@ public class FileDatabaseNode extends DatabaseNode {
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("type", type);
-		properties.put("path", pathString);	
+		properties.put("filepath", pathString);	
 		return properties;	
 	}
 
