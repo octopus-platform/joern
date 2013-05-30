@@ -29,6 +29,25 @@ def tree = { parentId, vertices ->
   results;
 }
 
+// For a given CallExpression AST-node, get its n'th parameter
+// Watchout: n needs to be a string for now
+
+Gremlin.defineStep('getParameterN', [Vertex,Pipe], { n -> _().outE('IS_AST_PARENT').filter{it.n == n}.inV() } )
+
+Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
+
+Gremlin.defineStep('markAsSink', [Vertex,Pipe], { _().basicBlock().sideEffect{ sinkId  = it.id; }.back(2) } )
+
+// Check if a flow from the current basic block
+// to the basicBlock with id 'sinkId' exists.
+// It would be much nicer if we could pass the
+// id in as a variable
+
+Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
+		   { _().out('FLOWS_TO').loop(1){it.loops < 100 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
+		   }  )
+
+// {String label -> _().as('x').out(label).in(label).except('x')})
 
 // For a given AST-node, get the function node
 

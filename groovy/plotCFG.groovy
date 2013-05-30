@@ -1,5 +1,3 @@
-import CodeDatabase;
-
 import com.tinkerpop.gremlin.groovy.*
 import com.tinkerpop.blueprints.*
 import com.tinkerpop.pipes.*;
@@ -7,6 +5,8 @@ import com.tinkerpop.pipes.util.*;
 import com.tinkerpop.pipes.transform.*;
 
 import com.tinkerpop.blueprints.Direction;
+
+import CodeDatabase;
 
 def nodeIds = [];
 def nodeCode = [];
@@ -36,7 +36,7 @@ function = g.idx('astNodeIndex')[[functionName:args[0]]][0]
 
 edges = function.funcBasicBlocks().sideEffect{
   storeBasicBlockInfo(it);
-}.out('FLOW_TO').transform{ [curNodeId, it.id] }.toList()
+}.out('FLOWS_TO').transform{ [curNodeId, it.id] }.toList()
 
 printf("digraph myGraph{");
 for (i = 0; i < nodeCode.size(); i++)
