@@ -1,19 +1,14 @@
 
-class JoernIndex
-{
+Object.metaClass.astNodesByType = { typeName ->
+  g.idx("astNodeIndex")[[type:typeName]]
+}
   
-  static def astNodesByType = { typeName ->
-    g.idx("astNodeIndex")[[type:typeName]]
-  }
-  
-  // We may want to also index code-strings. It takes
-  // a while but it would allow us much faster
-  // getCallsTo calls
-  
-  static def getCallsTo = { callee ->
-    astNodesByType("CallExpression").filterCodeByRegex(callee)
-  }
+// We may want to also index code-strings. It takes
+// a while but it would allow us much faster
+// getCallsTo calls
 
+Object.metaClass.getCallsTo = { callee ->
+  astNodesByType("CallExpression").filterCodeByRegex(callee)
 }
 
 
