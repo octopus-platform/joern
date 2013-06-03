@@ -10,16 +10,23 @@ import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
 import output.neo4j.Neo4JDatabase;
 import output.neo4j.nodes.ASTDatabaseNode;
+import output.neo4j.nodes.FunctionDatabaseNode;
 
 import astnodes.ASTNode;
 
 public class ASTImporter
 {
 	GraphNodeStore nodeStore;
+	private FunctionDatabaseNode currentFunction;
 	
 	public ASTImporter(GraphNodeStore aNodeStore)
 	{
 		nodeStore = aNodeStore;
+	}
+	
+	public void setCurrentFunction(FunctionDatabaseNode func)
+	{
+		currentFunction = func;
 	}
 	
 	public void addASTToDatabase(ASTNode node)
@@ -48,6 +55,8 @@ public class ASTImporter
 		ASTDatabaseNode astDatabaseNode = new ASTDatabaseNode();
 		astDatabaseNode.initialize(node);
 		Map<String, Object> properties = astDatabaseNode.createProperties();
+		
+		properties.put("functionId", nodeStore.getIdForObject(currentFunction));
 		nodeStore.addNeo4jNode(node, properties);
 		
 		indexASTNode(node, properties);

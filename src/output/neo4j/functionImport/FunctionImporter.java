@@ -36,7 +36,7 @@ public class FunctionImporter
 			linkFunctionToFileNode(function, fileNode);
 		}catch(RuntimeException ex)
 		{
-			// ex.printStackTrace();
+			ex.printStackTrace();
 			System.err.println("Error adding function to database: " + node.name.getEscapedCodeStr());
 			return;
 		}
@@ -55,27 +55,29 @@ public class FunctionImporter
 
 	private void addFunctionToDatabase(FunctionDatabaseNode function)
 	{
+		addFunctionNode(function);
+		
+		astImporter.setCurrentFunction(function);
 		astImporter.addASTToDatabase(function.getASTRoot());
 		cfgImporter.addCFGToDatabase(function.getCFG());
-		addFunctionNode(function);
-	}
 	
-	private void addFunctionNode(FunctionDatabaseNode function)
-	{
-		Map<String, Object> properties = function.createProperties();
-		
-		nodeStore.addNeo4jNode(function, properties);
-		
-		// index, but do not index location
-		properties.remove("location");
-		nodeStore.indexNode(function, properties);
-			
 		linkFunctionWithRootASTNode(function, function.getASTRoot());
 		linkFunctionWithAllASTNodes(function, function.getASTRoot());
 		
 		CFG cfg = function.getCFG();
 		if(cfg != null)
 			linkFunctionWithAllCFGNodes(function, cfg);
+	
+	}
+	
+	private void addFunctionNode(FunctionDatabaseNode function)
+	{
+		Map<String, Object> properties = function.createProperties();
+		nodeStore.addNeo4jNode(function, properties);
+		
+		// index, but do not index location
+		properties.remove("location");
+		nodeStore.indexNode(function, properties);
 	}
 
 	

@@ -7,8 +7,12 @@ Object.metaClass.astNodesByType = { typeName ->
 // a while but it would allow us much faster
 // getCallsTo calls
 
-Object.metaClass.getCallsTo = { callee ->
+Object.metaClass.getCallsToRegex = { callee ->
   astNodesByType("CallExpression").filterCodeByRegex(callee)
+}
+
+Object.metaClass.getCallsTo = { callee ->
+  astNodesByType("CallExpression").filter{ it.code.startsWith(callee) }
 }
 
 
