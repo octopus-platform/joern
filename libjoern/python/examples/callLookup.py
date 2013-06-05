@@ -25,7 +25,7 @@ cmd = 'getCallsTo("memcpy").function().signature'
 # (5) Get a [filename,location,signature] table of functions
 # calling memcpy
 
-cmd = 'getCallsTo("memcpy").function().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } '
+cmd = 'getCallsTo("memcpy").function().getLocationRow()'
 
 y = j.executeGremlinCmd(cmd)
 for x in y: print x

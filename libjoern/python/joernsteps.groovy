@@ -57,6 +57,8 @@ Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().outE('IS_FUNCTION_OF_AST
 
 Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
+Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
+
 ///////////////////////////////////
 // Steps for AST nodes in general
 //////////////////////////////////
@@ -82,7 +84,7 @@ Gremlin.defineStep('markAsSink', [Vertex,Pipe], { _().basicBlock().sideEffect{ s
 // to the sink exists
 
 Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
-		   { _().out('FLOWS_TO').loop(1){it.loops < 100 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
+		   { _().out('FLOWS_TO').loop(1){it.loops < 20 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
 		   }  )
 
 // For a given basic block, get all paths into the exit direction
