@@ -65,8 +65,6 @@ public class ASTImporter
 
 	private void indexASTNode(ASTNode node, Map<String, Object> properties)
 	{
-		// index, but do not index code
-		properties.remove("code");
 		nodeStore.indexNode(node, properties);
 	}
 
