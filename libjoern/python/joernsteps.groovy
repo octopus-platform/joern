@@ -12,9 +12,12 @@ Object.metaClass.getCallsToRegex = { callee ->
 }
 
 Object.metaClass.getCallsTo = { callee ->
-  astNodesByType("CallExpression").filter{ it.code.startsWith(callee) }
+  astNodesByType("CallExpression").filter{ it.code.startsWith(callee + " ") }
 }
 
+Object.metaClass.queryNodeIndex = { query ->
+  new com.tinkerpop.blueprints.pgm.impls.neo4j.util.Neo4jVertexSequence(g.getRawGraph().index().forNodes("astNodeIndex").query(query), g)._()
+}
 
 def getAST = {
   _().transform{ tree(0, [it] ) }
@@ -41,6 +44,10 @@ def tree = { parentId, vertices ->
 
 Gremlin.defineStep('getParameterN', [Vertex,Pipe], { n -> _().outE('IS_AST_PARENT').filter{it.n == n}.inV() } )
 
+Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { _().getParameterN('0')})
+
+Gremlin.defineStep('getCallsFromFuncToRegex', [Vertex,Pipe], { callee -> _().funcASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
+
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
 
 Gremlin.defineStep('markAsSink', [Vertex,Pipe], { _().basicBlock().sideEffect{ sinkId  = it.id; }.back(2) } )
@@ -53,6 +60,8 @@ Gremlin.defineStep('markAsSink', [Vertex,Pipe], { _().basicBlock().sideEffect{ s
 Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
 		   { _().out('FLOWS_TO').loop(1){it.loops < 100 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
 		   }  )
+
+Gremlin.defineStep('resolveCallee', [Vertex,Pipe], { _().getCalleeFromCall().transform{ g.idx('astNodeIndex')[[functionName:it.code]] }} )
 
 // {String label -> _().as('x').out(label).in(label).except('x')})
 
