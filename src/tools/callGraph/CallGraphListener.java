@@ -1,7 +1,5 @@
 package tools.callGraph;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -16,21 +14,45 @@ public class CallGraphListener {
 
 	public void visitFunction(Long funcId)
 	{
-		List<String> calleeStrings = getCalleeStrings(funcId);
-		for(String callee : calleeStrings){
-			IndexHits<Long> dstIds = lookupCallee(callee);
-			createCallGraphEdges(funcId, dstIds);
-		}
+		createOutgoingCallGraphEdges(funcId);
 	}
 
-	private void createCallGraphEdges(Long funcId, IndexHits<Long> dstIds)
+	private void createOutgoingCallGraphEdges(Long funcId)
 	{
-		for(long dstId : dstIds){
-			RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CALLER);
-			Neo4JBatchInserter.addRelationship(funcId, dstId, rel, null);
+		IndexHits<Long> calls = getOutgoingCallsFromIndex(funcId);
+		for(long callId : calls){
+			IndexHits<Long> dstIds = resolveCalledFunction(callId);
+			createCallGraphEdges(funcId, dstIds, callId);
 		}
 	}
 
+	private IndexHits<Long> getOutgoingCallsFromIndex(Long funcId)
+	{
+		String query = "type:\"CallExpression\" AND functionId:\"" + funcId + "\"";
+		IndexHits<Long> hits =
+				Neo4JBatchInserter.queryIndex(query);
+		return hits;
+	}
+	
+	private IndexHits<Long> resolveCalledFunction(long callId)
+	{
+		String calleeString = getCalleeString(callId);
+		IndexHits<Long> calleeIds = lookupCallee(calleeString);
+		return calleeIds;
+	}
+
+	private String getCalleeString(Long callId)
+	{	
+		try{
+			long firstChildId = getFirstChildId(callId);
+			String codeStr = (String) Neo4JBatchInserter.getNodeProperties(firstChildId).get("code");
+			return codeStr;
+		}catch(RuntimeException ex){
+			System.err.println(ex.getMessage());
+		}
+		return "";
+	}
+	
 	private IndexHits<Long> lookupCallee(String callee)
 	{
 		String query = "type:\"Function\" AND functionName:\"" + callee + "\"";
@@ -40,27 +62,7 @@ public class CallGraphListener {
 		
 		return hits;
 	}
-
-	private List<String> getCalleeStrings(Long funcId)
-	{	
-		IndexHits<Long> hits = getOutgoingCallsFromIndex(funcId);
-		List<String> callees = getCalleesFromCallNodes(hits);
-		return callees;
-	}
-
-	private List<String> getCalleesFromCallNodes(IndexHits<Long> hits)
-	{
-		List<String> retList = new LinkedList<String>();
-		
-		for(Long callId: hits){
-		
-			long firstChildId = getFirstChildId(callId);
-			String codeStr = (String) Neo4JBatchInserter.getNodeProperties(firstChildId).get("code");
-			retList.add(codeStr);
-		}
-		return retList;
-	}
-
+	
 	private long getFirstChildId(Long callId)
 	{
 		Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(callId);
@@ -83,13 +85,14 @@ public class CallGraphListener {
 		}
 		throw new RuntimeException("Warning: encountered CallExpression without child nodes.");
 	}
-	
-	private IndexHits<Long> getOutgoingCallsFromIndex(Long funcId)
-	{
-		String query = "type:\"CallExpression\" AND functionId:\"" + funcId + "\"";
-		IndexHits<Long> hits =
-				Neo4JBatchInserter.queryIndex(query);
-		return hits;
-	}
 
+	private void createCallGraphEdges(Long funcId, IndexHits<Long> dstIds, Long callId)
+	{
+		for(long dstId : dstIds){
+			RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CALLER);
+			Neo4JBatchInserter.addRelationship(funcId, dstId, rel, null);
+			Neo4JBatchInserter.addRelationship(callId, dstId, rel, null);
+		}
+	}
+	
 }
