@@ -11,7 +11,7 @@ import org.neo4j.unsafe.batchinsert.BatchInserterIndexProvider;
 import org.neo4j.unsafe.batchinsert.BatchInserters;
 
 
-public class Neo4JDatabase
+public class Neo4JBatchInserter
 {
 	
 	static BatchInserter inserter;
@@ -20,12 +20,13 @@ public class Neo4JDatabase
 	
 	static String databaseDirectory = "neo4j-db";
 	
+	
 	public static void setIndexDirectoryName(String dirName)
 	{
 		databaseDirectory = dirName;
 	}
 
-	public static void start()
+	public static void openDatabase()
 	{
 		inserter = BatchInserters.inserter(databaseDirectory);
 		initializeIndex();		
@@ -61,7 +62,7 @@ public class Neo4JDatabase
 		inserter.createRelationship(srcId, dstId, rel, properties);
 	}
 	
-	public static void shutdown()
+	public static void closeDatabase()
 	{
 		indexProvider.shutdown();
 		inserter.shutdown();

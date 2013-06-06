@@ -1,16 +1,15 @@
 package tools.index;
 
 import java.io.IOException;
-import output.neo4j.Neo4JDatabaseCreator;
+
+import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.Neo4JImportListener;
 
 public class CodeSensorIndex {
 
 	private static CommandLineInterface cmd = new CommandLineInterface();
 	private static CodebaseWalker codebaseWalker = new CodebaseWalker();
-	
 	private static Neo4JImportListener listener = new Neo4JImportListener();
-	private static Neo4JDatabaseCreator creator = new Neo4JDatabaseCreator();
 	
 	private static void usage()
 	{
@@ -35,13 +34,13 @@ public class CodeSensorIndex {
 
 	private static void initializeDatabase()
 	{
-    	creator.setIndexDirectoryName(".joernIndex/");
-    	creator.openDatabase();
+		Neo4JBatchInserter.setIndexDirectoryName(".joernIndex/");
+		Neo4JBatchInserter.openDatabase();
 	}
 
 	private static void shutdownDatabase()
 	{
-    	creator.closeDatabase();
+		Neo4JBatchInserter.closeDatabase();
 	}
 	
 	private static String[] parseCommandLine(String[] args) {

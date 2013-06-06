@@ -8,7 +8,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
-import output.neo4j.Neo4JDatabase;
+import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.nodes.ASTDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 
@@ -77,6 +77,6 @@ public class ASTImporter
 		
 		long parentId = nodeStore.getIdForObject(parent);
 		long childId = nodeStore.getIdForObject(child);
-		Neo4JDatabase.addRelationship(parentId, childId, rel, properties);
+		Neo4JBatchInserter.addRelationship(parentId, childId, rel, properties);
 	}
 }

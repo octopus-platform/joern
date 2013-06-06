@@ -9,7 +9,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
-import output.neo4j.Neo4JDatabase;
+import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 
@@ -50,7 +50,7 @@ public class FunctionImporter
 		long fileId = fileNode.getId();
 		long functionId = nodeStore.getIdForObject(function);
 		
-		Neo4JDatabase.addRelationship(fileId, functionId, rel, null);
+		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
 	}
 
 	private void addFunctionToDatabase(FunctionDatabaseNode function)
@@ -88,7 +88,7 @@ public class FunctionImporter
 		long functionId = nodeStore.getIdForObject(function);
 		long astRootId = nodeStore.getIdForObject(astRoot);
 		
-		Neo4JDatabase.addRelationship(functionId, astRootId, rel, null);
+		Neo4JBatchInserter.addRelationship(functionId, astRootId, rel, null);
 	}
 
 	private void linkFunctionWithAllASTNodes(FunctionDatabaseNode function, ASTNode node)
@@ -119,7 +119,7 @@ public class FunctionImporter
 		long functionId = nodeStore.getIdForObject(function);
 		long dstId = nodeStore.getIdForObject(block);
 		
-		Neo4JDatabase.addRelationship(functionId, dstId, rel, null);
+		Neo4JBatchInserter.addRelationship(functionId, dstId, rel, null);
 	}
 
 	private void linkParentWithASTNode(Object parent, ASTNode node)
@@ -129,7 +129,7 @@ public class FunctionImporter
 		long parentId = nodeStore.getIdForObject(parent);
 		long nodeId = nodeStore.getIdForObject(node);
 		
-		Neo4JDatabase.addRelationship(parentId, nodeId, rel, null);
+		Neo4JBatchInserter.addRelationship(parentId, nodeId, rel, null);
 	}
 
 }
