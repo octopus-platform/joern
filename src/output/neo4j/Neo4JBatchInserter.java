@@ -3,12 +3,14 @@ package output.neo4j;
 import java.util.Map;
 
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.helpers.collection.MapUtil;
 import org.neo4j.index.lucene.unsafe.batchinsert.LuceneBatchInserterIndexProvider;
 import org.neo4j.unsafe.batchinsert.BatchInserter;
 import org.neo4j.unsafe.batchinsert.BatchInserterIndex;
 import org.neo4j.unsafe.batchinsert.BatchInserterIndexProvider;
 import org.neo4j.unsafe.batchinsert.BatchInserters;
+import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 
 public class Neo4JBatchInserter
@@ -29,7 +31,7 @@ public class Neo4JBatchInserter
 	public static void openDatabase()
 	{
 		inserter = BatchInserters.inserter(databaseDirectory);
-		initializeIndex();		
+		initializeIndex();
 	}
 
 	private static void initializeIndex()
@@ -54,6 +56,32 @@ public class Neo4JBatchInserter
 		if(properties != null){
 			astNodeIndex.add(nodeId, properties);
 		}
+	}
+	
+	public static IndexHits<Long> retrieveExactFromIndex(String key, String value)
+	{
+		return astNodeIndex.get(key, value);
+	}
+	
+	public static IndexHits<Long> queryIndex(String query)
+	{
+		
+		return astNodeIndex.query(query);
+	}
+	
+	public static Map<String, Object> getNodeProperties(long id)
+	{
+		return inserter.getNodeProperties(id);
+	}
+	
+	public static Map<String, Object> getRelationshipProperties(long id)
+	{
+		return inserter.getRelationshipProperties(id);
+	}
+	
+	public static Iterable<BatchRelationship> getRelationships(long id)
+	{
+		return inserter.getRelationships(id);
 	}
 	
 	public static void addRelationship(long srcId, long dstId,

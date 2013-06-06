@@ -3,6 +3,10 @@ package tools.callGraph;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.neo4j.graphdb.index.IndexHits;
+
+import output.neo4j.Neo4JBatchInserter;
+
 
 /**
  * Walks all functions present in the Neo4J database
@@ -20,13 +24,17 @@ public class ImportedFunctionWalker
 
 	public void walk()
 	{
-		
+		IndexHits<Long> functions = Neo4JBatchInserter.retrieveExactFromIndex("type", "Function");
+		for(Long funcId : functions){
+			notifyListenersOfFunction(funcId);
+		}
+	
 	}
 	
-	private void notifyListenersOfFunction(Object func)
+	private void notifyListenersOfFunction(Long funcId)
 	{
 		for(CallGraphListener listener : listeners){
-			listener.visitFunction(func);
+			listener.visitFunction(funcId);
 		}
 	}
 	
