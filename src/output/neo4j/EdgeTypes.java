@@ -26,4 +26,9 @@ public class EdgeTypes
 
 	/** Connects file to the functions/classes/definitions it contains */
 	public static final String IS_FILE_OF = "IS_FILE_OF";
+
+	/** Connects functions to callees */
+	public static final String IS_CALLER = "IS_CALLER";
+
+
 }

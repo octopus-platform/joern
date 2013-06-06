@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
@@ -16,8 +18,27 @@ public class CallGraphListener {
 	{
 		List<String> calleeStrings = getCalleeStrings(funcId);
 		for(String callee : calleeStrings){
-			System.out.println(callee);
+			IndexHits<Long> dstIds = lookupCallee(callee);
+			createCallGraphEdges(funcId, dstIds);
 		}
+	}
+
+	private void createCallGraphEdges(Long funcId, IndexHits<Long> dstIds)
+	{
+		for(long dstId : dstIds){
+			RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CALLER);
+			Neo4JBatchInserter.addRelationship(funcId, dstId, rel, null);
+		}
+	}
+
+	private IndexHits<Long> lookupCallee(String callee)
+	{
+		String query = "type:\"Function\" AND functionName:\"" + callee + "\"";
+		
+		IndexHits<Long> hits =
+				Neo4JBatchInserter.queryIndex(query);
+		
+		return hits;
 	}
 
 	private List<String> getCalleeStrings(Long funcId)
