@@ -41,6 +41,16 @@ public class FineFunctionParserTest {
 	}
 	
 	@Test
+	public void testTwoParameters()
+	{
+		String input = "foo(x,y);";
+		FineFunctionParser functionParser = new FineFunctionParser();
+		ParseTree tree = functionParser.parseString(input);
+		String output = tree.toStringTree(functionParser.getParser());
+		assertTrue(output.contains(", (function_argument"));
+	}
+	
+	@Test
 	public void testCallViaPtr()
 	{
 		String input = "ptr->foo(x);";

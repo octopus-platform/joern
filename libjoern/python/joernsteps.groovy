@@ -33,11 +33,11 @@ Object.metaClass.queryNodeIndex = { query ->
 // Get n'th parameter.
 // Watchout: n needs to be a string for now
 
-Gremlin.defineStep('getParameterN', [Vertex,Pipe], { n -> _().outE('IS_AST_PARENT').filter{it.n == n}.inV() } )
+Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n -> _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}.outE('IS_AST_PARENT').filter{ it.n == n }.inV() } )
 
 // Get the callee, i.e. the name of the function called
 
-Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { _().getParameterN('0')})
+Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV() })
 
 Gremlin.defineStep('resolveCallee', [Vertex,Pipe], { _().getCalleeFromCall().transform{ g.idx('astNodeIndex')[[functionName:it.code]] }} )
 
@@ -80,11 +80,17 @@ Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().fi
 
 Gremlin.defineStep('markAsSink', [Vertex,Pipe], { _().basicBlock().sideEffect{ sinkId  = it.id; }.back(2) } )
 
+Gremlin.defineStep('markAsSource', [Vertex,Pipe], { _().basicBlock().sideEffect{ sourceId  = it.id; }.back(2) } )
+
 // Check if a flow from the current basic block
 // to the sink exists
 
 Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
-		   { _().out('FLOWS_TO').loop(1){it.loops < 20 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
+		   { _().out('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
+		   }  )
+
+Gremlin.defineStep('flowFromSource', [Vertex,Pipe],
+		   { _().in('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sourceId}.filter{it.id == sourceId }.dedup()
 		   }  )
 
 // For a given basic block, get all paths into the exit direction
