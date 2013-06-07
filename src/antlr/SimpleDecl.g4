@@ -27,7 +27,7 @@ type_name : (CV_QUALIFIER* (CLASS_KEY | UNSIGNED | SIGNED)?
           ;
 
 
-base_type: (ALPHA_NUMERIC | VOID | LONG | LONG LONG);
+base_type: (ALPHA_NUMERIC | VOID | LONG | LONG)+;
 
 // Parameters
 

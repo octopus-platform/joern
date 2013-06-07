@@ -3,8 +3,10 @@
 	package antlr;
 
 
-  import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
+  import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.Token;
 
 public interface CodeSensorListener extends ParseTreeListener<Token> {
 	void enterDeclarator(CodeSensorParser.DeclaratorContext ctx);
