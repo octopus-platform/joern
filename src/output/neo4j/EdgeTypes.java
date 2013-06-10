@@ -6,6 +6,12 @@ public class EdgeTypes
 	/** Edges connecting parent AST nodes with their children */
 	public static final String IS_AST_PARENT = "IS_AST_PARENT";
 	
+	/** Edges connecting the function node to the AST pseudo node*/
+	public static final String IS_FUNCTION_OF_AST = "IS_FUNCTION_OF_AST";
+	
+	/** Edges connecting the function node to the CFG pseudo node */
+	public static final String IS_FUNCTION_OF_CFG = "IS_FUNCTION_OF_CFG";
+	
 	/** Edges connecting basic blocks with basic blocks they transfer control to*/
 	public static final String FLOWS_TO = "FLOWS_TO";
 	
@@ -13,13 +19,13 @@ public class EdgeTypes
 	public static final String IS_BASIC_BLOCK_OF = "IS_BASIC_BLOCK_OF";
 	
 	/** Edges connecting functions with all of their AST nodes*/
-	public static final String IS_FUNCTION_OF_AST_NODE = "IS_FUNCTION_OF_AST_NODE";
+	public static final String IS_AST_OF_AST_NODE = "IS_AST_OF_AST_NODE";
 	
 	/** Edges connecting functions with all of their basic blocks*/
-	public static final String IS_FUNCTION_OF_BASIC_BLOCK = "IS_FUNCTION_OF_BASIC_BLOCK";
+	public static final String IS_CFG_OF_BASIC_BLOCK = "IS_CFG_OF_BASIC_BLOCK";
 	
 	/** Edges connecting functions with the root AST node */
-	public static final String IS_FUNCTION_OF_AST_ROOT = "AST_ROOT";
+	public static final String IS_AST_OF_AST_ROOT = "IS_AST_OF_AST_ROOT";
 	
 	/** Connects parent to child directories */
 	public static final String IS_PARENT_DIR_OF = "IS_PARENT_DIR_OF";
@@ -29,6 +35,5 @@ public class EdgeTypes
 
 	/** Connects functions to callees */
 	public static final String IS_CALLER = "IS_CALLER";
-
 
 }

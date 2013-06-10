@@ -13,20 +13,24 @@ public class FunctionDatabaseNode extends DatabaseNode
 	FunctionDef astRoot;
 	CFG cfg;
 
+	ASTPseudoNode astPseudoNode;
+	CFGPseudoNode cfgPseudoNode;
+	
 	String signature;
 	String name;
 	
 	ASTToCFGConverter astToCFG = new ASTToCFGConverter();
-
+	
 	@Override
 	public void initialize(Object node)
 	{
 		astRoot = (FunctionDef) node;
 		cfg = astToCFG.convert(astRoot);
 		setSignature(astRoot);
+	
+		createPseudoNodes();
 	}
-	
-	
+
 	@Override public Map<String, Object> createProperties()
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
@@ -41,11 +45,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 	public String getName()
 	{
 		return astRoot.name.getEscapedCodeStr();
-	}
-
-	private void setSignature(FunctionDef node)
-	{
-		signature = node.getFunctionSignature();
 	}
 
 	public ASTNode getASTRoot()
@@ -67,5 +66,38 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		return signature;
 	}
+	
+	public ASTPseudoNode getASTPseudoNode()
+	{
+		return astPseudoNode;
+	}
+	
+	public CFGPseudoNode getCFGPseudoNode()
+	{
+		return cfgPseudoNode;
+	}
 
+	private void createPseudoNodes()
+	{
+		createASTPseudoNode();
+		createCFGPseudoNode();
+	}
+
+	private void setSignature(FunctionDef node)
+	{
+		signature = node.getFunctionSignature();
+	}
+	
+	private void createASTPseudoNode()
+	{
+		astPseudoNode = new ASTPseudoNode();
+		astPseudoNode.initialize(null);
+	}
+	
+	private void createCFGPseudoNode()
+	{
+		cfgPseudoNode = new CFGPseudoNode();
+		cfgPseudoNode.initialize(null);
+	}
+	
 }

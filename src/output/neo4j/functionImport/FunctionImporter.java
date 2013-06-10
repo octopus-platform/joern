@@ -10,6 +10,8 @@ import org.neo4j.graphdb.RelationshipType;
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
 import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.nodes.ASTPseudoNode;
+import output.neo4j.nodes.CFGPseudoNode;
 import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 
@@ -41,7 +43,81 @@ public class FunctionImporter
 			return;
 		}
 	}
+	
+	private void addFunctionToDatabase(FunctionDatabaseNode function)
+	{
+		addFunctionNode(function);
+		
+		astImporter.setCurrentFunction(function);
+		astImporter.addASTToDatabase(function.getASTRoot());
+		cfgImporter.addCFGToDatabase(function.getCFG());
+	
+		linkFunctionToASTAndCFG(function);
+	
+	}
 
+	
+	private void addFunctionNode(FunctionDatabaseNode function)
+	{
+		Map<String, Object> properties = function.createProperties();
+		nodeStore.addNeo4jNode(function, properties);
+				
+		// index, but do not index location
+		properties.remove("location");
+		nodeStore.indexNode(function, properties);
+	
+		// and add the pseudo nodes
+		nodeStore.addNeo4jNode(function.getASTPseudoNode(), null);
+		nodeStore.addNeo4jNode(function.getCFGPseudoNode(), null);
+	}
+	
+	private void linkFunctionToASTAndCFG(FunctionDatabaseNode function)
+	{
+		
+		linkFunctionWithASTPseudoNode(function);
+		
+		linkPseudoASTWithRootASTNode(function.getASTPseudoNode(), function.getASTRoot());
+		linkPseudoASTWithAllASTNodes(function.getASTPseudoNode(), function.getASTRoot());
+		
+		CFG cfg = function.getCFG();
+		if(cfg != null){
+			linkFunctionWithCFGPseudoNode(function);
+			linkPseudoCFGWithAllCFGNodes(function.getCFGPseudoNode(), cfg);
+		}
+	}
+	
+	private void linkFunctionWithASTPseudoNode(FunctionDatabaseNode function)
+	{
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST);
+		
+		long functionId = nodeStore.getIdForObject(function);
+		long pseudoNodeId = nodeStore.getIdForObject(function.getASTPseudoNode());
+		
+		Neo4JBatchInserter.addRelationship(functionId, pseudoNodeId, rel, null);
+		
+	}
+	
+	private void linkFunctionWithCFGPseudoNode(FunctionDatabaseNode function)
+	{
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_CFG);
+		
+		long functionId = nodeStore.getIdForObject(function);
+		long pseudoNodeId = nodeStore.getIdForObject(function.getCFGPseudoNode());
+		
+		Neo4JBatchInserter.addRelationship(functionId, pseudoNodeId, rel, null);
+		
+	}
+	
+	private void linkPseudoASTWithRootASTNode(ASTPseudoNode astPseudoNode, ASTNode astRoot)
+	{
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_AST_OF_AST_ROOT);
+		
+		long functionId = nodeStore.getIdForObject(astPseudoNode);
+		long astRootId = nodeStore.getIdForObject(astRoot);
+		
+		Neo4JBatchInserter.addRelationship(functionId, astRootId, rel, null);
+	}
+	
 	private void linkFunctionToFileNode(FunctionDatabaseNode function,
 			FileDatabaseNode fileNode)
 	{
@@ -52,71 +128,33 @@ public class FunctionImporter
 		
 		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
 	}
-
-	private void addFunctionToDatabase(FunctionDatabaseNode function)
-	{
-		addFunctionNode(function);
-		
-		astImporter.setCurrentFunction(function);
-		astImporter.addASTToDatabase(function.getASTRoot());
-		cfgImporter.addCFGToDatabase(function.getCFG());
 	
-		linkFunctionWithRootASTNode(function, function.getASTRoot());
-		linkFunctionWithAllASTNodes(function, function.getASTRoot());
-		
-		CFG cfg = function.getCFG();
-		if(cfg != null)
-			linkFunctionWithAllCFGNodes(function, cfg);
-	
-	}
-	
-	private void addFunctionNode(FunctionDatabaseNode function)
+	private void linkPseudoASTWithAllASTNodes(ASTPseudoNode astPseudoNode, ASTNode node)
 	{
-		Map<String, Object> properties = function.createProperties();
-		nodeStore.addNeo4jNode(function, properties);
-		
-		// index, but do not index location
-		properties.remove("location");
-		nodeStore.indexNode(function, properties);
-	}
-
-	
-	private void linkFunctionWithRootASTNode(FunctionDatabaseNode function, ASTNode astRoot)
-	{
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST_ROOT);
-		
-		long functionId = nodeStore.getIdForObject(function);
-		long astRootId = nodeStore.getIdForObject(astRoot);
-		
-		Neo4JBatchInserter.addRelationship(functionId, astRootId, rel, null);
-	}
-
-	private void linkFunctionWithAllASTNodes(FunctionDatabaseNode function, ASTNode node)
-	{
-		linkParentWithASTNode(function, node);
+		linkParentWithASTNode(astPseudoNode, node);
 		
 		final int nChildren = node.getChildCount();
 		for(int i = 0; i < nChildren; i++){
 			ASTNode child = node.getChild(i);
-			linkFunctionWithAllASTNodes(function, child);
+			linkPseudoASTWithAllASTNodes(astPseudoNode, child);
 		}
 	}
 
-	private void linkFunctionWithAllCFGNodes(FunctionDatabaseNode function, CFG cfg)
+	private void linkPseudoCFGWithAllCFGNodes(CFGPseudoNode cfgPseudoNode, CFG cfg)
 	{
 		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
 		Iterator<BasicBlock> it = basicBlocks.iterator();
 		while(it.hasNext()){
 			BasicBlock block = it.next();
-			linkFunctionWithCFGNode(function, block);
+			linkPseudoCFGWithCFGNode(cfgPseudoNode, block);
 		}
 	}
 	
-	private void linkFunctionWithCFGNode(FunctionDatabaseNode function, BasicBlock block)
+	private void linkPseudoCFGWithCFGNode(CFGPseudoNode cfgPseudoNode, BasicBlock block)
 	{
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_BASIC_BLOCK);
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CFG_OF_BASIC_BLOCK);
 		
-		long functionId = nodeStore.getIdForObject(function);
+		long functionId = nodeStore.getIdForObject(cfgPseudoNode);
 		long dstId = nodeStore.getIdForObject(block);
 		
 		Neo4JBatchInserter.addRelationship(functionId, dstId, rel, null);
@@ -124,7 +162,7 @@ public class FunctionImporter
 
 	private void linkParentWithASTNode(Object parent, ASTNode node)
 	{
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST_NODE);
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_AST_OF_AST_NODE);
 		
 		long parentId = nodeStore.getIdForObject(parent);
 		long nodeId = nodeStore.getIdForObject(node);

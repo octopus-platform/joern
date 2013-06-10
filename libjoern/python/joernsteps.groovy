@@ -49,11 +49,11 @@ Gremlin.defineStep('getCallsFromFuncToRegex', [Vertex,Pipe], { callee -> _().fun
 
 // Get all basic blocks of a function
 
-Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().outE('BASIC_BLOCK').inV()})
+Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_CFG').out() })
 
 // Get all AST-nodes of a function
 
-Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().outE('IS_FUNCTION_OF_AST_NODE').inV()})
+Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out()})
 
 Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
@@ -65,7 +65,7 @@ Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEf
 
 // For a given AST-node, get the function node
 
-Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_FUNCTION_OF_AST_NODE') });
+Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in() });
 
 Gremlin.defineStep('basicBlock', [Vertex,Pipe], { _().in().loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
 
@@ -86,11 +86,11 @@ Gremlin.defineStep('markAsSource', [Vertex,Pipe], { _().basicBlock().sideEffect{
 // to the sink exists
 
 Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
-		   { _().out('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
+		   { _().out('FLOWS_TO').loop(1){it.loops < 20 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
 		   }  )
 
 Gremlin.defineStep('flowFromSource', [Vertex,Pipe],
-		   { _().in('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sourceId}.filter{it.id == sourceId }.dedup()
+		   { _().in('FLOWS_TO').loop(1){it.loops < 20 && it.object.id != sourceId}.filter{it.id == sourceId }.dedup()
 		   }  )
 
 // For a given basic block, get all paths into the exit direction
