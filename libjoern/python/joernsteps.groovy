@@ -49,11 +49,11 @@ Gremlin.defineStep('getCallsFromFuncToRegex', [Vertex,Pipe], { callee -> _().fun
 
 // Get all basic blocks of a function
 
-Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_CFG').out() })
+Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_CFG').out('IS_CFG_OF_BASIC_BLOCK') })
 
 // Get all AST-nodes of a function
 
-Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out()})
+Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out('IS_AST_OF_AST_NODE')})
 
 Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
@@ -67,7 +67,7 @@ Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEf
 
 Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in() });
 
-Gremlin.defineStep('basicBlock', [Vertex,Pipe], { _().in().loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
+Gremlin.defineStep('basicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
 
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
 
