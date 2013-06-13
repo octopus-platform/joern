@@ -51,13 +51,23 @@ Gremlin.defineStep('getCallsFromFuncToRegex', [Vertex,Pipe], { callee -> _().fun
 
 Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_CFG').out('IS_CFG_OF_BASIC_BLOCK') })
 
+Gremlin.defineStep("getFunctionAST", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST') })
+
+Gremlin.defineStep("getFunctionASTRoot", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out('IS_AST_OF_AST_ROOT') })
+
+Gremlin.defineStep("getParameterList", [Vertex,Pipe], { _().getFunctionASTRoot().outE('IS_AST_PARENT').filter{ it.n == '1'}.inV() })
+
+Gremlin.defineStep("getParameterN", [Vertex,Pipe], { n -> _().getParameterList().outE('IS_AST_PARENT').filter{ it.n == n}.inV() })
+
 // Get all AST-nodes of a function
 
-Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out('IS_AST_OF_AST_NODE')})
+Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().getFunctionAST().out('IS_AST_OF_AST_NODE')})
 
 Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
 Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
+
+
 
 ///////////////////////////////////
 // Steps for AST nodes in general
@@ -86,11 +96,11 @@ Gremlin.defineStep('markAsSource', [Vertex,Pipe], { _().basicBlock().sideEffect{
 // to the sink exists
 
 Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
-		   { _().out('FLOWS_TO').loop(1){it.loops < 20 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
+		   { _().out('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
 		   }  )
 
 Gremlin.defineStep('flowFromSource', [Vertex,Pipe],
-		   { _().in('FLOWS_TO').loop(1){it.loops < 20 && it.object.id != sourceId}.filter{it.id == sourceId }.dedup()
+		   { _().in('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sourceId}.filter{it.id == sourceId }.dedup()
 		   }  )
 
 // For a given basic block, get all paths into the exit direction
