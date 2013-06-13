@@ -1,4 +1,4 @@
-package output.neo4j.functionImport;
+package output.neo4j.importers;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.Vector;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.ASTImporter;
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
 import output.neo4j.Neo4JBatchInserter;
@@ -23,31 +24,41 @@ import cfg.CFG;
 // Stays alive while importing a function into
 // the database
 
-public class FunctionImporter
+public class FunctionImporter extends Importer
 {
-	GraphNodeStore nodeStore = new GraphNodeStore();
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
-	private long functionNodeId;
+	FileDatabaseNode curFile;
 	
-	public void addFunctionToDatabaseSafe(FunctionDef node, FileDatabaseNode fileNode)
+	
+	public void setCurrentFile(FileDatabaseNode fileNode)
+	{
+		curFile = fileNode;
+	}
+	
+	public void addToDatabaseSafe(ASTNode node)
 	{
 		try{
 			FunctionDatabaseNode function = new FunctionDatabaseNode();
 			function.initialize(node);
 			addFunctionToDatabase(function);
-			linkFunctionToFileNode(function, fileNode);
+			linkFunctionToFileNode(function, curFile);
 		}catch(RuntimeException ex)
 		{
 			ex.printStackTrace();
-			System.err.println("Error adding function to database: " + node.name.getEscapedCodeStr());
+			System.err.println("Error adding function to database: " + ((FunctionDef) node).name.getEscapedCodeStr());
 			return;
 		}
 	}
 	
 	private void addFunctionToDatabase(FunctionDatabaseNode function)
 	{
-		addFunctionNode(function);
+		
+		addMainNode(function);
+		
+		// and add the pseudo nodes
+		nodeStore.addNeo4jNode(function.getASTPseudoNode(), null);
+		nodeStore.addNeo4jNode(function.getCFGPseudoNode(), null);
 		
 		astImporter.setCurrentFunction(function);
 		astImporter.addASTToDatabase(function.getASTRoot());
@@ -57,23 +68,6 @@ public class FunctionImporter
 	
 	}
 
-	
-	private void addFunctionNode(FunctionDatabaseNode function)
-	{
-		Map<String, Object> properties = function.createProperties();
-		nodeStore.addNeo4jNode(function, properties);
-		
-		functionNodeId = nodeStore.getIdForObject(function);
-		
-		// index, but do not index location
-		properties.remove("location");
-		nodeStore.indexNode(function, properties);
-	
-		// and add the pseudo nodes
-		nodeStore.addNeo4jNode(function.getASTPseudoNode(), null);
-		nodeStore.addNeo4jNode(function.getCFGPseudoNode(), null);
-	}
-	
 	private void linkFunctionToASTAndCFG(FunctionDatabaseNode function)
 	{
 		
@@ -171,11 +165,6 @@ public class FunctionImporter
 		long nodeId = nodeStore.getIdForObject(node);
 		
 		Neo4JBatchInserter.addRelationship(parentId, nodeId, rel, null);
-	}
-
-	public long getFunctionNodeId()
-	{
-		return functionNodeId;
 	}
 
 }

@@ -2,7 +2,7 @@ package output.neo4j;
 
 import java.nio.file.Path;
 
-import output.neo4j.fileImport.FileImporter;
+import output.neo4j.importers.FileImporter;
 import output.neo4j.nodes.FileDatabaseNode;
 import parsing.Parser;
 import tools.index.DirectoryListener;

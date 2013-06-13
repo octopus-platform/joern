@@ -1,4 +1,4 @@
-package output.neo4j.functionImport;
+package output.neo4j.importers;
 
 import java.util.Iterator;
 import java.util.List;

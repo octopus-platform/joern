@@ -1,4 +1,4 @@
-package output.neo4j.fileImport;
+package output.neo4j.importers;
 
 import java.nio.file.Path;
 import java.util.Map;
