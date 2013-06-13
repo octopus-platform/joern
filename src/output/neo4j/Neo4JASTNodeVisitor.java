@@ -32,6 +32,10 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 		classDefImporter = new ClassDefImporter();
 		classDefImporter.addClassDefToDatabaseSafe(node, currentFileNode);
 		classDefImporter = null;
+	
+		// walk compound statement, it might contain
+		// functions, declarations or other class definitions
+		visit(node.content);
 	}
 	
 }

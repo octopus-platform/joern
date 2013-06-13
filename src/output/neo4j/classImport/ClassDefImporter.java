@@ -16,7 +16,7 @@ import astnodes.declarations.ClassDefStatement;
 public class ClassDefImporter
 {
 	GraphNodeStore nodeStore = new GraphNodeStore();
-
+	
 	public void addClassDefToDatabaseSafe(ClassDefStatement node,
 			FileDatabaseNode currentFileNode)
 	{
@@ -49,8 +49,14 @@ public class ClassDefImporter
 	private void addClassDefToDatabase(ClassDefDatabaseNode classDefNode)
 	{
 		addClassDefNode(classDefNode);
+		addClassContent(classDefNode);
 	}
 	
+	private void addClassContent(ClassDefDatabaseNode classDefNode)
+	{
+		// TODO Auto-generated method stub	
+	}
+
 	private void addClassDefNode(ClassDefDatabaseNode classDefNode)
 	{
 		Map<String, Object> properties = classDefNode.createProperties();

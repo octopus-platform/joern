@@ -8,12 +8,13 @@ import astnodes.declarations.ClassDefStatement;
 public class ClassDefDatabaseNode extends DatabaseNode {
 
 	String name;
+	ClassDefStatement stmt;
 	
 	@Override
 	public void initialize(Object obj)
 	{
-		ClassDefStatement classDef = (ClassDefStatement) obj;
-		name = classDef.name.getEscapedCodeStr();
+		stmt = (ClassDefStatement) obj;
+		name = stmt.name.getEscapedCodeStr();
 	}
 
 	@Override
