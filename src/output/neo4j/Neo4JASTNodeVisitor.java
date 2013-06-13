@@ -7,7 +7,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.importers.ClassDefImporter;
 import output.neo4j.importers.FunctionImporter;
-import output.neo4j.importers.IdentifierDeclImporter;
+import output.neo4j.importers.DeclStmtImporter;
 import output.neo4j.importers.Importer;
 import output.neo4j.nodes.FileDatabaseNode;
 import astnodes.ASTNode;
@@ -44,7 +44,7 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 	
 	public void visit(IdentifierDeclStatement node)
 	{
-		Importer importer = new IdentifierDeclImporter();
+		Importer importer = new DeclStmtImporter();
 		importNode(importer, node);
 	}
 	
