@@ -59,6 +59,9 @@ Gremlin.defineStep("getParameterList", [Vertex,Pipe], { _().getFunctionASTRoot()
 
 Gremlin.defineStep("getParameterN", [Vertex,Pipe], { n -> _().getParameterList().outE('IS_AST_PARENT').filter{ it.n == n}.inV() })
 
+Gremlin.defineStep("getParameterNType", [Vertex,Pipe], { n -> _().getParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()} )
+Gremlin.defineStep("getParameterNName", [Vertex,Pipe], { n -> _().getParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '1'}.inV()} )
+
 // Get all AST-nodes of a function
 
 Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().getFunctionAST().out('IS_AST_OF_AST_NODE')})
