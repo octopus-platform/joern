@@ -1,5 +1,6 @@
 package output.neo4j.importers;
 
+import output.neo4j.nodes.DeclDatabaseNode;
 import astnodes.ASTNode;
 
 public class DeclImporter extends Importer {
@@ -7,7 +8,9 @@ public class DeclImporter extends Importer {
 	@Override
 	public void addToDatabaseSafe(ASTNode node)
 	{
-		// TODO Auto-generated method stub
+		DeclDatabaseNode dbNode = new DeclDatabaseNode();
+		dbNode.initialize(node);
+		addMainNode(dbNode);
 	}
 
 }
