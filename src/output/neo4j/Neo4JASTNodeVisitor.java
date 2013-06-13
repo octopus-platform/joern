@@ -1,6 +1,9 @@
-package output.neo4j.functionImport;
+package output.neo4j;
 
+import output.neo4j.classImport.ClassDefImporter;
+import output.neo4j.functionImport.FunctionImporter;
 import output.neo4j.nodes.FileDatabaseNode;
+import astnodes.declarations.ClassDefStatement;
 import astnodes.functionDef.FunctionDef;
 import astwalking.ASTNodeVisitor;
 
@@ -9,6 +12,7 @@ import astwalking.ASTNodeVisitor;
 public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 {
 	FunctionImporter functionImporter;
+	ClassDefImporter classDefImporter;
 	FileDatabaseNode currentFileNode;
 	
 	public void handleStartOfUnit(FileDatabaseNode aCurrentFileNode)
@@ -18,14 +22,16 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 	
 	public void visit(FunctionDef node)
 	{
-		createNewFunctionImporterForFunction();
+		functionImporter = new FunctionImporter();
 		functionImporter.addFunctionToDatabaseSafe(node, currentFileNode);
 		functionImporter = null;
 	}
 
-	private void createNewFunctionImporterForFunction()
+	public void visit(ClassDefStatement node)
 	{
-		functionImporter = new FunctionImporter();
+		classDefImporter = new ClassDefImporter();
+		classDefImporter.addClassDefToDatabaseSafe(node, currentFileNode);
+		classDefImporter = null;
 	}
 	
 }

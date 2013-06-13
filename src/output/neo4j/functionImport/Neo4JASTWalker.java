@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import output.neo4j.Neo4JASTNodeVisitor;
 import output.neo4j.Neo4JImportListener;
 import output.neo4j.nodes.FileDatabaseNode;
 
