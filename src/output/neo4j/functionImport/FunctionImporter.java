@@ -28,6 +28,7 @@ public class FunctionImporter
 	GraphNodeStore nodeStore = new GraphNodeStore();
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
+	private long functionNodeId;
 	
 	public void addFunctionToDatabaseSafe(FunctionDef node, FileDatabaseNode fileNode)
 	{
@@ -61,7 +62,9 @@ public class FunctionImporter
 	{
 		Map<String, Object> properties = function.createProperties();
 		nodeStore.addNeo4jNode(function, properties);
-				
+		
+		functionNodeId = nodeStore.getIdForObject(function);
+		
 		// index, but do not index location
 		properties.remove("location");
 		nodeStore.indexNode(function, properties);
@@ -168,6 +171,11 @@ public class FunctionImporter
 		long nodeId = nodeStore.getIdForObject(node);
 		
 		Neo4JBatchInserter.addRelationship(parentId, nodeId, rel, null);
+	}
+
+	public long getFunctionNodeId()
+	{
+		return functionNodeId;
 	}
 
 }

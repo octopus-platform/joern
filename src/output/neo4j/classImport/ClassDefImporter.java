@@ -16,6 +16,7 @@ import astnodes.declarations.ClassDefStatement;
 public class ClassDefImporter
 {
 	GraphNodeStore nodeStore = new GraphNodeStore();
+	private long classNodeId;
 	
 	public void addClassDefToDatabaseSafe(ClassDefStatement node,
 			FileDatabaseNode currentFileNode)
@@ -60,11 +61,17 @@ public class ClassDefImporter
 	private void addClassDefNode(ClassDefDatabaseNode classDefNode)
 	{
 		Map<String, Object> properties = classDefNode.createProperties();
-		nodeStore.addNeo4jNode(classDefNode, properties);
-				
+		nodeStore.addNeo4jNode(classDefNode, properties);	
+		classNodeId = nodeStore.getIdForObject(classDefNode);
+		
 		// index, but do not index location
 		properties.remove("location");
 		nodeStore.indexNode(classDefNode, properties);
+	}
+
+	public long getClassNodeId()
+	{
+		return classNodeId;
 	}
 	
 }
