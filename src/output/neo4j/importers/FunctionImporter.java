@@ -28,13 +28,7 @@ public class FunctionImporter extends Importer
 {
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
-	FileDatabaseNode curFile;
 	
-	
-	public void setCurrentFile(FileDatabaseNode fileNode)
-	{
-		curFile = fileNode;
-	}
 	
 	public void addToDatabaseSafe(ASTNode node)
 	{

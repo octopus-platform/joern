@@ -13,12 +13,6 @@ import astnodes.declarations.ClassDefStatement;
 
 public class ClassDefImporter extends Importer
 {
-	FileDatabaseNode curFile;
-	
-	public void setCurrentFile(FileDatabaseNode fileNode)
-	{
-		curFile = fileNode;
-	}
 	
 	public void addToDatabaseSafe(ASTNode node)
 	{

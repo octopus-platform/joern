@@ -6,12 +6,20 @@ import astnodes.ASTNode;
 
 import output.neo4j.GraphNodeStore;
 import output.neo4j.nodes.DatabaseNode;
+import output.neo4j.nodes.FileDatabaseNode;
 
 public abstract class Importer {
 
 	protected Long mainNodeId;
 	protected GraphNodeStore nodeStore = new GraphNodeStore();
-
+	protected FileDatabaseNode curFile;
+	
+	
+	public void setCurrentFile(FileDatabaseNode fileNode)
+	{
+		curFile = fileNode;
+	}
+	
 	public long getMainNodeId()
 	{
 		return mainNodeId;
