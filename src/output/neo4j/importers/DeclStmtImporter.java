@@ -3,6 +3,11 @@ package output.neo4j.importers;
 import java.util.Iterator;
 import java.util.List;
 
+import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.RelationshipType;
+
+import output.neo4j.EdgeTypes;
+import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.nodes.DeclStmtDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.statements.IdentifierDeclStatement;
@@ -15,7 +20,7 @@ public class DeclStmtImporter extends Importer {
 	{
 		DeclStmtDatabaseNode dbNode = new DeclStmtDatabaseNode();
 		dbNode.initialize(node);
-		addMainNode(dbNode);
+		addMainNode(dbNode);	
 		
 		addDeclarations(node);
 	}
@@ -28,7 +33,15 @@ public class DeclStmtImporter extends Importer {
 		while(it.hasNext()){
 			ASTNode decl = it.next();
 			declImporter.addToDatabaseSafe(decl);
+			long declId = declImporter.getMainNodeId();
+			addLinkFromStmtToDecl(mainNodeId, declId);
 		}
+	}
+
+	private void addLinkFromStmtToDecl(long mainNodeId, long declId)
+	{	
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.DECLARES);	
+		Neo4JBatchInserter.addRelationship(mainNodeId, declId, rel, null);
 	}
 	
 }

@@ -70,7 +70,13 @@ Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
 Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
 
+// Get local variables: might want to make changes to this structure in importer later
 
+Gremlin.defineStep("getLocals", [Vertex,Pipe], { _().funcASTNodes().filter{it.type == 'IdentifierDecl'} })
+
+Gremlin.defineStep("getLocalTypes", [Vertex,Pipe], { _().getLocals().outE('IS_AST_PARENT').filter{it.n == '0'}.inV() } )
+
+Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().outE('IS_AST_PARENT').filter{it.n == '1'}.inV() } )
 
 ///////////////////////////////////
 // Steps for AST nodes in general

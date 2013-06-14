@@ -39,4 +39,8 @@ public class EdgeTypes
 	/** Connects functions to callees */
 	public static final String IS_CALLER = "IS_CALLER";
 
+	/** Links declaration statements to the declarations
+	 * contained in them */
+	public static final String DECLARES = "DECLARES";
+
 }

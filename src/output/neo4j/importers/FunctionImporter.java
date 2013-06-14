@@ -85,7 +85,6 @@ public class FunctionImporter extends Importer
 		long pseudoNodeId = nodeStore.getIdForObject(function.getASTPseudoNode());
 		
 		Neo4JBatchInserter.addRelationship(functionId, pseudoNodeId, rel, null);
-		
 	}
 	
 	private void linkFunctionWithCFGPseudoNode(FunctionDatabaseNode function)
