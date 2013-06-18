@@ -4,7 +4,6 @@ Object.metaClass.astNodesByType = { typeName ->
   g.idx("astNodeIndex")[[type:typeName]]
 }
  
-
 // This is more efficient than 'getCallsToRegex'
 // but less powerful, allowing only exact
 // matches of callee names
@@ -22,8 +21,16 @@ Object.metaClass.getCallsToRegex = { callee ->
   astNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
 }
 
+Object.metaClass.getArgumentNTo = { callee, n ->
+  getCallsTo(callee).getArgumentN(n)
+}
+
 Object.metaClass.queryNodeIndex = { query ->
   new com.tinkerpop.blueprints.pgm.impls.neo4j.util.Neo4jVertexSequence(g.getRawGraph().index().forNodes("astNodeIndex").query(query), g)._()
+}
+
+Object.metaClass.getTypeDeclarationsByName = { aName ->
+  g.idx('astNodeIndex')[[name:aName]]
 }
 
 ///////////////////////////////////////
@@ -77,6 +84,9 @@ Gremlin.defineStep("getTypeOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').
 Gremlin.defineStep("getNameOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{it.n == '1'}.inV() } )
 Gremlin.defineStep("getLocalTypes", [Vertex,Pipe], { _().getLocals().getTypeOfLocal() } )
 Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLocal() } )
+
+// This part is horrible as we use a regex to parse the struct part from the type and chop off the postfix
+Gremlin.defineStep("nameOfStructure", [Vertex,Pipe], { _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] } } )
 
 ///////////////////////////////////
 // Steps for AST nodes in general
