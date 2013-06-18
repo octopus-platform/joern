@@ -73,10 +73,10 @@ Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEf
 // Get local variables: might want to make changes to this structure in importer later
 
 Gremlin.defineStep("getLocals", [Vertex,Pipe], { _().funcASTNodes().filter{it.type == 'IdentifierDecl'} })
-
-Gremlin.defineStep("getLocalTypes", [Vertex,Pipe], { _().getLocals().outE('IS_AST_PARENT').filter{it.n == '0'}.inV() } )
-
-Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().outE('IS_AST_PARENT').filter{it.n == '1'}.inV() } )
+Gremlin.defineStep("getTypeOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{it.n == '0'}.inV() } )
+Gremlin.defineStep("getNameOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{it.n == '1'}.inV() } )
+Gremlin.defineStep("getLocalTypes", [Vertex,Pipe], { _().getLocals().getTypeOfLocal() } )
+Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLocal() } )
 
 ///////////////////////////////////
 // Steps for AST nodes in general
