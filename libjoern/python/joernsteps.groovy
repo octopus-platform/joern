@@ -1,36 +1,93 @@
 import java.util.regex.*;
+import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
+
+////////////////////////////////////////////
+// Selection of start nodes
+////////////////////////////////////////////
+
+/**
+   Query the AST node index.
+   
+   @param query Lucene query
+*/
+
+Object.metaClass.queryNodeIndex = { query ->
+  index = g.getRawGraph().index().forNodes("astNodeIndex")
+  new Neo4jVertexSequence(index.query(query), g)._()
+}
+
+/**
+   Retrieve all AST nodes of a specified type from
+   the AST node index.
+   
+   @param typeName AST type
+ */
 
 Object.metaClass.astNodesByType = { typeName ->
   g.idx("astNodeIndex")[[type:typeName]]
 }
- 
-// This is more efficient than 'getCallsToRegex'
-// but less powerful, allowing only exact
-// matches of callee names
+
+/**
+   Retrieve declaration by name.
+   
+   @param aName name
+*/
+
+Object.metaClass.getTypeDeclsByName = { aName ->
+  g.idx('astNodeIndex')[[name:aName]]
+}
+
+/**
+   Retrieve function by name.
+   
+   @param aName name
+*/
+
+Object.metaClass.getFunctionByName = { aName ->
+  g.idx('astNodeIndex')[[functionName:aName]]
+}
+
+/**
+   Retrieve all calls by callee.
+   This is more efficient than 'getCallsToRegex'
+   but less powerful, allowing only exact
+   matches of callee names.
+
+  @param callee identifier of the callee
+*/
 
 Object.metaClass.getCallsTo = { callee ->
-  queryNodeIndex('type:"CallExpression" AND code:' + callee + '*').filter{ it.code.startsWith(callee + ' ') }
+  query = 'type:"CallExpression" AND code:' + callee + '*'
+  queryNodeIndex(query).filter
+  {
+    it.code.startsWith(callee + ' ')
+  }
 }
- 
-// To match a regex, we can only use the index
-// to extract all CallExpressions. We then
-// need to iterate over all call expressions
-// to see where the regex matches.
 
-Object.metaClass.getCallsToRegex = { callee ->
-  astNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
-}
+/**
+   Retrieve n'th arguments to calls by callee.
+   
+   @param callee callee
+   @param n the parameter number (a String)
+*/
 
 Object.metaClass.getArgumentNTo = { callee, n ->
   getCallsTo(callee).getArgumentN(n)
 }
 
-Object.metaClass.queryNodeIndex = { query ->
-  new com.tinkerpop.blueprints.pgm.impls.neo4j.util.Neo4jVertexSequence(g.getRawGraph().index().forNodes("astNodeIndex").query(query), g)._()
-}
+/**
+   Retrieve all calls by regular expression
+   To match a regex, we can only use the index
+   to extract all CallExpressions. We then
+   need to iterate over all call expressions
+   to see where the regex matches.
 
-Object.metaClass.getTypeDeclarationsByName = { aName ->
-  g.idx('astNodeIndex')[[name:aName]]
+   @param callee regular expression callees must match.
+   
+ */
+ 
+Object.metaClass.getCallsToRegex = { callee ->
+  astNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
 }
 
 ///////////////////////////////////////
@@ -40,13 +97,18 @@ Object.metaClass.getTypeDeclarationsByName = { aName ->
 // Get n'th parameter.
 // Watchout: n needs to be a string for now
 
-Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n -> _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}.outE('IS_AST_PARENT').filter{ it.n == n }.inV() } )
+Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n ->
+  x = _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}
+  x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()
+} )
 
 // Get the callee, i.e. the name of the function called
 
-Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV() })
+Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { 
+ _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()
+} )
 
-Gremlin.defineStep('resolveCallee', [Vertex,Pipe], { _().getCalleeFromCall().transform{ g.idx('astNodeIndex')[[functionName:it.code]] }} )
+Gremlin.defineStep('resolveCallee', [Vertex,Pipe], { _().getCalleeFromCall().transform{ g.idx('astNodeIndex')[[functionName:it.code]] }.scatter()}  )
 
 /////////////////////////////
 // Steps for Function-nodes:
@@ -77,6 +139,10 @@ Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
 Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
 
+Gremlin.defineStep("getCallsOfFunction", [Vertex,Pipe], { _().funcASTNodes().filter{ it.type == 'CallExpression'}})
+
+Gremlin.defineStep("getCallsOfFunctionTo", [Vertex,Pipe], { x -> _().getCallsOfFunction().filter{ it.code.startsWith(x + ' ')}  })
+
 // Get local variables: might want to make changes to this structure in importer later
 
 Gremlin.defineStep("getLocals", [Vertex,Pipe], { _().funcASTNodes().filter{it.type == 'IdentifierDecl'} })
@@ -87,6 +153,11 @@ Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLo
 
 // This part is horrible as we use a regex to parse the struct part from the type and chop off the postfix
 Gremlin.defineStep("nameOfStructure", [Vertex,Pipe], { _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] } } )
+
+// Structure access
+
+Gremlin.defineStep("getMemberDecls", [Vertex,Pipe], { _().out('IS_CLASS_OF').filter{it.type == 'DECL_STMT'}.out() } )
+
 
 ///////////////////////////////////
 // Steps for AST nodes in general
