@@ -498,8 +498,8 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		// This is also a bit of a hack. As we go up,
 		// we introduce an artificial assignment-node.
 		
-		assign.setLeft(identifierDecl.getName());
-		assign.setRight(lastChild);
+		assign.addChild(identifierDecl.getName());
+		assign.addChild(lastChild);
 		identifierDecl.addChild(assign);
 		
 		ASTNode stmt =  itemStack.peek();

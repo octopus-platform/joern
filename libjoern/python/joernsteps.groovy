@@ -64,6 +64,11 @@ Object.metaClass.getCallsTo = { callee ->
   }
 }
 
+Object.metaClass.getParametersOfType = { typeName ->
+  query = 'type:"ParameterType" AND code:"' + typeName + '"'
+  queryNodeIndex(query)
+}
+
 /**
    Retrieve n'th arguments to calls by callee.
    
@@ -111,13 +116,20 @@ Gremlin.defineStep('getNodeById', [Vertex,Pipe], {
    _().transform{ g.v(it) }.scatter()
 })
 
+Gremlin.defineStep('backToLastFunction', [Vertex,Pipe], {
+   _().transform{ functionId }.getNodeById()
+})
+
 //////////////////////////////////////
 // (3) Steps for AST nodes in general
 /////////////////////////////////////
 
 // For a given AST-node, get the function node
 
-Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in() });
+Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in().sideEffect{ functionId = it.id} });
+
+Gremlin.defineStep('codeContains', [Vertex,Pipe], { x -> _().filter{ it.code.matches(x) } } )
+
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
 Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().filter{ regex.matcher(it.code).matches() }} )
 
@@ -216,7 +228,19 @@ Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOWS_TO').loop(1)
 // Assignments
 /////////////////////////////////
 
-Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }inV()});
+// There still seems to be a problem for assignments
+// where lval is a unary expression here
+
+Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }.inV()});
+Gremlin.defineStep('rval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("1") }.inV()});
+
+////////////////////////////////
+// Filter Expressions
+////////////////////////////////
+
+Object.metaClass.codeContains = { obj, x ->
+  obj.code.contains(x)
+}
 
 ///////////////////////////////
 // Deprecated
