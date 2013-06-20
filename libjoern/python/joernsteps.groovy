@@ -2,7 +2,7 @@ import java.util.regex.*;
 import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
 
 ////////////////////////////////////////////
-// Selection of start nodes
+// (1) Selection of start nodes
 ////////////////////////////////////////////
 
 /**
@@ -90,60 +90,65 @@ Object.metaClass.getCallsToRegex = { callee ->
   astNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
 }
 
+////////////////////////////////////////
+// (2) Steps to retrieve from the index
 ///////////////////////////////////////
-// Steps for CallExpression AST-nodes:
-///////////////////////////////////////
 
-// Get n'th parameter.
-// Watchout: n needs to be a string for now
+Gremlin.defineStep('queryNodeIndex', [Vertex,Pipe], {
+  _().transform{ queryNodeIndex(it) }.scatter()
+})
 
-Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n ->
-  x = _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}
-  x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()
-} )
+Gremlin.defineStep('getTypeDeclsByName', [Vertex,Pipe], {
+ _().transform{ getTypeDeclsByName(it) }.scatter()
+})
 
-// Get the callee, i.e. the name of the function called
+// this should be renamed to 'getFunctionByName'
+Gremlin.defineStep('resolveCallee', [Vertex,Pipe], {
+   _().getCalleeFromCall().transform{ getFunctionByName(it.code) }.scatter()
+})
 
-Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { 
- _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()
-} )
+Gremlin.defineStep('getNodeById', [Vertex,Pipe], {
+   _().transform{ g.v(it) }.scatter()
+})
 
-Gremlin.defineStep('resolveCallee', [Vertex,Pipe], { _().getCalleeFromCall().transform{ g.idx('astNodeIndex')[[functionName:it.code]] }.scatter()}  )
+//////////////////////////////////////
+// (3) Steps for AST nodes in general
+/////////////////////////////////////
 
-/////////////////////////////
-// Steps for Function-nodes:
-/////////////////////////////
+// For a given AST-node, get the function node
 
-Gremlin.defineStep('getCallsFromFuncToRegex', [Vertex,Pipe], { callee -> _().funcASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
+Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in() });
+Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
+Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().filter{ regex.matcher(it.code).matches() }} )
 
-// Get all basic blocks of a function
-
-Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_CFG').out('IS_CFG_OF_BASIC_BLOCK') })
-
-Gremlin.defineStep("getFunctionAST", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST') })
-
-Gremlin.defineStep("getFunctionASTRoot", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out('IS_AST_OF_AST_ROOT') })
-
-Gremlin.defineStep("getParameterList", [Vertex,Pipe], { _().getFunctionASTRoot().outE('IS_AST_PARENT').filter{ it.n == '1'}.inV() })
-
-Gremlin.defineStep("getParameterN", [Vertex,Pipe], { n -> _().getParameterList().outE('IS_AST_PARENT').filter{ it.n == n}.inV() })
-
-Gremlin.defineStep("getParameterNType", [Vertex,Pipe], { n -> _().getParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()} )
-Gremlin.defineStep("getParameterNName", [Vertex,Pipe], { n -> _().getParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '1'}.inV()} )
-
-// Get all AST-nodes of a function
-
-Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().getFunctionAST().out('IS_AST_OF_AST_NODE')})
+////////////////////////////////
+// (4) Steps for Function-nodes:
+////////////////////////////////
 
 Gremlin.defineStep("getSourceFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 
+Gremlin.defineStep("funcASTNodes", [Vertex,Pipe], { _().getFunctionAST().out('IS_AST_OF_AST_NODE')})
+Gremlin.defineStep("funcBasicBlocks", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_CFG').out('IS_CFG_OF_BASIC_BLOCK') })
+
+Gremlin.defineStep("getFunctionAST", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST') })
+Gremlin.defineStep("getFunctionASTRoot", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST').out('IS_AST_OF_AST_ROOT') })
+
+Gremlin.defineStep("getParameterList", [Vertex,Pipe], { _().getFunctionASTRoot().outE('IS_AST_PARENT').filter{ it.n == '1'}.inV() })
+Gremlin.defineStep("getParameterN", [Vertex,Pipe], { n -> _().getParameterList().outE('IS_AST_PARENT').filter{ it.n == n}.inV() })
+Gremlin.defineStep("getParameterNType", [Vertex,Pipe], { n -> _().getParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()} )
+Gremlin.defineStep("getParameterNName", [Vertex,Pipe], { n -> _().getParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '1'}.inV()} )
+
+Gremlin.defineStep("getCalls", [Vertex,Pipe], { _().funcASTNodes().filter{ it.type == 'CallExpression'}})
+Gremlin.defineStep("getCallsTo", [Vertex,Pipe], { x -> _().getCalls().filter{ it.code.startsWith(x + ' ')}  })
+
+Gremlin.defineStep("getCallsToAnyOf", [Vertex,Pipe], { l ->
+  _().getCalls().filter{ for(x in l){ if(it.code.startsWith(x + ' ')) return true; }; return false; }
+
+})
+
+Gremlin.defineStep('getCallsToRegex', [Vertex,Pipe], { callee -> _().funcASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
+
 Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
-
-Gremlin.defineStep("getCallsOfFunction", [Vertex,Pipe], { _().funcASTNodes().filter{ it.type == 'CallExpression'}})
-
-Gremlin.defineStep("getCallsOfFunctionTo", [Vertex,Pipe], { x -> _().getCallsOfFunction().filter{ it.code.startsWith(x + ' ')}  })
-
-// Get local variables: might want to make changes to this structure in importer later
 
 Gremlin.defineStep("getLocals", [Vertex,Pipe], { _().funcASTNodes().filter{it.type == 'IdentifierDecl'} })
 Gremlin.defineStep("getTypeOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{it.n == '0'}.inV() } )
@@ -154,32 +159,33 @@ Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLo
 // This part is horrible as we use a regex to parse the struct part from the type and chop off the postfix
 Gremlin.defineStep("nameOfStructure", [Vertex,Pipe], { _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] } } )
 
-// Structure access
+////////////////////////////////////
+// (5) Steps for structures/classes
+////////////////////////////////////
 
 Gremlin.defineStep("getMemberDecls", [Vertex,Pipe], { _().out('IS_CLASS_OF').filter{it.type == 'DECL_STMT'}.out() } )
 
+///////////////////////////////////////////
+// (6) Steps for CallExpression AST-nodes:
+//////////////////////////////////////////
 
-///////////////////////////////////
-// Steps for AST nodes in general
-//////////////////////////////////
+Gremlin.defineStep('getCalleeFromCall', [Vertex, Pipe], { 
+ _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()
+} )
 
-// For a given AST-node, get the function node
+// Watchout: n needs to be a string for now
 
-Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in() });
+Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n ->
+  x = _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}
+  x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()
+} )
+
+//////////////////////
+// (7) Control Flow
+//////////////////////
 
 Gremlin.defineStep('basicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
-
-Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
-
-Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().filter{ regex.matcher(it.code).matches() }} )
-
-
-//////////////////////////////////
-// Flows from sources to sinks
-//////////////////////////////////
-
 Gremlin.defineStep('markAsSink', [Vertex,Pipe], { _().basicBlock().sideEffect{ sinkId  = it.id; }.back(2) } )
-
 Gremlin.defineStep('markAsSource', [Vertex,Pipe], { _().basicBlock().sideEffect{ sourceId  = it.id; }.back(2) } )
 
 // Check if a flow from the current basic block
@@ -187,11 +193,14 @@ Gremlin.defineStep('markAsSource', [Vertex,Pipe], { _().basicBlock().sideEffect{
 
 Gremlin.defineStep('flowsToSink', [Vertex,Pipe],
 		   { _().out('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sinkId}.filter{it.id == sinkId }.dedup()
-		   }  )
+})
+
+// Check if a flow to the current basic block
+// from the source exists
 
 Gremlin.defineStep('flowFromSource', [Vertex,Pipe],
 		   { _().in('FLOWS_TO').loop(1){it.loops < 30 && it.object.id != sourceId}.filter{it.id == sourceId }.dedup()
-		   }  )
+})
 
 // For a given basic block, get all paths into the exit direction
 // up to and inlcuding a length of 10
@@ -206,8 +215,6 @@ Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOWS_TO').loop(1)
 /////////////////////////////////
 // Assignments
 /////////////////////////////////
-
-// Get the left-value-node
 
 Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }inV()});
 
