@@ -51,6 +51,7 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 		ParserRuleContext identifier = decl_ctx.identifier();
 		Identifier newName = new Identifier();
 		newName.initializeFromContext(identifier);
+		
 		thisItem.setName(newName);
 	}
 	
@@ -67,8 +68,8 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 			if(decl_ctx.getWrappedObject() == null) continue;
 			
 			createNew(decl_ctx.getWrappedObject());
-			setName(decl_ctx);
 			setType(decl_ctx, typeName);
+			setName(decl_ctx);
 			
 			declarations.add((IdentifierDecl) getItem());
 		}

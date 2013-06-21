@@ -163,8 +163,8 @@ Gremlin.defineStep('getCallsToRegex', [Vertex,Pipe], { callee -> _().funcASTNode
 Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
 
 Gremlin.defineStep("getLocals", [Vertex,Pipe], { _().funcASTNodes().filter{it.type == 'IdentifierDecl'} })
-Gremlin.defineStep("getTypeOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{it.n == '0'}.inV() } )
-Gremlin.defineStep("getNameOfLocal", [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{it.n == '1'}.inV() } )
+Gremlin.defineStep("getTypeOfLocal", [Vertex,Pipe], { _().out('IS_AST_PARENT').filter{it.type == 'IdentifierDeclType'} } )
+Gremlin.defineStep("getNameOfLocal", [Vertex,Pipe], { _().out('IS_AST_PARENT').filter{it.type == 'Identifier'} } )
 Gremlin.defineStep("getLocalTypes", [Vertex,Pipe], { _().getLocals().getTypeOfLocal() } )
 Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLocal() } )
 
@@ -227,9 +227,6 @@ Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOWS_TO').loop(1)
 /////////////////////////////////
 // Assignments
 /////////////////////////////////
-
-// There still seems to be a problem for assignments
-// where lval is a unary expression here
 
 Gremlin.defineStep('lval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }.inV()});
 Gremlin.defineStep('rval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("1") }.inV()});

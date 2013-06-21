@@ -500,6 +500,7 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		
 		assign.addChild(identifierDecl.getName());
 		assign.addChild(lastChild);
+		
 		identifierDecl.addChild(assign);
 		
 		ASTNode stmt =  itemStack.peek();
