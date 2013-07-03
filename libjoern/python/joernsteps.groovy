@@ -160,13 +160,13 @@ Gremlin.defineStep("getCallsToAnyOf", [Vertex,Pipe], { l ->
 
 Gremlin.defineStep('getCallsToRegex', [Vertex,Pipe], { callee -> _().funcASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
 
-Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
-
 Gremlin.defineStep("getLocals", [Vertex,Pipe], { _().funcASTNodes().filter{it.type == 'IdentifierDecl'} })
 Gremlin.defineStep("getTypeOfLocal", [Vertex,Pipe], { _().out('IS_AST_PARENT').filter{it.type == 'IdentifierDeclType'} } )
 Gremlin.defineStep("getNameOfLocal", [Vertex,Pipe], { _().out('IS_AST_PARENT').filter{it.type == 'Identifier'} } )
 Gremlin.defineStep("getLocalTypes", [Vertex,Pipe], { _().getLocals().getTypeOfLocal() } )
 Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLocal() } )
+
+Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
 
 // This part is horrible as we use a regex to parse the struct part from the type and chop off the postfix
 Gremlin.defineStep("nameOfStructure", [Vertex,Pipe], { _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] } } )
