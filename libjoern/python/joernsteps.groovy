@@ -168,6 +168,7 @@ Gremlin.defineStep("getLocalNames", [Vertex,Pipe], { _().getLocals().getNameOfLo
 
 Gremlin.defineStep("getLocationRow", [Vertex,Pipe], { _().getSourceFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
 
+
 // This part is horrible as we use a regex to parse the struct part from the type and chop off the postfix
 Gremlin.defineStep("nameOfStructure", [Vertex,Pipe], { _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] } } )
 
