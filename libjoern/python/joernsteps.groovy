@@ -16,8 +16,13 @@ Object.metaClass.queryNodeIndex = { query ->
   new Neo4jVertexSequence(index.query(query), g)._()
 }
 
-Object.metaClass.start = { p ->
-  g.V.copySplit( *p ).exhaustMerge()
+Object.metaClass.START = { pipes ->
+  
+  def result = []
+  pipes.each(){
+    result.addAll(it.toList())
+  }
+  result._().scatter() 
 }
 
 
