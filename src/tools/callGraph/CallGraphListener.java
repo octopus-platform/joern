@@ -22,6 +22,7 @@ public class CallGraphListener {
 		IndexHits<Long> calls = getOutgoingCallsFromIndex(funcId);
 		for(long callId : calls){
 			IndexHits<Long> dstIds = resolveCalledFunction(callId);
+			if(dstIds == null) continue;
 			createCallGraphEdges(funcId, dstIds, callId);
 		}
 	}
@@ -55,6 +56,9 @@ public class CallGraphListener {
 	
 	private IndexHits<Long> lookupCallee(String callee)
 	{
+		if(callee.contains(" "))
+			return null;
+		
 		String query = "type:\"Function\" AND functionName:\"" + callee + "\"";
 		
 		IndexHits<Long> hits =
