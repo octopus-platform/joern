@@ -16,6 +16,11 @@ Object.metaClass.queryNodeIndex = { query ->
   new Neo4jVertexSequence(index.query(query), g)._()
 }
 
+Object.metaClass.start = { p ->
+  g.V.copySplit( *p ).exhaustMerge()
+}
+
+
 /**
    Retrieve all AST nodes of a specified type from
    the AST node index.
@@ -193,6 +198,8 @@ Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n ->
   x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()
 } )
 
+
+
 //////////////////////
 // (7) Control Flow
 //////////////////////
@@ -239,6 +246,25 @@ Gremlin.defineStep('rval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it
 Object.metaClass.codeContains = { obj, x ->
   obj.code.contains(x)
 }
+
+
+public nodesOfTree(ArrayList vertices)
+{
+  def results = []; 
+  vertices.each()
+  { 
+    results << it;
+    def children = it.out('IS_AST_PARENT').toList();
+    if(children){
+      def childNodes = nodesOfTree(children);
+      results.addAll(childNodes);
+    }
+  }
+  results;
+}
+
+Gremlin.defineStep('getASTNodes', [Vertex,Pipe], { _().transform{ nodesOfTree([it]) }.scatter() } );
+Gremlin.defineStep('getASTNodesOfType', [Vertex,Pipe], { t -> _().getASTNodes().filter{ it.type == t} } );
 
 ///////////////////////////////
 // Deprecated

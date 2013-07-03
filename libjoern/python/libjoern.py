@@ -18,7 +18,7 @@ class JoernSteps:
 
     def executeGremlinCmd(self, cmd):
         finalCmd = self.initCommand
-        finalCmd += cmd 
+        finalCmd += cmd
         return gremlin.execute(finalCmd, self.graphDb)
         
     def executeCypherQuery(self, query):

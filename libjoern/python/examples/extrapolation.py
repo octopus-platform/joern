@@ -71,6 +71,9 @@ if __name__ == '__main__':
     for k in d.iterkeys():
         d[k] = dict(Counter(d[k]))
     
+        for j in d[k].iterkeys():
+            d[k][j] = 1.0
+    
     funcIds = d.iterkeys()
     vectors = d.itervalues()
 
@@ -83,7 +86,7 @@ if __name__ == '__main__':
 
     print 'Shape of document term matrix: ' + str(X.shape)
         
-    k = 200
+    k = 100
     print 'Performing SVD with k = %d' % (k)
     (U, S, V) = sparsesvd.sparsesvd(X.T.tocsc(), k)
 
