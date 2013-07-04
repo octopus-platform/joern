@@ -17,14 +17,16 @@ Object.metaClass.queryNodeIndex = { query ->
 }
 
 Object.metaClass.START = { pipes ->
+    
+  np = []
   
-  def result = []
-  pipes.each(){
-    result.addAll(it.toList())
+  for(int i = 0; i < pipes.size(); i++){
+    p = pipes[i]
+    np.add( _().transform{ p }.scatter())
   }
-  result._().scatter() 
+  
+  _().copySplit( *np ).exhaustMerge()
 }
-
 
 /**
    Retrieve all AST nodes of a specified type from
@@ -270,6 +272,8 @@ public nodesOfTree(ArrayList vertices)
 
 Gremlin.defineStep('getASTNodes', [Vertex,Pipe], { _().transform{ nodesOfTree([it]) }.scatter() } );
 Gremlin.defineStep('getASTNodesOfType', [Vertex,Pipe], { t -> _().getASTNodes().filter{ it.type == t} } );
+
+Gremlin.defineStep('getIdentifiers', [Vertex,Pipe], { _().getASTNodesOfType('Identifier') })
 
 ///////////////////////////////
 // Deprecated
