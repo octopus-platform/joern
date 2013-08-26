@@ -73,7 +73,7 @@ public class ASTToCFGConverter {
 		
 		while(it.hasNext()){
 			BasicBlock basicBlock = it.next();
-			ASTNode statement = basicBlock.getStatements().get(0);
+			ASTNode statement = basicBlock.getASTNode();
 			
 			jumpStatementVisitor.setCFG(cfg);
 			jumpStatementVisitor.setBasicBlock(basicBlock);

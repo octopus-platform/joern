@@ -86,7 +86,7 @@ public class CFGCreatorTest
 		
 		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
 		BasicBlock bodyBlock = basicBlocks.get(1);
-		ExpressionStatement exprStmt =  (ExpressionStatement) bodyBlock.getStatements().get(0);
+		ExpressionStatement exprStmt =  (ExpressionStatement) bodyBlock.getASTNode();
 		
 		assertTrue(exprStmt.getEscapedCodeStr().equals("bar ( )"));
 	}
@@ -208,7 +208,7 @@ public class CFGCreatorTest
 	{
 		String input = "for(;;){}";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().get(1).getStatements().get(0) == null);
+		assertTrue(cfg.getBasicBlocks().get(1).getASTNode() == null);
 	}
 	
 	
@@ -292,7 +292,7 @@ public class CFGCreatorTest
 		String input = "x = 10;";
 		CFG cfg = getCFGForCode(input);
 		BasicBlock basicBlock = cfg.getBasicBlocks().get(0);
-		ASTNode astNode = basicBlock.getStatements().get(0);
+		ASTNode astNode = basicBlock.getASTNode();
 		assertTrue(astNode != null);
 		System.out.println(astNode.getClass().getSimpleName());
 	}
@@ -311,7 +311,7 @@ public class CFGCreatorTest
 	{
 		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
 		BasicBlock conditionBlock = basicBlocks.get(0);
-		ASTNode astNode = conditionBlock.getStatements().get(0);
+		ASTNode astNode = conditionBlock.getASTNode();
 		return astNode;
 	}
 	

@@ -8,15 +8,16 @@ import astnodes.ASTNode;
 public class BasicBlock {
 
 	List<ASTNode> statements = new LinkedList<ASTNode>();
-
-	public void appendNode(ASTNode node)
+	ASTNode astNode;
+	
+	public void setASTNode(ASTNode node)
 	{
-		statements.add(node);
+		astNode = node;		
 	}
 
-	public List<ASTNode> getStatements()
+	public ASTNode getASTNode()
 	{
-		return statements;
+		return astNode;
 	}
 
 	public String getEscapedCodeStr()

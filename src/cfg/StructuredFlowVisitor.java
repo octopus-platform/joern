@@ -128,7 +128,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG cfg = new CFG();
 		
 		BasicBlock initBlock = addEmptyBlock(cfg);
-		initBlock.appendNode(node.getForInitStatement());
+		initBlock.setASTNode(node.getForInitStatement());
 		
 		BasicBlock conditionBlock = addConditionBlock(node, cfg, new LoopBlock());
 		
@@ -137,7 +137,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		loopStack.pop();
 		
 		BasicBlock exprBlock = addEmptyBlock(cfg);
-		exprBlock.appendNode(node.getExpression());
+		exprBlock.setASTNode(node.getExpression());
 		
 		cfg.addEdge(initBlock, conditionBlock);
 		cfg.addEdge(conditionBlock, statementCFG.getFirstBlock());
@@ -299,7 +299,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	private BasicBlock addConditionBlock(BlockStarter node, CFG cfg, BasicBlock container)
 	{
 		Condition condition = node.getCondition();
-		container.appendNode(condition);
+		container.setASTNode(condition);
 		cfg.addBasicBlock(container);
 		return container;
 	}
@@ -315,7 +315,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	private void addBasicBlockForNode(ASTNode child, CFG cfg)
 	{
 		BasicBlock basicBlock = new BasicBlock();
-		basicBlock.appendNode(child);
+		basicBlock.setASTNode(child);
 		cfg.addBasicBlock(basicBlock);
 	}
 

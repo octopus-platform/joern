@@ -86,10 +86,10 @@ public class CFGImporter
 		if(block instanceof EmptyBasicBlock)
 			return;
 		
-		if(block.getStatements().size() == 0)
+		if(block.getASTNode() == null)
 			return;
 		
-		ASTNode astNode = block.getStatements().get(0);
+		ASTNode astNode = block.getASTNode();
 		
 		if(astNode == null)
 			return;

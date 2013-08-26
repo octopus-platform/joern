@@ -205,8 +205,6 @@ Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n ->
   x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()
 } )
 
-
-
 //////////////////////
 // (7) Control Flow
 //////////////////////

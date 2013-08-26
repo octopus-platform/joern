@@ -28,7 +28,7 @@ public class FunctionImporter extends Importer
 {
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
-	
+	PDGImporter pdgImporter = new PDGImporter(nodeStore);
 	
 	public void addToDatabaseSafe(ASTNode node)
 	{
@@ -56,8 +56,9 @@ public class FunctionImporter extends Importer
 		
 		astImporter.setCurrentFunction(function);
 		astImporter.addASTToDatabase(function.getASTRoot());
-		cfgImporter.addCFGToDatabase(function.getCFG());
-	
+		cfgImporter.addCFGToDatabase(function.getCFG());	
+		pdgImporter.addPDGToDatabase(function.getPDG());
+		
 		linkFunctionToASTAndCFG(function);
 	
 	}
