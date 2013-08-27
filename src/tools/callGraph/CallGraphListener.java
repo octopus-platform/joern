@@ -9,10 +9,11 @@ import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.Neo4JBatchInserter;
+import tools.ImportedNodeListener;
 
-public class CallGraphListener {
+public class CallGraphListener extends ImportedNodeListener {
 
-	public void visitFunction(Long funcId)
+	public void visitNode(Long funcId)
 	{
 		createOutgoingCallGraphEdges(funcId);
 	}
@@ -92,6 +93,7 @@ public class CallGraphListener {
 
 	private void createCallGraphEdges(Long funcId, IndexHits<Long> dstIds, Long callId)
 	{
+		
 		for(long dstId : dstIds){
 			RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CALLER);
 			Neo4JBatchInserter.addRelationship(funcId, dstId, rel, null);

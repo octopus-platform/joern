@@ -1,6 +1,7 @@
 package tools.callGraph;
 
 import output.neo4j.Neo4JBatchInserter;
+import tools.ImportedNodeWalker;
 
 
 public class CallGraphCreator {
