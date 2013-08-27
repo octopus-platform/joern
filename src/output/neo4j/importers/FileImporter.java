@@ -41,14 +41,14 @@ public class FileImporter
 	private void insertDirectoryNode(Path dir, FileDatabaseNode node)
 	{
 		node.initialize(dir);
-		node.setType("directory");	
+		node.setType("Directory");	
 		insertNode(node);
 	}
 
 	private void insertFileNode(Path dir, FileDatabaseNode node)
 	{
 		node.initialize(dir);
-		node.setType("file");	
+		node.setType("File");	
 		insertNode(node);
 	}
 	
@@ -57,6 +57,8 @@ public class FileImporter
 		Map<String, Object> properties = node.createProperties();
 		long nodeId = Neo4JBatchInserter.addNode(properties);
 		node.setId(nodeId);
+	
+		Neo4JBatchInserter.indexNode(nodeId, properties);	
 	}
 
 	public void exitDir(Path dir)
