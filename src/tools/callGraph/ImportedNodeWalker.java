@@ -13,18 +13,24 @@ import output.neo4j.Neo4JBatchInserter;
  * by querying the index
  * */
 
-public class ImportedFunctionWalker
+public class ImportedNodeWalker
 {
 	private List<CallGraphListener> listeners = new LinkedList<CallGraphListener>();
+	String type = "Function";
 	
 	public void addListener(CallGraphListener listener)
 	{
 		listeners.add(listener);
 	}
-
+	
+	public void setType(String aType)
+	{
+		type = aType;
+	}
+	
 	public void walk()
 	{
-		IndexHits<Long> functions = Neo4JBatchInserter.retrieveExactFromIndex("type", "Function");
+		IndexHits<Long> functions = Neo4JBatchInserter.retrieveExactFromIndex("type", type);
 		for(Long funcId : functions){
 			notifyListenersOfFunction(funcId);
 		}
