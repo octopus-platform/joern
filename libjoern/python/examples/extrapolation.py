@@ -1,11 +1,18 @@
 ########################################################
+#
 # Sample script - 'Similar API Usage Patterns'
 # Fabian 'fabs' Yamaguchi <fabs@phenoelit.de>
 #
-# This short script demonstrates how the graph database
-# created by joern can be queried to calculate all
-# information required for vulnerability extrapolation
-# as outlined in the WOOT'11 paper on the topic.
+# In this example, a similarity matrix suitable to identify functions
+# employing similar API usage patterns is created. The example
+# demonstrates that two cypher queries are sufficient to represent each
+# function of the code base by the functions it calls and the types it
+# references. With this information at hand, scikit-learn is used to
+# create a sparse document by term matrix, apply the tf-idf weighting
+# scheme and perform principal component analysis to extract common API
+# usage patterns as proposed in the WOOT'11 paper on vulnerability
+# extrapolation:
+# http://user.informatik.uni-goettingen.de/%7Ekrieck/docs/2011-woot.pdf
 ########################################################
 
 import sys, os

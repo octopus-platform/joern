@@ -6,8 +6,7 @@ import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
 ////////////////////////////////////////////
 
 /**
-   Query the AST node index.
-   
+   Query the node index.   
    @param query Lucene query
 */
 
@@ -29,10 +28,10 @@ Object.metaClass.START = { pipes ->
 }
 
 /**
-   Retrieve all AST nodes of a specified type from
-   the AST node index.
+   Retrieve all nodes of a specified type from
+   the node index.
    
-   @param typeName AST type
+   @param typeName type
  */
 
 Object.metaClass.astNodesByType = { typeName ->
