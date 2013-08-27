@@ -12,7 +12,7 @@ import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
 */
 
 Object.metaClass.queryNodeIndex = { query ->
-  index = g.getRawGraph().index().forNodes("astNodeIndex")
+  index = g.getRawGraph().index().forNodes("nodeIndex")
   new Neo4jVertexSequence(index.query(query), g)._()
 }
 
@@ -36,7 +36,7 @@ Object.metaClass.START = { pipes ->
  */
 
 Object.metaClass.astNodesByType = { typeName ->
-  g.idx("astNodeIndex")[[type:typeName]]
+  g.idx("nodeIndex")[[type:typeName]]
 }
 
 /**
@@ -46,7 +46,7 @@ Object.metaClass.astNodesByType = { typeName ->
 */
 
 Object.metaClass.getTypeDeclsByName = { aName ->
-  g.idx('astNodeIndex')[[name:aName]]
+  g.idx('nodeIndex')[[name:aName]]
 }
 
 /**
@@ -56,7 +56,7 @@ Object.metaClass.getTypeDeclsByName = { aName ->
 */
 
 Object.metaClass.getFunctionByName = { aName ->
-  g.idx('astNodeIndex')[[functionName:aName]]
+  g.idx('nodeIndex')[[functionName:aName]]
 }
 
 /**

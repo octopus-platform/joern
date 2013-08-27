@@ -18,7 +18,7 @@ public class Neo4JBatchInserter
 	
 	static BatchInserter inserter;
 	static BatchInserterIndexProvider indexProvider;
-	static BatchInserterIndex astNodeIndex;
+	static BatchInserterIndex nodeIndex;
 	
 	static String databaseDirectory = "neo4j-db";
 	
@@ -37,10 +37,10 @@ public class Neo4JBatchInserter
 	private static void initializeIndex()
 	{
 		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
-		astNodeIndex = indexProvider.nodeIndex( "astNodeIndex", MapUtil.stringMap( "type", "exact" ) );		
+		nodeIndex = indexProvider.nodeIndex( "nodeIndex", MapUtil.stringMap( "type", "exact" ) );		
 	
-		astNodeIndex.setCacheCapacity( "type", 100000 );
-		astNodeIndex.setCacheCapacity( "functionName", 100000 );
+		nodeIndex.setCacheCapacity( "type", 100000 );
+		nodeIndex.setCacheCapacity( "functionName", 100000 );
 	
 	}
 	
@@ -54,19 +54,19 @@ public class Neo4JBatchInserter
 	public static void indexNode(long nodeId, Map<String, Object> properties)
 	{
 		if(properties != null){
-			astNodeIndex.add(nodeId, properties);
+			nodeIndex.add(nodeId, properties);
 		}
 	}
 	
 	public static IndexHits<Long> retrieveExactFromIndex(String key, String value)
 	{
-		return astNodeIndex.get(key, value);
+		return nodeIndex.get(key, value);
 	}
 	
 	public static IndexHits<Long> queryIndex(String query)
 	{
 		
-		return astNodeIndex.query(query);
+		return nodeIndex.query(query);
 	}
 	
 	public static Map<String, Object> getNodeProperties(long id)

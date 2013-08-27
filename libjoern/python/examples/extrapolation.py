@@ -31,7 +31,7 @@ def addRecordsToDict(records, d):
 
 def getTypeUsageRecords(j):
     
-    records = j.executeCypherQuery('START n=node:astNodeIndex(type="Function") ' + 
+    records = j.executeCypherQuery('START n=node:nodeIndex(type="Function") ' + 
                                    'MATCH (n)-[:IS_FUNCTION_OF_AST]->(p)-[:IS_AST_OF_AST_NODE]->(m) WHERE ' +
                                    'm.type IN ["IdentifierDeclType", "ParameterType"] ' +
                                    'RETURN ID(n), m.code ORDER BY ID(n)')[0]
@@ -40,7 +40,7 @@ def getTypeUsageRecords(j):
 
 def getCallRecords(j):
     
-    records = j.executeCypherQuery('START n=node:astNodeIndex(type="Function") ' + 
+    records = j.executeCypherQuery('START n=node:nodeIndex(type="Function") ' + 
                                    'MATCH (n)-[:IS_FUNCTION_OF_AST]->(p)-[:IS_AST_OF_AST_NODE]->(m)-[r:IS_AST_PARENT]->(callee) WHERE ' +
                                    'm.type = "CallExpression" AND r.n = "0"' +
                                    'RETURN ID(n), callee.code ORDER BY ID(n)')[0]

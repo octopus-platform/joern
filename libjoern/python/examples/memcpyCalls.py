@@ -13,7 +13,7 @@ j = JoernSteps()
 # (1) Retrieve all AST-nodes containing a call to memcpy
 # by using the node index
 
-records = j.executeCypherQuery('START funcCall=node:astNodeIndex(type="CallExpression") ' + 
+records = j.executeCypherQuery('START funcCall=node:nodeIndex(type="CallExpression") ' + 
                                'MATCH (funcCall)-[r:IS_AST_PARENT]->(callee) '
                                'WHERE r.n = "0" AND callee.code = "memcpy"' +
                                'RETURN funcCall ORDER by ID(funcCall)')[0]
@@ -30,7 +30,7 @@ records = j.executeCypherQuery(query)[0]
 
 # (1) and (2) in a single query
 
-records = j.executeCypherQuery('START funcCall=node:astNodeIndex(type="CallExpression") ' + 
+records = j.executeCypherQuery('START funcCall=node:nodeIndex(type="CallExpression") ' + 
                                'MATCH (func)-[r1:IS_FUNCTION_OF_AST_NODE]->(funcCall)' +
                                '-[r2:IS_AST_PARENT]->(callee) ' +
                                'WHERE r2.n = "0" AND callee.code = "memcpy"' +
