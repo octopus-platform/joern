@@ -13,15 +13,16 @@ cmd = """ queryNodeIndex('type:"AssignmentExpr"').code
 
 for x in j.executeGremlinCmd(cmd): print x
 
-# (*) Retrieve entire nodes including all properties
-# Warning: This is more expensive then specifying
+# (*) Alternative: Retrieve entire nodes including
+#     all properties
+# Warning: This is more expensive than specifying
 # the properties you are interested in
 
-# cmd = """ queryNodeIndex('type:"AssignmentExpr"')
-# """
+cmd = """ queryNodeIndex('type:"AssignmentExpr"')
+"""
 
-# for x in j.executeGremlinCmd(cmd):
-#    print x['data']['code']
+for x in j.executeGremlinCmd(cmd):
+    print x['data']['code']
 
 # (*) AND-query on two key-value pairs:
 # Retrieve all functions where name matches *create*
