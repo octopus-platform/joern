@@ -2,6 +2,8 @@ package cfg;
 
 import java.util.List;
 
+import misc.MultiHashMap;
+
 public class Edges extends MultiHashMap
 {
 	public void addEdge(BasicBlock src, BasicBlock dst)

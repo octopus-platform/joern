@@ -1,10 +1,9 @@
 package tools.callGraph;
 
-import output.neo4j.Neo4JBatchInserter;
+import tools.GraphDbWalker;
 import tools.ImportedNodeWalker;
 
-
-public class CallGraphCreator {
+public class CallGraphCreator extends GraphDbWalker{
 
 	private static ImportedNodeWalker functionWalker = new ImportedNodeWalker();
 	private static CallGraphListener listener = new CallGraphListener();
@@ -22,15 +21,4 @@ public class CallGraphCreator {
 		shutdownDatabase();
 	}
 
-	private static void initializeDatabase()
-	{
-		Neo4JBatchInserter.setIndexDirectoryName(".joernIndex/");
-		Neo4JBatchInserter.openDatabase();
-	}
-
-	private static void shutdownDatabase()
-	{
-		Neo4JBatchInserter.closeDatabase();
-	}
-	
 }

@@ -1,23 +1,23 @@
-package tools.icfg;
+package tools.ddg;
 
 import tools.GraphDbWalker;
 import tools.ImportedNodeListener;
 import tools.ImportedNodeWalker;
 
-public class ICFGCreator extends GraphDbWalker {
-
+public class DDGCreator extends GraphDbWalker {
+	
 	static ImportedNodeWalker walker = new ImportedNodeWalker();
-	static ImportedNodeListener listener = new ICFGListener();
+	private static ImportedNodeListener listener = new DDGListener();
 	
 	public static void main(String[] args)
 	{
 		initializeDatabase();
 		
-		walker.setType("CallExpression");
+		walker.setType("Function");
 		walker.addListener(listener);
-		walker.walk();
+		walker.walk();		
 		
 		shutdownDatabase();
-	}	
-	
+	}
+			
 }

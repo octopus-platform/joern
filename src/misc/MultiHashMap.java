@@ -1,4 +1,4 @@
-package cfg;
+package misc;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import cfg.BasicBlock;
+
 public class MultiHashMap
 {
-	HashMap<Object, List<Object>> hashMap =
+	public HashMap<Object, List<Object>> hashMap =
 			new HashMap<Object, List<Object>>();
 	
 	public Iterator<Entry<Object, List<Object>>> getEntrySetIterator()
