@@ -34,14 +34,14 @@
     <mkdir dir="${test.report.dir}" />
   </target>
 
-  <target name="compile" depends="clean, makedir">
+  <target name="compile">
     <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
 	<src path="src"/> 
 	<classpath refid="joern.classpath"/>
     </javac>
   </target>
 
-  <target name="jar" depends="compile">
+  <target name="jar" depends="clean,makedir,compile">
     <jar destfile="${build.dir}/joern.jar"
          basedir="${build.dir}"
          includes="**/*.class">
@@ -53,7 +53,7 @@
     </jar>
   </target>
 
-  <target name="icfg">
+  <target name="icfg" depends="compile">
     <jar destfile="${build.dir}/icfg.jar"
          basedir="${build.dir}"
          includes="**/*.class">
