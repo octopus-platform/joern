@@ -43,4 +43,6 @@ public class EdgeTypes
 	 * contained in them */
 	public static final String DECLARES = "DECLARES";
 
+	public static final String IS_ARG = "IS_ARG";
+
 }
