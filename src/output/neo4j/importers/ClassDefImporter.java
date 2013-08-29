@@ -11,7 +11,7 @@ import output.neo4j.nodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 
-public class ClassDefImporter extends Importer
+public class ClassDefImporter extends ASTNodeImporter
 {
 	
 	public void addToDatabaseSafe(ASTNode node)

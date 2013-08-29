@@ -8,7 +8,7 @@ import output.neo4j.GraphNodeStore;
 import output.neo4j.nodes.DatabaseNode;
 import output.neo4j.nodes.FileDatabaseNode;
 
-public abstract class Importer {
+public abstract class ASTNodeImporter {
 
 	protected Long mainNodeId;
 	protected GraphNodeStore nodeStore = new GraphNodeStore();

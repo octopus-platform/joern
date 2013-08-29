@@ -11,23 +11,22 @@ import misc.MultiHashMap;
 
 public class UseDefGraph {
 	
-	MultiHashMap UseDict = new MultiHashMap();
-	MultiHashMap DefDict = new MultiHashMap();			
+	MultiHashMap useDefDict = new MultiHashMap();
+	
 	long currentBasicBlock;
 
-	private class DefUseStackItem{
+	public class UseDefStackItem{
 		public long nodeId;
 		public boolean isDef;
 	
-		public DefUseStackItem(long aNodeId, boolean aIsDef)
+		public UseDefStackItem(long aNodeId, boolean aIsDef)
 		{
 			nodeId = aNodeId; isDef = aIsDef;
 		}
 	
 	};
 	
-	Stack<DefUseStackItem> defUseStack = new Stack<DefUseStackItem>();
-	
+	Stack<UseDefStackItem> useDefStack = new Stack<UseDefStackItem>();
 	
 	public void initialize(IndexHits<Long> basicBlocksInFunc)
 	{		
@@ -44,7 +43,12 @@ public class UseDefGraph {
 			traverseAST(astRoot);			
 		}
 	}
-
+	
+	public MultiHashMap getUseDefDict()
+	{
+		return useDefDict;
+	}
+	
 	private Long getASTForBasicBlock(Long basicBlockId)
 	{
 		Iterable<BatchRelationship> rels = getEdges(basicBlockId);
@@ -76,7 +80,6 @@ public class UseDefGraph {
 		traverseChildren(nodeId, type);		
 	}
 
-	
 	private void handleIdentifier(Long nodeId)
 	{		
 		String code = getNodeCode(nodeId);
@@ -84,20 +87,19 @@ public class UseDefGraph {
 		boolean def = false;		
 		
 		// create entries for all elements on the stack
-		for(DefUseStackItem item : defUseStack){
-			if(item.isDef){
-				DefDict.add(code, item.nodeId);
-				def = true;
-			}
-			else{
-				UseDict.add(code, item.nodeId);
+		for(UseDefStackItem item : useDefStack){
+			if(item.isDef)
+				def = true;			
+			else				
 				use = true;
-			}
+			
+			useDefDict.add(code, item);
 		}
 		
 		// and for the basic block.
-		if(def) UseDict.add(code, currentBasicBlock);
-		if(use) DefDict.add(code, currentBasicBlock);
+		
+		if(def) useDefDict.add(code, new UseDefStackItem(currentBasicBlock, true));
+		if(use) useDefDict.add(code, new UseDefStackItem(currentBasicBlock, false));
 		
 	}
 
@@ -117,25 +119,24 @@ public class UseDefGraph {
 			
 			// skip right children of MemberAccess and PtrMemberAccess 
 			if(nodeType.equals("MemberAccess") || nodeType.equals("PtrMemberAccess"))
-			{
-				
+			{				
 				String childNumber = getChildNumber(rel);
 				String childType = getNodeType(childId);
 			
 				if(childType != null && childNumber.equals("1") &&
 				   childType.equals("Identifier"))
-					continue;						
+					continue;				
 			}
 			
-			updateDefUseStackEnter(nodeId, rel);						
+			updateUseDefStackEnter(nodeId, rel);						
 			traverse(childId);
-			updateDefUseStackLeave(nodeId, rel);
+			updateUseDefStackLeave(nodeId, rel);
 			
 		}
 		
 	}
 
-	private void updateDefUseStackEnter(Long nodeId, BatchRelationship rel)
+	private void updateUseDefStackEnter(Long nodeId, BatchRelationship rel)
 	{
 		// Hardcoded rules to implement the difference between DEF and USE
 		String nodeType = getNodeType(nodeId);
@@ -145,17 +146,17 @@ public class UseDefGraph {
 		if(nodeType.equals("AssignmentExpr"))
 		{
 			if(childNum.equals("0") && childType.equals("Identifier"))
-				defUseStack.push( new DefUseStackItem(nodeId, true));
+				useDefStack.push( new UseDefStackItem(nodeId, true));
 			else
-				defUseStack.push( new DefUseStackItem(nodeId, false));
+				useDefStack.push( new UseDefStackItem(nodeId, false));
 		}else if(nodeType.equals("IdentifierDecl")){
 			if(childNum.equals("1") && childType.equals("Identifier"))
-				defUseStack.push( new DefUseStackItem(nodeId, true));
+				useDefStack.push( new UseDefStackItem(nodeId, true));
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
-			defUseStack.push( new DefUseStackItem(nodeId, false));		
+			useDefStack.push( new UseDefStackItem(nodeId, false));		
 	}
 
-	private void updateDefUseStackLeave(Long nodeId, BatchRelationship rel)
+	private void updateUseDefStackLeave(Long nodeId, BatchRelationship rel)
 	{
 		// Whatever we push onto the stack needs to be taken off as well
 		String nodeType = getNodeType(nodeId);
@@ -163,12 +164,12 @@ public class UseDefGraph {
 		String childNum = getChildNumber(rel);
 		
 		if(nodeType.equals("AssignmentExpr"))
-			defUseStack.pop();		
+			useDefStack.pop();		
 		else if(nodeType.equals("IdentifierDecl")){
 			if(childNum.equals("1") && childType.equals("Identifier"))
-				defUseStack.pop();
+				useDefStack.pop();
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
-			defUseStack.pop();
+			useDefStack.pop();
 	}
 	
 	private boolean isASTEdge(BatchRelationship rel)

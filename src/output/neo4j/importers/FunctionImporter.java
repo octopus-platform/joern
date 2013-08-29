@@ -22,7 +22,7 @@ import cfg.CFG;
 // Stays alive while importing a function into
 // the database
 
-public class FunctionImporter extends Importer
+public class FunctionImporter extends ASTNodeImporter
 {
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);

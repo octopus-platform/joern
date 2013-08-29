@@ -9,6 +9,7 @@ public class DDGEdgeAdder {
 
 	long functionId;
 	UseDefGraph useDefGraph = new UseDefGraph();
+	UseDefGraphImporter useDefGraphImporter = new UseDefGraphImporter();
 	
 	public void addEdgesToFunction(Long funcId)
 	{
@@ -20,6 +21,9 @@ public class DDGEdgeAdder {
 	{
 		IndexHits<Long> basicBlocks = getBasicBlocks();			
 		useDefGraph.initialize(basicBlocks);		
+		
+		useDefGraphImporter.setFunctionId(functionId);
+		useDefGraphImporter.importGraph(useDefGraph);
 	}
 
 	private IndexHits<Long> getBasicBlocks()

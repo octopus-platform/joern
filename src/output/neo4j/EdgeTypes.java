@@ -45,4 +45,8 @@ public class EdgeTypes
 
 	public static final String IS_ARG = "IS_ARG";
 
+	public static final String DEF = "DEF";
+
+	public static final String USE = "USE";
+
 }

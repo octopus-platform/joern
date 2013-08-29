@@ -12,7 +12,7 @@ import output.neo4j.nodes.DeclStmtDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.statements.IdentifierDeclStatement;
 
-public class DeclStmtImporter extends Importer {
+public class DeclStmtImporter extends ASTNodeImporter {
 	
 	DeclImporter declImporter = new DeclImporter();
 	

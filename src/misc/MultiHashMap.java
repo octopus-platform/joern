@@ -19,6 +19,11 @@ public class MultiHashMap
 		return hashMap.entrySet().iterator();
 	}
 	
+	public Iterator<Object> getKeySetIterator()
+	{
+		return hashMap.keySet().iterator();
+	}
+	
 	public void add(Object key, Object val)
 	{
 		List<Object> valList = hashMap.get(key);
@@ -67,9 +72,9 @@ public class MultiHashMap
 		return s;
 	}
 	
-	public List<Object> getListForKey(BasicBlock src)
+	public List<Object> getListForKey(Object k)
 	{
-		return hashMap.get(src);
+		return hashMap.get(k);
 	}
 	
 }

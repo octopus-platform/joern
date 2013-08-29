@@ -8,7 +8,7 @@ import org.neo4j.graphdb.RelationshipType;
 import output.neo4j.importers.ClassDefImporter;
 import output.neo4j.importers.FunctionImporter;
 import output.neo4j.importers.DeclStmtImporter;
-import output.neo4j.importers.Importer;
+import output.neo4j.importers.ASTNodeImporter;
 import output.neo4j.nodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
@@ -31,24 +31,24 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 	
 	public void visit(FunctionDef node)
 	{
-		Importer importer = new FunctionImporter();
+		ASTNodeImporter importer = new FunctionImporter();
 		importNode(importer, node);
 	}
 
 	public void visit(ClassDefStatement node)
 	{
-		Importer importer = new ClassDefImporter();		
+		ASTNodeImporter importer = new ClassDefImporter();		
 		long classNodeId = importNode(importer, node);		
 		visitClassDefContent(node, classNodeId);
 	}
 	
 	public void visit(IdentifierDeclStatement node)
 	{
-		Importer importer = new DeclStmtImporter();
+		ASTNodeImporter importer = new DeclStmtImporter();
 		importNode(importer, node);
 	}
 	
-	private long importNode(Importer importer, ASTNode node)
+	private long importNode(ASTNodeImporter importer, ASTNode node)
 	{
 		importer.setCurrentFile(currentFileNode);
 		importer.addToDatabaseSafe(node);
