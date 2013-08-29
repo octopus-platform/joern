@@ -5,8 +5,7 @@ import java.util.Stack;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.QueryUtils;
 import misc.MultiHashMap;
 
 public class UseDefGraph {
@@ -33,7 +32,7 @@ public class UseDefGraph {
 		
 		for(Long basicBlockId : basicBlocksInFunc){						
 			
-			Long astRoot = getASTForBasicBlock(basicBlockId);
+			Long astRoot = QueryUtils.getASTForBasicBlock(basicBlockId);
 			if(astRoot == -1){
 				// perfectly normal, e.g., empty blocks.
 				continue;
@@ -49,16 +48,6 @@ public class UseDefGraph {
 		return useDefDict;
 	}
 	
-	private Long getASTForBasicBlock(Long basicBlockId)
-	{
-		Iterable<BatchRelationship> rels = getEdges(basicBlockId);
-		for(BatchRelationship rel : rels){
-			if(isBasicBlockEdge(rel))
-				return rel.getEndNode();
-		}
-		return new Long(-1);
-	}
-
 	private void traverseAST(Long astRoot)
 	{		
 		traverse(astRoot);
@@ -66,7 +55,7 @@ public class UseDefGraph {
 
 	private void traverse(Long nodeId)
 	{		
-		String type = getNodeType(nodeId);		
+		String type = QueryUtils.getNodeType(nodeId);		
 		if(type != null){
 		
 			if(type.equals("Identifier"))
@@ -82,7 +71,7 @@ public class UseDefGraph {
 
 	private void handleIdentifier(Long nodeId)
 	{		
-		String code = getNodeCode(nodeId);
+		String code = QueryUtils.getNodeCode(nodeId);
 		boolean use = false;
 		boolean def = false;		
 		
@@ -102,26 +91,22 @@ public class UseDefGraph {
 		if(use) useDefDict.add(code, new UseDefStackItem(currentBasicBlock, false));
 		
 	}
-
-	private String getNodeCode(Long nodeId) {
-		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("code");
-	}
-
+	
 	private void traverseChildren(Long nodeId, String nodeType)
 	{
-		Iterable<BatchRelationship> rels = getEdges(nodeId);
+		Iterable<BatchRelationship> rels = QueryUtils.getEdges(nodeId);
 		
 		for(BatchRelationship rel : rels){
-			if(isIncomingEdge(nodeId, rel)) continue;
-			if(!isASTEdge(rel)) continue;
+			if(QueryUtils.isIncomingEdge(nodeId, rel)) continue;
+			if(!QueryUtils.isASTEdge(rel)) continue;
 			
 			long childId = rel.getEndNode();
 			
 			// skip right children of MemberAccess and PtrMemberAccess 
 			if(nodeType.equals("MemberAccess") || nodeType.equals("PtrMemberAccess"))
 			{				
-				String childNumber = getChildNumber(rel);
-				String childType = getNodeType(childId);
+				String childNumber = QueryUtils.getChildNumber(rel);
+				String childType = QueryUtils.getNodeType(childId);
 			
 				if(childType != null && childNumber.equals("1") &&
 				   childType.equals("Identifier"))
@@ -139,9 +124,9 @@ public class UseDefGraph {
 	private void updateUseDefStackEnter(Long nodeId, BatchRelationship rel)
 	{
 		// Hardcoded rules to implement the difference between DEF and USE
-		String nodeType = getNodeType(nodeId);
-		String childType = getNodeType(rel.getEndNode());
-		String childNum = getChildNumber(rel);
+		String nodeType = QueryUtils.getNodeType(nodeId);
+		String childType = QueryUtils.getNodeType(rel.getEndNode());
+		String childNum = QueryUtils.getChildNumber(rel);
 					
 		if(nodeType.equals("AssignmentExpr"))
 		{
@@ -159,9 +144,9 @@ public class UseDefGraph {
 	private void updateUseDefStackLeave(Long nodeId, BatchRelationship rel)
 	{
 		// Whatever we push onto the stack needs to be taken off as well
-		String nodeType = getNodeType(nodeId);
-		String childType = getNodeType(rel.getEndNode());
-		String childNum = getChildNumber(rel);
+		String nodeType = QueryUtils.getNodeType(nodeId);
+		String childType = QueryUtils.getNodeType(rel.getEndNode());
+		String childNum = QueryUtils.getChildNumber(rel);
 		
 		if(nodeType.equals("AssignmentExpr"))
 			useDefStack.pop();		
@@ -170,37 +155,6 @@ public class UseDefGraph {
 				useDefStack.pop();
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
 			useDefStack.pop();
-	}
-	
-	private boolean isASTEdge(BatchRelationship rel)
-	{	
-		// there's probably a more efficient way of doing this
-		return rel.getType().name().equals(EdgeTypes.IS_AST_PARENT);
-	}
-
-	private boolean isIncomingEdge(Long nodeId, BatchRelationship rel)
-	{
-		return rel.getEndNode() == nodeId;
-	}
-	
-	private boolean isBasicBlockEdge(BatchRelationship rel)
-	{			
-		return rel.getType().name().equals(EdgeTypes.IS_BASIC_BLOCK_OF);
-	}
-
-	private Iterable<BatchRelationship> getEdges(Long nodeId)
-	{
-		return Neo4JBatchInserter.getRelationships(nodeId);
-	}
-
-	private String getNodeType(Long nodeId)
-	{
-		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("type");
-	}
-
-	private String getChildNumber(BatchRelationship rel)
-	{
-		return (String) Neo4JBatchInserter.getRelationshipProperties(rel.getId()).get("n");
 	}
 	
 }
