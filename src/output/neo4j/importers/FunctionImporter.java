@@ -53,6 +53,8 @@ public class FunctionImporter extends Importer
 		nodeStore.addNeo4jNode(function.getCFGPseudoNode(), null);
 		
 		astImporter.setCurrentFunction(function);
+		cfgImporter.setCurrentFunction(function);
+		
 		astImporter.addASTToDatabase(function.getASTRoot());
 		cfgImporter.addCFGToDatabase(function.getCFG());	
 		pdgImporter.addPDGToDatabase(function.getPDG());

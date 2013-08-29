@@ -32,8 +32,8 @@ public class UseDefGraph {
 	public void initialize(IndexHits<Long> basicBlocksInFunc)
 	{		
 		
-		for(Long basicBlockId : basicBlocksInFunc){				
-						
+		for(Long basicBlockId : basicBlocksInFunc){						
+			
 			Long astRoot = getASTForBasicBlock(basicBlockId);
 			if(astRoot == -1){
 				System.err.println("Warning: Basic Block without AST");

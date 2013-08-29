@@ -13,7 +13,7 @@ import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
 import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.nodes.BasicBlockDatabaseNode;
-
+import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
 import cfg.BasicBlock;
 import cfg.CFG;
@@ -24,10 +24,17 @@ public class CFGImporter
 {
 	GraphNodeStore nodeStore;
 	
+	private FunctionDatabaseNode currentFunction;
+	
 	public CFGImporter(GraphNodeStore aNodeStore)
 	{
 		nodeStore = aNodeStore;
 	}
+	
+	public void setCurrentFunction(FunctionDatabaseNode func)
+	{
+		currentFunction = func;
+	}	
 	
 	public void addCFGToDatabase(CFG cfg)
 	{
@@ -47,6 +54,9 @@ public class CFGImporter
 			BasicBlockDatabaseNode bbDatabaseNode = new BasicBlockDatabaseNode();
 			bbDatabaseNode.initialize(block);
 			Map<String, Object> properties = bbDatabaseNode.createProperties();
+						
+			properties.put("functionId", nodeStore.getIdForObject(currentFunction));
+			
 			nodeStore.addNeo4jNode(block, properties);
 			nodeStore.indexNode(block, properties);
 			addLinkFromBasicBlockToAST(block);					
