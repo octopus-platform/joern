@@ -48,7 +48,9 @@ public class CFGImporter
 			bbDatabaseNode.initialize(block);
 			Map<String, Object> properties = bbDatabaseNode.createProperties();
 			nodeStore.addNeo4jNode(block, properties);
-			addLinkFromBasicBlockToAST(block);
+			nodeStore.indexNode(block, properties);
+			addLinkFromBasicBlockToAST(block);					
+		
 		}
 	}
 

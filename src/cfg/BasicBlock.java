@@ -26,10 +26,11 @@ public class BasicBlock {
 
 	public String getType()
 	{
-		if(astNode == null)
-			return "";
-
-		return astNode.getTypeAsString() + "BB";
+//		if(astNode == null)
+//			return "";
+//
+//		return astNode.getTypeAsString() + "BB";
+		return "BasicBlock";
 	}
 
 }

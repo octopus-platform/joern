@@ -7,7 +7,6 @@ import java.util.Vector;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import output.neo4j.ASTImporter;
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
 import output.neo4j.Neo4JBatchInserter;
@@ -15,7 +14,6 @@ import output.neo4j.nodes.ASTPseudoNode;
 import output.neo4j.nodes.CFGPseudoNode;
 import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
-
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
 import cfg.BasicBlock;
