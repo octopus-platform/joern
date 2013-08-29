@@ -1,13 +1,13 @@
-package tools.ddg;
+package tools.udg;
 
 import tools.GraphDbWalker;
 import tools.ImportedNodeListener;
 import tools.ImportedNodeWalker;
 
-public class DDGCreator extends GraphDbWalker {
+public class UseDefGraphCreator extends GraphDbWalker {
 	
 	static ImportedNodeWalker walker = new ImportedNodeWalker();
-	private static ImportedNodeListener listener = new DDGListener();
+	private static ImportedNodeListener listener = new UseDefGraphListener();
 	
 	public static void main(String[] args)
 	{

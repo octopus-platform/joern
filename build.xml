@@ -65,12 +65,12 @@
     </jar>
   </target>
 
-  <target name="ddg" depends="compile">
-    <jar destfile="${build.dir}/ddg.jar"
+  <target name="udg" depends="compile">
+    <jar destfile="${build.dir}/udg.jar"
          basedir="${build.dir}"
          includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.ddg.DDGCreator" />
+        <attribute name="Main-Class" value="tools.udg.UseDefGraphCreator" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />

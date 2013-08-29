@@ -1,4 +1,4 @@
-package tools.ddg;
+package tools.udg;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +10,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.Neo4JBatchInserter;
-import tools.ddg.UseDefGraph.UseDefStackItem;
+import tools.udg.UseDefGraph.UseDefStackItem;
 import misc.MultiHashMap;
 
 

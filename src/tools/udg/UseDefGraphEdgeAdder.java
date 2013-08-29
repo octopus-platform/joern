@@ -1,11 +1,11 @@
-package tools.ddg;
+package tools.udg;
 
 
 import org.neo4j.graphdb.index.IndexHits;
 import output.neo4j.Neo4JBatchInserter;
 
 
-public class DDGEdgeAdder {
+public class UseDefGraphEdgeAdder {
 
 	long functionId;
 	UseDefGraph useDefGraph = new UseDefGraph();
