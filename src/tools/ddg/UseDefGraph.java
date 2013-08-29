@@ -36,7 +36,7 @@ public class UseDefGraph {
 			
 			Long astRoot = getASTForBasicBlock(basicBlockId);
 			if(astRoot == -1){
-				System.err.println("Warning: Basic Block without AST");
+				// perfectly normal, e.g., empty blocks.
 				continue;
 			}			
 			
@@ -102,9 +102,7 @@ public class UseDefGraph {
 		String nodeType = getNodeType(nodeId);
 		String childType = getNodeType(rel.getEndNode());
 		String childNum = getChildNumber(rel);
-	
-		System.out.println("REACHED");
-		
+					
 		if(nodeType.equals("AssignmentExpr"))
 		{
 			if(childNum.equals("0") && childType.equals("Identifier"))
@@ -136,7 +134,7 @@ public class UseDefGraph {
 	
 	private boolean isASTEdge(BatchRelationship rel)
 	{
-		return rel.getType().equals(EdgeTypes.IS_AST_PARENT);
+		return rel.getType().name().equals(EdgeTypes.IS_AST_PARENT);
 	}
 
 	private boolean isIncomingEdge(Long nodeId, BatchRelationship rel)
@@ -145,8 +143,8 @@ public class UseDefGraph {
 	}
 	
 	private boolean isBasicBlockEdge(BatchRelationship rel)
-	{
-		return rel.getType().equals(EdgeTypes.IS_BASIC_BLOCK_OF);
+	{			
+		return rel.getType().name().equals(EdgeTypes.IS_BASIC_BLOCK_OF);
 	}
 
 	private Iterable<BatchRelationship> getEdges(Long nodeId)
