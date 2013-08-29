@@ -16,8 +16,8 @@ public class UseDefGraph {
 	long currentBasicBlock;
 
 	private class DefUseStackItem{
-		long nodeId;
-		boolean isDef;
+		public long nodeId;
+		public boolean isDef;
 	
 		public DefUseStackItem(long aNodeId, boolean aIsDef)
 		{
@@ -63,33 +63,72 @@ public class UseDefGraph {
 	private void traverse(Long nodeId)
 	{		
 		String type = getNodeType(nodeId);		
-		if(type != null && type.equals("Identifier"))
-			handleIdentifier(nodeId);
+		if(type != null){
 		
-		traverseChildren(nodeId);		
+			if(type.equals("Identifier"))
+				handleIdentifier(nodeId);
+			else if(type.equals("MemberAccess"))
+				handleIdentifier(nodeId);
+			else if(type.equals("PtrMemberAccess"))
+				handleIdentifier(nodeId);
+		}
+									
+		traverseChildren(nodeId, type);		
 	}
 
 	
-
 	private void handleIdentifier(Long nodeId)
 	{		
+		String code = getNodeCode(nodeId);
+		boolean use = false;
+		boolean def = false;		
 		
-		// If immediate parent is a Decl-Node
-		// and we are its second child (variable name), this is a DEF			
+		// create entries for all elements on the stack
+		for(DefUseStackItem item : defUseStack){
+			if(item.isDef){
+				DefDict.add(code, item.nodeId);
+				def = true;
+			}
+			else{
+				UseDict.add(code, item.nodeId);
+				use = true;
+			}
+		}
 		
-		// Otherwise, this is a use-node.
+		// and for the basic block.
+		if(def) UseDict.add(code, currentBasicBlock);
+		if(use) DefDict.add(code, currentBasicBlock);
 		
 	}
 
-	private void traverseChildren(Long nodeId)
+	private String getNodeCode(Long nodeId) {
+		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("code");
+	}
+
+	private void traverseChildren(Long nodeId, String nodeType)
 	{
 		Iterable<BatchRelationship> rels = getEdges(nodeId);
+		
 		for(BatchRelationship rel : rels){
 			if(isIncomingEdge(nodeId, rel)) continue;
 			if(!isASTEdge(rel)) continue;
-		
+			
+			long childId = rel.getEndNode();
+			
+			// skip right children of MemberAccess and PtrMemberAccess 
+			if(nodeType.equals("MemberAccess") || nodeType.equals("PtrMemberAccess"))
+			{
+				
+				String childNumber = getChildNumber(rel);
+				String childType = getNodeType(childId);
+			
+				if(childType != null && childNumber.equals("1") &&
+				   childType.equals("Identifier"))
+					continue;						
+			}
+			
 			updateDefUseStackEnter(nodeId, rel);						
-			traverse(rel.getEndNode());
+			traverse(childId);
 			updateDefUseStackLeave(nodeId, rel);
 			
 		}
@@ -133,7 +172,8 @@ public class UseDefGraph {
 	}
 	
 	private boolean isASTEdge(BatchRelationship rel)
-	{
+	{	
+		// there's probably a more efficient way of doing this
 		return rel.getType().name().equals(EdgeTypes.IS_AST_PARENT);
 	}
 
