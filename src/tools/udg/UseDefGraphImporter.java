@@ -10,7 +10,6 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.Neo4JBatchInserter;
-import tools.udg.UseDefGraph.UseDefStackItem;
 import misc.MultiHashMap;
 
 
@@ -45,7 +44,7 @@ public class UseDefGraphImporter {
 		List<Object> destinations = useDefDict.getListForKey(identifier);			
 		
 		for(Object d : destinations){
-			UseDefStackItem item = (UseDefStackItem) d;
+			UseOrDefRecord item = (UseOrDefRecord) d;
 						
 			RelationshipType rel;				
 			if(item.isDef)

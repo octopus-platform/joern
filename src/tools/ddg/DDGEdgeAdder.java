@@ -1,7 +1,6 @@
 package tools.ddg;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import misc.MultiHashMap;
@@ -14,18 +13,7 @@ public class DDGEdgeAdder {
 
 	HashMap<Long, Boolean> edgeVisited = new HashMap<Long, Boolean>();
 	MultiHashMap defStacks = new MultiHashMap();
-	List<BasicBlockPair> defUseEdges = new LinkedList<BasicBlockPair>();
-	
-	public class BasicBlockPair{		
-		public long src;
-		public long dst;
-		
-		public BasicBlockPair(Long aSrc, long aDst)
-		{
-			src = aSrc;
-			dst = aDst;
-		}
-	};
+	DDG ddg = new DDG();
 	
 	public void addEdges(Long funcId)
 	{
@@ -56,9 +44,8 @@ public class DDGEdgeAdder {
 			if(stackForSymbol == null || stackForSymbol.size() == 0)
 				continue;			
 		
-			Long topBasicBlock = (Long) stackForSymbol.get(stackForSymbol.size() -1);
-			BasicBlockPair basicBlockPair = new BasicBlockPair(topBasicBlock, nodeId);
-			defUseEdges.add(basicBlockPair);
+			Long topBasicBlockId = (Long) stackForSymbol.get(stackForSymbol.size() -1);						
+			ddg.add(topBasicBlockId, nodeId);		
 		}				
 	}
 

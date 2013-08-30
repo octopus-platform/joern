@@ -70,7 +70,7 @@
          basedir="${build.dir}"
          includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.udg.UseDefGraphCreator" />
+        <attribute name="Main-Class" value="tools.udg.UseDefGraphMain" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
