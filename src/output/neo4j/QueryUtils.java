@@ -12,7 +12,6 @@ public class QueryUtils {
 
 	public static boolean isCFGEdge(BatchRelationship rel)
 	{
-		System.out.println(rel.getType().name());
 		return rel.getType().name().equals(EdgeTypes.FLOWS_TO);
 	}
 	
