@@ -118,7 +118,7 @@ public class UseDefGraphCreator
 
 		if(nodeType.equals("AssignmentExpr"))
 		{
-			if(childNum.equals("0") && childType.equals("Identifier"))
+			if(childNum.equals("0"))
 				useDefStack.push( new UseOrDefRecord(nodeId, true));
 			else
 				useDefStack.push( new UseOrDefRecord(nodeId, false));
