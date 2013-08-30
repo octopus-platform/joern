@@ -5,22 +5,29 @@ import java.util.List;
 
 public class DDG {
 
-	List<BasicBlockPair> defUseEdges = new LinkedList<BasicBlockPair>();
+	List<DefUseRelation> defUseEdges = new LinkedList<DefUseRelation>();
 	
-	public class BasicBlockPair{		
+	public List<DefUseRelation> getDefUseEdges()
+	{
+		return defUseEdges;
+	}
+	
+	public class DefUseRelation{		
 		public long src;
 		public long dst;
+		public String symbol;
 		
-		public BasicBlockPair(Long aSrc, long aDst)
+		public DefUseRelation(Long aSrc, long aDst, String aSymbol)
 		{
 			src = aSrc;
 			dst = aDst;
+			symbol = aSymbol;
 		}
 	}
 
-	public void add(long srcId, long dstId)
+	public void add(long srcId, long dstId, String symbol)
 	{
-		BasicBlockPair basicBlockPair = new BasicBlockPair(srcId, dstId);
+		DefUseRelation basicBlockPair = new DefUseRelation(srcId, dstId, symbol);
 		defUseEdges.add(basicBlockPair);
 	};
 

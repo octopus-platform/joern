@@ -7,8 +7,12 @@ public class DDGListener extends ImportedNodeListener {
 	@Override
 	public void visitNode(Long funcId)
 	{
-		DDGEdgeAdder ddgEdgeAdder = new DDGEdgeAdder();
-		ddgEdgeAdder.addEdges(funcId);		
+		DDGCreator ddgCreator = new DDGCreator();
+		DDGImporter ddgImporter = new DDGImporter();
+		
+		DDG ddg = ddgCreator.create(funcId);		
+		if(ddg == null) return;
+		ddgImporter.importDDG(ddg);
 	}
 
 }

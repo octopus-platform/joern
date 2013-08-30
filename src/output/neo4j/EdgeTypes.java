@@ -52,4 +52,6 @@ public class EdgeTypes
 
 	public static final String USE = "USE";
 
+	public static final String REACHES = "REACHES";
+
 }
