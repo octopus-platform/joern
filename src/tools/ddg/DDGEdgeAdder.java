@@ -1,6 +1,10 @@
 package tools.ddg;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
+import misc.MultiHashMap;
 
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
@@ -8,15 +12,23 @@ import output.neo4j.QueryUtils;
 
 public class DDGEdgeAdder {
 
-	HashMap<Long, Boolean> visited = new HashMap<Long, Boolean>();
+	HashMap<Long, Boolean> edgeVisited = new HashMap<Long, Boolean>();
+	MultiHashMap defStacks = new MultiHashMap();
+	List<BasicBlockPair> defUseEdges = new LinkedList<BasicBlockPair>();
+	
+	public class BasicBlockPair{		
+		public long src;
+		public long dst;
+		
+		public BasicBlockPair(Long aSrc, long aDst)
+		{
+			src = aSrc;
+			dst = aDst;
+		}
+	};
 	
 	public void addEdges(Long funcId)
 	{
-		// get the CFG root node for the function
-		// traverse the CFG
-		// Keep a stack of defs for each variable
-		// So, we need something that maps Ids to Stacks.
-	
 		long cfgRootId = QueryUtils.getCFGFromFunction(funcId);
 		if(cfgRootId == -1){
 			System.err.println("Warning: Function without CFG. Skipping.");
@@ -29,7 +41,34 @@ public class DDGEdgeAdder {
 
 	private void traverse(long nodeId)
 	{
+		updateDefUseEdges(nodeId);
+		updateDefStacks(nodeId);
 		traverseChildren(nodeId);
+	}
+
+	private void updateDefUseEdges(long nodeId)
+	{						
+		List<String> symbolsUsed =
+				QueryUtils.getSymbolsUsedByBasicBlock(nodeId);
+				
+		for(String symbol : symbolsUsed){
+			List<Object> stackForSymbol = defStacks.getListForKey(symbol);
+			if(stackForSymbol == null || stackForSymbol.size() == 0)
+				continue;			
+		
+			Long topBasicBlock = (Long) stackForSymbol.get(stackForSymbol.size() -1);
+			BasicBlockPair basicBlockPair = new BasicBlockPair(topBasicBlock, nodeId);
+			defUseEdges.add(basicBlockPair);
+		}				
+	}
+
+	private void updateDefStacks(long nodeId)
+	{
+		List<String> symbolsDefined = QueryUtils.getSymbolsDefinedByBasicBlock(nodeId);		
+		// for each defined symbol, add basicblock to defstack
+		for(String symbol : symbolsDefined){
+			defStacks.add(symbol, nodeId);
+		}
 	}
 
 	private void traverseChildren(long nodeId)
@@ -53,12 +92,12 @@ public class DDGEdgeAdder {
 
 	private void markAsExpanded(long edgeId)
 	{
-		visited.put(edgeId, true);
+		edgeVisited.put(edgeId, true);
 	}
 
 	private boolean hasBeenExpanded(long edgeId)
 	{
-		return visited.containsKey(edgeId);
+		return edgeVisited.containsKey(edgeId);
 	}
 
 }

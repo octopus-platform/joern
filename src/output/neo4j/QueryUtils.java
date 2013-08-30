@@ -1,5 +1,8 @@
 package output.neo4j;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 public class QueryUtils {
@@ -60,6 +63,31 @@ public class QueryUtils {
 	{
 		long cfgNodeId = getFirstChildWithEdgeType(funcId, EdgeTypes.IS_FUNCTION_OF_CFG);
 		return getFirstChildWithEdgeType(cfgNodeId, EdgeTypes.IS_CFG_OF_CFG_ROOT);
+	}
+
+	public static List<String> getSymbolsUsedByBasicBlock(long nodeId)
+	{
+		return getCodeOfChildrenConnectedBy(nodeId, EdgeTypes.USE);
+	}
+
+	public static List<String> getSymbolsDefinedByBasicBlock(long nodeId)
+	{
+		return getCodeOfChildrenConnectedBy(nodeId, EdgeTypes.DEF);
+	}
+	
+	private static List<String> getCodeOfChildrenConnectedBy(long nodeId, String edgeType)
+	{
+		List<String> retval = new LinkedList<String>();
+		
+		Iterable<BatchRelationship> rels = getEdges(nodeId);
+		for(BatchRelationship rel : rels){
+			if(!rel.getType().name().equals(edgeType)) continue;
+		
+			String identifierStr = getNodeCode(rel.getEndNode());			
+			retval.add(identifierStr);
+		}
+		
+		return retval;
 	}
 
 }
