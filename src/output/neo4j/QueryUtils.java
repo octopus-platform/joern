@@ -10,12 +10,17 @@ public class QueryUtils {
 		return rel.getType().name().equals(EdgeTypes.IS_AST_PARENT);
 	}
 
+	public static boolean isCFGEdge(BatchRelationship rel)
+	{
+		System.out.println(rel.getType().name());
+		return rel.getType().name().equals(EdgeTypes.FLOWS_TO);
+	}
+	
 	public static boolean isIncomingEdge(Long nodeId, BatchRelationship rel)
 	{
 		return rel.getEndNode() == nodeId;
 	}
-	
-	
+		
 	public static Iterable<BatchRelationship> getEdges(Long nodeId)
 	{
 		return Neo4JBatchInserter.getRelationships(nodeId);
@@ -54,7 +59,8 @@ public class QueryUtils {
 
 	public static long getCFGFromFunction(Long funcId)
 	{
-		return getFirstChildWithEdgeType(funcId, EdgeTypes.IS_FUNCTION_OF_CFG);
+		long cfgNodeId = getFirstChildWithEdgeType(funcId, EdgeTypes.IS_FUNCTION_OF_CFG);
+		return getFirstChildWithEdgeType(cfgNodeId, EdgeTypes.IS_CFG_OF_CFG_ROOT);
 	}
-	
+
 }

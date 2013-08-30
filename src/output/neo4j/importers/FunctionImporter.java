@@ -26,7 +26,7 @@ public class FunctionImporter extends ASTNodeImporter
 {
 	ASTImporter astImporter = new ASTImporter(nodeStore);
 	CFGImporter cfgImporter = new CFGImporter(nodeStore);
-	PDGImporter pdgImporter = new PDGImporter(nodeStore);
+   	PDGImporter pdgImporter = new PDGImporter(nodeStore);
 	
 	public void addToDatabaseSafe(ASTNode node)
 	{
@@ -74,10 +74,29 @@ public class FunctionImporter extends ASTNodeImporter
 		CFG cfg = function.getCFG();
 		if(cfg != null){
 			linkFunctionWithCFGPseudoNode(function);
+			linkPseudoCFGWithRootCFGNode(function.getCFGPseudoNode(), cfg);
 			linkPseudoCFGWithAllCFGNodes(function.getCFGPseudoNode(), cfg);
 		}
 	}
 	
+	private void linkPseudoCFGWithRootCFGNode(CFGPseudoNode cfgPseudoNode, CFG cfg)
+	{
+		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CFG_OF_CFG_ROOT);
+
+		BasicBlock firstBlock = cfg.getFirstBlock();
+		if(firstBlock == null){
+			// TODO: sometimes there is not a single block in the CFG.
+			// It's probably fine but it needs to be investigated.
+			return;
+		}
+		
+		long functionId = nodeStore.getIdForObject(cfgPseudoNode);
+		long cfgRootId = nodeStore.getIdForObject(firstBlock);
+		
+		Neo4JBatchInserter.addRelationship(functionId, cfgRootId, rel, null);
+	
+	}
+
 	private void linkFunctionWithASTPseudoNode(FunctionDatabaseNode function)
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FUNCTION_OF_AST);

@@ -24,8 +24,11 @@ public class EdgeTypes
 	/** Edges connecting functions with all of their basic blocks*/
 	public static final String IS_CFG_OF_BASIC_BLOCK = "IS_CFG_OF_BASIC_BLOCK";
 	
-	/** Edges connecting functions with the root AST node */
+	/** Edges connecting AST Pseudo nodes with the root AST node */
 	public static final String IS_AST_OF_AST_ROOT = "IS_AST_OF_AST_ROOT";
+	
+	/** Edges connecting CFG Pseudo nodes with the root CFG node */
+	public static final String IS_CFG_OF_CFG_ROOT = "IS_CFG_OF_CFG_ROOT";	
 	
 	/** Connects parent to child directories */
 	public static final String IS_PARENT_DIR_OF = "IS_PARENT_DIR_OF";
