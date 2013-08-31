@@ -92,7 +92,7 @@ public class QueryUtils {
 	}
 
 	public static IndexHits<Long> getBasicBlocksFromIndex(long functionId)
-	{
+	{		
 		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";
 		return Neo4JBatchInserter.queryIndex(query);
 	}

@@ -4,8 +4,6 @@ import java.util.Stack;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
-
-import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.QueryUtils;
 
 
@@ -22,7 +20,7 @@ public class UseDefGraphCreator
 	{		
 		useDefGraph = new UseDefGraph();
 		
-		IndexHits<Long> basicBlocksInFunc = getBasicBlocksFromIndex(functionId);
+ 		IndexHits<Long> basicBlocksInFunc = QueryUtils.getBasicBlocksFromIndex(functionId);
 		
 		for(Long basicBlockId : basicBlocksInFunc){						
 
@@ -155,11 +153,4 @@ public class UseDefGraphCreator
 			useDefStack.pop();
 	}
 		
-	private IndexHits<Long> getBasicBlocksFromIndex(long functionId)
-	{
-		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";
-		return Neo4JBatchInserter.queryIndex(query);
-	}
-	
-	
 }

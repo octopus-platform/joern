@@ -3,6 +3,7 @@ package tools.ddg;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import misc.HashMapOfSets;
@@ -24,7 +25,7 @@ public class DDGCreator {
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
 	
-	IndexHits<Long> basicBlocks;
+	LinkedList<Long> basicBlocks = new LinkedList<Long>();
 	
 	private class Definition{
 		public Definition(Long aBasicBlock, String aIdentifier)
@@ -40,11 +41,15 @@ public class DDGCreator {
 	
 	public DDG create(Long funcId)
 	{
-		basicBlocks = QueryUtils.getBasicBlocksFromIndex(funcId);
+		IndexHits<Long> blocks = QueryUtils.getBasicBlocksFromIndex(funcId);
 		
-		cacheUsesAndDefs(basicBlocks);		
-		cacheParentBlocks(basicBlocks);
-		cacheChildBlocks(basicBlocks);
+		for(Long block : blocks)
+			basicBlocks.add(block);
+		
+		
+		cacheUsesAndDefs();		
+		cacheParentBlocks();
+		cacheParentBlocks();
 		
 		reachingDefinitions();
 		
@@ -57,6 +62,7 @@ public class DDGCreator {
 	{
 		for(Long basicBlock : basicBlocks){
 			HashSet<Object> inForBlock = in.getListForKey(basicBlock);
+			if(inForBlock == null) continue;
 			for(Object d : inForBlock){
 				Definition def = (Definition) d;
 				ddg.add(def.basicBlock, basicBlock, def.identifier);
@@ -64,7 +70,7 @@ public class DDGCreator {
 		}
 	}
 
-	private void cacheUsesAndDefs(IndexHits<Long> basicBlocks)
+	private void cacheUsesAndDefs()
 	{
 		for(Long basicBlock : basicBlocks){
 			
@@ -80,7 +86,7 @@ public class DDGCreator {
 		}
 	}
 
-	private void cacheParentBlocks(IndexHits<Long> basicBlocks)
+	private void cacheParentBlocks()
 	{
 		for(Long basicBlock : basicBlocks){
 			List<Long> parents = QueryUtils.getParentBasicBlocks(basicBlock);
@@ -119,7 +125,9 @@ public class DDGCreator {
 			changed = updateOut(x);
 		
 			if(changed){
-				for(Object o: childBlocks.getListForKey(x)){
+				List<Object> childrenOfX = childBlocks.getListForKey(x);
+				if(childrenOfX == null) continue;
+				for(Object o: childrenOfX){
 					changedNodes.add((Long) o);
 				}
 			}
@@ -130,7 +138,11 @@ public class DDGCreator {
 	private void initOut()
 	{
 		for(Long basicBlock : basicBlocks){
-			for(Object s: symbolsDefined.getListForKey(basicBlock)){
+			
+			List<Object> symsDefined = symbolsDefined.getListForKey(basicBlock);
+			if(symsDefined == null) continue;
+			
+			for(Object s: symsDefined){
 				String symbol = (String) s;
 				out.add(basicBlock, new Definition(basicBlock, symbol));
 			}
@@ -139,14 +151,17 @@ public class DDGCreator {
 
 	private void initInFromParents(Long x)
 	{
-		List<Object> parents = parentBlocks.getListForKey(x);
-	
+		List<Object> parents = parentBlocks.getListForKey(x);		
+		if(parents == null) return;
+		
 		in.removeAllForKey(x);
 		
 		// in(x) = union(out(p))_{p in parents(x)}
 		for(Object p : parents){
 			Long parent = (Long) p;
-			for (Object o : out.getListForKey(parent))
+			HashSet<Object> parentOut = out.getListForKey(parent);
+			if(parentOut == null) continue;
+			for (Object o : parentOut)
 				in.add(x, o);
 		}
 	}
@@ -155,18 +170,29 @@ public class DDGCreator {
 	{
 		boolean changed = false;
 		HashSet<Object> thisOut = out.getListForKey(x);
-		int oldSize = thisOut.size();
+		
+		int oldSize;
+		if(thisOut == null)
+			oldSize = 0;
+		else
+			oldSize = thisOut.size();
+				
 		int nCovered = 0;
 		
-		for(Object o : in.getListForKey(x)){
+		HashSet<Object> inForX = in.getListForKey(x);
+		if(inForX != null){
 			
-			if(thisOut.contains(o)){
-				nCovered++;
-				continue;
+			for(Object o : inForX){
+
+				if(thisOut != null && thisOut.contains(o)){
+					nCovered++;
+					continue;
+				}
+
+				out.add(x, o);
+				changed = true;
 			}
 			
-			thisOut.add(o);
-			changed = true;
 		}
 		
 		// for each element that was already there,
