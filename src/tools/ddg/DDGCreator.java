@@ -25,6 +25,8 @@ public class DDGCreator {
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
 	
+	HashMapOfSets gen = new HashMapOfSets();
+	
 	LinkedList<Long> basicBlocks = new LinkedList<Long>();
 	
 	private class Definition{
@@ -49,25 +51,13 @@ public class DDGCreator {
 		
 		cacheUsesAndDefs();		
 		cacheParentBlocks();
-		cacheParentBlocks();
+		cacheChildBlocks();
 		
 		reachingDefinitions();
 		
 		createDDGFromReachingDefs();
 		
 		return ddg;
-	}
-
-	private void createDDGFromReachingDefs()
-	{
-		for(Long basicBlock : basicBlocks){
-			HashSet<Object> inForBlock = in.getListForKey(basicBlock);
-			if(inForBlock == null) continue;
-			for(Object d : inForBlock){
-				Definition def = (Definition) d;
-				ddg.add(def.basicBlock, basicBlock, def.identifier);
-			}
-		}
 	}
 
 	private void cacheUsesAndDefs()
@@ -96,12 +86,12 @@ public class DDGCreator {
 		}
 	}
 	
-	private void cacheChildBlocks(IndexHits<Long> basicBlocks)
+	private void cacheChildBlocks()
 	{
 		for(Long basicBlock : basicBlocks){
 			List<Long> parents = QueryUtils.getChildBasicBlocks(basicBlock);
 			for(Long parent : parents){
-				parentBlocks.add(basicBlock, parent);
+				childBlocks.add(basicBlock, parent);
 			}
 		}
 	}
@@ -109,7 +99,7 @@ public class DDGCreator {
 	
 	private void reachingDefinitions()
 	{
-		initOut();
+		initOutAndGen();
 		
 		HashSet<Long> changedNodes = new HashSet<Long>();
 		for(Long basicBlock : basicBlocks)
@@ -135,9 +125,13 @@ public class DDGCreator {
 		
 	}
 
-	private void initOut()
+	private void initOutAndGen()
 	{
 		for(Long basicBlock : basicBlocks){
+			
+			// this has the nice side-effect that an
+			// empty hash is created for the basic block.
+			out.removeAllForKey(basicBlock);
 			
 			List<Object> symsDefined = symbolsDefined.getListForKey(basicBlock);
 			if(symsDefined == null) continue;
@@ -146,6 +140,9 @@ public class DDGCreator {
 				String symbol = (String) s;
 				out.add(basicBlock, new Definition(basicBlock, symbol));
 			}
+			
+			for(Object o: out.getListForKey(basicBlock))
+				gen.add(basicBlock, o);
 		}
 	}
 
@@ -167,52 +164,62 @@ public class DDGCreator {
 	}
 
 	private boolean updateOut(Long x)
-	{
-		boolean changed = false;
-		HashSet<Object> thisOut = out.getListForKey(x);
+	{		
 		
-		int oldSize;
-		if(thisOut == null)
-			oldSize = 0;
-		else
-			oldSize = thisOut.size();
-				
-		int nCovered = 0;
+		HashSet<Object> oldOut = new HashSet<Object>(out.getListForKey(x));		
 		
+		out.removeAllForKey(x);
+		
+		// in(x)
 		HashSet<Object> inForX = in.getListForKey(x);
-		if(inForX != null){
-			
+		if(inForX != null){		
 			for(Object o : inForX){
-
-				if(thisOut != null && thisOut.contains(o)){
-					nCovered++;
-					continue;
-				}
-
 				out.add(x, o);
-				changed = true;
+			}		
+		}
+		
+		// -kill(x)
+		List<Object> killX = symbolsDefined.getListForKey(x);
+		if(killX != null){
+		
+			Iterator<Object> it = out.getListForKey(x).iterator();
+			while(it.hasNext()){
+				Definition def = (Definition) it.next();
+				if(killX.contains(def.identifier))
+					it.remove();
 			}
 			
+		}	
+		
+		// gen(X)
+		HashSet<Object> genX = gen.getListForKey(x);
+
+		if(genX != null){
+			for(Object o :  genX){
+				out.add(x, o);
+			}
 		}
 		
-		// for each element that was already there,
-		// we tried to add it. Hence, nothing has changed.
-		if(nCovered == oldSize)
-			return false;
 		
-		// now kill definitions of identifiers also
-		// defined by this basic block
-		
-		List<Object> killX = symbolsDefined.getListForKey(x);
-		Iterator<Object> it = thisOut.iterator();
-		while(it.hasNext()){
-			Definition def = (Definition) it.next();
-			if(killX.contains(def.identifier))
-				it.remove();
-		}
-		
-		return changed;
+		return !oldOut.equals(out.getListForKey(x));
 	}
 
+	private void createDDGFromReachingDefs()
+	{
+		for(Long basicBlock : basicBlocks){
+			HashSet<Object> inForBlock = in.getListForKey(basicBlock);
+			if(inForBlock == null) continue;			
+			List<Object> usedSymbols = symbolsUsed.getListForKey(basicBlock);
+			if(usedSymbols == null) continue;
+			
+			for(Object d : inForBlock){
+				Definition def = (Definition) d;
+				
+				if(usedSymbols.contains(def.identifier))
+						ddg.add(def.basicBlock, basicBlock, def.identifier);
+			}
+		}
+	}
+	
 	
 }

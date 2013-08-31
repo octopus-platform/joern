@@ -37,12 +37,12 @@ public class HashMapOfSets {
 		valList.add(val);
 	}
 
-	public void addMultiHashMap(MultiHashMap otherHashMap)
+	public void addHashMapOfSets(HashMapOfSets otherHashMap)
 	{
-		Set<Entry<Object, List<Object>>> entrySet = otherHashMap.hashMap.entrySet();
-		Iterator<Entry<Object, List<Object>>> it = entrySet.iterator();
+		Set<Entry<Object, HashSet<Object>>> entrySet = otherHashMap.hashMap.entrySet();
+		Iterator<Entry<Object, HashSet<Object>>> it = entrySet.iterator();
 		while(it.hasNext()){
-			Entry<Object, List<Object>> pair = it.next();
+			Entry<Object, HashSet<Object>> pair = it.next();
 			Iterator<Object> it2 = pair.getValue().iterator();
 			while(it2.hasNext()){
 				add(pair.getKey(), it2.next());

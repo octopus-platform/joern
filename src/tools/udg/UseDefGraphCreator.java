@@ -130,9 +130,10 @@ public class UseDefGraphCreator
 				useDefStack.push( new UseOrDefRecord(nodeId, true));
 		}else if(nodeType.equals("Condition"))
 			useDefStack.push( new UseOrDefRecord(nodeId, false));		
-		else if(nodeType.equals("Argument")){
+		else if(nodeType.equals("Argument"))
 			useDefStack.push( new UseOrDefRecord(nodeId, false));
-		}
+		else if(nodeType.equals("ReturnStatement"))
+			useDefStack.push( new UseOrDefRecord(nodeId, false));
 			
 	
 	}
@@ -150,6 +151,8 @@ public class UseDefGraphCreator
 			if(childNum.equals("1") && childType.equals("Identifier"))
 				useDefStack.pop();
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
+			useDefStack.pop();
+		else if(nodeType.equals("ReturnStatement"))
 			useDefStack.pop();
 	}
 		

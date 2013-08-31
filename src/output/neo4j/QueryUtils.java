@@ -104,7 +104,7 @@ public class QueryUtils {
 		for(BatchRelationship rel : rels){
 			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
 			if(rel.getStartNode() == basicBlock) continue;
-			retval.add(rel.getStartNode());
+			retval.add(rel.getStartNode());		
 		}
 		return retval;
 	}
