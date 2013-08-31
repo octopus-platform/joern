@@ -30,29 +30,34 @@ public class UseDefGraphCreator
 			if(astRoot == -1){
 				// perfectly normal, e.g., empty blocks.
 				continue;
-			}			
+			}
 
 			currentBasicBlock = basicBlockId;
-			traverse(astRoot);			
+			traverseAST(astRoot);			
 		}
 	
 		return useDefGraph;
 	}
 
-	private void traverse(Long nodeId)
+	private void traverseAST(Long nodeId)
 	{		
+		String type = handleNodeBeforeExpansion(nodeId);
+		traverseASTChildren(nodeId, type);		
+	}
+
+	private String handleNodeBeforeExpansion(Long nodeId)
+	{
 		String type = QueryUtils.getNodeType(nodeId);		
-		if(type != null){
+		if(type == null) return null;
+				
+		if(type.equals("Identifier"))
+			handleIdentifier(nodeId);
+		else if(type.equals("MemberAccess"))
+			handleIdentifier(nodeId);
+		else if(type.equals("PtrMemberAccess"))
+			handleIdentifier(nodeId);
 
-			if(type.equals("Identifier"))
-				handleIdentifier(nodeId);
-			else if(type.equals("MemberAccess"))
-				handleIdentifier(nodeId);
-			else if(type.equals("PtrMemberAccess"))
-				handleIdentifier(nodeId);
-		}
-
-		traverseChildren(nodeId, type);		
+		return type;
 	}
 
 	private void handleIdentifier(Long nodeId)
@@ -80,7 +85,7 @@ public class UseDefGraphCreator
 
 	}
 
-	private void traverseChildren(Long nodeId, String nodeType)
+	private void traverseASTChildren(Long nodeId, String nodeType)
 	{
 		Iterable<BatchRelationship> rels = QueryUtils.getEdges(nodeId);
 
@@ -102,7 +107,7 @@ public class UseDefGraphCreator
 			}
 
 			updateUseDefStackEnter(nodeId, rel);						
-			traverse(childId);
+			traverseAST(childId);
 			updateUseDefStackLeave(nodeId, rel);
 
 		}
@@ -125,8 +130,13 @@ public class UseDefGraphCreator
 		}else if(nodeType.equals("IdentifierDecl")){
 			if(childNum.equals("1") && childType.equals("Identifier"))
 				useDefStack.push( new UseOrDefRecord(nodeId, true));
-		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
+		}else if(nodeType.equals("Condition"))
 			useDefStack.push( new UseOrDefRecord(nodeId, false));		
+		else if(nodeType.equals("Argument")){
+			useDefStack.push( new UseOrDefRecord(nodeId, false));
+		}
+			
+	
 	}
 
 	private void updateUseDefStackLeave(Long nodeId, BatchRelationship rel)
@@ -144,9 +154,7 @@ public class UseDefGraphCreator
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
 			useDefStack.pop();
 	}
-	
-	
-	// move to QueryUtils?
+		
 	private IndexHits<Long> getBasicBlocksFromIndex(long functionId)
 	{
 		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";

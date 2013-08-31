@@ -3,6 +3,7 @@ package output.neo4j;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 public class QueryUtils {
@@ -90,4 +91,34 @@ public class QueryUtils {
 		return retval;
 	}
 
+	public static IndexHits<Long> getBasicBlocksFromIndex(long functionId)
+	{
+		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";
+		return Neo4JBatchInserter.queryIndex(query);
+	}
+
+	public static List<Long> getParentBasicBlocks(Long basicBlock)
+	{
+		List<Long> retval = new LinkedList<Long>();
+		Iterable<BatchRelationship> rels = getEdges(basicBlock);
+		for(BatchRelationship rel : rels){
+			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
+			if(rel.getStartNode() == basicBlock) continue;
+			retval.add(rel.getStartNode());
+		}
+		return retval;
+	}
+
+	public static List<Long> getChildBasicBlocks(Long basicBlock)
+	{
+		List<Long> retval = new LinkedList<Long>();
+		Iterable<BatchRelationship> rels = getEdges(basicBlock);
+		for(BatchRelationship rel : rels){
+			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
+			if(rel.getEndNode() == basicBlock) continue;
+			retval.add(rel.getEndNode());
+		}
+		return retval;
+	}
+	
 }
