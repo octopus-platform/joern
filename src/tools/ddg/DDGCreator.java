@@ -2,9 +2,8 @@ package tools.ddg;
 
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
+
 
 import misc.HashMapOfSets;
 import misc.MultiHashMap;
@@ -33,6 +32,14 @@ public class DDGCreator {
 			basicBlock = aBasicBlock;
 			identifier = aIdentifier;
 		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			Definition other = (Definition) o;
+			return this.identifier.equals(other.identifier);
+		}
+		
 		public Long basicBlock;
 		public String identifier;
 	};
@@ -158,6 +165,7 @@ public class DDGCreator {
 		int nCovered = 0;
 		
 		for(Object o : in.getListForKey(x)){
+			
 			if(thisOut.contains(o)){
 				nCovered++;
 				continue;
