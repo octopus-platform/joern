@@ -2,8 +2,8 @@ package tools.ddg;
 
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-
 
 import misc.HashMapOfSets;
 import misc.MultiHashMap;
@@ -31,13 +31,6 @@ public class DDGCreator {
 		{
 			basicBlock = aBasicBlock;
 			identifier = aIdentifier;
-		}
-		
-		@Override
-		public boolean equals(Object o)
-		{
-			Definition other = (Definition) o;
-			return this.identifier.equals(other.identifier);
 		}
 		
 		public Long basicBlock;
@@ -150,6 +143,7 @@ public class DDGCreator {
 	
 		in.removeAllForKey(x);
 		
+		// in(x) = union(out(p))_{p in parents(x)}
 		for(Object p : parents){
 			Long parent = (Long) p;
 			for (Object o : out.getListForKey(parent))
@@ -175,10 +169,21 @@ public class DDGCreator {
 			changed = true;
 		}
 		
-		// only if for each element that was already there,
-		// there was and attempt to add it, nothing changed.
-		if(nCovered != oldSize)
-			return true;
+		// for each element that was already there,
+		// we tried to add it. Hence, nothing has changed.
+		if(nCovered == oldSize)
+			return false;
+		
+		// now kill definitions of identifiers also
+		// defined by this basic block
+		
+		List<Object> killX = symbolsDefined.getListForKey(x);
+		Iterator<Object> it = thisOut.iterator();
+		while(it.hasNext()){
+			Definition def = (Definition) it.next();
+			if(killX.contains(def.identifier))
+				it.remove();
+		}
 		
 		return changed;
 	}
