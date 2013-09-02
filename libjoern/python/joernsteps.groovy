@@ -15,6 +15,22 @@ Object.metaClass.queryNodeIndex = { query ->
   new Neo4jVertexSequence(index.query(query), g)._()
 }
 
+/**
+   Retrieve all nodes of a specified type from
+   the node index.
+   
+   @param typeName type
+ */
+
+Object.metaClass.getNodesByType = { typeName ->
+  g.idx("nodeIndex")[[type:typeName]]
+}
+
+/**
+   Allows more than one pipe to generate starting
+   points. Acts as an AND.
+*/
+
 Object.metaClass.START = { pipes ->
     
   np = []
@@ -25,17 +41,6 @@ Object.metaClass.START = { pipes ->
   }
   
   _().copySplit( *np ).exhaustMerge()
-}
-
-/**
-   Retrieve all nodes of a specified type from
-   the node index.
-   
-   @param typeName type
- */
-
-Object.metaClass.astNodesByType = { typeName ->
-  g.idx("nodeIndex")[[type:typeName]]
 }
 
 /**
@@ -103,7 +108,7 @@ Object.metaClass.getArgumentNTo = { callee, n ->
  */
  
 Object.metaClass.getCallsToRegex = { callee ->
-  astNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
+  getNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
 }
 
 ////////////////////////////////////////
@@ -116,6 +121,10 @@ Gremlin.defineStep('queryNodeIndex', [Vertex,Pipe], {
 
 Gremlin.defineStep('getTypeDeclsByName', [Vertex,Pipe], {
  _().transform{ getTypeDeclsByName(it) }.scatter()
+})
+
+Gremlin.defineStep('toSymbol', [Vertex,Pipe], {
+ _().transform{ queryNodeIndex('type:Symbol AND functionId:' + it.functionId + ' AND code:"' + it.code + '"') }.scatter()
 })
 
 // this should be renamed to 'getFunctionByName'
@@ -131,15 +140,14 @@ Gremlin.defineStep('backToLastFunction', [Vertex,Pipe], {
    _().transform{ functionId }.getNodeById()
 })
 
+
 //////////////////////////////////////
 // (3) Steps for AST nodes in general
 /////////////////////////////////////
 
 // For a given AST-node, get the function node
 
-// Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in().sideEffect{ functionId = it.id} });
-
-Gremlin.defineStep('function', [Vertex,Pipe],{ _().transform{ it.functionId }.getNodeById() });
+Gremlin.defineStep('function', [Vertex,Pipe],{ _().functionId.getNodeById() });
 
 Gremlin.defineStep('codeContains', [Vertex,Pipe], { x -> _().filter{ it.code.matches(x) } } )
 
@@ -205,6 +213,14 @@ Gremlin.defineStep('getArgumentN', [Vertex,Pipe], { n ->
   x = _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}
   x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()
 } )
+
+
+Gremlin.defineStep('fromArgToCallee', [Vertex,Pipe], {
+  _().in('IS_AST_PARENT').filter{ it.type == 'ArgumentList'}.in('IS_AST_PARENT')
+  .outE('IS_AST_PARENT').filter{ it.n == '0' }.inV()
+} )
+
+
 
 //////////////////////
 // (7) Control Flow

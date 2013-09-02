@@ -1,33 +1,20 @@
 package tools.ddg;
 
-
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-
 import misc.HashMapOfSets;
-import misc.MultiHashMap;
 
-import org.neo4j.graphdb.index.IndexHits;
-
-import output.neo4j.QueryUtils;
 
 public class DDGCreator {
-
-	DDG ddg = new DDG();	
-	MultiHashMap symbolsUsed = new MultiHashMap();
-	MultiHashMap symbolsDefined = new MultiHashMap();
 	
-	MultiHashMap parentBlocks = new MultiHashMap();
-	MultiHashMap childBlocks = new MultiHashMap();
+	CFGForDDGCreation cfg;
+	CFGForDDGFactory cfgFactory = new CFGForDDGFactory();
 	
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
-	
 	HashMapOfSets gen = new HashMapOfSets();
-	
-	LinkedList<Long> basicBlocks = new LinkedList<Long>();
+	HashSet<Long> changedNodes;
 	
 	private class Definition{
 		public Definition(Long aBasicBlock, String aIdentifier)
@@ -40,115 +27,82 @@ public class DDGCreator {
 		public String identifier;
 	};
 		
-	
 	public DDG create(Long funcId)
 	{
-		IndexHits<Long> blocks = QueryUtils.getBasicBlocksFromIndex(funcId);
+		cfg = cfgFactory.create(funcId);	
+		calculateReachingDefs();		
+		return createDDGFromReachingDefs();
 		
-		for(Long block : blocks)
-			basicBlocks.add(block);
-		
-		
-		cacheUsesAndDefs();		
-		cacheParentBlocks();
-		cacheChildBlocks();
-		
-		reachingDefinitions();
-		
-		createDDGFromReachingDefs();
-		
-		return ddg;
 	}
 
-	private void cacheUsesAndDefs()
+	private void calculateReachingDefs()
 	{
-		for(Long basicBlock : basicBlocks){
-			
-			List<String> useSymbols = QueryUtils.getSymbolsUsedByBasicBlock(basicBlock);			
-			for(String symbol : useSymbols){
-				symbolsUsed.add(basicBlock, symbol);
-			}
-			
-			List<String> defSymbols = QueryUtils.getSymbolsDefinedByBasicBlock(basicBlock);
-			for(String symbol : defSymbols){
-				symbolsDefined.add(basicBlock, symbol);
-			}	
-		}
-	}
-
-	private void cacheParentBlocks()
-	{
-		for(Long basicBlock : basicBlocks){
-			List<Long> parents = QueryUtils.getParentBasicBlocks(basicBlock);
-			for(Long parent : parents){
-				parentBlocks.add(basicBlock, parent);
-			}
-		}
-	}
-	
-	private void cacheChildBlocks()
-	{
-		for(Long basicBlock : basicBlocks){
-			List<Long> parents = QueryUtils.getChildBasicBlocks(basicBlock);
-			for(Long parent : parents){
-				childBlocks.add(basicBlock, parent);
-			}
-		}
-	}
-	
-	
-	private void reachingDefinitions()
-	{
-		initOutAndGen();
-		
-		HashSet<Long> changedNodes = new HashSet<Long>();
-		for(Long basicBlock : basicBlocks)
-			changedNodes.add(basicBlock);
-		
-		boolean changed;
-		
+		initReachingDefs();
+				
 		while(!changedNodes.isEmpty()){
-			Long x = changedNodes.iterator().next();
-			changedNodes.remove(x);
 			
-			initInFromParents(x);
-			changed = updateOut(x);
+			Long currentBlock = popFromChangedNodes();
+			
+			updateIn(currentBlock);
+			boolean changed = updateOut(currentBlock);
 		
-			if(changed){
-				List<Object> childrenOfX = childBlocks.getListForKey(x);
-				if(childrenOfX == null) continue;
-				for(Object o: childrenOfX){
-					changedNodes.add((Long) o);
-				}
-			}
+			if(!changed) continue;
+						
+			List<Object> children = cfg.childBlocks.getListForKey(currentBlock);
+			if(children == null)
+				continue;			
+			
+			for(Object o: children)
+				changedNodes.add((Long) o);
+						
 		}
 		
 	}
 
-	private void initOutAndGen()
+	private void initReachingDefs()
 	{
-		for(Long basicBlock : basicBlocks){
+		initOut();
+		initGenFromOut();
+		changedNodes = new HashSet<Long>();		
+		changedNodes.addAll(cfg.basicBlocks);
+	}
+
+	private Long popFromChangedNodes()
+	{
+		Long x = changedNodes.iterator().next();
+		changedNodes.remove(x);
+		return x;
+	}
+
+	private void initOut()
+	{
+		for(Long basicBlock : cfg.basicBlocks){
 			
 			// this has the nice side-effect that an
 			// empty hash is created for the basic block.
 			out.removeAllForKey(basicBlock);
 			
-			List<Object> symsDefined = symbolsDefined.getListForKey(basicBlock);
+			List<Object> symsDefined = cfg.symbolsDefined.getListForKey(basicBlock);
 			if(symsDefined == null) continue;
 			
 			for(Object s: symsDefined){
 				String symbol = (String) s;
 				out.add(basicBlock, new Definition(basicBlock, symbol));
 			}
-			
-			for(Object o: out.getListForKey(basicBlock))
-				gen.add(basicBlock, o);
 		}
 	}
 
-	private void initInFromParents(Long x)
+	private void initGenFromOut()
 	{
-		List<Object> parents = parentBlocks.getListForKey(x);		
+		for(Long basicBlock : cfg.basicBlocks){
+			for(Object o: out.getListForKey(basicBlock))
+				gen.add(basicBlock, o);		
+		}
+	}
+	
+	private void updateIn(Long x)
+	{
+		List<Object> parents = cfg.parentBlocks.getListForKey(x);		
 		if(parents == null) return;
 		
 		in.removeAllForKey(x);
@@ -157,7 +111,7 @@ public class DDGCreator {
 		for(Object p : parents){
 			Long parent = (Long) p;
 			HashSet<Object> parentOut = out.getListForKey(parent);
-			if(parentOut == null) continue;
+			if(parentOut == null) continue;			
 			for (Object o : parentOut)
 				in.add(x, o);
 		}
@@ -179,7 +133,7 @@ public class DDGCreator {
 		}
 		
 		// -kill(x)
-		List<Object> killX = symbolsDefined.getListForKey(x);
+		List<Object> killX = cfg.symbolsDefined.getListForKey(x);
 		if(killX != null){
 		
 			Iterator<Object> it = out.getListForKey(x).iterator();
@@ -204,12 +158,14 @@ public class DDGCreator {
 		return !oldOut.equals(out.getListForKey(x));
 	}
 
-	private void createDDGFromReachingDefs()
+	private DDG createDDGFromReachingDefs()
 	{
-		for(Long basicBlock : basicBlocks){
+		DDG ddg = new DDG();
+		
+		for(Long basicBlock : cfg.basicBlocks){
 			HashSet<Object> inForBlock = in.getListForKey(basicBlock);
 			if(inForBlock == null) continue;			
-			List<Object> usedSymbols = symbolsUsed.getListForKey(basicBlock);
+			List<Object> usedSymbols = cfg.symbolsUsed.getListForKey(basicBlock);
 			if(usedSymbols == null) continue;
 			
 			for(Object d : inForBlock){
@@ -219,6 +175,8 @@ public class DDGCreator {
 						ddg.add(def.basicBlock, basicBlock, def.identifier);
 			}
 		}
+	
+		return ddg;
 	}
 	
 	
