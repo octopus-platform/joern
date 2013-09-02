@@ -137,7 +137,9 @@ Gremlin.defineStep('backToLastFunction', [Vertex,Pipe], {
 
 // For a given AST-node, get the function node
 
-Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in().sideEffect{ functionId = it.id} });
+// Gremlin.defineStep('function', [Vertex,Pipe],{ _().in('IS_AST_OF_AST_NODE').in().sideEffect{ functionId = it.id} });
+
+Gremlin.defineStep('function', [Vertex,Pipe],{ _().transform{ it.functionId }.getNodeById() });
 
 Gremlin.defineStep('codeContains', [Vertex,Pipe], { x -> _().filter{ it.code.matches(x) } } )
 
