@@ -51,7 +51,10 @@ public class DDGPatchMain {
 
 	private static void patchCFGForDDG(CFGForDDGCreation cfgForDDG)
 	{
-		// TODO Auto-generated method stub		
+		// Continue here: add 'DEFs' for nodes containing
+		// source. Point defs to the symbol contained in
+		// tainted_arg. It may be necessary to create a
+		// corresponding symbol node.
 	}
 
 }

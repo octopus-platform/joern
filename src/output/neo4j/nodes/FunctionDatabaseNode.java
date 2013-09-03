@@ -7,14 +7,11 @@ import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
-import pdg.CFGToPDGConverter;
-import pdg.PDG;
 
 public class FunctionDatabaseNode extends DatabaseNode
 {
 	FunctionDef astRoot;
 	CFG cfg;
-	PDG pdg;
 	
 	ASTPseudoNode astPseudoNode;
 	CFGPseudoNode cfgPseudoNode;
@@ -23,7 +20,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 	String name;
 	
 	ASTToCFGConverter astToCFG = new ASTToCFGConverter();
-	CFGToPDGConverter cfgToPDG = new CFGToPDGConverter();
 	
 	@Override
 	public void initialize(Object node)
@@ -31,8 +27,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 		astRoot = (FunctionDef) node;
 		cfg = astToCFG.convert(astRoot);
 		setSignature(astRoot);
-	
-		pdg = cfgToPDG.convert(cfg);
 		
 		createPseudoNodes();
 	}
@@ -61,11 +55,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 	public CFG getCFG()
 	{
 		return cfg;
-	}
-
-	public PDG getPDG()
-	{
-		return pdg;
 	}
 	
 	public String getLocation()
