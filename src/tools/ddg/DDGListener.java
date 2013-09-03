@@ -10,7 +10,7 @@ public class DDGListener extends ImportedNodeListener {
 		DDGCreator ddgCreator = new DDGCreator();
 		DDGImporter ddgImporter = new DDGImporter();
 		
-		DDG ddg = ddgCreator.create(funcId);		
+		DDG ddg = ddgCreator.createForFunctionById(funcId);		
 		if(ddg == null) return;
 		ddgImporter.importDDG(ddg);
 	}

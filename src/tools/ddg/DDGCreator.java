@@ -33,14 +33,18 @@ public class DDGCreator {
 		cfgFactory = aFactory;
 	}
 	
-	public DDG create(Long funcId)
+	public DDG createForFunctionById(Long funcId)
 	{
-		cfg = cfgFactory.create(funcId);	
-		calculateReachingDefs();		
-		return createDDGFromReachingDefs();
-		
+		return createForCFG(cfgFactory.create(funcId));	
 	}
 
+	public DDG createForCFG(CFGForDDGCreation aCfg)
+	{
+		cfg = aCfg;
+		calculateReachingDefs();
+		return createDDGFromReachingDefs();
+	}
+	
 	private void calculateReachingDefs()
 	{
 		initReachingDefs();
