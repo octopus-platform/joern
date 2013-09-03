@@ -8,6 +8,7 @@ import org.neo4j.graphdb.Node;
 import output.neo4j.Neo4JDBInterface;
 import tools.ddg.CFGForDDGCreation;
 import tools.ddg.CFGForDDGFactory;
+import tools.ddg.ReadWriteDbFactory;
 
 public class DDGPatchMain {
 
@@ -23,8 +24,8 @@ public class DDGPatchMain {
 		
 		List<Node> sourceUsers = getFunctionsCallingFromIndex(source);
 		for(Node funcNode : sourceUsers){
-			// CFGForDDGCreation cfgForDDG = factory.create(funcNode.getId());
-			// patchCFGForDDG(cfgForDDG);
+			CFGForDDGCreation cfgForDDG = factory.create(funcNode.getId());
+			patchCFGForDDG(cfgForDDG);
 			System.out.println(funcNode.getId());
 		}
 				

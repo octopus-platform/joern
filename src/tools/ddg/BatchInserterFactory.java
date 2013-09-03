@@ -8,7 +8,7 @@ import output.neo4j.BatchInserter.QueryUtils;
 
 public class BatchInserterFactory extends CFGForDDGFactory{
 
-CFGForDDGCreation cfg;
+	CFGForDDGCreation cfg;
 	
 	public CFGForDDGCreation create(Long funcId)
 	{

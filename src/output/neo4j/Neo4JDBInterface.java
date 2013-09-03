@@ -33,5 +33,10 @@ public class Neo4JDBInterface {
 	{
 		graphDb.shutdown();
 	}
+
+	public static Node getNodeById(Long basicBlockId)
+	{
+		return graphDb.getNodeById(basicBlockId);
+	}
 	
 }
