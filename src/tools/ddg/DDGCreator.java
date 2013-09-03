@@ -3,13 +3,14 @@ package tools.ddg;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import misc.HashMapOfSets;
 
 
 public class DDGCreator {
 	
 	CFGForDDGCreation cfg;
-	CFGForDDGFactory cfgFactory = new CFGForDDGFactory();
+	CFGForDDGFactory cfgFactory = new BatchInserterFactory();
 	
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
@@ -26,7 +27,12 @@ public class DDGCreator {
 		public Long basicBlock;
 		public String identifier;
 	};
-		
+	
+	public void setFactory(CFGForDDGFactory aFactory)
+	{
+		cfgFactory = aFactory;
+	}
+	
 	public DDG create(Long funcId)
 	{
 		cfg = cfgFactory.create(funcId);	

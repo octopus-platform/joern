@@ -4,6 +4,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
 
 public class Neo4JDBInterface {
 	
@@ -21,6 +22,11 @@ public class Neo4JDBInterface {
 	{
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(databaseDir);
 		nodeIndex = graphDb.index().forNodes("nodeIndex");
+	}
+	
+	public static IndexHits<Node> queryIndex(String query)
+	{
+		return nodeIndex.query(query);
 	}
 	
 	public static void closeDatabase()

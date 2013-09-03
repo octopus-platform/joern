@@ -1,6 +1,9 @@
 package tools.ddgPatch;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import org.neo4j.graphdb.Node;
 
 import output.neo4j.Neo4JDBInterface;
 import tools.ddg.CFGForDDGCreation;
@@ -8,7 +11,7 @@ import tools.ddg.CFGForDDGFactory;
 
 public class DDGPatchMain {
 
-	static CFGForDDGFactory factory = new CFGForDDGFactory();
+	static CFGForDDGFactory factory = new ReadWriteDbFactory();
 	
 	public static void main(String[] args)
 	{
@@ -18,19 +21,24 @@ public class DDGPatchMain {
 		Neo4JDBInterface.setIndexDirectoryName(".joernIndex");
 		Neo4JDBInterface.openDatabase();
 		
-		List<Long> sourceUsers = getFunctionsCallingFromIndex(source);
-		for(Long funcId : sourceUsers){
-			CFGForDDGCreation cfgForDDG = factory.create(funcId);
-			patchCFGForDDG(cfgForDDG);
+		List<Node> sourceUsers = getFunctionsCallingFromIndex(source);
+		for(Node funcNode : sourceUsers){
+			// CFGForDDGCreation cfgForDDG = factory.create(funcNode.getId());
+			// patchCFGForDDG(cfgForDDG);
+			System.out.println(funcNode.getId());
 		}
 				
 		Neo4JDBInterface.closeDatabase();
 	}
 
-	private static List<Long> getFunctionsCallingFromIndex(String source)
+	private static List<Node> getFunctionsCallingFromIndex(String source)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Node> retval = new LinkedList<Node>();
+		String query = "type:CallExpression AND code:" + source + "*";
+				
+		for(Node n : Neo4JDBInterface.queryIndex(query))
+			retval.add(n);
+		return retval;
 	}
 
 	private static void patchCFGForDDG(CFGForDDGCreation cfgForDDG)
