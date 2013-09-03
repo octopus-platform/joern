@@ -4,7 +4,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 
 public class CallResolver {
 	
@@ -19,7 +19,7 @@ public class CallResolver {
 	{	
 		try{
 			long firstChildId = getFirstChildId(callId);
-			String codeStr = (String) Neo4JBatchInserter.getNodeProperties(firstChildId).get("code");
+			String codeStr = (String) Neo4JInterface.getNodeProperties(firstChildId).get("code");
 			return codeStr;			
 		}catch(RuntimeException ex){
 			System.err.println(ex.getMessage());
@@ -29,7 +29,7 @@ public class CallResolver {
 
 	private long getFirstChildId(Long callId)
 	{
-		Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(callId);
+		Iterable<BatchRelationship> rels = Neo4JInterface.getRelationships(callId);
 		long relId, endNode;
 		Object nProperty;
 		
@@ -47,7 +47,7 @@ public class CallResolver {
 			
 			relId = rel.getId();
 			
-			nProperty = Neo4JBatchInserter.getRelationshipProperties(relId).get("n");
+			nProperty = Neo4JInterface.getRelationshipProperties(relId).get("n");
 			if(nProperty == null || (!nProperty.equals("0")))
 				continue;
 						
@@ -64,7 +64,7 @@ public class CallResolver {
 		String query = "type:\"Function\" AND functionName:\"" + callee + "\"";
 		
 		IndexHits<Long> hits =
-				Neo4JBatchInserter.queryIndex(query);
+				Neo4JInterface.queryIndex(query);
 		
 		return hits;
 	}

@@ -2,8 +2,8 @@ package tools.index;
 
 import java.io.IOException;
 
-import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.Neo4JImportListener;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 
 public class CodeSensorIndex {
 
@@ -34,13 +34,13 @@ public class CodeSensorIndex {
 
 	private static void initializeDatabase()
 	{
-		Neo4JBatchInserter.setIndexDirectoryName(".joernIndex/");
-		Neo4JBatchInserter.openDatabase();
+		Neo4JInterface.setIndexDirectoryName(".joernIndex/");
+		Neo4JInterface.openDatabase();
 	}
 
 	private static void shutdownDatabase()
 	{
-		Neo4JBatchInserter.closeDatabase();
+		Neo4JInterface.closeDatabase();
 	}
 	
 	private static String[] parseCommandLine(String[] args) {

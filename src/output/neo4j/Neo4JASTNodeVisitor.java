@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.dbinterfaces.Neo4JInterface;
 import output.neo4j.importers.ClassDefImporter;
 import output.neo4j.importers.FunctionImporter;
 import output.neo4j.importers.DeclStmtImporter;
@@ -64,7 +65,7 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 			return;
 		Long classId = contextStack.peek();
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CLASS_OF);
-		Neo4JBatchInserter.addRelationship(classId, dstNodeId, rel, null);
+		Neo4JInterface.addRelationship(classId, dstNodeId, rel, null);
 	}
 
 	private void visitClassDefContent(ClassDefStatement node, long classNodeId)

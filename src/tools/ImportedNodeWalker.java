@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 
 
 /**
@@ -30,7 +30,7 @@ public class ImportedNodeWalker
 	
 	public void walk()
 	{
-		IndexHits<Long> nodes = Neo4JBatchInserter.retrieveExactFromIndex("type", type);
+		IndexHits<Long> nodes = Neo4JInterface.retrieveExactFromIndex("type", type);
 		for(Long nodeId : nodes){
 			notifyListenersOfNode(nodeId);
 		}

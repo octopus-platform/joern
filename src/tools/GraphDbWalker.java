@@ -1,18 +1,18 @@
 package tools;
 
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 
 public class GraphDbWalker {
 
 	protected static void initializeDatabase()
 	{
-		Neo4JBatchInserter.setIndexDirectoryName(".joernIndex/");
-		Neo4JBatchInserter.openDatabase();
+		Neo4JInterface.setIndexDirectoryName(".joernIndex/");
+		Neo4JInterface.openDatabase();
 	}
 
 	protected static void shutdownDatabase()
 	{
-		Neo4JBatchInserter.closeDatabase();
+		Neo4JInterface.closeDatabase();
 	}
 	
 }

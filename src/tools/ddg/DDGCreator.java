@@ -35,6 +35,11 @@ public class DDGCreator {
 		
 	}
 
+	public void setCFGForDDGFactory(CFGForDDGFactory f)
+	{
+		cfgFactory = f;
+	}
+	
 	private void calculateReachingDefs()
 	{
 		initReachingDefs();

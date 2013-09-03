@@ -9,7 +9,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 import tools.CallResolver;
 import tools.ImportedNodeListener;
 
@@ -54,7 +54,7 @@ public class ICFGListener extends ImportedNodeListener {
 	{
 				
 		String query = "type:\"ParameterList\" AND functionId:\"" + dst + "\"";
-		IndexHits<Long> hits = Neo4JBatchInserter.queryIndex(query);
+		IndexHits<Long> hits = Neo4JInterface.queryIndex(query);
 		
 		if(hits == null) return null;
 		
@@ -74,7 +74,7 @@ public class ICFGListener extends ImportedNodeListener {
 
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_ARG);
 		for(int i = 0; i < arguments.size(); i++)						
-			Neo4JBatchInserter.addRelationship(arguments.get(i), parameters.get(i), rel, null);					
+			Neo4JInterface.addRelationship(arguments.get(i), parameters.get(i), rel, null);					
 					
 	}
 
@@ -85,14 +85,14 @@ public class ICFGListener extends ImportedNodeListener {
 
 	private long getArgumentListByCallId(Long callNodeId)
 	{
-		Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(callNodeId);
+		Iterable<BatchRelationship> rels = Neo4JInterface.getRelationships(callNodeId);
 		for(BatchRelationship rel : rels){			
 			long childId = rel.getEndNode();
 			
 			if(childId == callNodeId)
 				continue;
 		
-			String childType = (String) Neo4JBatchInserter.getNodeProperties(childId).get("type");
+			String childType = (String) Neo4JInterface.getNodeProperties(childId).get("type");
 		
 			if(childType.equals("ArgumentList"))
 				return childId;	
@@ -106,13 +106,13 @@ public class ICFGListener extends ImportedNodeListener {
 		List<Long> retval = new LinkedList<Long>();
 		
 		for (Long paramId : params){
-			Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(paramId);
+			Iterable<BatchRelationship> rels = Neo4JInterface.getRelationships(paramId);
 			for(BatchRelationship rel : rels){
 				if(rel.getEndNode() == paramId)
 					continue;
 				
 				long identifierNode = rel.getEndNode();				
-				Object type = Neo4JBatchInserter.getNodeProperties(identifierNode).get("type");
+				Object type = Neo4JInterface.getNodeProperties(identifierNode).get("type");
 				if(type.equals("Identifier")){				
 					retval.add(identifierNode);				
 					break;
@@ -131,7 +131,7 @@ public class ICFGListener extends ImportedNodeListener {
 	private List<Long> getChildrenByNodeId(Long nodeId)
 	{
 		List<Long> retval = new LinkedList<Long>();
-		Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(nodeId);
+		Iterable<BatchRelationship> rels = Neo4JInterface.getRelationships(nodeId);
 	
 		for(BatchRelationship rel : rels){
 			if(rel.getEndNode() == nodeId)

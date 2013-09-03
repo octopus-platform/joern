@@ -8,7 +8,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 import output.neo4j.nodes.FileDatabaseNode;
 
 public class FileImporter
@@ -35,7 +35,7 @@ public class FileImporter
 		
 		long dstId = node.getId();
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_PARENT_DIR_OF);
-		Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
+		Neo4JInterface.addRelationship(srcId, dstId, rel, null);
 	}
 
 	private void insertDirectoryNode(Path dir, FileDatabaseNode node)
@@ -55,10 +55,10 @@ public class FileImporter
 	private void insertNode(FileDatabaseNode node)
 	{
 		Map<String, Object> properties = node.createProperties();
-		long nodeId = Neo4JBatchInserter.addNode(properties);
+		long nodeId = Neo4JInterface.addNode(properties);
 		node.setId(nodeId);
 	
-		Neo4JBatchInserter.indexNode(nodeId, properties);	
+		Neo4JInterface.indexNode(nodeId, properties);	
 	}
 
 	public void exitDir(Path dir)

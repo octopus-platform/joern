@@ -9,7 +9,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 import output.neo4j.nodes.ASTPseudoNode;
 import output.neo4j.nodes.CFGPseudoNode;
 import output.neo4j.nodes.FileDatabaseNode;
@@ -93,7 +93,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long functionId = nodeStore.getIdForObject(cfgPseudoNode);
 		long cfgRootId = nodeStore.getIdForObject(firstBlock);
 		
-		Neo4JBatchInserter.addRelationship(functionId, cfgRootId, rel, null);
+		Neo4JInterface.addRelationship(functionId, cfgRootId, rel, null);
 	
 	}
 
@@ -104,7 +104,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long functionId = nodeStore.getIdForObject(function);
 		long pseudoNodeId = nodeStore.getIdForObject(function.getASTPseudoNode());
 		
-		Neo4JBatchInserter.addRelationship(functionId, pseudoNodeId, rel, null);
+		Neo4JInterface.addRelationship(functionId, pseudoNodeId, rel, null);
 	}
 	
 	private void linkFunctionWithCFGPseudoNode(FunctionDatabaseNode function)
@@ -114,7 +114,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long functionId = nodeStore.getIdForObject(function);
 		long pseudoNodeId = nodeStore.getIdForObject(function.getCFGPseudoNode());
 		
-		Neo4JBatchInserter.addRelationship(functionId, pseudoNodeId, rel, null);
+		Neo4JInterface.addRelationship(functionId, pseudoNodeId, rel, null);
 		
 	}
 	
@@ -125,7 +125,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long functionId = nodeStore.getIdForObject(astPseudoNode);
 		long astRootId = nodeStore.getIdForObject(astRoot);
 		
-		Neo4JBatchInserter.addRelationship(functionId, astRootId, rel, null);
+		Neo4JInterface.addRelationship(functionId, astRootId, rel, null);
 	}
 	
 	private void linkFunctionToFileNode(FunctionDatabaseNode function,
@@ -136,7 +136,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long fileId = fileNode.getId();
 		long functionId = nodeStore.getIdForObject(function);
 		
-		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
+		Neo4JInterface.addRelationship(fileId, functionId, rel, null);
 	}
 	
 	private void linkPseudoASTWithAllASTNodes(ASTPseudoNode astPseudoNode, ASTNode node)
@@ -167,7 +167,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long functionId = nodeStore.getIdForObject(cfgPseudoNode);
 		long dstId = nodeStore.getIdForObject(block);
 		
-		Neo4JBatchInserter.addRelationship(functionId, dstId, rel, null);
+		Neo4JInterface.addRelationship(functionId, dstId, rel, null);
 	}
 
 	private void linkParentWithASTNode(Object parent, ASTNode node)
@@ -177,7 +177,7 @@ public class FunctionImporter extends ASTNodeImporter
 		long parentId = nodeStore.getIdForObject(parent);
 		long nodeId = nodeStore.getIdForObject(node);
 		
-		Neo4JBatchInserter.addRelationship(parentId, nodeId, rel, null);
+		Neo4JInterface.addRelationship(parentId, nodeId, rel, null);
 	}
 
 }

@@ -4,10 +4,9 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 import output.neo4j.nodes.ClassDefDatabaseNode;
 import output.neo4j.nodes.FileDatabaseNode;
-
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 
@@ -39,7 +38,7 @@ public class ClassDefImporter extends ASTNodeImporter
 		long fileId = fileNode.getId();
 		long functionId = nodeStore.getIdForObject(classDefNode);
 		
-		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
+		Neo4JInterface.addRelationship(fileId, functionId, rel, null);
 	}
 
 	private void addClassDefToDatabase(ClassDefDatabaseNode classDefNode)

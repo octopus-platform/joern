@@ -9,7 +9,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.dbinterfaces.Neo4JInterface;
 import misc.MultiHashMap;
 
 
@@ -52,7 +52,7 @@ public class UseDefGraphImporter {
 			else
 				rel = DynamicRelationshipType.withName(EdgeTypes.USE);
 				
-			Neo4JBatchInserter.addRelationship(item.nodeId, symbolNodeId, rel, null);					
+			Neo4JInterface.addRelationship(item.nodeId, symbolNodeId, rel, null);					
 		}
 	}
 
@@ -63,8 +63,8 @@ public class UseDefGraphImporter {
 		properties.put("type", "Symbol");
 		properties.put("functionId", functionId);
 		
-		long newNodeId = Neo4JBatchInserter.addNode(properties);
-		Neo4JBatchInserter.indexNode(newNodeId, properties);
+		long newNodeId = Neo4JInterface.addNode(properties);
+		Neo4JInterface.indexNode(newNodeId, properties);
 		return newNodeId;
 	}
 	
