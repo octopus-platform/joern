@@ -11,7 +11,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.GraphNodeStore;
-import output.neo4j.dbinterfaces.Neo4JInterface;
+import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.nodes.BasicBlockDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
@@ -89,7 +89,7 @@ public class CFGImporter
 		
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.FLOWS_TO);
 		Map<String, Object> properties = null;
-		Neo4JInterface.addRelationship(srcId, dstId, rel, properties);
+		Neo4JBatchInserter.addRelationship(srcId, dstId, rel, properties);
 	}
 
 	private void addLinkFromBasicBlockToAST(BasicBlock block)
@@ -111,7 +111,7 @@ public class CFGImporter
 		
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_BASIC_BLOCK_OF);
 		Map<String, Object> properties = null;
-		Neo4JInterface.addRelationship(idForCFGNode, idForASTNode, rel, properties);
+		Neo4JBatchInserter.addRelationship(idForCFGNode, idForASTNode, rel, properties);
 		
 	}
 }

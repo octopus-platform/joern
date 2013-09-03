@@ -2,12 +2,9 @@ package output.neo4j;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
-
-import output.neo4j.dbinterfaces.Neo4JInterface;
 
 public class QueryUtils {
 
@@ -29,22 +26,22 @@ public class QueryUtils {
 		
 	public static Iterable<BatchRelationship> getEdges(Long nodeId)
 	{
-		return Neo4JInterface.getRelationships(nodeId);
+		return Neo4JBatchInserter.getRelationships(nodeId);
 	}
 
 	public static String getNodeType(Long nodeId)
 	{
-		return (String) Neo4JInterface.getNodeProperties(nodeId).get("type");
+		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("type");
 	}
 
 	public static String getChildNumber(BatchRelationship rel)
 	{
-		return (String) Neo4JInterface.getRelationshipProperties(rel.getId()).get("n");
+		return (String) Neo4JBatchInserter.getRelationshipProperties(rel.getId()).get("n");
 	}
 
 	public static String getNodeCode(Long nodeId)
 	{
-		return (String) Neo4JInterface.getNodeProperties(nodeId).get("code");
+		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("code");
 	}
 	
 	public static long getASTForBasicBlock(Long basicBlockId)
@@ -97,26 +94,9 @@ public class QueryUtils {
 	public static IndexHits<Long> getBasicBlocksFromIndex(long functionId)
 	{		
 		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";
-		return Neo4JInterface.queryIndex(query);
+		return Neo4JBatchInserter.queryIndex(query);
 	}
 
-	public static List<Long> getFunctionsCallingFromIndex(String callee)
-	{	
-		List<Long> retval = new LinkedList<Long>();
-		String query = "type:CallExpression AND code:" + callee + "*";
-		System.out.println(query);
-		
-		IndexHits<Long> hits = Neo4JInterface.queryIndex(query);
-		
-		for(Long h: hits){
-			Map<String, Object> nodeProperties = Neo4JInterface.getNodeProperties(h);
-			if(nodeProperties.get("code").toString().startsWith(callee + " ") )
-				retval.add(Long.valueOf(( (String) nodeProperties.get("functionId").toString() )));
-		}
-		return retval;
-	}
-
-	
 	public static List<Long> getParentBasicBlocks(Long basicBlock)
 	{
 		List<Long> retval = new LinkedList<Long>();

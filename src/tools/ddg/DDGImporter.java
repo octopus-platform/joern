@@ -8,7 +8,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.dbinterfaces.Neo4JInterface;
+import output.neo4j.Neo4JBatchInserter;
 import tools.ddg.DDG.DefUseRelation;
 
 public class DDGImporter
@@ -26,7 +26,7 @@ public class DDGImporter
 		
 		for(DefUseRelation defUseRel : defUseEdges){			
 			properties.put("var", defUseRel.symbol);
-			Neo4JInterface.addRelationship(defUseRel.src, defUseRel.dst, rel, properties);		
+			Neo4JBatchInserter.addRelationship(defUseRel.src, defUseRel.dst, rel, properties);		
 		}
 	}
 	

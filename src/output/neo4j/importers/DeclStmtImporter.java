@@ -7,7 +7,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.dbinterfaces.Neo4JInterface;
+import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.nodes.DeclStmtDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.statements.IdentifierDeclStatement;
@@ -41,7 +41,7 @@ public class DeclStmtImporter extends ASTNodeImporter {
 	private void addLinkFromStmtToDecl(long mainNodeId, long declId)
 	{	
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.DECLARES);	
-		Neo4JInterface.addRelationship(mainNodeId, declId, rel, null);
+		Neo4JBatchInserter.addRelationship(mainNodeId, declId, rel, null);
 	}
 	
 }
