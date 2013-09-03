@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 import output.neo4j.importers.ClassDefImporter;
 import output.neo4j.importers.FunctionImporter;
 import output.neo4j.importers.DeclStmtImporter;

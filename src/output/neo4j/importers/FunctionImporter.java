@@ -8,8 +8,8 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.GraphNodeStore;
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.BatchInserter.GraphNodeStore;
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 import output.neo4j.nodes.ASTPseudoNode;
 import output.neo4j.nodes.CFGPseudoNode;
 import output.neo4j.nodes.FileDatabaseNode;

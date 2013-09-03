@@ -3,8 +3,7 @@ package output.neo4j.importers;
 import java.util.Map;
 
 import astnodes.ASTNode;
-
-import output.neo4j.GraphNodeStore;
+import output.neo4j.BatchInserter.GraphNodeStore;
 import output.neo4j.nodes.DatabaseNode;
 import output.neo4j.nodes.FileDatabaseNode;
 

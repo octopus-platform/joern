@@ -2,8 +2,8 @@ package tools.index;
 
 import java.io.IOException;
 
-import output.neo4j.Neo4JBatchInserter;
 import output.neo4j.Neo4JImportListener;
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
 public class CodeSensorIndex {
 

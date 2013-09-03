@@ -1,6 +1,6 @@
 package tools;
 
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
 public class GraphDbWalker {
 

@@ -1,10 +1,12 @@
-package output.neo4j;
+package output.neo4j.BatchInserter;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
+
+import output.neo4j.EdgeTypes;
 
 public class QueryUtils {
 

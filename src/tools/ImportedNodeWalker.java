@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.Neo4JBatchInserter;
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
 
 /**

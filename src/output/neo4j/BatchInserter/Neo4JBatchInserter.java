@@ -1,4 +1,4 @@
-package output.neo4j;
+package output.neo4j.BatchInserter;
 
 import java.util.Map;
 

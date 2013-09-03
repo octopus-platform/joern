@@ -1,6 +1,6 @@
 package output.neo4j.importers;
 
-import output.neo4j.GraphNodeStore;
+import output.neo4j.BatchInserter.GraphNodeStore;
 import pdg.PDG;
 
 public class PDGImporter {
