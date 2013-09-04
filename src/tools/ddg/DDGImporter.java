@@ -1,15 +1,14 @@
 package tools.ddg;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.BatchInserter.Neo4JBatchInserter;
-import tools.ddg.DDG.DefUseRelation;
 
 public class DDGImporter
 {
@@ -20,7 +19,7 @@ public class DDGImporter
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		
-		List<DefUseRelation> defUseEdges = ddg.getDefUseEdges();
+		Set<DefUseRelation> defUseEdges = ddg.getDefUseEdges();
 		if(defUseEdges == null)
 			return;
 		

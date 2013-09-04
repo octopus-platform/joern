@@ -1,28 +1,17 @@
 package tools.ddg;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class DDG {
 
-	List<DefUseRelation> defUseEdges = new LinkedList<DefUseRelation>();
+	private Set<DefUseRelation> defUseEdges = new HashSet<DefUseRelation>();
 	
-	public List<DefUseRelation> getDefUseEdges()
+	public Set<DefUseRelation> getDefUseEdges()
 	{
 		return defUseEdges;
-	}
-	
-	public class DefUseRelation{		
-		public long src;
-		public long dst;
-		public String symbol;
-		
-		public DefUseRelation(Long aSrc, long aDst, String aSymbol)
-		{
-			src = aSrc;
-			dst = aDst;
-			symbol = aSymbol;
-		}
 	}
 
 	public void add(long srcId, long dstId, String symbol)
@@ -32,5 +21,36 @@ public class DDG {
 	};
 
 	
+	/**
+	 * Compares the DDG with another DDG and returns
+	 * a DDGDifference object telling us which edges
+	 * need to be added/removed to transform one
+	 * DDG into the other.
+	 * @param other
+	 * @return
+	 */
+	public DDGDifference difference(DDG other)
+	{
+		DDGDifference retval = new DDGDifference();
+		List<DefUseRelation> thisEdges =
+				new LinkedList<DefUseRelation>(this.getDefUseEdges());
+		
+		Set<DefUseRelation> otherEdges =
+				new HashSet<DefUseRelation>(other.getDefUseEdges());
+		
+
+		while(thisEdges.size() > 0){
+			DefUseRelation elem = thisEdges.remove(0);
+			if(otherEdges.contains(elem))
+				otherEdges.remove(elem);
+			else
+				retval.addRelToRemove(elem);
+		}
+		
+		for(DefUseRelation elem: otherEdges)
+			retval.addRelToAdd(elem);
+		
+		return retval;
+	}
 
 }
