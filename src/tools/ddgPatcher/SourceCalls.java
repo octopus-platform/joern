@@ -1,4 +1,4 @@
-package tools.ddgPatch;
+package tools.ddgPatcher;
 
 import java.util.LinkedList;
 import java.util.List;

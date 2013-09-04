@@ -1,4 +1,4 @@
-package tools.ddgPatch;
+package tools.ddgPatcher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
 
-public class DDGPatchMain {
+public class DDGPatcherMain {
 
 	static DefUseCFGFactory factory = new ReadWriteDbFactory();
 	
@@ -39,14 +39,13 @@ public class DDGPatchMain {
 			DDG oldDDG = QueryUtils.getDDGForFunction(funcNode);
 			
 			DefUseCFG defUseCFG = getCurrentDefUseCFGFromDatabase(funcId);
+						
 			patchDefUseCFG(defUseCFG, sourceCalls);
 			
 			DDGCreator ddgCreator = new DDGCreator();
 			DDG newDDG = ddgCreator.createForDefUseCFG(defUseCFG);
 			DDGDifference diff = oldDDG.difference(newDDG);
 			changeDDGinDatabase(diff);
-			
-			System.out.println(funcNode.getId());
 		}
 				
 		Neo4JDBInterface.closeDatabase();
@@ -59,9 +58,11 @@ public class DDGPatchMain {
 		List<Node> hits = QueryUtils.getCallsToSymbol(source);
 		
 		for(Node callNode : hits){
+			
 			Long functionId = Long.valueOf(callNode.getProperty("functionId").toString());		
 			
 			SourceCalls sourceCalls = retval.get(functionId);
+			
 			if(sourceCalls == null){
 				SourceCalls newSourceCalls = new SourceCalls();
 				retval.put(functionId, newSourceCalls);
@@ -91,7 +92,7 @@ public class DDGPatchMain {
 
 		for(int i = 0; i< nCalls; i++){
 			String arg = sourceCalls.argsToSource.get(i);
-			Long blockId = sourceCalls.blocksCallingSource.get(i);		
+			Long blockId = sourceCalls.blocksCallingSource.get(i);
 			defUseCFG.addSymbolDefined(blockId, arg);
 		}
 		
@@ -99,7 +100,8 @@ public class DDGPatchMain {
 
 	private static void changeDDGinDatabase(DDGDifference diff)
 	{
-		// TODO Auto-generated method stub
+		System.out.println(diff.getRelsToAdd().size());
+		System.out.println(diff.getRelsToRemove().size());
 	}
 	
 }

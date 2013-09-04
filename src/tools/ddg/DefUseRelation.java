@@ -14,10 +14,17 @@ public class DefUseRelation{
 
 	@Override
 	public boolean equals(Object other) {
-		DefUseRelation otherRel = (DefUseRelation) other;
+		DefUseRelation otherRel = (DefUseRelation) other;	
+		
 		return (src == otherRel.src) &&
 			   (dst == otherRel.dst) &&
 			   (symbol.equals(otherRel.symbol));
 	}
-		
+
+	@Override
+	public int hashCode()
+	{
+		return symbol.hashCode();
+	}
+	
 }

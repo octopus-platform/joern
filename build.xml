@@ -89,5 +89,17 @@
     </jar>
   </target>
   
+  <target name="ddgpatcher" depends="compile">
+    <jar destfile="${build.dir}/ddgpatcher.jar"
+         basedir="${build.dir}"
+         includes="**/*.class">
+      <manifest>
+        <attribute name="Main-Class" value="tools.ddgPatcher.DDGPatcherMain" />
+      </manifest>
+    <fileset dir="${build.dir}" includes="**/*.class" />
+    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+
 
 </project>
