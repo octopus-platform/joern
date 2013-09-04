@@ -38,10 +38,10 @@ public class DDGCreator {
 	
 	public DDG createForFunctionById(Long funcId)
 	{
-		return createForCFG(cfgFactory.create(funcId));	
+		return createForDefUseCFG(cfgFactory.create(funcId));	
 	}
 
-	public DDG createForCFG(DefUseCFG aCfg)
+	public DDG createForDefUseCFG(DefUseCFG aCfg)
 	{
 		cfg = aCfg;
 		calculateReachingDefs();
@@ -83,7 +83,7 @@ public class DDGCreator {
 	private Long popFromChangedNodes()
 	{
 		Long x = changedNodes.iterator().next();
-		changedNodes.remove(x);
+		changedNodes.remove(x);		
 		return x;
 	}
 
@@ -93,6 +93,7 @@ public class DDGCreator {
 			
 			// this has the nice side-effect that an
 			// empty hash is created for the basic block.
+			
 			out.removeAllForKey(basicBlock);
 			
 			List<Object> symsDefined = cfg.getSymbolsDefined().getListForKey(basicBlock);
@@ -131,8 +132,7 @@ public class DDGCreator {
 	}
 
 	private boolean updateOut(Long x)
-	{		
-		
+	{	
 		HashSet<Object> oldOut = new HashSet<Object>(out.getListForKey(x));		
 		
 		out.removeAllForKey(x);

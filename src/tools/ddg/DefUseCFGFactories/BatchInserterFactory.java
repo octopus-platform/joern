@@ -13,6 +13,7 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 	public DefUseCFG create(Long funcId)
 	{
 		cfg = new DefUseCFG();
+		cfg.setFunctionId(funcId);
 		
 		getBasicBlocksOfFunction(funcId);		
 		getUsesAndDefs();		

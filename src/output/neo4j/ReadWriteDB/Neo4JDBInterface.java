@@ -1,4 +1,4 @@
-package output.neo4j;
+package output.neo4j.ReadWriteDB;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;

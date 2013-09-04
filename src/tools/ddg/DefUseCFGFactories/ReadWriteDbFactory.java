@@ -1,6 +1,5 @@
 package tools.ddg.DefUseCFGFactories;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.neo4j.graphdb.Direction;
@@ -8,7 +7,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.Neo4JDBInterface;
+import output.neo4j.EdgeTypes;
+import output.neo4j.ReadWriteDB.Neo4JDBInterface;
+import output.neo4j.ReadWriteDB.QueryUtils;
 
 public class ReadWriteDbFactory extends DefUseCFGFactory {
 
@@ -18,6 +19,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	public DefUseCFG create(Long funcId)
 	{
 		cfg = new DefUseCFG();
+		cfg.setFunctionId(funcId);
 		
 		getBasicBlocksOfFunction(funcId);		
 		getUsesAndDefs();		
@@ -39,35 +41,25 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	{
 		for(Long basicBlockId : cfg.getBasicBlocks()){
 			
-			List<String> used = getSymbolsUsedByBasicBlock(basicBlockId);
+			List<String> used = QueryUtils.getSymbolsUsedByBasicBlock(basicBlockId);
 			for(String symbol : used)
 				cfg.addSymbolUsed(basicBlockId, symbol);
 		
-			List<String> defined = getSymbolsDefinedByBasicBlock(basicBlockId);
+			List<String> defined = QueryUtils.getSymbolsDefinedByBasicBlock(basicBlockId);
 			for(String symbol : defined)
 				cfg.addSymbolDefined(basicBlockId, symbol);
 			
 		}
 	}
 	
-	private List<String> getSymbolsDefinedByBasicBlock(Long basicBlockId)
-	{
-		Node node = Neo4JDBInterface.getNodeById(basicBlockId);
-		return getCodeOfChildrenConnectedBy(node, "DEF");
-	}
-
-	private List<String> getSymbolsUsedByBasicBlock(Long basicBlockId)
-	{	
-		Node node = Neo4JDBInterface.getNodeById(basicBlockId);
-		return getCodeOfChildrenConnectedBy(node, "USE");
-	}
-
 	private void getParentBlocks()
 	{
 		for(Long basicBlockId : cfg.getBasicBlocks()){
 			Node basicBlock = Neo4JDBInterface.getNodeById(basicBlockId);
 			Iterable<Relationship> rels = basicBlock.getRelationships(Direction.INCOMING);
 			for(Relationship rel: rels){
+				if(!rel.getType().toString().equals(EdgeTypes.FLOWS_TO))
+					continue;
 				long parentId = rel.getStartNode().getId();
 				cfg.addParentBlock(basicBlockId, parentId);
 			}
@@ -80,26 +72,13 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 			Node basicBlock = Neo4JDBInterface.getNodeById(basicBlockId);
 			Iterable<Relationship> rels = basicBlock.getRelationships(Direction.OUTGOING);
 			for(Relationship rel: rels){
+				if(!rel.getType().toString().equals(EdgeTypes.FLOWS_TO))
+					continue;
+				
 				long childId = rel.getEndNode().getId();
 				cfg.addChildBlock(basicBlockId, childId);
 			}
 		}
-	}
-
-	private List<String> getCodeOfChildrenConnectedBy(Node node, String edgeType)
-	{
-		List<String> retval = new LinkedList<String>();
-		
-		Iterable<Relationship> rels = node.getRelationships();
-		for(Relationship rel : rels){
-			if(!rel.getType().name().equals(edgeType)) continue;
-		
-			Node identifierNode = rel.getEndNode();
-			String identifierStr = identifierNode.getProperty("code").toString();			
-			retval.add(identifierStr);
-		}
-		
-		return retval;
 	}
 	
 }

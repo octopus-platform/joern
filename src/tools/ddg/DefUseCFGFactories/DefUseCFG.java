@@ -11,11 +11,22 @@ import misc.MultiHashMap;
 
 public class DefUseCFG {
 
+	private long functionId;
 	private LinkedList<Long> basicBlocks = new LinkedList<Long>();
 	private MultiHashMap symbolsUsed = new MultiHashMap();
 	private MultiHashMap symbolsDefined = new MultiHashMap();
 	private MultiHashMap parentBlocks = new MultiHashMap();
 	private MultiHashMap childBlocks = new MultiHashMap();
+	
+	public void setFunctionId(long anId)
+	{
+		functionId = anId;
+	}
+	
+	public long getFunctionId()
+	{
+		return functionId;
+	}
 	
 	public void addBasicBlock(long basicBlockId)
 	{
