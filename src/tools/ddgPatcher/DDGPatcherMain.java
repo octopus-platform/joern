@@ -2,16 +2,22 @@ package tools.ddgPatcher;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
-
+import output.neo4j.EdgeTypes;
 import output.neo4j.ReadWriteDB.Neo4JDBInterface;
 import output.neo4j.ReadWriteDB.QueryUtils;
 import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
 import tools.ddg.DDGDifference;
+import tools.ddg.DefUseRelation;
 import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
@@ -100,8 +106,49 @@ public class DDGPatcherMain {
 
 	private static void changeDDGinDatabase(DDGDifference diff)
 	{
-		System.out.println(diff.getRelsToAdd().size());
-		System.out.println(diff.getRelsToRemove().size());
+		Neo4JDBInterface.startTransaction();
+		removeOldEdges(diff);
+		addNewEdges(diff);
+		Neo4JDBInterface.finishTransaction();
+	}
+
+	private static void addNewEdges(DDGDifference diff)
+	{
+		List<DefUseRelation> relsToAdd = diff.getRelsToAdd();
+		for(DefUseRelation rel : relsToAdd){
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("var", rel.symbol);
+			RelationshipType relType = DynamicRelationshipType.withName(EdgeTypes.REACHES);
+			
+			Neo4JDBInterface.addRelationship(rel.src, rel.dst, relType, properties);	
+		}
+	}
+
+	private static void removeOldEdges(DDGDifference diff)
+	{
+		List<DefUseRelation> relsToRemove = diff.getRelsToRemove();
+	
+		for(DefUseRelation rel : relsToRemove){
+			Node srcBasicBlock = Neo4JDBInterface.getNodeById(rel.src);
+			
+			Iterable<Relationship> rels = srcBasicBlock.getRelationships(Direction.OUTGOING);
+			
+			for(Relationship reachRel : rels){
+				if(!reachRel.getType().toString().equals(EdgeTypes.REACHES))
+					continue;
+				
+				if(reachRel.getEndNode().getId() != rel.dst)
+					continue;
+				
+				Object var = reachRel.getProperty("var");
+				if(var == null || !var.toString().equals(rel.symbol))
+					continue;
+				
+				Neo4JDBInterface.removeEdge(reachRel.getId());
+				break;
+			}
+		}
 	}
 	
 }
