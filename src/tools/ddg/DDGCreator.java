@@ -4,13 +4,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
+import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import tools.ddg.DefUseCFGFactories.BatchInserterFactory;
 import misc.HashMapOfSets;
 
 
 public class DDGCreator {
 	
-	CFGForDDGCreation cfg;
-	CFGForDDGFactory cfgFactory = new BatchInserterFactory();
+	DefUseCFG cfg;
+	DefUseCFGFactory cfgFactory = new BatchInserterFactory();
 	
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
@@ -28,7 +31,7 @@ public class DDGCreator {
 		public String identifier;
 	};
 	
-	public void setFactory(CFGForDDGFactory aFactory)
+	public void setFactory(DefUseCFGFactory aFactory)
 	{
 		cfgFactory = aFactory;
 	}
@@ -38,7 +41,7 @@ public class DDGCreator {
 		return createForCFG(cfgFactory.create(funcId));	
 	}
 
-	public DDG createForCFG(CFGForDDGCreation aCfg)
+	public DDG createForCFG(DefUseCFG aCfg)
 	{
 		cfg = aCfg;
 		calculateReachingDefs();
@@ -58,7 +61,7 @@ public class DDGCreator {
 		
 			if(!changed) continue;
 						
-			List<Object> children = cfg.childBlocks.getListForKey(currentBlock);
+			List<Object> children = cfg.getChildBlocks().getListForKey(currentBlock);
 			if(children == null)
 				continue;			
 			
@@ -74,7 +77,7 @@ public class DDGCreator {
 		initOut();
 		initGenFromOut();
 		changedNodes = new HashSet<Long>();		
-		changedNodes.addAll(cfg.basicBlocks);
+		changedNodes.addAll(cfg.getBasicBlocks());
 	}
 
 	private Long popFromChangedNodes()
@@ -86,13 +89,13 @@ public class DDGCreator {
 
 	private void initOut()
 	{
-		for(Long basicBlock : cfg.basicBlocks){
+		for(Long basicBlock : cfg.getBasicBlocks()){
 			
 			// this has the nice side-effect that an
 			// empty hash is created for the basic block.
 			out.removeAllForKey(basicBlock);
 			
-			List<Object> symsDefined = cfg.symbolsDefined.getListForKey(basicBlock);
+			List<Object> symsDefined = cfg.getSymbolsDefined().getListForKey(basicBlock);
 			if(symsDefined == null) continue;
 			
 			for(Object s: symsDefined){
@@ -104,7 +107,7 @@ public class DDGCreator {
 
 	private void initGenFromOut()
 	{
-		for(Long basicBlock : cfg.basicBlocks){
+		for(Long basicBlock : cfg.getBasicBlocks()){
 			for(Object o: out.getListForKey(basicBlock))
 				gen.add(basicBlock, o);		
 		}
@@ -112,7 +115,7 @@ public class DDGCreator {
 	
 	private void updateIn(Long x)
 	{
-		List<Object> parents = cfg.parentBlocks.getListForKey(x);		
+		List<Object> parents = cfg.getParentBlocks().getListForKey(x);		
 		if(parents == null) return;
 		
 		in.removeAllForKey(x);
@@ -143,7 +146,7 @@ public class DDGCreator {
 		}
 		
 		// -kill(x)
-		List<Object> killX = cfg.symbolsDefined.getListForKey(x);
+		List<Object> killX = cfg.getSymbolsDefined().getListForKey(x);
 		if(killX != null){
 		
 			Iterator<Object> it = out.getListForKey(x).iterator();
@@ -172,10 +175,10 @@ public class DDGCreator {
 	{
 		DDG ddg = new DDG();
 		
-		for(Long basicBlock : cfg.basicBlocks){
+		for(Long basicBlock : cfg.getBasicBlocks()){
 			HashSet<Object> inForBlock = in.getListForKey(basicBlock);
 			if(inForBlock == null) continue;			
-			List<Object> usedSymbols = cfg.symbolsUsed.getListForKey(basicBlock);
+			List<Object> usedSymbols = cfg.getSymbolsUsed().getListForKey(basicBlock);
 			if(usedSymbols == null) continue;
 			
 			for(Object d : inForBlock){

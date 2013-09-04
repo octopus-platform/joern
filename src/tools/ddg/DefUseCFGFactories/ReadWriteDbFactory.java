@@ -1,4 +1,4 @@
-package tools.ddg;
+package tools.ddg.DefUseCFGFactories;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,14 +10,14 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import output.neo4j.Neo4JDBInterface;
 
-public class ReadWriteDbFactory extends CFGForDDGFactory {
+public class ReadWriteDbFactory extends DefUseCFGFactory {
 
-	CFGForDDGCreation cfg;
+	DefUseCFG cfg;
 	
 	@Override
-	public CFGForDDGCreation create(Long funcId)
+	public DefUseCFG create(Long funcId)
 	{
-		cfg = new CFGForDDGCreation();
+		cfg = new DefUseCFG();
 		
 		getBasicBlocksOfFunction(funcId);		
 		getUsesAndDefs();		
@@ -32,20 +32,20 @@ public class ReadWriteDbFactory extends CFGForDDGFactory {
 		String query = "type:BasicBlock AND functionId:" + funcId;
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for(Node node : hits)
-			cfg.basicBlocks.add(node.getId());
+			cfg.addBasicBlock(node.getId());
 	}
 
 	private void getUsesAndDefs()
 	{
-		for(Long basicBlockId : cfg.basicBlocks){
+		for(Long basicBlockId : cfg.getBasicBlocks()){
 			
 			List<String> used = getSymbolsUsedByBasicBlock(basicBlockId);
 			for(String symbol : used)
-				cfg.symbolsUsed.add(basicBlockId, symbol);
+				cfg.addSymbolUsed(basicBlockId, symbol);
 		
 			List<String> defined = getSymbolsDefinedByBasicBlock(basicBlockId);
-			for(String symbol : used)
-				cfg.symbolsDefined.add(basicBlockId, symbol);
+			for(String symbol : defined)
+				cfg.addSymbolDefined(basicBlockId, symbol);
 			
 		}
 	}
@@ -64,21 +64,25 @@ public class ReadWriteDbFactory extends CFGForDDGFactory {
 
 	private void getParentBlocks()
 	{
-		for(Long basicBlockId : cfg.basicBlocks){
+		for(Long basicBlockId : cfg.getBasicBlocks()){
 			Node basicBlock = Neo4JDBInterface.getNodeById(basicBlockId);
 			Iterable<Relationship> rels = basicBlock.getRelationships(Direction.INCOMING);
-			for(Relationship rel: rels)
-				cfg.parentBlocks.add(basicBlockId, rel.getStartNode().getId());
+			for(Relationship rel: rels){
+				long parentId = rel.getStartNode().getId();
+				cfg.addParentBlock(basicBlockId, parentId);
+			}
 		}
 	}		
 	
 	private void getChildBlocks()
 	{
-		for(Long basicBlockId : cfg.basicBlocks){
+		for(Long basicBlockId : cfg.getBasicBlocks()){
 			Node basicBlock = Neo4JDBInterface.getNodeById(basicBlockId);
 			Iterable<Relationship> rels = basicBlock.getRelationships(Direction.OUTGOING);
-			for(Relationship rel: rels)
-				cfg.childBlocks.add(basicBlockId, rel.getEndNode().getId());
+			for(Relationship rel: rels){
+				long childId = rel.getEndNode().getId();
+				cfg.addChildBlock(basicBlockId, childId);
+			}
 		}
 	}
 

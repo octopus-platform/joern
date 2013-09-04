@@ -1,4 +1,4 @@
-package tools.ddg;
+package tools.ddg.DefUseCFGFactories;
 
 import java.util.List;
 
@@ -6,13 +6,13 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import output.neo4j.BatchInserter.QueryUtils;
 
-public class BatchInserterFactory extends CFGForDDGFactory{
+public class BatchInserterFactory extends DefUseCFGFactory{
 
-	CFGForDDGCreation cfg;
+	DefUseCFG cfg;
 	
-	public CFGForDDGCreation create(Long funcId)
+	public DefUseCFG create(Long funcId)
 	{
-		cfg = new CFGForDDGCreation();
+		cfg = new DefUseCFG();
 		
 		getBasicBlocksOfFunction(funcId);		
 		getUsesAndDefs();		
@@ -26,40 +26,38 @@ public class BatchInserterFactory extends CFGForDDGFactory{
 	{
 		IndexHits<Long> blocks = QueryUtils.getBasicBlocksFromIndex(funcId);
 		for(Long block : blocks)
-			cfg.basicBlocks.add(block);
+			cfg.addBasicBlock(block);
 	}
 
 	private void getUsesAndDefs()
 	{
-		for(Long basicBlock : cfg.basicBlocks){
+		for(Long basicBlock : cfg.getBasicBlocks()){
 			
 			List<String> useSymbols = QueryUtils.getSymbolsUsedByBasicBlock(basicBlock);			
 			for(String symbol : useSymbols)
-				cfg.symbolsUsed.add(basicBlock, symbol);
+				cfg.addSymbolUsed(basicBlock, symbol);
 					
 			List<String> defSymbols = QueryUtils.getSymbolsDefinedByBasicBlock(basicBlock);
 			for(String symbol : defSymbols)
-				cfg.symbolsDefined.add(basicBlock, symbol);				
+				cfg.addSymbolDefined(basicBlock, symbol);				
 		}
 	}
 
 	private void getParentBlocks()
 	{
-		for(Long basicBlock : cfg.basicBlocks){
+		for(Long basicBlock : cfg.getBasicBlocks()){
 			List<Long> parents = QueryUtils.getParentBasicBlocks(basicBlock);
-			for(Long parent : parents){
-				cfg.parentBlocks.add(basicBlock, parent);
-			}
+			for(Long parent : parents)
+				cfg.addParentBlock(basicBlock, parent);
 		}
 	}
 	
 	private void getChildBlocks()
 	{
-		for(Long basicBlock : cfg.basicBlocks){
-			List<Long> parents = QueryUtils.getChildBasicBlocks(basicBlock);
-			for(Long parent : parents){
-				cfg.childBlocks.add(basicBlock, parent);
-			}
+		for(Long basicBlock : cfg.getBasicBlocks()){
+			List<Long> children = QueryUtils.getChildBasicBlocks(basicBlock);
+			for(Long child : children)
+				cfg.addChildBlock(basicBlock, child);
 		}
 	}
 	

@@ -6,15 +6,15 @@ import java.util.List;
 import org.neo4j.graphdb.Node;
 
 import output.neo4j.Neo4JDBInterface;
-import tools.ddg.CFGForDDGCreation;
-import tools.ddg.CFGForDDGFactory;
 import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
-import tools.ddg.ReadWriteDbFactory;
+import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
+import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
 
 public class DDGPatchMain {
 
-	static CFGForDDGFactory factory = new ReadWriteDbFactory();
+	static DefUseCFGFactory factory = new ReadWriteDbFactory();
 	static DDGCreator ddgCreator = new DDGCreator();
 	
 	public static void main(String[] args)
@@ -29,9 +29,10 @@ public class DDGPatchMain {
 		for(Node funcNode : sourceUsers){
 			long funcId = funcNode.getId();
 			
-			CFGForDDGCreation cfgForDDG = factory.create(funcId);
+			DefUseCFG cfgForDDG = factory.create(funcId);
 			patchCFGForDDG(cfgForDDG);
 			DDG ddg = ddgCreator.createForCFG(cfgForDDG);
+			
 			
 			System.out.println(funcNode.getId());
 		}
@@ -49,7 +50,7 @@ public class DDGPatchMain {
 		return retval;
 	}
 
-	private static void patchCFGForDDG(CFGForDDGCreation cfgForDDG)
+	private static void patchCFGForDDG(DefUseCFG cfgForDDG)
 	{
 		// Continue here: add 'DEFs' for nodes containing
 		// source. Point defs to the symbol contained in
