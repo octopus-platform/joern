@@ -87,7 +87,7 @@ Object.metaClass.getParametersOfType = { typeName ->
 */
 
 Object.metaClass.getArgumentNTo = { callee, n ->
-  getCallsTo(callee).getArgumentN(n)
+  getCallsTo(callee).calleeToArgumentN(n)
 }
 
 /**
@@ -151,10 +151,14 @@ Gremlin.defineStep("structureToMemberDecls", [Vertex,Pipe], { _().out('IS_CLASS_
 Gremlin.defineStep('callToCallee', [Vertex, Pipe], { _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()})
 
 // Watchout: n needs to be a string for now
-Gremlin.defineStep('calleeToArgumentN', [Vertex,Pipe], { n -> x = _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'} x.outE('IS_AST_PARENT').filter{ it.n == n }.inV()} )
+Gremlin.defineStep('calleeToArgumentN', [Vertex,Pipe], { n -> _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}.outE('IS_AST_PARENT').filter{ it.n == n }.inV()} )
+
+
 Gremlin.defineStep('argToCallee', [Vertex,Pipe], { _().in('IS_AST_PARENT').filter{ it.type == 'ArgumentList'}.in('IS_AST_PARENT').outE('IS_AST_PARENT').filter{ it.n == '0' }.inV()} )
 
 Gremlin.defineStep('astNodeToBasicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
+
+Gremlin.defineStep('basicBlockToAST', [Vertex,Pipe], { _().out('IS_BASIC_BLOCK_OF') } );
 
 // For a given basic block, get all paths into the exit direction
 // up to and inlcuding a length of 10
@@ -177,6 +181,10 @@ Gremlin.defineStep('codeContains', [Vertex,Pipe], { x -> _().filter{ it.code.mat
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
 Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().filter{ regex.matcher(it.code).matches() }} )
 
+
+// A data flow from a basic block to all basic blocks
+// containing some expression
+
 public nodesOfTree(ArrayList vertices)
 {
   def results = []; 
@@ -197,3 +205,21 @@ Gremlin.defineStep('functionToASTNodesOfType', [Vertex,Pipe], { t -> _().functio
 Gremlin.defineStep('functionToIdentifiers', [Vertex,Pipe], { _().functionToASTNodesOfType('Identifier') })
 
 
+Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
+  def source = s;
+  _().out('USE').sideEffect{ symbol = it.code }.back(3)
+  .astNodeToBasicBlock().sideEffect{ firstRound = true }
+  .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
+  .loop('loopStart'){it.loops < 10 && !it.object.code.contains(source)}{true}
+  .filter{ it.code.contains(source) }.dedup()
+})
+
+Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def type = t; _().out('IS_AST_PARENT').loop(1){ it.object.type != type} })
+
+
+Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
+
+Gremlin.defineStep('controlFlowToSink', [Vertex, Pipe], { san ->
+  def sanitizer = san;
+  _().out('FLOWS_TO').loop(1){ it.loops < 10 && it.object.id != sinkId &&
+    !it.object.code.contains(sanitizer)}.filter{ it.id == sinkId } })
