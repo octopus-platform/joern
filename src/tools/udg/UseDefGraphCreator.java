@@ -126,7 +126,7 @@ public class UseDefGraphCreator
 				useDefStack.push( new UseOrDefRecord(nodeId, true));
 			else
 				useDefStack.push( new UseOrDefRecord(nodeId, false));
-		}else if(nodeType.equals("IdentifierDecl")){
+		}else if(nodeType.equals("IdentifierDecl") || nodeType.equals("Parameter")){
 			if(childNum.equals("1") && childType.equals("Identifier"))
 				useDefStack.push( new UseOrDefRecord(nodeId, true));
 		}else if(nodeType.equals("Condition"))
@@ -148,7 +148,7 @@ public class UseDefGraphCreator
 
 		if(nodeType.equals("AssignmentExpr"))
 			useDefStack.pop();		
-		else if(nodeType.equals("IdentifierDecl")){
+		else if(nodeType.equals("IdentifierDecl") || nodeType.equals("Parameter")){
 			if(childNum.equals("1") && childType.equals("Identifier"))
 				useDefStack.pop();
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))
