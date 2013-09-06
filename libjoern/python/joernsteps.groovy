@@ -118,7 +118,7 @@ Gremlin.defineStep('astNodeToFunction', [Vertex,Pipe],{ _().functionId.idToNode(
 Gremlin.defineStep('astNodeToSymbol', [Vertex,Pipe], { _().transform{ queryNodeIndex('type:Symbol AND functionId:' + it.functionId + ' AND code:"' + it.code + '"') }.scatter() })
 
 Gremlin.defineStep("functionToFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
-Gremlin.defineStep("functionToASTNodes", [Vertex,Pipe], { _().transform{ queryNodeIndex('functionId:' + it.functionId)}.scatter().filter{ it.type != 'BasicBlock'} })
+Gremlin.defineStep("functionToASTNodes", [Vertex,Pipe], { _().transform{ queryNodeIndex('functionId:' + it.id)}.scatter().filter{ it.type != 'BasicBlock'} })
 Gremlin.defineStep("functionToBasicBlocks", [Vertex,Pipe], { _().transform{ queryNodeIndex('type:BasicBlock AND functionId:' + it.id) }.scatter()})
 Gremlin.defineStep("functionToAST", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST') })
 Gremlin.defineStep("functionToASTRoot", [Vertex,Pipe], { _().functionToAST().out('IS_AST_OF_AST_ROOT') })
@@ -210,6 +210,20 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   _().out('USE').sideEffect{ symbol = it.code }.back(3)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
+  .loop('loopStart'){it.loops < 10 && !it.object.code.contains(source)}{true}
+  .filter{ it.code.contains(source) }.dedup()
+})
+
+Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { s-> 
+  def source = s;
+  _().out('USE').sideEffect{ symbol = it.code }.back(3)
+  .astNodeToBasicBlock().sideEffect{ firstRound = true }
+  .as('loopStart')
+
+  .basicBlockToAST()
+  .ifThenElse{ return it.type == 'Parameter'}
+  { it.out('IS_AST_PARENT').filter{ it.type == 'Identifier'}.in('IS_ARG').astNodeToBasicBlock() }
+  { it.astNodeToBasicBlock().inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false} }
   .loop('loopStart'){it.loops < 10 && !it.object.code.contains(source)}{true}
   .filter{ it.code.contains(source) }.dedup()
 })
