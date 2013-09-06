@@ -119,7 +119,7 @@ Gremlin.defineStep('astNodeToSymbol', [Vertex,Pipe], { _().transform{ queryNodeI
 
 Gremlin.defineStep("functionToFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 Gremlin.defineStep("functionToASTNodes", [Vertex,Pipe], { _().transform{ queryNodeIndex('functionId:' + it.functionId)}.scatter().filter{ it.type != 'BasicBlock'} })
-Gremlin.defineStep("functionToBasicBlocks", [Vertex,Pipe], { _().transform{ queryNodeIndex('type:BasicBlock AND functionId:' + it.functionId) }.scatter()})
+Gremlin.defineStep("functionToBasicBlocks", [Vertex,Pipe], { _().transform{ queryNodeIndex('type:BasicBlock AND functionId:' + it.id) }.scatter()})
 Gremlin.defineStep("functionToAST", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST') })
 Gremlin.defineStep("functionToASTRoot", [Vertex,Pipe], { _().functionToAST().out('IS_AST_OF_AST_ROOT') })
 

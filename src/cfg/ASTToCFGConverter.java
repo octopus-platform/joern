@@ -8,6 +8,7 @@ import java.util.Set;
 
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
+import astnodes.functionDef.ParameterList;
 import astnodes.statements.CompoundStatement;
 
 
@@ -24,8 +25,27 @@ public class ASTToCFGConverter {
 	
 	public CFG convertFunctionDef(FunctionDef node)
 	{
+		ParameterList parameterList = node.getParameterList();
+		CFG cfg = convertParameterList(parameterList);
+		BasicBlock lastParamDefBlock = cfg.getLastBlock();
+		
 		CompoundStatement content = node.getContent();
-		return convertCompoundStatement(content);
+		CFG compoundCFG = convertCompoundStatement(content);
+		BasicBlock firstCompoundStmtBlock = compoundCFG.getFirstBlock();
+		cfg.addCFG(compoundCFG);
+		
+		if(lastParamDefBlock != null && firstCompoundStmtBlock != null){
+			cfg.addEdge(lastParamDefBlock, firstCompoundStmtBlock);
+		}
+		
+		return cfg;
+	}
+
+	private CFG convertParameterList(ParameterList parameterList)
+	{
+		parameterList.accept(structuredFlowVisitor);
+		CFG cfg = structuredFlowVisitor.getCFG();
+		return cfg;
 	}
 
 	public CFG convertCompoundStatement(CompoundStatement content)

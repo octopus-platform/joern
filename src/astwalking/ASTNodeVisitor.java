@@ -10,6 +10,7 @@ import astnodes.expressions.MemberAccess;
 import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.UnaryExpression;
 import astnodes.functionDef.FunctionDef;
+import astnodes.functionDef.ParameterList;
 import astnodes.statements.BreakStatement;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
@@ -30,6 +31,7 @@ public class ASTNodeVisitor
 {
 	public void visit(ASTNode item) { visitChildren(item); }
 	
+	public void visit(ParameterList item){ defaultHandler(item); }
 	public void visit(FunctionDef item) { defaultHandler(item); }
 	public void visit(ClassDefStatement item){ defaultHandler(item); }
 	public void visit(IdentifierDeclStatement statementItem){ defaultHandler(statementItem); }

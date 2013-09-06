@@ -1,10 +1,13 @@
 package cfg;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
 import astnodes.ASTNode;
+import astnodes.functionDef.Parameter;
+import astnodes.functionDef.ParameterList;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.BreakStatement;
 import astnodes.statements.CompoundStatement;
@@ -36,6 +39,23 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	Stack<BasicBlock> loopStack = new Stack<BasicBlock>();
 	
 	CFG getCFG() { return returnCFG; }
+	
+	public void visit(ParameterList paramList)
+	{
+		CFG cfg = new CFG();
+		LinkedList<Parameter> parameters = paramList.getParameters();
+		BasicBlock lastParamBlock = null;
+		
+		for(Parameter parameter : parameters){
+			addBasicBlockForNode(parameter,cfg);
+			BasicBlock thisBlock = cfg.getLastBlock();
+			if(lastParamBlock != null)
+				cfg.addEdge(lastParamBlock, thisBlock);
+			lastParamBlock = thisBlock;
+		}
+		
+		returnCFG = cfg;
+	}
 	
 	public void visit(ASTNode expression)
 	{

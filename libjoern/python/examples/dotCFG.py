@@ -18,7 +18,7 @@ def normalizeCode(code):
 j = JoernSteps()
 functionName = sys.argv[1]
 
-cmd = "getFunctionByName('%s').funcBasicBlocks().transform{ [it.id, it.code, it.out('FLOWS_TO').id] } " % (functionName)
+cmd = "getFunctionByName('%s').functionToBasicBlocks().transform{ [it.id, it.code, it.out('FLOWS_TO').id] } " % (functionName)
 
 y = j.executeGremlinCmd(cmd)
 

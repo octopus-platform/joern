@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import astnodes.ASTNode;
 import astnodes.expressions.Identifier;
+import astwalking.ASTNodeVisitor;
 
 
 public class ParameterList extends ASTNode
@@ -87,4 +88,6 @@ public class ParameterList extends ASTNode
 		return codeStr;
 	}
 
+	@Override
+	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
 }
