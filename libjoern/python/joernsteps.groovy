@@ -1,6 +1,6 @@
 import java.util.regex.*;
 import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
-	   
+
 ////////////////////////////////////////////
 // (1) Selection of start nodes
 ////////////////////////////////////////////
@@ -207,25 +207,44 @@ Gremlin.defineStep('functionToIdentifiers', [Vertex,Pipe], { _().functionToASTNo
 
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   def source = s;
-  _().out('USE').sideEffect{ symbol = it.code }.back(3)
+  
+  _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
+  .out('USE').sideEffect{ symbol = it.code }.back(2)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
   .loop('loopStart'){it.loops < 10 && !it.object.code.contains(source)}{true}
-  .filter{ it.code.contains(source) }.dedup()
+  .filter{ it.code.contains(source) }
+  .transform{ [it.id, sinkId] } 
+  .dedup()
 })
 
-Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { s-> 
-  def source = s;
-  _().out('USE').sideEffect{ symbol = it.code }.back(3)
-  .astNodeToBasicBlock().sideEffect{ firstRound = true }
-  .as('loopStart')
+Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx-> 
+  def ipSource = sx;
 
+  _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
+  .out('USE').sideEffect{ ipSymbol = it.code }.back(2)
+  .astNodeToBasicBlock().sideEffect{ firstRound = true; ipDstNode = it.id; ipNodeStack = []}
+  
+  .as('loopStart')
   .basicBlockToAST()
-  .ifThenElse{ return it.type == 'Parameter'}
-  { it.out('IS_AST_PARENT').filter{ it.type == 'Identifier'}.in('IS_ARG').astNodeToBasicBlock() }
-  { it.astNodeToBasicBlock().inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false} }
-  .loop('loopStart'){it.loops < 10 && !it.object.code.contains(source)}{true}
-  .filter{ it.code.contains(source) }.dedup()
+  
+  .ifThenElse{ it.type == 'Parameter' }
+  {
+    it.out('IS_AST_PARENT')
+    .filter{ it.type == 'Identifier'}.in('IS_ARG').astNodeToBasicBlock()
+    .sideEffect{ ipNodeStack.add([ipCurNode, ipDstNode]); ipDstNode = it.id }
+  }
+  // else
+  { 
+    it.astNodeToBasicBlock().inE('REACHES').filter{ !firstRound || it.var == ipSymbol }.outV()
+  }
+  .sideEffect{firstRound = false; ipCurNode = it.id; }
+  .loop('loopStart'){it.loops < 10 && !it.object.code.contains(ipSource)}{true}
+  .filter{ it.code.contains(ipSource) }
+  .sideEffect{ if(ipNodeStack.size() == 0){ ipNodeStack.add([it.id,ipDstNode]) }}
+  .transform{ [it.id, sinkId] }
+  .dedup()
+  .transform{ [it[0], it[1], ipNodeStack] }
 })
 
 Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def type = t; _().out('IS_AST_PARENT').loop(1){ it.object.type != type} })
@@ -233,7 +252,27 @@ Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def type = t; _().out
 
 Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
 
-Gremlin.defineStep('controlFlowToSink', [Vertex, Pipe], { san ->
+Gremlin.defineStep('controlFlow', [Vertex, Pipe], { san ->
   def sanitizer = san;
-  _().out('FLOWS_TO').loop(1){ it.loops < 10 && it.object.id != sinkId &&
-    !it.object.code.contains(sanitizer)}.filter{ it.id == sinkId } })
+  
+  _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
+  .as('x').out('FLOWS_TO').simplePath().loop('x'){ it.loops < 40 && it.object.id != sinkId && !it.object.code.contains(sanitizer)}
+  .filter{ it.id == sinkId }
+  .dedup()
+ })
+
+Gremlin.defineStep('ipControlFlow', [Vertex, Pipe], { san ->
+  def sanitizer = san;
+  
+  _().sideEffect{ nodeStack = it[2]; }
+  .filter{
+    for(x in nodeStack){ 
+      def srcId = x[0];
+      def dstId = x[1];      
+      l = g.v(0).transform{ [srcId, dstId] }.controlFlow(sanitizer).toList()
+      if(l.size() == 0)
+  	return false;
+    }
+    return true;
+  }
+})
