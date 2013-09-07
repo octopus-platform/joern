@@ -20,12 +20,12 @@ cmd = 'getCallsToRegex("memcpy.*").code'
 
 # (4) Lookup the functions performing the call
 
-cmd = 'getCallsTo("memcpy").function().signature'
+cmd = 'getCallsTo("memcpy").astNodeToFunction().signature'
 
 # (5) Get a [filename,location,signature] table of functions
 # calling memcpy
 
-cmd = 'getCallsTo("memcpy").function().getLocationRow()'
+cmd = 'getCallsTo("memcpy").astNodeToFunction().functionToLocationRow()'
 
 y = j.executeGremlinCmd(cmd)
 for x in y: print x
