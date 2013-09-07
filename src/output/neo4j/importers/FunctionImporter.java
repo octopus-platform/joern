@@ -67,13 +67,11 @@ public class FunctionImporter extends ASTNodeImporter
 		linkFunctionWithASTPseudoNode(function);
 		
 		linkPseudoASTWithRootASTNode(function.getASTPseudoNode(), function.getASTRoot());
-		linkPseudoASTWithAllASTNodes(function.getASTPseudoNode(), function.getASTRoot());
 		
 		CFG cfg = function.getCFG();
 		if(cfg != null){
 			linkFunctionWithCFGPseudoNode(function);
 			linkPseudoCFGWithRootCFGNode(function.getCFGPseudoNode(), cfg);
-			linkPseudoCFGWithAllCFGNodes(function.getCFGPseudoNode(), cfg);
 		}
 	}
 	
@@ -137,45 +135,4 @@ public class FunctionImporter extends ASTNodeImporter
 		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
 	}
 	
-	private void linkPseudoASTWithAllASTNodes(ASTPseudoNode astPseudoNode, ASTNode node)
-	{
-		linkParentWithASTNode(astPseudoNode, node);
-		
-		final int nChildren = node.getChildCount();
-		for(int i = 0; i < nChildren; i++){
-			ASTNode child = node.getChild(i);
-			linkPseudoASTWithAllASTNodes(astPseudoNode, child);
-		}
-	}
-
-	private void linkPseudoCFGWithAllCFGNodes(CFGPseudoNode cfgPseudoNode, CFG cfg)
-	{
-		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
-		Iterator<BasicBlock> it = basicBlocks.iterator();
-		while(it.hasNext()){
-			BasicBlock block = it.next();
-			linkPseudoCFGWithCFGNode(cfgPseudoNode, block);
-		}
-	}
-	
-	private void linkPseudoCFGWithCFGNode(CFGPseudoNode cfgPseudoNode, BasicBlock block)
-	{
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CFG_OF_BASIC_BLOCK);
-		
-		long functionId = nodeStore.getIdForObject(cfgPseudoNode);
-		long dstId = nodeStore.getIdForObject(block);
-		
-		Neo4JBatchInserter.addRelationship(functionId, dstId, rel, null);
-	}
-
-	private void linkParentWithASTNode(Object parent, ASTNode node)
-	{
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_AST_OF_AST_NODE);
-		
-		long parentId = nodeStore.getIdForObject(parent);
-		long nodeId = nodeStore.getIdForObject(node);
-		
-		Neo4JBatchInserter.addRelationship(parentId, nodeId, rel, null);
-	}
-
 }
