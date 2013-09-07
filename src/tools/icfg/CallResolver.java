@@ -1,4 +1,4 @@
-package tools;
+package tools.icfg;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;

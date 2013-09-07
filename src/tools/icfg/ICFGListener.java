@@ -10,7 +10,6 @@ import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.BatchInserter.Neo4JBatchInserter;
-import tools.CallResolver;
 import tools.ImportedNodeListener;
 
 public class ICFGListener extends ImportedNodeListener {

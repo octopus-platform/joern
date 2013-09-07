@@ -5,9 +5,10 @@
 #
 # In this example, a similarity matrix suitable to identify functions
 # employing similar API usage patterns is created. The example
-# demonstrates that two cypher queries are sufficient to represent each
-# function of the code base by the functions it calls and the types it
-# references. With this information at hand, scikit-learn is used to
+# demonstrates how joern-steps can be easiely used to represent each
+# function of a code base by the API symbols is employs, i.e., the
+# the functions and types it references.
+# With this information at hand, scikit-learn is used to
 # create a sparse document by term matrix, apply the tf-idf weighting
 # scheme and perform principal component analysis to extract common API
 # usage patterns as proposed in the WOOT'11 paper on vulnerability
@@ -38,21 +39,29 @@ def addRecordsToDict(records, d):
 
 def getTypeUsageRecords(j):
     
-    records = j.executeCypherQuery('START n=node:nodeIndex(type="Function") ' + 
-                                   'MATCH (n)-[:IS_FUNCTION_OF_AST]->(p)-[:IS_AST_OF_AST_NODE]->(m) WHERE ' +
-                                   'm.type IN ["IdentifierDeclType", "ParameterType"] ' +
-                                   'RETURN ID(n), m.code ORDER BY ID(n)')[0]
-
-    return records
+    cmd = """
+    queryNodeIndex('type:IdentifierDeclType OR type:ParameterType')
+    .transform{ [it.functionId, it.code] }
+    """
+    return j.executeGremlinCmd(cmd)
 
 def getCallRecords(j):
     
-    records = j.executeCypherQuery('START n=node:nodeIndex(type="Function") ' + 
-                                   'MATCH (n)-[:IS_FUNCTION_OF_AST]->(p)-[:IS_AST_OF_AST_NODE]->(m)-[r:IS_AST_PARENT]->(callee) WHERE ' +
-                                   'm.type = "CallExpression" AND r.n = "0"' +
-                                   'RETURN ID(n), callee.code ORDER BY ID(n)')[0]
-    return records
+    cmd = """
+    queryNodeIndex('type:CallExpression').outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()
+    .transform{ [it.functionId, it.code] }
+    """
+    return j.executeGremlinCmd(cmd)
 
+def getNameToId():
+    nameToId = defaultdict(list)
+    
+    cmd = """
+    queryNodeIndex('type:Function').transform{ [it.id, it.functionName] }
+    """
+    for (funcId, funcName) in j.executeGremlinCmd(cmd):
+        d[funcName].append(funcId)
+    return nameToId
 
 if __name__ == '__main__':
 
@@ -67,12 +76,17 @@ if __name__ == '__main__':
 
     print 'Retrieving types used for all functions'
     records = getTypeUsageRecords(j)    
+    
     print 'Adding types to dictionary'
     addRecordsToDict(records, d)
 
     print 'Adding callees to dictionary'
     records = getCallRecords(j)
     addRecordsToDict(records, d)
+
+    print 'Getting nameToId mapping for convenience'
+
+    nameToId = getNameToId()
 
     print 'Counting occurrences'
     for k in d.iterkeys():
@@ -111,4 +125,5 @@ if __name__ == '__main__':
     pickle.dump(V, file('%s/V.pickl' % (OUTPUTDIR), 'w'), protocol=2)
     pickle.dump(squareform(D), file('%s/D.pickl' % (OUTPUTDIR), 'w'), protocol=2)
     pickle.dump(list(funcIds), file('%s/funcIds.pickl' % (OUTPUTDIR), 'w'), protocol=2)
+    pickle.dump(nameToId, file('%s/nameToId.pickl' % (OUTPUTDIR), 'w'), protocol = 2)
     
