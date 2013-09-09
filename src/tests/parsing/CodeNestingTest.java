@@ -120,6 +120,15 @@ public class CodeNestingTest {
 	}
 	
 	@Test
+	public void ifElseChain()
+	{
+		String input = "if(foo1) bar1(); else if(foo2) bar2(); else if(foo3) bar3();";
+		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		System.out.println(contentItem.getChildCount());
+	}
+	
+	
+	@Test
 	public void testIf()
 	{
 		String input = "if(a == b) foo();";

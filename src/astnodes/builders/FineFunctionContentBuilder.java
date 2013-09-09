@@ -116,8 +116,6 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		if(itemStack.size() != 1)
 			throw new RuntimeException("Broken stack while parsing");
 	
-		consolidateIfElse(rootItem);
-		consolidateDoWhile(rootItem);
 	}
 	
 	// For all statements, begin by pushing a CodeItem
@@ -207,50 +205,9 @@ public class FineFunctionContentBuilder extends FunctionContentBuilder
 		itemStack.pop(); // remove 'CloseBlock'
 		
 		CompoundStatement compoundItem = (CompoundStatement) itemStack.pop();
-		consolidateIfElse(compoundItem);
 		consolidateBlockStarters(compoundItem);		
 	}
 	
-	// Scans a compoundItem for sequences of if-/else.
-	// When found attaches else to if.
-	
-	private void consolidateIfElse(CompoundStatement compoundItem)
-	{
-		Iterator<ASTNode> it = compoundItem.getStatements().iterator();
-		ASTNode prev = null;
-		while(it.hasNext()){
-			
-			ASTNode cur = it.next();
-			if(prev != null && cur instanceof ElseStatement){
-				if(prev instanceof IfStatement){
-					IfStatement ifItem = (IfStatement) prev;
-					ifItem.setElseNode((ElseStatement) cur);
-					it.remove();
-				}
-			}
-			prev = cur;
-		}
-	}
-
-	
-	// Attach Whiles to Dos
-	private void consolidateDoWhile(CompoundStatement compoundItem)
-	{
-		Iterator<ASTNode> it = compoundItem.getStatements().iterator();
-		ASTNode prev = null;
-		while(it.hasNext()){
-			
-			ASTNode cur = it.next();
-			if(prev != null && cur instanceof WhileStatement){
-				if(prev instanceof DoStatement){
-					DoStatement doItem = (DoStatement) prev;
-					doItem.addChild(((WhileStatement) cur).getCondition());
-					it.remove();
-				}
-			}
-			prev = cur;
-		}
-	}
 	
 	// Expression handling
 	

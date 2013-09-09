@@ -176,6 +176,8 @@ Gremlin.defineStep('argToCallee', [Vertex,Pipe], { _().in('IS_AST_PARENT').filte
 
 Gremlin.defineStep('astNodeToBasicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
 
+Gremlin.defineStep('astNodeToBasicBlockRoot', [Vertex, Pipe], { _().astNodeToBasicBlock().basicBlockToAST() })
+
 Gremlin.defineStep('basicBlockToAST', [Vertex,Pipe], { _().out('IS_BASIC_BLOCK_OF') } );
 
 // For a given basic block, get all paths into the exit direction
@@ -199,6 +201,8 @@ Gremlin.defineStep('codeContains', [Vertex,Pipe], { x -> _().filter{ it.code.mat
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
 Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().filter{ regex.matcher(it.code).matches() }} )
 
+
+Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], { lval -> _().sideEffect{ val = it[1];}.transform{ it[0] }.outE('REACHES').filter{ it.var.equals(val)}.inV() })
 
 // A data flow from a basic block to all basic blocks
 // containing some expression

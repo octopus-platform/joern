@@ -11,14 +11,20 @@ import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Expression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
+import astnodes.statements.DoStatement;
+import astnodes.statements.ElseStatement;
 import astnodes.statements.ExpressionHolder;
 import astnodes.statements.IdentifierDeclStatement;
+import astnodes.statements.IfStatement;
 import astnodes.statements.Statement;
+import astnodes.statements.WhileStatement;
 
 public class FunctionContentBuilder extends ASTNodeBuilder
 {
 	Stack<ASTNode> itemStack = new Stack<ASTNode>();
 	CompoundStatement rootItem;
+	IfStatement lastIf;
+	DoStatement lastDo;
 	
 	@Override
 	public void createNew(ParserRuleContext ctx)
@@ -109,6 +115,44 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 				bItem = (BlockStarter) itemStack.pop();
 				bItem.addChild(stmt);
 				stmt = bItem;
+			
+				if(bItem instanceof IfStatement){
+					
+					if(itemStack.size() > 0 && itemStack.peek() instanceof ElseStatement){
+						
+						BlockStarter elseItem = (BlockStarter) itemStack.pop();
+						elseItem.addChild(bItem);
+					
+						if(lastIf != null)
+							lastIf.setElseNode((ElseStatement) elseItem);
+						
+						stmt = elseItem;
+						// save a pointer to the last IfStatement
+						lastIf = (IfStatement) bItem;
+						return;
+					}
+					// save a pointer to the last IfStatement
+					lastIf = (IfStatement) bItem;
+				}else if(bItem instanceof DoStatement){
+					// save a pointer to the last DoStatement
+					lastDo = (DoStatement) bItem;
+				}else if(bItem instanceof ElseStatement){
+					// add else statement to the previous if-statement,
+					// which has already been consolidated so we can return
+					if(lastIf != null)
+						lastIf.setElseNode((ElseStatement) bItem);
+					lastIf = null;
+					return;
+				}else if(bItem instanceof WhileStatement){
+					// add while statement to the previous do-statement
+					// if that exists. Otherwise, do nothing special.
+					if(lastDo != null){
+						lastDo.addChild( ((WhileStatement) bItem).getCondition() );
+						lastDo = null;
+						return;
+					}
+				}
+				
 			}catch(ClassCastException ex){
 				break;
 			}

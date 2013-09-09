@@ -60,6 +60,22 @@ public class CFGCreatorTest
 	}
 	
 	@Test
+	public void testElseIfNumberOfBlocks()
+	{
+		String input = "if(foo) bar(); else if(foo2) bar(2);";
+		CFG cfg = getCFGForCode(input);
+		assertTrue(cfg.getBasicBlocks().size()== 6);
+	}
+	
+	@Test
+	public void testElseIfElseIfNumberOfBlocks()
+	{
+		String input = "if(foo1) bar1(); else if(foo2) bar2(); else if(foo3) bar3();";
+		CFG cfg = getCFGForCode(input);
+		assertTrue(cfg.getBasicBlocks().size()== 9);
+	}
+	
+	@Test
 	public void testIfStatementNumberOfEdges()
 	{
 		String input = "if(foo){ bar(); }";
@@ -192,6 +208,7 @@ public class CFGCreatorTest
 	{
 		String input = "do{ bar(); }while(foo);";
 		CFG cfg = getCFGForCode(input);
+		System.out.println(cfg.getBasicBlocks().size());
 		assertTrue(cfg.getBasicBlocks().size() == 3);
 	}
 	
