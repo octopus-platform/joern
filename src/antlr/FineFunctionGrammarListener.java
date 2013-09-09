@@ -1,4 +1,4 @@
-// Generated from FineFunctionGrammar.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/FineFunctionGrammar.g4 by ANTLR 4.0.1-SNAPSHOT
 
 	package antlr;
 

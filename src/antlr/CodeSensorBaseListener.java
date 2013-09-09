@@ -1,4 +1,4 @@
-// Generated from CodeSensor.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/CodeSensor.g4 by ANTLR 4.0.1-SNAPSHOT
 
 	package antlr;
 
