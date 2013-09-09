@@ -124,21 +124,25 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		BasicBlock conditionBlock = addConditionBlock(node, cfg, new BasicBlock());
 		CFG statementCFG = addStatementBlock(node, cfg);
-		BasicBlock emptyBlock = addEmptyBlock(cfg);
+		BasicBlock emptyBlock;
 				
 		cfg.addEdge(conditionBlock, statementCFG.getFirstBlock());
-		cfg.addEdge(statementCFG.getLastBlock(), emptyBlock);
+		
 		
 		ElseStatement elseNode = node.getElseNode();
 		if(elseNode == null){
+			emptyBlock = addEmptyBlock(cfg);
 			cfg.addEdge(conditionBlock, emptyBlock);
 		}else{
 			Statement elseStatement = elseNode.getStatement();
 			CFG elseCFG = convertStatement(elseStatement);
 			cfg.addCFG(elseCFG);
 			cfg.addEdge(conditionBlock, elseCFG.getFirstBlock());
+			emptyBlock = addEmptyBlock(cfg);
 			cfg.addEdge(elseCFG.getLastBlock(), emptyBlock);
 		}
+		
+		cfg.addEdge(statementCFG.getLastBlock(), emptyBlock);
 		
 		returnCFG = cfg;
 	}
