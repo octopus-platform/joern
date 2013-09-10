@@ -7,14 +7,14 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 
-import antlr.CodeSensorBaseListener;
-import antlr.CodeSensorParser;
-import antlr.CodeSensorParser.Class_defContext;
-import antlr.CodeSensorParser.Compound_statementContext;
-import antlr.CodeSensorParser.DeclByClassContext;
-import antlr.CodeSensorParser.Function_defContext;
-import antlr.CodeSensorParser.Init_declarator_listContext;
-import antlr.CodeSensorParser.Type_nameContext;
+import antlr.ModuleBaseListener;
+import antlr.ModuleParser;
+import antlr.ModuleParser.Class_defContext;
+import antlr.ModuleParser.Compound_statementContext;
+import antlr.ModuleParser.DeclByClassContext;
+import antlr.ModuleParser.Function_defContext;
+import antlr.ModuleParser.Init_declarator_listContext;
+import antlr.ModuleParser.Type_nameContext;
 import astnodes.builders.ClassDefBuilder;
 import astnodes.builders.FunctionDefBuilder;
 import astnodes.builders.IdentifierDeclBuilder;
@@ -23,23 +23,23 @@ import astnodes.statements.CompoundStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 
-public class ModuleParseTreeListener extends CodeSensorBaseListener
+public class ModuleParserTreeListener extends ModuleBaseListener
 {
 	
 	CommonParser p;
 	
-	ModuleParseTreeListener(CommonParser aP)
+	ModuleParserTreeListener(CommonParser aP)
 	{
 		p = aP;
 	}
 	
 	@Override
-	public void enterCode(CodeSensorParser.CodeContext ctx)
+	public void enterCode(ModuleParser.CodeContext ctx)
 	{
 		p.notifyObserversOfUnitStart(ctx);
 	}
 	
-	@Override public void exitCode(CodeSensorParser.CodeContext ctx)
+	@Override public void exitCode(ModuleParser.CodeContext ctx)
 	{
 		p.notifyObserversOfUnitEnd(ctx);
 	}
@@ -47,7 +47,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	// Function Definitions
 	
 	@Override
-	public void enterFunction_def(CodeSensorParser.Function_defContext ctx)
+	public void enterFunction_def(ModuleParser.Function_defContext ctx)
 	{
 		
 		FunctionDefBuilder builder = new FunctionDefBuilder();
@@ -60,7 +60,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 
 	
-	private String getCompoundStmtAsString(CodeSensorParser.Function_defContext ctx)
+	private String getCompoundStmtAsString(ModuleParser.Function_defContext ctx)
 	{
 		Compound_statementContext compound_statement = ctx.compound_statement();
 		
@@ -88,34 +88,34 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 
 	@Override
-	public void enterReturn_type(CodeSensorParser.Return_typeContext ctx)
+	public void enterReturn_type(ModuleParser.Return_typeContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
 		builder.setReturnType(ctx, p.itemStack);
 	}
 	
 	@Override
-	public void enterFunction_name(CodeSensorParser.Function_nameContext ctx)
+	public void enterFunction_name(ModuleParser.Function_nameContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
 		builder.setName(ctx, p.itemStack);
 	}
 	
 	@Override
-	public void enterFunction_param_list(CodeSensorParser.Function_param_listContext ctx)
+	public void enterFunction_param_list(ModuleParser.Function_param_listContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
 		builder.setParameterList(ctx, p.itemStack);
 	}
 	
-	@Override public void enterParameter_decl(CodeSensorParser.Parameter_declContext ctx)
+	@Override public void enterParameter_decl(ModuleParser.Parameter_declContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
 		builder.addParameter(ctx, p.itemStack);
 	}
 	
 	@Override
-	public void exitFunction_def(CodeSensorParser.Function_defContext ctx)
+	public void exitFunction_def(ModuleParser.Function_defContext ctx)
 	{
 		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.pop();		
 		p.notifyObserversOfItem(builder.getItem());
@@ -123,7 +123,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	
 	// DeclByType
 	
-	@Override public void enterDeclByType(CodeSensorParser.DeclByTypeContext ctx)
+	@Override public void enterDeclByType(ModuleParser.DeclByTypeContext ctx)
 	{
 		Init_declarator_listContext decl_list = ctx.init_declarator_list();
 		Type_nameContext typeName = ctx.type_name();
@@ -151,7 +151,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	// DeclByClass
 	
 	@Override
-	public void enterDeclByClass(CodeSensorParser.DeclByClassContext ctx)
+	public void enterDeclByClass(ModuleParser.DeclByClassContext ctx)
 	{
 		ClassDefBuilder builder = new ClassDefBuilder();
 		builder.createNew(ctx);
@@ -159,7 +159,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 
 	@Override
-	public void enterClass_name(CodeSensorParser.Class_nameContext ctx)
+	public void enterClass_name(ModuleParser.Class_nameContext ctx)
 	{
 		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.peek();
 		builder.setName(ctx);
@@ -178,7 +178,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	
 	
 	@Override
-	public void exitDeclByClass(CodeSensorParser.DeclByClassContext ctx)
+	public void exitDeclByClass(ModuleParser.DeclByClassContext ctx)
 	{
 		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.pop();
 		
@@ -189,9 +189,9 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		emitDeclarationsForClass(ctx);
 	}
 
-	private CompoundStatement parseClassContent(CodeSensorParser.DeclByClassContext ctx)
+	private CompoundStatement parseClassContent(ModuleParser.DeclByClassContext ctx)
 	{
-		ModuleParser shallowParser = createNewShallowParser();
+		ModuleParserDriver shallowParser = createNewShallowParser();
 		CompoundItemAssembler generator = new CompoundItemAssembler();
 		shallowParser.addObserver(generator);
 
@@ -203,7 +203,7 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 	}
 
 	private void restrictStreamToClassContent(
-			CodeSensorParser.DeclByClassContext ctx)
+			ModuleParser.DeclByClassContext ctx)
 	{
 		Class_defContext class_def = ctx.class_def();
 		int startIndex = class_def.OPENING_CURLY().getSymbol().getTokenIndex();
@@ -212,9 +212,9 @@ public class ModuleParseTreeListener extends CodeSensorBaseListener
 		p.stream.restrict(startIndex+1, stopIndex);
 	}
 
-	private ModuleParser createNewShallowParser()
+	private ModuleParserDriver createNewShallowParser()
 	{
-		ModuleParser shallowParser = new ModuleParser();
+		ModuleParserDriver shallowParser = new ModuleParserDriver();
 		shallowParser.setStack(p.itemStack);
 		return shallowParser;
 	}

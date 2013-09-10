@@ -3,9 +3,9 @@ package astnodes.functionDef;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.CodeSensorParser.Parameter_declContext;
-import antlr.CodeSensorParser.Parameter_idContext;
-import antlr.CodeSensorParser.Parameter_nameContext;
+import antlr.ModuleParser.Parameter_declContext;
+import antlr.ModuleParser.Parameter_idContext;
+import antlr.ModuleParser.Parameter_nameContext;
 import astnodes.ASTNode;
 import astnodes.expressions.Identifier;
 

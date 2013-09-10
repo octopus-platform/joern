@@ -1,5 +1,5 @@
 grammar FineFunctionGrammar;
-import CodeSensorLex, Common, Expressions, FineSimpleDecl;
+import ModuleLex, Common, Expressions, FineSimpleDecl;
 
 @header{
 	package antlr;

@@ -1,4 +1,4 @@
-// Generated from src/antlr/CodeSensor.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/Module.g4 by ANTLR 4.0.1-SNAPSHOT
 
 	package antlr;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-public class CodeSensorParser extends Parser<Token> {
+public class ModuleParser extends Parser<Token> {
 	public static final int
 		T__55=1, T__54=2, T__53=3, T__52=4, T__51=5, T__50=6, T__49=7, T__48=8, 
 		T__47=9, T__46=10, T__45=11, T__44=12, T__43=13, T__42=14, T__41=15, T__40=16, 
@@ -99,7 +99,7 @@ public class CodeSensorParser extends Parser<Token> {
 	};
 
 	@Override
-	public String getGrammarFileName() { return "CodeSensor.g4"; }
+	public String getGrammarFileName() { return "Module.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }
@@ -169,7 +169,7 @@ public class CodeSensorParser extends Parser<Token> {
 	   }
 
 
-	public CodeSensorParser(TokenStream<? extends Token> input) {
+	public ModuleParser(TokenStream<? extends Token> input) {
 		super(input);
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
 	}
@@ -204,11 +204,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_code; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCode(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCode(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCode(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCode(this);
 		}
 	}
 
@@ -267,22 +267,22 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Using_directiveContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> USING() { return getToken(CodeSensorParser.USING, 0); }
+		public TerminalNode<Token> USING() { return getToken(ModuleParser.USING, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public TerminalNode<Token> NAMESPACE() { return getToken(CodeSensorParser.NAMESPACE, 0); }
+		public TerminalNode<Token> NAMESPACE() { return getToken(ModuleParser.NAMESPACE, 0); }
 		public Using_directiveContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_using_directive; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterUsing_directive(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterUsing_directive(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitUsing_directive(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitUsing_directive(this);
 		}
 	}
 
@@ -323,11 +323,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterExpr(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitExpr(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitExpr(this);
 		}
 	}
 
@@ -378,11 +378,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assign_expr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAssign_expr(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAssign_expr(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_expr(this);
 		}
 	}
 
@@ -433,11 +433,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_conditional_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterConditional_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterConditional_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitConditional_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitConditional_expression(this);
 		}
 	}
 
@@ -487,11 +487,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterOr_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterOr_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitOr_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitOr_expression(this);
 		}
 	}
 
@@ -539,11 +539,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_and_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAnd_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAnd_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAnd_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAnd_expression(this);
 		}
 	}
 
@@ -591,11 +591,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_inclusive_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInclusive_or_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInclusive_or_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInclusive_or_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInclusive_or_expression(this);
 		}
 	}
 
@@ -643,11 +643,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_exclusive_or_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterExclusive_or_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterExclusive_or_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitExclusive_or_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitExclusive_or_expression(this);
 		}
 	}
 
@@ -695,11 +695,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_bit_and_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterBit_and_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBit_and_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitBit_and_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBit_and_expression(this);
 		}
 	}
 
@@ -750,11 +750,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_equality_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterEquality_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterEquality_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitEquality_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitEquality_expression(this);
 		}
 	}
 
@@ -805,11 +805,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_relational_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterRelational_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterRelational_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitRelational_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitRelational_expression(this);
 		}
 	}
 
@@ -857,11 +857,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_shift_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterShift_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterShift_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitShift_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitShift_expression(this);
 		}
 	}
 
@@ -914,11 +914,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_additive_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAdditive_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAdditive_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAdditive_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAdditive_expression(this);
 		}
 	}
 
@@ -971,11 +971,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_multiplicative_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterMultiplicative_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterMultiplicative_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitMultiplicative_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitMultiplicative_expression(this);
 		}
 	}
 
@@ -1031,11 +1031,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_cast_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCast_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCast_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCast_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCast_expression(this);
 		}
 	}
 
@@ -1092,11 +1092,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_cast_target; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCast_target(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCast_target(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCast_target(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCast_target(this);
 		}
 	}
 
@@ -1166,11 +1166,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_unary_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterUnary_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterUnary_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitUnary_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitUnary_expression(this);
 		}
 	}
 
@@ -1251,11 +1251,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_inc_dec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInc_dec(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInc_dec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInc_dec(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInc_dec(this);
 		}
 	}
 
@@ -1304,29 +1304,29 @@ public class CodeSensorParser extends Parser<Token> {
 		public PrimaryOnlyContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterPrimaryOnly(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPrimaryOnly(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitPrimaryOnly(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPrimaryOnly(this);
 		}
 	}
 	public static class PtrMemberAccessContext extends Postfix_expressionContext {
 		public Postfix_expressionContext postfix_expression() {
 			return getRuleContext(Postfix_expressionContext.class,0);
 		}
-		public TerminalNode<Token> TEMPLATE() { return getToken(CodeSensorParser.TEMPLATE, 0); }
+		public TerminalNode<Token> TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
 		public PtrMemberAccessContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterPtrMemberAccess(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPtrMemberAccess(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitPtrMemberAccess(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPtrMemberAccess(this);
 		}
 	}
 	public static class ArrayIndexingContext extends Postfix_expressionContext {
@@ -1339,11 +1339,11 @@ public class CodeSensorParser extends Parser<Token> {
 		public ArrayIndexingContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterArrayIndexing(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterArrayIndexing(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitArrayIndexing(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitArrayIndexing(this);
 		}
 	}
 	public static class IncDecOpContext extends Postfix_expressionContext {
@@ -1356,29 +1356,29 @@ public class CodeSensorParser extends Parser<Token> {
 		public IncDecOpContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterIncDecOp(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterIncDecOp(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitIncDecOp(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitIncDecOp(this);
 		}
 	}
 	public static class MemberAccessContext extends Postfix_expressionContext {
 		public Postfix_expressionContext postfix_expression() {
 			return getRuleContext(Postfix_expressionContext.class,0);
 		}
-		public TerminalNode<Token> TEMPLATE() { return getToken(CodeSensorParser.TEMPLATE, 0); }
+		public TerminalNode<Token> TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
 		public MemberAccessContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterMemberAccess(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterMemberAccess(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitMemberAccess(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitMemberAccess(this);
 		}
 	}
 	public static class FuncCallContext extends Postfix_expressionContext {
@@ -1391,11 +1391,11 @@ public class CodeSensorParser extends Parser<Token> {
 		public FuncCallContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFuncCall(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFuncCall(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFuncCall(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFuncCall(this);
 		}
 	}
 
@@ -1530,11 +1530,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_function_argument_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_argument_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_argument_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_argument_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_argument_list(this);
 		}
 	}
 
@@ -1591,11 +1591,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_function_argument; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_argument(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_argument(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_argument(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_argument(this);
 		}
 	}
 
@@ -1636,11 +1636,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_primary_expression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterPrimary_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPrimary_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitPrimary_expression(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPrimary_expression(this);
 		}
 	}
 
@@ -1698,11 +1698,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_unary_operator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterUnary_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterUnary_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitUnary_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitUnary_operator(this);
 		}
 	}
 
@@ -1740,11 +1740,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_relational_operator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterRelational_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterRelational_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitRelational_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitRelational_operator(this);
 		}
 	}
 
@@ -1776,23 +1776,23 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class ConstantContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> CHAR() { return getToken(CodeSensorParser.CHAR, 0); }
-		public TerminalNode<Token> OCTAL_LITERAL() { return getToken(CodeSensorParser.OCTAL_LITERAL, 0); }
-		public TerminalNode<Token> HEX_LITERAL() { return getToken(CodeSensorParser.HEX_LITERAL, 0); }
-		public TerminalNode<Token> FLOATING_POINT_LITERAL() { return getToken(CodeSensorParser.FLOATING_POINT_LITERAL, 0); }
-		public TerminalNode<Token> DECIMAL_LITERAL() { return getToken(CodeSensorParser.DECIMAL_LITERAL, 0); }
-		public TerminalNode<Token> STRING() { return getToken(CodeSensorParser.STRING, 0); }
+		public TerminalNode<Token> CHAR() { return getToken(ModuleParser.CHAR, 0); }
+		public TerminalNode<Token> OCTAL_LITERAL() { return getToken(ModuleParser.OCTAL_LITERAL, 0); }
+		public TerminalNode<Token> HEX_LITERAL() { return getToken(ModuleParser.HEX_LITERAL, 0); }
+		public TerminalNode<Token> FLOATING_POINT_LITERAL() { return getToken(ModuleParser.FLOATING_POINT_LITERAL, 0); }
+		public TerminalNode<Token> DECIMAL_LITERAL() { return getToken(ModuleParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode<Token> STRING() { return getToken(ModuleParser.STRING, 0); }
 		public ConstantContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constant; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterConstant(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterConstant(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitConstant(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitConstant(this);
 		}
 	}
 
@@ -1830,11 +1830,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_function_decl_specifiers; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_decl_specifiers(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_decl_specifiers(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_decl_specifiers(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_decl_specifiers(this);
 		}
 	}
 
@@ -1872,11 +1872,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_ptr_operator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterPtr_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPtr_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitPtr_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPtr_operator(this);
 		}
 	}
 
@@ -1914,11 +1914,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_access_specifier; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAccess_specifier(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAccess_specifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAccess_specifier(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAccess_specifier(this);
 		}
 	}
 
@@ -1956,11 +1956,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_operator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterOperator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitOperator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitOperator(this);
 		}
 	}
 
@@ -2247,11 +2247,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assignment_operator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAssignment_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssignment_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAssignment_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssignment_operator(this);
 		}
 	}
 
@@ -2289,11 +2289,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_equality_operator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterEquality_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterEquality_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitEquality_operator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitEquality_operator(this);
 		}
 	}
 
@@ -2328,18 +2328,18 @@ public class CodeSensorParser extends Parser<Token> {
 		public Template_param_listContext template_param_list() {
 			return getRuleContext(Template_param_listContext.class,0);
 		}
-		public TerminalNode<Token> TEMPLATE() { return getToken(CodeSensorParser.TEMPLATE, 0); }
+		public TerminalNode<Token> TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
 		public Template_decl_startContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_template_decl_start; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterTemplate_decl_start(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterTemplate_decl_start(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitTemplate_decl_start(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitTemplate_decl_start(this);
 		}
 	}
 
@@ -2386,11 +2386,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_template_param_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterTemplate_param_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterTemplate_param_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitTemplate_param_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitTemplate_param_list(this);
 		}
 	}
 
@@ -2555,11 +2555,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_brackets; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_brackets(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_brackets(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_brackets(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_brackets(this);
 		}
 	}
 
@@ -2597,11 +2597,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_brackets_curlies_or_squares; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_brackets_curlies_or_squares(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_brackets_curlies_or_squares(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_brackets_curlies_or_squares(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_brackets_curlies_or_squares(this);
 		}
 	}
 
@@ -2639,11 +2639,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_brackets_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_brackets_or_semicolon(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_brackets_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_brackets_or_semicolon(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_brackets_or_semicolon(this);
 		}
 	}
 
@@ -2681,11 +2681,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_angle_brackets_or_brackets; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_angle_brackets_or_brackets(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_angle_brackets_or_brackets(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_angle_brackets_or_brackets(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_angle_brackets_or_brackets(this);
 		}
 	}
 
@@ -2723,11 +2723,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_curlies; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_curlies(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_curlies(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_curlies(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_curlies(this);
 		}
 	}
 
@@ -2765,11 +2765,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_squares; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_squares(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_squares(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_squares(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_squares(this);
 		}
 	}
 
@@ -2807,11 +2807,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_squares_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_squares_or_semicolon(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_squares_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_squares_or_semicolon(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_squares_or_semicolon(this);
 		}
 	}
 
@@ -2849,11 +2849,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_no_comma_or_semicolon; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNo_comma_or_semicolon(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_comma_or_semicolon(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNo_comma_or_semicolon(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_comma_or_semicolon(this);
 		}
 	}
 
@@ -2891,11 +2891,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assign_water; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAssign_water(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_water(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAssign_water(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_water(this);
 		}
 	}
 
@@ -2933,11 +2933,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assign_water_l2; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAssign_water_l2(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_water_l2(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAssign_water_l2(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_water_l2(this);
 		}
 	}
 
@@ -2975,11 +2975,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_water; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterWater(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterWater(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitWater(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitWater(this);
 		}
 	}
 
@@ -3030,11 +3030,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_function_def; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_def(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_def(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_def(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_def(this);
 		}
 	}
 
@@ -3108,11 +3108,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_return_type; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterReturn_type(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterReturn_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitReturn_type(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitReturn_type(this);
 		}
 	}
 
@@ -3167,7 +3167,7 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Function_param_listContext extends ParserRuleContext<Token> {
-		public List<? extends TerminalNode<Token>> CV_QUALIFIER() { return getTokens(CodeSensorParser.CV_QUALIFIER); }
+		public List<? extends TerminalNode<Token>> CV_QUALIFIER() { return getTokens(ModuleParser.CV_QUALIFIER); }
 		public Exception_specificationContext exception_specification() {
 			return getRuleContext(Exception_specificationContext.class,0);
 		}
@@ -3175,7 +3175,7 @@ public class CodeSensorParser extends Parser<Token> {
 			return getRuleContext(Parameter_decl_clauseContext.class,0);
 		}
 		public TerminalNode<Token> CV_QUALIFIER(int i) {
-			return getToken(CodeSensorParser.CV_QUALIFIER, i);
+			return getToken(ModuleParser.CV_QUALIFIER, i);
 		}
 		public Function_param_listContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3183,11 +3183,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_function_param_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_param_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_param_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_param_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_param_list(this);
 		}
 	}
 
@@ -3244,7 +3244,7 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Parameter_decl_clauseContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> VOID() { return getToken(CodeSensorParser.VOID, 0); }
+		public TerminalNode<Token> VOID() { return getToken(ModuleParser.VOID, 0); }
 		public List<? extends Parameter_declContext> parameter_decl() {
 			return getRuleContexts(Parameter_declContext.class);
 		}
@@ -3257,11 +3257,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameter_decl_clause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_decl_clause(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_decl_clause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_decl_clause(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_decl_clause(this);
 		}
 	}
 
@@ -3339,11 +3339,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameter_decl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_decl(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_decl(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_decl(this);
 		}
 	}
 
@@ -3388,11 +3388,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameter_id; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_id(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_id(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_id(this);
 		}
 	}
 
@@ -3454,18 +3454,18 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Compound_statementContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> OPENING_CURLY() { return getToken(CodeSensorParser.OPENING_CURLY, 0); }
+		public TerminalNode<Token> OPENING_CURLY() { return getToken(ModuleParser.OPENING_CURLY, 0); }
 		public Compound_statementContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_compound_statement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCompound_statement(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCompound_statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCompound_statement(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCompound_statement(this);
 		}
 	}
 
@@ -3504,11 +3504,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_ctor_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCtor_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCtor_list(this);
 		}
 	}
 
@@ -3562,11 +3562,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_ctor_initializer; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_initializer(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCtor_initializer(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_initializer(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCtor_initializer(this);
 		}
 	}
 
@@ -3602,11 +3602,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_initializer_id; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInitializer_id(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInitializer_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInitializer_id(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInitializer_id(this);
 		}
 	}
 
@@ -3650,11 +3650,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_ctor_expr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterCtor_expr(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCtor_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitCtor_expr(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCtor_expr(this);
 		}
 	}
 
@@ -3693,7 +3693,7 @@ public class CodeSensorParser extends Parser<Token> {
 		public Function_nameContext function_name() {
 			return getRuleContext(Function_nameContext.class,0);
 		}
-		public TerminalNode<Token> OPERATOR() { return getToken(CodeSensorParser.OPERATOR, 0); }
+		public TerminalNode<Token> OPERATOR() { return getToken(ModuleParser.OPERATOR, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
@@ -3706,11 +3706,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_function_name; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterFunction_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitFunction_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_name(this);
 		}
 	}
 
@@ -3761,18 +3761,18 @@ public class CodeSensorParser extends Parser<Token> {
 		public Type_id_listContext type_id_list() {
 			return getRuleContext(Type_id_listContext.class,0);
 		}
-		public TerminalNode<Token> THROW() { return getToken(CodeSensorParser.THROW, 0); }
+		public TerminalNode<Token> THROW() { return getToken(ModuleParser.THROW, 0); }
 		public Exception_specificationContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exception_specification; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterException_specification(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterException_specification(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitException_specification(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitException_specification(this);
 		}
 	}
 
@@ -3819,11 +3819,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_type_id_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterType_id_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterType_id_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitType_id_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitType_id_list(this);
 		}
 	}
 
@@ -3905,11 +3905,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_init_declarator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInit_declarator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInit_declarator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInit_declarator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInit_declarator(this);
 		}
 	}
 
@@ -3983,11 +3983,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_declarator; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterDeclarator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterDeclarator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitDeclarator(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitDeclarator(this);
 		}
 	}
 
@@ -4042,11 +4042,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_type_suffix; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterType_suffix(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterType_suffix(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitType_suffix(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitType_suffix(this);
 		}
 	}
 
@@ -4107,11 +4107,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assign_expr_w_; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAssign_expr_w_(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_expr_w_(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAssign_expr_w_(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_expr_w_(this);
 		}
 	}
 
@@ -4219,11 +4219,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assign_expr_w__l2; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterAssign_expr_w__l2(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_expr_w__l2(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitAssign_expr_w__l2(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_expr_w__l2(this);
 		}
 	}
 
@@ -4331,11 +4331,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_constant_expr_w_; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterConstant_expr_w_(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterConstant_expr_w_(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitConstant_expr_w_(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitConstant_expr_w_(this);
 		}
 	}
 
@@ -4405,7 +4405,7 @@ public class CodeSensorParser extends Parser<Token> {
 		public Template_decl_startContext template_decl_start() {
 			return getRuleContext(Template_decl_startContext.class,0);
 		}
-		public TerminalNode<Token> TYPEDEF() { return getToken(CodeSensorParser.TYPEDEF, 0); }
+		public TerminalNode<Token> TYPEDEF() { return getToken(ModuleParser.TYPEDEF, 0); }
 		public Var_declContext var_decl() {
 			return getRuleContext(Var_declContext.class,0);
 		}
@@ -4415,11 +4415,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_simple_decl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterSimple_decl(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterSimple_decl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitSimple_decl(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitSimple_decl(this);
 		}
 	}
 
@@ -4484,11 +4484,11 @@ public class CodeSensorParser extends Parser<Token> {
 		public DeclByClassContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterDeclByClass(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterDeclByClass(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitDeclByClass(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitDeclByClass(this);
 		}
 	}
 	public static class DeclByTypeContext extends Var_declContext {
@@ -4501,11 +4501,11 @@ public class CodeSensorParser extends Parser<Token> {
 		public DeclByTypeContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterDeclByType(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterDeclByType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitDeclByType(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitDeclByType(this);
 		}
 	}
 
@@ -4565,11 +4565,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_init_declarator_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInit_declarator_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInit_declarator_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInit_declarator_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInit_declarator_list(this);
 		}
 	}
 
@@ -4623,11 +4623,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_initializer; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInitializer(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInitializer(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInitializer(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInitializer(this);
 		}
 	}
 
@@ -4696,11 +4696,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_initializer_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterInitializer_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInitializer_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitInitializer_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInitializer_list(this);
 		}
 	}
 
@@ -4747,19 +4747,19 @@ public class CodeSensorParser extends Parser<Token> {
 		public Class_nameContext class_name() {
 			return getRuleContext(Class_nameContext.class,0);
 		}
-		public TerminalNode<Token> CLASS_KEY() { return getToken(CodeSensorParser.CLASS_KEY, 0); }
-		public TerminalNode<Token> OPENING_CURLY() { return getToken(CodeSensorParser.OPENING_CURLY, 0); }
+		public TerminalNode<Token> CLASS_KEY() { return getToken(ModuleParser.CLASS_KEY, 0); }
+		public TerminalNode<Token> OPENING_CURLY() { return getToken(ModuleParser.OPENING_CURLY, 0); }
 		public Class_defContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_class_def; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterClass_def(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterClass_def(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitClass_def(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitClass_def(this);
 		}
 	}
 
@@ -4813,11 +4813,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_class_name; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterClass_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterClass_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitClass_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitClass_name(this);
 		}
 	}
 
@@ -4855,11 +4855,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_base_classes; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterBase_classes(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBase_classes(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitBase_classes(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBase_classes(this);
 		}
 	}
 
@@ -4901,7 +4901,7 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Base_classContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> VIRTUAL() { return getToken(CodeSensorParser.VIRTUAL, 0); }
+		public TerminalNode<Token> VIRTUAL() { return getToken(ModuleParser.VIRTUAL, 0); }
 		public Access_specifierContext access_specifier() {
 			return getRuleContext(Access_specifierContext.class,0);
 		}
@@ -4914,11 +4914,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_base_class; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterBase_class(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBase_class(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitBase_class(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBase_class(this);
 		}
 	}
 
@@ -4961,12 +4961,12 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Type_nameContext extends ParserRuleContext<Token> {
-		public List<? extends TerminalNode<Token>> CV_QUALIFIER() { return getTokens(CodeSensorParser.CV_QUALIFIER); }
+		public List<? extends TerminalNode<Token>> CV_QUALIFIER() { return getTokens(ModuleParser.CV_QUALIFIER); }
 		public Template_param_listContext template_param_list(int i) {
 			return getRuleContext(Template_param_listContext.class,i);
 		}
-		public TerminalNode<Token> SIGNED() { return getToken(CodeSensorParser.SIGNED, 0); }
-		public TerminalNode<Token> UNSIGNED() { return getToken(CodeSensorParser.UNSIGNED, 0); }
+		public TerminalNode<Token> SIGNED() { return getToken(ModuleParser.SIGNED, 0); }
+		public TerminalNode<Token> UNSIGNED() { return getToken(ModuleParser.UNSIGNED, 0); }
 		public List<? extends Template_param_listContext> template_param_list() {
 			return getRuleContexts(Template_param_listContext.class);
 		}
@@ -4977,20 +4977,20 @@ public class CodeSensorParser extends Parser<Token> {
 			return getRuleContexts(Base_typeContext.class);
 		}
 		public TerminalNode<Token> CV_QUALIFIER(int i) {
-			return getToken(CodeSensorParser.CV_QUALIFIER, i);
+			return getToken(ModuleParser.CV_QUALIFIER, i);
 		}
-		public TerminalNode<Token> CLASS_KEY() { return getToken(CodeSensorParser.CLASS_KEY, 0); }
+		public TerminalNode<Token> CLASS_KEY() { return getToken(ModuleParser.CLASS_KEY, 0); }
 		public Type_nameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type_name; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterType_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterType_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitType_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitType_name(this);
 		}
 	}
 
@@ -5096,29 +5096,29 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class Base_typeContext extends ParserRuleContext<Token> {
-		public List<? extends TerminalNode<Token>> VOID() { return getTokens(CodeSensorParser.VOID); }
+		public List<? extends TerminalNode<Token>> VOID() { return getTokens(ModuleParser.VOID); }
 		public TerminalNode<Token> ALPHA_NUMERIC(int i) {
-			return getToken(CodeSensorParser.ALPHA_NUMERIC, i);
+			return getToken(ModuleParser.ALPHA_NUMERIC, i);
 		}
-		public List<? extends TerminalNode<Token>> ALPHA_NUMERIC() { return getTokens(CodeSensorParser.ALPHA_NUMERIC); }
+		public List<? extends TerminalNode<Token>> ALPHA_NUMERIC() { return getTokens(ModuleParser.ALPHA_NUMERIC); }
 		public TerminalNode<Token> LONG(int i) {
-			return getToken(CodeSensorParser.LONG, i);
+			return getToken(ModuleParser.LONG, i);
 		}
 		public TerminalNode<Token> VOID(int i) {
-			return getToken(CodeSensorParser.VOID, i);
+			return getToken(ModuleParser.VOID, i);
 		}
-		public List<? extends TerminalNode<Token>> LONG() { return getTokens(CodeSensorParser.LONG); }
+		public List<? extends TerminalNode<Token>> LONG() { return getTokens(ModuleParser.LONG); }
 		public Base_typeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_base_type; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterBase_type(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBase_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitBase_type(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBase_type(this);
 		}
 	}
 
@@ -5172,19 +5172,19 @@ public class CodeSensorParser extends Parser<Token> {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
-		public TerminalNode<Token> REGISTER() { return getToken(CodeSensorParser.REGISTER, 0); }
-		public TerminalNode<Token> AUTO() { return getToken(CodeSensorParser.AUTO, 0); }
+		public TerminalNode<Token> REGISTER() { return getToken(ModuleParser.REGISTER, 0); }
+		public TerminalNode<Token> AUTO() { return getToken(ModuleParser.AUTO, 0); }
 		public Param_decl_specifiersContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_decl_specifiers; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParam_decl_specifiers(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_decl_specifiers(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParam_decl_specifiers(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_decl_specifiers(this);
 		}
 	}
 
@@ -5236,11 +5236,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameter_name; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParameter_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParameter_name(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_name(this);
 		}
 	}
 
@@ -5287,18 +5287,18 @@ public class CodeSensorParser extends Parser<Token> {
 		public List<? extends Param_typeContext> param_type() {
 			return getRuleContexts(Param_typeContext.class);
 		}
-		public TerminalNode<Token> VOID() { return getToken(CodeSensorParser.VOID, 0); }
+		public TerminalNode<Token> VOID() { return getToken(ModuleParser.VOID, 0); }
 		public Param_type_listContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_type_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParam_type_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_type_list(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParam_type_list(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_type_list(this);
 		}
 	}
 
@@ -5373,11 +5373,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_param_type; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParam_type(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_type(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParam_type(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_type(this);
 		}
 	}
 
@@ -5422,11 +5422,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_param_type_id; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterParam_type_id(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_type_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitParam_type_id(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_type_id(this);
 		}
 	}
 
@@ -5491,20 +5491,20 @@ public class CodeSensorParser extends Parser<Token> {
 
 	public static class IdentifierContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> ALPHA_NUMERIC(int i) {
-			return getToken(CodeSensorParser.ALPHA_NUMERIC, i);
+			return getToken(ModuleParser.ALPHA_NUMERIC, i);
 		}
-		public List<? extends TerminalNode<Token>> ALPHA_NUMERIC() { return getTokens(CodeSensorParser.ALPHA_NUMERIC); }
+		public List<? extends TerminalNode<Token>> ALPHA_NUMERIC() { return getTokens(ModuleParser.ALPHA_NUMERIC); }
 		public IdentifierContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterIdentifier(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterIdentifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitIdentifier(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitIdentifier(this);
 		}
 	}
 
@@ -5547,20 +5547,20 @@ public class CodeSensorParser extends Parser<Token> {
 	}
 
 	public static class NumberContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> OCTAL_LITERAL() { return getToken(CodeSensorParser.OCTAL_LITERAL, 0); }
-		public TerminalNode<Token> HEX_LITERAL() { return getToken(CodeSensorParser.HEX_LITERAL, 0); }
-		public TerminalNode<Token> DECIMAL_LITERAL() { return getToken(CodeSensorParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode<Token> OCTAL_LITERAL() { return getToken(ModuleParser.OCTAL_LITERAL, 0); }
+		public TerminalNode<Token> HEX_LITERAL() { return getToken(ModuleParser.HEX_LITERAL, 0); }
+		public TerminalNode<Token> DECIMAL_LITERAL() { return getToken(ModuleParser.DECIMAL_LITERAL, 0); }
 		public NumberContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_number; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterNumber(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNumber(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitNumber(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNumber(this);
 		}
 	}
 
@@ -5604,11 +5604,11 @@ public class CodeSensorParser extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_ptrs; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).enterPtrs(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPtrs(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof CodeSensorListener ) ((CodeSensorListener)listener).exitPtrs(this);
+			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPtrs(this);
 		}
 	}
 

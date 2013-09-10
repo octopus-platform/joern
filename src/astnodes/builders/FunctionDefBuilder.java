@@ -5,10 +5,10 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ParseTreeUtils;
-import antlr.CodeSensorParser.Function_nameContext;
-import antlr.CodeSensorParser.Function_param_listContext;
-import antlr.CodeSensorParser.Parameter_declContext;
-import antlr.CodeSensorParser.Return_typeContext;
+import antlr.ModuleParser.Function_nameContext;
+import antlr.ModuleParser.Function_param_listContext;
+import antlr.ModuleParser.Parameter_declContext;
+import antlr.ModuleParser.Return_typeContext;
 import astnodes.ASTNodeBuilder;
 import astnodes.expressions.Identifier;
 import astnodes.functionDef.FunctionDef;

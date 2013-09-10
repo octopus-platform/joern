@@ -46,7 +46,7 @@
          basedir="${build.dir}"
          includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.index.CodeSensorIndex" />
+        <attribute name="Main-Class" value="tools.index.IndexMain" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />

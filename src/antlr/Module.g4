@@ -1,6 +1,6 @@
-grammar CodeSensor;
+grammar Module;
 
-import CodeSensorLex, Expressions, Common, FunctionDef, CoarseSimpleDecl;
+import ModuleLex, Expressions, Common, FunctionDef, CoarseSimpleDecl;
 
 /*
     Copyright (C) 2013 Fabian 'fabs' Yamaguchi <fabs@phenoelit.de>

@@ -1,4 +1,4 @@
-// Generated from src/antlr/CodeSensor.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/Module.g4 by ANTLR 4.0.1-SNAPSHOT
 
 	package antlr;
 
@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-public class CodeSensorLexer extends Lexer {
+public class ModuleLexer extends Lexer {
 	public static final int
 		T__55=1, T__54=2, T__53=3, T__52=4, T__51=5, T__50=6, T__49=7, T__48=8, 
 		T__47=9, T__46=10, T__45=11, T__44=12, T__43=13, T__42=14, T__41=15, T__40=16, 
@@ -71,13 +71,13 @@ public class CodeSensorLexer extends Lexer {
 	};
 
 
-	public CodeSensorLexer(CharStream input) {
+	public ModuleLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "CodeSensor.g4"; }
+	public String getGrammarFileName() { return "Module.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

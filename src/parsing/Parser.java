@@ -7,7 +7,7 @@ import java.util.Observer;
 
 public class Parser
 {
-	ModuleParser parser = new ModuleParser();
+	ModuleParserDriver parser = new ModuleParserDriver();
 	
 	public void addObserver(Observer anObserver)
 	{

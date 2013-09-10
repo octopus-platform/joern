@@ -5,22 +5,22 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.CodeSensorLexer;
-import antlr.CodeSensorParser;
+import antlr.ModuleLexer;
+import antlr.ModuleParser;
 
-public class ModuleParser extends CommonParser
+public class ModuleParserDriver extends CommonParser
 {	
 	
-	public ModuleParser()
+	public ModuleParserDriver()
 	{
 		super();
-		setListener(new ModuleParseTreeListener(this));
+		setListener(new ModuleParserTreeListener(this));
 	}
 
 	@Override
 	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
-		CodeSensorParser parser = new CodeSensorParser(tokens);
+		ModuleParser parser = new ModuleParser(tokens);
         ParseTree tree = null;
         
         try {
@@ -40,7 +40,7 @@ public class ModuleParser extends CommonParser
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
-		return new CodeSensorLexer(input);
+		return new ModuleLexer(input);
 	}
 	
 }

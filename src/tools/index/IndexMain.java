@@ -5,7 +5,7 @@ import java.io.IOException;
 import output.neo4j.Neo4JImportListener;
 import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
-public class CodeSensorIndex {
+public class IndexMain {
 
 	private static CommandLineInterface cmd = new CommandLineInterface();
 	private static CodebaseWalker codebaseWalker = new CodebaseWalker();

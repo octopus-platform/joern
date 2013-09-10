@@ -1,4 +1,4 @@
-lexer grammar CodeSensorLex;
+lexer grammar ModuleLex;
 
 // Keywords shared among C/C++/Java
 

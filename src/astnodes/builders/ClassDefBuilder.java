@@ -3,7 +3,7 @@ package astnodes.builders;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.CodeSensorParser.Class_nameContext;
+import antlr.ModuleParser.Class_nameContext;
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.expressions.Identifier;

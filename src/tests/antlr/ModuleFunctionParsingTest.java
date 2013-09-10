@@ -6,17 +6,17 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 
-import antlr.CodeSensorLexer;
-import antlr.CodeSensorParser;
+import antlr.ModuleLexer;
+import antlr.ModuleParser;
 
 public class ModuleFunctionParsingTest {
 
-	private CodeSensorParser createParser(String input)
+	private ModuleParser createParser(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
-		CodeSensorLexer lex = new CodeSensorLexer(inputStream);
+		ModuleLexer lex = new ModuleLexer(inputStream);
 		CommonTokenStream tokens = new CommonTokenStream(lex);
-        CodeSensorParser parser = new CodeSensorParser(tokens);
+        ModuleParser parser = new ModuleParser(tokens);
         return parser;
 	}
 	
@@ -28,7 +28,7 @@ public class ModuleFunctionParsingTest {
 		String input = "main(){foo}";
 		String expected = "(function_def (function_name (identifier main)) (function_param_list ( )) (compound_statement {";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		System.out.println(output);
 		assertTrue(output.startsWith(expected));
@@ -40,7 +40,7 @@ public class ModuleFunctionParsingTest {
 		String input = "int main(){}";
 		String expected = "(function_def (return_type (type_name (base_type int))) (function_name (identifier main)) (function_param_list ( )) (compound_statement { }))";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		System.out.println(output);
 		assertTrue(output.equals(expected));
@@ -52,7 +52,7 @@ public class ModuleFunctionParsingTest {
 		String input = "int *foo(){}";
 		String expected = "(function_def (return_type (type_name (base_type int)) (ptr_operator *)) (function_name (identifier foo)) (function_param_list ( )) (compound_statement { }))";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		System.out.println(output);
 		assertTrue(output.equals(expected));
@@ -63,7 +63,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "static unsigned my_atoi(const char *p){}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def (return_type (function_decl_specifiers static) (type_name unsigned)) (function_name (identifier my_atoi))"));
@@ -74,7 +74,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "int foo(char *(*param)(void)){}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def (return_type (type_name (base_type int))) (function_name (identifier foo)) (function_param_list ( (parameter_decl_clause (parameter_decl (param_decl_specifiers (type_name (base_type char))) (parameter_id (ptrs (ptr_operator *)) ( (parameter_id (ptrs (ptr_operator *)) (parameter_name (identifier param))) ) (type_suffix (param_type_list ( void )))))) )) (compound_statement { }))"));
@@ -85,7 +85,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "static int altgid(void){}";
 	
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
@@ -96,7 +96,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "static int altgid(void *ptr){}";
 	
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		assertTrue(output.startsWith("(function_def"));
 	}
@@ -106,7 +106,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "static long aio_read_events_ring(struct kioctx *ctx, struct io_event __user *event, long nr){}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		System.out.println(output);
 	}
@@ -117,7 +117,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "static ssize_t _7z_write_data(struct archive_write *a, const void *buff, size_t s){}";
 	
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);		
 		assertTrue(output.startsWith("(function_def"));
 	}
@@ -127,7 +127,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "int foo(){ #if bar\n { #endif\n}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
@@ -138,7 +138,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "int foo(){ #if bar\n #if bar2\n { #endif #endif\n}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
@@ -149,7 +149,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "int (foo)(){}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
@@ -160,7 +160,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "inline bool operator == (const PlMessageHeader &b) const {}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
@@ -171,7 +171,7 @@ public class ModuleFunctionParsingTest {
 	{
 		String input = "int foo() throw(){}";
 		
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.function_def().toStringTree(parser);	
 		System.out.println(output);
 		assertTrue(output.startsWith("(function_def "));
@@ -181,7 +181,7 @@ public class ModuleFunctionParsingTest {
 	public void testPreprocIfBeforeFunc()
 	{
 		String input = "#ifdef foo\nint foo(){ #if x\n foo();\n #else\n #endif\n} abc\n #endif\n" ;
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
 		assertTrue(output.contains("(water abc)"));
@@ -191,7 +191,7 @@ public class ModuleFunctionParsingTest {
 	public void testPreprocIfNesting()
 	{
 		String input = "foo(){ #ifdef x\n #ifdef y\n #else\n #endif\n#endif\n abc(); } foo();" ;
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
 		assertTrue(output.contains("(compound_statement { #ifdef x\\n #ifdef y\\n #else\\n #endif\\n #endif\\n abc ( ) ; }))"));
@@ -201,7 +201,7 @@ public class ModuleFunctionParsingTest {
 	public void testPreprocIfInElse()
 	{
 		String input = "foo(){ #ifdef x\n #else\n #ifdef y\n #endif\n#endif\n abc(); } foo();" ;
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
 		assertTrue(output.contains("(compound_statement { #ifdef x\\n #else\\n #ifdef y\\n #endif\\n #endif\\n abc ( ) ; }))"));
@@ -212,7 +212,7 @@ public class ModuleFunctionParsingTest {
 	public void testStartingPreProcElse()
 	{
 		String input = "#ifdef foo\n int foo(){ #else\n {\n#endif\n } abc\n #endif\n" ;
-		CodeSensorParser parser = createParser(input);
+		ModuleParser parser = createParser(input);
 		String output = parser.code().toStringTree(parser);
 		System.out.println(output);
 		assertTrue(output.contains("(water abc)"));
