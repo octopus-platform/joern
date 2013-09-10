@@ -1,4 +1,4 @@
-grammar FineFunctionGrammar;
+grammar Function;
 import ModuleLex, Common, Expressions, FineSimpleDecl;
 
 @header{

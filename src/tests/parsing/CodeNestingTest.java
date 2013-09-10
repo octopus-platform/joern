@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import antlr.FineFunctionGrammarParser.StatementsContext;
+import antlr.FunctionParser.StatementsContext;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;

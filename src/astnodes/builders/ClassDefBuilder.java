@@ -29,7 +29,7 @@ public class ClassDefBuilder extends ASTNodeBuilder
 	}
 
 	public void setName(
-			antlr.FineFunctionGrammarParser.Class_nameContext ctx)
+			antlr.FunctionParser.Class_nameContext ctx)
 	{
 		thisItem.name = new Identifier();
 		thisItem.name.initializeFromContext(ctx);

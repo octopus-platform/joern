@@ -4,12 +4,12 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.ModuleParser;
-import antlr.FineFunctionGrammarParser;
+import antlr.FunctionParser;
 
 public class InitDeclContextWrapper
 {
 	ModuleParser.DeclaratorContext ctxCodeSensor = null;
-	FineFunctionGrammarParser.DeclaratorContext ctxFine = null;
+	FunctionParser.DeclaratorContext ctxFine = null;
 	int contextInUse;
 	
 	public InitDeclContextWrapper(ModuleParser.DeclaratorContext ctx)
@@ -18,7 +18,7 @@ public class InitDeclContextWrapper
 		contextInUse = 0;
 	}
 
-	public InitDeclContextWrapper(FineFunctionGrammarParser.DeclaratorContext ctx)
+	public InitDeclContextWrapper(FunctionParser.DeclaratorContext ctx)
 	{
 		ctxFine = ctx;
 		contextInUse = 2;
@@ -29,8 +29,8 @@ public class InitDeclContextWrapper
 		if(objToWrap instanceof ModuleParser.Init_declaratorContext){
 			ctxCodeSensor = (ModuleParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 0;
-		}else if(objToWrap instanceof FineFunctionGrammarParser.Init_declaratorContext){
-			ctxFine = (FineFunctionGrammarParser.DeclaratorContext) objToWrap.getChild(0);
+		}else if(objToWrap instanceof FunctionParser.Init_declaratorContext){
+			ctxFine = (FunctionParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 2;
 		}
 	}

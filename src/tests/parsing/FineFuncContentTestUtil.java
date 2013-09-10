@@ -5,9 +5,9 @@ package tests.parsing;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import parsing.FineFunctionParser;
+import parsing.FunctionParserDriver;
 import parsing.TokenSubStream;
-import antlr.FineFunctionGrammarLexer;
+import antlr.FunctionLexer;
 import astnodes.ASTNode;
 
 public class FineFuncContentTestUtil {
@@ -15,7 +15,7 @@ public class FineFuncContentTestUtil {
 	
 	public static ASTNode parseAndWalk(String input)
 	{
-		FineFunctionParser parser = new FineFunctionParser();		
+		FunctionParserDriver parser = new FunctionParserDriver();		
 		TokenSubStream tokens = tokenStreamFromString(input);
 		parser.parseAndWalkStream(tokens);
 		return parser.itemStack.peek().getItem();
@@ -24,14 +24,14 @@ public class FineFuncContentTestUtil {
 		
 	static ParseTree parse(String input)
 	{
-		FineFunctionParser parser = new FineFunctionParser();
+		FunctionParserDriver parser = new FunctionParserDriver();
 		return parser.parseString(input);
 	}
 
 	private static TokenSubStream tokenStreamFromString(String input)
 	{
 		ANTLRInputStream inputStream = new ANTLRInputStream(input);
-		FineFunctionGrammarLexer lex = new FineFunctionGrammarLexer(inputStream);
+		FunctionLexer lex = new FunctionLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		return tokens;
 	}

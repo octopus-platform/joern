@@ -26,9 +26,9 @@ import astnodes.statements.IdentifierDeclStatement;
 public class ModuleParserTreeListener extends ModuleBaseListener
 {
 	
-	CommonParser p;
+	CommonParserDriver p;
 	
-	ModuleParserTreeListener(CommonParser aP)
+	ModuleParserTreeListener(CommonParserDriver aP)
 	{
 		p = aP;
 	}

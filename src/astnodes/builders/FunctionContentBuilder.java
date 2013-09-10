@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.FineFunctionGrammarParser.Type_nameContext;
+import antlr.FunctionParser.Type_nameContext;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astnodes.declarations.IdentifierDecl;

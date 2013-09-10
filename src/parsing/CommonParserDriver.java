@@ -24,7 +24,7 @@ import astnodes.statements.CompoundStatement;
 import astwalking.ASTWalkerEvent;
 
 
-abstract public class CommonParser extends Observable
+abstract public class CommonParserDriver extends Observable
 {
 
 	public Stack<ASTNodeBuilder> itemStack = new Stack<ASTNodeBuilder>();
@@ -47,7 +47,7 @@ abstract public class CommonParser extends Observable
 	
 	abstract public Lexer createLexer(ANTLRInputStream input);
 	
-	public CommonParser()
+	public CommonParserDriver()
 	{
 		super();
 	}

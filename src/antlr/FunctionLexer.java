@@ -1,4 +1,4 @@
-// Generated from src/antlr/FineFunctionGrammar.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/Function.g4 by ANTLR 4.0.1-SNAPSHOT
 
 	package antlr;
 
@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-public class FineFunctionGrammarLexer extends Lexer {
+public class FunctionLexer extends Lexer {
 	public static final int
 		T__54=1, T__53=2, T__52=3, T__51=4, T__50=5, T__49=6, T__48=7, T__47=8, 
 		T__46=9, T__45=10, T__44=11, T__43=12, T__42=13, T__41=14, T__40=15, T__39=16, 
@@ -71,13 +71,13 @@ public class FineFunctionGrammarLexer extends Lexer {
 	};
 
 
-	public FineFunctionGrammarLexer(CharStream input) {
+	public FunctionLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "FineFunctionGrammar.g4"; }
+	public String getGrammarFileName() { return "Function.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

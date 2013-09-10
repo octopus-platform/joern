@@ -6,30 +6,30 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.FineFunctionGrammarLexer;
-import antlr.FineFunctionGrammarParser;
+import antlr.FunctionLexer;
+import antlr.FunctionParser;
 
 
-public class FineFunctionParser extends CommonParser
+public class FunctionParserDriver extends CommonParserDriver
 {
 	
-	public FineFunctionParser()
+	public FunctionParserDriver()
 	{
 		super();
-		setListener(new FineFunctionParseTreeListener(this));
+		setListener(new FunctionParseTreeListener(this));
 	}
 	
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
-		return new FineFunctionGrammarLexer(input);
+		return new FunctionLexer(input);
 	}
 	
 	@Override
 	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
-		setParser(new FineFunctionGrammarParser(tokens));
-        FineFunctionGrammarParser thisParser = (FineFunctionGrammarParser) getParser();
+		setParser(new FunctionParser(tokens));
+        FunctionParser thisParser = (FunctionParser) getParser();
 		ParseTree tree = null;
         
         try {
