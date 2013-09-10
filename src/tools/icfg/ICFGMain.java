@@ -4,7 +4,7 @@ import tools.GraphDbWalker;
 import tools.ImportedNodeListener;
 import tools.ImportedNodeWalker;
 
-public class ICFGCreator extends GraphDbWalker {
+public class ICFGMain extends GraphDbWalker {
 
 	static ImportedNodeWalker walker = new ImportedNodeWalker();
 	static ImportedNodeListener listener = new ICFGListener();

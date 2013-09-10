@@ -57,6 +57,16 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		returnCFG = cfg;
 	}
 	
+	public void visit(CompoundStatement content)
+	{
+		CFG cfg = new CFG();
+		List<ASTNode> statements = content.getStatements();
+		
+		appendChildCFGs(cfg, statements);
+		
+		returnCFG = cfg;
+	}
+	
 	public void visit(ASTNode expression)
 	{
 		returnCFG = defaultStatementConverter(expression);
@@ -79,16 +89,6 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG cfg = new CFG();
 		addBasicBlockForNode(child, cfg);
 		return cfg;
-	}
-	
-	public void visit(CompoundStatement content)
-	{
-		CFG cfg = new CFG();
-		List<ASTNode> statements = content.getStatements();
-		
-		appendChildCFGs(cfg, statements);
-		
-		returnCFG = cfg;
 	}
 	
 	private void appendChildCFGs(CFG cfg, List<ASTNode> statements)

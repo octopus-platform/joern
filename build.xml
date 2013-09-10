@@ -53,12 +53,15 @@
     </jar>
   </target>
 
+  <target name="tools" depends="icfg,udg,ddg,ddgpatcher">
+  </target>
+
   <target name="icfg" depends="compile">
     <jar destfile="${build.dir}/icfg.jar"
          basedir="${build.dir}"
          includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.icfg.ICFGCreator" />
+        <attribute name="Main-Class" value="tools.icfg.ICFGMain" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />

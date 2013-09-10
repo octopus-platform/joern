@@ -4,9 +4,11 @@ import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
 public class GraphDbWalker {
 
+	private static String indexDirectory = ".joernIndex/";
+	
 	protected static void initializeDatabase()
 	{
-		Neo4JBatchInserter.setIndexDirectoryName(".joernIndex/");
+		Neo4JBatchInserter.setIndexDirectoryName(indexDirectory);
 		Neo4JBatchInserter.openDatabase();
 	}
 

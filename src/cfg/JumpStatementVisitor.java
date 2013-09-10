@@ -38,8 +38,7 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 		String target = expression.getTarget();
 		BasicBlock blockByLabel = thisCFG.getBlockByLabel(target);
 		if(blockByLabel == null){
-			System.err.println("Warning: cannot find goto target.");
-			return;
+			throw new RuntimeException("cannot find label " + target);
 		}
 		
 		thisCFG.getEdges().removeAllEdgesFrom(thisBasicBlock);

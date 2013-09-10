@@ -97,7 +97,14 @@ public class ASTToCFGConverter {
 			
 			jumpStatementVisitor.setCFG(cfg);
 			jumpStatementVisitor.setBasicBlock(basicBlock);
-			statement.accept(jumpStatementVisitor);
+			
+			try{
+				statement.accept(jumpStatementVisitor);
+			}catch(RuntimeException ex){
+				System.err.println("While fixing jumps: " + ex.getMessage());
+			}
+		
+		
 		}
 	}
 	

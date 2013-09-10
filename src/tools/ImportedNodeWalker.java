@@ -9,8 +9,8 @@ import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
 
 /**
- * Walks all functions present in the Neo4J database
- * by querying the index
+ * Walks all nodes of a given type present in the Neo4J database
+ * by querying the index.
  * */
 
 public class ImportedNodeWalker

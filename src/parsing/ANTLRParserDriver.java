@@ -26,7 +26,14 @@ import astwalking.ASTWalkerEvent;
 
 abstract public class ANTLRParserDriver extends Observable
 {
-
+	// TODO: This class does two things:
+	// * It is a driver for the ANTLRParser, i.e., the parser
+	//   that creates ParseTrees from Strings. It can also already
+ 	//   'walk' the ParseTree to create ASTs.
+	// * It is an AST provider in that it will notify watchers
+	//   when ASTs are ready.
+	// We should split this into two classes.
+	
 	public Stack<ASTNodeBuilder> itemStack = new Stack<ASTNodeBuilder>();
 	public TokenSubStream stream;
 	public String filename;
@@ -84,8 +91,6 @@ abstract public class ANTLRParserDriver extends Observable
 		ParseTree tree = parseTokenStream(tokens);
 		return tree;
 	}
-	
-	
 	
 	protected TokenSubStream createTokenStreamFromFile(String filename) throws ParserException
 	{
@@ -152,6 +157,8 @@ abstract public class ANTLRParserDriver extends Observable
 	}
 	
 	
+	////////////////////
+	
 	public void begin()
 	{
 		notifyObserversOfBegin();
@@ -162,7 +169,6 @@ abstract public class ANTLRParserDriver extends Observable
 		notifyObserversOfEnd();
 	}
 
-	
 	private void notifyObserversOfBegin()
 	{
 		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.BEGIN);

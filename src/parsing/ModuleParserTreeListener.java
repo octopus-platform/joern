@@ -22,6 +22,7 @@ import astnodes.declarations.IdentifierDecl;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
+// Converts Parse Trees to ASTs for Modules
 
 public class ModuleParserTreeListener extends ModuleBaseListener
 {
