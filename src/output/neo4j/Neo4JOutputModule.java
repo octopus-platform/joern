@@ -2,28 +2,38 @@ package output.neo4j;
 
 import java.nio.file.Path;
 
-import output.neo4j.BatchInserter.Neo4JBatchInserter;
-import output.neo4j.importers.FileImporter;
-import output.neo4j.nodes.FileDatabaseNode;
+import output.OutputModule;
 import parsing.ModuleParser;
-import tools.index.SourceFileListener;
+import output.neo4j.importers.DirectoryTreeImporter;
+import output.neo4j.nodes.FileDatabaseNode;
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
-public class Neo4JImportListener extends SourceFileListener {
+
+public class Neo4JOutputModule extends OutputModule
+{
 
 	ModuleParser parser = new ModuleParser();
-	FileDatabaseNode currentFileNode;
 	Neo4JASTWalker neo4JASTWalker = new Neo4JASTWalker();
-	FileImporter dirImporter = new FileImporter();
+	
+	DirectoryTreeImporter dirTreeImporter = new DirectoryTreeImporter();
+	FileDatabaseNode currentFileNode;
 	
 	private static final String indexDirectory = ".joernIndex/";
 	
-	public Neo4JImportListener()
+	@Override
+	public void initialize()
+	{
+		initializeParser();
+		initializeDatabase();
+	}
+
+	private void initializeParser()
 	{
 		neo4JASTWalker.setImportListener(this);
 		parser.addObserver(neo4JASTWalker);
 	}
-
-	public void initialize()
+	
+	private void initializeDatabase()
 	{
 		Neo4JBatchInserter.setIndexDirectoryName(indexDirectory);
 		Neo4JBatchInserter.openDatabase();
@@ -32,27 +42,28 @@ public class Neo4JImportListener extends SourceFileListener {
 	@Override
 	public void preVisitDirectory(Path dir)
 	{
-		dirImporter.enterDir(dir);
+		dirTreeImporter.enterDir(dir);
 	}
 	
 	@Override
 	public void postVisitDirectory(Path dir)
 	{
-		dirImporter.exitDir(dir);
+		dirTreeImporter.exitDir(dir);
 	}
 	
 	@Override
 	public void visitFile(Path pathToFile)
 	{
-		currentFileNode = dirImporter.enterFile(pathToFile);
-		parser.processSingleFile(pathToFile.toString());
+		currentFileNode = dirTreeImporter.enterFile(pathToFile);
+		parser.parseFile(pathToFile.toString());
 	}
-
+	
 	public FileDatabaseNode getCurrentFileNode()
 	{
 		return currentFileNode;
 	}
-
+	
+	@Override
 	public void shutdown()
 	{
 		Neo4JBatchInserter.closeDatabase();	

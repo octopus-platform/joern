@@ -11,7 +11,7 @@ import output.neo4j.EdgeTypes;
 import output.neo4j.BatchInserter.Neo4JBatchInserter;
 import output.neo4j.nodes.FileDatabaseNode;
 
-public class FileImporter
+public class DirectoryTreeImporter
 {
 	Stack<FileDatabaseNode> directoryStack = new Stack<FileDatabaseNode>();
 	
@@ -24,18 +24,35 @@ public class FileImporter
 		directoryStack.push(node);
 	}
 
+	public void exitDir(Path dir)
+	{
+		directoryStack.pop();
+	}
+
+	public FileDatabaseNode enterFile(Path pathToFile)
+	{
+		FileDatabaseNode node = new FileDatabaseNode();
+		insertFileNode(pathToFile, node);
+		linkWithParentDirectory(node);
+		return node;
+	}
+	
 	private void linkWithParentDirectory(FileDatabaseNode node)
 	{
-		long srcId;
-		
-		if(directoryStack.size() == 0)
-			srcId = 0; // link with reference node
-		else
-			srcId = directoryStack.peek().getId();
-		
+		long srcId = getSourceIdFromStack();
 		long dstId = node.getId();
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_PARENT_DIR_OF);
 		Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
+	}
+
+	private long getSourceIdFromStack()
+	{
+		long srcId;
+		if(directoryStack.size() == 0)
+			srcId = 0; // reference node
+		else
+			srcId = directoryStack.peek().getId();
+		return srcId;
 	}
 
 	private void insertDirectoryNode(Path dir, FileDatabaseNode node)
@@ -59,19 +76,6 @@ public class FileImporter
 		node.setId(nodeId);
 	
 		Neo4JBatchInserter.indexNode(nodeId, properties);	
-	}
-
-	public void exitDir(Path dir)
-	{
-		directoryStack.pop();
-	}
-
-	public FileDatabaseNode enterFile(Path pathToFile)
-	{
-		FileDatabaseNode node = new FileDatabaseNode();
-		insertFileNode(pathToFile, node);
-		linkWithParentDirectory(node);
-		return node;
 	}
 
 }

@@ -41,7 +41,7 @@ public class CommandLineInterface
 	
 	}
 	
-	public void outputHelp()
+	public void printHelp()
 	{	
 		formater.printHelp("joern [SOURCE_DIR1] ...", options);
 	}

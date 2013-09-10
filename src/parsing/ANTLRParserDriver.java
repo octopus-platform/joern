@@ -24,32 +24,40 @@ import astnodes.statements.CompoundStatement;
 import astwalking.ASTWalkerEvent;
 
 
-abstract public class CommonParserDriver extends Observable
+abstract public class ANTLRParserDriver extends Observable
 {
 
 	public Stack<ASTNodeBuilder> itemStack = new Stack<ASTNodeBuilder>();
 	public TokenSubStream stream;
 	public String filename;
 	
-	private Parser parser;
+	private Parser antlrParser;
 	private ParseTreeListener listener;
 	private CommonParserContext context = null;
 	
 	abstract public ParseTree parseTokenStreamImpl(TokenSubStream tokens);
-	
-	public ParseTree parseTokenStream(TokenSubStream tokens) throws ParserException
-	{
-		ParseTree returnTree = parseTokenStreamImpl(tokens);
-		if(returnTree == null)
-			throw new ParserException();
-		return returnTree;
-	}
-	
 	abstract public Lexer createLexer(ANTLRInputStream input);
 	
-	public CommonParserDriver()
+	public ANTLRParserDriver()
 	{
 		super();
+	}	
+	
+	public void parseAndWalkFile(String filename) throws ParserException
+	{
+		TokenSubStream stream = createTokenStreamFromFile(filename);
+		initializeContextWithFile(filename, stream);
+		
+		ParseTree tree = parseTokenStream(stream);		
+		walkTree(tree);
+	}
+	
+	public void parseAndWalkTokenStream(TokenSubStream tokens) throws ParserException
+	{
+		filename = "";
+		stream = tokens;
+		ParseTree tree = parseTokenStream(tokens);
+		walkTree(tree);
 	}
 	
 	public ParseTree parseAndWalkString(String input) throws ParserException
@@ -57,6 +65,14 @@ abstract public class CommonParserDriver extends Observable
 		ParseTree tree = parseString(input);
 		walkTree(tree);
 		return tree;
+	}
+	
+	public ParseTree parseTokenStream(TokenSubStream tokens) throws ParserException
+	{
+		ParseTree returnTree = parseTokenStreamImpl(tokens);
+		if(returnTree == null)
+			throw new ParserException();
+		return returnTree;
 	}
 	
 	public ParseTree parseString(String input) throws ParserException
@@ -69,19 +85,7 @@ abstract public class CommonParserDriver extends Observable
 		return tree;
 	}
 	
-	protected void walkTree(ParseTree tree)
-	{
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(getListener(), tree);
-	}
 	
-	public void parseAndWalkStream(TokenSubStream tokens) throws ParserException
-	{
-		filename = "";
-		stream = tokens;
-		ParseTree tree = parseTokenStream(tokens);
-		walkTree(tree);
-	}
 	
 	protected TokenSubStream createTokenStreamFromFile(String filename) throws ParserException
 	{
@@ -99,24 +103,12 @@ abstract public class CommonParserDriver extends Observable
 		
 	}
 	
-	public void parseAndWalkFile(String filename) throws ParserException
+	protected void walkTree(ParseTree tree)
 	{
-		TokenSubStream stream = createTokenStreamFromFile(filename);
-		initializeContextWithFile(filename, stream);
-		
-		ParseTree tree = parseTokenStream(stream);		
-		walkTree(tree);
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(getListener(), tree);
 	}
-
-	public void parseAndANTLRFileStream(ANTLRFileStream input, String aFilename) throws IOException
-	{
-		filename = aFilename;
-		Lexer lexer = createLexer(input);
-        TokenSubStream stream = new TokenSubStream(lexer);
-		initializeContextWithFile(filename, stream);
-		ParseTree tree = parseTokenStream(stream);
-        walkTree(tree);
-	}
+	
 	
 	protected void initializeContextWithFile(String filename, TokenSubStream stream)
 	{
@@ -131,8 +123,6 @@ abstract public class CommonParserDriver extends Observable
 		
 		return ex.getClass() == ParseCancellationException.class &&
 			   ex.getCause() instanceof RecognitionException;
-			
-	
 	}
 
 	protected void setLLStarMode(Parser parser)
@@ -173,14 +163,14 @@ abstract public class CommonParserDriver extends Observable
 	}
 
 	
-	public void notifyObserversOfBegin()
+	private void notifyObserversOfBegin()
 	{
 		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.BEGIN);
 		setChanged();
 		notifyObservers(event);
 	}
 
-	public void notifyObserversOfEnd()
+	private void notifyObserversOfEnd()
 	{
 		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.END);
 		setChanged();
@@ -219,12 +209,12 @@ abstract public class CommonParserDriver extends Observable
 		return (CompoundStatement) itemStack.peek().getItem();
 	}
 
-	public Parser getParser() {
-		return parser;
+	public Parser getAntlrParser() {
+		return antlrParser;
 	}
 
-	public void setParser(Parser parser) {
-		this.parser = parser;
+	public void setAntlrParser(Parser aParser) {
+		antlrParser = aParser;
 	}
 
 	public ParseTreeListener getListener() {

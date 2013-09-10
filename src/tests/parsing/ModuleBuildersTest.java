@@ -7,7 +7,7 @@ import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
-import parsing.ModuleParserDriver;
+import parsing.ANTLRModuleParserDriver;
 import parsing.TokenSubStream;
 import antlr.ModuleLexer;
 import astnodes.ASTNode;
@@ -213,7 +213,7 @@ public class ModuleBuildersTest {
 	
 	private List<ASTNode> parseInput(String input)
 	{
-		ModuleParserDriver parser = new ModuleParserDriver();		
+		ANTLRModuleParserDriver parser = new ANTLRModuleParserDriver();		
 		TestASTWalker testProcessor = new TestASTWalker();
 		parser.addObserver(testProcessor);
 		
@@ -221,7 +221,7 @@ public class ModuleBuildersTest {
 		ModuleLexer lex = new ModuleLexer(inputStream);
 		TokenSubStream tokens = new TokenSubStream(lex);
 		
-		parser.parseAndWalkStream(tokens);
+		parser.parseAndWalkTokenStream(tokens);
 		return testProcessor.codeItems;
 	}
 

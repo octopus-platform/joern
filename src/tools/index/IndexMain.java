@@ -4,27 +4,28 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import output.neo4j.Neo4JImportListener;
+import output.OutputModule;
+import output.neo4j.Neo4JOutputModule;
 
 
 public class IndexMain {
 
 	private static CommandLineInterface cmd = new CommandLineInterface();
 	private static SourceFileWalker sourceFileWalker = new SourceFileWalker();
-	private static Neo4JImportListener neo4jImportListener = new Neo4JImportListener();
+	private static OutputModule outputModule = new Neo4JOutputModule();
 	
     public static void main(String[] args)
 	{
     	parseCommandLine(args);
     	String[] fileAndDirNames = getFileAndDirNamesFromCommandLine();
-    	setupNeo4JListener();
+    	setupOutputModule();
     	
     	try{
     		sourceFileWalker.walk(fileAndDirNames);
 	    }catch(IOException err){
-			System.err.println("I/O-Error: " + err.getMessage()); 
+			System.err.println("Error walking source files: " + err.getMessage()); 
 	    }finally{
-	    	shutdownNeo4JListener();
+	    	shutdownOutputModule();
 	    }
 	}
 
@@ -40,7 +41,7 @@ public class IndexMain {
 	private static void printHelpAndTerminate(Exception ex)
 	{
 		System.err.println(ex.getMessage());
-		cmd.outputHelp();
+		cmd.printHelp();
 		System.exit(1);
 	}
 	
@@ -49,15 +50,15 @@ public class IndexMain {
 		return cmd.getFilenames();
 	}
 
-	private static void setupNeo4JListener()
+	private static void setupOutputModule()
     {
-		neo4jImportListener.initialize(); 	
-    	sourceFileWalker.addListener(neo4jImportListener);
+		outputModule.initialize(); 	
+    	sourceFileWalker.addListener(outputModule);
     }
 	
-    private static void shutdownNeo4JListener()
+    private static void shutdownOutputModule()
     {
-    	neo4jImportListener.shutdown();
+    	outputModule.shutdown();
 	}
 
 }

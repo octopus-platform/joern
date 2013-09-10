@@ -6,9 +6,9 @@ import astnodes.builders.FineFunctionContentBuilder;
 
 public class FunctionParseTreeListener extends FunctionBaseListener
 {
-	CommonParserDriver p;
+	ANTLRParserDriver p;
 	
-	FunctionParseTreeListener(CommonParserDriver aP)
+	FunctionParseTreeListener(ANTLRParserDriver aP)
 	{
 		p = aP;
 	}

@@ -5,7 +5,7 @@ package tests.parsing;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import parsing.FunctionParserDriver;
+import parsing.ANTLRFunctionParserDriver;
 import parsing.TokenSubStream;
 import antlr.FunctionLexer;
 import astnodes.ASTNode;
@@ -15,16 +15,16 @@ public class FineFuncContentTestUtil {
 	
 	public static ASTNode parseAndWalk(String input)
 	{
-		FunctionParserDriver parser = new FunctionParserDriver();		
+		ANTLRFunctionParserDriver parser = new ANTLRFunctionParserDriver();		
 		TokenSubStream tokens = tokenStreamFromString(input);
-		parser.parseAndWalkStream(tokens);
+		parser.parseAndWalkTokenStream(tokens);
 		return parser.itemStack.peek().getItem();
 	}
 	
 		
 	static ParseTree parse(String input)
 	{
-		FunctionParserDriver parser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver parser = new ANTLRFunctionParserDriver();
 		return parser.parseString(input);
 	}
 

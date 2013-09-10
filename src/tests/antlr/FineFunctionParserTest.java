@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import parsing.FunctionParserDriver;
+import parsing.ANTLRFunctionParserDriver;
 
 public class FineFunctionParserTest {
 
@@ -13,9 +13,9 @@ public class FineFunctionParserTest {
 	public void testIf()
 	{
 		String input = "if(foo){}";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
 		assertTrue(output.contains("(selection_or_iteration if"));
 	}
@@ -24,9 +24,9 @@ public class FineFunctionParserTest {
 	public void testStructInFunc()
 	{
 		String input = "class foo{ int x; };";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("class_def"));
 	}
 	
@@ -34,9 +34,9 @@ public class FineFunctionParserTest {
 	public void testFunctionCall()
 	{
 		String input = "foo(x);";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
@@ -44,9 +44,9 @@ public class FineFunctionParserTest {
 	public void testTwoParameters()
 	{
 		String input = "foo(x,y);";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains(", (function_argument"));
 	}
 	
@@ -54,9 +54,9 @@ public class FineFunctionParserTest {
 	public void testCallViaPtr()
 	{
 		String input = "ptr->foo(x);";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
@@ -64,9 +64,9 @@ public class FineFunctionParserTest {
 	public void testCallWithExprInArg()
 	{
 		String input = "foo(x == 1, x++);";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
 	
@@ -74,9 +74,9 @@ public class FineFunctionParserTest {
 	public void testAssignmentExpr()
 	{
 		String input = "x = y + 1;";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}
@@ -85,9 +85,9 @@ public class FineFunctionParserTest {
 	public void testComplexAssignment()
 	{
 		String input = "k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c];";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}
@@ -96,9 +96,9 @@ public class FineFunctionParserTest {
 	public void testDeclInFor()
 	{
 		String input = "for(int k = 0; k < 10; k++ ){}";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
 		assertTrue(output.contains("for ( (for_init_statement (simple_decl (var_decl (type_name (base_type int))"));
 	}
@@ -107,9 +107,9 @@ public class FineFunctionParserTest {
 	public void testEmptyFor()
 	{
 		String input = "for(; ;){}";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
 		assertTrue(output.contains("for_init_statement"));
 	}
@@ -118,9 +118,9 @@ public class FineFunctionParserTest {
 	public void testSizeofStruct()
 	{
 		String input = "while((buffer + len) > (tmp + sizeof(struct stun_attrib))) {}";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("selection_or_iteration while"));
 	}
 	
@@ -128,9 +128,9 @@ public class FineFunctionParserTest {
 	public void testComplexFor()
 	{
 		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";
-		FunctionParserDriver functionParser = new FunctionParserDriver();
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
 		ParseTree tree = functionParser.parseString(input);
-		String output = tree.toStringTree(functionParser.getParser());
+		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}

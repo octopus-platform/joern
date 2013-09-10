@@ -26,9 +26,9 @@ import astnodes.statements.IdentifierDeclStatement;
 public class ModuleParserTreeListener extends ModuleBaseListener
 {
 	
-	CommonParserDriver p;
+	ANTLRParserDriver p;
 	
-	ModuleParserTreeListener(CommonParserDriver aP)
+	ModuleParserTreeListener(ANTLRParserDriver aP)
 	{
 		p = aP;
 	}
@@ -191,12 +191,12 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 
 	private CompoundStatement parseClassContent(ModuleParser.DeclByClassContext ctx)
 	{
-		ModuleParserDriver shallowParser = createNewShallowParser();
+		ANTLRModuleParserDriver shallowParser = createNewShallowParser();
 		CompoundItemAssembler generator = new CompoundItemAssembler();
 		shallowParser.addObserver(generator);
 
 		restrictStreamToClassContent(ctx);
-		shallowParser.parseAndWalkStream(p.stream);
+		shallowParser.parseAndWalkTokenStream(p.stream);
 		p.stream.resetRestriction();
 		
 		return generator.getCompoundItem();
@@ -212,9 +212,9 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 		p.stream.restrict(startIndex+1, stopIndex);
 	}
 
-	private ModuleParserDriver createNewShallowParser()
+	private ANTLRModuleParserDriver createNewShallowParser()
 	{
-		ModuleParserDriver shallowParser = new ModuleParserDriver();
+		ANTLRModuleParserDriver shallowParser = new ANTLRModuleParserDriver();
 		shallowParser.setStack(p.itemStack);
 		return shallowParser;
 	}

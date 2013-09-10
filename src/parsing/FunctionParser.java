@@ -4,11 +4,11 @@ import astnodes.statements.CompoundStatement;
 
 public class FunctionParser
 {
-	CommonParserDriver parser;
+	ANTLRParserDriver parser;
 	
 	public FunctionParser()
 	{
-		parser = new FunctionParserDriver();
+		parser = new ANTLRFunctionParserDriver();
 	}
 
 	public void parseAndWalkString(String input)

@@ -10,10 +10,10 @@ import antlr.FunctionLexer;
 import antlr.FunctionParser;
 
 
-public class FunctionParserDriver extends CommonParserDriver
+public class ANTLRFunctionParserDriver extends ANTLRParserDriver
 {
 	
-	public FunctionParserDriver()
+	public ANTLRFunctionParserDriver()
 	{
 		super();
 		setListener(new FunctionParseTreeListener(this));
@@ -28,18 +28,18 @@ public class FunctionParserDriver extends CommonParserDriver
 	@Override
 	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
-		setParser(new FunctionParser(tokens));
-        FunctionParser thisParser = (FunctionParser) getParser();
+		setAntlrParser(new FunctionParser(tokens));
+        FunctionParser thisParser = (FunctionParser) getAntlrParser();
 		ParseTree tree = null;
         
         try {
-    		setSLLMode(getParser());
+    		setSLLMode(getAntlrParser());
         	tree = thisParser.statements();
         } catch (RuntimeException ex) {
         	if (isRecognitionException(ex))
         	{
         		tokens.reset();
-        		setLLStarMode(getParser());
+        		setLLStarMode(getAntlrParser());
         		tree = thisParser.statements();
         	}
         

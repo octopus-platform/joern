@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import output.OutputModule;
+
 public class SourceFileWalker
 {
 	
@@ -29,8 +31,8 @@ public class SourceFileWalker
 		if(!file.exists())
 			return false;
 		
-		// TODO: add more checks. Do we have sufficient permissions
-		// for access?
+		// TODO: add more checks, for example, do we have sufficient
+		// permissions for access?
 		
 		return true;
 	}
@@ -41,7 +43,7 @@ public class SourceFileWalker
 		Files.walkFileTree(dir, sourceFileWalkerImpl);
 	}
 	
-	public void addListener(SourceFileListener listener)
+	public void addListener(OutputModule listener)
 	{
 		sourceFileWalkerImpl.addListener(listener);
 	}

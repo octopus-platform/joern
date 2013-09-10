@@ -8,10 +8,10 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import antlr.ModuleLexer;
 import antlr.ModuleParser;
 
-public class ModuleParserDriver extends CommonParserDriver
+public class ANTLRModuleParserDriver extends ANTLRParserDriver
 {	
 	
-	public ModuleParserDriver()
+	public ANTLRModuleParserDriver()
 	{
 		super();
 		setListener(new ModuleParserTreeListener(this));

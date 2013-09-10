@@ -14,7 +14,7 @@ public class Neo4JASTWalker extends ASTWalker
 {
 
 	Neo4JASTNodeVisitor neo4jASTVisitor = new Neo4JASTNodeVisitor();
-	Neo4JImportListener importListener;
+	Neo4JOutputModule importListener;
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
@@ -35,7 +35,7 @@ public class Neo4JASTWalker extends ASTWalker
 	@Override public void begin(){}
 	@Override public void end(){}
 
-	public void setImportListener(Neo4JImportListener anImportListener)
+	public void setImportListener(Neo4JOutputModule anImportListener)
 	{
 		importListener = anImportListener;
 	}
