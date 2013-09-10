@@ -10,17 +10,17 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
 
-class DirectoryWalker extends SimpleFileVisitor<Path>
+class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 {
 	private final PathMatcher matcher;
-	private List<DirectoryListener> listeners = new LinkedList<DirectoryListener>();
+	private List<SourceFileListener> listeners = new LinkedList<SourceFileListener>();
 	
-    DirectoryWalker(String pattern)
+    SourceFileWalkerImpl(String pattern)
     {
         matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
     }
 
-    public void addListener(DirectoryListener listener)
+    public void addListener(SourceFileListener listener)
     {
     	listeners.add(listener);    
     }
@@ -34,7 +34,7 @@ class DirectoryWalker extends SimpleFileVisitor<Path>
     
     private void notifyListenersOfDirEntry(Path dir)
     {
-    	for(DirectoryListener listener : listeners){
+    	for(SourceFileListener listener : listeners){
 			listener.preVisitDirectory(dir);
 		}
 	}
@@ -47,7 +47,7 @@ class DirectoryWalker extends SimpleFileVisitor<Path>
     
 	private void notifyListenersOfDirExit(Path dir)
 	{
-		for(DirectoryListener listener : listeners){
+		for(SourceFileListener listener : listeners){
 			listener.postVisitDirectory(dir);
 		}
 	}
@@ -65,7 +65,7 @@ class DirectoryWalker extends SimpleFileVisitor<Path>
 
 	private void notifyListenersOfFile(Path filename)
 	{
-		for(DirectoryListener listener : listeners){
+		for(SourceFileListener listener : listeners){
 			listener.visitFile(filename);
 		}
 	}

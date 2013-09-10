@@ -4,9 +4,9 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-import tools.index.DirectoryListener;
+import tools.index.SourceFileListener;
 
-public class FilenameAggregator extends DirectoryListener {
+public class FilenameAggregator extends SourceFileListener {
 
 	public List<String> filenames = new LinkedList<String>();
 	

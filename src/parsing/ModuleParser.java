@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Observer;
 
 
-public class Parser
+public class ModuleParser
 {
 	ModuleParserDriver parser = new ModuleParserDriver();
 	

@@ -2,18 +2,20 @@ package output.neo4j;
 
 import java.nio.file.Path;
 
+import output.neo4j.BatchInserter.Neo4JBatchInserter;
 import output.neo4j.importers.FileImporter;
 import output.neo4j.nodes.FileDatabaseNode;
-import parsing.Parser;
-import tools.index.DirectoryListener;
+import parsing.ModuleParser;
+import tools.index.SourceFileListener;
 
-public class Neo4JImportListener extends DirectoryListener {
+public class Neo4JImportListener extends SourceFileListener {
 
-	Parser parser = new Parser();
+	ModuleParser parser = new ModuleParser();
 	FileDatabaseNode currentFileNode;
-	
 	Neo4JASTWalker neo4JASTWalker = new Neo4JASTWalker();
 	FileImporter dirImporter = new FileImporter();
+	
+	private static final String indexDirectory = ".joernIndex/";
 	
 	public Neo4JImportListener()
 	{
@@ -21,6 +23,12 @@ public class Neo4JImportListener extends DirectoryListener {
 		parser.addObserver(neo4JASTWalker);
 	}
 
+	public void initialize()
+	{
+		Neo4JBatchInserter.setIndexDirectoryName(indexDirectory);
+		Neo4JBatchInserter.openDatabase();
+	}
+	
 	@Override
 	public void preVisitDirectory(Path dir)
 	{
@@ -43,6 +51,11 @@ public class Neo4JImportListener extends DirectoryListener {
 	public FileDatabaseNode getCurrentFileNode()
 	{
 		return currentFileNode;
+	}
+
+	public void shutdown()
+	{
+		Neo4JBatchInserter.closeDatabase();	
 	}
 	
 }

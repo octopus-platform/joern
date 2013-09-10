@@ -2,55 +2,62 @@ package tools.index;
 
 import java.io.IOException;
 
+import org.apache.commons.cli.ParseException;
+
 import output.neo4j.Neo4JImportListener;
-import output.neo4j.BatchInserter.Neo4JBatchInserter;
+
 
 public class IndexMain {
 
 	private static CommandLineInterface cmd = new CommandLineInterface();
-	private static CodebaseWalker codebaseWalker = new CodebaseWalker();
-	private static Neo4JImportListener listener = new Neo4JImportListener();
-	
-	private static void usage()
-	{
-		cmd.outputHelp();
-	}
+	private static SourceFileWalker sourceFileWalker = new SourceFileWalker();
+	private static Neo4JImportListener neo4jImportListener = new Neo4JImportListener();
 	
     public static void main(String[] args)
 	{
-    	String[] userSpecifiedFilenames = parseCommandLine(args);
-		initializeDatabase();
-    	
-    	codebaseWalker.addListener(listener);
+    	parseCommandLine(args);
+    	String[] fileAndDirNames = getFileAndDirNamesFromCommandLine();
+    	setupNeo4JListener();
     	
     	try{
-    		codebaseWalker.walk(userSpecifiedFilenames);
+    		sourceFileWalker.walk(fileAndDirNames);
 	    }catch(IOException err){
 			System.err.println("I/O-Error: " + err.getMessage()); 
 	    }finally{
-	    	shutdownDatabase();
+	    	shutdownNeo4JListener();
 	    }
 	}
 
-	private static void initializeDatabase()
+	private static void parseCommandLine(String [] args)
 	{
-		Neo4JBatchInserter.setIndexDirectoryName(".joernIndex/");
-		Neo4JBatchInserter.openDatabase();
+		try{
+			cmd.parseCommandLine(args);
+		} catch(RuntimeException | ParseException ex){
+			printHelpAndTerminate(ex);
+		}
 	}
 
-	private static void shutdownDatabase()
+	private static void printHelpAndTerminate(Exception ex)
 	{
-		Neo4JBatchInserter.closeDatabase();
+		System.err.println(ex.getMessage());
+		cmd.outputHelp();
+		System.exit(1);
 	}
 	
-	private static String[] parseCommandLine(String[] args) {
-		cmd.parseCommandLine(args);
-		String[] userSpecifiedFilenames = cmd.getFilenames();
-		if(userSpecifiedFilenames.length == 0){
-			usage();
-			System.exit(1);
-		}
-		return userSpecifiedFilenames;
+	private static String[] getFileAndDirNamesFromCommandLine()
+	{
+		return cmd.getFilenames();
+	}
+
+	private static void setupNeo4JListener()
+    {
+		neo4jImportListener.initialize(); 	
+    	sourceFileWalker.addListener(neo4jImportListener);
+    }
+	
+    private static void shutdownNeo4JListener()
+    {
+    	neo4jImportListener.shutdown();
 	}
 
 }

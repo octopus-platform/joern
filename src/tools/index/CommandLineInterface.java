@@ -31,22 +31,22 @@ public class CommandLineInterface
 		
 	}
 	
+	public void parseCommandLine(String [] args) throws ParseException
+	{
+		if(args.length == 0)
+			throw new RuntimeException("At least one file needs to be supplied for parsing.");
+		
+		cmd = parser.parse(options, args);
+		filenames = cmd.getArgs();
+	
+	}
+	
 	public void outputHelp()
 	{	
 		formater.printHelp("joern [SOURCE_DIR1] ...", options);
 	}
 
-	public void parseCommandLine(String [] args)
-	{
-		try {
-			cmd = parser.parse(options, args);
-			filenames = cmd.getArgs();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
-	}
 	
 }
 

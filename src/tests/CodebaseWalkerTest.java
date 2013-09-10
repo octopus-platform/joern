@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import tools.index.CodebaseWalker;
+import tools.index.SourceFileWalker;
 
 
 public class CodebaseWalkerTest {
@@ -17,13 +17,13 @@ public class CodebaseWalkerTest {
 	{
 		String [] args = {"src/tests/samples/"};
 		
-		CodebaseWalker provider = new CodebaseWalker();
+		SourceFileWalker provider = new SourceFileWalker();
 		
 		try {
 			String expected = "[src/tests/samples/test.c, src/tests/samples/subdir/test.c, src/tests/samples/tiff.cpp]";
 			FilenameAggregator listener = new FilenameAggregator();
 			provider.addListener(listener);
-			provider.walkUserSpecifiedFiles(args);
+			provider.walk(args);
 						
 			assertTrue(expected.equals(listener.filenames.toString()));
 		} catch (IOException e) {
