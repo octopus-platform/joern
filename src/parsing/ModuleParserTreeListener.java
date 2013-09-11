@@ -79,6 +79,7 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 		FunctionParser parser = new FunctionParser();
 		
 		try{
+			// System.out.println(ctx.function_name().getText());
 			parser.parseAndWalkString(text);
 		}catch(RuntimeException ex){
 			System.err.println("Error parsing function " +

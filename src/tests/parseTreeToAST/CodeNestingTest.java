@@ -17,6 +17,7 @@ import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.Condition;
 import astnodes.statements.DoStatement;
+import astnodes.statements.ElseStatement;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
@@ -51,21 +52,6 @@ public class CodeNestingTest {
 		assertTrue(item.getStatements().size() == 2);
 	}
 	
-	@Test
-	public void ifBlockCompound()
-	{
-		String input = "if(foo){}";
-		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		assertTrue(item.getStatements().size() == 1);
-	}
-	
-	@Test
-	public void ifBlockNoCompound()
-	{
-		String input = "if(foo) bar();";
-		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		assertTrue(item.getStatements().size() == 1);
-	}
 	
 	@Test
 	public void NestedIfndefs()
@@ -74,26 +60,7 @@ public class CodeNestingTest {
 		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(item.getStatements().size() == 0);
 	}
-	
-	@Test
-	public void nestedIfBlocksNoCompound()
-	{
-		String input = "if(foo) if(fooAgain) bar();";
-		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		assertTrue(item.getStatements().size() == 1);
-	}
-	
-	@Test
-	public void condition()
-	{
-		String input = "if(foo){}";
-		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
-		Expression condition = starter.getCondition().getExpression();
-		System.out.println(condition.getEscapedCodeStr());
-		assertTrue(condition.getEscapedCodeStr().equals("foo"));
-	}
-	
+			
 	@Test
 	public void assignmentInCondition()
 	{
@@ -104,69 +71,16 @@ public class CodeNestingTest {
 		System.out.println(condition.getEscapedCodeStr());
 		assertTrue(condition.getEscapedCodeStr().equals("foo = bar"));
 	}
-		
-	@Test
-	public void ifElse()
-	{
-		String input = "if(foo) lr->f = stdin; else lr->f = fopen(pathname, \"r\");";
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
-		
-		System.out.println(contentItem.getStatements().size());
-		
-		assertTrue(ifItem.getElseNode() != null);
-		assertTrue(ifItem.getElseNode().getChild(0) != null);
-		assertTrue(contentItem.getStatements().size() == 1);
-	}
 	
 	@Test
-	public void ifElseChain()
-	{
-		String input = "if(foo1) bar1(); else if(foo2) bar2(); else if(foo3) bar3();";
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
-		for(int i = 0; i < 2; i++){
-			assertTrue(ifItem.getChildCount() == 3);
-			assertTrue(ifItem.getElseNode() != null);
-			ifItem = (IfStatement) ifItem.getElseNode().getStatement() ;
-		}		
-	}
-	
-	@Test
-	public void ifInElse()
-	{
-		String input = "if (foo1){} else { if (foo2) { foo(); } }";
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
-		
-		assertTrue(ifItem.getChildCount() == 3);
-	}
-	
-	@Test
-	public void ifFoo()
+	public void whileInElse()
 	{
 		String input = "if(foo){bar();}else{ while(foo1){ if(bar2){} } }";
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
-		
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);	
 	}
 	
 	
-	@Test
-	public void testIf()
-	{
-		String input = "if(a == b) foo();";
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
-		Condition condition = ifItem.getCondition();
-		Expression expression = condition.getExpression();
-		ASTNode firstChild = expression.getChild(0);
-		assertTrue(firstChild.getChildCount() == 0);
-	}
-
 	@Test
 	public void testFor()
 	{

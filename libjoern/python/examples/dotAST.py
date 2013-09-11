@@ -18,16 +18,16 @@ def normalizeCode(code):
 j = JoernSteps()
 functionName = sys.argv[1]
 
-cmd = " getFunctionByName('%s').functionToASTNodes().transform{ [it.id, it.code, it.out('IS_AST_PARENT').id] } " % (functionName)
+cmd = " getFunctionByName('%s').functionToASTNodes().transform{ [it.id, it.type, it.code, it.out('IS_AST_PARENT').id] } " % (functionName)
 
 y = j.executeGremlinCmd(cmd)
 
 print 'digraph myGraph{'
 
-for (bbId, bbString, links) in y:
-    print 'node%s [label="%s"]' % (bbId, normalizeCode(bbString))
+for (bbId, bbType, bbString, links) in y:
+    print 'node%s [label="%s"]' % (bbId, normalizeCode(bbType) + ': ' + normalizeCode(bbString))
 
-for (bbId, bbString, links) in y:
+for (bbId, bbType, bbString, links) in y:
     for l in links:
         print '"node%s":s->"node%s":n;' % (bbId, l) 
 
