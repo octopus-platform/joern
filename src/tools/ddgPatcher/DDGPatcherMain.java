@@ -12,8 +12,8 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.ReadWriteDB.Neo4JDBInterface;
-import output.neo4j.ReadWriteDB.QueryUtils;
+import output.neo4j.readWriteDB.Neo4JDBInterface;
+import output.neo4j.readWriteDB.QueryUtils;
 import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
 import tools.ddg.DDGDifference;

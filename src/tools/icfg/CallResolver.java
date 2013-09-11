@@ -4,7 +4,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
-import output.neo4j.BatchInserter.Neo4JBatchInserter;
+import output.neo4j.batchInserter.Neo4JBatchInserter;
 
 public class CallResolver {
 	

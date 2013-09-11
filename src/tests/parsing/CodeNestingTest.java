@@ -29,7 +29,7 @@ public class CodeNestingTest {
 	public void testLineNumbers()
 	{
 		String input = "if(foo)\nbar();\nfoo()\n";
-		StatementsContext ctx = (StatementsContext) FineFuncContentTestUtil.parse(input);
+		StatementsContext ctx = (StatementsContext) FunctionContentTestUtil.parse(input);
 		assert(ctx.start.getLine() == 1);
 		assert(ctx.stop.getLine() == 3);
 	}
@@ -39,7 +39,7 @@ public class CodeNestingTest {
 	public void emptyContent()
 	{
 		String input = "";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assert(item.getStatements().size() == 0);
 	}
 	
@@ -47,7 +47,7 @@ public class CodeNestingTest {
 	public void compoundWithoutBlockStart()
 	{
 		String input = "bar(); {}";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(item.getStatements().size() == 2);
 	}
 	
@@ -55,7 +55,7 @@ public class CodeNestingTest {
 	public void ifBlockCompound()
 	{
 		String input = "if(foo){}";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(item.getStatements().size() == 1);
 	}
 	
@@ -63,7 +63,7 @@ public class CodeNestingTest {
 	public void ifBlockNoCompound()
 	{
 		String input = "if(foo) bar();";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(item.getStatements().size() == 1);
 	}
 	
@@ -71,7 +71,7 @@ public class CodeNestingTest {
 	public void NestedIfndefs()
 	{
 		String input = "#ifdef foo\n#else\n #ifdef foo\n#else\n#endif\n#endif";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(item.getStatements().size() == 0);
 	}
 	
@@ -79,7 +79,7 @@ public class CodeNestingTest {
 	public void nestedIfBlocksNoCompound()
 	{
 		String input = "if(foo) if(fooAgain) bar();";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(item.getStatements().size() == 1);
 	}
 	
@@ -87,7 +87,7 @@ public class CodeNestingTest {
 	public void condition()
 	{
 		String input = "if(foo){}";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
 		Expression condition = starter.getCondition().getExpression();
 		System.out.println(condition.getEscapedCodeStr());
@@ -98,7 +98,7 @@ public class CodeNestingTest {
 	public void assignmentInCondition()
 	{
 		String input = "if(foo = bar){}";
-		CompoundStatement item = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
 		AssignmentExpr condition = (AssignmentExpr) starter.getCondition().getExpression();
 		System.out.println(condition.getEscapedCodeStr());
@@ -109,7 +109,7 @@ public class CodeNestingTest {
 	public void ifElse()
 	{
 		String input = "if(foo) lr->f = stdin; else lr->f = fopen(pathname, \"r\");";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
 		
 		System.out.println(contentItem.getStatements().size());
@@ -123,7 +123,7 @@ public class CodeNestingTest {
 	public void ifElseChain()
 	{
 		String input = "if(foo1) bar1(); else if(foo2) bar2(); else if(foo3) bar3();";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		System.out.println(contentItem.getChildCount());
 	}
 	
@@ -132,7 +132,7 @@ public class CodeNestingTest {
 	public void testIf()
 	{
 		String input = "if(a == b) foo();";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
 		Condition condition = ifItem.getCondition();
 		Expression expression = condition.getExpression();
@@ -144,7 +144,7 @@ public class CodeNestingTest {
 	public void testFor()
 	{
 		String input = "for(i = 0; i < 10; i++){}";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		ForStatement forItem = (ForStatement) contentItem.getStatements().get(0);
 		
 		String condExprString = forItem.getCondition().getExpression().getEscapedCodeStr();
@@ -156,7 +156,7 @@ public class CodeNestingTest {
 	public void testDeclInFor()
 	{
 		String input = "for(int i = 0; i < 10; i++){}";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		ForStatement forItem = (ForStatement) contentItem.getStatements().get(0);
 		
 		System.out.println(forItem.getChildCount());
@@ -171,7 +171,7 @@ public class CodeNestingTest {
 	public void testDoWhile()
 	{
 		String input = "do{ foo(); }while(bar);";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
 		
 		String condExprString = doItem.getCondition().getExpression().getEscapedCodeStr();
@@ -184,7 +184,7 @@ public class CodeNestingTest {
 	public void testVarDeclName()
 	{
 		String input = "int x = 2*y;";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
 		assertTrue(decl.getName().getEscapedCodeStr().equals("x"));
@@ -194,7 +194,7 @@ public class CodeNestingTest {
 	public void testVarDeclType()
 	{
 		String input = "int x = 2*y;";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
 		System.out.println(decl.getType().getEscapedCodeStr());
@@ -205,7 +205,7 @@ public class CodeNestingTest {
 	public void testAssignment()
 	{
 		String input = "const char *m = \"Usage: untar [-tvx] [-f file] [file]\\n\";";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		IdentifierDeclStatement declStatement = (IdentifierDeclStatement) contentItem.getStatements().get(0);	
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);	
 		
@@ -218,7 +218,7 @@ public class CodeNestingTest {
 	public void testDeclRightAfterStruct()
 	{
 		String input = "struct foo{ int x; } foo;";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(contentItem.getChildCount() == 1);
 		ClassDefStatement classDef = (ClassDefStatement) contentItem.getChild(0);
 		assertTrue(classDef.getChildCount() == 1);
@@ -230,7 +230,7 @@ public class CodeNestingTest {
 	public void testCall()
 	{
 		String input = "foo(x);";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
@@ -242,7 +242,7 @@ public class CodeNestingTest {
 	public void testCallWithTwoArguments()
 	{
 		String input = "foo(x,y);";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
@@ -253,7 +253,7 @@ public class CodeNestingTest {
 	{
 		// TODO: implement content-parsing for classes defined inside functions
 		String input = "struct foo{ int x; } foo;";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		assertTrue(contentItem.getChildCount() == 1);
 		ClassDefStatement classDef = (ClassDefStatement) contentItem.getChild(0);
 		assertTrue(classDef.content.getChildCount() == 1);
@@ -266,7 +266,7 @@ public class CodeNestingTest {
 	public void testPreElseSkipping()
 	{
 		String input = "#if foo\n bar(); #else\n foo(); foo(); #endif";
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		System.out.println(contentItem.getStatements().size());
 		assertTrue(contentItem.getStatements().size() == 1);
 	}

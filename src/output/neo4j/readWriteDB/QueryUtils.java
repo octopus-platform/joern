@@ -1,4 +1,4 @@
-package output.neo4j.ReadWriteDB;
+package output.neo4j.readWriteDB;
 
 import java.util.LinkedList;
 import java.util.List;

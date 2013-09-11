@@ -4,9 +4,9 @@ import java.nio.file.Path;
 
 import output.OutputModule;
 import parsing.ModuleParser;
+import output.neo4j.batchInserter.Neo4JBatchInserter;
 import output.neo4j.importers.DirectoryTreeImporter;
 import output.neo4j.nodes.FileDatabaseNode;
-import output.neo4j.BatchInserter.Neo4JBatchInserter;
 
 
 public class Neo4JOutputModule extends OutputModule

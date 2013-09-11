@@ -1,4 +1,4 @@
-package output.neo4j.BatchInserter;
+package output.neo4j.batchInserter;
 
 import java.util.LinkedList;
 import java.util.List;

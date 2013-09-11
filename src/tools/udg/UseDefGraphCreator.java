@@ -5,7 +5,7 @@ import java.util.Stack;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
-import output.neo4j.BatchInserter.QueryUtils;
+import output.neo4j.batchInserter.QueryUtils;
 
 
 public class UseDefGraphCreator

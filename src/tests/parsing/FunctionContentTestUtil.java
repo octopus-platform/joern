@@ -10,7 +10,7 @@ import parsing.TokenSubStream;
 import antlr.FunctionLexer;
 import astnodes.ASTNode;
 
-public class FineFuncContentTestUtil {
+public class FunctionContentTestUtil {
 
 	
 	public static ASTNode parseAndWalk(String input)

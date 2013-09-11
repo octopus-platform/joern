@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.BatchInserter.QueryUtils;
+import output.neo4j.batchInserter.QueryUtils;
 
 public class BatchInserterFactory extends DefUseCFGFactory{
 

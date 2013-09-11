@@ -1,4 +1,4 @@
-package tests.antlr;
+package tests.antlrParsers.moduleParser;
 
 import static org.junit.Assert.assertTrue;
 
@@ -10,7 +10,7 @@ import antlr.ModuleLexer;
 import antlr.ModuleParser;
 import antlr.ModuleParser.Class_defContext;
 
-public class ModuleClassParsingTest {
+public class ClassDeclarationTest {
 
 	private ModuleParser createParser(String input)
 	{

@@ -9,7 +9,7 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
-import tests.parsing.FineFuncContentTestUtil;
+import tests.parsing.FunctionContentTestUtil;
 import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.ExpressionStatement;
@@ -31,7 +31,7 @@ public class CFGCreatorTest
 	
 	public CFG getCFGForCode(String input)
 	{
-		CompoundStatement contentItem = (CompoundStatement) FineFuncContentTestUtil.parseAndWalk(input);
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
 		return converter.convertCompoundStatement(contentItem);
 	}
 	
