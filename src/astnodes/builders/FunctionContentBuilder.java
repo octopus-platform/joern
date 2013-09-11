@@ -112,105 +112,20 @@ import astnodes.statements.WhileStatement;
 public class FunctionContentBuilder extends ASTNodeBuilder
 {
 	private Stack<ASTNode> itemStack = new Stack<ASTNode>();
+	private ShadowStack shadowStack = new ShadowStack(itemStack);
 	CompoundStatement rootItem;
-
-	Stack<ASTNode> shadowStack = new Stack<ASTNode>();
-
 
 	private void itemStackPush(ASTNode statementItem)
 	{
-		if(statementItem instanceof IfStatement || statementItem instanceof DoStatement){
-			shadowStack.push(statementItem);
-
-			ASTNode parentCompound = null;
-			for(int i = itemStack.size() -1; i >= 0; i--){
-				// walk stack from top to bottom
-				if(itemStack.get(i) instanceof CompoundStatement){
-					parentCompound = itemStack.get(i);
-					break;
-				}
-			}
-			
-			shadowStack.push(parentCompound);
-		}
+		shadowStack.push(statementItem);
 		itemStack.push(statementItem);
 	}
 	
 	private ASTNode itemStackPop()
 	{
-		ASTNode topOfItemStack = itemStack.peek();
-		
-		if(shadowStack.size() > 0 && shadowStack.peek() == topOfItemStack){
-			shadowStack.pop();
-			shadowStack.pop(); // scope of the block hosting the if closed
-		}
-			
+		shadowStack.pop();
 		return itemStack.pop();
 	}
-
-	private ASTNode getIfOrDoInElseCaseFromShadowStack()
-	{
-		ASTNode topScope = shadowStack.pop(); // scope item
-		ASTNode topNode = shadowStack.pop();
-	
-		shadowStack.pop();
-		ASTNode retval = shadowStack.pop();
-		shadowStack.push(topNode);
-		shadowStack.push(topScope);
-		return retval;
-	}
-	
-	
-	private IfStatement getIfFromShadowStack()
-	{
-		IfStatement retval;
-		ASTNode first = null;
-		ASTNode second = null;
-		
-		try{
-			first = shadowStack.pop();
-			second = shadowStack.pop();
-			retval = (IfStatement) second;
-		}catch(EmptyStackException ex){
-			return null;
-		}catch(ClassCastException ex){
-			shadowStack.push(second);
-			shadowStack.push(first);
-			return null;
-		}
-		
-		return retval;
-	}
-	
-	private DoStatement getDoFromShadowStack()
-	{
-		DoStatement retval;
-		ASTNode first = null;
-		ASTNode second = null;
-		
-		try{
-			first = shadowStack.pop();
-			second = shadowStack.pop();
-			retval = (DoStatement) second;
-		
-			if(itemStack.contains(retval)){
-				shadowStack.push(second);
-				shadowStack.push(first);
-				return null;
-			}
-		
-		}catch(EmptyStackException ex){
-			return null;
-		}catch(ClassCastException ex){
-			shadowStack.push(second);
-			shadowStack.push(first);
-			return null;
-		}
-		
-		return retval;
-	}
-	
-	
 	
 	// exitStatements is called when the entire
 	// function-content has been walked
@@ -856,7 +771,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 						BlockStarter elseItem = (BlockStarter) itemStackPop();
 						elseItem.addChild(bItem);
 
-						IfStatement lastIf = (IfStatement) getIfOrDoInElseCaseFromShadowStack();
+						IfStatement lastIf = (IfStatement) shadowStack.getIfInElseCase();;
 						if( lastIf != null){
 							lastIf.setElseNode((ElseStatement) elseItem);
 						}
@@ -869,7 +784,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
 					
-					IfStatement lastIf = (IfStatement) getIfFromShadowStack();
+					IfStatement lastIf = (IfStatement) shadowStack.getIf();
 					if(lastIf != null)
 						lastIf.setElseNode((ElseStatement) bItem);
 					else
@@ -880,7 +795,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 					// add while statement to the previous do-statement
 					// if that exists. Otherwise, do nothing special.
 					
-					DoStatement lastDo = getDoFromShadowStack();
+					DoStatement lastDo = shadowStack.getDo();;
 					if(lastDo != null){
 						lastDo.addChild( ((WhileStatement) bItem).getCondition() );
 						return;
