@@ -107,20 +107,7 @@ public class CodeNestingTest {
 		
 	}
 	
-	
-	@Test
-	public void testDoWhile()
-	{
-		String input = "do{ foo(); }while(bar);";
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
-		
-		String condExprString = doItem.getCondition().getExpression().getEscapedCodeStr();
-		System.out.println(condExprString);
-		assertTrue(condExprString.equals("bar"));
-		
-	}
-		
+			
 	@Test
 	public void testVarDeclName()
 	{

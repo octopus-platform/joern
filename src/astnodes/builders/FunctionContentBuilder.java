@@ -192,6 +192,13 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			first = shadowStack.pop();
 			second = shadowStack.pop();
 			retval = (DoStatement) second;
+		
+			if(itemStack.contains(retval)){
+				shadowStack.push(second);
+				shadowStack.push(first);
+				return null;
+			}
+		
 		}catch(EmptyStackException ex){
 			return null;
 		}catch(ClassCastException ex){
