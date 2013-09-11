@@ -1,4 +1,4 @@
-package tests.parsing;
+package tests.parseTreeToAST;
 
 import static org.junit.Assert.assertTrue;
 
@@ -124,9 +124,25 @@ public class CodeNestingTest {
 	{
 		String input = "if(foo1) bar1(); else if(foo2) bar2(); else if(foo3) bar3();";
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		System.out.println(contentItem.getChildCount());
+		
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
+		for(int i = 0; i < 2; i++){
+			assertTrue(ifItem.getChildCount() == 3);
+			assertTrue(ifItem.getElseNode() != null);
+			ifItem = (IfStatement) ifItem.getElseNode().getStatement() ;
+		}		
 	}
 	
+	@Test
+	public void ifInElse()
+	{
+		String input = "if (foo1){} else { if (foo2) { foo(); } }";
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
+		
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
+		
+		assertTrue(ifItem.getChildCount() == 3);
+	}
 	
 	@Test
 	public void testIf()

@@ -1,4 +1,4 @@
-package tests.parsing;
+package tests.parseTreeToAST;
 
 import static org.junit.Assert.assertTrue;
 

@@ -110,11 +110,61 @@ import astnodes.statements.WhileStatement;
 
 public class FunctionContentBuilder extends ASTNodeBuilder
 {
-	Stack<ASTNode> itemStack = new Stack<ASTNode>();
+	private Stack<ASTNode> itemStack = new Stack<ASTNode>();
 	CompoundStatement rootItem;
-	IfStatement lastIf;
-	DoStatement lastDo;
 
+	Stack<ASTNode> shadowStack = new Stack<ASTNode>();
+
+
+	private void itemStackPush(ASTNode statementItem)
+	{
+		if(statementItem instanceof IfStatement || statementItem instanceof DoStatement){
+			shadowStack.push(statementItem);
+
+			ASTNode parentCompound = null;
+			for(int i = itemStack.size() -1; i >= 0; i--){
+				// walk stack from top to bottom
+				if(itemStack.get(i) instanceof CompoundStatement){
+					parentCompound = itemStack.get(i);
+					break;
+				}
+			}
+			
+			shadowStack.push(parentCompound);
+		}
+		itemStack.push(statementItem);
+	}
+	
+	private ASTNode itemStackPop()
+	{
+		ASTNode topOfItemStack = itemStack.peek();
+		
+		if(shadowStack.size() > 0 && shadowStack.peek() == topOfItemStack){
+			shadowStack.pop();
+			shadowStack.pop(); // scope of the block hosting the if closed
+		}
+			
+		return itemStack.pop();
+	}
+
+	private ASTNode getIfOrDoInElseCaseFromShadowStack()
+	{
+		ASTNode topScope = shadowStack.pop(); // scope item
+		ASTNode topNode = shadowStack.pop();
+	
+		shadowStack.pop();
+		ASTNode retval = shadowStack.pop();
+		shadowStack.push(topNode);
+		shadowStack.push(topScope);
+		return retval;
+	}
+	
+	private ASTNode getIfOrDoFromShadowStack()
+	{
+		shadowStack.pop();
+		return shadowStack.pop();
+	}
+	
 	// exitStatements is called when the entire
 	// function-content has been walked
 
@@ -122,9 +172,9 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		if(itemStack.size() != 1)
 			throw new RuntimeException("Broken stack while parsing");
-
+		
 	}
-
+	
 	// For all statements, begin by pushing a CodeItem
 	// onto the stack. Once we have implemented
 	// handling for all statement types, this can
@@ -134,7 +184,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		ASTNode statementItem = new Statement();
 		statementItem.initializeFromContext(ctx);
-		itemStack.push(statementItem);
+		itemStackPush(statementItem);
 	}
 
 	// Mapping of grammar-rules to CodeItems.
@@ -209,9 +259,9 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	private void closeCompoundStatement()
 	{
-		itemStack.pop(); // remove 'CloseBlock'
-
-		CompoundStatement compoundItem = (CompoundStatement) itemStack.pop();
+		itemStackPop(); // remove 'CloseBlock'
+		
+		CompoundStatement compoundItem = (CompoundStatement) itemStackPop();
 		consolidateBlockStarters(compoundItem);		
 	}
 
@@ -220,7 +270,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterExpression(ExprContext ctx)
 	{
 		Expression expression = new Expression();
-		itemStack.push(expression);
+		itemStackPush(expression);
 	}
 
 	public void exitExpression(ExprContext ctx)
@@ -231,7 +281,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterAssignment(Assign_exprContext ctx)
 	{	
 		AssignmentExpr expr = new AssignmentExpr();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitAssignment(Assign_exprContext ctx)
@@ -242,7 +292,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterConditionalExpr(Conditional_expressionContext ctx)
 	{
 		ConditionalExpression expr = new ConditionalExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitConditionalExpr(Conditional_expressionContext ctx)
@@ -253,7 +303,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterOrExpression(Or_expressionContext ctx)
 	{
 		OrExpression expr = new OrExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitrOrExpression(Or_expressionContext ctx)
@@ -264,7 +314,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterAndExpression(And_expressionContext ctx)
 	{
 		AndExpression expr = new AndExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitAndExpression(And_expressionContext ctx)
@@ -275,7 +325,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInclusiveOrExpression(Inclusive_or_expressionContext ctx)
 	{
 		InclusiveOrExpression expr = new InclusiveOrExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitInclusiveOrExpression(Inclusive_or_expressionContext ctx)
@@ -286,7 +336,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterExclusiveOrExpression(Exclusive_or_expressionContext ctx)
 	{
 		ExclusiveOrExpression expr = new ExclusiveOrExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitExclusiveOrExpression(Exclusive_or_expressionContext ctx)
@@ -297,13 +347,13 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterBitAndExpression(Bit_and_expressionContext ctx)
 	{
 		BitAndExpression expr = new BitAndExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void enterEqualityExpression(Equality_expressionContext ctx)
 	{
 		EqualityExpression expr = new EqualityExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitEqualityExpression(Equality_expressionContext ctx)
@@ -319,7 +369,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterRelationalExpression(Relational_expressionContext ctx)
 	{
 		RelationalExpression expr = new RelationalExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitRelationalExpression(Relational_expressionContext ctx)
@@ -330,7 +380,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterShiftExpression(Shift_expressionContext ctx)
 	{
 		ShiftExpression expr = new ShiftExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitShiftExpression(Shift_expressionContext ctx)
@@ -341,7 +391,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterAdditiveExpression(Additive_expressionContext ctx)
 	{
 		AdditiveExpression expr = new AdditiveExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitAdditiveExpression(Additive_expressionContext ctx)
@@ -352,7 +402,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterMultiplicativeExpression(Multiplicative_expressionContext ctx)
 	{
 		MultiplicativeExpression expr = new MultiplicativeExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitMultiplicativeExpression(Multiplicative_expressionContext ctx)
@@ -363,7 +413,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCastExpression(Cast_expressionContext ctx)
 	{
 		CastExpression expr = new CastExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitCastExpression(Cast_expressionContext ctx)
@@ -374,7 +424,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCast_target(Cast_targetContext ctx)
 	{
 		CastTarget expr = new CastTarget();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitCast_target(Cast_targetContext ctx)
@@ -385,7 +435,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterFuncCall(FuncCallContext ctx)
 	{
 		CallExpression expr = new CallExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitFuncCall(FuncCallContext ctx)
@@ -396,7 +446,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterArgumentList(Function_argument_listContext ctx)
 	{
 		ArgumentList expr = new ArgumentList();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitArgumentList(Function_argument_listContext ctx)
@@ -407,12 +457,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCondition(ConditionContext ctx)
 	{
 		Condition expr = new Condition();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitCondition(ConditionContext ctx)
 	{	
-		Condition cond = (Condition) itemStack.pop();
+		Condition cond = (Condition) itemStackPop();
 		cond.initializeFromContext(ctx);
 		addItemToParent(cond);
 	}
@@ -433,12 +483,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitDeclSimple(InitDeclSimpleContext ctx)
 	{				
 		ASTNode identifierDecl = buildDeclarator(ctx);
-		itemStack.push(identifierDecl);	
+		itemStackPush(identifierDecl);	
 	}
 
 	public void exitInitDeclSimple()
 	{
-		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
+		IdentifierDecl identifierDecl = (IdentifierDecl) itemStackPop();
 		ASTNode stmt =  itemStack.peek();
 		stmt.addChild(identifierDecl);
 	}
@@ -446,12 +496,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitDeclWithAssign(InitDeclWithAssignContext ctx)
 	{
 		IdentifierDecl identifierDecl = buildDeclarator(ctx);				
-		itemStack.push(identifierDecl);	
+		itemStackPush(identifierDecl);	
 	}
 
 	public void exitInitDeclWithAssign(InitDeclWithAssignContext ctx)
 	{
-		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
+		IdentifierDecl identifierDecl = (IdentifierDecl) itemStackPop();
 
 		Expression lastChild = (Expression) identifierDecl.popLastChild();
 		AssignmentExpr assign = new AssignmentExpr();
@@ -473,12 +523,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitDeclWithCall(InitDeclWithCallContext ctx)
 	{
 		ASTNode identifierDecl = buildDeclarator(ctx);
-		itemStack.push(identifierDecl);	
+		itemStackPush(identifierDecl);	
 	}
 
 	public void exitInitDeclWithCall()
 	{
-		IdentifierDecl identifierDecl = (IdentifierDecl) itemStack.pop();
+		IdentifierDecl identifierDecl = (IdentifierDecl) itemStackPop();
 		ASTNode stmt =  itemStack.peek();
 		stmt.addChild(identifierDecl);
 	}
@@ -510,7 +560,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterIncDec(Inc_decContext ctx)
 	{
 		IncDec expr = new IncDec();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitIncDec(Inc_decContext ctx)
@@ -521,7 +571,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterArrayIndexing(ArrayIndexingContext ctx)
 	{
 		ArrayIndexing expr = new ArrayIndexing();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitArrayIndexing(ArrayIndexingContext ctx)
@@ -532,7 +582,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterMemberAccess(MemberAccessContext ctx)
 	{
 		MemberAccess expr = new MemberAccess();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitMemberAccess(MemberAccessContext ctx)
@@ -543,7 +593,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterIncDecOp(IncDecOpContext ctx)
 	{
 		IncDecOp expr = new IncDecOp();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitIncDecOp(IncDecOpContext ctx)
@@ -554,7 +604,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterPrimary(Primary_expressionContext ctx)
 	{
 		PrimaryExpression expr = new PrimaryExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitPrimary(Primary_expressionContext ctx)
@@ -565,7 +615,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterUnaryExpression(Unary_expressionContext ctx)
 	{
 		UnaryExpression expr = new UnaryExpression();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitUnaryExpression(Unary_expressionContext ctx)
@@ -576,7 +626,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterIdentifier(IdentifierContext ctx)
 	{
 		Identifier expr = new Identifier();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitIdentifier(IdentifierContext ctx)
@@ -587,7 +637,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterArgument(Function_argumentContext ctx)
 	{
 		Argument expr = new Argument();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitArgument(Function_argumentContext ctx)
@@ -598,7 +648,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitializerList(Initializer_listContext ctx)
 	{
 		InitializerList expr = new InitializerList();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitInitializerList(Initializer_listContext ctx)
@@ -609,7 +659,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterPtrMemberAccess(PtrMemberAccessContext ctx)
 	{
 		PtrMemberAccess expr = new PtrMemberAccess();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitPtrMemberAccess(PtrMemberAccessContext ctx)
@@ -620,12 +670,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitFor(For_init_statementContext ctx)
 	{
 		ForInit expr = new ForInit();
-		itemStack.push(expr);
+		itemStackPush(expr);
 	}
 
 	public void exitInitFor(For_init_statementContext ctx)
 	{
-		ASTNode node = itemStack.pop();
+		ASTNode node = itemStackPop();
 		node.initializeFromContext(ctx);
 		ForStatement forStatement = (ForStatement) itemStack.peek();
 		forStatement.addChild(node);
@@ -667,7 +717,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		item = new CompoundStatement();
 		rootItem = (CompoundStatement) item;
 		item.initializeFromContext(ctx);
-		itemStack.push(rootItem);
+		itemStackPush(rootItem);
 	}
 
 	public void addLocalDecl(IdentifierDecl decl)
@@ -685,7 +735,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		if(itemStack.peek() instanceof Statement)
 			replaceTopOfStack(declStmt);
 		else
-			itemStack.push(declStmt);
+			itemStackPush(declStmt);
 	}
 
 	public void exitDeclByType()
@@ -695,13 +745,13 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	protected void replaceTopOfStack(ASTNode item)
 	{
-		itemStack.pop();
-		itemStack.push(item);
+		itemStackPop();
+		itemStackPush(item);
 	}
 
 	protected void consolidateSubExpression(ParserRuleContext ctx)
 	{
-		Expression expression = (Expression) itemStack.pop();
+		Expression expression = (Expression) itemStackPop();
 		expression.initializeFromContext(ctx);
 		if(!(expression instanceof ExpressionHolder))
 			expression = pullUpOnlyChild(expression);
@@ -724,7 +774,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	protected void consolidate()
 	{
 
-		ASTNode stmt = itemStack.pop();
+		ASTNode stmt = itemStackPop();
 		ASTNode topOfStack = null;
 
 		if(itemStack.size() > 0)
@@ -747,33 +797,32 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		while(true){
 			try{
 				BlockStarter bItem = (BlockStarter) itemStack.peek();
-				bItem = (BlockStarter) itemStack.pop();
+				bItem = (BlockStarter) itemStackPop();
 				bItem.addChild(stmt);
 				stmt = bItem;
 
+				
 				if(bItem instanceof IfStatement){
 
 					if(itemStack.size() > 0 && itemStack.peek() instanceof ElseStatement){
 
-						BlockStarter elseItem = (BlockStarter) itemStack.pop();
+						BlockStarter elseItem = (BlockStarter) itemStackPop();
 						elseItem.addChild(bItem);
 
-						if(lastIf != null)
+						IfStatement lastIf = (IfStatement) getIfOrDoInElseCaseFromShadowStack();
+						if( lastIf != null){
 							lastIf.setElseNode((ElseStatement) elseItem);
-
-						stmt = elseItem;
-						// save a pointer to the last IfStatement
-						lastIf = (IfStatement) bItem;
+						}
+							
+						
 						return;
 					}
-					// save a pointer to the last IfStatement
-					lastIf = (IfStatement) bItem;
-				}else if(bItem instanceof DoStatement){
-					// save a pointer to the last DoStatement
-					lastDo = (DoStatement) bItem;
+					
 				}else if(bItem instanceof ElseStatement){
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
+					
+					IfStatement lastIf = (IfStatement) getIfOrDoFromShadowStack();
 					if(lastIf != null)
 						lastIf.setElseNode((ElseStatement) bItem);
 					lastIf = null;
@@ -781,11 +830,19 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 				}else if(bItem instanceof WhileStatement){
 					// add while statement to the previous do-statement
 					// if that exists. Otherwise, do nothing special.
+					
+					DoStatement lastDo;
+					try{
+						lastDo = (DoStatement) getIfOrDoFromShadowStack();
+					}catch(RuntimeException ex){
+						break;
+					}
+					
 					if(lastDo != null){
 						lastDo.addChild( ((WhileStatement) bItem).getCondition() );
-						lastDo = null;
 						return;
 					}
+					
 				}
 
 			}catch(ClassCastException ex){

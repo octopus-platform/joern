@@ -1,4 +1,4 @@
-package tests.parsing;
+package tests.parseTreeToAST;
 
 import java.util.LinkedList;
 import java.util.List;
