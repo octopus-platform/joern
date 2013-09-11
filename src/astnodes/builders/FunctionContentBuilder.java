@@ -1,5 +1,6 @@
 package astnodes.builders;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -159,11 +160,50 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		return retval;
 	}
 	
-	private ASTNode getIfOrDoFromShadowStack()
+	
+	private IfStatement getIfFromShadowStack()
 	{
-		shadowStack.pop();
-		return shadowStack.pop();
+		IfStatement retval;
+		ASTNode first = null;
+		ASTNode second = null;
+		
+		try{
+			first = shadowStack.pop();
+			second = shadowStack.pop();
+			retval = (IfStatement) second;
+		}catch(EmptyStackException ex){
+			return null;
+		}catch(ClassCastException ex){
+			shadowStack.push(second);
+			shadowStack.push(first);
+			return null;
+		}
+		
+		return retval;
 	}
+	
+	private DoStatement getDoFromShadowStack()
+	{
+		DoStatement retval;
+		ASTNode first = null;
+		ASTNode second = null;
+		
+		try{
+			first = shadowStack.pop();
+			second = shadowStack.pop();
+			retval = (DoStatement) second;
+		}catch(EmptyStackException ex){
+			return null;
+		}catch(ClassCastException ex){
+			shadowStack.push(second);
+			shadowStack.push(first);
+			return null;
+		}
+		
+		return retval;
+	}
+	
+	
 	
 	// exitStatements is called when the entire
 	// function-content has been walked
@@ -822,22 +862,18 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
 					
-					IfStatement lastIf = (IfStatement) getIfOrDoFromShadowStack();
+					IfStatement lastIf = (IfStatement) getIfFromShadowStack();
 					if(lastIf != null)
 						lastIf.setElseNode((ElseStatement) bItem);
-					lastIf = null;
+					else
+						System.err.println("Warning: cannot find if for else");
+					
 					return;
 				}else if(bItem instanceof WhileStatement){
 					// add while statement to the previous do-statement
 					// if that exists. Otherwise, do nothing special.
 					
-					DoStatement lastDo;
-					try{
-						lastDo = (DoStatement) getIfOrDoFromShadowStack();
-					}catch(RuntimeException ex){
-						break;
-					}
-					
+					DoStatement lastDo = getDoFromShadowStack();
 					if(lastDo != null){
 						lastDo.addChild( ((WhileStatement) bItem).getCondition() );
 						return;

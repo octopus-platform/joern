@@ -145,6 +145,17 @@ public class CodeNestingTest {
 	}
 	
 	@Test
+	public void ifFoo()
+	{
+		String input = "if(foo){bar();}else{ while(foo1){ if(bar2){} } }";
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
+		
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
+		
+	}
+	
+	
+	@Test
 	public void testIf()
 	{
 		String input = "if(a == b) foo();";

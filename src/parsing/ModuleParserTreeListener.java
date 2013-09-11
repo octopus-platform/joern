@@ -84,6 +84,8 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 			System.err.println("Error parsing function " +
 							  ctx.function_name().getText()
 							  + ". skipping.");
+		
+			ex.printStackTrace();
 		}
 		return parser.getResult();
 	}
