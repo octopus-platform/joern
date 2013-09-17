@@ -25,11 +25,13 @@ import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
 public class DDGPatcherMain {
 
 	static DefUseCFGFactory factory = new ReadWriteDbFactory();
+	static String source = "copy_from_user";
+	static int taintedArg = 0;
 	
 	public static void main(String[] args)
 	{
-		String source = "copy_from_user";
-		int taintedArg = 0;
+		parseCommandLine(args);
+		
 			
 		Neo4JDBInterface.setIndexDirectoryName(".joernIndex");
 		Neo4JDBInterface.openDatabase();
@@ -55,6 +57,21 @@ public class DDGPatcherMain {
 		}
 				
 		Neo4JDBInterface.closeDatabase();
+	}
+
+	private static void parseCommandLine(String[] args)
+	{
+		if(args.length != 2)
+			printUsageAndExit();
+	
+		source = args[0];
+		taintedArg = Integer.valueOf(args[1]);
+	}
+
+	private static void printUsageAndExit()
+	{
+		System.err.println("usage: <sourceFunction> <argument>");
+		System.exit(0);
 	}
 
 	private static HashMap<Long, SourceCalls> getSourceCallsFromIndex(String source, int taintedArg)
