@@ -105,7 +105,7 @@ Object.metaClass.getParametersOfType = { typeName ->
 */
 
 Object.metaClass.getArgumentNTo = { callee, n ->
-  getCallsTo(callee).calleeToArgumentN(n)
+  getCallsTo(callee).callToArgumentN(n)
 }
 
 /**
@@ -129,7 +129,7 @@ Object.metaClass.getCallsToRegex = { callee ->
 
 Gremlin.defineStep('idToNode', [Vertex,Pipe], { _().transform{ g.v(it) }.scatter() })
 Gremlin.defineStep('queryToNodes', [Vertex,Pipe], { _().transform{ queryNodeIndex(it) }.scatter() })
-Gremlin.defineStep('nameToTypeDecl', [Vertex,Pipe], { _().transform{ getTypeDeclsByName(it) }.scatter() })
+
 Gremlin.defineStep('calleeToFunctions', [Vertex,Pipe], { _().getCalleeFromCall().transform{ getFunctionByName(it.code) }.scatter() })
 
 Gremlin.defineStep('astNodeToFunction', [Vertex,Pipe],{ _().functionId.idToNode() });
@@ -158,19 +158,11 @@ Gremlin.defineStep("localToName", [Vertex,Pipe], { _().out('IS_AST_PARENT').filt
 Gremlin.defineStep("functionToLocalTypes", [Vertex,Pipe], { _().functionToLocals().localToType() } )
 Gremlin.defineStep("functionToLocalNames", [Vertex,Pipe], { _().functionToLocals().localToName() } )
 
-Gremlin.defineStep("functionToLocationRow", [Vertex,Pipe], { _().functionToFile().sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] } })
-
-
-// This one is horrible as we use a regex to parse the struct part from the type and chop off the postfix
-Gremlin.defineStep("structureToName", [Vertex,Pipe], { _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] } } )
-Gremlin.defineStep("structureToMemberDecls", [Vertex,Pipe], { _().out('IS_CLASS_OF').filter{it.type == 'DECL_STMT'}.out() } )
-
 
 Gremlin.defineStep('callToCallee', [Vertex, Pipe], { _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()})
 
 // Watchout: n needs to be a string for now
-Gremlin.defineStep('calleeToArgumentN', [Vertex,Pipe], { n -> _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}.outE('IS_AST_PARENT').filter{ it.n == n }.inV()} )
-
+Gremlin.defineStep('callToArgumentN', [Vertex,Pipe], { n -> _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}.outE('IS_AST_PARENT').filter{ it.n == n }.inV()} )
 
 Gremlin.defineStep('argToCallee', [Vertex,Pipe], { _().in('IS_AST_PARENT').filter{ it.type == 'ArgumentList'}.in('IS_AST_PARENT').outE('IS_AST_PARENT').filter{ it.n == '0' }.inV()} )
 
@@ -201,12 +193,6 @@ Gremlin.defineStep('codeContains', [Vertex,Pipe], { x -> _().filter{ it.code.mat
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> _().filter{ it.code.matches(expr) }} )
 Gremlin.defineStep('filterCodeByCompiledRegex', [Vertex,Pipe], { regex -> _().filter{ regex.matcher(it.code).matches() }} )
 
-
-Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], { lval -> _().sideEffect{ val = it[1];}.transform{ it[0] }.outE('REACHES').filter{ it.var.equals(val)}.inV() })
-
-// A data flow from a basic block to all basic blocks
-// containing some expression
-
 public nodesOfTree(ArrayList vertices)
 {
   def results = []; 
@@ -226,6 +212,9 @@ Gremlin.defineStep('getASTNodes', [Vertex,Pipe], { _().transform{ nodesOfTree([i
 Gremlin.defineStep('functionToASTNodesOfType', [Vertex,Pipe], { t -> _().functionToASTNodes().filter{ it.type == t} } );
 Gremlin.defineStep('functionToIdentifiers', [Vertex,Pipe], { _().functionToASTNodesOfType('Identifier') })
 
+// Data flow analysis
+
+Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], { lval -> _().sideEffect{ val = it[1];}.transform{ it[0] }.outE('REACHES').filter{ it.var.equals(val)}.inV() })
 
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   def source = s;
@@ -297,5 +286,60 @@ Gremlin.defineStep('ipControlFlow', [Vertex, Pipe], { san ->
     }
     return true;
   }
+})
+
+/////////////////////////////////
+// Type analysis
+////////////////////////////////
+
+Gremlin.defineStep('astNodeToTypesUsed', [Vertex, Pipe], {
+  _().astNodeToLocalDeclsUsed().localDeclToType()
+})
+
+Gremlin.defineStep('localDeclToType', [Vertex, Pipe],{
+  _().ifThenElse{ it.type == 'IdentifierDecl'}
+  { it.out().filter{ it.type == 'IdentifierDeclType'} }
+  // else: Parameter
+  { it.out().filter{ it.type == 'ParameterType'} }
+})
+
+Gremlin.defineStep('localDeclToName', [Vertex, Pipe], {
+ _().out().filter{it.type == 'Identifier'}
+})
+
+Gremlin.defineStep('astNodeToSymbolsUsed', [Vertex, Pipe], { 
+  _().out('USE')
+})
+
+Gremlin.defineStep('astNodeToLocalDeclsUsed', [Vertex, Pipe], {
+ _().astNodeToSymbolsUsed().symbolToDecl()
+})
+
+Gremlin.defineStep('symbolToDecl', [Vertex, Pipe],{
+  _().in('DEF').filter{ it.type in ['IdentifierDecl', 'Parameter']}
+})
+
+// This one is horrible as we use a regex to parse the
+// struct part from the type and chop off the postfix
+
+Gremlin.defineStep("structureToName", [Vertex,Pipe], {
+  _().transform{ (it.code =~/struct ([^\s]+)/)[0][1] }
+})
+
+Gremlin.defineStep("structureToMemberDecls", [Vertex,Pipe], {
+  _().out('IS_CLASS_OF').filter{it.type == 'DECL_STMT'}.out()
+})
+
+Gremlin.defineStep('nameToTypeDecl', [Vertex,Pipe], {
+  _().transform{ getTypeDeclsByName(it) }.scatter()
+})
+
+//////////////////////////
+// Output steps
+/////////////////////////
+
+Gremlin.defineStep("functionToLocationRow", [Vertex,Pipe], {
+  _().functionToFile()
+  .sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] }
 })
 
