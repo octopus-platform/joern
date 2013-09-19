@@ -214,7 +214,12 @@ Gremlin.defineStep('functionToIdentifiers', [Vertex,Pipe], { _().functionToASTNo
 
 // Data flow analysis
 
-Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], { lval -> _().sideEffect{ val = it[1];}.transform{ it[0] }.outE('REACHES').filter{ it.var.equals(val)}.inV() })
+Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
+  _().sideEffect{ val = it[1];}.transform{ it[0] }.outE('REACHES').filter{if(!val) return true; else return it.var.equals(val)}.inV()
+
+})
+
+
 
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   def source = s;
@@ -334,6 +339,21 @@ Gremlin.defineStep('nameToTypeDecl', [Vertex,Pipe], {
   _().transform{ getTypeDeclsByName(it) }.scatter()
 })
 
+Object.metaClass.numTypesInStructure = {
+  it.structureToMemberDecls().baseType.dedup().toList().size()
+}
+
+Object.metaClass.isStruct = {
+  it.code.startsWith('struct ')
+}
+
+Gremlin.defineStep('astNodeToStructTypesUsed', [Vertex, Pipe], {
+  _().astNodeToLocalDeclsUsed().as('localDecl')
+  .localDeclToName().sideEffect{ symbol = it.code }.back('localDecl')
+  .localDeclToType().filter{ isStruct(it) }.structureToName()
+  .nameToTypeDecl().transform{ [it, symbol]  }
+})
+
 //////////////////////////
 // Output steps
 /////////////////////////
@@ -343,3 +363,8 @@ Gremlin.defineStep("functionToLocationRow", [Vertex,Pipe], {
   .sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] }
 })
 
+/////
+
+Object.metaClass.containsSymbol = { it, symbol ->
+  it.code.matches(symbol + '(?!([a-zA-Z0-9_]))')  
+}
