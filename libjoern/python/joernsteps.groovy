@@ -219,6 +219,10 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
 
 })
 
+Gremlin.defineStep('reaches', [Vertex, Pipe], {
+ _().out('REACHES').loop(1){ it.loops < 20}{true}
+})
+
 
 
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
