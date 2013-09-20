@@ -108,6 +108,22 @@ Object.metaClass.getArgumentNTo = { callee, n ->
   getCallsTo(callee).callToArgumentN(n)
 }
 
+
+/**
++   Retrieve function by name matching regular
++   expression.
++   @param aNameRegex regular expression function names must match.
++*/
+
+Object.metaClass.getFunctionByNameRegex = { aNameRegex ->
+  getNodesByType("Function").filter{ it.functionName.matches(aNameRegex) }
+}
+
+Object.metaClass.getParameterByNameRegex = { aNameRegex ->
+  getNodesByType("Parameter").out('IS_AST_PARENT').filter{ it.type == 'Identifier' && it.code.matches(aNameRegex) }
+}
+
+
 /**
    Retrieve all calls by regular expression
    To match a regex, we can only use the index
