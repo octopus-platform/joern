@@ -287,15 +287,30 @@ Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx->
   .transform{ [it[0], it[1], ipNodeStack] }
 })
 
-Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def type = t; _().out('IS_AST_PARENT').loop(1){ it.object.type != type} })
+Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;
+ _().out('IS_AST_PARENT').loop(1){true}{ it.object.type in types }
+})
 
 Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
+
+// Object.metaClass.aSanitizerMatches = { it, sanitizers ->
+//   for s in sanitizers{
+//       sType = s[0]
+//       sRegex = s[1]
+//       if(it.type == sType && it.code.matches(sRegex))
+// 	return true;
+//     }
+//   return false;
+// }
 
 Gremlin.defineStep('controlFlow', [Vertex, Pipe], { san ->
   def sanitizer = san;
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
-  .as('x').out('FLOWS_TO').simplePath().loop('x'){ it.loops < 40 && it.object.id != sinkId && !it.object.code.contains(sanitizer)}
+  .as('x').out('FLOWS_TO').simplePath()
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !it.object.code.matches(sanitizer)
+
+}
   .filter{ it.id == sinkId }
   .dedup()
  })
