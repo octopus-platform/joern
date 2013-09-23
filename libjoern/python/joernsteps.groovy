@@ -184,7 +184,12 @@ Gremlin.defineStep("functionToCallsTo", [Vertex,Pipe], { x -> _().functionToCall
 Gremlin.defineStep("functionToCallsToAnyOf", [Vertex,Pipe], { l -> _().functionToCalls().filter{ for(x in l){ if(it.code.startsWith(x + ' ')) return true; }; return false; }})
 Gremlin.defineStep('functionToCallsToRegex', [Vertex,Pipe], { callee -> _().functionToASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
 
-Gremlin.defineStep("functionToConditions", [Vertex,Pipe], { _().functionToAllNodesOfType('Condition') } )
+Gremlin.defineStep("functionToConditions", [Vertex,Pipe], {
+   
+_().functionToAllNodesOfType('Condition')
+// _().functionToAllNodesOfType('ConditionalExpr').outE('IS_AST_PARENT').filter{ it.n == "0"}.inV()
+
+})
 
 Gremlin.defineStep("functionToLocals", [Vertex,Pipe], { _().functionToASTNodes().filter{it.type == 'IdentifierDecl'} })
 Gremlin.defineStep("localToType", [Vertex,Pipe], { _().out('IS_AST_PARENT').filter{it.type == 'IdentifierDeclType'} } )
@@ -307,13 +312,11 @@ Gremlin.defineStep('controlFlow', [Vertex, Pipe], { san ->
   def sanitizer = san;
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
-  .as('x').out('FLOWS_TO').simplePath()
-  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !it.object.code.matches(sanitizer)
-
-}
+  .as('x').out('FLOWS_TO').simplePath().loop('x'){ it.loops < 40 && it.object.id != sinkId && !it.object.code.contains(sanitizer)}
   .filter{ it.id == sinkId }
   .dedup()
  })
+
 
 Gremlin.defineStep('ipControlFlow', [Vertex, Pipe], { san ->
   def sanitizer = san;
