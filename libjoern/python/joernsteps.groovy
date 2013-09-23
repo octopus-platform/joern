@@ -1,27 +1,36 @@
 import java.util.regex.*;
 import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
 
-////////////////////////////////////////////////////
-// = User-defined Gremlin steps for code analysis. =
-// The "language" joern offers on top of Gremlin
-// to allow you to formulate complex queries
-// without too much pain.
-// If you have a good idea for a custom step,
-// for example from reoccuring patterns in your
-// queries, make a proposal and I'm likely to
-// include it.
-///////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+// = User-defined Gremlin steps for code analysis. = The "language"
+// joern offers on top of Gremlin to allow you to formulate complex
+// queries without too much pain.  If you have a good idea for a
+// custom step, for example from reoccuring patterns in your queries,
+// make a proposal and I'm likely to include it.
+///////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////
-// The following are utility functions
-// for  Gremlin/Groovy scripts, which you
-// can use to select start-nodes for your
-// analysis. For example, you might want to
-// start with all function definitions,
-// all calls to a specific function or all
-// instances of variables of a certain type.
-////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// The following are utility functions for Gremlin/Groovy scripts,
+// which you can use to select start-nodes for your analysis. For
+// example, you might want to start with all function definitions, all
+// calls to a specific function or all instances of variables of a
+// certain type.
+//////////////////////////////////////////////////////////////////////
+
+/**
+   Allows more than one pipe to generate starting points. Acts as an
+   AND.
+*/
+
+Object.metaClass.AND = { pipes ->
+  np = []
+  for(int i = 0; i < pipes.size(); i++){
+    p = pipes[i]
+    np.add( _().transform{ p }.scatter())
+  }
+  _().copySplit( *np ).exhaustMerge()
+}
 
 /**
    Query the node index.
@@ -34,8 +43,7 @@ Object.metaClass.queryNodeIndex = { query ->
 }
 
 /**
-   Retrieve all nodes of a specified type from
-   the node index.
+   Retrieve all nodes of a specified type from the node index.
    @param typeName type
 */
 
@@ -43,28 +51,9 @@ Object.metaClass.getNodesByType = { typeName ->
   g.idx("nodeIndex")[[type:typeName]]
 }
 
-/**
-   Allows more than one pipe to generate starting
-   points. Acts as an AND.
-*/
-
-Object.metaClass.START = { pipes ->
-  np = []
-  for(int i = 0; i < pipes.size(); i++){
-    p = pipes[i]
-    np.add( _().transform{ p }.scatter())
-  }
-  _().copySplit( *np ).exhaustMerge()
-}
-
-/**
-   Retrieve declaration by name.
-   @param aName name
-*/
-
-Object.metaClass.getTypeDeclsByName = { aName ->
-  g.idx('nodeIndex')[[name:aName]]
-}
+////////////////////////////////
+///// Functions ///////
+///////////////////////////////
 
 /**
    Retrieve function by name.
@@ -76,10 +65,41 @@ Object.metaClass.getFunctionByName = { aName ->
 }
 
 /**
-   Retrieve all calls by callee.
-   This is more efficient than 'getCallsToRegex'
-   but less powerful, allowing only exact
-   matches of callee names.
+   Retrieve function by name matching regular
+   expression.
+   @param aNameRegex regular expression function names must match.
+*/
+
+Object.metaClass.getFunctionByNameRegex = { aNameRegex ->
+  getNodesByType("Function").filter{ it.functionName.matches(aNameRegex) }
+}
+
+//////////////////////////////////
+////// Parameters //////
+/////////////////////////////////
+
+Object.metaClass.getParametersOfType = { typeName ->
+  query = 'type:"ParameterType" AND code:"' + typeName + '"'
+  queryNodeIndex(query)
+}
+
+Object.metaClass.getParameterByRegex = { aNameRegex ->
+  getNodesByType("Parameter").filter{ it.code.matches(aNameRegex) }
+}
+
+Object.metaClass.getParameterByNameRegex = { aNameRegex ->
+  getNodesByType("Parameter").out('IS_AST_PARENT').filter{ it.type == 'Identifier' && it.code.matches(aNameRegex) }
+}
+
+
+/////////////////////////////
+//////// Calls //////////
+////////////////////////////
+
+/**
+   Retrieve all calls by callee.  This is more efficient than
+   'getCallsToRegex' but less powerful, allowing only exact matches of
+   callee names.
 
   @param callee identifier of the callee
 */
@@ -92,10 +112,22 @@ Object.metaClass.getCallsTo = { callee ->
   }
 }
 
-Object.metaClass.getParametersOfType = { typeName ->
-  query = 'type:"ParameterType" AND code:"' + typeName + '"'
-  queryNodeIndex(query)
+/**
+   Retrieve all calls by regular expression To match a regex, we can
+   only use the index to extract all CallExpressions. We then need to
+   iterate over all call expressions to see where the regex matches.
+
+   @param callee regular expression callees must match.
+   
+ */
+ 
+Object.metaClass.getCallsToRegex = { callee ->
+  getNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
 }
+
+//////////////////////////
+//// Arguments to calls
+//////////////////////////
 
 /**
    Retrieve n'th arguments to calls by callee.
@@ -110,63 +142,49 @@ Object.metaClass.getArgumentNTo = { callee, n ->
 
 
 /**
-+   Retrieve function by name matching regular
-+   expression.
-+   @param aNameRegex regular expression function names must match.
-+*/
+   Retrieve declaration by name.
+   @param aName name
+*/
 
-Object.metaClass.getFunctionByNameRegex = { aNameRegex ->
-  getNodesByType("Function").filter{ it.functionName.matches(aNameRegex) }
-}
-
-Object.metaClass.getParameterByNameRegex = { aNameRegex ->
-  getNodesByType("Parameter").out('IS_AST_PARENT').filter{ it.type == 'Identifier' && it.code.matches(aNameRegex) }
+Object.metaClass.getTypeDeclsByName = { aName ->
+  g.idx('nodeIndex')[[name:aName]]
 }
 
 
-/**
-   Retrieve all calls by regular expression
-   To match a regex, we can only use the index
-   to extract all CallExpressions. We then
-   need to iterate over all call expressions
-   to see where the regex matches.
-
-   @param callee regular expression callees must match.
-   
- */
- 
-Object.metaClass.getCallsToRegex = { callee ->
-  getNodesByType("CallExpression").filterCodeByCompiledRegex(Pattern.compile(callee))
-}
-
-/////////////////////////////////////////////
-// (2) Steps
-/////////////////////////////////////////////
+Object.metaClass.exists = { it ->  it.toList().size != 0 }
+//////////////////////////////////////////////////////////////////
+// (2) Once start nodes have been selected, you can use the steps
+// below to traverse the graph.
+//////////////////////////////////////////////////////////////////
 
 Gremlin.defineStep('idToNode', [Vertex,Pipe], { _().transform{ g.v(it) }.scatter() })
 Gremlin.defineStep('queryToNodes', [Vertex,Pipe], { _().transform{ queryNodeIndex(it) }.scatter() })
 
-Gremlin.defineStep('calleeToFunctions', [Vertex,Pipe], { _().getCalleeFromCall().transform{ getFunctionByName(it.code) }.scatter() })
-
 Gremlin.defineStep('astNodeToFunction', [Vertex,Pipe],{ _().functionId.idToNode() });
 Gremlin.defineStep('astNodeToSymbol', [Vertex,Pipe], { _().transform{ queryNodeIndex('type:Symbol AND functionId:' + it.functionId + ' AND code:"' + it.code + '"') }.scatter() })
+Gremlin.defineStep('astNodeToBasicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
+Gremlin.defineStep('astNodeToBasicBlockRoot', [Vertex, Pipe], { _().astNodeToBasicBlock().basicBlockToAST() })
+
+Gremlin.defineStep("functionToAllNodesOfType", [Vertex, Pipe], { aType -> _().functionToASTNodes().filter{ it.type == aType}  })
 
 Gremlin.defineStep("functionToFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 Gremlin.defineStep("functionToASTNodes", [Vertex,Pipe], { _().transform{ queryNodeIndex('functionId:' + it.id)}.scatter().filter{ it.type != 'BasicBlock' && it.type != 'Symbol'} })
 Gremlin.defineStep("functionToBasicBlocks", [Vertex,Pipe], { _().transform{ queryNodeIndex('type:BasicBlock AND functionId:' + it.id) }.scatter()})
 Gremlin.defineStep("functionToAST", [Vertex,Pipe], { _().out('IS_FUNCTION_OF_AST') })
 Gremlin.defineStep("functionToASTRoot", [Vertex,Pipe], { _().functionToAST().out('IS_AST_OF_AST_ROOT') })
+Gremlin.defineStep('basicBlockToAST', [Vertex,Pipe], { _().out('IS_BASIC_BLOCK_OF') } );
 
 Gremlin.defineStep("functionToParameterList", [Vertex,Pipe], { _().getFunctionASTRoot().outE('IS_AST_PARENT').filter{ it.n == '1'}.inV() })
 Gremlin.defineStep("functionToParameterN", [Vertex,Pipe], { n -> _().functionToParameterList().outE('IS_AST_PARENT').filter{ it.n == n}.inV() })
 Gremlin.defineStep("functionToParameterNType", [Vertex,Pipe], { n -> _().functionToParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()} )
 Gremlin.defineStep("functionToParameterNName", [Vertex,Pipe], { n -> _().functionToParameterN(n).outE('IS_AST_PARENT').filter{ it.n == '1'}.inV()} )
 
-Gremlin.defineStep("functionToCalls", [Vertex,Pipe], { _().functionToASTNodes().filter{ it.type == 'CallExpression'}})
+Gremlin.defineStep("functionToCalls", [Vertex,Pipe], { _().functionToAllNodesOfType('CallExpression') } )
 Gremlin.defineStep("functionToCallsTo", [Vertex,Pipe], { x -> _().functionToCalls().filter{ it.code.startsWith(x + ' ')}  })
 Gremlin.defineStep("functionToCallsToAnyOf", [Vertex,Pipe], { l -> _().functionToCalls().filter{ for(x in l){ if(it.code.startsWith(x + ' ')) return true; }; return false; }})
 Gremlin.defineStep('functionToCallsToRegex', [Vertex,Pipe], { callee -> _().functionToASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
 
+Gremlin.defineStep("functionToConditions", [Vertex,Pipe], { _().functionToAllNodesOfType('Condition') } )
 
 Gremlin.defineStep("functionToLocals", [Vertex,Pipe], { _().functionToASTNodes().filter{it.type == 'IdentifierDecl'} })
 Gremlin.defineStep("localToType", [Vertex,Pipe], { _().out('IS_AST_PARENT').filter{it.type == 'IdentifierDeclType'} } )
@@ -175,31 +193,19 @@ Gremlin.defineStep("functionToLocalTypes", [Vertex,Pipe], { _().functionToLocals
 Gremlin.defineStep("functionToLocalNames", [Vertex,Pipe], { _().functionToLocals().localToName() } )
 
 
-Gremlin.defineStep('callToCallee', [Vertex, Pipe], { _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()})
+// Watchout: 'n' is a string parameter for now
 
-// Watchout: n needs to be a string for now
+Gremlin.defineStep('callToCallee', [Vertex, Pipe], { _().outE('IS_AST_PARENT').filter{ it.n == '0'}.inV()})
 Gremlin.defineStep('callToArgumentN', [Vertex,Pipe], { n -> _().out('IS_AST_PARENT').filter{it.type == 'ArgumentList'}.outE('IS_AST_PARENT').filter{ it.n == n }.inV()} )
+Gremlin.defineStep('callToFunctions', [Vertex,Pipe], { _().callToCallee().transform{ getFunctionByName(it.code) }.scatter() })
 
 Gremlin.defineStep('argToCallee', [Vertex,Pipe], { _().in('IS_AST_PARENT').filter{ it.type == 'ArgumentList'}.in('IS_AST_PARENT').outE('IS_AST_PARENT').filter{ it.n == '0' }.inV()} )
 
-Gremlin.defineStep('astNodeToBasicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
+Gremlin.defineStep('cfgPathsToExit', [Vertex,Pipe], { _().out('FLOWS_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})
+Gremlin.defineStep('cfgPathsFromEntry', [Vertex,Pipe], { _().in('FLOWS_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})    
 
-Gremlin.defineStep('astNodeToBasicBlockRoot', [Vertex, Pipe], { _().astNodeToBasicBlock().basicBlockToAST() })
-
-Gremlin.defineStep('basicBlockToAST', [Vertex,Pipe], { _().out('IS_BASIC_BLOCK_OF') } );
-
-// For a given basic block, get all paths into the exit direction
-// up to and inlcuding a length of 10
-
-Gremlin.defineStep('pathsToExit', [Vertex,Pipe], { _().out('FLOWS_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})
-
-// For a given basic block, get all paths into the entry direction
-// up to and inlcuding a length of 10
-
-Gremlin.defineStep('pathsFromEntry', [Vertex,Pipe], { _().in('FLOWS_TO').loop(1){it.loops < 10 }{true}.simplePath.path()})    
-
-Gremlin.defineStep('assignToLval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }.inV()});
-Gremlin.defineStep('assignToRval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("1") }.inV()});
+Gremlin.defineStep('assignmentToLval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("0") }.inV()});
+Gremlin.defineStep('assignmentToRval', [Vertex,Pipe], { _().outE('IS_AST_PARENT').filter{ it.n.equals("1") }.inV()});
 
 Object.metaClass.codeContains = { obj, x ->
   obj.code.contains(x)
@@ -238,8 +244,6 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
 Gremlin.defineStep('reaches', [Vertex, Pipe], {
  _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
-
-
 
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   def source = s;
@@ -284,7 +288,6 @@ Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx->
 })
 
 Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def type = t; _().out('IS_AST_PARENT').loop(1){ it.object.type != type} })
-
 
 Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
 
