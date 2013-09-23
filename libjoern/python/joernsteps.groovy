@@ -185,9 +185,13 @@ Gremlin.defineStep("functionToCallsToAnyOf", [Vertex,Pipe], { l -> _().functionT
 Gremlin.defineStep('functionToCallsToRegex', [Vertex,Pipe], { callee -> _().functionToASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
 
 Gremlin.defineStep("functionToConditions", [Vertex,Pipe], {
-   
-_().functionToAllNodesOfType('Condition')
-// _().functionToAllNodesOfType('ConditionalExpr').outE('IS_AST_PARENT').filter{ it.n == "0"}.inV()
+
+_().transform{
+ret = []
+ret = it.functionToAllNodesOfType('Condition').toList() 
+ret.addAll(it.functionToAllNodesOfType('ConditionalExpression').outE('IS_AST_PARENT').filter{ it.n == "0"}.inV().toList())
+ret;
+}.scatter()
 
 })
 
@@ -292,8 +296,11 @@ Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx->
   .transform{ [it[0], it[1], ipNodeStack] }
 })
 
-Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;
- _().out('IS_AST_PARENT').loop(1){true}{ it.object.type in types }
+Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;		     
+  _().copySplit(
+    _().out('IS_AST_PARENT').loop(1){true}{ it.object.type in types },
+    _().filter{ it.type in types}
+).exhaustMerge()
 })
 
 Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
