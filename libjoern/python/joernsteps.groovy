@@ -256,17 +256,17 @@ Gremlin.defineStep('reaches', [Vertex, Pipe], {
 
 // For a given function argument, get all sources connected to it by
 // data flow, which match one of the supplied regular expressions.
-// Returns list of (sourceId, sinkId) tuples. UPDATE ME.
+// Returns list of (sourceId, sinkId) tuples.
 
-Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
-  def source = s;
+Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { Object [] s ->
+  def sources = s;
   
   _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
   .out('USE').sideEffect{ symbol = it.code }.back(2)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 10 && !it.object.code.contains(source)}{true}
-  .filter{ it.code.contains(source) }
+  .loop('loopStart'){it.loops < 10 && ! aRegexFound(it.object, sources)}{true}
+  .filter{ aRegexFound(it, sources)}
   .transform{ [it.id, sinkId] } 
   .dedup()
 })
@@ -307,9 +307,9 @@ Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;
 ).exhaustMerge()
 })
 
-Object.metaClass.aSanitizerMatches = { it, sanitizers ->
+Object.metaClass.aRegexFound = { it, sanitizers ->
   for(s in sanitizers){
-      if(it.code.matches(s))
+      if(it.code.find(s))
 	return true;
     }
   return false;
@@ -320,7 +320,7 @@ Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { Object [] san ->
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
   .as('x').out('FLOWS_TO').simplePath()
-  .loop('x'){ it.loops < 40 && it.object.id != sinkId && ! aSanitizerMatches(it.object, sanitizers)}
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && ! aRegexFound(it.object, sanitizers)}
   .filter{ it.id == sinkId }
   .dedup()
  })
@@ -334,7 +334,7 @@ Gremlin.defineStep('ipControlFlow', [Vertex, Pipe], { san ->
     for(x in nodeStack){ 
       def srcId = x[0];
       def dstId = x[1];      
-      l = g.v(0).transform{ [srcId, dstId] }.controlFlow(sanitizer).toList()
+      l = g.v(0).transform{ [srcId, dstId] }.isNotSanitizedBy(sanitizer).toList()
       if(l.size() == 0)
   	return false;
     }
