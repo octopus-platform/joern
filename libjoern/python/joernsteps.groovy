@@ -254,7 +254,9 @@ Gremlin.defineStep('reaches', [Vertex, Pipe], {
  _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
 
-// returns list of (sourceId, sinkId) tuples. Use 'doesNot'
+// For a given function argument, get all sources connected to it by
+// data flow, which match one of the supplied regular expressions.
+// Returns list of (sourceId, sinkId) tuples. UPDATE ME.
 
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   def source = s;
@@ -305,8 +307,6 @@ Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;
 ).exhaustMerge()
 })
 
-Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
-
 Object.metaClass.aSanitizerMatches = { it, sanitizers ->
   for(s in sanitizers){
       if(it.code.matches(s))
@@ -315,7 +315,7 @@ Object.metaClass.aSanitizerMatches = { it, sanitizers ->
   return false;
 }
 
-Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { san ->
+Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { Object [] san ->
   def sanitizers = san;
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
