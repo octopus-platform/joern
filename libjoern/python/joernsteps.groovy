@@ -254,6 +254,8 @@ Gremlin.defineStep('reaches', [Vertex, Pipe], {
  _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
 
+// returns list of (sourceId, sinkId) tuples. Use 'doesNot'
+
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { s ->
   def source = s;
   
@@ -305,21 +307,20 @@ Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;
 
 Gremlin.defineStep('markAsSink', [Vertex, Pipe], { _().sideEffect{ sinkId = it.id; } } )
 
-// Object.metaClass.aSanitizerMatches = { it, sanitizers ->
-//   for s in sanitizers{
-//       sType = s[0]
-//       sRegex = s[1]
-//       if(it.type == sType && it.code.matches(sRegex))
-// 	return true;
-//     }
-//   return false;
-// }
+Object.metaClass.aSanitizerMatches = { it, sanitizers ->
+  for(s in sanitizers){
+      if(it.code.matches(s))
+	return true;
+    }
+  return false;
+}
 
-Gremlin.defineStep('controlFlow', [Vertex, Pipe], { san ->
-  def sanitizer = san;
+Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { san ->
+  def sanitizers = san;
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
-  .as('x').out('FLOWS_TO').simplePath().loop('x'){ it.loops < 40 && it.object.id != sinkId && !it.object.code.contains(sanitizer)}
+  .as('x').out('FLOWS_TO').simplePath()
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && ! aSanitizerMatches(it.object, sanitizers)}
   .filter{ it.id == sinkId }
   .dedup()
  })
