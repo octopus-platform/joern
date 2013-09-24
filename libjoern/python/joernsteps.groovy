@@ -251,7 +251,7 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
 })
 
 Gremlin.defineStep('reaches', [Vertex, Pipe], {
- _().out('REACHES').loop(1){ it.loops < 20}{true}
+   _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
 
 // For a given function argument, get all sources connected to it by
@@ -302,9 +302,9 @@ Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx->
 
 Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;		     
   _().copySplit(
-    _().out('IS_AST_PARENT').loop(1){true}{ it.object.type in types },
+    _().out('IS_AST_PARENT').loop(1){it.object.out('IS_AST_PARENT').toList() != [] }{ it.object.type in types },
     _().filter{ it.type in types}
-).exhaustMerge()
+).fairMerge()
 })
 
 Object.metaClass.aRegexFound = { it, sanitizers ->
@@ -318,7 +318,8 @@ Object.metaClass.aRegexFound = { it, sanitizers ->
 Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { Object [] san ->
   def sanitizers = san;
   
-  _().sideEffect{ sourceId = it[0]; sinkId = it[1] }.transform{ g.v(sourceId)}
+  _().sideEffect{ sourceId = it[0]; sinkId = it[1] }
+  .transform{ g.v(sourceId)}
   .as('x').out('FLOWS_TO').simplePath()
   .loop('x'){ it.loops < 40 && it.object.id != sinkId && ! aRegexFound(it.object, sanitizers)}
   .filter{ it.id == sinkId }
