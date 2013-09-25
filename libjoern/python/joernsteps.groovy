@@ -160,13 +160,17 @@ Object.metaClass.exists = { it ->  it.toList().size != 0 }
 Gremlin.defineStep('idToNode', [Vertex,Pipe], { _().transform{ g.v(it) }.scatter() })
 Gremlin.defineStep('queryToNodes', [Vertex,Pipe], { _().transform{ queryNodeIndex(it) }.scatter() })
 
+
+//////////////////////////////////////////////
+// Getting from one representation to another
+//////////////////////////////////////////////
+
 Gremlin.defineStep('astNodeToFunction', [Vertex,Pipe],{ _().functionId.idToNode() });
 Gremlin.defineStep('astNodeToSymbol', [Vertex,Pipe], { _().transform{ queryNodeIndex('type:Symbol AND functionId:' + it.functionId + ' AND code:"' + it.code + '"') }.scatter() })
 Gremlin.defineStep('astNodeToBasicBlock', [Vertex,Pipe], { _().in('IS_AST_PARENT', 'IS_BASIC_BLOCK_OF').loop(1){ it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }  });
 Gremlin.defineStep('astNodeToBasicBlockRoot', [Vertex, Pipe], { _().astNodeToBasicBlock().basicBlockToAST() })
 
 Gremlin.defineStep("functionToAllNodesOfType", [Vertex, Pipe], { aType -> _().functionToASTNodes().filter{ it.type == aType}  })
-
 Gremlin.defineStep("functionToFile", [Vertex,Pipe], { _().in('IS_FILE_OF') })
 Gremlin.defineStep("functionToASTNodes", [Vertex,Pipe], { _().transform{ queryNodeIndex('functionId:' + it.id)}.scatter().filter{ it.type != 'BasicBlock' && it.type != 'Symbol'} })
 Gremlin.defineStep("functionToBasicBlocks", [Vertex,Pipe], { _().transform{ queryNodeIndex('type:BasicBlock AND functionId:' + it.id) }.scatter()})
@@ -185,14 +189,12 @@ Gremlin.defineStep("functionToCallsToAnyOf", [Vertex,Pipe], { l -> _().functionT
 Gremlin.defineStep('functionToCallsToRegex', [Vertex,Pipe], { callee -> _().functionToASTNodes().filter{ it.type == 'CallExpression' && it.code.matches(callee) }} )
 
 Gremlin.defineStep("functionToConditions", [Vertex,Pipe], {
-
 _().transform{
-ret = []
-ret = it.functionToAllNodesOfType('Condition').toList() 
-ret.addAll(it.functionToAllNodesOfType('ConditionalExpression').outE('IS_AST_PARENT').filter{ it.n == "0"}.inV().toList())
-ret;
-}.scatter()
-
+  ret = []
+  ret = it.functionToAllNodesOfType('Condition').toList() 
+  ret.addAll(it.functionToAllNodesOfType('ConditionalExpression').outE('IS_AST_PARENT').filter{ it.n == "0"}.inV().toList())
+  ret;
+  }.scatter()
 })
 
 Gremlin.defineStep("functionToLocals", [Vertex,Pipe], { _().functionToASTNodes().filter{it.type == 'IdentifierDecl'} })
@@ -300,13 +302,6 @@ Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx->
   .transform{ [it[0], it[1], ipNodeStack] }
 })
 
-Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;		     
-  _().copySplit(
-    _().out('IS_AST_PARENT').loop(1){it.object.out('IS_AST_PARENT').toList() != [] }{ it.object.type in types },
-    _().filter{ it.type in types}
-).fairMerge()
-})
-
 Object.metaClass.aRegexFound = { it, sanitizers ->
   for(s in sanitizers){
       if(it.code.find(s))
@@ -342,6 +337,22 @@ Gremlin.defineStep('ipControlFlow', [Vertex, Pipe], { san ->
     return true;
   }
 })
+
+//////////////////////////////////
+// Abstract Syntax Tree Analysis
+//////////////////////////////////
+
+Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;		     
+  _().copySplit(
+    _().out('IS_AST_PARENT').loop(1){it.object.out('IS_AST_PARENT').toList() != [] }{ it.object.type in types },
+    _().filter{ it.type in types}
+).fairMerge()
+})
+
+Gremlin.defineStep('notInASTOfType', [Vertex, Pipe], { t -> def types = t;
+  // CONTINUE HERE
+})
+
 
 /////////////////////////////////
 // Type analysis
@@ -382,7 +393,7 @@ Gremlin.defineStep("structureToName", [Vertex,Pipe], {
 })
 
 Gremlin.defineStep("structureToMemberDecls", [Vertex,Pipe], {
-  _().out('IS_CLASS_OF').filter{it.type == 'DECL_STMT'}.out()
+  _().out('IS_CLASS_OF').filter{it.type == 'DeclStmt'}.out()
 })
 
 Gremlin.defineStep('nameToTypeDecl', [Vertex,Pipe], {

@@ -25,7 +25,7 @@ public class DeclDatabaseNode extends DatabaseNode {
 	public Map<String, Object> createProperties()
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("type", "DECL");
+		map.put("type", "Decl");
 		map.put("baseType", baseType);
 		map.put("completeType", completeType);
 		map.put("identifier", identifierString);
