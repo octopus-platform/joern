@@ -8,11 +8,19 @@ class JoernSteps:
         
     def _initJoernSteps(self):
         self.graphDb = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
-    
-        filename = os.path.join(os.path.dirname(__file__), 'joernsteps.groovy')
-        cmd = file(filename).read()
-        self.initCommand = cmd + "\n"
-
+   
+        joernStepsDir = os.path.dirname(__file__) + '/joernsteps/'
+        self.initCommand = self._createInitCommand(joernStepsDir)
+        
+    def _createInitCommand(self, stepsDir):
+        
+        initCommand = ""
+        for (root, dirs, files) in os.walk(stepsDir):
+            for f in files:
+                filename = root + f
+                initCommand += file(filename).read() + "\n"
+        return initCommand
+        
     def executeGremlinScript(self, filename):
         return self.executeGremlinCmd()
 
