@@ -1,7 +1,4 @@
 
-import java.util.regex.*;
-import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
-
 //////////////////////////////////////////////////////////////////////
 // Start Node Selection (Coarse Node Selection)
 // The following are utility functions for Gremlin/Groovy scripts,

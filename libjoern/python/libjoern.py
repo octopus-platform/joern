@@ -16,6 +16,7 @@ class JoernSteps:
         
         initCommand = ""
         for (root, dirs, files) in os.walk(stepsDir):
+            files.sort()
             for f in files:
                 filename = root + f
                 initCommand += file(filename).read() + "\n"
