@@ -11,6 +11,7 @@ import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
 
 
 //////////////////////////////////////////////////////////////////////
+// Start Node Selection (Coarse Node Selection)
 // The following are utility functions for Gremlin/Groovy scripts,
 // which you can use to select start-nodes for your analysis. For
 // example, you might want to start with all function definitions, all
@@ -20,10 +21,10 @@ import com.tinkerpop.blueprints.pgm.impls.neo4j.util.*;
 
 /**
    Allows more than one pipe to generate starting points. Acts as an
-   AND.
+   OR.
 */
 
-Object.metaClass.AND = { pipes ->
+Object.metaClass.OR = { pipes ->
   np = []
   for(int i = 0; i < pipes.size(); i++){
     p = pipes[i]
@@ -151,7 +152,10 @@ Object.metaClass.getTypeDeclsByName = { aName ->
 }
 
 
-Object.metaClass.exists = { it ->  it.toList().size != 0 }
+////////////////////////////////////////////////
+// AST-Filtering (Fine-grained node selection)
+////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////////////
 // (2) Once start nodes have been selected, you can use the steps
 // below to traverse the graph.
@@ -253,7 +257,7 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
 })
 
 Gremlin.defineStep('reaches', [Vertex, Pipe], {
-   _().out('REACHES').loop(1){ it.loops < 20}{true}
+  _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
 
 // For a given function argument, get all sources connected to it by
@@ -414,6 +418,9 @@ Gremlin.defineStep('astNodeToStructTypesUsed', [Vertex, Pipe], {
   .localDeclToType().filter{ isStruct(it) }.structureToName()
   .nameToTypeDecl().transform{ [it, symbol]  }
 })
+
+
+Object.metaClass.exists = { it ->  it.toList().size != 0 }
 
 //////////////////////////
 // Output steps
