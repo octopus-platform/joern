@@ -41,18 +41,18 @@ Gremlin.defineStep('isNotSanitizedByRegex', [Vertex, Pipe], { Object [] san ->
   .as('x').out('FLOWS_TO').simplePath()
   .loop('x'){ it.loops < 40 && it.object.id != sinkId && ! aRegexFound(it.object, sanitizers)}
   .filter{ it.id == sinkId }
-  .dedup()
+  .dedup().transform{ [sourceId, sinkId] }
 })
 
-Gremlin.defineStep('isNotSanitized', [Vertex, Pipe], { p ->
-  def pipe = p;
+Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { f ->
+  def fil = f;
 
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }
   .transform{ g.v(sourceId)}
   .as('x').out('FLOWS_TO').simplePath()
-  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !pipe() }
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !exists(fil(it.object))}
   .filter{ it.id == sinkId }
-  .dedup()
+  .dedup().transform{ [sourceId, sinkId] }
 
 })
 

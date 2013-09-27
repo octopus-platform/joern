@@ -7,11 +7,6 @@ Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;
   ).fairMerge()
 })
 
-Gremlin.defineStep('astsOfTypeMatch', [Vertex, Pipe], { filterClosure, t ->
-  _().subASTsOfType(t).filter(filterClosure).toList() != []
-})
-
-
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> 
   _().filter{ it.code.matches(expr) }
 })
