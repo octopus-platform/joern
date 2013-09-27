@@ -11,3 +11,15 @@ Gremlin.defineStep('symbolToDecl', [Vertex, Pipe],{
 Gremlin.defineStep('nameToTypeDecl', [Vertex,Pipe], {
   _().transform{ getTypeDeclsByName(it) }.scatter()
 })
+
+Gremlin.defineStep('storeFunctionAndFilename', [Vertex, Pipe], { filterExpr ->
+  x = _().as('originalNode').astNodeToFunction()
+  if(filterExpr != null){
+    x = x.filter{ it.functionName.matches(filterExpr) }
+  }  
+  x.sideEffect{ funcName = it.functionName}
+  .functionToFile().sideEffect{ fileName = it.filepath}						     
+  .back('originalNode')
+})
+
+Gremlin.defineStep('functionAndFilename', [Vertex, Pipe], { _().transform{ [funcName, fileName] }})

@@ -89,3 +89,8 @@ Gremlin.defineStep("functionToLocationRow", [Vertex,Pipe], {
 Gremlin.defineStep("functionToAllNodesOfType", [Vertex, Pipe], { aType ->
  _().functionToASTNodes().filter{ it.type == aType}
 })
+
+Gremlin.defineStep("filterByFunctionName", [Vertex, Pipe], { fExpr ->
+  def filterExpression = fExpr;
+  _().astNodeToFunction().filter{it.functionName.matches(fExpr)}.back(2)
+})
