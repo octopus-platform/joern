@@ -1,5 +1,5 @@
 
-Object.metaClass.setSinkArgument =  { callRegex, argNum, argRegex ->
+Object.metaClass.setSinkArgument =  { callRegex, argNum, argRegex = null ->
   x = _().getCallsToRegex(callRegex).sideEffect{ sinkCall = it }
   .callToArgumentN(argNum).sideEffect{ sinkArg = it }
   if(argRegex != null) x = x.filter{ it.code.matches(argRegex) }
