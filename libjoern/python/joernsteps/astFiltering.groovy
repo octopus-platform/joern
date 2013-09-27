@@ -29,3 +29,16 @@ Gremlin.defineStep('codeContains', [Vertex,Pipe], { x ->
 Object.metaClass.codeContains = { obj, x ->
   obj.code.contains(x)
 }
+
+Object.metaClass.containsSymbol = { it, symbol ->
+  it.code.matches(symbol + '(?!([a-zA-Z0-9_]))')  
+}
+
+// This is useful when checking if a patch DOES NOT exist.
+// You can then use a .filter{!exists(pipe)} step.
+// Not that it is not necessary for the positive case, i.e., when you
+// want to know whether a path exists. In that case, the pipe can
+// simply be appended to the existing pipe.
+
+Object.metaClass.exists = { it ->  it.toList().size != 0 }
+
