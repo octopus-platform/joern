@@ -85,3 +85,7 @@ Gremlin.defineStep("functionToLocationRow", [Vertex,Pipe], {
   _().functionToFile()
   .sideEffect{fname = it.filepath; }.back(2).transform{ [fname, it.location, it.signature] }
 })
+
+Gremlin.defineStep("functionToAllNodesOfType", [Vertex, Pipe], { aType ->
+ _().functionToASTNodes().filter{ it.type == aType}
+})
