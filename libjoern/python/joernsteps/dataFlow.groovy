@@ -33,7 +33,7 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { Object [] s ->
   .dedup()
 })
 
-Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { Object [] san ->
+Gremlin.defineStep('isNotSanitizedByRegex', [Vertex, Pipe], { Object [] san ->
   def sanitizers = san;
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }
