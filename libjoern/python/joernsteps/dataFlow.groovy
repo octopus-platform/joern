@@ -1,4 +1,12 @@
 
+Object.metaClass.setSinkArgument =  { callRegex, argNum, argRegex ->
+  x = _().getCallsToRegex(callRegex).sideEffect{ sinkCall = it }
+  .callToArgumentN(argNum).sideEffect{ sinkArg = it }
+  if(argRegex != null) x = x.filter{ it.code.matches(argRegex) }
+  return x
+}
+
+
 Gremlin.defineStep('reaches', [Vertex, Pipe], {
   _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
