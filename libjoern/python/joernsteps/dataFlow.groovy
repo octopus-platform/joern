@@ -44,6 +44,18 @@ Gremlin.defineStep('isNotSanitizedByRegex', [Vertex, Pipe], { Object [] san ->
   .dedup()
 })
 
+Gremlin.defineStep('isNotSanitized', [Vertex, Pipe], { p ->
+  def pipe = p;
+
+  _().sideEffect{ sourceId = it[0]; sinkId = it[1] }
+  .transform{ g.v(sourceId)}
+  .as('x').out('FLOWS_TO').simplePath()
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !pipe() }
+  .filter{ it.id == sinkId }
+  .dedup()
+
+})
+
 // interprocedural data flow
 
 Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx-> 
