@@ -1,10 +1,10 @@
 
 Gremlin.defineStep('subASTsOfType', [Vertex, Pipe], { t -> def types = t;		     
-  _().copySplit(
+  // _().copySplit(
     _().out('IS_AST_PARENT')
-    .loop(1){it.object.out('IS_AST_PARENT').toList() != [] }{ it.object.type in types },
-    _().filter{ it.type in types}
-  ).fairMerge()
+    .loop(1){it.object.out('IS_AST_PARENT').toList() != [] }{ it.object.type in types }
+    // _().filter{ it.type in types}
+    // ).exhaustMerge()
 })
 
 Gremlin.defineStep('filterCodeByRegex', [Vertex,Pipe], { expr -> 
