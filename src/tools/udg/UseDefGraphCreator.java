@@ -122,8 +122,14 @@ public class UseDefGraphCreator
 
 		if(nodeType.equals("AssignmentExpr"))
 		{
-			if(childNum.equals("0"))
+			if(childNum.equals("0")){
+				String operatorCode = QueryUtils.getOperatorCode(nodeId);
+				if(operatorCode != null && !operatorCode.equals("=")){
+					// += etc. also "USE" the variable
+					useDefStack.push( new UseOrDefRecord(nodeId, false));
+				}
 				useDefStack.push( new UseOrDefRecord(nodeId, true));
+			}
 			else
 				useDefStack.push( new UseOrDefRecord(nodeId, false));
 		}else if(nodeType.equals("IdentifierDecl") || nodeType.equals("Parameter")){
@@ -146,9 +152,15 @@ public class UseDefGraphCreator
 		String childType = QueryUtils.getNodeType(rel.getEndNode());
 		String childNum = QueryUtils.getChildNumber(rel);
 
-		if(nodeType.equals("AssignmentExpr"))
+		if(nodeType.equals("AssignmentExpr")){
 			useDefStack.pop();		
-		else if(nodeType.equals("IdentifierDecl") || nodeType.equals("Parameter")){
+		
+			String operatorCode = QueryUtils.getOperatorCode(nodeId);
+			if(childNum.equals("0") && operatorCode != null && !operatorCode.equals("=")){
+				useDefStack.pop();
+			}
+		
+		}else if(nodeType.equals("IdentifierDecl") || nodeType.equals("Parameter")){
 			if(childNum.equals("1") && childType.equals("Identifier"))
 				useDefStack.pop();
 		}else if(nodeType.equals("Condition") || nodeType.equals("Argument"))

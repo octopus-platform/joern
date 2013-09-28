@@ -2,6 +2,7 @@ package output.neo4j.batchInserter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
@@ -121,6 +122,11 @@ public class QueryUtils {
 			retval.add(rel.getEndNode());
 		}
 		return retval;
+	}
+
+	public static String getOperatorCode(Long nodeId)
+	{
+		return Neo4JBatchInserter.getNodeProperties(nodeId).get("operator").toString();
 	}
 	
 }
