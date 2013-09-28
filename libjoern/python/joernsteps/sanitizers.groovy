@@ -9,3 +9,11 @@ Object.metaClass.checksSymbol = { it, s ->
   .subASTsOfType(['EqualityExpression', 'RelationalExpression'])
   .out('IS_AST_PARENT').filter{ it.code.equals(symbol) }
 }
+
+Object.metaClass.noConditionMatches = { it, filterExpr ->
+  it.functionToConditions().filter(filterExpr).toList() == []
+}
+
+
+
+
