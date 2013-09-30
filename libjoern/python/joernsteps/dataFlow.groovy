@@ -102,11 +102,18 @@ Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
   def fil = f;
   
   _().sideEffect{ (astNode, sourceSymbol) = it }.transform{ astNode }
+  
+  .sideEffect{ 
+    sinkIds = it.astNodeToFunction().functionToBasicBlocks()
+    .filter{ exists(fil(it)) }.id.toList()
+  }
+  
   .astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
   .as('loopStart').ifThenElse{!firstRound}{it.inV()}{it}
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 10 }{ exists(fil(it.object)) }
+  .sideEffect{ isSink = (it.inV().id.toList()[0] in sinkIds ) }
+  .loop('loopStart'){it.loops < 10 && !isSink}{ isSink }
   .transform{ [sourceId, it.inV().toList()[0].id, it.var] } 
   .dedup()
 })
@@ -125,8 +132,15 @@ Gremlin.defineStep('isNotSanitizedByRegex', [Vertex, Pipe], { Object [] san ->
   
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }
   .transform{ g.v(sourceId)}
+  
+  .sideEffect{
+    sanIds = it.astNodeToFunction().functionToBasicBlocks()
+    .filter{ aRegexFound(it, sanitizers) }.id.toList()
+  }
+  
   .as('x').out('FLOWS_TO').simplePath()
-  .loop('x'){ it.loops < 40 && it.object.id != sinkId && ! aRegexFound(it.object, sanitizers)}
+  .sideEffect{ isSanitizer = (it.id in sanIds) }
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !isSanitizer}
   .filter{ it.id == sinkId }
   .dedup().transform{ [sourceId, sinkId] }
 })
