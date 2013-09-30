@@ -28,15 +28,21 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
 Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
   def sources = []
   
+  // compile regular expressions
   for (aPattern in s){
     sources.add(Pattern.compile(aPattern))
   }
   
-  _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
+  // get all basic blocks in function, which match regex:
+  _()
+  .sideEffect{ sourceIds = it.astNodeToFunction().functionToBasicBlocks()
+               .filter{ aRegexFound(it, sources) }.id.toList() }
+  
+  .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
   .out('USE').sideEffect{ symbol = it.code }.back(2)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
-  .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 10 && ! aRegexFound(it.object, sources)} { aRegexFound(it.object, sources) }
+  .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}.sideEffect{ isSource = (it.id in sourceIds) }
+  .loop('loopStart'){it.loops < 10 && !isSource } { isSource }
   .transform{ [it.id, sinkId] } 
   .dedup()
 })
