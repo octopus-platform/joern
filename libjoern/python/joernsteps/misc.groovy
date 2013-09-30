@@ -12,16 +12,19 @@ Gremlin.defineStep('nameToTypeDecl', [Vertex,Pipe], {
   _().transform{ getTypeDeclsByName(it) }.scatter()
 })
 
-Gremlin.defineStep('storeFunctionAndFilename', [Vertex, Pipe], { filterExpr ->
-  x = _().as('originalNode').astNodeToFunction()
+Gremlin.defineStep('functionAndFilename', [Vertex, Pipe], { filterExpr ->
+  x = _().astNodeToFunction()
   if(filterExpr != null){
     x = x.filter{ it.functionName.matches(filterExpr) }
   }  
   x.sideEffect{ funcName = it.functionName}
-  .functionToFile().sideEffect{ fileName = it.filepath}						     
-  .back('originalNode')
+  .functionToFile().sideEffect{ fileName = it.filepath}						  .transform{ [funcName, fileName] }   
+  
 })
 
-Gremlin.defineStep('functionAndFilename', [Vertex, Pipe], { _().transform{ [funcName, fileName] }})
-Gremlin.defineStep('sinkCallAndArg', [Vertex, Pipe], { _().transform{ [sinkCall, sinkArg] } })
 Gremlin.defineStep('sinkAssignment', [Vertex, Pipe], { _().transform{ sink } })
+
+Gremlin.defineStep('sourceSymbol', [Vertex, Pipe], { _().transform { sourceSymbol } })
+
+Gremlin.defineStep('sinkCode', [Vertex, Pipe], { _().astNodeToBasicBlock().code })
+Gremlin.defineStep('sinkArgCode', [Vertex, Pipe], { _().code })

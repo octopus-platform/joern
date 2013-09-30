@@ -1,7 +1,6 @@
 
 Object.metaClass.setSinkArgument =  { callRegex, argNum, argRegex = null ->
-  x = _().getCallsToRegex(callRegex).sideEffect{ sinkCall = it }
-  .callToArgumentN(argNum).sideEffect{ sinkArg = it }
+  x = _().getCallsToRegex(callRegex).callToArgumentN(argNum)
   if(argRegex != null) x = x.filter{ it.code.matches(argRegex) }
   return x
 }
@@ -39,7 +38,7 @@ Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
   .out('USE').sideEffect{ symbol = it.code }.back(2)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 10 && ! aRegexFound(it.object, sources)}{ aRegexFound(it.object, sources)}
+  .loop('loopStart'){it.loops < 2 && ! aRegexFound(it.object, sources)} { aRegexFound(it.object, sources) }
   .transform{ [it.id, sinkId] } 
   .dedup()
 })
@@ -86,11 +85,12 @@ Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
   .dedup()
 })
 
-// Expects the following to be set:
-// sourceSymbol
+// Expects:
+// [it, sourceSymbol]
 
 Gremlin.defineStep('directDataFlowTo', [Vertex, Pipe], { it ->
-  _().astNodeToBasicBlock().outE('REACHES').filter{ it.var.equals(sourceSymbol) }.inV()    
+  _().sideEffect{ sourceSymbol = it[1] }.transform{ it[0] }
+  .astNodeToBasicBlock().outE('REACHES').filter{ it.var.equals(sourceSymbol) }.inV()
 })
 
 Gremlin.defineStep('isNotSanitizedByRegex', [Vertex, Pipe], { Object [] san ->
