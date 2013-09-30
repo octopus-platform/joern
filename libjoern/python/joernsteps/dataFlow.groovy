@@ -55,13 +55,14 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
 })
 
 // Input is an AST-node such as a parameter:
-// Expects the following to be set:
-// sourceSymbol
+// Expects:
+// [astNode, symbol]
 
 Gremlin.defineStep('dataFlowToRegex', [Vertex, Pipe], { Object [] s ->
   def sinks = s;
   
-  _().astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
+  _().sideEffect{ (astNode, sourceSymbol) = it }.transform{ astNode }
+  .astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
   .as('loopStart').ifThenElse{!firstRound}{it.inV()}{it}
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
@@ -164,7 +165,7 @@ Gremlin.defineStep('ipIsNotSanitizedBy', [Vertex, Pipe], { san ->
 
 Object.metaClass.aRegexFound = { it, sanitizers ->
   for(s in sanitizers){
-      if(it.code.find(s) != null)
+      if(it.code.find(s))
 	return true;
     }
   return false;
