@@ -150,8 +150,15 @@ Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { f ->
 
   _().sideEffect{ sourceId = it[0]; sinkId = it[1] }
   .transform{ g.v(sourceId)}
+  
+  .sideEffect{
+    sanIds = it.astNodeToFunction().functionToBasicBlocks()
+    .filter{ exists(fil(it)) }.id.toList()
+  }
+  
   .as('x').out('FLOWS_TO').simplePath()
-  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !exists(fil(it.object))}
+  .sideEffect{ isSanitizer = (it.id in sanIds) }
+  .loop('x'){ it.loops < 40 && it.object.id != sinkId && !isSanitizer }
   .filter{ it.id == sinkId }
   .dedup().transform{ [sourceId, sinkId] }
 
