@@ -29,4 +29,4 @@ Gremlin.defineStep('sourceSymbol', [Vertex, Pipe], { _().transform { sourceSymbo
 Object.metaClass.sinkCode = { it.astNodeToBasicBlock.code }
 Object.metaClass.sinkArgCode = { it.code }
 
-Object.metaClass.parameterName = { it.parameterToName().code }
+Object.metaClass.parameterName = { it.parameterToName().code.next() }
