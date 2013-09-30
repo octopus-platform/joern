@@ -5,11 +5,6 @@ Object.metaClass.setSinkArgument =  { callRegex, argNum, argRegex = null ->
   return x
 }
 
-Object.metaClass.setSinkAssignment = { assignRegex ->
-  getAssignmentsByRegex(assignRegex).sideEffect{ sink = it}
-  .astNodeToBasicBlock().sideEffect{ sinkBlock = it}.back(2)
-}
-
 Gremlin.defineStep('reaches', [Vertex, Pipe], {
   _().out('REACHES').loop(1){ it.loops < 20}{true}
 })
