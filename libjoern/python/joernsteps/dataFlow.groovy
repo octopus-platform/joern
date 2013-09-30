@@ -26,11 +26,13 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
   .filter{if(!val) return true; else return it.var.equals(val)}.inV()
 })
 
+// TODO: eliminate copy/paste code
+
 // For a given AST node (e.g., argument), get all sources connected to it by
 // data flow, which match one of the supplied regular expressions.
 // Returns list of (sourceId, sinkId) tuples.
 
-Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { Object [] s ->
+Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
   def sources = s;
   
   _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
@@ -43,19 +45,43 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { Object [] s ->
 })
 
 
+Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
+  def fil = f;
+  
+  _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
+  .out('USE').sideEffect{ symbol = it.code }.back(2)
+  .astNodeToBasicBlock().sideEffect{ firstRound = true }
+  .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
+  .loop('loopStart'){it.loops < 10 && !exists(fil(it.object))}
+  .transform{ [it.id, sinkId] }
+  .dedup()
+})
+
 // Input is an AST-node such as a parameter:
 // Expects the following to be set:
 // sourceSymbol
 
-Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { Object [] s ->
+Gremlin.defineStep('dataFlowToRegex', [Vertex, Pipe], { Object [] s ->
   def sinks = s;
   
   _().astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
-
   .as('loopStart').ifThenElse{!firstRound}{it.inV()}{it}
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
   .loop('loopStart'){it.loops < 10 }{ aRegexFound(it.object.inV().toList()[0], sinks) }
+  .transform{ [sourceId, it.inV().toList()[0].id, it.var] } 
+  .dedup()
+})
+
+
+Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
+  def fil = f;
+  
+  _().astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
+  .as('loopStart').ifThenElse{!firstRound}{it.inV()}{it}
+  .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
+  .sideEffect{firstRound = false}
+  .loop('loopStart'){it.loops < 10 }{ exists(fil(it.object)) }
   .transform{ [sourceId, it.inV().toList()[0].id, it.var] } 
   .dedup()
 })
