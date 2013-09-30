@@ -48,14 +48,24 @@ Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
 })
 
 
+// I'm not sure if this one works well with the cache since we are
+// passing a closure.
+
 Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
   def fil = f;
   
-  _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
+  // get all basic blocks in function, which match filter
+  _().sideEffect{ 
+    sourceIds = it.astNodeToFunction().functionToBasicBlocks()
+    .filter( exists(fil(it)) ).id.toList()
+  }
+
+  .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
   .out('USE').sideEffect{ symbol = it.code }.back(2)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 10 && !exists(fil(it.object))}
+  .sideEffect{ isSource = (it.id in sourceIds) }
+  .loop('loopStart'){it.loops < 10 && !isSource }{ isSource }
   .transform{ [it.id, sinkId] }
   .dedup()
 })
@@ -67,12 +77,20 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
 Gremlin.defineStep('dataFlowToRegex', [Vertex, Pipe], { Object [] s ->
   def sinks = s;
   
-  _().sideEffect{ (astNode, sourceSymbol) = it }.transform{ astNode }
+  _()
+  .sideEffect{ (astNode, sourceSymbol) = it }.transform{ astNode }
+  
+  .sideEffect{ 
+    sinkIds = it.astNodeToFunction().functionToBasicBlocks()
+    .filter{ aRegexFound(it, sinks) }.id.toList()
+  }
+  
   .astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
   .as('loopStart').ifThenElse{!firstRound}{it.inV()}{it}
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 10 }{ aRegexFound(it.object.inV().toList()[0], sinks) }
+  .sideEffect{ isSink = (it.inV().id.toList()[0] in sinkIds ) }
+  .loop('loopStart'){it.loops < 10 && !isSink}{ isSink }
   .transform{ [sourceId, it.inV().toList()[0].id, it.var] } 
   .dedup()
 })
