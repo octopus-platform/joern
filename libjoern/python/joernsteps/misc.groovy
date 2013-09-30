@@ -26,5 +26,5 @@ Gremlin.defineStep('sinkAssignment', [Vertex, Pipe], { _().transform{ sink } })
 
 Gremlin.defineStep('sourceSymbol', [Vertex, Pipe], { _().transform { sourceSymbol } })
 
-Gremlin.defineStep('sinkCode', [Vertex, Pipe], { _().astNodeToBasicBlock().code })
-Gremlin.defineStep('sinkArgCode', [Vertex, Pipe], { _().code })
+Object.metaClass.sinkCode = { it.astNodeToBasicBlock.code.next() }
+Object.metaClass.sinkArgCode = { it.code.next() }

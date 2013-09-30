@@ -25,20 +25,24 @@ Gremlin.defineStep('reachesUnaltered', [Vertex, Pipe], {
   .filter{if(!val) return true; else return it.var.equals(val)}.inV()
 })
 
-// TODO: eliminate copy/paste code
+// TODO: eliminate copy/paste code. Optimize.
 
 // For a given AST node (e.g., argument), get all sources connected to it by
 // data flow, which match one of the supplied regular expressions.
 // Returns list of (sourceId, sinkId) tuples.
 
 Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
-  def sources = s;
+  def sources = []
+  
+  for (aPattern in s){
+    sources.add(Pattern.compile(aPattern))
+  }
   
   _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
   .out('USE').sideEffect{ symbol = it.code }.back(2)
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
-  .loop('loopStart'){it.loops < 2 && ! aRegexFound(it.object, sources)} { aRegexFound(it.object, sources) }
+  .loop('loopStart'){it.loops < 10 && ! aRegexFound(it.object, sources)} { aRegexFound(it.object, sources) }
   .transform{ [it.id, sinkId] } 
   .dedup()
 })
@@ -166,7 +170,7 @@ Gremlin.defineStep('ipIsNotSanitizedBy', [Vertex, Pipe], { san ->
 
 Object.metaClass.aRegexFound = { it, sanitizers ->
   for(s in sanitizers){
-      if(it.code.find(s))
+      if(it.code.find(s) != null)
 	return true;
     }
   return false;
