@@ -71,11 +71,14 @@ Gremlin.defineStep('dataFlowToRegex', [Vertex, Pipe], { Object [] s ->
   .dedup()
 })
 
+// Expects:
+// [astNode, sourceSymbol]
 
 Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
   def fil = f;
   
-  _().astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
+  _().sideEffect{ (astNode, sourceSymbol) = it }.transform{ astNode }
+  .astNodeToBasicBlock().sideEffect{ sourceId = it.id; firstRound = true }
   .as('loopStart').ifThenElse{!firstRound}{it.inV()}{it}
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
@@ -86,6 +89,7 @@ Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
 
 // Expects:
 // [astNode, sourceSymbol]
+
 
 Gremlin.defineStep('directDataFlowTo', [Vertex, Pipe], { it ->
   _().sideEffect{ sourceSymbol = it[1] }.transform{ it[0] }
