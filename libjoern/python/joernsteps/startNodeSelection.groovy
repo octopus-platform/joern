@@ -138,3 +138,7 @@ Object.metaClass.getArgumentNTo = { callee, n ->
 Object.metaClass.getTypeDeclsByName = { aName ->
   g.idx('nodeIndex')[[name:aName]]
 }
+
+Object.metaClass.getAssignmentsByRegex = { aRegex ->
+  getNodesByType('AssignmentExpr').filterCodeByCompiledRegex(Pattern.compile(aRegex))
+}

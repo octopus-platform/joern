@@ -24,3 +24,4 @@ Gremlin.defineStep('storeFunctionAndFilename', [Vertex, Pipe], { filterExpr ->
 
 Gremlin.defineStep('functionAndFilename', [Vertex, Pipe], { _().transform{ [funcName, fileName] }})
 Gremlin.defineStep('sinkCallAndArg', [Vertex, Pipe], { _().transform{ [sinkCall, sinkArg] } })
+Gremlin.defineStep('sinkAssignment', [Vertex, Pipe], { _().transform{ sink } })
