@@ -5,12 +5,6 @@ Object.metaClass.setSinkArgument =  { callRegex, argNum, argRegex = null ->
   return x
 }
 
-Object.metaClass.setSourceParameter = { paramRegex ->
-  getParameterByRegex(paramRegex).sideEffect{ sourceParam = it; }
-  .parameterToName().sideEffect{ sourceSymbol = it.code }.back(2)
-  .astNodeToBasicBlock().sideEffect{ sourceBlock = it}.back(2)
-}
-
 Object.metaClass.setSinkAssignment = { assignRegex ->
   getAssignmentsByRegex(assignRegex).sideEffect{ sink = it}
   .astNodeToBasicBlock().sideEffect{ sinkBlock = it}.back(2)
@@ -90,7 +84,7 @@ Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
 })
 
 // Expects:
-// [it, sourceSymbol]
+// [astNode, sourceSymbol]
 
 Gremlin.defineStep('directDataFlowTo', [Vertex, Pipe], { it ->
   _().sideEffect{ sourceSymbol = it[1] }.transform{ it[0] }
