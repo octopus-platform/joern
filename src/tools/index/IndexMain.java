@@ -52,7 +52,8 @@ public class IndexMain {
 
 	private static void setupOutputModule()
     {
-		outputModule.initialize(); 	
+		String outputDir = cmd.getOutputDir();
+		outputModule.initialize(outputDir); 	
     	sourceFileWalker.addListener(outputModule);
     }
 	

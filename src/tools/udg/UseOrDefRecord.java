@@ -1,6 +1,5 @@
 package tools.udg;
 
-
 public class UseOrDefRecord{
 	public long nodeId;
 	public boolean isDef;

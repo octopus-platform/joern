@@ -45,15 +45,19 @@ public class UseDefGraphImporter {
 		
 		for(Object d : destinations){
 			UseOrDefRecord item = (UseOrDefRecord) d;
-						
-			RelationshipType rel;				
-			if(item.isDef)
-				rel = DynamicRelationshipType.withName(EdgeTypes.DEF);				          
-			else
-				rel = DynamicRelationshipType.withName(EdgeTypes.USE);
-				
-			Neo4JBatchInserter.addRelationship(item.nodeId, symbolNodeId, rel, null);					
+			addUseOrDefRecordToDatabase(symbolNodeId, item);			
 		}
+	}
+
+	private void addUseOrDefRecordToDatabase(long symbolNodeId, UseOrDefRecord item)
+	{
+		RelationshipType rel;				
+		if(item.isDef)
+			rel = DynamicRelationshipType.withName(EdgeTypes.DEF);				          
+		else
+			rel = DynamicRelationshipType.withName(EdgeTypes.USE);
+			
+		Neo4JBatchInserter.addRelationship(item.nodeId, symbolNodeId, rel, null);
 	}
 
 	private long createSymbolNode(String identifier)

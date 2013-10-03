@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public abstract class OutputModule
 {
-	abstract public void initialize();
+	abstract public void initialize(String indexDirectory);
 	abstract public void shutdown();
 	
 	abstract public void visitFile(Path filename);

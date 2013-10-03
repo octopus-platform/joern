@@ -1,5 +1,8 @@
 package tools.udg;
 
+import java.util.List;
+
+import tools.udg.environments.UseDefEnvironment;
 import misc.MultiHashMap;
 
 public class UseDefGraph {
@@ -16,20 +19,25 @@ public class UseDefGraph {
 		return useOrDefRecordTable;
 	}
 	
-	public void addDefinition(String identifier, long basicBlockId)
+	public List<Object> getUsesAndDefsForSymbol(String symbol)
 	{
-		add(identifier, basicBlockId, true);
-	}
-
-	public void addUse(String identifier, long basicBlockId)
-	{
-		add(identifier, basicBlockId, false);
+		return useOrDefRecordTable.getListForKey(symbol);
 	}
 	
-	private void add(String code, long basicBlockId, boolean isDef)
+	public void addDefinition(String identifier, long nodeId)
 	{
-		UseOrDefRecord item = new UseOrDefRecord(basicBlockId, isDef);		
-		useOrDefRecordTable.add(code, item);
+		add(identifier, nodeId, true);
+	}
+
+	public void addUse(String identifier, long nodeId)
+	{
+		add(identifier, nodeId, false);
+	}
+	
+	private void add(String identifier, long basicBlockId, boolean isDef)
+	{
+		UseOrDefRecord record = new UseOrDefRecord(basicBlockId, isDef);		
+		useOrDefRecordTable.add(identifier, record);
 	}
 		
 }

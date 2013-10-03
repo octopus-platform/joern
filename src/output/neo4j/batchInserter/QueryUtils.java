@@ -128,5 +128,23 @@ public class QueryUtils {
 	{
 		return Neo4JBatchInserter.getNodeProperties(nodeId).get("operator").toString();
 	}
+
+	public static IndexHits<Long> getFunctionsByName(String functionName)
+	{
+		return Neo4JBatchInserter.queryIndex("functionName:" + functionName);
+	}
+
+	public static String getCalleeFromCall(Long nodeId)
+	{
+		Iterable<BatchRelationship> rels = getEdges(nodeId);
+		for(BatchRelationship rel : rels){
+			if(isIncomingEdge(nodeId, rel)) continue;
+			if(!isASTEdge(rel)) continue;
+			
+			if(QueryUtils.getChildNumber(rel).equals("0"))
+				return getNodeCode(rel.getEndNode());
+		}
+		return "";
+	}
 	
 }

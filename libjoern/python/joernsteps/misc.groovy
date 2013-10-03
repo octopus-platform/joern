@@ -18,7 +18,7 @@ Gremlin.defineStep('functionAndFilename', [Vertex, Pipe], { filterExpr ->
     x = x.filter{ it.functionName.matches(filterExpr) }
   }  
   x.sideEffect{ funcName = it.functionName}
-  .functionToFile().sideEffect{ fileName = it.filepath}						  .transform{ [funcName, fileName] }   
+  .functionToFile().sideEffect{ fileName = it.filepath}.transform{ [funcName, fileName] }   
   
 })
 

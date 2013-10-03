@@ -1,6 +1,13 @@
 package tools.ddg.DefUseCFGFactories;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import misc.MultiHashMap;
+import misc.Pair;
 
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -25,7 +32,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 		getUsesAndDefs();		
 		getParentBlocks();
 		getChildBlocks();
-	
+		
 		return cfg;
 	}
 
@@ -41,14 +48,21 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	{
 		for(Long basicBlockId : cfg.getBasicBlocks()){
 			
-			List<String> used = QueryUtils.getSymbolsUsedByBasicBlock(basicBlockId);
-			for(String symbol : used)
-				cfg.addSymbolUsed(basicBlockId, symbol);
-		
-			List<String> defined = QueryUtils.getSymbolsDefinedByBasicBlock(basicBlockId);
-			for(String symbol : defined)
-				cfg.addSymbolDefined(basicBlockId, symbol);
-			
+			List<Pair<Long,String>> used = QueryUtils.getSymbolsUsedByBasicBlock(basicBlockId);
+			for(Pair<Long, String> symbolIdAndCode : used){
+				Long symbolId = symbolIdAndCode.getL();
+				String symbolCode = symbolIdAndCode.getR();
+				cfg.addSymbolUsed(basicBlockId, symbolCode);
+				cfg.setSetSymbolId(symbolCode, symbolId);
+			}
+				
+			List<Pair<Long,String>> defined = QueryUtils.getSymbolsDefinedByBasicBlock(basicBlockId);
+			for(Pair<Long, String> symbolIdAndCode : defined){
+				Long symbolId = symbolIdAndCode.getL();
+				String symbolCode = symbolIdAndCode.getR();
+				cfg.addSymbolDefined(basicBlockId, symbolCode);
+				cfg.setSetSymbolId(symbolCode, symbolId);
+			}
 		}
 	}
 	

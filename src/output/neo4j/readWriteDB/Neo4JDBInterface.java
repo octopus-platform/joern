@@ -32,7 +32,7 @@ public class Neo4JDBInterface {
 		tx.finish();
 	}
 	
-	public static void setIndexDirectoryName(String aDir)
+	public static void setDatabaseDir(String aDir)
 	{
 		databaseDir = aDir;
 	}
@@ -65,9 +65,9 @@ public class Neo4JDBInterface {
 
 	public static void addRelationship(long src, long dst, RelationshipType relType, Map<String, Object> properties)
 	{
-		
 		Node node = graphDb.getNodeById(src);
 		Relationship rel = node.createRelationshipTo(graphDb.getNodeById(dst), relType);
+		if(properties == null) return;
 		for(Entry<String, Object> entry : properties.entrySet()){
 			rel.setProperty(entry.getKey(), entry.getValue());
 		}

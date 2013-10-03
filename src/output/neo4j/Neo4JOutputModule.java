@@ -18,11 +18,13 @@ public class Neo4JOutputModule extends OutputModule
 	DirectoryTreeImporter dirTreeImporter = new DirectoryTreeImporter();
 	FileDatabaseNode currentFileNode;
 	
-	private static final String indexDirectory = ".joernIndex/";
+	private String indexDirectory;
 	
 	@Override
-	public void initialize()
+	public void initialize(String aIndexDirectory)
 	{
+		indexDirectory = aIndexDirectory;
+		
 		initializeParser();
 		initializeDatabase();
 	}

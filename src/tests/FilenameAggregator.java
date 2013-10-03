@@ -20,7 +20,7 @@ public class FilenameAggregator extends OutputModule {
 	@Override public void postVisitDirectory(Path dir) {}
 
 	@Override
-	public void initialize() {
+	public void initialize(String indexDirectory) {
 		// TODO Auto-generated method stub
 		
 	}

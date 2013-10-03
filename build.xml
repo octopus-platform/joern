@@ -53,7 +53,7 @@
     </jar>
   </target>
 
-  <target name="tools" depends="icfg,udg,ddg,ddgpatcher">
+  <target name="tools" depends="icfg,udg,ddg,argumentTainter">
   </target>
 
   <target name="icfg" depends="compile">
@@ -92,12 +92,12 @@
     </jar>
   </target>
   
-  <target name="ddgpatcher" depends="compile">
-    <jar destfile="${build.dir}/ddgpatcher.jar"
+  <target name="argumentTainter" depends="compile">
+    <jar destfile="${build.dir}/argumentTainter.jar"
          basedir="${build.dir}"
          includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.ddgPatcher.DDGPatcherMain" />
+        <attribute name="Main-Class" value="tools.argumentTainter.ArgumentTainterMain" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />

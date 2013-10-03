@@ -1,33 +1,44 @@
 package tools.index;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
+
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+
 import org.apache.commons.cli.ParseException;
 
+import tools.CommonCommandLineInterface;
 
-public class CommandLineInterface
+
+public class CommandLineInterface extends CommonCommandLineInterface
 {
-	private Options options = new Options();
-	private CommandLineParser parser = new BasicParser();
-	private HelpFormatter formater = new HelpFormatter();
-	private CommandLine cmd = null;
+	
 	private String [] filenames;
+	
+	String outputDir = ".joernIndex/";
 	
 	public String [] getFilenames()
 	{
 		return filenames;
 	}
 	
-	public CommandLineInterface()
+	public String getOutputDir()
 	{
-		initializeOptions();
+		return outputDir;
 	}
-
-	private void initializeOptions()
+	
+	public CommandLineInterface() { super(); }
+	
+	
+	@Override
+	protected void initializeOptions()
 	{
+		super.initializeOptions();
+		
+		Option outputDirectory = OptionBuilder.withArgName( "outdir" ).hasArg()
+            .withDescription(  "specifies where the neo4j database will be written" )
+            .create( "outdir" );
+
+		options.addOption(outputDirectory);
 		
 	}
 	
@@ -38,7 +49,9 @@ public class CommandLineInterface
 		
 		cmd = parser.parse(options, args);
 		filenames = cmd.getArgs();
-	
+		
+		if(cmd.hasOption( "outdir"))		
+			outputDir = cmd.getOptionValue("outdir");
 	}
 	
 	public void printHelp()
@@ -46,7 +59,5 @@ public class CommandLineInterface
 		formater.printHelp("joern [SOURCE_DIR1] ...", options);
 	}
 
-	
-	
 }
 
