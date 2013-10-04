@@ -1,7 +1,7 @@
 package tools.udg.environments;
 
 
-public class ArgumentEnvironment extends EmitDefEnvironment {
+public class ArgumentEnvironment extends EmitDefAndUseEnvironment {
 
 	boolean isTainted = false;
 	

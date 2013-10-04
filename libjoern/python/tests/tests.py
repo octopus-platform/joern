@@ -98,6 +98,18 @@ class JoernStepsTests(unittest.TestCase):
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
 
+    def testUseFromArg(self):
+        query = """
+        getFunctionByName('udg_test_def_tainted_call').functionToASTNodes()
+        .filter{it.type == 'Argument'}.out('USE')
+
+        """
+        x = self.j.executeGremlinCmd(query)
+        print 
+
+        self.assertEquals(len(x), 1)
+        self.assertEquals(x[0], 'x')
+
         
 
 def main():
