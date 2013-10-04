@@ -115,7 +115,7 @@ class JoernStepsTests(unittest.TestCase):
          
          sources  = [Pattern.compile('taint_source')]
          
-         getFunctionByName('test_dataFlowFrom')
+         getFunctionByName('test_dataFlowFromRegex')
          .functionToASTNodes().filter{it.type == 'Argument' && it.code =='y'}
          .dataFlowFromRegex('taint_source')
          .transform{ g.v(it[0]) } // source
@@ -123,8 +123,33 @@ class JoernStepsTests(unittest.TestCase):
          
          """
          x = self.j.executeGremlinCmd(query)
+         self.assertEquals(len(x), 1)
          self.assertTrue(x[0].startswith('taint_source'))
 
+    def testIsNotSanitizedByRegex_positive(self):
+        query = """
+        getFunctionByName('test_isNotSanitizedByRegex')
+        .functionToCallsTo('sink').callToArgumentN('0')
+        .dataFlowFromRegex('taint_source')
+        .isNotSanitizedByRegex('foo') 
+        .transform{ g.v(it[0]) } // source
+        .code
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertTrue(len(x) == 1)
+        self.assertTrue(x[0].startswith('taint_source'))
+
+    def testIsNotSanitizedByRegex_negative(self):
+        query = """
+        getFunctionByName('test_isNotSanitizedByRegex')
+        .functionToCallsTo('sink').callToArgumentN('0')
+        .dataFlowFromRegex('taint_source')
+        .isNotSanitizedByRegex('memset') 
+        .transform{ g.v(it[0]) } // source
+        .code
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertTrue(len(x) == 0)
 
 
 def main():

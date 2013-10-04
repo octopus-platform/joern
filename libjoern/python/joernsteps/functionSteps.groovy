@@ -42,7 +42,7 @@ Gremlin.defineStep("functionToCalls", [Vertex,Pipe], {
 })
 
 Gremlin.defineStep("functionToCallsTo", [Vertex,Pipe], { x ->
-gen _().functionToCalls().filter{ it.code.startsWith(x + ' ')}
+  _().functionToCalls().filter{ it.code.startsWith(x + ' ')}
 })
 
 Gremlin.defineStep("functionToCallsToAnyOf", [Vertex,Pipe], { l ->

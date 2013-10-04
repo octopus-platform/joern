@@ -28,10 +28,19 @@ int two_taint_sources()
 }
 
 
-int test_dataFlowFrom()
+int test_dataFlowFromRegex()
 {
 	taint_source(x,y);	
 	if(x == 0) return;
+
+	sink(y);
+}
+
+int test_isNotSanitizedByRegex()
+{
+	taint_source(x,y);	
+	
+	memset(y, 0, sizeof(y));
 
 	sink(y);
 }
