@@ -170,7 +170,7 @@ public class ASTDefUseAnalyzer {
 		{
 			// stack is empty, we've reached the root.
 			// Now emit anything that propagated this far
-			LinkedList<UseOrDef> toEmit = UseDefEnvironment.createUsesForAllSymbols(symbols);
+			LinkedList<UseOrDef> toEmit = childEnv.createUsesForAllSymbols(symbols);
 			emitUseOrDefs(toEmit);
 		}
 	}

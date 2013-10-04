@@ -63,23 +63,24 @@ public class UseDefEnvironment{
 		return emptyUseOrDef;
 	}
 
-	static public LinkedList<UseOrDef> createDefsForAllSymbols(Collection<String> symbols)
+	public LinkedList<UseOrDef> createDefsForAllSymbols(Collection<String> symbols)
 	{
 		return createDefOrUseForSymbols(symbols, true);
 	}
 	
-	static public LinkedList<UseOrDef> createUsesForAllSymbols(Collection<String> symbols)
+	public LinkedList<UseOrDef> createUsesForAllSymbols(Collection<String> symbols)
 	{
 		return createDefOrUseForSymbols(symbols, false);
 	}
 	
-	static private LinkedList<UseOrDef> createDefOrUseForSymbols(Collection<String> symbols, boolean isDef)
+	private LinkedList<UseOrDef> createDefOrUseForSymbols(Collection<String> symbols, boolean isDef)
 	{
 		LinkedList<UseOrDef> retval = new LinkedList<UseOrDef>();
 		for(String s : symbols){
 			UseOrDef useOrDef = new UseOrDef();
 			useOrDef.isDef = isDef;
 			useOrDef.symbol = s;
+			useOrDef.nodeId = this.nodeId ;
 			retval.add(useOrDef);
 		}
 		return retval;

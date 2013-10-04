@@ -67,8 +67,7 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.executeGremlinCmd(query)
         self.assertTrue(len(x) == 1)
         self.assertEquals(x[0], "y")
-
-
+    
     def testPlusEqualsUse(self):
         query = """
         getFunctionByName('plusEqualsUse')
@@ -76,6 +75,30 @@ class JoernStepsTests(unittest.TestCase):
         
         x = self.j.executeGremlinCmd(query)
         self.assertTrue(len(x) == 2)
+    
+    def testIdentifierDeclDEFLink(self):
+        query = """
+        getFunctionByName('udg_test_simple_decl').functionToASTNodes()
+        .filter{it.type == 'IdentifierDecl'}.out('DEF').code
+
+        """
+        x = self.j.executeGremlinCmd(query)
+
+        self.assertEquals(len(x), 1)
+        self.assertEquals(x[0], 'x')
+
+    
+    def testParameterrDEFLink(self):
+        query = """
+        getFunctionByName('udg_test_param_decl').functionToASTNodes()
+        .filter{it.type == 'Parameter'}.out('DEF').code
+
+        """
+        x = self.j.executeGremlinCmd(query)
+
+        self.assertEquals(len(x), 1)
+        self.assertEquals(x[0], 'x')
+
         
 
 def main():
