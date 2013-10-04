@@ -52,3 +52,9 @@ int test_dataFlowFromUntainted()
 
 	sink(y);
 }
+
+int test_dataFlowToFromParam(int aUniqueParamName)
+{
+	sanitizer(aUniqueParamName);
+	sink(aUniqueParamName);
+}

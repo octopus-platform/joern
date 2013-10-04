@@ -201,6 +201,24 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.executeGremlinCmd(query)
         self.assertTrue(len(x) == 1)
 
+    def testMissingCheckLocalTaintTemplate2(self):
+        query = """
+        getParameterByRegex('.*aUniqueParamName.*')
+        .sideEffect{ taintedVar = parameterName(it);}
+        .transform{ [it, taintedVar] }
+        .dataFlowToRegex('sink')
+        .sideEffect{ (sourceId, sinkId, v) = it }
+        // get those sink calls where the third argument is tainted
+        .transform{ g.v(sinkId) }
+        .basicBlockToAST().subASTsOfType('CallExpression').callToArgumentN('0')
+        .filter{ it.code.contains(v) }
+        .transform{ [sourceId, sinkId] }.dedup()
+        .isNotSanitizedByRegex('foo')
+
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertEquals(len(x), 1)
+
 
 def main():
     unittest.main()
