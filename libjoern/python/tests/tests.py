@@ -219,6 +219,16 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.executeGremlinCmd(query)
         self.assertEquals(len(x), 1)
 
+    def test_checksSymbol(self):
+        query = """
+        getFunctionByName('test_checksSymbol')
+        .sideEffect{ sanitizerExpr = { exists( checksSymbol(it.astNodeToBasicBlock(), 'count')) } }
+        .filter{ noConditionMatches(it, sanitizerExpr) }
+        .functionName
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertEquals(len(x), 0)
+
 
 def main():
     unittest.main()

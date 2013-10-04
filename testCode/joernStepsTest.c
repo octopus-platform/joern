@@ -58,3 +58,9 @@ int test_dataFlowToFromParam(int aUniqueParamName)
 	sanitizer(aUniqueParamName);
 	sink(aUniqueParamName);
 }
+
+int test_checksSymbol(int count)
+{
+	if(count > 0)
+		return;
+}
