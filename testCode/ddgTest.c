@@ -6,3 +6,11 @@ int ddg_simplest_test()
 	int x = 0;
 	foo(x);
 }
+
+
+int ddg_test_struct()
+{
+	struct my_struct foo;
+	foo.bar = 10;
+	copy_somehwere(foo);
+}

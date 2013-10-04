@@ -45,6 +45,14 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	}
 	
 	@Test
+	public void test_struct_field_assign()
+	{
+		UseDefGraph useDefGraph = createUDGForFunction("ddg_test_struct");
+		assertOnlyDefForXFound(useDefGraph, "foo . bar");
+	}
+	
+	
+	@Test
 	public void test_def_tainted_call()
 	{
 		IndexHits<Long> hits = QueryUtils.getFunctionsByName("udg_test_def_tainted_call");
