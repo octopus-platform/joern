@@ -83,7 +83,6 @@ class JoernStepsTests(unittest.TestCase):
 
         """
         x = self.j.executeGremlinCmd(query)
-
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
 
