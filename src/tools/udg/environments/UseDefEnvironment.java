@@ -19,7 +19,7 @@ public class UseDefEnvironment{
 	
 	Collection<String> symbolsForUpstream = new HashSet<String>();
 	
-	static final Collection<UseOrDef> emptyUseOrDef = new LinkedList<UseOrDef>();
+	static final LinkedList<UseOrDef> emptyUseOrDef = new LinkedList<UseOrDef>();
 	static final Collection<String> emptySymbolHash = new HashSet<String>();
 	
 	public boolean isUse() { return false; }

@@ -2,6 +2,7 @@ package tools.udg.environments;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import tools.udg.UseOrDef;
 
@@ -9,19 +10,8 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 
 	boolean emitted = false;
 	
-	// emit 'use' for left hand side
-	// and def for complete node
+	String leftMostSymbol = "";
 	
-//	@Override
-//	public boolean shouldTraverse()
-//	{
-//		if(childType != null && childNum == 1  &&
-//		   childType.equals("Identifier"))
-//			return false;				
-//		
-//		return true;
-//	}
-
 	public Collection<String> upstreamSymbols()
 	{
 		if(emitted) return emptySymbolHash;
@@ -32,5 +22,23 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 		retval.add(dbProvider.getNodeCode(nodeId));
 		return retval; 
 	}
+
+	public void addChildSymbols(Collection<String> childSymbols)
+	{
+		if(childNum == 0 && childSymbols.size() == 1){
+			leftMostSymbol = childSymbols.iterator().next();
+		}
+	}
 	
+	public Collection<UseOrDef> useOrDefsFromChildSymbols()
+	{	
+		if(childNum != 0)
+			return emptyUseOrDef;
+		
+		LinkedList<String> symbols = new LinkedList<String>();
+		symbols.add(leftMostSymbol);
+	
+		return createUsesForAllSymbols(symbols);
+	}
+		
 }

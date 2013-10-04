@@ -229,7 +229,7 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.executeGremlinCmd(query)
         self.assertEquals(len(x), 0)
         
-    def testUDGStruct(self):
+    def testUDGStructDEF(self):
         query = """
         getFunctionByName('ddg_test_struct').functionToASTNodes()
         .filter{it.type == 'AssignmentExpr'}.astNodeToBasicBlock()
@@ -239,14 +239,27 @@ class JoernStepsTests(unittest.TestCase):
         self.assertEquals(len(x), 1)
         self.assertTrue(x[0] == 'foo . bar')
     
-    # def testDDGStruct(self):
-    #     query = """
-    #     getFunctionByName('ddg_test_struct').functionToASTNodes()
-    #     .filter{it.type == 'IdentifierDecl'}.astNodeToBasicBlock()
-    #     .out('REACHES').code
-    #     """
-    #     x = self.j.executeGremlinCmd(query)
-    #     self.assertTrue(len(x) == 1)
+    def testUDGStructUSE(self):
+        query = """
+        getFunctionByName('ddg_test_struct').functionToASTNodes()
+        .filter{it.type == 'AssignmentExpr'}.astNodeToBasicBlock()
+        .out('USE').code
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertEquals(len(x), 1)
+        self.assertTrue(x[0] == 'foo')
+
+
+    def testDDGStruct(self):
+        query = """
+        getFunctionByName('ddg_test_struct').functionToASTNodes()
+        .filter{it.type == 'IdentifierDecl'}.astNodeToBasicBlock()
+        .out('REACHES').code
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertEquals(len(x), 2)
+
+    
 
 
 

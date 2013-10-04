@@ -45,12 +45,11 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	}
 	
 	@Test
-	public void test_struct_field_assign()
+	public void test_struct_field_assign_def()
 	{
 		UseDefGraph useDefGraph = createUDGForFunction("ddg_test_struct");
 		assertOnlyDefForXFound(useDefGraph, "foo . bar");
 	}
-	
 	
 	@Test
 	public void test_def_tainted_call()
