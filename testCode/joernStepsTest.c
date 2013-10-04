@@ -26,3 +26,12 @@ int two_taint_sources()
 	if(y == 0) return 1;
 	if(z == 0) return -1;
 }
+
+
+int test_dataFlowFrom()
+{
+	taint_source(x,y);	
+	if(x == 0) return;
+
+	sink(y);
+}

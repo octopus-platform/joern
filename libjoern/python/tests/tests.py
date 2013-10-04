@@ -109,7 +109,23 @@ class JoernStepsTests(unittest.TestCase):
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
 
-        
+    
+    def testDataFlowFromRegex(self):
+         query = """
+         
+         sources  = [Pattern.compile('taint_source')]
+         
+         getFunctionByName('test_dataFlowFrom')
+         .functionToASTNodes().filter{it.type == 'Argument' && it.code =='y'}
+         .dataFlowFromRegex('taint_source')
+         .transform{ g.v(it[0]) } // source
+         .code
+         
+         """
+         x = self.j.executeGremlinCmd(query)
+         self.assertTrue(x[0].startswith('taint_source'))
+
+
 
 def main():
     unittest.main()
