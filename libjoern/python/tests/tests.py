@@ -141,6 +141,21 @@ class JoernStepsTests(unittest.TestCase):
          x = self.j.executeGremlinCmd(query)
          self.assertTrue(len(x) == 0)
 
+    def testDataFlowFromRegex_untainted_source(self):
+         query = """
+         
+         sources  = [Pattern.compile('taint_source')]
+         
+         getFunctionByName('test_dataFlowFromUntainted')
+         .functionToASTNodes().filter{it.type == 'Argument' && it.code =='y'}
+         .dataFlowFromRegex('not_a_taint_source')
+         .transform{ g.v(it[0]) } // source
+         .code
+         
+         """
+         x = self.j.executeGremlinCmd(query)
+         self.assertTrue(len(x) == 0)
+
 
     def testIsNotSanitizedByRegex_positive(self):
         query = """

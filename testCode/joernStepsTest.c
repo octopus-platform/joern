@@ -44,3 +44,11 @@ int test_isNotSanitizedByRegex()
 
 	sink(y);
 }
+
+int test_dataFlowFromUntainted()
+{
+	not_a_taint_source(x,y);	
+	if(x == 0) return;
+
+	sink(y);
+}
