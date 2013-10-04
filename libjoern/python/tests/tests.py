@@ -182,6 +182,25 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.executeGremlinCmd(query)
         self.assertTrue(len(x) == 0)
 
+    def testMissingCheckLocalTaintTemplate(self):
+        query = """
+        
+        setSinkArgument('sink.*', '0', 'y')
+        .sideEffect{ sinkCallCode = sinkCode(it) ; argCode = sinkArgCode(it); }
+        
+        .astNodeToFunction().filter{it.functionName.equals('test_isNotSanitizedByRegex')}
+        .back(2)
+        .dataFlowFromRegex('taint_source')
+        .isNotSanitizedBy{ it.filter{it.code.contains('foo')} }
+        .sideEffect{ (sinkId, sourceId) = it}
+        
+        .transform{ g.v(sinkId) }
+        .functionAndFilename().sideEffect{ (funcName, fileName) = it;}
+        .transform{[fileName, funcName, sinkCallCode, argCode]}
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertTrue(len(x) == 1)
+
 
 def main():
     unittest.main()
