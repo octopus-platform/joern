@@ -110,7 +110,7 @@ class JoernStepsTests(unittest.TestCase):
         self.assertEquals(x[0], 'x')
 
     
-    def testDataFlowFromRegex(self):
+    def testDataFlowFromRegex_positive(self):
          query = """
          
          sources  = [Pattern.compile('taint_source')]
@@ -125,6 +125,22 @@ class JoernStepsTests(unittest.TestCase):
          x = self.j.executeGremlinCmd(query)
          self.assertEquals(len(x), 1)
          self.assertTrue(x[0].startswith('taint_source'))
+
+    def testDataFlowFromRegex_negative(self):
+         query = """
+         
+         sources  = [Pattern.compile('taint_source')]
+         
+         getFunctionByName('test_dataFlowFromRegex')
+         .functionToASTNodes().filter{it.type == 'Argument' && it.code =='y'}
+         .dataFlowFromRegex('something_else')
+         .transform{ g.v(it[0]) } // source
+         .code
+         
+         """
+         x = self.j.executeGremlinCmd(query)
+         self.assertTrue(len(x) == 0)
+
 
     def testIsNotSanitizedByRegex_positive(self):
         query = """
