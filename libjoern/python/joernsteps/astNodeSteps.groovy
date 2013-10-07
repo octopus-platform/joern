@@ -25,7 +25,7 @@ Gremlin.defineStep('astNodeToLocalDeclsUsed', [Vertex, Pipe], {
 })
 
 Gremlin.defineStep('astNodeToStructTypesUsed', [Vertex, Pipe], {
-   _().astNodeToBasicBlock().astNodeToLocalDeclsUsed().as('localDecl')
+   _().astNodeToLocalDeclsUsed().as('localDecl')
   .localDeclToName().sideEffect{ symbol = it.code }.back('localDecl')
   .localDeclToType().filter{ isStruct(it) }.structureToName()
   .nameToTypeDecl().transform{ [it, symbol]  }

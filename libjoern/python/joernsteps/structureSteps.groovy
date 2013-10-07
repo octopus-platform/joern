@@ -11,7 +11,7 @@ Gremlin.defineStep("structureToMemberDecls", [Vertex,Pipe], {
 })
 
 Object.metaClass.isStruct = {
-  it.code.startsWith('struct ')
+  it.code.startsWith('struct ') // && !it.code.contains('*')
 }
 
 Object.metaClass.numTypesInStructure = {
