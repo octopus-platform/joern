@@ -56,7 +56,7 @@ Object.metaClass.getFunctionByNameRegex = { aNameRegex ->
 
 Object.metaClass.getParametersOfType = { typeName ->
   query = 'type:"ParameterType" AND code:"' + typeName + '"'
-  queryNodeIndex(query)
+  queryNodeIndex(query).in('IS_AST_PARENT')
 }
 
 Object.metaClass.getParameterByRegex = { aNameRegex ->
