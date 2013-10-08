@@ -9,20 +9,6 @@
 //////////////////////////////////////////////////////////////////////
 
 /**
-   Allows more than one pipe to generate starting points. Acts as an
-   OR.
-*/
-
-Object.metaClass.OR = { pipes ->
-  np = []
-  for(int i = 0; i < pipes.size(); i++){
-    p = pipes[i]
-    np.add( _().transform{ p }.scatter())
-  }
-  _().copySplit( *np ).exhaustMerge()
-}
-
-/**
    Query the node index.
    @param query Lucene query
 */
