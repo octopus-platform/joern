@@ -15,5 +15,8 @@ Object.metaClass.noConditionMatches = { it, filterExpr ->
 }
 
 
-
-
+Object.metaClass.isDirectCast = { it, identifier ->
+  it.type == 'CastExpression' &&
+  exists(it.out('IS_AST_PARENT').filter{it.type == 'Identifier'}
+	 .filter{it.code == identifier}) 
+}
