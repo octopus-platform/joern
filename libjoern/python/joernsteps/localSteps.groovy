@@ -17,3 +17,7 @@ Gremlin.defineStep('localDeclToType', [Vertex, Pipe],{
   // else: Parameter
   { it.out().filter{ it.type == 'ParameterType'} }
 })
+
+Gremlin.defineStep('localToInitAssignment', [Vertex, Pipe], { 
+ _().out('IS_AST_PARENT').filter{ it.type == 'AssignmentExpr'}
+})
