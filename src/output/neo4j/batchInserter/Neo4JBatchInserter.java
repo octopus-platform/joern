@@ -1,5 +1,6 @@
 package output.neo4j.batchInserter;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.neo4j.graphdb.RelationshipType;
@@ -92,7 +93,13 @@ public class Neo4JBatchInserter
 	
 	public static void closeDatabase()
 	{
-		indexProvider.shutdown();
+		try{
+			indexProvider.shutdown();
+		}catch(RuntimeException ex)
+		{
+			System.err.println("Error while shutting down index provider. This may be harmless:");
+			// System.err.println(ex.getMessage());
+		}
 		inserter.shutdown();
 	}
 	
