@@ -31,4 +31,15 @@ public class AssignmentTests {
 		assertTrue(output.contains("assign_expr"));
 	}
 	
+	@Test
+	public void testPrivateInName()
+	{
+		String input = "struct acpi_battery *battery = m->private;";
+		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
+		ParseTree tree = functionParser.parseString(input);
+		String output = tree.toStringTree(functionParser.getAntlrParser());
+		System.out.println(output);
+		assertTrue(output.contains("simple_decl"));
+	}
+	
 }

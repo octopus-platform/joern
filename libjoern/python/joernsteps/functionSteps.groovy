@@ -21,6 +21,17 @@ Gremlin.defineStep("functionToBasicBlocks", [Vertex,Pipe], {
  .scatter()
 })
 
+
+Gremlin.defineStep("functionToSymbols", [Vertex,Pipe], {
+ _().transform{ queryNodeIndex('type:Symbol AND functionId:' + it.id) }
+ .scatter()
+})
+
+Gremlin.defineStep("functionToParameters", [Vertex,Pipe], {
+ _().transform{ queryNodeIndex('type:Parameter AND functionId:' + it.id) }
+ .scatter()
+})
+
 Gremlin.defineStep("functionToParameterList", [Vertex,Pipe], {
  _().getFunctionASTRoot().outE('IS_AST_PARENT').filter{ it.n == '1'}.inV()
 })
@@ -87,7 +98,8 @@ Gremlin.defineStep("functionToLocationRow", [Vertex,Pipe], {
 })
 
 Gremlin.defineStep("functionToAllNodesOfType", [Vertex, Pipe], { aType ->
- _().functionToASTNodes().filter{ it.type == aType}
+  
+  _().transform{ queryNodeIndex('type:' + aType + ' AND functionId:' + it.id) }.scatter()
 })
 
 Gremlin.defineStep("filterByFunctionName", [Vertex, Pipe], { fExpr ->

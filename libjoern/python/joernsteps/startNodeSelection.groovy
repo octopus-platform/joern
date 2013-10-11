@@ -74,7 +74,7 @@ Object.metaClass.getParameterByNameRegex = { aNameRegex ->
 /**
    Retrieve all calls by callee.  This is more efficient than
    'getCallsToRegex' but less powerful, allowing only exact matches of
-   callee names.
+   callee names. If we had 'Callee'-nodes, this would be a lot more efficient.
 
   @param callee identifier of the callee
 */

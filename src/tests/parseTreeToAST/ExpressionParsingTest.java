@@ -190,5 +190,5 @@ public class ExpressionParsingTest {
 		CallExpression expr = (CallExpression) starter.getCondition().getExpression();
 		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 	}
-	
+		
 }

@@ -53,7 +53,7 @@ jump_statement: BREAK ';'		#breakStatement
               | RETURN expr? ';'	#returnStatement
               ;
 
-label: CASE? (identifier | number | access_specifier) ':' ;
+label: CASE? (identifier | number) ':' ;
 
 expr_statement: expr? ';';
 

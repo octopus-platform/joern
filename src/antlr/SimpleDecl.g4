@@ -37,7 +37,7 @@ param_decl_specifiers : (AUTO | REGISTER)? type_name;
 // here because C programs can use 'public', 'protected' or 'private'
 // as variable names.
 
-parameter_name: identifier | access_specifier;
+parameter_name: identifier;
 
 param_type_list: '(' VOID ')'
                | '(' (param_type (',' param_type)*)? ')';
@@ -46,7 +46,7 @@ param_type: param_decl_specifiers param_type_id;
 param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 
 // operator-identifiers not implemented
-identifier : ALPHA_NUMERIC ('::' ALPHA_NUMERIC)*;
+identifier : (ALPHA_NUMERIC ('::' ALPHA_NUMERIC)*) | access_specifier;
 number: HEX_LITERAL | DECIMAL_LITERAL | OCTAL_LITERAL;
 
 ptrs: ptr_operator+;
