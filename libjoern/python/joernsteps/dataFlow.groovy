@@ -33,11 +33,13 @@ Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
   .sideEffect{ sourceIds = it.astNodeToFunction().functionToBasicBlocks()
                .filter{ aRegexFound(it, sources) }.id.toList() }
   
-  .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
   .out('USE').sideEffect{ symbol = it.code }.back(2)
-  .astNodeToBasicBlock().sideEffect{ firstRound = true }
+
+  .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }
+  
+  .sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}.sideEffect{ isSource = (it.id in sourceIds) }
-  .loop('loopStart'){it.loops < 10 && !isSource } { isSource }
+  .loop('loopStart'){it.loops < 2 && !isSource } { isSource }
   .transform{ [it.id, sinkId] } 
   .dedup()
 })
@@ -60,7 +62,7 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
   .sideEffect{ isSource = (it.id in sourceIds) }
-  .loop('loopStart'){it.loops < 10 && !isSource }{ isSource }
+  .loop('loopStart'){it.loops < 2 && !isSource }{ isSource }
   .transform{ [it.id, sinkId] }
   .dedup()
 })
@@ -85,7 +87,7 @@ Gremlin.defineStep('dataFlowToRegex', [Vertex, Pipe], { Object [] s ->
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
   .sideEffect{ isSink = (it.inV().id.toList()[0] in sinkIds ) }
-  .loop('loopStart'){it.loops < 10 && !isSink}{ isSink }
+  .loop('loopStart'){it.loops < 2 && !isSink}{ isSink }
   .transform{ [sourceId, it.inV().toList()[0].id, it.var] } 
   .dedup()
 })
@@ -108,7 +110,7 @@ Gremlin.defineStep('dataFlowTo', [Vertex, Pipe], { f ->
   .outE('REACHES').filter{ !firstRound || it.var.equals(sourceSymbol) }
   .sideEffect{firstRound = false}
   .sideEffect{ isSink = (it.inV().id.toList()[0] in sinkIds ) }
-  .loop('loopStart'){it.loops < 10 && !isSink}{ isSink }
+  .loop('loopStart'){it.loops < 2 && !isSink}{ isSink }
   .transform{ [sourceId, it.inV().toList()[0].id, it.var] } 
   .dedup()
 })
