@@ -29,6 +29,22 @@ int udg_test_def_tainted_call_addr()
 	foo(&x);
 }
 
+int udg_test_struct_field_use()
+{
+  foo(x.y);
+}
+
+int udg_test_assign_to_array_field()
+{
+  arr[x] = 0;
+}
+
+
+int udg_test_assign_to_expression()
+{
+  *(a + b) = 0;
+}
+
 int plusEqualsUse()
 {
 	// there should be a DEF(X)

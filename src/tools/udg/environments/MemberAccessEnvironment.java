@@ -14,12 +14,17 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 	
 	public Collection<String> upstreamSymbols()
 	{
-		if(emitted) return emptySymbolHash;
+		if(emitted) return emptySymbolList;
 		
 		// emit the entire symbol
 		emitted = true;
-		HashSet<String> retval = new HashSet<String>();
-		retval.add(dbProvider.getNodeCode(nodeId));
+		LinkedList<String> retval = new LinkedList<String>();
+		
+		// emit the left-most symbol
+		retval.add(leftMostSymbol);	
+		
+		retval.add(dbProvider.getNodeCode(nodeId));		
+				
 		return retval; 
 	}
 

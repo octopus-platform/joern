@@ -87,7 +87,7 @@ class JoernStepsTests(unittest.TestCase):
         self.assertEquals(x[0], 'x')
 
     
-    def testParameterrDEFLink(self):
+    def testParameterDEFLink(self):
         query = """
         getFunctionByName('udg_test_param_decl').functionToASTNodes()
         .filter{it.type == 'Parameter'}.out('DEF').code
@@ -109,7 +109,53 @@ class JoernStepsTests(unittest.TestCase):
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
 
-    
+    def testUseFromArgMemberAccess(self):
+        query = """
+        getFunctionByName('udg_test_struct_field_use')
+        .functionToASTNodes()
+        .filter{it.type == 'Argument'}
+        .out('USE').code
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertEquals(len(x), 2)
+        
+    def testAssignToArrayField(self):
+        query = """
+        getFunctionByName('udg_test_assign_to_array_field')
+        .functionToASTNodes()
+        .filter{it.type == 'AssignmentExpr'}
+        .out('DEF').code
+        """
+        x = self.j.executeGremlinCmd(query)
+        # At some point, we want to make this DEF(*x)
+        # instead.
+        self.assertEquals(x[0], 'arr')
+
+    def testAssignToExpressionDef(self):
+        query = """
+        getFunctionByName('udg_test_assign_to_expression')
+        .functionToASTNodes()
+        .filter{it.type == 'AssignmentExpr'}
+        .out('DEF').code
+        """
+        x = self.j.executeGremlinCmd(query)
+        self.assertEquals(x[0], 'a')
+        self.assertEquals(x[1], 'b')
+        
+
+    # This one currently fails.
+    # def testAssignToExpressionUSE(self):
+    #     query = """
+    #     getFunctionByName('udg_test_assign_to_expression')
+    #     .functionToASTNodes()
+    #     .filter{it.type == 'AssignmentExpr'}
+    #     .out('USE').code
+    #     """
+    #     x = self.j.executeGremlinCmd(query)
+    #     self.assertEquals(x[0], 'a')
+    #     self.assertEquals(x[1], 'b')
+
+
     def testDataFlowFromRegex_positive(self):
          query = """
          
@@ -237,7 +283,7 @@ class JoernStepsTests(unittest.TestCase):
         """
         x = self.j.executeGremlinCmd(query)
         self.assertEquals(len(x), 1)
-        self.assertTrue(x[0] == 'foo . bar')
+        self.assertEquals(x[0], 'foo . bar')
     
     def testUDGStructUSE(self):
         query = """

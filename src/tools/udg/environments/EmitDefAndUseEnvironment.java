@@ -33,7 +33,7 @@ public class EmitDefAndUseEnvironment extends UseDefEnvironment {
 	
 	public Collection<String> upstreamSymbols()
 	{
-		return emptySymbolHash;
+		return emptySymbolList;
 	}
 	
 }

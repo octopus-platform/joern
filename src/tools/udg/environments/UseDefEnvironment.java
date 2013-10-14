@@ -17,10 +17,10 @@ public class UseDefEnvironment{
 	protected long nodeId;
 	protected DBProvider dbProvider;
 	
-	Collection<String> symbolsForUpstream = new HashSet<String>();
+	Collection<String> symbolsForUpstream = new LinkedList<String>();
 	
 	static final LinkedList<UseOrDef> emptyUseOrDef = new LinkedList<UseOrDef>();
-	static final Collection<String> emptySymbolHash = new HashSet<String>();
+	static final Collection<String> emptySymbolList = new LinkedList<String>();
 	
 	public boolean isUse() { return false; }
 	public boolean isDef() { return false; }

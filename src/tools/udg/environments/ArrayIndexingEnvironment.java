@@ -11,7 +11,7 @@ public class ArrayIndexingEnvironment extends EmitUseEnvironment {
 	{
 		if(childNum != 0)
 			useSymbols.addAll(childSymbols);
-		else
+		else	
 			symbolsForUpstream.addAll(childSymbols);
 	}
 	
