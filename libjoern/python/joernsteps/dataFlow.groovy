@@ -33,7 +33,9 @@ Gremlin.defineStep('dataFlowFromRegex', [Vertex, Pipe], { Object [] s ->
   .sideEffect{ sourceIds = it.astNodeToFunction().functionToBasicBlocks()
                .filter{ aRegexFound(it, sources) }.id.toList() }
   
-  .out('USE').sideEffect{ symbol = it.code }.back(2)
+  .sideEffect{ argNode = it; }
+  .out('USE').sideEffect{ symbol = it.code }
+  .transform{ argNode }
 
   .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }
   
@@ -57,8 +59,9 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
     .filter( exists(fil(it)) ).id.toList()
   }
 
-  .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
-  .out('USE').sideEffect{ symbol = it.code }.back(2)
+  .sideEffect{ argNode = it; }
+  .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }
+  .out('USE').sideEffect{ symbol = it.code }.transform{ argNode }
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
   .sideEffect{ isSource = (it.id in sourceIds) }
