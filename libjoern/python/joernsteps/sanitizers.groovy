@@ -7,7 +7,7 @@ Object.metaClass.checksSymbol = { it, s ->
   def symbol = s;
   it.basicBlockToAST()
   .subASTsOfType(['EqualityExpression', 'RelationalExpression'])
-  .out('IS_AST_PARENT').filter{ it.code.equals(symbol) }
+  .out('IS_AST_PARENT').filter{ containsSymbol(it, symbol) }
 }
 
 Object.metaClass.noConditionMatches = { it, filterExpr ->
