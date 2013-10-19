@@ -59,9 +59,11 @@ Gremlin.defineStep('dataFlowFrom', [Vertex, Pipe], { f ->
     .filter( exists(fil(it)) ).id.toList()
   }
 
+  .out('USE').sideEffect{ symbol = it.code }.transform{ argNode }
+
   .sideEffect{ argNode = it; }
   .astNodeToBasicBlock().sideEffect{ sinkId = it.id; }
-  .out('USE').sideEffect{ symbol = it.code }.transform{ argNode }
+  
   .astNodeToBasicBlock().sideEffect{ firstRound = true }
   .as('loopStart').inE('REACHES').filter{ !firstRound || it.var == symbol }.outV().sideEffect{firstRound = false}
   .sideEffect{ isSource = (it.id in sourceIds) }
@@ -162,54 +164,6 @@ Gremlin.defineStep('isNotSanitizedBy', [Vertex, Pipe], { f ->
   .filter{ it.id == sinkId }
   .dedup().transform{ [sourceId, sinkId] }
 
-})
-
-// interprocedural data flow
-
-Gremlin.defineStep('ipDataFlowFrom', [Vertex, Pipe], { sx-> 
-  def ipSource = sx;
-
-  _().astNodeToBasicBlock().sideEffect{ sinkId = it.id; }.back(2)
-  .out('USE').sideEffect{ ipSymbol = it.code }.back(2)
-  .astNodeToBasicBlock().sideEffect{ firstRound = true; ipDstNode = it.id; ipNodeStack = []}
-  
-  .as('loopStart')
-  .basicBlockToAST()
-  
-  .ifThenElse{ it.type == 'Parameter' }
-  {
-    it.out('IS_AST_PARENT')
-    .filter{ it.type == 'Identifier'}.in('IS_ARG').astNodeToBasicBlock()
-    .sideEffect{ ipNodeStack.add([ipCurNode, ipDstNode]); ipDstNode = it.id }
-  }
-  // else
-  { 
-    it.astNodeToBasicBlock().inE('REACHES').filter{ !firstRound || it.var == ipSymbol }.outV()
-  }
-  .sideEffect{firstRound = false; ipCurNode = it.id; }
-  .loop('loopStart'){it.loops < 10 && !it.object.code.contains(ipSource)}{true}
-  .filter{ it.code.contains(ipSource) }
-  .sideEffect{ if(ipNodeStack.size() == 0){ ipNodeStack.add([it.id,ipDstNode]) }}
-  .transform{ [it.id, sinkId] }
-  .dedup()
-  .transform{ [it[0], it[1], ipNodeStack] }
-})
-
-
-Gremlin.defineStep('ipIsNotSanitizedBy', [Vertex, Pipe], { san ->
-  def sanitizer = san;
-  
-  _().sideEffect{ nodeStack = it[2]; }
-  .filter{
-    for(x in nodeStack){ 
-      def srcId = x[0];
-      def dstId = x[1];      
-      l = g.v(0).transform{ [srcId, dstId] }.isNotSanitizedBy(sanitizer).toList()
-      if(l.size() == 0)
-  	return false;
-    }
-    return true;
-  }
 })
 
 Object.metaClass.aRegexFound = { it, sanitizers ->

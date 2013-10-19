@@ -20,7 +20,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "foo();";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 1);
+		assertTrue(cfg.getBasicBlocks().size() == 2);
 	}
 	
 	
@@ -29,7 +29,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "while(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 3);
+		assertTrue(cfg.getBasicBlocks().size() == 4);
 	}
 	
 	@Test
@@ -38,7 +38,7 @@ public class OtherTests extends CFGCreatorTest
 		String input = "do{ bar(); }while(foo);";
 		CFG cfg = getCFGForCode(input);
 		System.out.println(cfg.getBasicBlocks().size());
-		assertTrue(cfg.getBasicBlocks().size() == 3);
+		assertTrue(cfg.getBasicBlocks().size() == 4);
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "for(i = 0; i < 10; i ++){ foo(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 4);
+		assertTrue(cfg.getBasicBlocks().size() == 5);
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		Edges edges = cfg.getEdges();
 		System.out.println(edges.size());
-		assertTrue(edges.size() == 8);
+		assertTrue(edges.size() == 9);
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "x = 10; y = 20;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 2);
+		assertTrue(cfg.getBasicBlocks().size() == 3);
 	}
 	
 	@Test
@@ -92,7 +92,7 @@ public class OtherTests extends CFGCreatorTest
 		String input = "x = 10; y = 20;";
 		CFG cfg = getCFGForCode(input);
 		Edges edges = cfg.getEdges();
-		assertTrue(cfg.getEdges().size() == 1);
+		assertTrue(cfg.getEdges().size() == 2);
 	}
 	
 	@Test

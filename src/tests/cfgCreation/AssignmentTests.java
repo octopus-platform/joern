@@ -15,7 +15,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "x = y;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 1);
+		assertTrue(cfg.getBasicBlocks().size() == 2);
 	}
 
 	
@@ -36,7 +36,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "int x = 10;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 1);
+		assertTrue(cfg.getBasicBlocks().size() == 2);
 	}
 	
 	

@@ -19,7 +19,7 @@ public class IfBlockTests extends CFGCreatorTest
 	{
 		String input = "if(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 3);
+		assertTrue(cfg.getBasicBlocks().size() == 4);
 	}
 	
 	@Test
@@ -27,7 +27,7 @@ public class IfBlockTests extends CFGCreatorTest
 	{
 		String input = "if(foo) bar(); else if(foo2) bar(2);";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size()== 6);
+		assertTrue(cfg.getBasicBlocks().size()== 7);
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class IfBlockTests extends CFGCreatorTest
 	{
 		String input = "if(foo1) bar1(); else if(foo2) bar2(); else if(foo3) bar3();";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size()== 9);
+		assertTrue(cfg.getBasicBlocks().size()== 10);
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class IfBlockTests extends CFGCreatorTest
 		String input = "if(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
 		Edges edges = cfg.getEdges();
-		assertTrue(edges.size() == 3);
+		assertTrue(edges.size() == 4);
 	}
 	
 	
@@ -80,7 +80,7 @@ public class IfBlockTests extends CFGCreatorTest
 		BasicBlock ifStatements = cfg.getBasicBlocks().get(1);
 		BasicBlock emptyBlock = cfg.getBasicBlocks().get(2);
 		
-		assertTrue(cfg.getEdges().size() == 3);
+		assertTrue(cfg.getEdges().size() == 4);
 		assertTrue(cfg.getEdges().getEdgesFrom(conditionBlock).size() == 2);
 		assertTrue(cfg.getEdges().getEdgesFrom(ifStatements).size() == 1);
 		
@@ -100,7 +100,7 @@ public class IfBlockTests extends CFGCreatorTest
 		BasicBlock ifStatements = cfg.getBasicBlocks().get(2);
 		BasicBlock emptyBlock = cfg.getBasicBlocks().get(3);
 		
-		assertTrue(cfg.getEdges().size() == 4);
+		assertTrue(cfg.getEdges().size() == 5);
 		assertTrue(cfg.getEdges().getEdgesFrom(conditionBlock).size() == 2);
 		assertTrue(cfg.getEdges().getEdgesFrom(ifStatements).size() == 1);
 		
@@ -122,7 +122,7 @@ public class IfBlockTests extends CFGCreatorTest
 		BasicBlock emptyBlock = cfg.getBasicBlocks().get(2);
 		BasicBlock nextBlock = cfg.getBasicBlocks().get(3);
 		
-		assertTrue(cfg.getEdges().size() == 4);
+		assertTrue(cfg.getEdges().size() == 5);
 		assertTrue(cfg.getEdges().getEdgesFrom(conditionBlock).size() == 2);
 		assertTrue(cfg.getEdges().getEdgesFrom(ifStatements).size() == 1);
 		
@@ -155,7 +155,7 @@ public class IfBlockTests extends CFGCreatorTest
 	{
 		String input = "if(foo){ bar(); }else{ woo(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 4);
+		assertTrue(cfg.getBasicBlocks().size() == 5);
 	}
 	
 }

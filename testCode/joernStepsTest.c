@@ -64,3 +64,4 @@ int test_checksSymbol(int count)
 	if(count > 0)
 		return;
 }
+
