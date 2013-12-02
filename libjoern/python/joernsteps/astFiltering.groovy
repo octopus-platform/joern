@@ -24,7 +24,7 @@ Object.metaClass.codeContains = { obj, x ->
 }
 
 Object.metaClass.containsSymbol = { it, symbol ->
-  it.code.matches(".*" + "(?<![a-zA-Z0-9_])" + symbol + '(?!([a-zA-Z0-9_]))' + ".*")  
+  it.code.matches(".*" + "(?<![a-zA-Z0-9_])" + Pattern.quote(symbol) + '(?!([a-zA-Z0-9_]))' + ".*")  
 }
 
 // This is useful when checking if a patch DOES NOT exist.

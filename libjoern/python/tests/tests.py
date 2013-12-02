@@ -304,6 +304,17 @@ class JoernStepsTests(unittest.TestCase):
         """
         x = self.j.executeGremlinCmd(query)
         self.assertEquals(len(x), 2)
+
+    def testParameterNotTainted(self):
+        
+        query = """
+        getFunctionByName('test_dataFlowToFromParam')
+        .functionToASTNodes().filter{it.type == 'Parameter'}
+        .out('DEF').code
+        """
+        x = self.j.executeGremlinCmd(query)
+        print x
+
     
 
 def main():
