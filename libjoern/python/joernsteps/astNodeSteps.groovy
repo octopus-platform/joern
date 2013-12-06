@@ -6,6 +6,10 @@ Gremlin.defineStep('astNodeToBasicBlock', [Vertex,Pipe], {
    it.object.out('IS_BASIC_BLOCK_OF').toList() ==[]  }
 });
 
+Gremlin.defineStep('astNodeToBasicBlockRoot', [Vertex, Pipe],{
+ _().astNodeToBasicBlock().basicBlockToAST()
+})
+
 Gremlin.defineStep('astNodeToSymbolsUsed', [Vertex, Pipe], { 
   _().out('USE')
 })
