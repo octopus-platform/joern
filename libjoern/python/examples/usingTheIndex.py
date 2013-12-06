@@ -11,7 +11,7 @@ j = JoernSteps()
 cmd = """ queryNodeIndex('type:"AssignmentExpr"').code
 """
 
-for x in j.executeGremlinCmd(cmd): print x
+for x in j.executeGremlinCmd(cmd): print x.encode('utf-8')
 
 # (*) Alternative: Retrieve entire nodes including
 #     all properties
@@ -22,14 +22,14 @@ cmd = """ queryNodeIndex('type:"AssignmentExpr"')
 """
 
 for x in j.executeGremlinCmd(cmd):
-    print x['data']['code']
+    print x['data']['code'].encode('utf-8')
 
 # (*) AND-query on two key-value pairs:
 # Retrieve all functions where name matches *create*
 
 cmd = """ queryNodeIndex('type:"Function" AND functionName:*create*').functionName """
 
-for x in j.executeGremlinCmd(cmd): print x
+for x in j.executeGremlinCmd(cmd): print x.encode('utf-8')
 
 # (*) Use result of an index lookup for a subsequent index lookup:
 # Retrieve all assignments in functions where name matches *create*
@@ -40,4 +40,5 @@ queryNodeIndex('type:"Function" AND functionName:*create*').id
   .queryNodeIndex().code
 """
 
-for x in j.executeGremlinCmd(cmd): print x
+for x in j.executeGremlinCmd(cmd):
+    print x.encode('utf-8')
