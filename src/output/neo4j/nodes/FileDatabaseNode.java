@@ -8,7 +8,7 @@ public class FileDatabaseNode extends DatabaseNode {
 
 	long neo4jId = -1;
 	private String pathString;
-	private String type = "file";
+	private String type;
 	
 	public void setType(String aType)
 	{
