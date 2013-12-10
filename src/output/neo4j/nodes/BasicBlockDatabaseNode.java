@@ -20,7 +20,7 @@ public class BasicBlockDatabaseNode extends DatabaseNode {
 	{	
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("code", block.getEscapedCodeStr());
-		properties.put("type", block.getType());
+		properties.put("type", block.getType());		
 		return properties;	
 	}
 
