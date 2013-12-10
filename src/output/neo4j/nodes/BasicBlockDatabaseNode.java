@@ -21,7 +21,9 @@ public class BasicBlockDatabaseNode extends DatabaseNode {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("code", block.getEscapedCodeStr());
 		properties.put("type", block.getType());		
-		return properties;	
+		if(block.getASTNode() != null)
+			properties.put("location", block.getASTNode().getLocationString());
+		return properties;
 	}
 
 }
