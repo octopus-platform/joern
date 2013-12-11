@@ -18,8 +18,6 @@ public class ASTNode {
 	protected LinkedList<ASTNode> children;
 	protected int childNumber;
 	
-	protected static final List<ASTNode> emptyList = new LinkedList<ASTNode>();
-	
 	public void addChild(ASTNode node)
 	{ 
 		if(children == null)
