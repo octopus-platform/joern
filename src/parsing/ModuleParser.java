@@ -8,11 +8,23 @@ public class ModuleParser
 {
 	ANTLRModuleParserDriver parserDriver = new ANTLRModuleParserDriver();
 	
+	public void parseFile(String filename)
+    {
+    	System.out.println(filename);
+    	
+    	try{
+    		parserDriver.parseAndWalkFile(filename);
+    	}catch(ParserException ex){
+    		System.err.println("Error parsing file: " + filename);
+    	}
+    }
+	
 	public void addObserver(Observer anObserver)
 	{
 		parserDriver.addObserver(anObserver);
 	}
 	
+	// Not used?
 	public void parseListOfFiles(List<String> filenames)
 	{
 		parserDriver.begin();
@@ -23,14 +35,4 @@ public class ModuleParser
 		parserDriver.end();
 	}
 	
-    public void parseFile(String filename)
-    {
-    	System.out.println(filename);
-    	
-    	try{
-    		parserDriver.parseAndWalkFile(filename);
-    	}catch(ParserException ex){
-    		System.err.println("Error parsing file: " + filename);
-    	}
-    }
 }

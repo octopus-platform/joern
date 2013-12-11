@@ -34,7 +34,7 @@ abstract public class ANTLRParserDriver extends Observable
 	//   when ASTs are ready.
 	// We should split this into two classes.
 	
-	public Stack<ASTNodeBuilder> itemStack = new Stack<ASTNodeBuilder>();
+	public Stack<ASTNodeBuilder> builderStack = new Stack<ASTNodeBuilder>();
 	public TokenSubStream stream;
 	public String filename;
 	
@@ -153,7 +153,7 @@ abstract public class ANTLRParserDriver extends Observable
 	
 	public void setStack(Stack<ASTNodeBuilder> aStack)
 	{
-		itemStack = aStack;
+		builderStack = aStack;
 	}
 	
 	
@@ -205,14 +205,14 @@ abstract public class ANTLRParserDriver extends Observable
 	{
 		ASTWalkerEvent event = new ASTWalkerEvent(ASTWalkerEvent.eventID.PROCESS_ITEM);
 		event.item = aItem;
-		event.itemStack = itemStack;
+		event.itemStack = builderStack;
 		setChanged();
 		notifyObservers(event);
 	}
 	
 	public CompoundStatement getResult()
 	{
-		return (CompoundStatement) itemStack.peek().getItem();
+		return (CompoundStatement) builderStack.peek().getItem();
 	}
 
 	public Parser getAntlrParser() {

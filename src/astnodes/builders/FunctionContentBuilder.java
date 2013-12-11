@@ -136,10 +136,8 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		
 	}
 	
-	// For all statements, begin by pushing a CodeItem
-	// onto the stack. Once we have implemented
-	// handling for all statement types, this can
-	// be removed
+	// For all statements, begin by pushing a Statement Object
+	// onto the stack.
 
 	public void enterStatement(StatementContext ctx)
 	{
