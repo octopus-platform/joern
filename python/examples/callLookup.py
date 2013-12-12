@@ -1,8 +1,9 @@
 import sys, os
 sys.path.append(os.getcwd())
-from libjoern import JoernSteps
+from joern.all import JoernSteps
 
 j = JoernSteps()
+j.connectToDatabase()
 
 # (1) Lookup all calls to memcpy
 
@@ -27,5 +28,5 @@ cmd = 'getCallsTo("memcpy").astNodeToFunction().signature'
 
 cmd = 'getCallsTo("memcpy").astNodeToFunction().functionToLocationRow()'
 
-y = j.executeGremlinCmd(cmd)
+y = j.runGremlinQuery(cmd)
 for x in y: print x
