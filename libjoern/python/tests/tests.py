@@ -1,15 +1,13 @@
 import unittest
-
-
 import sys, os
 
-sys.path.append(os.getcwd())
-from libjoern import JoernSteps
+from joern.all import JoernSteps
 
 class JoernStepsTests(unittest.TestCase):
 
     def setUp(self):
         self.j = JoernSteps()
+        self.j.connectToDatabase()
 
     def tearDown(self):
         pass
@@ -17,7 +15,7 @@ class JoernStepsTests(unittest.TestCase):
     def testCallRetrieval(self):
         
         query = """ getCallsTo('bar').code """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
 
     def testLeftValueFlowCaption(self):
@@ -26,7 +24,7 @@ class JoernStepsTests(unittest.TestCase):
         getCallsTo('bar')
         .astNodeToBasicBlock().outE('REACHES').var
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         
         self.assertTrue(len(x) == 2)
         self.assertEquals(x[0], "x")
@@ -42,7 +40,7 @@ class JoernStepsTests(unittest.TestCase):
         .astNodeToBasicBlock().outE('REACHES').var
         """
         
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
         self.assertEquals(x[0], "y")
 
@@ -53,7 +51,7 @@ class JoernStepsTests(unittest.TestCase):
         .astNodeToBasicBlock().outE('REACHES').var
         """
         
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
         self.assertEquals(x[0], "z")
 
@@ -64,7 +62,7 @@ class JoernStepsTests(unittest.TestCase):
         .back(2)
         .astNodeToBasicBlock().outE('REACHES').var
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
         self.assertEquals(x[0], "y")
     
@@ -73,7 +71,7 @@ class JoernStepsTests(unittest.TestCase):
         getFunctionByName('plusEqualsUse')
         .functionToBasicBlocks().out('USE').code"""
         
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 2)
     
     def testIdentifierDeclDEFLink(self):
@@ -82,7 +80,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'IdentifierDecl'}.out('DEF').code
 
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
 
@@ -93,7 +91,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'Parameter'}.out('DEF').code
 
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
 
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
@@ -104,7 +102,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'Argument'}.out('USE').code
 
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
 
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'x')
@@ -116,7 +114,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'Argument'}
         .out('USE').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 2)
         
     def testAssignToArrayField(self):
@@ -126,7 +124,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'AssignmentExpr'}
         .out('DEF').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         # At some point, we want to make this DEF(*x)
         # instead.
         self.assertEquals(x[0], 'arr')
@@ -138,7 +136,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'AssignmentExpr'}
         .out('DEF').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(x[0], 'a')
         self.assertEquals(x[1], 'b')
         
@@ -151,7 +149,7 @@ class JoernStepsTests(unittest.TestCase):
     #     .filter{it.type == 'AssignmentExpr'}
     #     .out('USE').code
     #     """
-    #     x = self.j.executeGremlinCmd(query)
+    #     x = self.j.runGremlinQuery(query)
     #     self.assertEquals(x[0], 'a')
     #     self.assertEquals(x[1], 'b')
 
@@ -168,7 +166,7 @@ class JoernStepsTests(unittest.TestCase):
          .code
          
          """
-         x = self.j.executeGremlinCmd(query)
+         x = self.j.runGremlinQuery(query)
          self.assertEquals(len(x), 1)
          self.assertTrue(x[0].startswith('taint_source'))
 
@@ -184,7 +182,7 @@ class JoernStepsTests(unittest.TestCase):
          .code
          
          """
-         x = self.j.executeGremlinCmd(query)
+         x = self.j.runGremlinQuery(query)
          self.assertTrue(len(x) == 0)
 
     def testDataFlowFromRegex_untainted_source(self):
@@ -199,7 +197,7 @@ class JoernStepsTests(unittest.TestCase):
          .code
          
          """
-         x = self.j.executeGremlinCmd(query)
+         x = self.j.runGremlinQuery(query)
          self.assertTrue(len(x) == 0)
 
 
@@ -212,7 +210,7 @@ class JoernStepsTests(unittest.TestCase):
         .transform{ g.v(it[0]) } // source
         .code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
         self.assertTrue(x[0].startswith('taint_source'))
 
@@ -225,7 +223,7 @@ class JoernStepsTests(unittest.TestCase):
         .transform{ g.v(it[0]) } // source
         .code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 0)
 
     def testMissingCheckLocalTaintTemplate(self):
@@ -244,7 +242,7 @@ class JoernStepsTests(unittest.TestCase):
         .functionAndFilename().sideEffect{ (funcName, fileName) = it;}
         .transform{[fileName, funcName, sinkCallCode, argCode]}
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
 
     def testMissingCheckLocalTaintTemplate2(self):
@@ -262,7 +260,7 @@ class JoernStepsTests(unittest.TestCase):
         .isNotSanitizedByRegex('foo')
 
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 1)
 
     def test_checksSymbol(self):
@@ -272,7 +270,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{ noConditionMatches(it, sanitizerExpr) }
         .functionName
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 0)
         
     def testUDGStructDEF(self):
@@ -281,7 +279,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'AssignmentExpr'}.astNodeToBasicBlock()
         .out('DEF').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 1)
         self.assertEquals(x[0], 'foo . bar')
     
@@ -291,7 +289,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'AssignmentExpr'}.astNodeToBasicBlock()
         .out('USE').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 1)
         self.assertTrue(x[0] == 'foo')
 
@@ -302,7 +300,7 @@ class JoernStepsTests(unittest.TestCase):
         .filter{it.type == 'IdentifierDecl'}.astNodeToBasicBlock()
         .out('REACHES').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 2)
 
     def testParameterNotTainted(self):
@@ -312,7 +310,7 @@ class JoernStepsTests(unittest.TestCase):
         .functionToASTNodes().filter{it.type == 'Parameter'}
         .out('DEF').code
         """
-        x = self.j.executeGremlinCmd(query)
+        x = self.j.runGremlinQuery(query)
         print x
 
     

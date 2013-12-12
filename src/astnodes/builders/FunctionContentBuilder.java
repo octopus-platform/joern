@@ -1,5 +1,6 @@
 package astnodes.builders;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -68,6 +69,7 @@ import astnodes.expressions.ArrayIndexing;
 import astnodes.expressions.AssignmentExpr;
 import astnodes.expressions.BitAndExpression;
 import astnodes.expressions.CallExpression;
+import astnodes.expressions.Callee;
 import astnodes.expressions.CastExpression;
 import astnodes.expressions.CastTarget;
 import astnodes.expressions.ConditionalExpression;
@@ -399,7 +401,25 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitFuncCall(FuncCallContext ctx)
 	{
+		introduceCalleeNode();
 		consolidateSubExpression(ctx);
+	}
+
+	private void introduceCalleeNode()
+	{
+		CallExpression expr;
+		try{
+			expr = (CallExpression) itemStack.peek();
+		}catch(EmptyStackException ex){
+			return;
+		}
+
+		ASTNode child = expr.getChild(0);
+		if(child == null) return;
+
+		Callee callee = new Callee(); 
+		callee.addChild(child);
+		expr.replaceFirstChild(callee);
 	}
 
 	public void enterArgumentList(Function_argument_listContext ctx)
@@ -565,7 +585,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		PrimaryExpression expr = new PrimaryExpression();
 		itemStackPush(expr);
 	}
-
+	
 	public void exitPrimary(Primary_expressionContext ctx)
 	{
 		consolidateSubExpression(ctx);

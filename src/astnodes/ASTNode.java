@@ -1,7 +1,6 @@
 package astnodes;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -27,7 +26,18 @@ public class ASTNode {
 	}
 	
 	public int getChildCount(){ if(children == null) return 0; return children.size(); }
-	public ASTNode getChild(int i){ if(children == null) return null; return children.get(i); }
+	public ASTNode getChild(int i)
+	{
+		if(children == null) return null;
+		
+		ASTNode retval;
+		try{
+			retval = children.get(i);
+		}catch(IndexOutOfBoundsException ex){
+			return null;
+		}
+		return retval;
+	}
 	
 	public ASTNode popLastChild(){ return children.removeLast(); }
 	
