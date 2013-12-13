@@ -3,6 +3,7 @@ package astnodes.statements;
 import java.util.LinkedList;
 import java.util.List;
 
+import parsing.ParseTreeUtils;
 import astnodes.ASTNode;
 import astwalking.ASTNodeVisitor;
 
@@ -22,5 +23,7 @@ public class CompoundStatement extends Statement
 		return children;
 	}
 
+	public String getEscapedCodeStr() { return ""; }
+	
 	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
 }
