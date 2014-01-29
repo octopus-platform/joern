@@ -72,6 +72,15 @@ public class CodeNestingTest {
 		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);	
 	}
 	
+	@Test
+	public void complexIfElseNesting()
+	{
+		String input = "if (A){ if (B){ } if (C){ } } else { }";
+		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);	
+		assertTrue(ifItem.getElseNode() != null);
+	}
+	
 	
 	@Test
 	public void testFor()
