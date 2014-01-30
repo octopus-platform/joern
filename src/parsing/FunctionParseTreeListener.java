@@ -2,7 +2,7 @@ package parsing;
 
 import antlr.FunctionBaseListener;
 import antlr.FunctionParser;
-import astnodes.builders.FunctionContentBuilder;
+import astnodes.builders.function.FunctionContentBuilder;
 
 public class FunctionParseTreeListener extends FunctionBaseListener
 {
