@@ -127,6 +127,7 @@ import astnodes.statements.WhileStatement;
 public class FunctionContentBuilder extends ASTNodeBuilder
 {
 	ContentBuilderStack stack = new ContentBuilderStack();
+	NestingReconstructor nesting = new NestingReconstructor(stack);
 	
 	// exitStatements is called when the entire
 	// function-content has been walked
@@ -215,7 +216,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 				itemToRemove instanceof CompoundStatement)
 			return;
 
-		consolidate();	
+		nesting.consolidate();	
 	}
 
 	private void closeCompoundStatement()
@@ -223,7 +224,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		stack.pop(); // remove 'CloseBlock'
 		
 		CompoundStatement compoundItem = (CompoundStatement) stack.pop();
-		consolidateBlockStarters(compoundItem);		
+		nesting.consolidateBlockStarters(compoundItem);		
 	}
 
 	// Expression handling
@@ -236,7 +237,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitExpression(ExprContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterAssignment(Assign_exprContext ctx)
@@ -247,7 +248,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitAssignment(Assign_exprContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterConditionalExpr(Conditional_expressionContext ctx)
@@ -258,7 +259,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitConditionalExpr(Conditional_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterOrExpression(Or_expressionContext ctx)
@@ -269,7 +270,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitrOrExpression(Or_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterAndExpression(And_expressionContext ctx)
@@ -280,7 +281,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitAndExpression(And_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterInclusiveOrExpression(Inclusive_or_expressionContext ctx)
@@ -291,7 +292,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitInclusiveOrExpression(Inclusive_or_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterExclusiveOrExpression(Exclusive_or_expressionContext ctx)
@@ -302,7 +303,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitExclusiveOrExpression(Exclusive_or_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterBitAndExpression(Bit_and_expressionContext ctx)
@@ -319,12 +320,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitEqualityExpression(Equality_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void exitBitAndExpression(Bit_and_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}	
 
 	public void enterRelationalExpression(Relational_expressionContext ctx)
@@ -335,7 +336,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitRelationalExpression(Relational_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterShiftExpression(Shift_expressionContext ctx)
@@ -346,7 +347,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitShiftExpression(Shift_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterAdditiveExpression(Additive_expressionContext ctx)
@@ -357,7 +358,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitAdditiveExpression(Additive_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}	
 
 	public void enterMultiplicativeExpression(Multiplicative_expressionContext ctx)
@@ -368,7 +369,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitMultiplicativeExpression(Multiplicative_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterCastExpression(Cast_expressionContext ctx)
@@ -379,7 +380,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitCastExpression(Cast_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterCast_target(Cast_targetContext ctx)
@@ -390,7 +391,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitCast_target(Cast_targetContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterFuncCall(FuncCallContext ctx)
@@ -402,7 +403,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void exitFuncCall(FuncCallContext ctx)
 	{
 		introduceCalleeNode();
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	private void introduceCalleeNode()
@@ -430,7 +431,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitArgumentList(Function_argument_listContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterCondition(ConditionContext ctx)
@@ -443,7 +444,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{	
 		Condition cond = (Condition) stack.pop();
 		cond.initializeFromContext(ctx);
-		addItemToParent(cond);
+		nesting.addItemToParent(cond);
 	}
 
 	public void enterDeclByClass(DeclByClassContext ctx)
@@ -456,7 +457,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitDeclByClass()
 	{
-		consolidate();
+		nesting.consolidate();
 	}
 
 	public void enterInitDeclSimple(InitDeclSimpleContext ctx)
@@ -544,7 +545,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitIncDec(Inc_decContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterArrayIndexing(ArrayIndexingContext ctx)
@@ -555,7 +556,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitArrayIndexing(ArrayIndexingContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterMemberAccess(MemberAccessContext ctx)
@@ -566,7 +567,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitMemberAccess(MemberAccessContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterIncDecOp(IncDecOpContext ctx)
@@ -577,7 +578,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitIncDecOp(IncDecOpContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterPrimary(Primary_expressionContext ctx)
@@ -588,7 +589,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	
 	public void exitPrimary(Primary_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterUnaryExpression(Unary_expressionContext ctx)
@@ -599,7 +600,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitUnaryExpression(Unary_expressionContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterIdentifier(IdentifierContext ctx)
@@ -610,7 +611,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitIdentifier(IdentifierContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterArgument(Function_argumentContext ctx)
@@ -621,7 +622,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitArgument(Function_argumentContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterInitializerList(Initializer_listContext ctx)
@@ -632,7 +633,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitInitializerList(Initializer_listContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterPtrMemberAccess(PtrMemberAccessContext ctx)
@@ -643,7 +644,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitPtrMemberAccess(PtrMemberAccessContext ctx)
 	{
-		consolidateSubExpression(ctx);
+		nesting.consolidateSubExpression(ctx);
 	}
 
 	public void enterInitFor(For_init_statementContext ctx)
@@ -719,7 +720,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitDeclByType()
 	{
-		consolidate();
+		nesting.consolidate();
 	}
 
 	protected void replaceTopOfStack(ASTNode item)
@@ -727,106 +728,5 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		stack.pop();
 		stack.push(item);
 	}
-
-	protected void consolidateSubExpression(ParserRuleContext ctx)
-	{
-		Expression expression = (Expression) stack.pop();
-		expression.initializeFromContext(ctx);
-		if(!(expression instanceof ExpressionHolder))
-			expression = pullUpOnlyChild(expression);
-		addItemToParent(expression);
-	}
-
-	private Expression pullUpOnlyChild(Expression expression)
-	{
-		if(expression.getChildCount() == 1)
-			expression = (Expression) expression.getChild(0);
-		return expression;
-	}
-
-	protected void addItemToParent(ASTNode expression)
-	{
-		ASTNode topOfStack = stack.peek();
-		topOfStack.addChild(expression);
-	}
-
-	protected void consolidate()
-	{
-
-		ASTNode stmt = stack.pop();
-		ASTNode topOfStack = null;
-
-		if(stack.size() > 0)
-			topOfStack = stack.peek();
-
-		if(topOfStack instanceof CompoundStatement){
-			CompoundStatement compound = (CompoundStatement)topOfStack;
-			compound.addStatement(stmt);
-		}else{
-			consolidateBlockStarters(stmt);
-		}
-
-	}
-
-	// Joins consecutive BlockStarters on the stack
-
-	protected void consolidateBlockStarters(ASTNode stmt)
-	{
-
-		while(true){
-			try{
-				BlockStarter bItem = (BlockStarter) stack.peek();
-				bItem = (BlockStarter) stack.pop();
-				bItem.addChild(stmt);
-				stmt = bItem;
-
-				
-				if(bItem instanceof IfStatement){
-
-					if(stack.size() > 0 && stack.peek() instanceof ElseStatement){
-
-						BlockStarter elseItem = (BlockStarter) stack.pop();
-						elseItem.addChild(bItem);
-
-						IfStatement lastIf = (IfStatement) stack.getIfInElseCase();
-						if( lastIf != null){
-							lastIf.setElseNode((ElseStatement) elseItem);
-						}
-							
-						
-						return;
-					}
-					
-				}else if(bItem instanceof ElseStatement){
-					// add else statement to the previous if-statement,
-					// which has already been consolidated so we can return
-					
-					IfStatement lastIf = (IfStatement) stack.getIf();
-					if(lastIf != null)
-						lastIf.setElseNode((ElseStatement) bItem);
-					else
-						System.err.println("Warning: cannot find if for else");
-					
-					return;
-				}else if(bItem instanceof WhileStatement){
-					// add while statement to the previous do-statement
-					// if that exists. Otherwise, do nothing special.
-					
-					DoStatement lastDo = stack.getDo();
-					if(lastDo != null){
-						lastDo.addChild( ((WhileStatement) bItem).getCondition() );
-						return;
-					}
-					
-				}
-
-			}catch(ClassCastException ex){
-				break;
-			}
-		}
-		// Finally, add chain to top compound-item
-		ASTNode root = stack.peek();
-		root.addChild(stmt);
-	}
-
+	
 }
