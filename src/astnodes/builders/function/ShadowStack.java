@@ -51,6 +51,9 @@ public class ShadowStack {
 	
 	public IfStatement getIfInElseCase()
 	{
+		if(stack.size() < 2)
+			return null;
+		
 		StackItem topItem = stack.pop();
 		StackItem returnItem = stack.pop();
 		stack.push(topItem);
