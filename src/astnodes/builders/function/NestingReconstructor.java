@@ -63,54 +63,53 @@ public class NestingReconstructor {
 
 	// Joins consecutive BlockStarters on the stack
 
-	protected void consolidateBlockStarters(ASTNode stmt)
+	protected void consolidateBlockStarters(ASTNode node)
 	{
 
 		while(true){
 			try{
-				BlockStarter bItem = (BlockStarter) stack.peek();
-				bItem = (BlockStarter) stack.pop();
-				bItem.addChild(stmt);
-				stmt = bItem;
+				BlockStarter curBlockStarter = (BlockStarter) stack.peek();
+				curBlockStarter = (BlockStarter) stack.pop();
+				curBlockStarter.addChild(node);
+				node = curBlockStarter;
 
 				
-				if(bItem instanceof IfStatement){
+				if(curBlockStarter instanceof IfStatement){
 
 					if(stack.size() > 0 && stack.peek() instanceof ElseStatement){
-
+						// This is an if inside an else, e.g., 'else if' handling
+						
 						BlockStarter elseItem = (BlockStarter) stack.pop();
-						elseItem.addChild(bItem);
+						elseItem.addChild(curBlockStarter);
 
 						IfStatement lastIf = (IfStatement) stack.getIfInElseCase();
 						if( lastIf != null){
 							lastIf.setElseNode((ElseStatement) elseItem);
 						}
-							
 						
 						return;
 					}
 					
-				}else if(bItem instanceof ElseStatement){
+				}else if(curBlockStarter instanceof ElseStatement){
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
 					
 					IfStatement lastIf = (IfStatement) stack.getIf();
 					if(lastIf != null)
-						lastIf.setElseNode((ElseStatement) bItem);
+						lastIf.setElseNode((ElseStatement) curBlockStarter);
 					else
 						System.err.println("Warning: cannot find if for else");
 					
 					return;
-				}else if(bItem instanceof WhileStatement){
+				}else if(curBlockStarter instanceof WhileStatement){
 					// add while statement to the previous do-statement
 					// if that exists. Otherwise, do nothing special.
 					
 					DoStatement lastDo = stack.getDo();
 					if(lastDo != null){
-						lastDo.addChild( ((WhileStatement) bItem).getCondition() );
+						lastDo.addChild( ((WhileStatement) curBlockStarter).getCondition() );
 						return;
 					}
-					
 				}
 
 			}catch(ClassCastException ex){
@@ -119,6 +118,7 @@ public class NestingReconstructor {
 		}
 		// Finally, add chain to top compound-item
 		ASTNode root = stack.peek();
-		root.addChild(stmt);
+		root.addChild(node);
 	}
+
 }
