@@ -12,13 +12,13 @@ import org.neo4j.graphdb.RelationshipType;
 import output.neo4j.EdgeTypes;
 import output.neo4j.batchInserter.GraphNodeStore;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
-import output.neo4j.nodes.BasicBlockDatabaseNode;
+import output.neo4j.nodes.StmtOrCndDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
-import cfg.BasicBlock;
+import cfg.StatementOrCondition;
 import cfg.CFG;
 import cfg.Edges;
-import cfg.EmptyBasicBlock;
+import cfg.EmptyStatement;
 
 public class CFGImporter
 {
@@ -40,18 +40,18 @@ public class CFGImporter
 	{
 		if(cfg == null) return;
 		
-		addCFGBasicBlocks(cfg);
+		addCFGStatements(cfg);
 		addCFGEdges(cfg);
 	}
 
-	private void addCFGBasicBlocks(CFG cfg)
+	private void addCFGStatements(CFG cfg)
 	{
-		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
-		Iterator<BasicBlock> it = basicBlocks.iterator();
+		Vector<StatementOrCondition> statemens = cfg.getStatements();
+		Iterator<StatementOrCondition> it = statemens.iterator();
 		while(it.hasNext()){
-			BasicBlock block = it.next();
+			StatementOrCondition block = it.next();
 			
-			BasicBlockDatabaseNode bbDatabaseNode = new BasicBlockDatabaseNode();
+			StmtOrCndDatabaseNode bbDatabaseNode = new StmtOrCndDatabaseNode();
 			bbDatabaseNode.initialize(block);
 			Map<String, Object> properties = bbDatabaseNode.createProperties();
 						
@@ -59,7 +59,7 @@ public class CFGImporter
 			
 			nodeStore.addNeo4jNode(block, properties);
 			nodeStore.indexNode(block, properties);
-			addLinkFromBasicBlockToAST(block);					
+			addLinkFromStatementToAST(block);					
 		
 		}
 	}
@@ -77,12 +77,12 @@ public class CFGImporter
 			Object sourceBlock = entry.getKey();
 			List<Object> dstBlockList = entry.getValue();
 			for(Object dstBlock: dstBlockList){
-				addFlowToLink((BasicBlock)sourceBlock, (BasicBlock)dstBlock);
+				addFlowToLink((StatementOrCondition)sourceBlock, (StatementOrCondition)dstBlock);
 			}
 		}
 	}
 
-	private void addFlowToLink(BasicBlock srcBlock, BasicBlock dstBlock)
+	private void addFlowToLink(StatementOrCondition srcBlock, StatementOrCondition dstBlock)
 	{
 		long srcId = nodeStore.getIdForObject(srcBlock);
 		long dstId = nodeStore.getIdForObject(dstBlock);
@@ -92,10 +92,10 @@ public class CFGImporter
 		Neo4JBatchInserter.addRelationship(srcId, dstId, rel, properties);
 	}
 
-	private void addLinkFromBasicBlockToAST(BasicBlock block)
+	private void addLinkFromStatementToAST(StatementOrCondition block)
 	{
 		
-		if(block instanceof EmptyBasicBlock)
+		if(block instanceof EmptyStatement)
 			return;
 		
 		if(block.getASTNode() == null)

@@ -53,9 +53,9 @@ public class Neo4JDBInterface {
 		graphDb.shutdown();
 	}
 
-	public static Node getNodeById(Long basicBlockId)
+	public static Node getNodeById(Long nodeId)
 	{
-		return graphDb.getNodeById(basicBlockId);
+		return graphDb.getNodeById(nodeId);
 	}
 
 	public static void removeEdge(long id)

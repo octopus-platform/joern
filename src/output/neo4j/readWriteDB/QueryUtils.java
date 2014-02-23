@@ -16,21 +16,21 @@ import tools.ddg.DDG;
 public class QueryUtils
 {
 
-	public static IndexHits<Node> getBasicBlocksForFunction(Node funcNode)
+	public static IndexHits<Node> getStatementsForFunction(Node funcNode)
 	{
 		String query = "type:BasicBlock AND functionId:" + funcNode.getId();
 		return Neo4JDBInterface.queryIndex(query);
 	}
 
-	public static List<Pair<Long,String>> getSymbolsDefinedByBasicBlock(Long basicBlockId)
+	public static List<Pair<Long,String>> getSymbolsDefinedByStatement(Long statementId)
 	{
-		Node node = Neo4JDBInterface.getNodeById(basicBlockId);
+		Node node = Neo4JDBInterface.getNodeById(statementId);
 		return getIdAndCodeOfChildrenConnectedBy(node, "DEF");
 	}
 
-	public static List<Pair<Long,String>> getSymbolsUsedByBasicBlock(Long basicBlockId)
+	public static List<Pair<Long,String>> getSymbolsUsedByStatement(Long statementId)
 	{	
-		Node node = Neo4JDBInterface.getNodeById(basicBlockId);
+		Node node = Neo4JDBInterface.getNodeById(statementId);
 		return getIdAndCodeOfChildrenConnectedBy(node, "USE");
 	}
 	
@@ -124,9 +124,9 @@ public class QueryUtils
 	public static DDG getDDGForFunction(Node funcNode)
 	{
 		DDG retval = new DDG();
-		for(Node basicBlock: QueryUtils.getBasicBlocksForFunction(funcNode)){
-			Iterable<Relationship> rels = basicBlock.getRelationships(Direction.OUTGOING);
-			long srcId = basicBlock.getId();
+		for(Node statement: QueryUtils.getStatementsForFunction(funcNode)){
+			Iterable<Relationship> rels = statement.getRelationships(Direction.OUTGOING);
+			long srcId = statement.getId();
 			
 			for(Relationship rel: rels){
 				if(!rel.getType().toString().equals(EdgeTypes.REACHES))
@@ -143,7 +143,7 @@ public class QueryUtils
 	// The two following functions are somewhat disgraceful
 	// but should work for now.
 	
-	public static Node getBasicBlockForASTNode(Node callNode)
+	public static Node getStatementForASTNode(Node callNode)
 	{
 		Node n = callNode;
 		Node parent = null;
@@ -197,10 +197,10 @@ public class QueryUtils
 	}
 
 
-	public static Node getASTForBasicBlock(Node basicBlock)
+	public static Node getASTForStatement(Node statement)
 	{
 
-		List<Node> r = getChildrenConnectedBy(basicBlock, EdgeTypes.IS_BASIC_BLOCK_OF);
+		List<Node> r = getChildrenConnectedBy(statement, EdgeTypes.IS_BASIC_BLOCK_OF);
 		return r.get(0);
 	}
 

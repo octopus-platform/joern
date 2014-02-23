@@ -18,7 +18,7 @@ import misc.MultiHashMap;
 public class DefUseCFG {
 
 	private long functionId;
-	private LinkedList<Long> basicBlocks = new LinkedList<Long>();
+	private LinkedList<Long> statements = new LinkedList<Long>();
 	private MultiHashMap symbolsUsed = new MultiHashMap();
 	private MultiHashMap symbolsDefined = new MultiHashMap();
 	private MultiHashMap parentBlocks = new MultiHashMap();
@@ -37,9 +37,9 @@ public class DefUseCFG {
 		return functionId;
 	}
 	
-	public void addBasicBlock(long basicBlockId)
+	public void addStatement(long statementId)
 	{
-		basicBlocks.add(basicBlockId);
+		statements.add(statementId);
 	}
 	
 	public void addSymbolUsed(Long key, String symbol)
@@ -69,8 +69,8 @@ public class DefUseCFG {
 		childBlocks.add(thisBlockId, childId);
 	}
 	
-	public LinkedList<Long> getBasicBlocks() {
-		return basicBlocks;
+	public LinkedList<Long> getStatements() {
+		return statements;
 	}
 	
 	public MultiHashMap getSymbolsUsed() {

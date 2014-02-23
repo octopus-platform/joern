@@ -62,9 +62,9 @@ public class DDGPatcher
 		List<DefUseRelation> relsToRemove = diff.getRelsToRemove();
 	
 		for(DefUseRelation rel : relsToRemove){
-			Node srcBasicBlock = Neo4JDBInterface.getNodeById(rel.src);
+			Node srcStatement = Neo4JDBInterface.getNodeById(rel.src);
 			
-			Iterable<Relationship> rels = srcBasicBlock.getRelationships(Direction.OUTGOING);
+			Iterable<Relationship> rels = srcStatement.getRelationships(Direction.OUTGOING);
 			
 			for(Relationship reachRel : rels){
 				if(!reachRel.getType().toString().equals(EdgeTypes.REACHES))

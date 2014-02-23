@@ -13,27 +13,28 @@ import java.util.Vector;
 
 public class CFG {
 
-	Vector<BasicBlock> basicBlocks = new Vector<BasicBlock>();
+	// As indicated by the type, these are statements OR conditions
+	Vector<StatementOrCondition> statements = new Vector<StatementOrCondition>();
 	
 	Edges edges = new Edges();
 	SwitchLabels switchLabels = new SwitchLabels();
 	
-	Vector<BasicBlock> jumpStatements = new Vector<BasicBlock>();
-	HashMap<String, BasicBlock> labels = new HashMap<String, BasicBlock>();
+	Vector<StatementOrCondition> jumpStatements = new Vector<StatementOrCondition>();
+	HashMap<String, StatementOrCondition> labels = new HashMap<String, StatementOrCondition>();
 	
-	HashMap<BasicBlock, BasicBlock> loopStart = new HashMap<BasicBlock, BasicBlock>();
+	HashMap<StatementOrCondition, StatementOrCondition> loopStart = new HashMap<StatementOrCondition, StatementOrCondition>();
 	
 	public void addCFG(CFG otherCFG)
 	{
-		if(basicBlocks.size() == 0){
+		if(statements.size() == 0){
 			replaceCFGBy(otherCFG);
 			return;
 		}
 		
-		Vector<BasicBlock> otherBlocks = otherCFG.getBasicBlocks();
+		Vector<StatementOrCondition> otherBlocks = otherCFG.getStatements();
 		Edges otherEdges = otherCFG.getEdges();
 		switchLabels.addMultiHashMap(otherCFG.getSwitchLabels());
-		basicBlocks.addAll(otherBlocks);
+		statements.addAll(otherBlocks);
 		edges.addEdges(otherEdges);
 		
 		jumpStatements.addAll(otherCFG.getJumpStatements());
@@ -45,7 +46,7 @@ public class CFG {
 
 	public void replaceCFGBy(CFG otherCFG)
 	{
-		this.basicBlocks = otherCFG.basicBlocks;
+		this.statements = otherCFG.statements;
 		this.edges = otherCFG.edges;
 		this.switchLabels = otherCFG.switchLabels;
 		this.labels = otherCFG.labels;
@@ -54,20 +55,20 @@ public class CFG {
 	}
 
 	
-	public BasicBlock getBlockByLabel(String label)
+	public StatementOrCondition getBlockByLabel(String label)
 	{
 		return labels.get(label);
 	}
 	
-	public void addSwitchLabel(BasicBlock surroundingSwitch,
-			BasicBlock labeledBlock)
+	public void addSwitchLabel(StatementOrCondition surroundingSwitch,
+			StatementOrCondition labeledBlock)
 	{
 		switchLabels.add(surroundingSwitch, labeledBlock);	
 	}
 
-	public BasicBlock getOuterLoop(BasicBlock thisBasicBlock)
+	public StatementOrCondition getOuterLoop(StatementOrCondition thisStatement)
 	{
-		return loopStart.get(thisBasicBlock);
+		return loopStart.get(thisStatement);
 	}
 
 	public SwitchLabels getSwitchLabels()
@@ -75,39 +76,39 @@ public class CFG {
 		return switchLabels;
 	}
 	
-	public BasicBlock getLastBlock()
+	public StatementOrCondition getLastStatement()
 	{
 		try{
-			return basicBlocks.lastElement();
+			return statements.lastElement();
 		}catch(RuntimeException ex)
 		{
 			return null;
 		}
 	}
 	
-	public BasicBlock getFirstBlock()
+	public StatementOrCondition getFirstStatement()
 	{	
 		try{
-			return basicBlocks.firstElement();
+			return statements.firstElement();
 		}catch(RuntimeException ex)
 		{
 			return null;
 		}
 	}
 	
-	public void labelBlock(String label, BasicBlock block) { labels.put(label, block); }
-	public void addBasicBlock(BasicBlock newBlock) { basicBlocks.add(newBlock); }
-	public void addEdge(BasicBlock srcBlock,
-			 BasicBlock dstBlock){ edges.addEdge(srcBlock, dstBlock); }
+	public void labelBlock(String label, StatementOrCondition block) { labels.put(label, block); }
+	public void addStatement(StatementOrCondition newBlock) { statements.add(newBlock); }
+	public void addEdge(StatementOrCondition srcBlock,
+			 StatementOrCondition dstBlock){ edges.addEdge(srcBlock, dstBlock); }
 	
-	public int getNumberOfBasicBlocks(){ return basicBlocks.size(); }
+	public int getNumberOfStatements(){ return statements.size(); }
 	
-	public Collection<? extends BasicBlock> getJumpStatements() { return jumpStatements; }
-	public HashMap<String,BasicBlock> getLabels(){ return labels; }
+	public Collection<? extends StatementOrCondition> getJumpStatements() { return jumpStatements; }
+	public HashMap<String,StatementOrCondition> getLabels(){ return labels; }
 	public Edges getEdges() { return edges; }
-	public Vector<BasicBlock> getBasicBlocks(){ return basicBlocks; }
+	public Vector<StatementOrCondition> getStatements(){ return statements; }
 
-	public void addJumpStatement(BasicBlock block)
+	public void addJumpStatement(StatementOrCondition block)
 	{
 		this.jumpStatements.add(block);
 	}

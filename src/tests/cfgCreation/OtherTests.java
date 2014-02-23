@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import cfg.BasicBlock;
+import cfg.StatementOrCondition;
 import cfg.CFG;
 import cfg.Edges;
 
@@ -20,7 +20,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "foo();";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 2);
+		assertTrue(cfg.getStatements().size() == 2);
 	}
 	
 	
@@ -29,7 +29,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "while(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 4);
+		assertTrue(cfg.getStatements().size() == 4);
 	}
 	
 	@Test
@@ -37,8 +37,8 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "do{ bar(); }while(foo);";
 		CFG cfg = getCFGForCode(input);
-		System.out.println(cfg.getBasicBlocks().size());
-		assertTrue(cfg.getBasicBlocks().size() == 4);
+		System.out.println(cfg.getStatements().size());
+		assertTrue(cfg.getStatements().size() == 4);
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "for(i = 0; i < 10; i ++){ foo(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 5);
+		assertTrue(cfg.getStatements().size() == 5);
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "for(;;){}";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().get(1).getASTNode() == null);
+		assertTrue(cfg.getStatements().get(1).getASTNode() == null);
 	}
 	
 	
@@ -63,7 +63,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "foo: foo();";
 		CFG cfg = getCFGForCode(input);
-		HashMap<String, BasicBlock> labels = cfg.getLabels();
+		HashMap<String, StatementOrCondition> labels = cfg.getLabels();
 		System.out.println(labels.size());
 		assertTrue(labels.size() == 1);
 	}
@@ -83,7 +83,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "x = 10; y = 20;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 3);
+		assertTrue(cfg.getStatements().size() == 3);
 	}
 	
 	@Test
@@ -101,7 +101,7 @@ public class OtherTests extends CFGCreatorTest
 		String input = "if(!x) return 1; y = x; return 0;";
 		CFG cfg = getCFGForCode(input);
 		
-		BasicBlock exitBlock = cfg.getBasicBlocks().lastElement();		
+		StatementOrCondition exitBlock = cfg.getStatements().lastElement();		
 		assertTrue(exitBlock.getEscapedCodeStr().equals(""));
 	}
 	
@@ -111,8 +111,8 @@ public class OtherTests extends CFGCreatorTest
 		String input = "if(!x) return 1; y = x;";
 		CFG cfg = getCFGForCode(input);
 		
-		BasicBlock yAssignX = cfg.getBasicBlocks().get(3);
-		BasicBlock exitBlock = cfg.getBasicBlocks().lastElement();
+		StatementOrCondition yAssignX = cfg.getStatements().get(3);
+		StatementOrCondition exitBlock = cfg.getStatements().lastElement();
 		
 		assertTrue(cfg.getEdges().getEdgesFrom(yAssignX).contains(exitBlock));
 	}
@@ -123,10 +123,10 @@ public class OtherTests extends CFGCreatorTest
 		String input = "x = 0; foo: x++; if(x < 10) goto foo;";
 		CFG cfg = getCFGForCode(input);
 		
-		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
+		Vector<StatementOrCondition> statements = cfg.getStatements();
 		
-		BasicBlock gotoStmt = basicBlocks.get(4);
-		BasicBlock exitBlock = cfg.getLastBlock();
+		StatementOrCondition gotoStmt = statements.get(4);
+		StatementOrCondition exitBlock = cfg.getLastStatement();
 		
 		assertFalse(cfg.getEdges().getEdgesFrom(gotoStmt).contains(exitBlock));
 	}

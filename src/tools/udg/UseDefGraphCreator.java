@@ -24,32 +24,32 @@ public class UseDefGraphCreator
 	{		
 		useDefGraph = new UseDefGraph();
 		
- 		IndexHits<Long> basicBlocks = QueryUtils.getBasicBlocksFromIndex(functionId);
+ 		IndexHits<Long> statements = QueryUtils.getStatementsFromIndex(functionId);
 		
-		for(Long basicBlockId : basicBlocks){
+		for(Long statementId : statements){
 			
-			Long astRoot = QueryUtils.getASTForBasicBlock(basicBlockId);
+			Long astRoot = QueryUtils.getASTForStatement(statementId);
 			if(astRoot == -1) // perfectly normal, e.g., empty blocks.	
 				continue;
 						
 			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(astRoot);
-			addToUseDefGraph(usesAndDefs, basicBlockId);
+			addToUseDefGraph(usesAndDefs, statementId);
 		}
 	
 		return useDefGraph;
 	}
 
 
-	private void addToUseDefGraph(Collection<UseOrDef> usesAndDefs, Long basicBlockId)
+	private void addToUseDefGraph(Collection<UseOrDef> usesAndDefs, Long statementId)
 	{
 		for(UseOrDef useOrDef : usesAndDefs){
 			
 			if(useOrDef.isDef){
-				useDefGraph.addDefinition(useOrDef.symbol, basicBlockId);
+				useDefGraph.addDefinition(useOrDef.symbol, statementId);
 				if(useOrDef.nodeId != 0)
 					useDefGraph.addDefinition(useOrDef.symbol, useOrDef.nodeId);
 			}else{
-				useDefGraph.addUse(useOrDef.symbol, basicBlockId);
+				useDefGraph.addUse(useOrDef.symbol, statementId);
 				if(useOrDef.nodeId != 0)
 					useDefGraph.addUse(useOrDef.symbol, useOrDef.nodeId);
 			}

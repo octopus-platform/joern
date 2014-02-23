@@ -3,16 +3,16 @@ package output.neo4j.nodes;
 import java.util.HashMap;
 import java.util.Map;
 
-import cfg.BasicBlock;
+import cfg.StatementOrCondition;
 
-public class BasicBlockDatabaseNode extends DatabaseNode {
+public class StmtOrCndDatabaseNode extends DatabaseNode {
 
-	BasicBlock block;
+	StatementOrCondition block;
 	
 	@Override
 	public void initialize(Object obj)
 	{
-		block = (BasicBlock) obj;
+		block = (StatementOrCondition) obj;
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package cfg;
 
 import astnodes.ASTNode;
 
-public class BasicBlock {
+public class StatementOrCondition {
 
 	ASTNode astNode;
 	

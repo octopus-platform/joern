@@ -15,7 +15,7 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 		cfg = new DefUseCFG();
 		cfg.setFunctionId(funcId);
 		
-		getBasicBlocksOfFunction(funcId);		
+		getStatementsOfFunction(funcId);		
 		getUsesAndDefs();		
 		getParentBlocks();
 		getChildBlocks();
@@ -23,42 +23,42 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 		return cfg;
 	}
 
-	private void getBasicBlocksOfFunction(Long funcId)
+	private void getStatementsOfFunction(Long funcId)
 	{
-		IndexHits<Long> blocks = QueryUtils.getBasicBlocksFromIndex(funcId);
+		IndexHits<Long> blocks = QueryUtils.getStatementsFromIndex(funcId);
 		for(Long block : blocks)
-			cfg.addBasicBlock(block);
+			cfg.addStatement(block);
 	}
 
 	private void getUsesAndDefs()
 	{
-		for(Long basicBlock : cfg.getBasicBlocks()){
+		for(Long statement : cfg.getStatements()){
 			
-			List<String> useSymbols = QueryUtils.getSymbolsUsedByBasicBlock(basicBlock);			
+			List<String> useSymbols = QueryUtils.getSymbolsUsedByStatement(statement);			
 			for(String symbol : useSymbols)
-				cfg.addSymbolUsed(basicBlock, symbol);
+				cfg.addSymbolUsed(statement, symbol);
 					
-			List<String> defSymbols = QueryUtils.getSymbolsDefinedByBasicBlock(basicBlock);
+			List<String> defSymbols = QueryUtils.getSymbolsDefinedByStatement(statement);
 			for(String symbol : defSymbols)
-				cfg.addSymbolDefined(basicBlock, symbol);				
+				cfg.addSymbolDefined(statement, symbol);				
 		}
 	}
 
 	private void getParentBlocks()
 	{
-		for(Long basicBlock : cfg.getBasicBlocks()){
-			List<Long> parents = QueryUtils.getParentBasicBlocks(basicBlock);
+		for(Long statement : cfg.getStatements()){
+			List<Long> parents = QueryUtils.getParentStatements(statement);
 			for(Long parent : parents)
-				cfg.addParentBlock(basicBlock, parent);
+				cfg.addParentBlock(statement, parent);
 		}
 	}
 	
 	private void getChildBlocks()
 	{
-		for(Long basicBlock : cfg.getBasicBlocks()){
-			List<Long> children = QueryUtils.getChildBasicBlocks(basicBlock);
+		for(Long statement : cfg.getStatements()){
+			List<Long> children = QueryUtils.getChildStatements(statement);
 			for(Long child : children)
-				cfg.addChildBlock(basicBlock, child);
+				cfg.addChildBlock(statement, child);
 		}
 	}
 	

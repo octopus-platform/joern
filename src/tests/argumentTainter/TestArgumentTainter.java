@@ -27,13 +27,13 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 	public void testDefUseCFGPatcher()
 	{
 		Long funcId = getFunctionIdByFunctionName("arg_tainter_basic_test");
-		List<Node> basicBlocksToPatch = getBasicBlocksToPatch(funcId, "memset");
+		List<Node> statementsToPatch = getStatementsToPatch(funcId, "memset");
 		
 		DefUseCFGPatcher defUseCFGPatcher = new DefUseCFGPatcher();
 		DefUseCFG defUseCFG = defUseGraphFactory.create(funcId);
 		
 		defUseCFGPatcher.setSourceToPatch("memset", 0);
-		defUseCFGPatcher.patchDefUseCFG(defUseCFG, basicBlocksToPatch);
+		defUseCFGPatcher.patchDefUseCFG(defUseCFG, statementsToPatch);
 	
 		Collection<DefUseLink> defUseLinksToAdd = defUseCFGPatcher.getDefUseLinksToAdd();
 		
@@ -50,14 +50,14 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 		
 	}
 	
-	private List<Node> getBasicBlocksToPatch(Long funcId, String source)
+	private List<Node> getStatementsToPatch(Long funcId, String source)
 	{
-		List<Node> basicBlocksToPatch = new LinkedList<Node>();
+		List<Node> statementsToPatch = new LinkedList<Node>();
 		List<Node> callNodes = QueryUtils.getCallsToForFunction(source, funcId);	
 		for(Node callNode : callNodes){
-			basicBlocksToPatch.add(QueryUtils.getBasicBlockForASTNode(callNode));
+			statementsToPatch.add(QueryUtils.getStatementForASTNode(callNode));
 		}
-		return basicBlocksToPatch;
+		return statementsToPatch;
 	}
 	
 	private Long getFunctionIdByFunctionName(String functionName)

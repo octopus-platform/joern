@@ -21,13 +21,13 @@ public class DDGCreator {
 	HashSet<Long> changedNodes;
 	
 	private class Definition{
-		public Definition(Long aBasicBlock, String aIdentifier)
+		public Definition(Long aStatement, String aIdentifier)
 		{
-			basicBlock = aBasicBlock;
+			statement = aStatement;
 			identifier = aIdentifier;
 		}
 		
-		public Long basicBlock;
+		public Long statement;
 		public String identifier;
 	};
 	
@@ -77,7 +77,7 @@ public class DDGCreator {
 		initOut();
 		initGenFromOut();
 		changedNodes = new HashSet<Long>();		
-		changedNodes.addAll(cfg.getBasicBlocks());
+		changedNodes.addAll(cfg.getStatements());
 	}
 
 	private Long popFromChangedNodes()
@@ -89,28 +89,28 @@ public class DDGCreator {
 
 	private void initOut()
 	{
-		for(Long basicBlock : cfg.getBasicBlocks()){
+		for(Long statement : cfg.getStatements()){
 			
 			// this has the nice side-effect that an
 			// empty hash is created for the basic block.
 			
-			out.removeAllForKey(basicBlock);
+			out.removeAllForKey(statement);
 			
-			List<Object> symsDefined = cfg.getSymbolsDefined().getListForKey(basicBlock);
+			List<Object> symsDefined = cfg.getSymbolsDefined().getListForKey(statement);
 			if(symsDefined == null) continue;
 			
 			for(Object s: symsDefined){
 				String symbol = (String) s;
-				out.add(basicBlock, new Definition(basicBlock, symbol));
+				out.add(statement, new Definition(statement, symbol));
 			}
 		}
 	}
 
 	private void initGenFromOut()
 	{
-		for(Long basicBlock : cfg.getBasicBlocks()){
-			for(Object o: out.getListForKey(basicBlock))
-				gen.add(basicBlock, o);		
+		for(Long statement : cfg.getStatements()){
+			for(Object o: out.getListForKey(statement))
+				gen.add(statement, o);		
 		}
 	}
 	
@@ -175,17 +175,17 @@ public class DDGCreator {
 	{
 		DDG ddg = new DDG();
 		
-		for(Long basicBlock : cfg.getBasicBlocks()){
-			HashSet<Object> inForBlock = in.getListForKey(basicBlock);
+		for(Long statement : cfg.getStatements()){
+			HashSet<Object> inForBlock = in.getListForKey(statement);
 			if(inForBlock == null) continue;			
-			List<Object> usedSymbols = cfg.getSymbolsUsed().getListForKey(basicBlock);
+			List<Object> usedSymbols = cfg.getSymbolsUsed().getListForKey(statement);
 			if(usedSymbols == null) continue;
 			
 			for(Object d : inForBlock){
 				Definition def = (Definition) d;
 				
 				if(usedSymbols.contains(def.identifier))
-						ddg.add(def.basicBlock, basicBlock, def.identifier);
+						ddg.add(def.statement, statement, def.identifier);
 			}
 		}
 	

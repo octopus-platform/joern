@@ -27,11 +27,11 @@ public class ASTToCFGConverter {
 	{
 		ParameterList parameterList = node.getParameterList();
 		CFG cfg = convertParameterList(parameterList);
-		BasicBlock lastParamDefBlock = cfg.getLastBlock();
+		StatementOrCondition lastParamDefBlock = cfg.getLastStatement();
 		
 		CompoundStatement content = node.getContent();
 		CFG compoundCFG = convertCompoundStatement(content);
-		BasicBlock firstCompoundStmtBlock = compoundCFG.getFirstBlock();
+		StatementOrCondition firstCompoundStmtBlock = compoundCFG.getFirstStatement();
 		cfg.addCFG(compoundCFG);
 		
 		if(lastParamDefBlock != null && firstCompoundStmtBlock != null){
@@ -70,34 +70,34 @@ public class ASTToCFGConverter {
 		
 		while(it.hasNext()){
 			Entry<Object, List<Object>> entry = it.next();
-			BasicBlock switchBlock = (BasicBlock) entry.getKey();
+			StatementOrCondition switchBlock = (StatementOrCondition) entry.getKey();
 			List<Object> labeledBlocks = entry.getValue();
 			
 			for(Object labeledBlock : labeledBlocks)
-				cfg.addEdge(switchBlock, (BasicBlock) labeledBlock);
+				cfg.addEdge(switchBlock, (StatementOrCondition) labeledBlock);
 		}
 	}
 
 	private void fixJumps(CFG cfg)
 	{
-		Collection<? extends BasicBlock> jumpStatements = cfg.getJumpStatements();
-		Iterator<? extends BasicBlock> it = jumpStatements.iterator();
+		Collection<? extends StatementOrCondition> jumpStatements = cfg.getJumpStatements();
+		Iterator<? extends StatementOrCondition> it = jumpStatements.iterator();
 		
 		// if(jumpStatements.size() > 0){
 			// add an exit-block
 			
-			EmptyBasicBlock emptyBasicBlock = new EmptyBasicBlock();
-			if(cfg.getLastBlock() != null)
-				cfg.addEdge(cfg.getLastBlock(), emptyBasicBlock);
-			cfg.addBasicBlock(emptyBasicBlock);
+			EmptyStatement emptyStatement = new EmptyStatement();
+			if(cfg.getLastStatement() != null)
+				cfg.addEdge(cfg.getLastStatement(), emptyStatement);
+			cfg.addStatement(emptyStatement);
 		// }
 		
 		while(it.hasNext()){
-			BasicBlock basicBlock = it.next();
-			ASTNode statement = basicBlock.getASTNode();
+			StatementOrCondition stmt = it.next();
+			ASTNode statement = stmt.getASTNode();
 			
 			jumpStatementVisitor.setCFG(cfg);
-			jumpStatementVisitor.setBasicBlock(basicBlock);
+			jumpStatementVisitor.setStatement(stmt);
 			
 			try{
 				statement.accept(jumpStatementVisitor);

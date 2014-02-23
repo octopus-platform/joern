@@ -1,5 +1,5 @@
 package cfg;
 
-public class SwitchBlock extends BasicBlock {
+public class SwitchBlock extends StatementOrCondition {
 
 }

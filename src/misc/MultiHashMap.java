@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import cfg.BasicBlock;
+import cfg.StatementOrCondition;
 
 public class MultiHashMap
 {

@@ -47,9 +47,9 @@ public class QueryUtils {
 		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("code");
 	}
 	
-	public static long getASTForBasicBlock(Long basicBlockId)
+	public static long getASTForStatement(Long statementId)
 	{
-		return getFirstChildWithEdgeType(basicBlockId, EdgeTypes.IS_BASIC_BLOCK_OF);		
+		return getFirstChildWithEdgeType(statementId, EdgeTypes.IS_BASIC_BLOCK_OF);		
 	}
 	
 	// this is the same as 'getASTRoot' except for the edge type
@@ -69,12 +69,12 @@ public class QueryUtils {
 		return getFirstChildWithEdgeType(cfgNodeId, EdgeTypes.IS_CFG_OF_CFG_ROOT);
 	}
 
-	public static List<String> getSymbolsUsedByBasicBlock(long nodeId)
+	public static List<String> getSymbolsUsedByStatement(long nodeId)
 	{
 		return getCodeOfChildrenConnectedBy(nodeId, EdgeTypes.USE);
 	}
 
-	public static List<String> getSymbolsDefinedByBasicBlock(long nodeId)
+	public static List<String> getSymbolsDefinedByStatement(long nodeId)
 	{
 		return getCodeOfChildrenConnectedBy(nodeId, EdgeTypes.DEF);
 	}
@@ -94,31 +94,31 @@ public class QueryUtils {
 		return retval;
 	}
 
-	public static IndexHits<Long> getBasicBlocksFromIndex(long functionId)
+	public static IndexHits<Long> getStatementsFromIndex(long functionId)
 	{		
 		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";
 		return Neo4JBatchInserter.queryIndex(query);
 	}
 
-	public static List<Long> getParentBasicBlocks(Long basicBlock)
+	public static List<Long> getParentStatements(Long statementId)
 	{
 		List<Long> retval = new LinkedList<Long>();
-		Iterable<BatchRelationship> rels = getEdges(basicBlock);
+		Iterable<BatchRelationship> rels = getEdges(statementId);
 		for(BatchRelationship rel : rels){
 			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
-			if(rel.getStartNode() == basicBlock) continue;
+			if(rel.getStartNode() == statementId) continue;
 			retval.add(rel.getStartNode());		
 		}
 		return retval;
 	}
 
-	public static List<Long> getChildBasicBlocks(Long basicBlock)
+	public static List<Long> getChildStatements(Long statementId)
 	{
 		List<Long> retval = new LinkedList<Long>();
-		Iterable<BatchRelationship> rels = getEdges(basicBlock);
+		Iterable<BatchRelationship> rels = getEdges(statementId);
 		for(BatchRelationship rel : rels){
 			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
-			if(rel.getEndNode() == basicBlock) continue;
+			if(rel.getEndNode() == statementId) continue;
 			retval.add(rel.getEndNode());
 		}
 		return retval;

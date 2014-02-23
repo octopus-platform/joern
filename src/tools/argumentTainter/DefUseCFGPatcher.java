@@ -32,13 +32,13 @@ public class DefUseCFGPatcher {
 	}
 	
 	public class DefUseLink{
-		public DefUseLink(String aSymbol, Long aBasicBlockId, boolean aIsDef) {
+		public DefUseLink(String aSymbol, Long aStatementId, boolean aIsDef) {
 			symbol = aSymbol;
-			basicBlock = aBasicBlockId;
+			statement = aStatementId;
 			isDef = aIsDef;
 		}
 		public String symbol;
-		public long basicBlock;
+		public long statement;
 		public boolean isDef;
 	}
 	
@@ -56,35 +56,35 @@ public class DefUseCFGPatcher {
 	}
 	
 
-	public void patchDefUseCFG(DefUseCFG defUseCFG, Collection<Node> basicBlocksToPatch)
+	public void patchDefUseCFG(DefUseCFG defUseCFG, Collection<Node> statementsToPatch)
 	{
 		this.defUseCFG = defUseCFG;
 		newlyAddedLinks.clear();
 		
-		for(Node basicBlock : basicBlocksToPatch){
+		for(Node statement : statementsToPatch){
 			
-			long basicBlockId = basicBlock.getId();
+			long statementId = statement.getId();
 			
-			Node astNode = QueryUtils.getASTForBasicBlock(basicBlock);
+			Node astNode = QueryUtils.getASTForStatement(statement);
 			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astNode.getId());
 			
-			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(basicBlockId);
-			updateDefsToAdd(oldDefs, newDefs, basicBlockId);
+			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(statementId);
+			updateDefsToAdd(oldDefs, newDefs, statementId);
 			
 		}
 		
 	}
 	
 	private void updateDefsToAdd(Collection<Object> oldDefs,
-			Collection<UseOrDef> newDefs, Long basicBlockId)
+			Collection<UseOrDef> newDefs, Long statementId)
 	{
 		for(UseOrDef newDef : newDefs){
 			if(oldDefs.contains(newDef.symbol)) continue;
 			if(!newDef.isDef) continue;
-			DefUseLink e = new DefUseLink(newDef.symbol, basicBlockId, newDef.isDef);
+			DefUseLink e = new DefUseLink(newDef.symbol, statementId, newDef.isDef);
 			// add to newlyAddedLinks
 			newlyAddedLinks.add(e);
-			defUseCFG.addSymbolDefined(basicBlockId, newDef.symbol);
+			defUseCFG.addSymbolDefined(statementId, newDef.symbol);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class DefUseCFGPatcher {
 		Neo4JDBInterface.startTransaction();
 		for(DefUseLink link : newlyAddedLinks){
 			
-			Long fromId = link.basicBlock;
+			Long fromId = link.statement;
 			Long toId = defUseCFG.getIdForSymbol(link.symbol); 
 			
 			if(toId == null){

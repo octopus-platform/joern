@@ -16,8 +16,8 @@ public class DDG {
 
 	public void add(long srcId, long dstId, String symbol)
 	{
-		DefUseRelation basicBlockPair = new DefUseRelation(srcId, dstId, symbol);
-		defUseEdges.add(basicBlockPair);
+		DefUseRelation statementPair = new DefUseRelation(srcId, dstId, symbol);
+		defUseEdges.add(statementPair);
 	};
 
 	

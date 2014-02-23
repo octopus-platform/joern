@@ -34,9 +34,9 @@ public class UseDefGraph {
 		add(identifier, nodeId, false);
 	}
 	
-	private void add(String identifier, long basicBlockId, boolean isDef)
+	private void add(String identifier, long statementId, boolean isDef)
 	{
-		UseOrDefRecord record = new UseOrDefRecord(basicBlockId, isDef);		
+		UseOrDefRecord record = new UseOrDefRecord(statementId, isDef);		
 		useOrDefRecordTable.add(identifier, record);
 	}
 		

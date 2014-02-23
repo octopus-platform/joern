@@ -11,7 +11,7 @@ import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
-import cfg.BasicBlock;
+import cfg.StatementOrCondition;
 import cfg.CFG;
 
 // Stays alive while importing a function into
@@ -74,7 +74,7 @@ public class FunctionImporter extends ASTNodeImporter
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CFG_OF_CFG_ROOT);
 
-		BasicBlock firstBlock = cfg.getFirstBlock();
+		StatementOrCondition firstBlock = cfg.getFirstStatement();
 		if(firstBlock == null){
 			// TODO: sometimes there is not a single block in the CFG.
 			// It's probably fine but it needs to be investigated.

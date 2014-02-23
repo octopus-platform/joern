@@ -14,7 +14,7 @@ import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
 public class FunctionPatcher {
 
 	private DefUseCFGFactory defUseGraphFactory = new ReadWriteDbFactory();
-	private Collection<Node> basicBlocksToPatch = new LinkedList<Node>();
+	private Collection<Node> statementsToPatch = new LinkedList<Node>();
 	private DefUseCFG defUseCFG = null;
 	
 	private String sourceToPatch;
@@ -32,7 +32,7 @@ public class FunctionPatcher {
 	
 	public void reset()
 	{
-		basicBlocksToPatch.clear();
+		statementsToPatch.clear();
 		defUseCFG = null;
 	}
 	
@@ -49,7 +49,7 @@ public class FunctionPatcher {
 	{
 		List<Node> callNodes = QueryUtils.getCallsToForFunction(sourceToPatch, funcId);	
 		for(Node callNode : callNodes){
-			basicBlocksToPatch.add(QueryUtils.getBasicBlockForASTNode(callNode));
+			statementsToPatch.add(QueryUtils.getStatementForASTNode(callNode));
 		}
 	}
 
@@ -62,7 +62,7 @@ public class FunctionPatcher {
 	{
 		DefUseCFGPatcher patcher = new DefUseCFGPatcher();
 		patcher.setSourceToPatch(sourceToPatch, argumentToPatch);
-		patcher.patchDefUseCFG(defUseCFG, basicBlocksToPatch);
+		patcher.patchDefUseCFG(defUseCFG, statementsToPatch);
 		patcher.writeChangesToDatabase();
 	}
 
