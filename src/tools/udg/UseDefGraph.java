@@ -2,7 +2,6 @@ package tools.udg;
 
 import java.util.List;
 
-import tools.udg.environments.UseDefEnvironment;
 import misc.MultiHashMap;
 
 public class UseDefGraph {

@@ -10,10 +10,8 @@ import java.util.Vector;
 // the first edge is the one taken if
 // condition evaluates to true.
 
-
 public class CFG {
 
-	// As indicated by the type, these are statements OR conditions
 	Vector<CFGNode> statements = new Vector<CFGNode>();
 	
 	Edges edges = new Edges();

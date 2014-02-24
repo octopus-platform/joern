@@ -7,10 +7,14 @@ public class ParseTreeUtils
 	 public static String childTokenString(ParseTree ctx)
 	 {
 	    	// TODO: Optimize this. Strings are immutable
-	    	
+		 
+		 	// The reason we don't just call ctx.getText()
+		 	// here is because it removes whitespace, making
+		 	// 'inti' from 'int i'.
+		 
 		 	if(ctx == null)
 		 		return "";
-		 
+		 	
 	    	int nChildren = ctx.getChildCount();
 	    	
 	    	if(nChildren == 0){

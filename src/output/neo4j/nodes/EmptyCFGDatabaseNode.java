@@ -3,8 +3,6 @@ package output.neo4j.nodes;
 import java.util.HashMap;
 import java.util.Map;
 
-import cfg.CFGNode;
-
 public class EmptyCFGDatabaseNode extends DatabaseNode {
 	
 	@Override

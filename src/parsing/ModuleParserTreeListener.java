@@ -3,16 +3,12 @@ package parsing;
 import java.util.Iterator;
 import java.util.List;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.Interval;
 
 import antlr.ModuleBaseListener;
 import antlr.ModuleParser;
 import antlr.ModuleParser.Class_defContext;
-import antlr.ModuleParser.Compound_statementContext;
 import antlr.ModuleParser.DeclByClassContext;
-import antlr.ModuleParser.Function_defContext;
 import antlr.ModuleParser.Init_declarator_listContext;
 import antlr.ModuleParser.Type_nameContext;
 import astnodes.builders.ClassDefBuilder;

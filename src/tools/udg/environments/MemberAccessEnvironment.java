@@ -1,7 +1,6 @@
 package tools.udg.environments;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 import tools.udg.UseOrDef;

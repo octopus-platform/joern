@@ -4,11 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.DoStatement;
 import astnodes.statements.IfStatement;
-import astnodes.statements.Statement;
 import astnodes.statements.WhileStatement;
 
 public class DoWhileTests

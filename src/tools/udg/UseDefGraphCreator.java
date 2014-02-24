@@ -8,9 +8,9 @@ import org.neo4j.graphdb.index.IndexHits;
 import output.neo4j.batchInserter.QueryUtils;
 import tools.udg.environments.UseDefEnvironment;
 
-// Create a UseDefGraph by running running a basic
-// block analyzer on each basic block of the function
-// to determine the symbols USEs and DEFs 
+// Create a UseDefGraph by running running an ast
+// analyzer on each statement of the function
+// to determine the symbols USEd and DEF'd.
 
 public class UseDefGraphCreator
 {
@@ -19,20 +19,14 @@ public class UseDefGraphCreator
 	Stack<UseDefEnvironment> useDefStack = new Stack<UseDefEnvironment>();	
 	ASTDefUseAnalyzer astAnalyzer = new ASTDefUseAnalyzer();
 	
-	
 	public UseDefGraph create(long functionId)
 	{		
 		useDefGraph = new UseDefGraph();
 		
  		IndexHits<Long> statements = QueryUtils.getStatementsFromIndex(functionId);
 		
-		for(Long statementId : statements){
-			
-			Long astRoot = QueryUtils.getASTForStatement(statementId);
-			if(astRoot == -1) // perfectly normal, e.g., empty blocks.	
-				continue;
-						
-			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(astRoot);
+		for(Long statementId : statements){	
+			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(statementId);
 			addToUseDefGraph(usesAndDefs, statementId);
 		}
 	

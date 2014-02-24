@@ -11,8 +11,8 @@ import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
-import cfg.CFGNode;
 import cfg.CFG;
+import cfg.CFGNode;
 
 // Stays alive while importing a function into
 // the database

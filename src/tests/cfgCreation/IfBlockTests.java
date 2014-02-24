@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import astnodes.ASTNode;
 import astnodes.statements.ExpressionStatement;
-import cfg.CFGNode;
 import cfg.CFG;
+import cfg.CFGNode;
 import cfg.Edges;
 
 public class IfBlockTests extends CFGCreatorTest

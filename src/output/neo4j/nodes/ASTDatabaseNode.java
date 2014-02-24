@@ -25,27 +25,42 @@ public class ASTDatabaseNode extends DatabaseNode {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("type", astNode.getTypeAsString());
+
+		boolean isStatement = isStatement();
 		
-//		if(astNode.getChildCount() == 0)
+		// Only calculate and store code strings for
+		// leave-nodes and statements
+		
+		// if(astNode.getChildCount() == 0 || isStatement)
 			properties.put("code", astNode.getEscapedCodeStr());
+		
 		
 		if(astNode instanceof BinaryExpression)
 			properties.put("operator", ((BinaryExpression) astNode).getOperator()); 
 	
-		
-		if(Statement.class.isAssignableFrom(astNode.getClass())){
+		if(isStatement)
 			properties.put("isStatement", "True");
-		}
-		
-		if(Condition.class.isAssignableFrom(astNode.getClass())){
-			properties.put("isStatement", "True");
-		}
-		
-		if(Parameter.class.isAssignableFrom(astNode.getClass())){
-			properties.put("isStatement", "True");
-		}
 		
 		return properties;
 	}
 
+	// TODO
+	// When creating properties for the database node of an AST node,
+	// we decide if it is a statement. Arguably, the parser should
+	// already do this.
+	
+	private boolean isStatement()
+	{
+		if(Statement.class.isAssignableFrom(astNode.getClass()))
+			return true;
+		
+		if(Condition.class.isAssignableFrom(astNode.getClass()))
+			return true;
+		
+		if(Parameter.class.isAssignableFrom(astNode.getClass()))
+			return true;
+	
+		return false;
+	}
+	
 }

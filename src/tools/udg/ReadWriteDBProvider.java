@@ -3,13 +3,14 @@ package tools.udg;
 import java.util.LinkedList;
 import java.util.List;
 
+import misc.Pair;
+
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
 import output.neo4j.readWriteDB.QueryUtils;
-import misc.Pair;
 
 public class ReadWriteDBProvider extends DBProvider {
 

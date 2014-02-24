@@ -1,7 +1,6 @@
 package astnodes.builders.function;
 
 import java.util.EmptyStackException;
-import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -99,7 +98,6 @@ import astnodes.statements.Condition;
 import astnodes.statements.ContinueStatement;
 import astnodes.statements.DoStatement;
 import astnodes.statements.ElseStatement;
-import astnodes.statements.ExpressionHolder;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForInit;
 import astnodes.statements.ForStatement;

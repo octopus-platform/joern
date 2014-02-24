@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import cfg.CFGNode;
-
 public class MultiHashMap
 {
 	public HashMap<Object, List<Object>> hashMap =

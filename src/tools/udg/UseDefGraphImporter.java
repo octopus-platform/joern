@@ -5,12 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import misc.MultiHashMap;
+
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
-import misc.MultiHashMap;
 
 
 

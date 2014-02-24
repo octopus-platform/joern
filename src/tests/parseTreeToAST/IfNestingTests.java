@@ -9,7 +9,6 @@ import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.ElseStatement;
 import astnodes.statements.IfStatement;
-import astnodes.statements.Statement;
 
 public class IfNestingTests
 {

@@ -2,7 +2,6 @@ package output.neo4j.batchInserter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
@@ -45,11 +44,6 @@ public class QueryUtils {
 	public static String getNodeCode(Long nodeId)
 	{
 		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("code");
-	}
-	
-	public static long getASTForStatement(Long statementId)
-	{
-		return statementId;
 	}
 	
 	// this is the same as 'getASTRoot' except for the edge type

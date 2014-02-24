@@ -1,6 +1,6 @@
 package tests.argumentTainter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -12,7 +12,6 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import output.neo4j.readWriteDB.QueryUtils;
 import tests.TestDBTestReadWriteDB;
-import tools.argumentTainter.DDGPatcher;
 import tools.argumentTainter.DefUseCFGPatcher;
 import tools.argumentTainter.DefUseCFGPatcher.DefUseLink;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;

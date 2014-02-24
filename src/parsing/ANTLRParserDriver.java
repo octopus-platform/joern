@@ -17,7 +17,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astnodes.statements.CompoundStatement;

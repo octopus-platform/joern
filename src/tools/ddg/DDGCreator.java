@@ -4,10 +4,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.ddg.DefUseCFGFactories.BatchInserterFactory;
 import misc.HashMapOfSets;
+import tools.ddg.DefUseCFGFactories.BatchInserterFactory;
+import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
 
 
 public class DDGCreator {

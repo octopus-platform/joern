@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import astnodes.ASTNode;
-import cfg.CFGNode;
 import cfg.CFG;
+import cfg.CFGNode;
 
 public class AssignmentTests extends CFGCreatorTest
 {

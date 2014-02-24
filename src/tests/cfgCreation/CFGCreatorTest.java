@@ -5,14 +5,12 @@ import java.util.Vector;
 
 import org.junit.Before;
 
-
 import tests.parseTreeToAST.FunctionContentTestUtil;
 import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
-
 import cfg.ASTToCFGConverter;
-import cfg.CFGNode;
 import cfg.CFG;
+import cfg.CFGNode;
 
 
 

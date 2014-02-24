@@ -15,10 +15,9 @@ import output.neo4j.batchInserter.Neo4JBatchInserter;
 import output.neo4j.nodes.EmptyCFGDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
-import cfg.CFGNode;
 import cfg.CFG;
+import cfg.CFGNode;
 import cfg.Edges;
-import cfg.EmptyStatement;
 
 public class CFGImporter
 {

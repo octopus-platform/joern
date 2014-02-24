@@ -3,8 +3,6 @@ package tools.udg.environments;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import output.neo4j.batchInserter.QueryUtils;
-
 
 public class IdentifierEnvironment extends UseDefEnvironment {
 

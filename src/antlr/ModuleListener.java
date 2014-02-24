@@ -3,10 +3,8 @@
 	package antlr;
 
 
-  import java.util.Stack;
-
-import org.antlr.v4.runtime.tree.*;
-import org.antlr.v4.runtime.Token;
+  import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 public interface ModuleListener extends ParseTreeListener<Token> {
 	void enterDeclarator(ModuleParser.DeclaratorContext ctx);

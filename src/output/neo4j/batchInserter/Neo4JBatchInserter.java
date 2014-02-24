@@ -1,6 +1,5 @@
 package output.neo4j.batchInserter;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.neo4j.graphdb.RelationshipType;

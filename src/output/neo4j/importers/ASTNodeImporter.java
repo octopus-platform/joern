@@ -2,10 +2,10 @@ package output.neo4j.importers;
 
 import java.util.Map;
 
-import astnodes.ASTNode;
 import output.neo4j.batchInserter.GraphNodeStore;
 import output.neo4j.nodes.DatabaseNode;
 import output.neo4j.nodes.FileDatabaseNode;
+import astnodes.ASTNode;
 
 public abstract class ASTNodeImporter {
 

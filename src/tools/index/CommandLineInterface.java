@@ -3,7 +3,6 @@ package tools.index;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
-
 import org.apache.commons.cli.ParseException;
 
 import tools.CommonCommandLineInterface;

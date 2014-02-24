@@ -6,10 +6,10 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.batchInserter.Neo4JBatchInserter;
-import output.neo4j.importers.ClassDefImporter;
-import output.neo4j.importers.FunctionImporter;
-import output.neo4j.importers.DeclStmtImporter;
 import output.neo4j.importers.ASTNodeImporter;
+import output.neo4j.importers.ClassDefImporter;
+import output.neo4j.importers.DeclStmtImporter;
+import output.neo4j.importers.FunctionImporter;
 import output.neo4j.nodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;

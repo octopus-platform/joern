@@ -23,16 +23,26 @@ public class ASTToCFGConverter {
 		return cfg;
 	}
 	
-	public CFG convertFunctionDef(FunctionDef node)
+	private CFG convertFunctionDef(FunctionDef node)
 	{
+		// create a CFG for the parameter list
+		
 		ParameterList parameterList = node.getParameterList();
 		CFG cfg = convertParameterList(parameterList);
 		CFGNode lastParamDefBlock = cfg.getLastStatement();
 		
+		// create a CFG for the compound statement
+		
 		CompoundStatement content = node.getContent();
 		CFG compoundCFG = convertCompoundStatement(content);
 		CFGNode firstCompoundStmtBlock = compoundCFG.getFirstStatement();
+
+		// add compound statement cfg to parameter list CFG
+		
 		cfg.addCFG(compoundCFG);
+		
+		// create an edge from the last parameter to the first
+		// statement from the compound statement if necessary.
 		
 		if(lastParamDefBlock != null && firstCompoundStmtBlock != null){
 			cfg.addEdge(lastParamDefBlock, firstCompoundStmtBlock);
@@ -86,7 +96,7 @@ public class ASTToCFGConverter {
 		// if(jumpStatements.size() > 0){
 			// add an exit-block
 			
-			EmptyStatement emptyStatement = new EmptyStatement();
+			CFGNode emptyStatement = new CFGNode();
 			if(cfg.getLastStatement() != null)
 				cfg.addEdge(cfg.getLastStatement(), emptyStatement);
 			cfg.addStatement(emptyStatement);
@@ -104,7 +114,6 @@ public class ASTToCFGConverter {
 			}catch(RuntimeException ex){
 				System.err.println("While fixing jumps: " + ex.getMessage());
 			}
-		
 		
 		}
 	}

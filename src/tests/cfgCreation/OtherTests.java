@@ -8,8 +8,8 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import cfg.CFGNode;
 import cfg.CFG;
+import cfg.CFGNode;
 import cfg.Edges;
 
 public class OtherTests extends CFGCreatorTest

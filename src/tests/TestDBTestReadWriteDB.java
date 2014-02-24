@@ -3,7 +3,6 @@ package tests;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-
 import output.neo4j.readWriteDB.Neo4JDBInterface;
 
 public class TestDBTestReadWriteDB
