@@ -1,4 +1,4 @@
-package output.neo4j.readWriteDB;
+package traversals.readWriteDB;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,9 +12,10 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import output.neo4j.EdgeTypes;
+import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DDG;
 
-public class QueryUtils
+public class Traversals
 {
 
 	public static IndexHits<Node> getStatementsForFunction(Node funcNode)
@@ -125,7 +126,7 @@ public class QueryUtils
 	public static DDG getDDGForFunction(Node funcNode)
 	{
 		DDG retval = new DDG();
-		for(Node statement: QueryUtils.getStatementsForFunction(funcNode)){
+		for(Node statement: Traversals.getStatementsForFunction(funcNode)){
 			Iterable<Relationship> rels = statement.getRelationships(Direction.OUTGOING);
 			long srcId = statement.getId();
 			

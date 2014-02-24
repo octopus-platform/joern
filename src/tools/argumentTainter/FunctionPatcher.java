@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.neo4j.graphdb.Node;
 
-import output.neo4j.readWriteDB.QueryUtils;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
 import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
+import traversals.readWriteDB.Traversals;
 
 public class FunctionPatcher {
 
@@ -47,9 +47,9 @@ public class FunctionPatcher {
 	
 	private void determineCallsToPatch(Long funcId)
 	{
-		List<Node> callNodes = QueryUtils.getCallsToForFunction(sourceToPatch, funcId);	
+		List<Node> callNodes = Traversals.getCallsToForFunction(sourceToPatch, funcId);	
 		for(Node callNode : callNodes){
-			statementsToPatch.add(QueryUtils.getStatementForASTNode(callNode));
+			statementsToPatch.add(Traversals.getStatementForASTNode(callNode));
 		}
 	}
 

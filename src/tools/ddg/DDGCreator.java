@@ -38,7 +38,8 @@ public class DDGCreator {
 	
 	public DDG createForFunctionById(Long funcId)
 	{
-		return createForDefUseCFG(cfgFactory.create(funcId));	
+		DefUseCFG cfg = cfgFactory.create(funcId);
+		return createForDefUseCFG(cfg);	
 	}
 
 	public DDG createForDefUseCFG(DefUseCFG aCfg)
@@ -92,7 +93,7 @@ public class DDGCreator {
 		for(Long statement : cfg.getStatements()){
 			
 			// this has the nice side-effect that an
-			// empty hash is created for the basic block.
+			// empty hash is created for the statement.
 			
 			out.removeAllForKey(statement);
 			

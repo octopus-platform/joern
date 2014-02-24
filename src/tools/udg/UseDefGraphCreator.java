@@ -5,8 +5,8 @@ import java.util.Stack;
 
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.batchInserter.QueryUtils;
 import tools.udg.environments.UseDefEnvironment;
+import traversals.batchInserter.CFG;
 
 // Create a UseDefGraph by running running an ast
 // analyzer on each statement of the function
@@ -23,7 +23,7 @@ public class UseDefGraphCreator
 	{		
 		useDefGraph = new UseDefGraph();
 		
- 		IndexHits<Long> statements = QueryUtils.getStatementsFromIndex(functionId);
+ 		IndexHits<Long> statements = CFG.getStatementsFromIndex(functionId);
 		
 		for(Long statementId : statements){	
 			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(statementId);

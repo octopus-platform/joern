@@ -7,18 +7,19 @@ import java.util.Set;
 import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.batchInserter.QueryUtils;
 import tests.TestDBTestsBatchInserter;
 import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
 import tools.ddg.DefUseRelation;
+import traversals.batchInserter.Elementary;
+import traversals.batchInserter.Function;
 
 public class testDDGCreator extends TestDBTestsBatchInserter{
 
 	@Test
 	public void simplestTest()
 	{
-		IndexHits<Long> hits = QueryUtils.getFunctionsByName("ddg_simplest_test");
+		IndexHits<Long> hits = Function.getFunctionsByName("ddg_simplest_test");
 		long functionId = hits.next();
 		DDGCreator ddgCreator = new DDGCreator();
 		DDG ddg = ddgCreator.createForFunctionById(functionId);
@@ -28,8 +29,8 @@ public class testDDGCreator extends TestDBTestsBatchInserter{
 		assertTrue(reachesLinks.size() == 1);
 		
 		for(DefUseRelation x : ddg.getDefUseEdges()){
-			assertTrue((QueryUtils.getNodeCode(x.src).startsWith("int x = ")));
-			assertTrue((QueryUtils.getNodeCode(x.dst).startsWith("foo ( x )")));
+			assertTrue((Elementary.getNodeCode(x.src).startsWith("int x = ")));
+			assertTrue((Elementary.getNodeCode(x.dst).startsWith("foo ( x )")));
 		}
 	
 	}

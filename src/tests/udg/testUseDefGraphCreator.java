@@ -7,11 +7,11 @@ import java.util.List;
 import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.batchInserter.QueryUtils;
 import tests.TestDBTestsBatchInserter;
 import tools.udg.UseDefGraph;
 import tools.udg.UseDefGraphCreator;
 import tools.udg.UseOrDefRecord;
+import traversals.batchInserter.Function;
 
 public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 
@@ -63,7 +63,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	@Test
 	public void test_def_tainted_call()
 	{
-		IndexHits<Long> hits = QueryUtils.getFunctionsByName("udg_test_def_tainted_call");
+		IndexHits<Long> hits = Function.getFunctionsByName("udg_test_def_tainted_call");
 		long functionId = hits.next();
 		
 		UseDefGraphCreator creator = new UseDefGraphCreator();
@@ -103,7 +103,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	
 	private UseDefGraph createUDGForFunction(String functionName)
 	{
-		IndexHits<Long> hits = QueryUtils.getFunctionsByName(functionName);
+		IndexHits<Long> hits = Function.getFunctionsByName(functionName);
 		long functionId = hits.next();
 		
 		UseDefGraphCreator creator = new UseDefGraphCreator();

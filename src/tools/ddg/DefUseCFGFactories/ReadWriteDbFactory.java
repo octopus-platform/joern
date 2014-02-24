@@ -11,7 +11,7 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
+import traversals.readWriteDB.Traversals;
 
 public class ReadWriteDbFactory extends DefUseCFGFactory {
 
@@ -43,7 +43,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	{
 		for(Long statementId : cfg.getStatements()){
 			
-			List<Pair<Long,String>> used = QueryUtils.getSymbolsUsedByStatement(statementId);
+			List<Pair<Long,String>> used = Traversals.getSymbolsUsedByStatement(statementId);
 			for(Pair<Long, String> symbolIdAndCode : used){
 				Long symbolId = symbolIdAndCode.getL();
 				String symbolCode = symbolIdAndCode.getR();
@@ -51,7 +51,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 				cfg.setSetSymbolId(symbolCode, symbolId);
 			}
 				
-			List<Pair<Long,String>> defined = QueryUtils.getSymbolsDefinedByStatement(statementId);
+			List<Pair<Long,String>> defined = Traversals.getSymbolsDefinedByStatement(statementId);
 			for(Pair<Long, String> symbolIdAndCode : defined){
 				Long symbolId = symbolIdAndCode.getL();
 				String symbolCode = symbolIdAndCode.getR();

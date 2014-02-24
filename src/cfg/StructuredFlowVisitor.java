@@ -131,14 +131,14 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		ElseStatement elseNode = node.getElseNode();
 		if(elseNode == null){
-			emptyBlock = addEmptyStatement(cfg);
+			emptyBlock = addEmptyCFGNode(cfg);
 			cfg.addEdge(conditionBlock, emptyBlock);
 		}else{
 			Statement elseStatement = elseNode.getStatement();
 			CFG elseCFG = convertStatement(elseStatement);
 			cfg.addCFG(elseCFG);
 			cfg.addEdge(conditionBlock, elseCFG.getFirstStatement());
-			emptyBlock = addEmptyStatement(cfg);
+			emptyBlock = addEmptyCFGNode(cfg);
 			cfg.addEdge(elseCFG.getLastStatement(), emptyBlock);
 		}
 		
@@ -151,7 +151,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		CFG cfg = new CFG();
 		
-		CFGNode initBlock = addEmptyStatement(cfg);
+		CFGNode initBlock = addEmptyCFGNode(cfg);
 		initBlock.setASTNode(node.getForInitStatement());
 		
 		CFGNode conditionBlock = addConditionBlock(node, cfg, new LoopBlock());
@@ -160,7 +160,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG statementCFG = addStatementBlock(node, cfg);
 		loopStack.pop();
 		
-		CFGNode exprBlock = addEmptyStatement(cfg);
+		CFGNode exprBlock = addEmptyCFGNode(cfg);
 		exprBlock.setASTNode(node.getExpression());
 		
 		cfg.addEdge(initBlock, conditionBlock);
@@ -181,7 +181,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG statementCFG = addStatementBlock(node, cfg);
 		loopStack.push(conditionBlock);
 		
-		CFGNode emptyBlock = addEmptyStatement(cfg);
+		CFGNode emptyBlock = addEmptyCFGNode(cfg);
 		
 		cfg.addEdge(conditionBlock, statementCFG.getFirstStatement());
 		cfg.addEdge(statementCFG.getLastStatement(), emptyBlock);
@@ -195,7 +195,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		CFG cfg = new CFG();
 
-		CFGNode emptyBlock = addEmptyStatement(cfg);
+		CFGNode emptyBlock = addEmptyCFGNode(cfg);
 		
 		loopStack.push(emptyBlock);
 		CFG statementCFG = addStatementBlock(node, cfg);
@@ -220,7 +220,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG statementCFG = addStatementBlock(node, cfg);
 		loopStack.pop();
 		
-		CFGNode emptyBlock = addEmptyStatement(cfg);
+		CFGNode emptyBlock = addEmptyCFGNode(cfg);
 		
 		cfg.addEdge(conditionBlock, statementCFG.getFirstStatement());
 		cfg.addEdge(statementCFG.getLastStatement(), emptyBlock);
@@ -313,7 +313,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		return loopStack.peek();
 	}
 	
-	private CFGNode addEmptyStatement(CFG cfg)
+	private CFGNode addEmptyCFGNode(CFG cfg)
 	{
 		CFGNode emptyBlock = new CFGNode();
 		cfg.addStatement(emptyBlock);

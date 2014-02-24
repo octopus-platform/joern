@@ -12,12 +12,12 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.udg.ASTDefUseAnalyzer;
 import tools.udg.DBProvider;
 import tools.udg.ReadWriteDBProvider;
 import tools.udg.UseOrDef;
+import traversals.readWriteDB.Traversals;
 
 public class DefUseCFGPatcher {
 
@@ -65,7 +65,7 @@ public class DefUseCFGPatcher {
 			
 			long statementId = statement.getId();
 			
-			Node astNode = QueryUtils.getASTForStatement(statement);
+			Node astNode = Traversals.getASTForStatement(statement);
 			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astNode.getId());
 			
 			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(statementId);

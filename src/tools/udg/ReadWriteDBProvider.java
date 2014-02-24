@@ -10,20 +10,20 @@ import org.neo4j.graphdb.Relationship;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
+import traversals.readWriteDB.Traversals;
 
 public class ReadWriteDBProvider extends DBProvider {
 
 	@Override
 	public String getNodeType(Long nodeId)
 	{
-		return QueryUtils.getNodeType(nodeId);
+		return Traversals.getNodeType(nodeId);
 	}
 
 	@Override
 	public String getCalleeFromCall(Long nodeId)
 	{
-		return QueryUtils.getCalleeFromCall(nodeId);
+		return Traversals.getCalleeFromCall(nodeId);
 	}
 
 	@Override
@@ -48,13 +48,13 @@ public class ReadWriteDBProvider extends DBProvider {
 	@Override
 	public String getNodeCode(long nodeId)
 	{
-		return QueryUtils.getNodeCode(nodeId);
+		return Traversals.getNodeCode(nodeId);
 	}
 
 	@Override
 	public String getOperatorCode(long nodeId)
 	{
-		return QueryUtils.getOperatorCode(nodeId);
+		return Traversals.getOperatorCode(nodeId);
 	}
 
 }

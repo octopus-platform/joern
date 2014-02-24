@@ -10,13 +10,13 @@ import org.junit.Test;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.readWriteDB.QueryUtils;
 import tests.TestDBTestReadWriteDB;
 import tools.argumentTainter.DefUseCFGPatcher;
 import tools.argumentTainter.DefUseCFGPatcher.DefUseLink;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
 import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
+import traversals.readWriteDB.Traversals;
 
 public class TestArgumentTainter extends TestDBTestReadWriteDB
 {
@@ -52,16 +52,16 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 	private List<Node> getStatementsToPatch(Long funcId, String source)
 	{
 		List<Node> statementsToPatch = new LinkedList<Node>();
-		List<Node> callNodes = QueryUtils.getCallsToForFunction(source, funcId);	
+		List<Node> callNodes = Traversals.getCallsToForFunction(source, funcId);	
 		for(Node callNode : callNodes){
-			statementsToPatch.add(QueryUtils.getStatementForASTNode(callNode));
+			statementsToPatch.add(Traversals.getStatementForASTNode(callNode));
 		}
 		return statementsToPatch;
 	}
 	
 	private Long getFunctionIdByFunctionName(String functionName)
 	{
-		IndexHits<Node> hits = QueryUtils.getFunctionsByName(functionName);
+		IndexHits<Node> hits = Traversals.getFunctionsByName(functionName);
 		Long funcId = hits.next().getId();
 		return funcId;
 	}

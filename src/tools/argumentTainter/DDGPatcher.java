@@ -12,12 +12,12 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
 import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
 import tools.ddg.DDGDifference;
 import tools.ddg.DefUseRelation;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import traversals.readWriteDB.Traversals;
 
 public class DDGPatcher
 {
@@ -28,7 +28,7 @@ public class DDGPatcher
 	{
 		Node node = Neo4JDBInterface.getNodeById(funcId);
 		
-		DDG oldDDG = QueryUtils.getDDGForFunction(node);
+		DDG oldDDG = Traversals.getDDGForFunction(node);
 		DDGCreator ddgCreator = new DDGCreator();
 		DDG newDDG = ddgCreator.createForDefUseCFG(defUseCFG);
 		

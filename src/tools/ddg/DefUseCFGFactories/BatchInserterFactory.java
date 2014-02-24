@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.batchInserter.QueryUtils;
+import traversals.batchInserter.CFG;
 
 public class BatchInserterFactory extends DefUseCFGFactory{
 
@@ -25,7 +25,7 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 
 	private void getStatementsOfFunction(Long funcId)
 	{
-		IndexHits<Long> blocks = QueryUtils.getStatementsFromIndex(funcId);
+		IndexHits<Long> blocks = CFG.getStatementsFromIndex(funcId);
 		for(Long block : blocks)
 			cfg.addStatement(block);
 	}
@@ -34,11 +34,11 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 	{
 		for(Long statement : cfg.getStatements()){
 			
-			List<String> useSymbols = QueryUtils.getSymbolsUsedByStatement(statement);			
+			List<String> useSymbols = CFG.getSymbolsUsedByStatement(statement);			
 			for(String symbol : useSymbols)
 				cfg.addSymbolUsed(statement, symbol);
 					
-			List<String> defSymbols = QueryUtils.getSymbolsDefinedByStatement(statement);
+			List<String> defSymbols = CFG.getSymbolsDefinedByStatement(statement);
 			for(String symbol : defSymbols)
 				cfg.addSymbolDefined(statement, symbol);				
 		}
@@ -47,7 +47,7 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 	private void getParentBlocks()
 	{
 		for(Long statement : cfg.getStatements()){
-			List<Long> parents = QueryUtils.getParentStatements(statement);
+			List<Long> parents = CFG.getParentStatements(statement);
 			for(Long parent : parents)
 				cfg.addParentBlock(statement, parent);
 		}
@@ -56,7 +56,7 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 	private void getChildBlocks()
 	{
 		for(Long statement : cfg.getStatements()){
-			List<Long> children = QueryUtils.getChildStatements(statement);
+			List<Long> children = CFG.getChildStatements(statement);
 			for(Long child : children)
 				cfg.addChildBlock(statement, child);
 		}
