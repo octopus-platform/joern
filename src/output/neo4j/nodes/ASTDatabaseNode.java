@@ -5,6 +5,10 @@ import java.util.Map;
 
 import astnodes.ASTNode;
 import astnodes.expressions.BinaryExpression;
+import astnodes.functionDef.Parameter;
+import astnodes.statements.Condition;
+import astnodes.statements.Statement;
+
 
 public class ASTDatabaseNode extends DatabaseNode {
 
@@ -21,10 +25,25 @@ public class ASTDatabaseNode extends DatabaseNode {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("type", astNode.getTypeAsString());
-		properties.put("code", astNode.getEscapedCodeStr());
+		
+//		if(astNode.getChildCount() == 0)
+			properties.put("code", astNode.getEscapedCodeStr());
 		
 		if(astNode instanceof BinaryExpression)
 			properties.put("operator", ((BinaryExpression) astNode).getOperator()); 
+	
+		
+		if(Statement.class.isAssignableFrom(astNode.getClass())){
+			properties.put("isStatement", "True");
+		}
+		
+		if(Condition.class.isAssignableFrom(astNode.getClass())){
+			properties.put("isStatement", "True");
+		}
+		
+		if(Parameter.class.isAssignableFrom(astNode.getClass())){
+			properties.put("isStatement", "True");
+		}
 		
 		return properties;
 	}

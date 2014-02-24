@@ -26,9 +26,6 @@ public class EdgeTypes
 	/** Edges connecting basic blocks with basic blocks they transfer control to*/
 	public static final String FLOWS_TO = "FLOWS_TO";
 	
-	/** Edges connecting a basic block to its corresponding AST node */
-	public static final String IS_BASIC_BLOCK_OF = "IS_BASIC_BLOCK_OF";
-	
 	/** Connects classes to their members */
 	public static final String IS_CLASS_OF = "IS_CLASS_OF";
 	

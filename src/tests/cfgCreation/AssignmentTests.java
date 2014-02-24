@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import astnodes.ASTNode;
-import cfg.StatementOrCondition;
+import cfg.CFGNode;
 import cfg.CFG;
 
 public class AssignmentTests extends CFGCreatorTest
@@ -24,7 +24,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "x = 10;";
 		CFG cfg = getCFGForCode(input);
-		StatementOrCondition statement = cfg.getStatements().get(0);
+		CFGNode statement = cfg.getStatements().get(0);
 		ASTNode astNode = statement.getASTNode();
 		assertTrue(astNode != null);
 		System.out.println(astNode.getClass().getSimpleName());

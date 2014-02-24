@@ -2,7 +2,7 @@ package cfg;
 
 import astnodes.ASTNode;
 
-public class StatementOrCondition {
+public class CFGNode {
 
 	ASTNode astNode;
 	
@@ -22,15 +22,6 @@ public class StatementOrCondition {
 			return "";
 		
 		return astNode.getEscapedCodeStr();
-	}
-
-	public String getType()
-	{
-//		if(astNode == null)
-//			return "";
-//
-//		return astNode.getTypeAsString() + "BB";
-		return "BasicBlock";
 	}
 
 }

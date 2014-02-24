@@ -6,12 +6,12 @@ import misc.MultiHashMap;
 
 public class Edges extends MultiHashMap
 {
-	public void addEdge(StatementOrCondition src, StatementOrCondition dst)
+	public void addEdge(Object src, Object dst)
 	{
 		add(src, dst);
 	}
 
-	public List<Object> getEdgesFrom(StatementOrCondition src)
+	public List<Object> getEdgesFrom(CFGNode src)
 	{
 		return getListForKey(src);
 	}
@@ -21,12 +21,12 @@ public class Edges extends MultiHashMap
 		addMultiHashMap(otherEdges);
 	}
 
-	public void removeEdge(StatementOrCondition src, StatementOrCondition dst)
+	public void removeEdge(CFGNode src, CFGNode dst)
 	{
 		remove(src, dst);
 	}
 	
-	public void removeAllEdgesFrom(StatementOrCondition src)
+	public void removeAllEdgesFrom(CFGNode src)
 	{
 		removeAllForKey(src);
 	}

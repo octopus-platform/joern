@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import cfg.StatementOrCondition;
+import cfg.CFGNode;
 import cfg.CFG;
 import cfg.Edges;
 
@@ -63,7 +63,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "foo: foo();";
 		CFG cfg = getCFGForCode(input);
-		HashMap<String, StatementOrCondition> labels = cfg.getLabels();
+		HashMap<String, CFGNode> labels = cfg.getLabels();
 		System.out.println(labels.size());
 		assertTrue(labels.size() == 1);
 	}
@@ -101,7 +101,7 @@ public class OtherTests extends CFGCreatorTest
 		String input = "if(!x) return 1; y = x; return 0;";
 		CFG cfg = getCFGForCode(input);
 		
-		StatementOrCondition exitBlock = cfg.getStatements().lastElement();		
+		CFGNode exitBlock = cfg.getStatements().lastElement();		
 		assertTrue(exitBlock.getEscapedCodeStr().equals(""));
 	}
 	
@@ -111,8 +111,8 @@ public class OtherTests extends CFGCreatorTest
 		String input = "if(!x) return 1; y = x;";
 		CFG cfg = getCFGForCode(input);
 		
-		StatementOrCondition yAssignX = cfg.getStatements().get(3);
-		StatementOrCondition exitBlock = cfg.getStatements().lastElement();
+		CFGNode yAssignX = cfg.getStatements().get(3);
+		CFGNode exitBlock = cfg.getStatements().lastElement();
 		
 		assertTrue(cfg.getEdges().getEdgesFrom(yAssignX).contains(exitBlock));
 	}
@@ -123,10 +123,10 @@ public class OtherTests extends CFGCreatorTest
 		String input = "x = 0; foo: x++; if(x < 10) goto foo;";
 		CFG cfg = getCFGForCode(input);
 		
-		Vector<StatementOrCondition> statements = cfg.getStatements();
+		Vector<CFGNode> statements = cfg.getStatements();
 		
-		StatementOrCondition gotoStmt = statements.get(4);
-		StatementOrCondition exitBlock = cfg.getLastStatement();
+		CFGNode gotoStmt = statements.get(4);
+		CFGNode exitBlock = cfg.getLastStatement();
 		
 		assertFalse(cfg.getEdges().getEdgesFrom(gotoStmt).contains(exitBlock));
 	}

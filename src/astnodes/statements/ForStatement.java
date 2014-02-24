@@ -1,13 +1,13 @@
 package astnodes.statements;
 
 import astnodes.ASTNode;
-import astnodes.DummyNode;
+import astnodes.DummyASTNode;
 import astwalking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter
 {
-	private ASTNode forInitStatement = new DummyNode();
-	private ASTNode expression = new DummyNode();
+	private ASTNode forInitStatement = new DummyASTNode();
+	private ASTNode expression = null;
 	
 	public ASTNode getForInitStatement()
 	{
@@ -32,9 +32,9 @@ public class ForStatement extends BlockStarter
 	@Override
 	public void addChild(ASTNode item)
 	{	
-		if(forInitStatement instanceof DummyNode)
+		if(forInitStatement instanceof DummyASTNode)
 			forInitStatement = item;
-		else if(expression instanceof DummyNode && condition != null)
+		else if(expression instanceof DummyASTNode && condition != null)
 			expression = item;
 		super.addChild(item);
 	}

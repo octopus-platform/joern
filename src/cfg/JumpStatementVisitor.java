@@ -11,14 +11,14 @@ import astwalking.ASTNodeVisitor;
 public class JumpStatementVisitor extends ASTNodeVisitor
 {
 	CFG thisCFG;
-	StatementOrCondition thisStatement;
+	CFGNode thisStatement;
 	
 	void setCFG(CFG cfg)
 	{
 		thisCFG = cfg;
 	}
 	
-	void setStatement(StatementOrCondition statement)
+	void setStatement(CFGNode statement)
 	{
 		thisStatement = statement;
 	}
@@ -27,7 +27,7 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 	{ 
 		Edges edges = thisCFG.getEdges();
 		edges.removeAllEdgesFrom(thisStatement);
-		StatementOrCondition exitBlock = thisCFG.getLastStatement();
+		CFGNode exitBlock = thisCFG.getLastStatement();
 		if(exitBlock == null)
 			throw new RuntimeException("error attaching return to exitBlock: no exitBlock");
 		edges.addEdge(thisStatement, exitBlock);
@@ -36,7 +36,7 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 	public void visit(GotoStatement expression)
 	{	
 		String target = expression.getTarget();
-		StatementOrCondition blockByLabel = thisCFG.getBlockByLabel(target);
+		CFGNode blockByLabel = thisCFG.getBlockByLabel(target);
 		if(blockByLabel == null){
 			throw new RuntimeException("cannot find label " + target);
 		}
@@ -48,17 +48,17 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 	public void visit(ContinueStatement expression)
 	{
 		thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-		StatementOrCondition outerLoop = thisCFG.getOuterLoop(thisStatement);
+		CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
 		thisCFG.addEdge(thisStatement, outerLoop);
 	}
 	
 	public void visit(BreakStatement expression)
 	{	
 		thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-		StatementOrCondition outerLoop = thisCFG.getOuterLoop(thisStatement);
+		CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
 		
 		List<Object> edgesFrom = thisCFG.edges.getEdgesFrom(outerLoop);
-		StatementOrCondition endOfLoop = (StatementOrCondition) edgesFrom.get(1);
+		CFGNode endOfLoop = (CFGNode) edgesFrom.get(1);
 		thisCFG.addEdge(thisStatement, endOfLoop);
 	}
 }

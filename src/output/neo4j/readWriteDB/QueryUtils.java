@@ -7,6 +7,7 @@ import misc.Pair;
 
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -18,7 +19,7 @@ public class QueryUtils
 
 	public static IndexHits<Node> getStatementsForFunction(Node funcNode)
 	{
-		String query = "type:BasicBlock AND functionId:" + funcNode.getId();
+		String query = "isStatement:True AND functionId:" + funcNode.getId();
 		return Neo4JDBInterface.queryIndex(query);
 	}
 
@@ -143,19 +144,28 @@ public class QueryUtils
 	// The two following functions are somewhat disgraceful
 	// but should work for now.
 	
-	public static Node getStatementForASTNode(Node callNode)
+	public static Node getStatementForASTNode(Node node)
 	{
-		Node n = callNode;
-		Node parent = null;
+		Node n = node;
+		Node parent = node;
 		
 		while(true){
-			Iterable<Relationship> rels = n.getRelationships(Direction.INCOMING);
-			for(Relationship rel : rels){
-				if(rel.getType().toString().equals(EdgeTypes.IS_BASIC_BLOCK_OF))
-					return rel.getStartNode(); 
-				else if(rel.getType().toString().equals(EdgeTypes.IS_AST_PARENT))
-					parent = rel.getStartNode();						
+			
+			try{
+				Object property = n.getProperty("isStatement");
+				return n;
+			}catch(NotFoundException ex){
+				
 			}
+			
+			Iterable<Relationship> rels = n.getRelationships(Direction.INCOMING);			
+			for(Relationship rel : rels){
+				parent = rel.getStartNode();
+				break;
+			}
+			
+			if(n == parent)
+				return null;
 			n = parent;
 		}
 	}
@@ -192,16 +202,13 @@ public class QueryUtils
 
 	public static IndexHits<Node> getFunctionsByName(String functionName)
 	{
-		// TODO Auto-generated method stub	
 		return Neo4JDBInterface.queryIndex("functionName:" + functionName);
 	}
 
 
 	public static Node getASTForStatement(Node statement)
 	{
-
-		List<Node> r = getChildrenConnectedBy(statement, EdgeTypes.IS_BASIC_BLOCK_OF);
-		return r.get(0);
+		return statement;
 	}
 
 	public static String getNodeType(Long nodeId)

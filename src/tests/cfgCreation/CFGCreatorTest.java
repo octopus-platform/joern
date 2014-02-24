@@ -11,7 +11,7 @@ import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
 
 import cfg.ASTToCFGConverter;
-import cfg.StatementOrCondition;
+import cfg.CFGNode;
 import cfg.CFG;
 
 
@@ -34,8 +34,8 @@ public class CFGCreatorTest
 	
 	protected ASTNode getConditionNode(CFG cfg)
 	{
-		Vector<StatementOrCondition> statements = cfg.getStatements();
-		StatementOrCondition conditionBlock = statements.get(0);
+		Vector<CFGNode> statements = cfg.getStatements();
+		CFGNode conditionBlock = statements.get(0);
 		ASTNode astNode = conditionBlock.getASTNode();
 		return astNode;
 	}

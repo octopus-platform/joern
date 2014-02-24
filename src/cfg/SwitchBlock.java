@@ -1,5 +1,5 @@
 package cfg;
 
-public class SwitchBlock extends StatementOrCondition {
+public class SwitchBlock extends CFGNode {
 
 }

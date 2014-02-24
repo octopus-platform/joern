@@ -14,15 +14,15 @@ import java.util.Vector;
 public class CFG {
 
 	// As indicated by the type, these are statements OR conditions
-	Vector<StatementOrCondition> statements = new Vector<StatementOrCondition>();
+	Vector<CFGNode> statements = new Vector<CFGNode>();
 	
 	Edges edges = new Edges();
 	SwitchLabels switchLabels = new SwitchLabels();
 	
-	Vector<StatementOrCondition> jumpStatements = new Vector<StatementOrCondition>();
-	HashMap<String, StatementOrCondition> labels = new HashMap<String, StatementOrCondition>();
+	Vector<CFGNode> jumpStatements = new Vector<CFGNode>();
+	HashMap<String, CFGNode> labels = new HashMap<String, CFGNode>();
 	
-	HashMap<StatementOrCondition, StatementOrCondition> loopStart = new HashMap<StatementOrCondition, StatementOrCondition>();
+	HashMap<CFGNode, CFGNode> loopStart = new HashMap<CFGNode, CFGNode>();
 	
 	public void addCFG(CFG otherCFG)
 	{
@@ -31,7 +31,7 @@ public class CFG {
 			return;
 		}
 		
-		Vector<StatementOrCondition> otherBlocks = otherCFG.getStatements();
+		Vector<CFGNode> otherBlocks = otherCFG.getStatements();
 		Edges otherEdges = otherCFG.getEdges();
 		switchLabels.addMultiHashMap(otherCFG.getSwitchLabels());
 		statements.addAll(otherBlocks);
@@ -55,18 +55,18 @@ public class CFG {
 	}
 
 	
-	public StatementOrCondition getBlockByLabel(String label)
+	public CFGNode getBlockByLabel(String label)
 	{
 		return labels.get(label);
 	}
 	
-	public void addSwitchLabel(StatementOrCondition surroundingSwitch,
-			StatementOrCondition labeledBlock)
+	public void addSwitchLabel(CFGNode surroundingSwitch,
+			CFGNode labeledBlock)
 	{
 		switchLabels.add(surroundingSwitch, labeledBlock);	
 	}
 
-	public StatementOrCondition getOuterLoop(StatementOrCondition thisStatement)
+	public CFGNode getOuterLoop(CFGNode thisStatement)
 	{
 		return loopStart.get(thisStatement);
 	}
@@ -76,7 +76,7 @@ public class CFG {
 		return switchLabels;
 	}
 	
-	public StatementOrCondition getLastStatement()
+	public CFGNode getLastStatement()
 	{
 		try{
 			return statements.lastElement();
@@ -86,7 +86,7 @@ public class CFG {
 		}
 	}
 	
-	public StatementOrCondition getFirstStatement()
+	public CFGNode getFirstStatement()
 	{	
 		try{
 			return statements.firstElement();
@@ -96,19 +96,19 @@ public class CFG {
 		}
 	}
 	
-	public void labelBlock(String label, StatementOrCondition block) { labels.put(label, block); }
-	public void addStatement(StatementOrCondition newBlock) { statements.add(newBlock); }
-	public void addEdge(StatementOrCondition srcBlock,
-			 StatementOrCondition dstBlock){ edges.addEdge(srcBlock, dstBlock); }
+	public void labelBlock(String label, CFGNode block) { labels.put(label, block); }
+	public void addStatement(CFGNode newBlock) { statements.add(newBlock); }
+	public void addEdge(CFGNode srcBlock,
+			 CFGNode dstBlock){ edges.addEdge(srcBlock, dstBlock); }
 	
 	public int getNumberOfStatements(){ return statements.size(); }
 	
-	public Collection<? extends StatementOrCondition> getJumpStatements() { return jumpStatements; }
-	public HashMap<String,StatementOrCondition> getLabels(){ return labels; }
+	public Collection<? extends CFGNode> getJumpStatements() { return jumpStatements; }
+	public HashMap<String,CFGNode> getLabels(){ return labels; }
 	public Edges getEdges() { return edges; }
-	public Vector<StatementOrCondition> getStatements(){ return statements; }
+	public Vector<CFGNode> getStatements(){ return statements; }
 
-	public void addJumpStatement(StatementOrCondition block)
+	public void addJumpStatement(CFGNode block)
 	{
 		this.jumpStatements.add(block);
 	}

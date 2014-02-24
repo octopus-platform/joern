@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import astnodes.ASTNode;
 import astnodes.statements.ExpressionStatement;
-import cfg.StatementOrCondition;
+import cfg.CFGNode;
 import cfg.CFG;
 import cfg.Edges;
 
@@ -63,8 +63,8 @@ public class IfBlockTests extends CFGCreatorTest
 		String input = "if(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
 		
-		Vector<StatementOrCondition> statements = cfg.getStatements();
-		StatementOrCondition bodyBlock = statements.get(1);
+		Vector<CFGNode> statements = cfg.getStatements();
+		CFGNode bodyBlock = statements.get(1);
 		ExpressionStatement exprStmt =  (ExpressionStatement) bodyBlock.getASTNode();
 		
 		assertTrue(exprStmt.getEscapedCodeStr().equals("bar ( )"));
@@ -76,9 +76,9 @@ public class IfBlockTests extends CFGCreatorTest
 		String input = "if(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
 		
-		StatementOrCondition conditionBlock = cfg.getStatements().get(0);
-		StatementOrCondition ifStatements = cfg.getStatements().get(1);
-		StatementOrCondition emptyBlock = cfg.getStatements().get(2);
+		CFGNode conditionBlock = cfg.getStatements().get(0);
+		CFGNode ifStatements = cfg.getStatements().get(1);
+		CFGNode emptyBlock = cfg.getStatements().get(2);
 		
 		assertTrue(cfg.getEdges().size() == 4);
 		assertTrue(cfg.getEdges().getEdgesFrom(conditionBlock).size() == 2);
@@ -95,10 +95,10 @@ public class IfBlockTests extends CFGCreatorTest
 		String input = "x = 10; if(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
 		
-		StatementOrCondition prevBlock = cfg.getStatements().get(0);
-		StatementOrCondition conditionBlock = cfg.getStatements().get(1);
-		StatementOrCondition ifStatements = cfg.getStatements().get(2);
-		StatementOrCondition emptyBlock = cfg.getStatements().get(3);
+		CFGNode prevBlock = cfg.getStatements().get(0);
+		CFGNode conditionBlock = cfg.getStatements().get(1);
+		CFGNode ifStatements = cfg.getStatements().get(2);
+		CFGNode emptyBlock = cfg.getStatements().get(3);
 		
 		assertTrue(cfg.getEdges().size() == 5);
 		assertTrue(cfg.getEdges().getEdgesFrom(conditionBlock).size() == 2);
@@ -117,10 +117,10 @@ public class IfBlockTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		
 		
-		StatementOrCondition conditionBlock = cfg.getStatements().get(0);
-		StatementOrCondition ifStatements = cfg.getStatements().get(1);
-		StatementOrCondition emptyBlock = cfg.getStatements().get(2);
-		StatementOrCondition nextBlock = cfg.getStatements().get(3);
+		CFGNode conditionBlock = cfg.getStatements().get(0);
+		CFGNode ifStatements = cfg.getStatements().get(1);
+		CFGNode emptyBlock = cfg.getStatements().get(2);
+		CFGNode nextBlock = cfg.getStatements().get(3);
 		
 		assertTrue(cfg.getEdges().size() == 5);
 		assertTrue(cfg.getEdges().getEdgesFrom(conditionBlock).size() == 2);

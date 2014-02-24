@@ -49,7 +49,7 @@ public class QueryUtils {
 	
 	public static long getASTForStatement(Long statementId)
 	{
-		return getFirstChildWithEdgeType(statementId, EdgeTypes.IS_BASIC_BLOCK_OF);		
+		return statementId;
 	}
 	
 	// this is the same as 'getASTRoot' except for the edge type
@@ -96,7 +96,7 @@ public class QueryUtils {
 
 	public static IndexHits<Long> getStatementsFromIndex(long functionId)
 	{		
-		String query = "type:\"BasicBlock\" AND functionId:\"" + functionId + "\"";
+		String query = "isStatement:True AND functionId:" + functionId;
 		return Neo4JBatchInserter.queryIndex(query);
 	}
 
@@ -104,6 +104,7 @@ public class QueryUtils {
 	{
 		List<Long> retval = new LinkedList<Long>();
 		Iterable<BatchRelationship> rels = getEdges(statementId);
+		
 		for(BatchRelationship rel : rels){
 			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
 			if(rel.getStartNode() == statementId) continue;

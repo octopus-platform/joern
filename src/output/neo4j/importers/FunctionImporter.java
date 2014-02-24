@@ -11,7 +11,7 @@ import output.neo4j.nodes.FileDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
-import cfg.StatementOrCondition;
+import cfg.CFGNode;
 import cfg.CFG;
 
 // Stays alive while importing a function into
@@ -60,7 +60,6 @@ public class FunctionImporter extends ASTNodeImporter
 	{
 		
 		linkFunctionWithASTPseudoNode(function);
-		
 		linkPseudoASTWithRootASTNode(function.getASTPseudoNode(), function.getASTRoot());
 		
 		CFG cfg = function.getCFG();
@@ -74,7 +73,7 @@ public class FunctionImporter extends ASTNodeImporter
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CFG_OF_CFG_ROOT);
 
-		StatementOrCondition firstBlock = cfg.getFirstStatement();
+		CFGNode firstBlock = cfg.getFirstStatement();
 		if(firstBlock == null){
 			// TODO: sometimes there is not a single block in the CFG.
 			// It's probably fine but it needs to be investigated.
@@ -82,8 +81,14 @@ public class FunctionImporter extends ASTNodeImporter
 		}
 		
 		long functionId = nodeStore.getIdForObject(cfgPseudoNode);
-		long cfgRootId = nodeStore.getIdForObject(firstBlock);
 		
+		long cfgRootId;
+		try{
+			cfgRootId = nodeStore.getIdForObject(firstBlock);
+		}catch(RuntimeException ex){
+			cfgRootId = nodeStore.getIdForObject(firstBlock.getASTNode());
+		}
+			
 		Neo4JBatchInserter.addRelationship(functionId, cfgRootId, rel, null);
 	
 	}

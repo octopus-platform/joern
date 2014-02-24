@@ -1,5 +1,5 @@
 package cfg;
 
-public class LoopBlock extends StatementOrCondition {
+public class LoopBlock extends CFGNode {
 
 }

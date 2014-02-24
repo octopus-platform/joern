@@ -27,11 +27,11 @@ public class ASTToCFGConverter {
 	{
 		ParameterList parameterList = node.getParameterList();
 		CFG cfg = convertParameterList(parameterList);
-		StatementOrCondition lastParamDefBlock = cfg.getLastStatement();
+		CFGNode lastParamDefBlock = cfg.getLastStatement();
 		
 		CompoundStatement content = node.getContent();
 		CFG compoundCFG = convertCompoundStatement(content);
-		StatementOrCondition firstCompoundStmtBlock = compoundCFG.getFirstStatement();
+		CFGNode firstCompoundStmtBlock = compoundCFG.getFirstStatement();
 		cfg.addCFG(compoundCFG);
 		
 		if(lastParamDefBlock != null && firstCompoundStmtBlock != null){
@@ -70,18 +70,18 @@ public class ASTToCFGConverter {
 		
 		while(it.hasNext()){
 			Entry<Object, List<Object>> entry = it.next();
-			StatementOrCondition switchBlock = (StatementOrCondition) entry.getKey();
+			CFGNode switchBlock = (CFGNode) entry.getKey();
 			List<Object> labeledBlocks = entry.getValue();
 			
 			for(Object labeledBlock : labeledBlocks)
-				cfg.addEdge(switchBlock, (StatementOrCondition) labeledBlock);
+				cfg.addEdge(switchBlock, (CFGNode) labeledBlock);
 		}
 	}
 
 	private void fixJumps(CFG cfg)
 	{
-		Collection<? extends StatementOrCondition> jumpStatements = cfg.getJumpStatements();
-		Iterator<? extends StatementOrCondition> it = jumpStatements.iterator();
+		Collection<? extends CFGNode> jumpStatements = cfg.getJumpStatements();
+		Iterator<? extends CFGNode> it = jumpStatements.iterator();
 		
 		// if(jumpStatements.size() > 0){
 			// add an exit-block
@@ -93,7 +93,7 @@ public class ASTToCFGConverter {
 		// }
 		
 		while(it.hasNext()){
-			StatementOrCondition stmt = it.next();
+			CFGNode stmt = it.next();
 			ASTNode statement = stmt.getASTNode();
 			
 			jumpStatementVisitor.setCFG(cfg);
