@@ -14,7 +14,7 @@ class JoernStepsTests(unittest.TestCase):
 
     def testCallRetrieval(self):
         
-        query = """ getCallsTo('bar').$NODE_CODE """
+        query = """ getCallsTo('bar').code """
         x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 1)
 
@@ -115,58 +115,57 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.runGremlinQuery(query)
         self.assertEquals(len(x), 2)
         
-    # def testAssignToArrayField(self):
-    #     query = """
-    #     getFunctionByName('udg_test_assign_to_array_field')
-    #     .functionToASTNodes()
-    #     .filter{it.type == 'AssignmentExpr'}
-    #     .out('DEF').code
-    #     """
-    #     x = self.j.runGremlinQuery(query)
-    #     # At some point, we want to make this DEF(*x)
-    #     # instead.
-    #     self.assertEquals(x[0], 'arr')
+    def testAssignToArrayField(self):
+        query = """
+        getFunctionsByName('udg_test_assign_to_array_field')
+        .functionsToASTNodesOfType('AssignmentExpr')
+        .out('DEF').code
+        """
+        x = self.j.runGremlinQuery(query)
+        # At some point, we want to make this DEF(*x)
+        # instead.
+        self.assertEquals(x[0], 'arr')
 
-    # def testAssignToExpressionDef(self):
+    def testAssignToExpressionDef(self):
+        query = """
+        getFunctionsByName('udg_test_assign_to_expression')
+        .functionsToASTNodesOfType('AssignmentExpr')
+        .out('DEF').code
+        """
+        x = self.j.runGremlinQuery(query)
+        self.assertEquals(x[0], 'a')
+        self.assertEquals(x[1], 'b')
+        
+
+    # This one currently fails.
+    # def testAssignToExpressionUSE(self):
     #     query = """
     #     getFunctionByName('udg_test_assign_to_expression')
     #     .functionToASTNodes()
     #     .filter{it.type == 'AssignmentExpr'}
-    #     .out('DEF').code
+    #     .out('USE').code
     #     """
     #     x = self.j.runGremlinQuery(query)
     #     self.assertEquals(x[0], 'a')
     #     self.assertEquals(x[1], 'b')
-        
-
-    # # This one currently fails.
-    # # def testAssignToExpressionUSE(self):
-    # #     query = """
-    # #     getFunctionByName('udg_test_assign_to_expression')
-    # #     .functionToASTNodes()
-    # #     .filter{it.type == 'AssignmentExpr'}
-    # #     .out('USE').code
-    # #     """
-    # #     x = self.j.runGremlinQuery(query)
-    # #     self.assertEquals(x[0], 'a')
-    # #     self.assertEquals(x[1], 'b')
 
 
-    # def testDataFlowFromRegex_positive(self):
-    #      query = """
+    def testDataFlowFromRegex_positive(self):
+         query = """
          
-    #      sources  = [Pattern.compile('taint_source')]
+         sources  = [Pattern.compile('taint_source')]
          
-    #      getFunctionByName('test_dataFlowFromRegex')
-    #      .functionToASTNodes().filter{it.type == 'Argument' && it.code =='y'}
-    #      .dataFlowFromRegex('taint_source')
-    #      .transform{ g.v(it[0]) } // source
-    #      .code
+         getFunctionsByName('test_dataFlowFromRegex')
+         .functionsToASTNodesOfType('Argument').filter{it.code == 'y'}
+         .statement()
+         .dataFlowFromRegex('taint_source')
+         .transform{ g.v(it[0]) } // source
+         .code
          
-    #      """
-    #      x = self.j.runGremlinQuery(query)
-    #      self.assertEquals(len(x), 1)
-    #      self.assertTrue(x[0].startswith('taint_source'))
+         """
+         x = self.j.runGremlinQuery(query)
+         self.assertEquals(len(x), 1)
+         self.assertTrue(x[0].startswith('taint_source'))
 
     # def testDataFlowFromRegex_negative(self):
     #      query = """
