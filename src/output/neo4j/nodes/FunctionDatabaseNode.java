@@ -13,9 +13,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 	FunctionDef astRoot;
 	CFG cfg;
 	
-	ASTPseudoNode astPseudoNode;
-	CFGPseudoNode cfgPseudoNode;
-	
 	String signature;
 	String name;
 	
@@ -27,8 +24,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 		astRoot = (FunctionDef) node;
 		cfg = astToCFG.convert(astRoot);
 		setSignature(astRoot);
-		
-		createPseudoNodes();
 	}
 
 	@Override public Map<String, Object> createProperties()
@@ -66,37 +61,9 @@ public class FunctionDatabaseNode extends DatabaseNode
 		return signature;
 	}
 	
-	public ASTPseudoNode getASTPseudoNode()
-	{
-		return astPseudoNode;
-	}
-	
-	public CFGPseudoNode getCFGPseudoNode()
-	{
-		return cfgPseudoNode;
-	}
-
-	private void createPseudoNodes()
-	{
-		createASTPseudoNode();
-		createCFGPseudoNode();
-	}
-
 	private void setSignature(FunctionDef node)
 	{
 		signature = node.getFunctionSignature();
-	}
-	
-	private void createASTPseudoNode()
-	{
-		astPseudoNode = new ASTPseudoNode();
-		astPseudoNode.initialize(null);
-	}
-	
-	private void createCFGPseudoNode()
-	{
-		cfgPseudoNode = new CFGPseudoNode();
-		cfgPseudoNode.initialize(null);
 	}
 	
 }

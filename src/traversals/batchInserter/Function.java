@@ -16,8 +16,7 @@ public class Function
 	
 	public static long getCFGForFunction(Long funcId)
 	{
-		long cfgNodeId = Elementary.getFirstChildWithEdgeType(funcId, EdgeTypes.IS_FUNCTION_OF_CFG);
-		return Elementary.getFirstChildWithEdgeType(cfgNodeId, EdgeTypes.IS_CFG_OF_CFG_ROOT);
+		return  Elementary.getFirstChildWithEdgeType(funcId, EdgeTypes.IS_FUNCTION_OF_CFG);
 	}
 	
 }

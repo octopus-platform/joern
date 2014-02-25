@@ -11,18 +11,12 @@ public class EdgeTypes
 	/** Edges connecting the function node to the AST pseudo node*/
 	public static final String IS_FUNCTION_OF_AST = "IS_FUNCTION_OF_AST";
 	
-	/** Edges connecting AST Pseudo nodes with the root AST node */
-	public static final String IS_AST_OF_AST_ROOT = "IS_AST_OF_AST_ROOT";
-	
 	/** Edges connecting parent AST nodes with their children */
 	public static final String IS_AST_PARENT = "IS_AST_PARENT";
 	
 	/** Edges connecting the function node to the CFG pseudo node */
 	public static final String IS_FUNCTION_OF_CFG = "IS_FUNCTION_OF_CFG";
-	
-	/** Edges connecting CFG Pseudo nodes with the root CFG node */
-	public static final String IS_CFG_OF_CFG_ROOT = "IS_CFG_OF_CFG_ROOT";
-	
+		
 	/** Edges connecting basic blocks with basic blocks they transfer control to*/
 	public static final String FLOWS_TO = "FLOWS_TO";
 	
