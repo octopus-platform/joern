@@ -105,7 +105,8 @@ public class Traversals
 	{
 		List<Node> retval = new LinkedList<Node>();
 		
-		IndexHits<Node> hits = Neo4JDBInterface.queryIndex("type:CallExpression AND code:" + source + "*");
+		String query = String.format("%s:CallExpression AND %s:%s" + "*", NodeKeys.TYPE, NodeKeys.CODE, source);
+		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for(Node n: hits){
 			if(n.getProperty(NodeKeys.CODE).toString().startsWith(source + " "))
 				retval.add(n);
@@ -117,7 +118,10 @@ public class Traversals
 	{
 		List<Node> retval = new LinkedList<Node>();
 		
-		String query = "type:CallExpression AND functionId:"+ functionId + " AND code:" + source + "*";
+		String query = String.format("%s:CallExpression AND %s:%d AND %s:%s" + "*",
+				NodeKeys.TYPE,
+				NodeKeys.FUNCTION_ID, functionId,
+				NodeKeys.CODE, source);
 		
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for(Node n: hits){
@@ -208,7 +212,7 @@ public class Traversals
 
 	public static IndexHits<Node> getFunctionsByName(String functionName)
 	{
-		return Neo4JDBInterface.queryIndex("name:" + functionName);
+		return Neo4JDBInterface.queryIndex(NodeKeys.NAME + ":" + functionName);
 	}
 
 
