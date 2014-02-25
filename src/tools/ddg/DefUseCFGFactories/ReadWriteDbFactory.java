@@ -33,7 +33,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 
 	private void getStatementsOfFunction(Long funcId)
 	{
-		String query = "isStatement:True AND functionId:" + funcId;
+		String query = "isCFGNode:True AND functionId:" + funcId;
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for(Node node : hits)
 			cfg.addStatement(node.getId());

@@ -20,19 +20,18 @@ public class ASTDatabaseNode extends DatabaseNode {
 	public Map<String, Object> createProperties() {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("type", astNode.getTypeAsString());
+		properties.put(NodeKeys.TYPE, astNode.getTypeAsString());
 
 		// Only calculate and store code strings for
 		// leave-nodes and statements
-		
 		// if(astNode.getChildCount() == 0)
-			properties.put("code", astNode.getEscapedCodeStr());
+			properties.put(NodeKeys.CODE, astNode.getEscapedCodeStr());
 		
 		if(astNode.isInCFG())
-			properties.put("isCFGNode", "True");
+			properties.put(NodeKeys.IS_CFG_NODE, "True");
 			
 		if(astNode instanceof BinaryExpression)
-			properties.put("operator", ((BinaryExpression) astNode).getOperator()); 
+			properties.put(NodeKeys.OPERATOR, ((BinaryExpression) astNode).getOperator()); 
 		
 		return properties;
 	}

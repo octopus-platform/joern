@@ -10,7 +10,7 @@ public class Function
 
 	public static IndexHits<Long> getFunctionsByName(String functionName)
 	{
-		return Neo4JBatchInserter.queryIndex("functionName:" + functionName);
+		return Neo4JBatchInserter.queryIndex("name:" + functionName);
 	}
 	
 	public static long getCFGForFunction(Long funcId)

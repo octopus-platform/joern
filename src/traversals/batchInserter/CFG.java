@@ -8,6 +8,7 @@ import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
+import output.neo4j.nodes.NodeKeys;
 
 public class CFG
 {
@@ -24,7 +25,9 @@ public class CFG
 	
 	public static IndexHits<Long> getStatementsFromIndex(long functionId)
 	{		
-		String query = "isCFGNode:True AND functionId:" + functionId;
+		String query = String.format("%s:True AND %s:%d",
+				NodeKeys.IS_CFG_NODE, NodeKeys.FUNCTION_ID, functionId);
+		
 		return Neo4JBatchInserter.queryIndex(query);
 	}
 

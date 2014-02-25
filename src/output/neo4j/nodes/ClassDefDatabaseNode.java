@@ -21,9 +21,9 @@ public class ClassDefDatabaseNode extends DatabaseNode {
 	public Map<String, Object> createProperties()
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("type", "Class");
-		map.put("name", name);
-		map.put("location", stmt.getLocationString());
+		map.put(NodeKeys.TYPE, "Class");
+		map.put(NodeKeys.NAME, name);
+		map.put(NodeKeys.LOCATION, stmt.getLocationString());
 		return map;
 	}
 

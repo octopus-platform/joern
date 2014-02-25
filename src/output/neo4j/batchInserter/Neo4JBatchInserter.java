@@ -12,6 +12,8 @@ import org.neo4j.unsafe.batchinsert.BatchInserterIndexProvider;
 import org.neo4j.unsafe.batchinsert.BatchInserters;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
+import output.neo4j.nodes.NodeKeys;
+
 
 public class Neo4JBatchInserter
 {
@@ -39,8 +41,9 @@ public class Neo4JBatchInserter
 		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
 		nodeIndex = indexProvider.nodeIndex( "nodeIndex", MapUtil.stringMap( "type", "exact" ) );		
 	
-		nodeIndex.setCacheCapacity( "type", 100000 );
-		nodeIndex.setCacheCapacity( "functionName", 100000 );
+		// TODO: Does this have an effect at all?
+		nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
+		nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
 	
 	}
 	

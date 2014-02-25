@@ -11,6 +11,7 @@ import output.neo4j.batchInserter.GraphNodeStore;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
 import output.neo4j.nodes.ASTDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
+import output.neo4j.nodes.NodeKeys;
 import astnodes.ASTNode;
 
 public class ASTImporter
@@ -55,7 +56,7 @@ public class ASTImporter
 		astDatabaseNode.initialize(node);
 		Map<String, Object> properties = astDatabaseNode.createProperties();
 		
-		properties.put("functionId", nodeStore.getIdForObject(currentFunction));
+		properties.put(NodeKeys.FUNCTION_ID, nodeStore.getIdForObject(currentFunction));
 		nodeStore.addNeo4jNode(node, properties);
 		
 		indexASTNode(node, properties);

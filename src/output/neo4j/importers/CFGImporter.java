@@ -14,6 +14,7 @@ import output.neo4j.batchInserter.GraphNodeStore;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
 import output.neo4j.nodes.EmptyCFGDatabaseNode;
 import output.neo4j.nodes.FunctionDatabaseNode;
+import output.neo4j.nodes.NodeKeys;
 import astnodes.ASTNode;
 import cfg.CFG;
 import cfg.CFGNode;
@@ -68,8 +69,7 @@ public class CFGImporter
 			EmptyCFGDatabaseNode emptyDatabaseNode = new EmptyCFGDatabaseNode();
 			emptyDatabaseNode.initialize(null);
 			Map<String, Object> properties = emptyDatabaseNode.createProperties();
-			properties.put("functionId", nodeStore.getIdForObject(currentFunction));
-			properties.put("isCFGNode", "True");
+			properties.put(NodeKeys.FUNCTION_ID, nodeStore.getIdForObject(currentFunction));
 			nodeStore.addNeo4jNode(statement, properties);
 			nodeStore.indexNode(statement, properties);
 		}

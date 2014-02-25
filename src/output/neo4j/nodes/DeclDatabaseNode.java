@@ -25,10 +25,10 @@ public class DeclDatabaseNode extends DatabaseNode {
 	public Map<String, Object> createProperties()
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("type", "Decl");
-		map.put("baseType", baseType);
-		map.put("completeType", completeType);
-		map.put("identifier", identifierString);
+		map.put(NodeKeys.TYPE, "Decl");
+		map.put(NodeKeys.BASE_TYPE, baseType);
+		map.put(NodeKeys.COMPLETE_TYPE, completeType);
+		map.put(NodeKeys.IDENTIFIER, identifierString);
 		return map;
 	}
 

@@ -12,6 +12,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
+import output.neo4j.nodes.NodeKeys;
 
 
 
@@ -64,9 +65,9 @@ public class UseDefGraphImporter {
 	private long createSymbolNode(String identifier)
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("code", identifier);
-		properties.put("type", "Symbol");
-		properties.put("functionId", functionId);
+		properties.put(NodeKeys.TYPE, "Symbol");
+		properties.put(NodeKeys.CODE, identifier);
+		properties.put(NodeKeys.FUNCTION_ID, functionId);
 		
 		long newNodeId = Neo4JBatchInserter.addNode(properties);
 		Neo4JBatchInserter.indexNode(newNodeId, properties);

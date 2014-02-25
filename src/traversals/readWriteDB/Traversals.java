@@ -12,6 +12,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import output.neo4j.EdgeTypes;
+import output.neo4j.nodes.NodeKeys;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DDG;
 
@@ -20,7 +21,11 @@ public class Traversals
 
 	public static IndexHits<Node> getStatementsForFunction(Node funcNode)
 	{
-		String query = "isCFGNode:True AND functionId:" + funcNode.getId();
+		String query = String.format("%s:True AND %s:%d",
+							NodeKeys.IS_CFG_NODE,
+							NodeKeys.FUNCTION_ID,
+							funcNode.getId());
+		
 		return Neo4JDBInterface.queryIndex(query);
 	}
 
@@ -42,7 +47,7 @@ public class Traversals
 				
 		List<Node> children = getChildrenConnectedBy(node, edgeType);
 		for(Node childNode : children){
-			String childCode = childNode.getProperty("code").toString();
+			String childCode = childNode.getProperty(NodeKeys.CODE).toString();
 			retval.add(childCode);
 		}
 		return retval;
@@ -54,7 +59,7 @@ public class Traversals
 		List<Node> children = getChildrenConnectedBy(node, edgeType);
 		
 		for(Node childNode : children){
-			String childCode = childNode.getProperty("code").toString();
+			String childCode = childNode.getProperty(NodeKeys.CODE).toString();
 			Pair<Long, String> pair = new Pair<Long,String>(childNode.getId(), childCode);
 			retval.add(pair);
 		}
@@ -102,7 +107,7 @@ public class Traversals
 		
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex("type:CallExpression AND code:" + source + "*");
 		for(Node n: hits){
-			if(n.getProperty("code").toString().startsWith(source + " "))
+			if(n.getProperty(NodeKeys.CODE).toString().startsWith(source + " "))
 				retval.add(n);
 		}
 		return retval;
@@ -116,7 +121,7 @@ public class Traversals
 		
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for(Node n: hits){
-			if(n.getProperty("code").toString().startsWith(source + " "))
+			if(n.getProperty(NodeKeys.CODE).toString().startsWith(source + " "))
 				retval.add(n);
 		}
 		return retval;
@@ -153,7 +158,7 @@ public class Traversals
 		while(true){
 			
 			try{
-				Object property = n.getProperty("isCFGNode");
+				Object property = n.getProperty(NodeKeys.IS_CFG_NODE);
 				return n;
 			}catch(NotFoundException ex){
 				
@@ -189,7 +194,7 @@ public class Traversals
 						continue;
 					Integer nProp2 = Integer.valueOf(rel2.getProperty("n").toString());
 					if(nProp2 == n)
-						return rel2.getEndNode().getProperty("code").toString();
+						return rel2.getEndNode().getProperty(NodeKeys.CODE).toString();
 				}	
 			}
 		}
@@ -198,12 +203,12 @@ public class Traversals
 
 	public static Long getFunctionIdFromASTNode(Node astNode)
 	{
-		return Long.valueOf(astNode.getProperty("functionId").toString());
+		return Long.valueOf(astNode.getProperty(NodeKeys.FUNCTION_ID).toString());
 	}
 
 	public static IndexHits<Node> getFunctionsByName(String functionName)
 	{
-		return Neo4JDBInterface.queryIndex("functionName:" + functionName);
+		return Neo4JDBInterface.queryIndex("name:" + functionName);
 	}
 
 
@@ -215,7 +220,7 @@ public class Traversals
 	public static String getNodeType(Long nodeId)
 	{
 		Node node = Neo4JDBInterface.getNodeById(nodeId);
-		return node.getProperty("type").toString();
+		return node.getProperty(NodeKeys.TYPE).toString();
 
 	}
 
@@ -228,7 +233,7 @@ public class Traversals
 			if(rel.getEndNode().getId() == node.getId()) continue;
 			if(!rel.getProperty("n").equals("0")) continue;
 			
-			return rel.getEndNode().getProperty("code").toString();
+			return rel.getEndNode().getProperty(NodeKeys.CODE).toString();
 		}
 		return "";
 	}
@@ -236,13 +241,13 @@ public class Traversals
 	public static String getNodeCode(long nodeId)
 	{
 		Node node = Neo4JDBInterface.getNodeById(nodeId);
-		return node.getProperty("code").toString();
+		return node.getProperty(NodeKeys.CODE).toString();
 	}
 
 	public static String getOperatorCode(long nodeId)
 	{
 		Node node = Neo4JDBInterface.getNodeById(nodeId);
-		return node.getProperty("operator").toString();
+		return node.getProperty(NodeKeys.OPERATOR).toString();
 	}	
 	
 }

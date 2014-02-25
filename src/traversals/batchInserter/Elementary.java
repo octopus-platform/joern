@@ -4,7 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
+
 import output.neo4j.batchInserter.Neo4JBatchInserter;
+import output.neo4j.nodes.NodeKeys;
 
 public class Elementary
 {
@@ -31,17 +33,17 @@ public class Elementary
 	
 	public static String getNodeCode(Long nodeId)
 	{
-		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get("code");
+		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get(NodeKeys.CODE);
 	}
 	
 	public static String getOperatorCode(Long nodeId)
 	{
-		return getNodeProperty(nodeId, "operator");
+		return getNodeProperty(nodeId, NodeKeys.OPERATOR);
 	}
 
 	public static String getNodeType(Long nodeId)
 	{
-		return getNodeProperty(nodeId, "type");
+		return getNodeProperty(nodeId, NodeKeys.TYPE);
 	}
 	
 	public static String getNodeProperty(Long nodeId, String property)
