@@ -133,7 +133,7 @@ public class ASTDefUseAnalyzer {
 			long childId = child.getL() ;
 			int childNumber = child.getR();
 
-			configurEnvironmentForChild(env, childId, childNumber);
+			configureEnvironmentForChild(env, childId, childNumber);
 			if(!env.shouldTraverse()) continue;
 			
 			
@@ -151,7 +151,7 @@ public class ASTDefUseAnalyzer {
 		
 	}
 	
-	private void configurEnvironmentForChild(UseDefEnvironment env, long childId, int childNumber)
+	private void configureEnvironmentForChild(UseDefEnvironment env, long childId, int childNumber)
 	{
 		String childType = dbProvider.getNodeType(childId);
 		env.setChild(childType, childNumber);
