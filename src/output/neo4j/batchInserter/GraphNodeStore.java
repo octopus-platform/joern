@@ -24,5 +24,11 @@ public class GraphNodeStore
 		long nodeId = getIdForObject(o);
 		Neo4JBatchInserter.indexNode(nodeId, properties);
 	}
+
+	public void setNodeProperty(Object o, String key, String val)
+	{
+		long nodeId = getIdForObject(o);
+		Neo4JBatchInserter.setNodeProperty(nodeId, key, val);
+	}
 	
 }

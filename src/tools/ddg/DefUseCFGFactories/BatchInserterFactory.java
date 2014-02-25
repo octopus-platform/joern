@@ -19,7 +19,7 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 		getUsesAndDefs();		
 		getParentBlocks();
 		getChildBlocks();
-	
+		
 		return cfg;
 	}
 

@@ -8,7 +8,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import tools.udg.environments.UseDefEnvironment;
 import traversals.batchInserter.CFG;
 
-// Create a UseDefGraph by running running an ast
+// Create a UseDefGraph by running running an AST
 // analyzer on each statement of the function
 // to determine the symbols USEd and DEF'd.
 

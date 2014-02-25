@@ -34,7 +34,7 @@ public class CFG
 		Iterable<BatchRelationship> rels = Elementary.getEdges(statementId);
 		
 		for(BatchRelationship rel : rels){
-			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
+			if(!Elementary.isEdgeOfType(rel, EdgeTypes.FLOWS_TO)) continue;
 			if(rel.getStartNode() == statementId) continue;
 			retval.add(rel.getStartNode());		
 		}
@@ -46,7 +46,7 @@ public class CFG
 		List<Long> retval = new LinkedList<Long>();
 		Iterable<BatchRelationship> rels = Elementary.getEdges(statementId);
 		for(BatchRelationship rel : rels){
-			if(!rel.getType().name().equals(EdgeTypes.FLOWS_TO)) continue;
+			if(!Elementary.isEdgeOfType(rel, EdgeTypes.FLOWS_TO)) continue;
 			if(rel.getEndNode() == statementId) continue;
 			retval.add(rel.getEndNode());
 		}

@@ -58,14 +58,18 @@ public class CFGImporter
 		while(it.hasNext()){
 			CFGNode statement = it.next();
 			
-			// nothing to do for non-empty nodes
-			if(statement.getASTNode() != null)
+			ASTNode astNode = statement.getASTNode();
+			if(astNode != null){
+				// add 'isStatement' to AST node
+				nodeStore.setNodeProperty(astNode, "isStatement", "True");
 				continue;
-			
+			}
+				
 			EmptyCFGDatabaseNode emptyDatabaseNode = new EmptyCFGDatabaseNode();
 			emptyDatabaseNode.initialize(null);
 			Map<String, Object> properties = emptyDatabaseNode.createProperties();
 			properties.put("functionId", nodeStore.getIdForObject(currentFunction));
+			properties.put("isStatement", "True");
 			nodeStore.addNeo4jNode(statement, properties);
 			nodeStore.indexNode(statement, properties);
 		}

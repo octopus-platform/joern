@@ -47,7 +47,7 @@ public class Neo4JBatchInserter
 	public static long addNode(Map<String, Object> properties)
 	{
 		long newNode = inserter.createNode(properties);
-		
+
 		return newNode;	
 	}
 
@@ -100,6 +100,12 @@ public class Neo4JBatchInserter
 			// System.err.println(ex.getMessage());
 		}
 		inserter.shutdown();
+	}
+
+	public static void setNodeProperty(long nodeId, String key, String val)
+	{
+		inserter.setNodeProperty(nodeId, key, val);
+		nodeIndex.updateOrAdd(nodeId, getNodeProperties(nodeId));
 	}
 	
 }

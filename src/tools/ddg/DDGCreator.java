@@ -37,7 +37,7 @@ public class DDGCreator {
 	}
 	
 	public DDG createForFunctionById(Long funcId)
-	{
+	{		
 		DefUseCFG cfg = cfgFactory.create(funcId);
 		return createForDefUseCFG(cfg);	
 	}
@@ -134,7 +134,8 @@ public class DDGCreator {
 
 	private boolean updateOut(Long x)
 	{	
-		HashSet<Object> oldOut = new HashSet<Object>(out.getListForKey(x));		
+		HashSet<Object> listForKey = out.getListForKey(x);
+		HashSet<Object> oldOut = new HashSet<Object>(listForKey);		
 		
 		out.removeAllForKey(x);
 		
