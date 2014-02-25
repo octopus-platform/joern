@@ -28,7 +28,9 @@ public class ASTDatabaseNode extends DatabaseNode {
 		// if(astNode.getChildCount() == 0)
 			properties.put("code", astNode.getEscapedCodeStr());
 		
-		
+		if(astNode.isInCFG())
+			properties.put("isCFGNode", "True");
+			
 		if(astNode instanceof BinaryExpression)
 			properties.put("operator", ((BinaryExpression) astNode).getOperator()); 
 		

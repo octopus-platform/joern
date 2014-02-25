@@ -14,6 +14,8 @@ public class ASTNode {
 	protected ParserRuleContext parseTreeNodeContext;
 	private CodeLocation location = new CodeLocation();
 	
+	private boolean isInCFG = false;
+	
 	protected LinkedList<ASTNode> children;
 	protected int childNumber;
 	
@@ -101,4 +103,15 @@ public class ASTNode {
 	{
 		return this.getClass().getSimpleName();
 	}	
+
+	public void markAsCFGNode()
+	{
+		isInCFG = true;
+	}
+
+	public boolean isInCFG()
+	{
+		return isInCFG;
+	}
+	
 }

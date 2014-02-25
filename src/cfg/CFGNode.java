@@ -24,4 +24,10 @@ public class CFGNode {
 		return astNode.getEscapedCodeStr();
 	}
 
+	public void markAsCFGNode()
+	{
+		if(astNode == null) return;
+		astNode.markAsCFGNode();
+	}
+
 }

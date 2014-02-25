@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
@@ -20,9 +21,17 @@ public class ASTToCFGConverter {
 	public CFG convert(FunctionDef node)
 	{
 		CFG cfg = convertFunctionDef(node);
+		markCFGNodes(cfg);
 		return cfg;
 	}
 	
+	private void markCFGNodes(CFG cfg)
+	{
+		Vector<CFGNode> statements = cfg.getStatements();
+		for(CFGNode statement: statements)
+			statement.markAsCFGNode();
+	}
+
 	private CFG convertFunctionDef(FunctionDef node)
 	{
 		// create a CFG for the parameter list

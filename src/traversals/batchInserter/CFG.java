@@ -24,7 +24,7 @@ public class CFG
 	
 	public static IndexHits<Long> getStatementsFromIndex(long functionId)
 	{		
-		String query = "isStatement:True AND functionId:" + functionId;
+		String query = "isCFGNode:True AND functionId:" + functionId;
 		return Neo4JBatchInserter.queryIndex(query);
 	}
 

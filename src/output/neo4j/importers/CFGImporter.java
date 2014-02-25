@@ -49,7 +49,7 @@ public class CFGImporter
 		// Our CFG creation code currently inserts empty-blocks
 		// in some places, e.g., nodes that join prior control-flows.
 		// These nodes do not have to exist in theory but as long
-		// as we have them in our code, we need to create corresponding
+		// as we have them in our CFG, we need to create corresponding
 		// database nodes when importing the CFG. All other CFG nodes
 		// are nodes of the AST and hence are already in the database.
 		
@@ -60,8 +60,8 @@ public class CFGImporter
 			
 			ASTNode astNode = statement.getASTNode();
 			if(astNode != null){
-				// add 'isStatement' to AST node
-				nodeStore.setNodeProperty(astNode, "isStatement", "True");
+				// nothing to do for nodes that have already
+				// been imported by the ASTImporter.
 				continue;
 			}
 				
@@ -69,12 +69,11 @@ public class CFGImporter
 			emptyDatabaseNode.initialize(null);
 			Map<String, Object> properties = emptyDatabaseNode.createProperties();
 			properties.put("functionId", nodeStore.getIdForObject(currentFunction));
-			properties.put("isStatement", "True");
+			properties.put("isCFGNode", "True");
 			nodeStore.addNeo4jNode(statement, properties);
 			nodeStore.indexNode(statement, properties);
 		}
-	}
-
+	}	
 	
 	private void addCFGEdges(CFG cfg)
 	{

@@ -17,7 +17,7 @@ public class EmptyCFGDatabaseNode extends DatabaseNode {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("code", "");
 		properties.put("type", "Statement");
-		properties.put("isStatement", "True");
+		properties.put("isCFGNode", "True");
 		return properties;
 	}
 

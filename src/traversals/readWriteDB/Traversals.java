@@ -20,7 +20,7 @@ public class Traversals
 
 	public static IndexHits<Node> getStatementsForFunction(Node funcNode)
 	{
-		String query = "isStatement:True AND functionId:" + funcNode.getId();
+		String query = "isCFGNode:True AND functionId:" + funcNode.getId();
 		return Neo4JDBInterface.queryIndex(query);
 	}
 
@@ -153,7 +153,7 @@ public class Traversals
 		while(true){
 			
 			try{
-				Object property = n.getProperty("isStatement");
+				Object property = n.getProperty("isCFGNode");
 				return n;
 			}catch(NotFoundException ex){
 				
