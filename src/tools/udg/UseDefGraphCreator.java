@@ -38,10 +38,15 @@ public class UseDefGraphCreator
 	{
 		for(UseOrDef useOrDef : usesAndDefs){
 			
-			if(useOrDef.isDef)
+			if(useOrDef.isDef){
 				useDefGraph.addDefinition(useOrDef.symbol, statementId);
-			else
+				if(useOrDef.nodeId != 0 && useOrDef.nodeId != statementId)
+					useDefGraph.addDefinition(useOrDef.symbol, useOrDef.nodeId);
+			}else{
 				useDefGraph.addUse(useOrDef.symbol, statementId);
+				if(useOrDef.nodeId != 0 && useOrDef.nodeId != statementId)
+					useDefGraph.addUse(useOrDef.symbol, useOrDef.nodeId);
+			}
 		}
 	}
 

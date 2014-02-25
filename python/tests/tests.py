@@ -73,48 +73,47 @@ class JoernStepsTests(unittest.TestCase):
         x = self.j.runGremlinQuery(query)
         self.assertTrue(len(x) == 2)
     
-    # def testIdentifierDeclDEFLink(self):
-    #     query = """
-    #     getFunctionByName('udg_test_simple_decl').functionToASTNodes()
-    #     .filter{it.type == 'IdentifierDecl'}.out('DEF').code
+    def testIdentifierDeclDEFLink(self):
+        query = """
+        getFunctionsByName('udg_test_simple_decl')
+        .functionsToASTNodesOfType('IdentifierDecl')
+        .statement().out('DEF').code
 
-    #     """
-    #     x = self.j.runGremlinQuery(query)
-    #     self.assertEquals(len(x), 1)
-    #     self.assertEquals(x[0], 'x')
+        """
+        x = self.j.runGremlinQuery(query)
+        self.assertEquals(len(x), 1)
+        self.assertEquals(x[0], 'x')
 
-    
-    # def testParameterDEFLink(self):
-    #     query = """
-    #     getFunctionByName('udg_test_param_decl').functionToASTNodes()
-    #     .filter{it.type == 'Parameter'}.out('DEF').code
+    def testParameterDEFLink(self):
+        query = """
+        getFunctionsByName('udg_test_param_decl')
+        .functionsToASTNodesOfType('Parameter')
+        .out('DEF').code
+        """
+        x = self.j.runGremlinQuery(query)
 
-    #     """
-    #     x = self.j.runGremlinQuery(query)
+        self.assertEquals(len(x), 1)
+        self.assertEquals(x[0], 'x')
 
-    #     self.assertEquals(len(x), 1)
-    #     self.assertEquals(x[0], 'x')
+    def testUseFromArg(self):
+        query = """
+        getFunctionsByName('udg_test_def_tainted_call')
+        .functionsToASTNodesOfType('Argument')
+        .out('USE').code
+        """
+        x = self.j.runGremlinQuery(query)
 
-    # def testUseFromArg(self):
-    #     query = """
-    #     getFunctionByName('udg_test_def_tainted_call').functionToASTNodes()
-    #     .filter{it.type == 'Argument'}.out('USE').code
+        self.assertEquals(len(x), 1)
+        self.assertEquals(x[0], 'x')
 
-    #     """
-    #     x = self.j.runGremlinQuery(query)
-
-    #     self.assertEquals(len(x), 1)
-    #     self.assertEquals(x[0], 'x')
-
-    # def testUseFromArgMemberAccess(self):
-    #     query = """
-    #     getFunctionByName('udg_test_struct_field_use')
-    #     .functionToASTNodes()
-    #     .filter{it.type == 'Argument'}
-    #     .out('USE').code
-    #     """
-    #     x = self.j.runGremlinQuery(query)
-    #     self.assertEquals(len(x), 2)
+    def testUseFromArgMemberAccess(self):
+        query = """
+        getFunctionsByName('udg_test_struct_field_use')
+        .functionsToASTNodesOfType('Argument')
+        .out('USE').code
+        """
+        x = self.j.runGremlinQuery(query)
+        self.assertEquals(len(x), 2)
         
     # def testAssignToArrayField(self):
     #     query = """
