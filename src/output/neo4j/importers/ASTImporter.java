@@ -1,6 +1,5 @@
 package output.neo4j.importers;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -71,12 +70,11 @@ public class ASTImporter
 	private void addASTLink(Object parent, ASTNode child)
 	{
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_AST_PARENT);
-		Map<String, Object> properties = new HashMap<String, Object>();
-		String childStr = new Integer(child.getChildNumber()).toString();
-		properties.put("n", childStr);
 		
 		long parentId = nodeStore.getIdForObject(parent);
 		long childId = nodeStore.getIdForObject(child);
+		Map<String, Object> properties = null;
+		
 		Neo4JBatchInserter.addRelationship(parentId, childId, rel, properties);
 	}
 }

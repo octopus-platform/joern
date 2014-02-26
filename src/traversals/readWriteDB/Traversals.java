@@ -182,22 +182,39 @@ public class Traversals
 
 	public static String getNthArgCodeOfCall(Node callNode, int n)
 	{
+		String nStr = String.format("%d", n);
+		
 		Iterable<Relationship> rels = callNode.getRelationships(Direction.OUTGOING);
 		for(Relationship rel : rels){
 			
 			if(!rel.getType().toString().equals(EdgeTypes.IS_AST_PARENT))
 				continue;
 			
-			Integer nProp = Integer.valueOf(rel.getProperty("n").toString());
-			if(nProp == 1){
+			Node endNode = rel.getEndNode();
+			String childNum;
+
+			try{
+			    childNum = (String) endNode.getProperty(NodeKeys.CHILD_NUMBER);
+			}catch(RuntimeException ex){
+			    childNum = "0";
+			}			
+
+			if(childNum.equals("1")){
 				// found argument list
 				Node argList = rel.getEndNode();
 				Iterable<Relationship> rels2 = argList.getRelationships(Direction.OUTGOING);
 				for(Relationship rel2 : rels2){
 					if(!rel2.getType().toString().equals(EdgeTypes.IS_AST_PARENT))
 						continue;
-					Integer nProp2 = Integer.valueOf(rel2.getProperty("n").toString());
-					if(nProp2 == n)
+					
+					String childNum2;
+					try{
+					    childNum2 = (String) rel2.getEndNode().getProperty(NodeKeys.CHILD_NUMBER);
+					}catch(RuntimeException ex){
+					    childNum2 = "0";
+					}
+
+					if(childNum2.equals(nStr))
 						return rel2.getEndNode().getProperty(NodeKeys.CODE).toString();
 				}	
 			}
@@ -234,10 +251,18 @@ public class Traversals
 		Iterable<Relationship> rels = node.getRelationships();
 		for(Relationship rel : rels){
 			if(!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT)) continue;
-			if(rel.getEndNode().getId() == node.getId()) continue;
-			if(!rel.getProperty("n").equals("0")) continue;
 			
-			return rel.getEndNode().getProperty(NodeKeys.CODE).toString();
+			Node endNode = rel.getEndNode();
+			
+			if(endNode.getId() == node.getId()) continue;
+			
+			try{
+				String childNumStr = (String) endNode.getProperty(NodeKeys.CHILD_NUMBER);
+				if(childNumStr.equals("0"))
+					return endNode.getProperty(NodeKeys.CODE).toString();
+			}catch(RuntimeException ex){
+				return endNode.getProperty(NodeKeys.CODE).toString();
+			}	
 		}
 		return "";
 	}

@@ -9,6 +9,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import output.neo4j.EdgeTypes;
+import output.neo4j.nodes.NodeKeys;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
 import traversals.readWriteDB.Traversals;
 
@@ -33,12 +34,26 @@ public class ReadWriteDBProvider extends DBProvider {
 		Node node = Neo4JDBInterface.getNodeById(nodeId);
 		
 		Iterable<Relationship> rels = node.getRelationships();
+		
 		for(Relationship rel : rels){
-			if(!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT)) continue;
-			if(rel.getEndNode().getId() == node.getId()) continue;
+			Node endNode = rel.getEndNode();
+			int childNumber;
 			
-			long childId = rel.getEndNode().getId();
-			int childNumber = Integer.parseInt(rel.getProperty("n").toString());
+			if(endNode.getId() == node.getId()) continue;
+			if(!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT)) continue;
+			
+			long childId = endNode.getId();
+			
+			String childNum = null;
+			try{
+				childNum = (String) endNode.getProperty(NodeKeys.CHILD_NUMBER);
+			}catch(RuntimeException ex){ }
+		
+			if(childNum == null)
+				childNumber = 0;
+			else
+				childNumber = Integer.parseInt(childNum);
+		
 			retval.add(new Pair<Long,Integer>(childId, childNumber));
 		}
 

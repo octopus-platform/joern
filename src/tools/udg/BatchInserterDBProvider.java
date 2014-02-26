@@ -7,6 +7,7 @@ import misc.Pair;
 
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
+import output.neo4j.nodes.NodeKeys;
 import traversals.batchInserter.AST;
 import traversals.batchInserter.Elementary;
 
@@ -33,7 +34,13 @@ public class BatchInserterDBProvider extends DBProvider
 			if(!AST.isASTEdge(rel)) continue;
 		
 			long childId = rel.getEndNode();
-			Integer childNumber = Integer.parseInt(Elementary.getChildNumber(rel));
+			String childNumStr = Elementary.getNodeProperty(childId, NodeKeys.CHILD_NUMBER);
+			Integer childNumber;
+			if(childNumStr != null)
+				childNumber = Integer.parseInt(childNumStr);
+			else
+				childNumber = 0;
+			
 			retval.add(new Pair<Long,Integer>(childId, childNumber));
 		}
 		return retval;

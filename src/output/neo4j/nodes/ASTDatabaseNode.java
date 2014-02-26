@@ -33,6 +33,11 @@ public class ASTDatabaseNode extends DatabaseNode {
 		if(astNode instanceof BinaryExpression)
 			properties.put(NodeKeys.OPERATOR, ((BinaryExpression) astNode).getOperator()); 
 		
+		// if(astNode.getChildCount() > 1){
+			String childNumStr = Integer.toString(astNode.getChildNumber());
+			properties.put(NodeKeys.CHILD_NUMBER, childNumStr);
+		//}
+		
 		return properties;
 	}
 	

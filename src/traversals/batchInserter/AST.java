@@ -3,6 +3,7 @@ package traversals.batchInserter;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
+import output.neo4j.nodes.NodeKeys;
 
 public class AST
 {
@@ -19,8 +20,11 @@ public class AST
 			if(Elementary.isIncomingEdge(nodeId, rel)) continue;
 			if(!isASTEdge(rel)) continue;
 			
-			if(Elementary.getChildNumber(rel).equals("0"))
-				return Elementary.getNodeCode(rel.getEndNode());
+			long endNode = rel.getEndNode();
+			String childNum = Elementary.getNodeProperty(endNode, NodeKeys.CHILD_NUMBER);
+			
+			if(childNum == null || childNum.equals("0"))
+				return Elementary.getNodeCode(endNode);
 		}
 		return "";
 	}

@@ -14,5 +14,6 @@ public class NodeKeys {
 	public static final String IDENTIFIER = "identifier";
 	public static final String FILEPATH = "filepath";
 	public static final String FUNCTION_ID = "functionId";
+	public static final String CHILD_NUMBER = "childNum";
 	
 }

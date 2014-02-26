@@ -20,11 +20,6 @@ public class Elementary
 		return Neo4JBatchInserter.getRelationships(nodeId);
 	}
 	
-	public static String getChildNumber(BatchRelationship rel)
-	{
-		return (String) Neo4JBatchInserter.getRelationshipProperties(rel.getId()).get("n");
-	}
-	
 	// there's probably a more efficient way of doing this
 	public static boolean isEdgeOfType(BatchRelationship rel, String typeStr)
 	{
@@ -48,7 +43,11 @@ public class Elementary
 	
 	public static String getNodeProperty(Long nodeId, String property)
 	{
-		return Neo4JBatchInserter.getNodeProperties(nodeId).get(property).toString();
+		try{
+			return Neo4JBatchInserter.getNodeProperties(nodeId).get(property).toString();
+		}catch(RuntimeException ex){
+			return null;
+		}
 	}
 
 	public static long getFirstChildWithEdgeType(Long nodeId, String edgeType)

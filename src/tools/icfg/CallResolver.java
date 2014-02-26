@@ -5,6 +5,8 @@ import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import output.neo4j.EdgeTypes;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
+import output.neo4j.nodes.NodeKeys;
+import traversals.batchInserter.Elementary;
 
 public class CallResolver {
 	
@@ -30,8 +32,7 @@ public class CallResolver {
 	private long getFirstChildId(Long callId)
 	{
 		Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(callId);
-		long relId, endNode;
-		Object nProperty;
+		long endNode;
 		
 		for(BatchRelationship rel : rels){
 			
@@ -44,11 +45,13 @@ public class CallResolver {
 			// don't think we need this.
 			if(!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT))
 				continue;
+				
+			String childNum = Elementary.getNodeProperty(endNode, NodeKeys.CHILD_NUMBER);
 			
-			relId = rel.getId();
-			
-			nProperty = Neo4JBatchInserter.getRelationshipProperties(relId).get("n");
-			if(nProperty == null || (!nProperty.equals("0")))
+			if(childNum == null)
+			    return endNode;
+
+			if(!childNum.equals("0"))
 				continue;
 						
 			return endNode;				
