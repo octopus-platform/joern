@@ -1,5 +1,6 @@
 package output.neo4j.batchInserter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.RelationshipType;
@@ -32,7 +33,9 @@ public class Neo4JBatchInserter
 
 	public static void openDatabase()
 	{
-		inserter = BatchInserters.inserter(databaseDirectory);
+		Map<String, String> config = new HashMap<String, String>();
+		config.put("cache_type", "none");
+		inserter = BatchInserters.inserter(databaseDirectory, config);
 		initializeIndex();
 	}
 
@@ -42,8 +45,8 @@ public class Neo4JBatchInserter
 		nodeIndex = indexProvider.nodeIndex( "nodeIndex", MapUtil.stringMap( "type", "exact" ) );		
 	
 		// TODO: Does this have an effect at all?
-		nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
-		nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
+		// nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
+		// nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
 	
 	}
 	
