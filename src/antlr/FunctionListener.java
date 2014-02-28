@@ -1,206 +1,997 @@
-// Generated from src/antlr/Function.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/Function.g4 by ANTLR 4.2.1-SNAPSHOT
 
 	package antlr;
 
 
-  import org.antlr.v4.runtime.Token;
+  import java.util.Stack;
+
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
-public interface FunctionListener extends ParseTreeListener<Token> {
-	void enterPre_else(FunctionParser.Pre_elseContext ctx);
-	void exitPre_else(FunctionParser.Pre_elseContext ctx);
-	void enterDeclarator(FunctionParser.DeclaratorContext ctx);
-	void exitDeclarator(FunctionParser.DeclaratorContext ctx);
-	void enterTemplate_decl_start(FunctionParser.Template_decl_startContext ctx);
-	void exitTemplate_decl_start(FunctionParser.Template_decl_startContext ctx);
-	void enterFunction_argument_list(FunctionParser.Function_argument_listContext ctx);
-	void exitFunction_argument_list(FunctionParser.Function_argument_listContext ctx);
-	void enterType_suffix(FunctionParser.Type_suffixContext ctx);
-	void exitType_suffix(FunctionParser.Type_suffixContext ctx);
-	void enterNo_squares_or_semicolon(FunctionParser.No_squares_or_semicolonContext ctx);
-	void exitNo_squares_or_semicolon(FunctionParser.No_squares_or_semicolonContext ctx);
-	void enterFor_statement(FunctionParser.For_statementContext ctx);
-	void exitFor_statement(FunctionParser.For_statementContext ctx);
-	void enterCast_expression(FunctionParser.Cast_expressionContext ctx);
-	void exitCast_expression(FunctionParser.Cast_expressionContext ctx);
-	void enterNo_angle_brackets_or_brackets(FunctionParser.No_angle_brackets_or_bracketsContext ctx);
-	void exitNo_angle_brackets_or_brackets(FunctionParser.No_angle_brackets_or_bracketsContext ctx);
-	void enterEquality_expression(FunctionParser.Equality_expressionContext ctx);
-	void exitEquality_expression(FunctionParser.Equality_expressionContext ctx);
-	void enterNo_comma_or_semicolon(FunctionParser.No_comma_or_semicolonContext ctx);
-	void exitNo_comma_or_semicolon(FunctionParser.No_comma_or_semicolonContext ctx);
-	void enterTry_statement(FunctionParser.Try_statementContext ctx);
-	void exitTry_statement(FunctionParser.Try_statementContext ctx);
-	void enterNumber(FunctionParser.NumberContext ctx);
-	void exitNumber(FunctionParser.NumberContext ctx);
-	void enterBase_type(FunctionParser.Base_typeContext ctx);
-	void exitBase_type(FunctionParser.Base_typeContext ctx);
-	void enterPtrMemberAccess(FunctionParser.PtrMemberAccessContext ctx);
-	void exitPtrMemberAccess(FunctionParser.PtrMemberAccessContext ctx);
-	void enterPre_opener(FunctionParser.Pre_openerContext ctx);
-	void exitPre_opener(FunctionParser.Pre_openerContext ctx);
-	void enterNo_squares(FunctionParser.No_squaresContext ctx);
-	void exitNo_squares(FunctionParser.No_squaresContext ctx);
-	void enterShift_expression(FunctionParser.Shift_expressionContext ctx);
-	void exitShift_expression(FunctionParser.Shift_expressionContext ctx);
-	void enterDeclByClass(FunctionParser.DeclByClassContext ctx);
-	void exitDeclByClass(FunctionParser.DeclByClassContext ctx);
-	void enterType_name(FunctionParser.Type_nameContext ctx);
-	void exitType_name(FunctionParser.Type_nameContext ctx);
-	void enterBreakStatement(FunctionParser.BreakStatementContext ctx);
-	void exitBreakStatement(FunctionParser.BreakStatementContext ctx);
-	void enterFuncCall(FunctionParser.FuncCallContext ctx);
-	void exitFuncCall(FunctionParser.FuncCallContext ctx);
-	void enterInclusive_or_expression(FunctionParser.Inclusive_or_expressionContext ctx);
-	void exitInclusive_or_expression(FunctionParser.Inclusive_or_expressionContext ctx);
-	void enterBase_classes(FunctionParser.Base_classesContext ctx);
-	void exitBase_classes(FunctionParser.Base_classesContext ctx);
-	void enterIncDecOp(FunctionParser.IncDecOpContext ctx);
-	void exitIncDecOp(FunctionParser.IncDecOpContext ctx);
-	void enterPre_closer(FunctionParser.Pre_closerContext ctx);
-	void exitPre_closer(FunctionParser.Pre_closerContext ctx);
-	void enterRelational_expression(FunctionParser.Relational_expressionContext ctx);
-	void exitRelational_expression(FunctionParser.Relational_expressionContext ctx);
-	void enterClass_name(FunctionParser.Class_nameContext ctx);
-	void exitClass_name(FunctionParser.Class_nameContext ctx);
-	void enterParam_decl_specifiers(FunctionParser.Param_decl_specifiersContext ctx);
-	void exitParam_decl_specifiers(FunctionParser.Param_decl_specifiersContext ctx);
-	void enterParam_type(FunctionParser.Param_typeContext ctx);
-	void exitParam_type(FunctionParser.Param_typeContext ctx);
-	void enterFunction_argument(FunctionParser.Function_argumentContext ctx);
-	void exitFunction_argument(FunctionParser.Function_argumentContext ctx);
-	void enterIf_statement(FunctionParser.If_statementContext ctx);
-	void exitIf_statement(FunctionParser.If_statementContext ctx);
-	void enterWater(FunctionParser.WaterContext ctx);
-	void exitWater(FunctionParser.WaterContext ctx);
-	void enterClosing_curly(FunctionParser.Closing_curlyContext ctx);
-	void exitClosing_curly(FunctionParser.Closing_curlyContext ctx);
-	void enterFor_init_statement(FunctionParser.For_init_statementContext ctx);
-	void exitFor_init_statement(FunctionParser.For_init_statementContext ctx);
-	void enterOr_expression(FunctionParser.Or_expressionContext ctx);
-	void exitOr_expression(FunctionParser.Or_expressionContext ctx);
-	void enterRelational_operator(FunctionParser.Relational_operatorContext ctx);
-	void exitRelational_operator(FunctionParser.Relational_operatorContext ctx);
-	void enterDo_statement1(FunctionParser.Do_statement1Context ctx);
-	void exitDo_statement1(FunctionParser.Do_statement1Context ctx);
-	void enterOperator(FunctionParser.OperatorContext ctx);
-	void exitOperator(FunctionParser.OperatorContext ctx);
-	void enterInc_dec(FunctionParser.Inc_decContext ctx);
-	void exitInc_dec(FunctionParser.Inc_decContext ctx);
-	void enterConditional_expression(FunctionParser.Conditional_expressionContext ctx);
-	void exitConditional_expression(FunctionParser.Conditional_expressionContext ctx);
-	void enterInitDeclSimple(FunctionParser.InitDeclSimpleContext ctx);
-	void exitInitDeclSimple(FunctionParser.InitDeclSimpleContext ctx);
-	void enterOpening_curly(FunctionParser.Opening_curlyContext ctx);
-	void exitOpening_curly(FunctionParser.Opening_curlyContext ctx);
-	void enterPrimary_expression(FunctionParser.Primary_expressionContext ctx);
-	void exitPrimary_expression(FunctionParser.Primary_expressionContext ctx);
-	void enterGotoStatement(FunctionParser.GotoStatementContext ctx);
-	void exitGotoStatement(FunctionParser.GotoStatementContext ctx);
-	void enterNo_brackets(FunctionParser.No_bracketsContext ctx);
-	void exitNo_brackets(FunctionParser.No_bracketsContext ctx);
-	void enterBit_and_expression(FunctionParser.Bit_and_expressionContext ctx);
-	void exitBit_and_expression(FunctionParser.Bit_and_expressionContext ctx);
-	void enterAssign_water(FunctionParser.Assign_waterContext ctx);
-	void exitAssign_water(FunctionParser.Assign_waterContext ctx);
-	void enterCast_target(FunctionParser.Cast_targetContext ctx);
-	void exitCast_target(FunctionParser.Cast_targetContext ctx);
-	void enterInitializer(FunctionParser.InitializerContext ctx);
-	void exitInitializer(FunctionParser.InitializerContext ctx);
-	void enterFunction_decl_specifiers(FunctionParser.Function_decl_specifiersContext ctx);
-	void exitFunction_decl_specifiers(FunctionParser.Function_decl_specifiersContext ctx);
-	void enterReturnStatement(FunctionParser.ReturnStatementContext ctx);
-	void exitReturnStatement(FunctionParser.ReturnStatementContext ctx);
-	void enterMultiplicative_expression(FunctionParser.Multiplicative_expressionContext ctx);
-	void exitMultiplicative_expression(FunctionParser.Multiplicative_expressionContext ctx);
-	void enterAssign_expr(FunctionParser.Assign_exprContext ctx);
-	void exitAssign_expr(FunctionParser.Assign_exprContext ctx);
-	void enterExpr_statement(FunctionParser.Expr_statementContext ctx);
-	void exitExpr_statement(FunctionParser.Expr_statementContext ctx);
-	void enterMemberAccess(FunctionParser.MemberAccessContext ctx);
-	void exitMemberAccess(FunctionParser.MemberAccessContext ctx);
-	void enterBase_class(FunctionParser.Base_classContext ctx);
-	void exitBase_class(FunctionParser.Base_classContext ctx);
-	void enterParameter_name(FunctionParser.Parameter_nameContext ctx);
-	void exitParameter_name(FunctionParser.Parameter_nameContext ctx);
-	void enterAccess_specifier(FunctionParser.Access_specifierContext ctx);
-	void exitAccess_specifier(FunctionParser.Access_specifierContext ctx);
-	void enterAssign_water_l2(FunctionParser.Assign_water_l2Context ctx);
-	void exitAssign_water_l2(FunctionParser.Assign_water_l2Context ctx);
-	void enterInit_declarator_list(FunctionParser.Init_declarator_listContext ctx);
-	void exitInit_declarator_list(FunctionParser.Init_declarator_listContext ctx);
-	void enterCondition(FunctionParser.ConditionContext ctx);
-	void exitCondition(FunctionParser.ConditionContext ctx);
-	void enterArrayIndexing(FunctionParser.ArrayIndexingContext ctx);
-	void exitArrayIndexing(FunctionParser.ArrayIndexingContext ctx);
-	void enterCatch_statement(FunctionParser.Catch_statementContext ctx);
-	void exitCatch_statement(FunctionParser.Catch_statementContext ctx);
-	void enterLabel(FunctionParser.LabelContext ctx);
-	void exitLabel(FunctionParser.LabelContext ctx);
-	void enterExclusive_or_expression(FunctionParser.Exclusive_or_expressionContext ctx);
-	void exitExclusive_or_expression(FunctionParser.Exclusive_or_expressionContext ctx);
-	void enterStatement(FunctionParser.StatementContext ctx);
-	void exitStatement(FunctionParser.StatementContext ctx);
-	void enterInitDeclWithCall(FunctionParser.InitDeclWithCallContext ctx);
-	void exitInitDeclWithCall(FunctionParser.InitDeclWithCallContext ctx);
-	void enterParam_type_id(FunctionParser.Param_type_idContext ctx);
-	void exitParam_type_id(FunctionParser.Param_type_idContext ctx);
-	void enterAdditive_expression(FunctionParser.Additive_expressionContext ctx);
-	void exitAdditive_expression(FunctionParser.Additive_expressionContext ctx);
-	void enterInitializer_list(FunctionParser.Initializer_listContext ctx);
-	void exitInitializer_list(FunctionParser.Initializer_listContext ctx);
-	void enterUnary_operator(FunctionParser.Unary_operatorContext ctx);
-	void exitUnary_operator(FunctionParser.Unary_operatorContext ctx);
-	void enterElse_statement(FunctionParser.Else_statementContext ctx);
-	void exitElse_statement(FunctionParser.Else_statementContext ctx);
-	void enterSwitch_statement(FunctionParser.Switch_statementContext ctx);
-	void exitSwitch_statement(FunctionParser.Switch_statementContext ctx);
-	void enterDo_statement(FunctionParser.Do_statementContext ctx);
-	void exitDo_statement(FunctionParser.Do_statementContext ctx);
-	void enterNo_brackets_curlies_or_squares(FunctionParser.No_brackets_curlies_or_squaresContext ctx);
-	void exitNo_brackets_curlies_or_squares(FunctionParser.No_brackets_curlies_or_squaresContext ctx);
-	void enterWhile_statement(FunctionParser.While_statementContext ctx);
-	void exitWhile_statement(FunctionParser.While_statementContext ctx);
-	void enterIdentifier(FunctionParser.IdentifierContext ctx);
-	void exitIdentifier(FunctionParser.IdentifierContext ctx);
-	void enterPrimaryOnly(FunctionParser.PrimaryOnlyContext ctx);
-	void exitPrimaryOnly(FunctionParser.PrimaryOnlyContext ctx);
-	void enterNo_brackets_or_semicolon(FunctionParser.No_brackets_or_semicolonContext ctx);
-	void exitNo_brackets_or_semicolon(FunctionParser.No_brackets_or_semicolonContext ctx);
-	void enterNo_curlies(FunctionParser.No_curliesContext ctx);
-	void exitNo_curlies(FunctionParser.No_curliesContext ctx);
-	void enterEquality_operator(FunctionParser.Equality_operatorContext ctx);
-	void exitEquality_operator(FunctionParser.Equality_operatorContext ctx);
-	void enterExpr(FunctionParser.ExprContext ctx);
-	void exitExpr(FunctionParser.ExprContext ctx);
-	void enterParam_type_list(FunctionParser.Param_type_listContext ctx);
-	void exitParam_type_list(FunctionParser.Param_type_listContext ctx);
-	void enterSimple_decl(FunctionParser.Simple_declContext ctx);
-	void exitSimple_decl(FunctionParser.Simple_declContext ctx);
-	void enterBlock_starter(FunctionParser.Block_starterContext ctx);
-	void exitBlock_starter(FunctionParser.Block_starterContext ctx);
-	void enterAssignment_operator(FunctionParser.Assignment_operatorContext ctx);
-	void exitAssignment_operator(FunctionParser.Assignment_operatorContext ctx);
-	void enterStatements(FunctionParser.StatementsContext ctx);
-	void exitStatements(FunctionParser.StatementsContext ctx);
-	void enterUnary_expression(FunctionParser.Unary_expressionContext ctx);
-	void exitUnary_expression(FunctionParser.Unary_expressionContext ctx);
-	void enterPtrs(FunctionParser.PtrsContext ctx);
-	void exitPtrs(FunctionParser.PtrsContext ctx);
-	void enterInitDeclWithAssign(FunctionParser.InitDeclWithAssignContext ctx);
-	void exitInitDeclWithAssign(FunctionParser.InitDeclWithAssignContext ctx);
-	void enterConstant(FunctionParser.ConstantContext ctx);
-	void exitConstant(FunctionParser.ConstantContext ctx);
-	void enterContinueStatement(FunctionParser.ContinueStatementContext ctx);
-	void exitContinueStatement(FunctionParser.ContinueStatementContext ctx);
-	void enterPtr_operator(FunctionParser.Ptr_operatorContext ctx);
-	void exitPtr_operator(FunctionParser.Ptr_operatorContext ctx);
-	void enterClass_def(FunctionParser.Class_defContext ctx);
-	void exitClass_def(FunctionParser.Class_defContext ctx);
-	void enterAnd_expression(FunctionParser.And_expressionContext ctx);
-	void exitAnd_expression(FunctionParser.And_expressionContext ctx);
-	void enterTemplate_param_list(FunctionParser.Template_param_listContext ctx);
-	void exitTemplate_param_list(FunctionParser.Template_param_listContext ctx);
-	void enterDeclByType(FunctionParser.DeclByTypeContext ctx);
-	void exitDeclByType(FunctionParser.DeclByTypeContext ctx);
+/**
+ * This interface defines a complete listener for a parse tree produced by
+ * {@link FunctionParser}.
+ */
+public interface FunctionListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#pre_else}.
+	 * @param ctx the parse tree
+	 */
+	void enterPre_else(@NotNull FunctionParser.Pre_elseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#pre_else}.
+	 * @param ctx the parse tree
+	 */
+	void exitPre_else(@NotNull FunctionParser.Pre_elseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#declarator}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclarator(@NotNull FunctionParser.DeclaratorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#declarator}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclarator(@NotNull FunctionParser.DeclaratorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#template_decl_start}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplate_decl_start(@NotNull FunctionParser.Template_decl_startContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#template_decl_start}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplate_decl_start(@NotNull FunctionParser.Template_decl_startContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#function_argument_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction_argument_list(@NotNull FunctionParser.Function_argument_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#function_argument_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction_argument_list(@NotNull FunctionParser.Function_argument_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#type_suffix}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_suffix(@NotNull FunctionParser.Type_suffixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#type_suffix}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_suffix(@NotNull FunctionParser.Type_suffixContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_squares_or_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_squares_or_semicolon(@NotNull FunctionParser.No_squares_or_semicolonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_squares_or_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_squares_or_semicolon(@NotNull FunctionParser.No_squares_or_semicolonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#For_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFor_statement(@NotNull FunctionParser.For_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#For_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFor_statement(@NotNull FunctionParser.For_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#cast_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCast_expression(@NotNull FunctionParser.Cast_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#cast_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCast_expression(@NotNull FunctionParser.Cast_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_angle_brackets_or_brackets}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_angle_brackets_or_brackets(@NotNull FunctionParser.No_angle_brackets_or_bracketsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_angle_brackets_or_brackets}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_angle_brackets_or_brackets(@NotNull FunctionParser.No_angle_brackets_or_bracketsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#equality_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquality_expression(@NotNull FunctionParser.Equality_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#equality_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquality_expression(@NotNull FunctionParser.Equality_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_comma_or_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_comma_or_semicolon(@NotNull FunctionParser.No_comma_or_semicolonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_comma_or_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_comma_or_semicolon(@NotNull FunctionParser.No_comma_or_semicolonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#Try_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterTry_statement(@NotNull FunctionParser.Try_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#Try_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitTry_statement(@NotNull FunctionParser.Try_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumber(@NotNull FunctionParser.NumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumber(@NotNull FunctionParser.NumberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#base_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterBase_type(@NotNull FunctionParser.Base_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#base_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitBase_type(@NotNull FunctionParser.Base_typeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#ptrMemberAccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterPtrMemberAccess(@NotNull FunctionParser.PtrMemberAccessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#ptrMemberAccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitPtrMemberAccess(@NotNull FunctionParser.PtrMemberAccessContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#pre_opener}.
+	 * @param ctx the parse tree
+	 */
+	void enterPre_opener(@NotNull FunctionParser.Pre_openerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#pre_opener}.
+	 * @param ctx the parse tree
+	 */
+	void exitPre_opener(@NotNull FunctionParser.Pre_openerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_squares}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_squares(@NotNull FunctionParser.No_squaresContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_squares}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_squares(@NotNull FunctionParser.No_squaresContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#shift_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterShift_expression(@NotNull FunctionParser.Shift_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#shift_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitShift_expression(@NotNull FunctionParser.Shift_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#declByClass}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclByClass(@NotNull FunctionParser.DeclByClassContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#declByClass}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclByClass(@NotNull FunctionParser.DeclByClassContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#type_name}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_name(@NotNull FunctionParser.Type_nameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#type_name}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_name(@NotNull FunctionParser.Type_nameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#breakStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBreakStatement(@NotNull FunctionParser.BreakStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#breakStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBreakStatement(@NotNull FunctionParser.BreakStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncCall(@NotNull FunctionParser.FuncCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncCall(@NotNull FunctionParser.FuncCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#inclusive_or_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclusive_or_expression(@NotNull FunctionParser.Inclusive_or_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#inclusive_or_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclusive_or_expression(@NotNull FunctionParser.Inclusive_or_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#base_classes}.
+	 * @param ctx the parse tree
+	 */
+	void enterBase_classes(@NotNull FunctionParser.Base_classesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#base_classes}.
+	 * @param ctx the parse tree
+	 */
+	void exitBase_classes(@NotNull FunctionParser.Base_classesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#incDecOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterIncDecOp(@NotNull FunctionParser.IncDecOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#incDecOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitIncDecOp(@NotNull FunctionParser.IncDecOpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#pre_closer}.
+	 * @param ctx the parse tree
+	 */
+	void enterPre_closer(@NotNull FunctionParser.Pre_closerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#pre_closer}.
+	 * @param ctx the parse tree
+	 */
+	void exitPre_closer(@NotNull FunctionParser.Pre_closerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#relational_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelational_expression(@NotNull FunctionParser.Relational_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#relational_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelational_expression(@NotNull FunctionParser.Relational_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#class_name}.
+	 * @param ctx the parse tree
+	 */
+	void enterClass_name(@NotNull FunctionParser.Class_nameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#class_name}.
+	 * @param ctx the parse tree
+	 */
+	void exitClass_name(@NotNull FunctionParser.Class_nameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#param_decl_specifiers}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam_decl_specifiers(@NotNull FunctionParser.Param_decl_specifiersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#param_decl_specifiers}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam_decl_specifiers(@NotNull FunctionParser.Param_decl_specifiersContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#param_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam_type(@NotNull FunctionParser.Param_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#param_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam_type(@NotNull FunctionParser.Param_typeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#function_argument}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction_argument(@NotNull FunctionParser.Function_argumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#function_argument}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction_argument(@NotNull FunctionParser.Function_argumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#If_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIf_statement(@NotNull FunctionParser.If_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#If_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIf_statement(@NotNull FunctionParser.If_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#water}.
+	 * @param ctx the parse tree
+	 */
+	void enterWater(@NotNull FunctionParser.WaterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#water}.
+	 * @param ctx the parse tree
+	 */
+	void exitWater(@NotNull FunctionParser.WaterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#closing_curly}.
+	 * @param ctx the parse tree
+	 */
+	void enterClosing_curly(@NotNull FunctionParser.Closing_curlyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#closing_curly}.
+	 * @param ctx the parse tree
+	 */
+	void exitClosing_curly(@NotNull FunctionParser.Closing_curlyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#for_init_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFor_init_statement(@NotNull FunctionParser.For_init_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#for_init_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFor_init_statement(@NotNull FunctionParser.For_init_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#or_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterOr_expression(@NotNull FunctionParser.Or_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#or_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitOr_expression(@NotNull FunctionParser.Or_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#relational_operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelational_operator(@NotNull FunctionParser.Relational_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#relational_operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelational_operator(@NotNull FunctionParser.Relational_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#do_statement1}.
+	 * @param ctx the parse tree
+	 */
+	void enterDo_statement1(@NotNull FunctionParser.Do_statement1Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#do_statement1}.
+	 * @param ctx the parse tree
+	 */
+	void exitDo_statement1(@NotNull FunctionParser.Do_statement1Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperator(@NotNull FunctionParser.OperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperator(@NotNull FunctionParser.OperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#inc_dec}.
+	 * @param ctx the parse tree
+	 */
+	void enterInc_dec(@NotNull FunctionParser.Inc_decContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#inc_dec}.
+	 * @param ctx the parse tree
+	 */
+	void exitInc_dec(@NotNull FunctionParser.Inc_decContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#conditional_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditional_expression(@NotNull FunctionParser.Conditional_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#conditional_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditional_expression(@NotNull FunctionParser.Conditional_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#initDeclSimple}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitDeclSimple(@NotNull FunctionParser.InitDeclSimpleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#initDeclSimple}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitDeclSimple(@NotNull FunctionParser.InitDeclSimpleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#opening_curly}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpening_curly(@NotNull FunctionParser.Opening_curlyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#opening_curly}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpening_curly(@NotNull FunctionParser.Opening_curlyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimary_expression(@NotNull FunctionParser.Primary_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimary_expression(@NotNull FunctionParser.Primary_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#gotoStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterGotoStatement(@NotNull FunctionParser.GotoStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#gotoStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitGotoStatement(@NotNull FunctionParser.GotoStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_brackets}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_brackets(@NotNull FunctionParser.No_bracketsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_brackets}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_brackets(@NotNull FunctionParser.No_bracketsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#bit_and_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBit_and_expression(@NotNull FunctionParser.Bit_and_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#bit_and_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBit_and_expression(@NotNull FunctionParser.Bit_and_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#assign_water}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssign_water(@NotNull FunctionParser.Assign_waterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#assign_water}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssign_water(@NotNull FunctionParser.Assign_waterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#cast_target}.
+	 * @param ctx the parse tree
+	 */
+	void enterCast_target(@NotNull FunctionParser.Cast_targetContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#cast_target}.
+	 * @param ctx the parse tree
+	 */
+	void exitCast_target(@NotNull FunctionParser.Cast_targetContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#initializer}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitializer(@NotNull FunctionParser.InitializerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#initializer}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitializer(@NotNull FunctionParser.InitializerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#function_decl_specifiers}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction_decl_specifiers(@NotNull FunctionParser.Function_decl_specifiersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#function_decl_specifiers}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction_decl_specifiers(@NotNull FunctionParser.Function_decl_specifiersContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnStatement(@NotNull FunctionParser.ReturnStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnStatement(@NotNull FunctionParser.ReturnStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#multiplicative_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiplicative_expression(@NotNull FunctionParser.Multiplicative_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#multiplicative_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiplicative_expression(@NotNull FunctionParser.Multiplicative_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#assign_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssign_expr(@NotNull FunctionParser.Assign_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#assign_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssign_expr(@NotNull FunctionParser.Assign_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#expr_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr_statement(@NotNull FunctionParser.Expr_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#expr_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr_statement(@NotNull FunctionParser.Expr_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#memberAccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterMemberAccess(@NotNull FunctionParser.MemberAccessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#memberAccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitMemberAccess(@NotNull FunctionParser.MemberAccessContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#base_class}.
+	 * @param ctx the parse tree
+	 */
+	void enterBase_class(@NotNull FunctionParser.Base_classContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#base_class}.
+	 * @param ctx the parse tree
+	 */
+	void exitBase_class(@NotNull FunctionParser.Base_classContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#parameter_name}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameter_name(@NotNull FunctionParser.Parameter_nameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#parameter_name}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameter_name(@NotNull FunctionParser.Parameter_nameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#access_specifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAccess_specifier(@NotNull FunctionParser.Access_specifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#access_specifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAccess_specifier(@NotNull FunctionParser.Access_specifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#assign_water_l2}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssign_water_l2(@NotNull FunctionParser.Assign_water_l2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#assign_water_l2}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssign_water_l2(@NotNull FunctionParser.Assign_water_l2Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#init_declarator_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterInit_declarator_list(@NotNull FunctionParser.Init_declarator_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#init_declarator_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitInit_declarator_list(@NotNull FunctionParser.Init_declarator_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterCondition(@NotNull FunctionParser.ConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitCondition(@NotNull FunctionParser.ConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#arrayIndexing}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayIndexing(@NotNull FunctionParser.ArrayIndexingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#arrayIndexing}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayIndexing(@NotNull FunctionParser.ArrayIndexingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#Catch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCatch_statement(@NotNull FunctionParser.Catch_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#Catch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCatch_statement(@NotNull FunctionParser.Catch_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#label}.
+	 * @param ctx the parse tree
+	 */
+	void enterLabel(@NotNull FunctionParser.LabelContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#label}.
+	 * @param ctx the parse tree
+	 */
+	void exitLabel(@NotNull FunctionParser.LabelContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#exclusive_or_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExclusive_or_expression(@NotNull FunctionParser.Exclusive_or_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#exclusive_or_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExclusive_or_expression(@NotNull FunctionParser.Exclusive_or_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(@NotNull FunctionParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(@NotNull FunctionParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#initDeclWithCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitDeclWithCall(@NotNull FunctionParser.InitDeclWithCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#initDeclWithCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitDeclWithCall(@NotNull FunctionParser.InitDeclWithCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#param_type_id}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam_type_id(@NotNull FunctionParser.Param_type_idContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#param_type_id}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam_type_id(@NotNull FunctionParser.Param_type_idContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#additive_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdditive_expression(@NotNull FunctionParser.Additive_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#additive_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdditive_expression(@NotNull FunctionParser.Additive_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#initializer_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitializer_list(@NotNull FunctionParser.Initializer_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#initializer_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitializer_list(@NotNull FunctionParser.Initializer_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#unary_operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#unary_operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#Else_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterElse_statement(@NotNull FunctionParser.Else_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#Else_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitElse_statement(@NotNull FunctionParser.Else_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#Switch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwitch_statement(@NotNull FunctionParser.Switch_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#Switch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwitch_statement(@NotNull FunctionParser.Switch_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#Do_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDo_statement(@NotNull FunctionParser.Do_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#Do_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDo_statement(@NotNull FunctionParser.Do_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_brackets_curlies_or_squares}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_brackets_curlies_or_squares(@NotNull FunctionParser.No_brackets_curlies_or_squaresContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_brackets_curlies_or_squares}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_brackets_curlies_or_squares(@NotNull FunctionParser.No_brackets_curlies_or_squaresContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#While_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhile_statement(@NotNull FunctionParser.While_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#While_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhile_statement(@NotNull FunctionParser.While_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifier(@NotNull FunctionParser.IdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifier(@NotNull FunctionParser.IdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#primaryOnly}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryOnly(@NotNull FunctionParser.PrimaryOnlyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#primaryOnly}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryOnly(@NotNull FunctionParser.PrimaryOnlyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_brackets_or_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_brackets_or_semicolon(@NotNull FunctionParser.No_brackets_or_semicolonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_brackets_or_semicolon}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_brackets_or_semicolon(@NotNull FunctionParser.No_brackets_or_semicolonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#no_curlies}.
+	 * @param ctx the parse tree
+	 */
+	void enterNo_curlies(@NotNull FunctionParser.No_curliesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#no_curlies}.
+	 * @param ctx the parse tree
+	 */
+	void exitNo_curlies(@NotNull FunctionParser.No_curliesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#equality_operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquality_operator(@NotNull FunctionParser.Equality_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#equality_operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquality_operator(@NotNull FunctionParser.Equality_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr(@NotNull FunctionParser.ExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr(@NotNull FunctionParser.ExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#param_type_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam_type_list(@NotNull FunctionParser.Param_type_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#param_type_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam_type_list(@NotNull FunctionParser.Param_type_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#simple_decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimple_decl(@NotNull FunctionParser.Simple_declContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#simple_decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimple_decl(@NotNull FunctionParser.Simple_declContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#block_starter}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock_starter(@NotNull FunctionParser.Block_starterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#block_starter}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock_starter(@NotNull FunctionParser.Block_starterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#assignment_operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignment_operator(@NotNull FunctionParser.Assignment_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#assignment_operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignment_operator(@NotNull FunctionParser.Assignment_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#statements}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatements(@NotNull FunctionParser.StatementsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#statements}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatements(@NotNull FunctionParser.StatementsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#unary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnary_expression(@NotNull FunctionParser.Unary_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#unary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnary_expression(@NotNull FunctionParser.Unary_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#ptrs}.
+	 * @param ctx the parse tree
+	 */
+	void enterPtrs(@NotNull FunctionParser.PtrsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#ptrs}.
+	 * @param ctx the parse tree
+	 */
+	void exitPtrs(@NotNull FunctionParser.PtrsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#initDeclWithAssign}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitDeclWithAssign(@NotNull FunctionParser.InitDeclWithAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#initDeclWithAssign}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitDeclWithAssign(@NotNull FunctionParser.InitDeclWithAssignContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#constant}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstant(@NotNull FunctionParser.ConstantContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#constant}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstant(@NotNull FunctionParser.ConstantContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#continueStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterContinueStatement(@NotNull FunctionParser.ContinueStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#continueStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitContinueStatement(@NotNull FunctionParser.ContinueStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#ptr_operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterPtr_operator(@NotNull FunctionParser.Ptr_operatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#ptr_operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitPtr_operator(@NotNull FunctionParser.Ptr_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#class_def}.
+	 * @param ctx the parse tree
+	 */
+	void enterClass_def(@NotNull FunctionParser.Class_defContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#class_def}.
+	 * @param ctx the parse tree
+	 */
+	void exitClass_def(@NotNull FunctionParser.Class_defContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#and_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnd_expression(@NotNull FunctionParser.And_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#and_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnd_expression(@NotNull FunctionParser.And_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#template_param_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplate_param_list(@NotNull FunctionParser.Template_param_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#template_param_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplate_param_list(@NotNull FunctionParser.Template_param_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#declByType}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclByType(@NotNull FunctionParser.DeclByTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#declByType}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclByType(@NotNull FunctionParser.DeclByTypeContext ctx);
 }
