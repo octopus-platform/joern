@@ -35,6 +35,12 @@ public class Neo4JBatchInserter
 	{
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("cache_type", "none");
+		config.put("neostore.nodestore.db.mapped_memory", "90M");
+		config.put("neostore.relationshipstore.db.mapped_memory", "3G");
+		config.put("neostore.propertystore.db.mapped_memory", "50M");
+		config.put("neostore.propertystore.db.strings.mapped_memory", "100M");
+		config.put("neostore.propertystore.db.arrays.mapped_memory", "0M");
+		
 		inserter = BatchInserters.inserter(databaseDirectory, config);
 		initializeIndex();
 	}
@@ -45,9 +51,10 @@ public class Neo4JBatchInserter
 		nodeIndex = indexProvider.nodeIndex( "nodeIndex", MapUtil.stringMap( "type", "exact" ) );		
 	
 		// TODO: Does this have an effect at all?
-		// nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
-		// nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
-	
+		nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
+		nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
+		nodeIndex.setCacheCapacity( NodeKeys.CODE, 100000 );
+		
 	}
 	
 	public static long addNode(Map<String, Object> properties)
@@ -112,6 +119,11 @@ public class Neo4JBatchInserter
 	{
 		inserter.setNodeProperty(nodeId, key, val);
 		nodeIndex.updateOrAdd(nodeId, getNodeProperties(nodeId));
+	}
+
+	public static void flushIndex()
+	{
+		nodeIndex.flush();
 	}
 	
 }
