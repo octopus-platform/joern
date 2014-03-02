@@ -15,7 +15,6 @@ import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.udg.ASTDefUseAnalyzer;
 import tools.udg.DBProvider;
-import tools.udg.ReadWriteDBProvider;
 import tools.udg.UseOrDef;
 import traversals.readWriteDB.Traversals;
 

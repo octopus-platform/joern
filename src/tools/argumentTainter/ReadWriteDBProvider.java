@@ -1,4 +1,4 @@
-package tools.udg;
+package tools.argumentTainter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.neo4j.graphdb.Relationship;
 import output.neo4j.EdgeTypes;
 import output.neo4j.nodes.NodeKeys;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
+import tools.udg.DBProvider;
 import traversals.readWriteDB.Traversals;
 
 public class ReadWriteDBProvider extends DBProvider {
