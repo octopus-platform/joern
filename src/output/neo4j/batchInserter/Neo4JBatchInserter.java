@@ -24,43 +24,37 @@ public class Neo4JBatchInserter
 	static BatchInserterIndex nodeIndex;
 	
 	static String databaseDirectory = "neo4j-db";
+	static Map<String, String> batchInserterConfig;
 	
+	/* 
+	 * Configuration of the batch inserter:
+	 * These functions must be called before openDatabase is called
+	 */
 	
 	public static void setIndexDirectoryName(String dirName)
 	{
 		databaseDirectory = dirName;
 	}
 
+	public static void setBatchInserterConfig(Map <String, String> config)
+	{
+		batchInserterConfig = config;
+	}
+	
+	/* ************************************** */
+	
 	public static void openDatabase()
 	{
-		Map<String, String> config = new HashMap<String, String>();
-		config.put("cache_type", "none");
-		config.put("neostore.nodestore.db.mapped_memory", "90M");
-		config.put("neostore.relationshipstore.db.mapped_memory", "3G");
-		config.put("neostore.propertystore.db.mapped_memory", "50M");
-		config.put("neostore.propertystore.db.strings.mapped_memory", "100M");
-		config.put("neostore.propertystore.db.arrays.mapped_memory", "0M");
+		if(batchInserterConfig == null)	
+			batchInserterConfig = getDefaultBatchInserterConfig();
 		
-		inserter = BatchInserters.inserter(databaseDirectory, config);
+		inserter = BatchInserters.inserter(databaseDirectory, batchInserterConfig);
 		initializeIndex();
-	}
-
-	private static void initializeIndex()
-	{
-		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
-		nodeIndex = indexProvider.nodeIndex( "nodeIndex", MapUtil.stringMap( "type", "exact" ) );		
-	
-		// TODO: Does this have an effect at all?
-		nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
-		nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
-		nodeIndex.setCacheCapacity( NodeKeys.CODE, 100000 );
-		
 	}
 	
 	public static long addNode(Map<String, Object> properties)
 	{
 		long newNode = inserter.createNode(properties);
-
 		return newNode;	
 	}
 
@@ -118,12 +112,39 @@ public class Neo4JBatchInserter
 	public static void setNodeProperty(long nodeId, String key, String val)
 	{
 		inserter.setNodeProperty(nodeId, key, val);
+		// Need to call flush before calling updateOrAdd because otherwise
+		// the node may not be visible yet.
+		flushIndex();
 		nodeIndex.updateOrAdd(nodeId, getNodeProperties(nodeId));
 	}
 
 	public static void flushIndex()
 	{
 		nodeIndex.flush();
+	}
+	
+	private static Map<String, String> getDefaultBatchInserterConfig()
+	{
+		Map<String, String> config = new HashMap<String, String>();
+		config.put("cache_type", "none");
+		config.put("neostore.nodestore.db.mapped_memory", "90M");
+		config.put("neostore.relationshipstore.db.mapped_memory", "3G");
+		config.put("neostore.propertystore.db.mapped_memory", "50M");
+		config.put("neostore.propertystore.db.strings.mapped_memory", "100M");
+		config.put("neostore.propertystore.db.arrays.mapped_memory", "0M");
+		return config;
+	}
+	
+	private static void initializeIndex()
+	{
+		indexProvider = new LuceneBatchInserterIndexProvider( inserter );		
+		nodeIndex = indexProvider.nodeIndex( "nodeIndex", MapUtil.stringMap( "type", "exact" ) );		
+	
+		// TODO: Does this have an effect at all?
+		nodeIndex.setCacheCapacity( NodeKeys.TYPE, 100000 );
+		nodeIndex.setCacheCapacity( NodeKeys.NAME, 100000 );
+		nodeIndex.setCacheCapacity( NodeKeys.CODE, 100000 );
+		
 	}
 	
 }

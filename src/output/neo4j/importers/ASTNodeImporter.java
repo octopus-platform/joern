@@ -33,7 +33,11 @@ public abstract class ASTNodeImporter {
 		
 		mainNodeId = nodeStore.getIdForObject(dbNode);
 		
-		nodeStore.setNodeProperty(dbNode, "functionId", String.format("%d", mainNodeId));
+		// We are currently not adding 'functionId' to the function node
+		// as that requires us to perform a lookup on the node just created
+		// and thus requires us to flush.
+		
+		// nodeStore.setNodeProperty(dbNode, "functionId", String.format("%d", mainNodeId));
 		
 		// index, but do not index location
 		properties.remove("location");
