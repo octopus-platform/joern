@@ -127,11 +127,14 @@ public class Neo4JBatchInserter
 	{
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("cache_type", "none");
-		config.put("neostore.nodestore.db.mapped_memory", "90M");
+		config.put("use_memory_mapped_buffers", "true");
+		config.put("neostore.nodestore.db.mapped_memory", "200M");
 		config.put("neostore.relationshipstore.db.mapped_memory", "3G");
-		config.put("neostore.propertystore.db.mapped_memory", "50M");
-		config.put("neostore.propertystore.db.strings.mapped_memory", "100M");
-		config.put("neostore.propertystore.db.arrays.mapped_memory", "0M");
+		config.put("neostore.propertystore.db.mapped_memory", "500M");
+		config.put("neostore.propertystore.db.strings.mapped_memory", "500M");
+		// config.put("neostore.propertystore.db.arrays.mapped_memory", "500M");
+		config.put("neostore.propertystore.db.index.keys.mapped_memory", "5M");
+		config.put("neostore.propertystore.db.index.mapped_memory", "5M");
 		return config;
 	}
 	
