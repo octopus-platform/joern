@@ -45,10 +45,11 @@ public class Neo4JBatchInserter
 	
 	public static void openDatabase()
 	{
-		if(batchInserterConfig == null)	
-			batchInserterConfig = getDefaultBatchInserterConfig();
+		if(batchInserterConfig == null)
+			inserter = BatchInserters.inserter(databaseDirectory);
+		else
+			inserter = BatchInserters.inserter(databaseDirectory, batchInserterConfig);
 		
-		inserter = BatchInserters.inserter(databaseDirectory, batchInserterConfig);
 		initializeIndex();
 	}
 	
@@ -121,21 +122,6 @@ public class Neo4JBatchInserter
 	public static void flushIndex()
 	{
 		nodeIndex.flush();
-	}
-	
-	private static Map<String, String> getDefaultBatchInserterConfig()
-	{
-		Map<String, String> config = new HashMap<String, String>();
-		config.put("cache_type", "none");
-		config.put("use_memory_mapped_buffers", "true");
-		config.put("neostore.nodestore.db.mapped_memory", "200M");
-		config.put("neostore.relationshipstore.db.mapped_memory", "3G");
-		config.put("neostore.propertystore.db.mapped_memory", "500M");
-		config.put("neostore.propertystore.db.strings.mapped_memory", "500M");
-		// config.put("neostore.propertystore.db.arrays.mapped_memory", "500M");
-		config.put("neostore.propertystore.db.index.keys.mapped_memory", "5M");
-		config.put("neostore.propertystore.db.index.mapped_memory", "5M");
-		return config;
 	}
 	
 	private static void initializeIndex()
