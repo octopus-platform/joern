@@ -6,17 +6,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import neo4j.EdgeTypes;
+import neo4j.dbProviders.DBProvider;
+import neo4j.dbProviders.ReadWriteDBProvider;
+import neo4j.readWriteDB.Neo4JDBInterface;
+
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.udg.ASTDefUseAnalyzer;
-import tools.udg.UseOrDef;
-import tools.udg.dbProviders.DBProvider;
-import tools.udg.dbProviders.ReadWriteDBProvider;
+import tools.udg.useDefAnalysis.ASTDefUseAnalyzer;
+import tools.udg.useDefGraph.UseOrDef;
 import traversals.readWriteDB.Traversals;
 
 public class DefUseCFGPatcher {

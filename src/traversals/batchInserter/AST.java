@@ -1,9 +1,9 @@
 package traversals.batchInserter;
 
-import org.neo4j.unsafe.batchinsert.BatchRelationship;
+import neo4j.EdgeTypes;
+import neo4j.nodes.NodeKeys;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.nodes.NodeKeys;
+import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 public class AST
 {

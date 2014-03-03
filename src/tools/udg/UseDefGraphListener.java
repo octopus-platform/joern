@@ -1,6 +1,8 @@
 package tools.udg;
 
-import output.neo4j.batchInserter.ImportedNodeListener;
+import tools.udg.useDefGraph.UseDefGraph;
+import neo4j.batchInserter.ImportedNodeListener;
+import neo4j.importers.UseDefGraphImporter;
 
 public class UseDefGraphListener extends ImportedNodeListener {
 

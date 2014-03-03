@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import misc.Pair;
+import neo4j.EdgeTypes;
+import neo4j.nodes.NodeKeys;
+import neo4j.readWriteDB.Neo4JDBInterface;
 
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -11,9 +14,6 @@ import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.nodes.NodeKeys;
-import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DDG;
 
 public class Traversals

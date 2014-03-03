@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import neo4j.EdgeTypes;
+import neo4j.batchInserter.Neo4JBatchInserter;
+
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
-
-import output.neo4j.EdgeTypes;
-import output.neo4j.batchInserter.Neo4JBatchInserter;
 
 public class DDGImporter
 {

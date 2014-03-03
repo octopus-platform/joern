@@ -3,10 +3,10 @@ package traversals.batchInserter;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.neo4j.unsafe.batchinsert.BatchRelationship;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import neo4j.nodes.NodeKeys;
 
-import output.neo4j.batchInserter.Neo4JBatchInserter;
-import output.neo4j.nodes.NodeKeys;
+import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 public class Elementary
 {

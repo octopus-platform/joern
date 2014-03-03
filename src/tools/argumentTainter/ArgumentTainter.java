@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import neo4j.readWriteDB.Neo4JDBInterface;
+
 import org.neo4j.graphdb.Node;
 
-import output.neo4j.readWriteDB.Neo4JDBInterface;
 import traversals.readWriteDB.Traversals;
 
 // Determine functions to patch and hand over

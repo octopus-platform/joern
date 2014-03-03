@@ -13,14 +13,14 @@ import java.util.List;
 class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 {
 	private final PathMatcher matcher;
-	private List<OutputModule> listeners = new LinkedList<OutputModule>();
+	private List<SourceFileListener> listeners = new LinkedList<SourceFileListener>();
 	
     SourceFileWalkerImpl(String pattern)
     {
         matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
     }
 
-    public void addListener(OutputModule listener)
+    public void addListener(SourceFileListener listener)
     {
     	listeners.add(listener);    
     }
@@ -34,7 +34,7 @@ class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
     
     private void notifyListenersOfDirEntry(Path dir)
     {
-    	for(OutputModule listener : listeners){
+    	for(SourceFileListener listener : listeners){
 			listener.preVisitDirectory(dir);
 		}
 	}
@@ -47,7 +47,7 @@ class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
     
 	private void notifyListenersOfDirExit(Path dir)
 	{
-		for(OutputModule listener : listeners){
+		for(SourceFileListener listener : listeners){
 			listener.postVisitDirectory(dir);
 		}
 	}
@@ -65,7 +65,7 @@ class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 
 	private void notifyListenersOfFile(Path filename)
 	{
-		for(OutputModule listener : listeners){
+		for(SourceFileListener listener : listeners){
 			listener.visitFile(filename);
 		}
 	}

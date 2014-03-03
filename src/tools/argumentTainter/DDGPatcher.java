@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import neo4j.EdgeTypes;
+import neo4j.readWriteDB.Neo4JDBInterface;
+
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
 import tools.ddg.DDGDifference;

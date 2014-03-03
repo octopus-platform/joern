@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
 import tests.TestDBTestsBatchInserter;
-import tools.udg.UseDefGraph;
 import tools.udg.UseDefGraphCreator;
-import tools.udg.UseOrDefRecord;
+import tools.udg.useDefGraph.UseDefGraph;
+import tools.udg.useDefGraph.UseOrDefRecord;
 import traversals.batchInserter.Function;
 
 public class testUseDefGraphCreator extends TestDBTestsBatchInserter {

@@ -1,10 +1,10 @@
 package traversals.batchInserter;
 
-import org.neo4j.graphdb.index.IndexHits;
+import neo4j.EdgeTypes;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import neo4j.nodes.NodeKeys;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.batchInserter.Neo4JBatchInserter;
-import output.neo4j.nodes.NodeKeys;
+import org.neo4j.graphdb.index.IndexHits;
 
 public class Function
 {

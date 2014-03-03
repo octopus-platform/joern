@@ -5,7 +5,10 @@ import java.util.Stack;
 
 import org.neo4j.graphdb.index.IndexHits;
 
-import tools.udg.environments.UseDefEnvironment;
+import tools.udg.useDefAnalysis.ASTDefUseAnalyzer;
+import tools.udg.useDefAnalysis.environments.UseDefEnvironment;
+import tools.udg.useDefGraph.UseDefGraph;
+import tools.udg.useDefGraph.UseOrDef;
 import traversals.batchInserter.CFG;
 
 // Create a UseDefGraph by running running an AST
@@ -16,13 +19,21 @@ public class UseDefGraphCreator
 {
 	
 	UseDefGraph useDefGraph;
-	Stack<UseDefEnvironment> useDefStack = new Stack<UseDefEnvironment>();	
 	ASTDefUseAnalyzer astAnalyzer = new ASTDefUseAnalyzer();
 	
+	public void addTaintSource(String callee, int argNum)
+	{
+		astAnalyzer.addTaintSource(callee, argNum);
+	}
+		
 	public UseDefGraph create(long functionId)
 	{		
-		useDefGraph = new UseDefGraph();
+		// Incrementally create a UseDefGraph by generating
+		// UseOrDefs for each statement separately and adding those
+		// to the UseDefGraph
 		
+		useDefGraph = new UseDefGraph();
+	
  		IndexHits<Long> statements = CFG.getStatementsFromIndex(functionId);
 		
 		for(Long statementId : statements){	
@@ -48,12 +59,6 @@ public class UseDefGraphCreator
 					useDefGraph.addUse(useOrDef.symbol, useOrDef.nodeId);
 			}
 		}
-	}
-
-
-	public void addTaintSource(String callee, int argNum)
-	{
-		astAnalyzer.addTaintSource(callee, argNum);
 	}
 		
 }

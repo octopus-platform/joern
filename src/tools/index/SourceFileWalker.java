@@ -41,7 +41,7 @@ public class SourceFileWalker
 		Files.walkFileTree(dir, sourceFileWalkerImpl);
 	}
 	
-	public void addListener(OutputModule listener)
+	public void addListener(SourceFileListener listener)
 	{
 		sourceFileWalkerImpl.addListener(listener);
 	}

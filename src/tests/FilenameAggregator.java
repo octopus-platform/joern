@@ -4,9 +4,9 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-import tools.index.OutputModule;
+import tools.index.SourceFileListener;
 
-public class FilenameAggregator extends OutputModule {
+public class FilenameAggregator extends SourceFileListener {
 
 	public List<String> filenames = new LinkedList<String>();
 	
@@ -20,9 +20,8 @@ public class FilenameAggregator extends OutputModule {
 	@Override public void postVisitDirectory(Path dir) {}
 
 	@Override
-	public void initialize(String indexDirectory) {
+	public void initialize() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
