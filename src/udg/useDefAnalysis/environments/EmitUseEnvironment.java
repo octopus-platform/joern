@@ -1,9 +1,9 @@
-package tools.udg.useDefAnalysis.environments;
+package udg.useDefAnalysis.environments;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
-import tools.udg.useDefGraph.UseOrDef;
+import udg.useDefGraph.UseOrDef;
 
 // emit all symbols as USE and don't hand
 // anything to up stream.

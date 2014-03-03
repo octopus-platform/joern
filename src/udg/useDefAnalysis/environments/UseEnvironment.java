@@ -1,4 +1,4 @@
-package tools.udg.useDefAnalysis.environments;
+package udg.useDefAnalysis.environments;
 
 
 public class UseEnvironment extends UseDefEnvironment {

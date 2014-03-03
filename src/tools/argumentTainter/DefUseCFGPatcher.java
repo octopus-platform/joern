@@ -16,9 +16,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.udg.useDefAnalysis.ASTDefUseAnalyzer;
-import tools.udg.useDefGraph.UseOrDef;
 import traversals.readWriteDB.Traversals;
+import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import udg.useDefGraph.UseOrDef;
 
 public class DefUseCFGPatcher {
 

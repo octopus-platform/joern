@@ -1,4 +1,4 @@
-package tools.udg.useDefAnalysis;
+package udg.useDefAnalysis;
 
 import java.util.Collection;
 import java.util.EmptyStackException;
@@ -7,19 +7,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import astnodes.ASTNode;
 import neo4j.dbProviders.BatchInserterDBProvider;
 import neo4j.dbProviders.DBProvider;
 import misc.Pair;
-import tools.udg.useDefAnalysis.environments.ArgumentEnvironment;
-import tools.udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
-import tools.udg.useDefAnalysis.environments.AssignmentEnvironment;
-import tools.udg.useDefAnalysis.environments.CallEnvironment;
-import tools.udg.useDefAnalysis.environments.DeclEnvironment;
-import tools.udg.useDefAnalysis.environments.IdentifierEnvironment;
-import tools.udg.useDefAnalysis.environments.MemberAccessEnvironment;
-import tools.udg.useDefAnalysis.environments.UseDefEnvironment;
-import tools.udg.useDefAnalysis.environments.UseEnvironment;
-import tools.udg.useDefGraph.UseOrDef;
+import udg.useDefAnalysis.environments.ArgumentEnvironment;
+import udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
+import udg.useDefAnalysis.environments.AssignmentEnvironment;
+import udg.useDefAnalysis.environments.CallEnvironment;
+import udg.useDefAnalysis.environments.DeclEnvironment;
+import udg.useDefAnalysis.environments.IdentifierEnvironment;
+import udg.useDefAnalysis.environments.MemberAccessEnvironment;
+import udg.useDefAnalysis.environments.UseDefEnvironment;
+import udg.useDefAnalysis.environments.UseEnvironment;
+import udg.useDefGraph.UseOrDef;
 
 public class ASTDefUseAnalyzer {
 
@@ -29,10 +30,10 @@ public class ASTDefUseAnalyzer {
 	
 	TaintSources taintSources = new TaintSources();
 	
-	public Collection<UseOrDef> analyzeAST(long astRoot)
+	public Collection<UseOrDef> analyzeAST(ASTNode astNode)
 	{
 		reset();
-		traverseAST(astRoot);
+		traverseAST(astNode);
 		return useDefsOfBlock;
 	}
 
@@ -52,18 +53,18 @@ public class ASTDefUseAnalyzer {
 		useDefsOfBlock.clear();
 	}
 
-	private void traverseAST(Long nodeId)
+	private void traverseAST(ASTNode astNode)
 	{		
-		UseDefEnvironment env = createUseDefEnvironment(nodeId);
-		env.setDBProvider(dbProvider);
-		env.setNodeId(nodeId);
+		UseDefEnvironment env = createUseDefEnvironment(astNode);
+		env.setASTNode(astNode);
 		
-		traverseASTChildren(nodeId, env);		
+		traverseASTChildren(astNode, env);		
 	}
 	
-	private UseDefEnvironment createUseDefEnvironment(Long nodeId)
+	private UseDefEnvironment createUseDefEnvironment(ASTNode astNode)
 	{
-		String nodeType = dbProvider.getNodeType(nodeId);
+		
+		String nodeType = astNode.getTypeAsString();
 		
 		switch(nodeType){
 		case "AssignmentExpr":
@@ -73,7 +74,7 @@ public class ASTDefUseAnalyzer {
 			return new DeclEnvironment();
 		
 		case "CallExpression":
-			return createCallEnvironment(nodeId);
+			return createCallEnvironment(astNode);
 			
 		case "Argument":
 			return createArgumentEnvironment();
@@ -97,11 +98,12 @@ public class ASTDefUseAnalyzer {
 		}
 	}
 
-	private UseDefEnvironment createCallEnvironment(Long nodeId)
+	private UseDefEnvironment createCallEnvironment(ASTNode astNode)
 	{
 		CallEnvironment callEnv = new CallEnvironment();
 		// inform calls of any arguments it might taint
-		String callee = dbProvider.getCalleeFromCall(nodeId);
+		
+		String callee = astNode.getChild(0).getEscapedCodeStr();
 		if(taintSources.isTaintSource(callee)){
 			List<Integer> taintedArgs = taintSources.getTaintedArgsForCallee(callee);
 			callEnv.setTaintedArgs(taintedArgs);
@@ -122,41 +124,33 @@ public class ASTDefUseAnalyzer {
 		return argEnv;
 	}
 	
-	private void traverseASTChildren(Long nodeId, UseDefEnvironment env)
+	private void traverseASTChildren(ASTNode astNode, UseDefEnvironment env)
 	{
-
-		List<misc.Pair<Long, Integer>> children = dbProvider.getASTChildren(nodeId);
 		
-		int nChildren = 0;
+		int numChildren = astNode.getChildCount();
 		
-		// childId, childNumber -> index
-		
-		for(Pair<Long, Integer> child : children){
+		for(int i = 0; i < numChildren; i++){
+			ASTNode childNode = astNode.getChild(i);
 			
-			long childId = child.getL() ;
-			int childNumber = child.getR();
-
-			configureEnvironmentForChild(env, childId, childNumber);
+			configureEnvironmentForChild(env, childNode);
 			if(!env.shouldTraverse()) continue;
 			
-			
 			environmentStack.push(env);
-			traverseAST(childId);
+			traverseAST(childNode);
 			environmentStack.pop();
 			reportUpstream(env);
-		
-			nChildren++;
 		}
-
-		if(nChildren == 0){
+		
+		if(numChildren == 0){
 			reportUpstream(env);
 		}
 		
 	}
 	
-	private void configureEnvironmentForChild(UseDefEnvironment env, long childId, int childNumber)
+	private void configureEnvironmentForChild(UseDefEnvironment env, ASTNode childNode)
 	{
-		String childType = dbProvider.getNodeType(childId);
+		String childType = childNode.getTypeAsString();
+		int childNumber = childNode.getChildNumber();
 		env.setChild(childType, childNumber);
 	}
 	

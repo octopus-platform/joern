@@ -1,9 +1,11 @@
-package tools.udg.useDefGraph;
+package udg.useDefGraph;
+
+import astnodes.ASTNode;
 
 public class UseOrDef {
 	public boolean isDef;
 	public String symbol;
-	public long nodeId = 0;
+	public ASTNode astNode;
 
 	@Override
 	public boolean equals(Object o) {
@@ -11,7 +13,7 @@ public class UseOrDef {
 
 		return (isDef == other.isDef) &&
 				(symbol.equals(other.symbol)) &&
-				(nodeId == other.nodeId);
+				(astNode == other.astNode);
 	}
 
 	@Override

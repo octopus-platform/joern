@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ParseTreeUtils;
+import astnodes.expressions.BinaryExpression;
 import astwalking.ASTNodeVisitor;
 
 
@@ -112,6 +113,15 @@ public class ASTNode {
 	public boolean isInCFG()
 	{
 		return isInCFG;
+	}
+
+	public String getOperatorCode() {
+		if(BinaryExpression.class.isAssignableFrom(this.getClass())){
+			return ((BinaryExpression) this).getOperator();
+		}
+		
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

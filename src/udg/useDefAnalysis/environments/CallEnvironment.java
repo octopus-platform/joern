@@ -1,4 +1,4 @@
-package tools.udg.useDefAnalysis.environments;
+package udg.useDefAnalysis.environments;
 
 import java.util.Collection;
 import java.util.List;

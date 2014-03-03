@@ -1,4 +1,4 @@
-package tools.udg.useDefAnalysis;
+package udg.useDefAnalysis;
 
 import java.util.HashMap;
 import java.util.LinkedList;

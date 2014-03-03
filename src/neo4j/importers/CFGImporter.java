@@ -24,7 +24,6 @@ import cfg.Edges;
 public class CFGImporter
 {
 	GraphNodeStore nodeStore;
-	
 	private FunctionDatabaseNode currentFunction;
 	
 	public CFGImporter(GraphNodeStore aNodeStore)

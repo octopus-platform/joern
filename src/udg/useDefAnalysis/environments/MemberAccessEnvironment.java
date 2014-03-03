@@ -1,9 +1,9 @@
-package tools.udg.useDefAnalysis.environments;
+package udg.useDefAnalysis.environments;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
-import tools.udg.useDefGraph.UseOrDef;
+import udg.useDefGraph.UseOrDef;
 
 public class MemberAccessEnvironment extends UseDefEnvironment {
 
@@ -22,7 +22,9 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 		// emit the left-most symbol
 		retval.add(leftMostSymbol);	
 		
-		retval.add(dbProvider.getNodeCode(nodeId));		
+		String codeStr = astNode.getEscapedCodeStr();
+		
+		retval.add(codeStr);		
 				
 		return retval; 
 	}

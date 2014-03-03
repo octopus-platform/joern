@@ -1,4 +1,4 @@
-package tools.udg.useDefAnalysis.environments;
+package udg.useDefAnalysis.environments;
 
 
 public class AssignmentEnvironment extends EmitDefEnvironment {
@@ -7,7 +7,8 @@ public class AssignmentEnvironment extends EmitDefEnvironment {
 	public boolean isUse()
 	{
 		if(childNum == 0){
-			String operatorCode = dbProvider.getOperatorCode(nodeId);
+			
+			String operatorCode = astNode.getOperatorCode();
 			if(operatorCode != null && !operatorCode.equals("="))
 				return true;
 			else

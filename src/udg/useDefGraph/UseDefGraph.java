@@ -1,7 +1,9 @@
-package tools.udg.useDefGraph;
+package udg.useDefGraph;
 
 import java.util.List;
 
+import astnodes.ASTNode;
+import cfg.CFGNode;
 import misc.MultiHashMap;
 
 public class UseDefGraph {
@@ -23,19 +25,19 @@ public class UseDefGraph {
 		return useOrDefRecordTable.getListForKey(symbol);
 	}
 	
-	public void addDefinition(String identifier, long nodeId)
+	public void addDefinition(String identifier, ASTNode astNode)
 	{
-		add(identifier, nodeId, true);
+		add(identifier, astNode, true);
 	}
 
-	public void addUse(String identifier, long nodeId)
+	public void addUse(String identifier, ASTNode astNode)
 	{
-		add(identifier, nodeId, false);
+		add(identifier, astNode, false);
 	}
 	
-	private void add(String identifier, long statementId, boolean isDef)
+	private void add(String identifier, ASTNode astNode, boolean isDef)
 	{
-		UseOrDefRecord record = new UseOrDefRecord(statementId, isDef);		
+		UseOrDefRecord record = new UseOrDefRecord(astNode, isDef);		
 		useOrDefRecordTable.add(identifier, record);
 	}
 		
