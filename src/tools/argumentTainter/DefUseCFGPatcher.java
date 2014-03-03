@@ -14,8 +14,9 @@ import output.neo4j.EdgeTypes;
 import output.neo4j.readWriteDB.Neo4JDBInterface;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import tools.udg.ASTDefUseAnalyzer;
-import tools.udg.DBProvider;
 import tools.udg.UseOrDef;
+import tools.udg.dbProviders.DBProvider;
+import tools.udg.dbProviders.ReadWriteDBProvider;
 import traversals.readWriteDB.Traversals;
 
 public class DefUseCFGPatcher {

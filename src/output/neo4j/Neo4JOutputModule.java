@@ -4,12 +4,12 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import output.OutputModule;
 import output.neo4j.batchInserter.ConfigurationGenerator;
 import output.neo4j.batchInserter.Neo4JBatchInserter;
 import output.neo4j.importers.DirectoryTreeImporter;
 import output.neo4j.nodes.FileDatabaseNode;
 import parsing.ModuleParser;
+import tools.index.OutputModule;
 
 
 public class Neo4JOutputModule extends OutputModule

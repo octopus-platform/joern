@@ -10,8 +10,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
 
-import output.OutputModule;
-
 class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 {
 	private final PathMatcher matcher;

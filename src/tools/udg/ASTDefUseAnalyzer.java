@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Stack;
 
 import misc.Pair;
+import tools.udg.dbProviders.BatchInserterDBProvider;
+import tools.udg.dbProviders.DBProvider;
 import tools.udg.environments.ArgumentEnvironment;
 import tools.udg.environments.ArrayIndexingEnvironment;
 import tools.udg.environments.AssignmentEnvironment;

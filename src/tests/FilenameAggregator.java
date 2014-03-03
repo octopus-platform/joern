@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-import output.OutputModule;
+import tools.index.OutputModule;
 
 public class FilenameAggregator extends OutputModule {
 

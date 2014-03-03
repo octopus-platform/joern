@@ -1,11 +1,9 @@
-package tools;
+package output.neo4j.batchInserter;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.neo4j.graphdb.index.IndexHits;
-
-import output.neo4j.batchInserter.Neo4JBatchInserter;
 
 
 /**

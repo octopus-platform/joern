@@ -1,6 +1,6 @@
 package tools.ddg;
 
-import tools.ImportedNodeListener;
+import output.neo4j.batchInserter.ImportedNodeListener;
 
 public class DDGListener extends ImportedNodeListener {
 	

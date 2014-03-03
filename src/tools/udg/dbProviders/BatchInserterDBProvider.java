@@ -1,4 +1,4 @@
-package tools.udg;
+package tools.udg.dbProviders;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,17 +13,19 @@ import traversals.batchInserter.Elementary;
 
 public class BatchInserterDBProvider extends DBProvider
 {
-
+	@Override
 	public String getNodeType(Long nodeId)
 	{
 		return Elementary.getNodeType(nodeId);
 	}
 
+	@Override
 	public String getCalleeFromCall(Long nodeId)
 	{
 		return AST.getCalleeFromCall(nodeId);
 	}
 
+	@Override
 	public List<Pair<Long,Integer>> getASTChildren(Long nodeId)
 	{
 		Iterable<BatchRelationship> rels = Elementary.getEdges(nodeId);

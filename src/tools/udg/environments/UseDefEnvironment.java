@@ -3,8 +3,8 @@ package tools.udg.environments;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import tools.udg.DBProvider;
 import tools.udg.UseOrDef;
+import tools.udg.dbProviders.DBProvider;
 
 // This is both the base class of all UseDefEnvironments
 // and the default implementation
@@ -28,6 +28,9 @@ public class UseDefEnvironment{
 	
 	public void setDBProvider(DBProvider dbProvider)
 	{
+		// Environments can use the dbProvider
+		// to obtain additional information about nodes
+		
 		this.dbProvider = dbProvider;
 	}
 	
@@ -43,7 +46,7 @@ public class UseDefEnvironment{
 	}
 	
 	
-	// default behaviour is simply to propgate all
+	// default behavior is simply to propagate all
 	// symbols received
 	
 	public Collection<String> upstreamSymbols()

@@ -1,4 +1,4 @@
-package tools;
+package output.neo4j.batchInserter;
 
 public abstract class ImportedNodeListener {
 

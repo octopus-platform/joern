@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import output.OutputModule;
 import output.neo4j.Neo4JOutputModule;
 
 

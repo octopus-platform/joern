@@ -1,4 +1,4 @@
-package output;
+package tools.index;
 
 import java.nio.file.Path;
 

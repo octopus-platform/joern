@@ -2,9 +2,9 @@ package tools.udg;
 
 import org.apache.commons.cli.ParseException;
 
+import output.neo4j.batchInserter.ImportedNodeListener;
+import output.neo4j.batchInserter.ImportedNodeWalker;
 import tools.GraphDbWalker;
-import tools.ImportedNodeListener;
-import tools.ImportedNodeWalker;
 import tools.ddg.DDGCommandLineInterface;
 
 public class UseDefGraphMain extends GraphDbWalker {

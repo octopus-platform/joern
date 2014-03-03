@@ -2,9 +2,9 @@ package tools.icfg;
 
 import org.apache.commons.cli.ParseException;
 
+import output.neo4j.batchInserter.ImportedNodeListener;
+import output.neo4j.batchInserter.ImportedNodeWalker;
 import tools.GraphDbWalker;
-import tools.ImportedNodeListener;
-import tools.ImportedNodeWalker;
 
 public class ICFGMain extends GraphDbWalker {
 
