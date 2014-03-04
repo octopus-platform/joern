@@ -47,7 +47,6 @@ public class ReadWriteDbASTProvider extends ASTProvider{
 		while(it.hasNext()){
 			Pair<Long, Integer> next = it.next();
 			Long childId = next.getL();
-			Integer childNumber = next.getR();
 			children.add(childId);
 		}
 		
