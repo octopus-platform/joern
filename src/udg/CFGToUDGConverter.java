@@ -37,7 +37,9 @@ public class CFGToUDGConverter {
 			if(astNode == null)
 				continue;
 			
-			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(astNode);
+			ASTNodeASTProvider provider = new ASTNodeASTProvider();
+			provider.setNode(astNode);
+			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(provider);
 			addToUseDefGraph(useDefGraph, usesAndDefs, astNode);
 		}
 			
@@ -48,14 +50,18 @@ public class CFGToUDGConverter {
 	{
 		for(UseOrDef useOrDef : usesAndDefs){
 			
+			ASTNodeASTProvider astProvider = (ASTNodeASTProvider) useOrDef.astProvider;
+			// CHECK?
+			ASTNode useOrDefNode = astProvider.getASTNode();
+			
 			if(useOrDef.isDef){
 				useDefGraph.addDefinition(useOrDef.symbol, astNode);
-				if(useOrDef.astNode != null && useOrDef.astNode != astNode)
-					useDefGraph.addDefinition(useOrDef.symbol, useOrDef.astNode);
+				if(useOrDefNode != null && useOrDefNode  != astNode)
+					useDefGraph.addDefinition(useOrDef.symbol, useOrDefNode);
 			}else{
 				useDefGraph.addUse(useOrDef.symbol, astNode);
-				if(useOrDef.astNode != null && useOrDef.astNode != astNode)
-					useDefGraph.addUse(useOrDef.symbol, useOrDef.astNode);
+				if(useOrDef.astProvider != null && useOrDefNode != astNode)
+					useDefGraph.addUse(useOrDef.symbol, useOrDefNode);
 			}
 		}
 	}

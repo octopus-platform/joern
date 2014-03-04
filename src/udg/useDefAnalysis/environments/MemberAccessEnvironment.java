@@ -22,7 +22,7 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 		// emit the left-most symbol
 		retval.add(leftMostSymbol);	
 		
-		String codeStr = astNode.getEscapedCodeStr();
+		String codeStr = astProvider.getEscapedCodeStr();
 		
 		retval.add(codeStr);		
 				

@@ -8,7 +8,7 @@ public class AssignmentEnvironment extends EmitDefEnvironment {
 	{
 		if(childNum == 0){
 			
-			String operatorCode = astNode.getOperatorCode();
+			String operatorCode = astProvider.getOperatorCode();
 			if(operatorCode != null && !operatorCode.equals("="))
 				return true;
 			else

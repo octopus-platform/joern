@@ -7,10 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import astnodes.ASTNode;
-import neo4j.dbProviders.BatchInserterDBProvider;
-import neo4j.dbProviders.DBProvider;
-import misc.Pair;
+import udg.ASTProvider;
 import udg.useDefAnalysis.environments.ArgumentEnvironment;
 import udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
 import udg.useDefAnalysis.environments.AssignmentEnvironment;
@@ -26,14 +23,12 @@ public class ASTDefUseAnalyzer {
 
 	Stack<UseDefEnvironment> environmentStack = new Stack<UseDefEnvironment>();
 	HashSet<UseOrDef> useDefsOfBlock = new HashSet<UseOrDef>();
-	DBProvider dbProvider = new BatchInserterDBProvider();
-	
 	TaintSources taintSources = new TaintSources();
 	
-	public Collection<UseOrDef> analyzeAST(ASTNode astNode)
+	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider)
 	{
 		reset();
-		traverseAST(astNode);
+		traverseAST(astProvider);
 		return useDefsOfBlock;
 	}
 
@@ -42,29 +37,23 @@ public class ASTDefUseAnalyzer {
 		taintSources.add(callee, argNum);
 	}
 	
-	public void setDBProvider(DBProvider dbProvider)
-	{
-		this.dbProvider = dbProvider;
-	}
-	
 	private void reset()
 	{
 		environmentStack.clear();
 		useDefsOfBlock.clear();
 	}
 
-	private void traverseAST(ASTNode astNode)
+	private void traverseAST(ASTProvider astProvider)
 	{		
-		UseDefEnvironment env = createUseDefEnvironment(astNode);
-		env.setASTNode(astNode);
-		
-		traverseASTChildren(astNode, env);		
+		UseDefEnvironment env = createUseDefEnvironment(astProvider);
+		env.setASTProvider(astProvider);
+		traverseASTChildren(astProvider, env);		
 	}
 	
-	private UseDefEnvironment createUseDefEnvironment(ASTNode astNode)
+	private UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider)
 	{
 		
-		String nodeType = astNode.getTypeAsString();
+		String nodeType = astProvider.getTypeAsString();
 		
 		switch(nodeType){
 		case "AssignmentExpr":
@@ -74,7 +63,7 @@ public class ASTDefUseAnalyzer {
 			return new DeclEnvironment();
 		
 		case "CallExpression":
-			return createCallEnvironment(astNode);
+			return createCallEnvironment(astProvider);
 			
 		case "Argument":
 			return createArgumentEnvironment();
@@ -98,12 +87,12 @@ public class ASTDefUseAnalyzer {
 		}
 	}
 
-	private UseDefEnvironment createCallEnvironment(ASTNode astNode)
+	private UseDefEnvironment createCallEnvironment(ASTProvider astProvider)
 	{
 		CallEnvironment callEnv = new CallEnvironment();
 		// inform calls of any arguments it might taint
 		
-		String callee = astNode.getChild(0).getEscapedCodeStr();
+		String callee = astProvider.getChild(0).getEscapedCodeStr();
 		if(taintSources.isTaintSource(callee)){
 			List<Integer> taintedArgs = taintSources.getTaintedArgsForCallee(callee);
 			callEnv.setTaintedArgs(taintedArgs);
@@ -124,19 +113,19 @@ public class ASTDefUseAnalyzer {
 		return argEnv;
 	}
 	
-	private void traverseASTChildren(ASTNode astNode, UseDefEnvironment env)
+	private void traverseASTChildren(ASTProvider astProvider, UseDefEnvironment env)
 	{
 		
-		int numChildren = astNode.getChildCount();
+		int numChildren = astProvider.getChildCount();
 		
 		for(int i = 0; i < numChildren; i++){
-			ASTNode childNode = astNode.getChild(i);
+			ASTProvider childProvider = astProvider.getChild(i);
 			
-			configureEnvironmentForChild(env, childNode);
+			configureEnvironmentForChild(env, childProvider);
 			if(!env.shouldTraverse()) continue;
 			
 			environmentStack.push(env);
-			traverseAST(childNode);
+			traverseAST(childProvider);
 			environmentStack.pop();
 			reportUpstream(env);
 		}
@@ -147,10 +136,10 @@ public class ASTDefUseAnalyzer {
 		
 	}
 	
-	private void configureEnvironmentForChild(UseDefEnvironment env, ASTNode childNode)
+	private void configureEnvironmentForChild(UseDefEnvironment env, ASTProvider childProvider)
 	{
-		String childType = childNode.getTypeAsString();
-		int childNumber = childNode.getChildNumber();
+		String childType = childProvider.getTypeAsString();
+		int childNumber = childProvider.getChildNumber();
 		env.setChild(childType, childNumber);
 	}
 	

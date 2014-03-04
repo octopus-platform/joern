@@ -3,9 +3,7 @@ package udg.useDefAnalysis.environments;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import astnodes.ASTNode;
-import cfg.CFGNode;
-import neo4j.dbProviders.DBProvider;
+import udg.ASTProvider;
 import udg.useDefGraph.UseOrDef;
 
 // This is both the base class of all UseDefEnvironments
@@ -15,7 +13,7 @@ public class UseDefEnvironment{
 	
 	protected String childType;
 	protected int childNum;
-	protected ASTNode astNode;
+	protected ASTProvider astProvider;
 	
 	Collection<String> symbolsForUpstream = new LinkedList<String>();
 	
@@ -26,9 +24,9 @@ public class UseDefEnvironment{
 	public boolean isDef() { return false; }
 	public boolean shouldTraverse() { return true; }
 
-	public void setASTNode(ASTNode anASTNode)
+	public void setASTProvider(ASTProvider anASTProvider)
 	{
-		this.astNode = anASTNode;
+		this.astProvider = anASTProvider;
 	}
 	
 	public void setChild(String childType, int childNum)
@@ -74,7 +72,7 @@ public class UseDefEnvironment{
 			UseOrDef useOrDef = new UseOrDef();
 			useOrDef.isDef = isDef;
 			useOrDef.symbol = s;
-			useOrDef.astNode = this.astNode ;
+			useOrDef.astProvider = this.astProvider ;
 			retval.add(useOrDef);
 		}
 		return retval;

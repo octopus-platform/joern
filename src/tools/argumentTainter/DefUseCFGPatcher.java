@@ -15,6 +15,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
+import astnodes.ASTNode;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import traversals.readWriteDB.Traversals;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
@@ -66,8 +67,9 @@ public class DefUseCFGPatcher {
 			
 			long statementId = statement.getId();
 			
-			Node astNode = Traversals.getASTForStatement(statement);
-			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astNode.getId());
+			Node node = Traversals.getASTForStatement(statement);
+			ASTNode astNode = ASTLoader.convert(node);
+			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astNode);
 			
 			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(statementId);
 			updateDefsToAdd(oldDefs, newDefs, statementId);
