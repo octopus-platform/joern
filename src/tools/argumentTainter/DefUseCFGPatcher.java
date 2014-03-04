@@ -7,18 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import neo4j.EdgeTypes;
-import neo4j.dbProviders.DBProvider;
-import neo4j.dbProviders.ReadWriteDBProvider;
 import neo4j.readWriteDB.Neo4JDBInterface;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
-import astnodes.ASTNode;
 import tools.ddg.DefUseCFGFactories.DefUseCFG;
 import traversals.readWriteDB.Traversals;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import udg.useDefGraph.ReadWriteDbASTProvider;
 import udg.useDefGraph.UseOrDef;
 
 public class DefUseCFGPatcher {
@@ -26,12 +24,7 @@ public class DefUseCFGPatcher {
 	List<DefUseLink> newlyAddedLinks = new LinkedList<DefUseLink>();
 	DefUseCFG defUseCFG;
 	ASTDefUseAnalyzer astDefUseAnalyzer = new ASTDefUseAnalyzer();
-	DBProvider dbProvider = new ReadWriteDBProvider();
 
-	public DefUseCFGPatcher()
-	{
-		astDefUseAnalyzer.setDBProvider(dbProvider);
-	}
 	
 	public class DefUseLink{
 		public DefUseLink(String aSymbol, Long aStatementId, boolean aIsDef) {
@@ -68,8 +61,11 @@ public class DefUseCFGPatcher {
 			long statementId = statement.getId();
 			
 			Node node = Traversals.getASTForStatement(statement);
-			ASTNode astNode = ASTLoader.convert(node);
-			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astNode);
+			
+			ReadWriteDbASTProvider astProvider = new ReadWriteDbASTProvider();
+			astProvider.setNodeId(node.getId());
+			
+			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astProvider);
 			
 			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(statementId);
 			updateDefsToAdd(oldDefs, newDefs, statementId);

@@ -72,4 +72,10 @@ public class ReadWriteDBProvider extends DBProvider {
 		return Traversals.getOperatorCode(nodeId);
 	}
 
+	@Override
+	public int getChildNumber(long nodeId)
+	{
+		return Traversals.getNodeChildNum(nodeId);
+	}
+
 }

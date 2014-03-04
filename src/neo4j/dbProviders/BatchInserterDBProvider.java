@@ -59,4 +59,13 @@ public class BatchInserterDBProvider extends DBProvider
 	{
 		return Elementary.getOperatorCode(nodeId);
 	}
+
+	@Override
+	public int getChildNumber(long nodeId)
+	{
+		String childNumStr = Elementary.getNodeProperty(nodeId, NodeKeys.CHILD_NUMBER);
+		if(childNumStr == null)
+			return 0;
+		return Integer.parseInt(childNumStr);
+	}
 }

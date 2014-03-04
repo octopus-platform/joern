@@ -277,6 +277,15 @@ public class Traversals
 	{
 		Node node = Neo4JDBInterface.getNodeById(nodeId);
 		return node.getProperty(NodeKeys.OPERATOR).toString();
+	}
+
+	public static int getNodeChildNum(long nodeId)
+	{
+		Node node = Neo4JDBInterface.getNodeById(nodeId);
+		String childNumStr = (String) node.getProperty(NodeKeys.CHILD_NUMBER, null);
+		if(childNumStr == null)
+			return 0;
+		return Integer.parseInt(childNumStr);
 	}	
 	
 }

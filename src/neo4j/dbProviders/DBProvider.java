@@ -12,5 +12,6 @@ public abstract class DBProvider {
 	
 	public abstract String getNodeCode(long nodeId);
 	public abstract String getOperatorCode(long nodeId);
-
+	public abstract int getChildNumber(long nodeId);
+	
 }
