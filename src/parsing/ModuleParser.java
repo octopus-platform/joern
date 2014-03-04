@@ -19,6 +19,15 @@ public class ModuleParser
     	}
     }
 	
+	public void parseString(String code)
+	{
+    	try{
+    		parserDriver.parseAndWalkString(code);
+    	}catch(ParserException ex){
+    		System.err.println("Error parsing string.");
+    	}
+	}
+	
 	public void addObserver(Observer anObserver)
 	{
 		parserDriver.addObserver(anObserver);

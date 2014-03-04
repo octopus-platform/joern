@@ -6,12 +6,11 @@ import neo4j.nodes.FileDatabaseNode;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import tools.index.Indexer;
 import tools.index.IndexerASTWalker;
 import tools.index.IndexerState;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
-import astwalking.ASTWalker;
+
 
 public class Neo4JASTWalker extends IndexerASTWalker
 {
@@ -23,7 +22,6 @@ public class Neo4JASTWalker extends IndexerASTWalker
 	{
 		state = (Neo4JIndexerState) aState;
 	}
-	
 	
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)

@@ -9,11 +9,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import astnodes.statements.CompoundStatement;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import tests.TestDBTestsBatchInserter;
-import tests.parseTreeToAST.FunctionContentTestUtil;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
@@ -28,6 +26,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
         Map<String, String> aMap = new HashMap<String, String>();
         aMap.put("udg_test_simple_decl", "int f(){ int x; }");
         aMap.put("udg_test_decl_with_assign", "int f(){ int x = 0; }");
+        aMap.put("udg_test_param_decl", "int f(int x){}");
         aMap.put("udg_test_struct_field_use", "int udg_test_struct_field_use(){ foo(x.y); }");
         aMap.put("test_buf_def", "int f(){ buf[i] = x; }");	
         aMap.put("condition_test", "int condition_test() { if(x && y) return 0; if(z) return 1; }");
@@ -57,6 +56,13 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	public void testDeclWithAssignment()
 	{
 		UseDefGraph useDefGraph = createUDGForFunction("udg_test_decl_with_assign");		
+		assertOnlyDefForXFound(useDefGraph, "x");
+	}
+	
+	@Test
+	public void testParamDecl()
+	{
+		UseDefGraph useDefGraph = createUDGForFunction("udg_test_param_decl");	
 		assertOnlyDefForXFound(useDefGraph, "x");
 	}
 	
@@ -132,8 +138,8 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	
 	public CFG getCFGForCode(String input)
 	{
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		return astToCFG.convertCompoundStatement(contentItem);
+		CFGCreator cfgCreator = new CFGCreator();
+		return cfgCreator.getCFGForCode(input);	
 	}
 	
 	
