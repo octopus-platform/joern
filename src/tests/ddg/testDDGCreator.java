@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
 import tests.TestDBTestsBatchInserter;
-import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
-import tools.ddg.DefUseRelation;
+import tools.ddg.DataDependenceGraph.DDG;
+import tools.ddg.DataDependenceGraph.DefUseRelation;
 import traversals.batchInserter.Elementary;
 import traversals.batchInserter.Function;
 

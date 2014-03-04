@@ -13,11 +13,11 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-import tools.ddg.DDG;
 import tools.ddg.DDGCreator;
-import tools.ddg.DDGDifference;
-import tools.ddg.DefUseRelation;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import tools.ddg.DataDependenceGraph.DDG;
+import tools.ddg.DataDependenceGraph.DDGDifference;
+import tools.ddg.DataDependenceGraph.DefUseRelation;
+import tools.ddg.DefUseCFG.DefUseCFG;
 import traversals.readWriteDB.Traversals;
 
 public class DDGPatcher

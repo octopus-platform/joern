@@ -1,6 +1,8 @@
 package tools.ddg;
 
+import tools.ddg.DataDependenceGraph.DDG;
 import neo4j.batchInserter.ImportedNodeListener;
+import neo4j.importers.DDGImporter;
 
 public class DDGListener extends ImportedNodeListener {
 	

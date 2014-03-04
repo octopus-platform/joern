@@ -1,4 +1,4 @@
-package tools.ddg;
+package neo4j.importers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,9 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
+
+import tools.ddg.DataDependenceGraph.DDG;
+import tools.ddg.DataDependenceGraph.DefUseRelation;
 
 public class DDGImporter
 {

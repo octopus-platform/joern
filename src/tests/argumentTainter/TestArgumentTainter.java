@@ -13,9 +13,9 @@ import org.neo4j.graphdb.index.IndexHits;
 import tests.TestDBTestReadWriteDB;
 import tools.argumentTainter.DefUseCFGPatcher;
 import tools.argumentTainter.DefUseCFGPatcher.DefUseLink;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
-import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
+import tools.ddg.DefUseCFG.DefUseCFG;
+import tools.ddg.DefUseCFG.DefUseCFGFactory;
+import tools.ddg.DefUseCFG.ReadWriteDbFactory;
 import traversals.readWriteDB.Traversals;
 
 public class TestArgumentTainter extends TestDBTestReadWriteDB

@@ -39,7 +39,13 @@ public class Neo4JDBInterface {
 		
 	public static void openDatabase()
 	{
-		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(databaseDir);
+		
+		Map<String, String> conf = ConfigurationGenerator.generateConfiguration();
+		graphDb = new GraphDatabaseFactory()
+	    .newEmbeddedDatabaseBuilder( databaseDir )
+	    .setConfig(conf)
+	    .newGraphDatabase();
+	    
 		nodeIndex = graphDb.index().forNodes("nodeIndex");
 	}
 	

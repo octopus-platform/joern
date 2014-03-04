@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.neo4j.graphdb.Node;
 
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
-import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
+import tools.ddg.DefUseCFG.DefUseCFG;
+import tools.ddg.DefUseCFG.DefUseCFGFactory;
+import tools.ddg.DefUseCFG.ReadWriteDbFactory;
 import traversals.readWriteDB.Traversals;
 
 public class FunctionPatcher {

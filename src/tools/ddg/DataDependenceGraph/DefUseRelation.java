@@ -1,4 +1,4 @@
-package tools.ddg;
+package tools.ddg.DataDependenceGraph;
 
 public class DefUseRelation{		
 	public long src;

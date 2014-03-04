@@ -13,7 +13,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import tools.ddg.DefUseCFG.DefUseCFG;
 import traversals.readWriteDB.Traversals;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.ReadWriteDbASTProvider;

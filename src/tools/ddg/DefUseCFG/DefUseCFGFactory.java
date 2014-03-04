@@ -1,4 +1,4 @@
-package tools.ddg.DefUseCFGFactories;
+package tools.ddg.DefUseCFG;
 
 
 public abstract class DefUseCFGFactory {

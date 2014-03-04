@@ -5,9 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import misc.HashMapOfSets;
-import tools.ddg.DefUseCFGFactories.BatchInserterFactory;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
+import tools.ddg.DataDependenceGraph.DDG;
+import tools.ddg.DefUseCFG.BatchInserterFactory;
+import tools.ddg.DefUseCFG.DefUseCFG;
+import tools.ddg.DefUseCFG.DefUseCFGFactory;
 
 
 public class DDGCreator {

@@ -1,4 +1,4 @@
-package tools.ddg.DefUseCFGFactories;
+package tools.ddg.DefUseCFG;
 
 import java.util.Collection;
 import java.util.HashMap;
