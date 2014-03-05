@@ -13,7 +13,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
-import tools.ddg.DefUseCFG.DefUseCFG;
+import ddg.DefUseCFG.DefUseCFG;
 import traversals.readWriteDB.Traversals;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.ReadWriteDbASTProvider;
@@ -99,7 +99,7 @@ public class DefUseCFGPatcher {
 		for(DefUseLink link : newlyAddedLinks){
 			
 			Long fromId = link.statement;
-			Long toId = defUseCFG.getIdForSymbol(link.symbol); 
+			Long toId = (Long) defUseCFG.getIdForSymbol(link.symbol); 
 			
 			if(toId == null){
 				System.err.println("Warning: Trying to create DEF-link to unknown symbol: " + link.symbol);

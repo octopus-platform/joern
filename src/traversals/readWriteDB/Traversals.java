@@ -14,7 +14,7 @@ import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import tools.ddg.DataDependenceGraph.DDG;
+import ddg.DataDependenceGraph.DDG;
 
 public class Traversals
 {

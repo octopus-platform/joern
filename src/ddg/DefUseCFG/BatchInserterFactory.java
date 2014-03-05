@@ -1,4 +1,4 @@
-package tools.ddg.DefUseCFG;
+package ddg.DefUseCFG;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 	public DefUseCFG create(Long funcId)
 	{
 		cfg = new DefUseCFG();
-		cfg.setFunctionId(funcId);
 		
 		getStatementsOfFunction(funcId);		
 		getUsesAndDefs();		
@@ -32,7 +31,8 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 
 	private void getUsesAndDefs()
 	{
-		for(Long statement : cfg.getStatements()){
+		for(Object obj : cfg.getStatements()){
+			Long statement = (Long) obj;
 			
 			List<String> useSymbols = CFG.getSymbolsUsedByStatement(statement);			
 			for(String symbol : useSymbols)
@@ -46,7 +46,9 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 
 	private void getParentBlocks()
 	{
-		for(Long statement : cfg.getStatements()){
+		for(Object obj : cfg.getStatements()){
+			Long statement = (Long) obj;
+			
 			List<Long> parents = CFG.getParentStatements(statement);
 			for(Long parent : parents)
 				cfg.addParentBlock(statement, parent);
@@ -55,7 +57,9 @@ public class BatchInserterFactory extends DefUseCFGFactory{
 	
 	private void getChildBlocks()
 	{
-		for(Long statement : cfg.getStatements()){
+		for(Object obj : cfg.getStatements()){
+			Long statement = (Long) obj;
+			
 			List<Long> children = CFG.getChildStatements(statement);
 			for(Long child : children)
 				cfg.addChildBlock(statement, child);

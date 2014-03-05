@@ -24,7 +24,7 @@ public class ConfigurationGenerator {
     		
     	}
     	
-    	if(maxMemory < 5000)
+    	if(maxMemory < 4000)
     		return get4GBImportConfiguration();
     	else
     		return get6GBImportConfiguration();

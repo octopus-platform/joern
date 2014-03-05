@@ -7,10 +7,10 @@ import java.util.Set;
 import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
+import ddg.DDGCreator;
+import ddg.DataDependenceGraph.DDG;
+import ddg.DataDependenceGraph.DefUseRelation;
 import tests.TestDBTestsBatchInserter;
-import tools.ddg.DDGCreator;
-import tools.ddg.DataDependenceGraph.DDG;
-import tools.ddg.DataDependenceGraph.DefUseRelation;
 import traversals.batchInserter.Elementary;
 import traversals.batchInserter.Function;
 
@@ -29,8 +29,8 @@ public class testDDGCreator extends TestDBTestsBatchInserter{
 		assertTrue(reachesLinks.size() == 1);
 		
 		for(DefUseRelation x : ddg.getDefUseEdges()){
-			assertTrue((Elementary.getNodeCode(x.src).startsWith("int x = ")));
-			assertTrue((Elementary.getNodeCode(x.dst).startsWith("foo ( x )")));
+			assertTrue((Elementary.getNodeCode( (Long) x.src).startsWith("int x = ")));
+			assertTrue((Elementary.getNodeCode( (long) x.dst).startsWith("foo ( x )")));
 		}
 	
 	}

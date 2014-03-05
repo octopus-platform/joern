@@ -1,4 +1,4 @@
-package tools.ddg.DefUseCFG;
+package ddg.DefUseCFG;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,59 +17,48 @@ import misc.MultiHashMap;
 
 public class DefUseCFG {
 
-	private long functionId;
-	private LinkedList<Long> statements = new LinkedList<Long>();
+	private LinkedList<Object> statements = new LinkedList<Object>();
 	private MultiHashMap symbolsUsed = new MultiHashMap();
 	private MultiHashMap symbolsDefined = new MultiHashMap();
 	private MultiHashMap parentBlocks = new MultiHashMap();
 	private MultiHashMap childBlocks = new MultiHashMap();
-	private Map<String, Long> symbolIds = new HashMap<String, Long>();
+	private Map<String, Object> symbolIds = new HashMap<String, Object>();
 	
 	private static final List<Object> EMPTY_LIST = new LinkedList<Object>();
 	
-	public void setFunctionId(long anId)
-	{
-		functionId = anId;
-	}
-	
-	public long getFunctionId()
-	{
-		return functionId;
-	}
-	
-	public void addStatement(long statementId)
+	public void addStatement(Object statementId)
 	{
 		statements.add(statementId);
 	}
 	
-	public void addSymbolUsed(Long key, String symbol)
+	public void addSymbolUsed(Object key, String symbol)
 	{
 		symbolsUsed.add(key, symbol);
 	}
 	
-	public void addSymbolDefined(Long key, String symbol)
+	public void addSymbolDefined(Object key, String symbol)
 	{
 		symbolsDefined.add(key, symbol);
 	}
 	
-	public Collection<Object> getSymbolsDefinedBy(Long blockId)
+	public Collection<Object> getSymbolsDefinedBy(Object blockId)
 	{
 		List<Object> listForKey = symbolsDefined.getListForKey(blockId);
 		if(listForKey == null) return EMPTY_LIST;
 		return listForKey;
 	}
 	
-	public void addParentBlock(long thisBlockId, long parentId)
+	public void addParentBlock(Object thisBlockId, Object parentId)
 	{
 		parentBlocks.add(thisBlockId, parentId);
 	}
 	
-	public void addChildBlock(long thisBlockId, long childId)
+	public void addChildBlock(Object thisBlockId, Object childId)
 	{
 		childBlocks.add(thisBlockId, childId);
 	}
 	
-	public LinkedList<Long> getStatements() {
+	public LinkedList<Object> getStatements() {
 		return statements;
 	}
 	
@@ -89,12 +78,12 @@ public class DefUseCFG {
 		return childBlocks;
 	}
 
-	public Long getIdForSymbol(String symbol)
+	public Object getIdForSymbol(String symbol)
 	{
 		return symbolIds.get(symbol);
 	}
 
-	public void setSetSymbolId(String symbolCode, Long symbolId)
+	public void setSetSymbolId(String symbolCode, Object symbolId)
 	{
 		symbolIds.put(symbolCode, symbolId);
 	}

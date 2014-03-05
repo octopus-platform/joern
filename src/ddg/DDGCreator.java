@@ -1,14 +1,14 @@
-package tools.ddg;
+package ddg;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import ddg.DataDependenceGraph.DDG;
+import ddg.DefUseCFG.BatchInserterFactory;
+import ddg.DefUseCFG.DefUseCFG;
+import ddg.DefUseCFG.DefUseCFGFactory;
 import misc.HashMapOfSets;
-import tools.ddg.DataDependenceGraph.DDG;
-import tools.ddg.DefUseCFG.BatchInserterFactory;
-import tools.ddg.DefUseCFG.DefUseCFG;
-import tools.ddg.DefUseCFG.DefUseCFGFactory;
 
 
 public class DDGCreator {
@@ -19,16 +19,16 @@ public class DDGCreator {
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
 	HashMapOfSets gen = new HashMapOfSets();
-	HashSet<Long> changedNodes;
+	HashSet<Object> changedNodes;
 	
 	private class Definition{
-		public Definition(Long aStatement, String aIdentifier)
+		public Definition(Object aStatement, String aIdentifier)
 		{
 			statement = aStatement;
 			identifier = aIdentifier;
 		}
 		
-		public Long statement;
+		public Object statement;
 		public String identifier;
 	};
 	
@@ -56,7 +56,7 @@ public class DDGCreator {
 				
 		while(!changedNodes.isEmpty()){
 			
-			Long currentBlock = popFromChangedNodes();
+			Object currentBlock = popFromChangedNodes();
 			
 			updateIn(currentBlock);
 			boolean changed = updateOut(currentBlock);
@@ -68,7 +68,7 @@ public class DDGCreator {
 				continue;			
 			
 			for(Object o: children)
-				changedNodes.add((Long) o);
+				changedNodes.add(o);
 						
 		}
 		
@@ -78,20 +78,20 @@ public class DDGCreator {
 	{
 		initOut();
 		initGenFromOut();
-		changedNodes = new HashSet<Long>();		
+		changedNodes = new HashSet<Object>();		
 		changedNodes.addAll(cfg.getStatements());
 	}
 
-	private Long popFromChangedNodes()
+	private Object popFromChangedNodes()
 	{
-		Long x = changedNodes.iterator().next();
+		Object x = changedNodes.iterator().next();
 		changedNodes.remove(x);		
 		return x;
 	}
 
 	private void initOut()
 	{
-		for(Long statement : cfg.getStatements()){
+		for(Object statement : cfg.getStatements()){
 			
 			// this has the nice side-effect that an
 			// empty hash is created for the statement.
@@ -110,13 +110,13 @@ public class DDGCreator {
 
 	private void initGenFromOut()
 	{
-		for(Long statement : cfg.getStatements()){
+		for(Object statement : cfg.getStatements()){
 			for(Object o: out.getListForKey(statement))
 				gen.add(statement, o);		
 		}
 	}
 	
-	private void updateIn(Long x)
+	private void updateIn(Object x)
 	{
 		List<Object> parents = cfg.getParentBlocks().getListForKey(x);		
 		if(parents == null) return;
@@ -124,8 +124,7 @@ public class DDGCreator {
 		in.removeAllForKey(x);
 		
 		// in(x) = union(out(p))_{p in parents(x)}
-		for(Object p : parents){
-			Long parent = (Long) p;
+		for(Object parent : parents){
 			HashSet<Object> parentOut = out.getListForKey(parent);
 			if(parentOut == null) continue;			
 			for (Object o : parentOut)
@@ -133,7 +132,7 @@ public class DDGCreator {
 		}
 	}
 
-	private boolean updateOut(Long x)
+	private boolean updateOut(Object x)
 	{	
 		HashSet<Object> listForKey = out.getListForKey(x);
 		HashSet<Object> oldOut = new HashSet<Object>(listForKey);		
@@ -178,7 +177,7 @@ public class DDGCreator {
 	{
 		DDG ddg = new DDG();
 		
-		for(Long statement : cfg.getStatements()){
+		for(Object statement : cfg.getStatements()){
 			HashSet<Object> inForBlock = in.getListForKey(statement);
 			if(inForBlock == null) continue;			
 			List<Object> usedSymbols = cfg.getSymbolsUsed().getListForKey(statement);

@@ -13,11 +13,11 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-import tools.ddg.DDGCreator;
-import tools.ddg.DataDependenceGraph.DDG;
-import tools.ddg.DataDependenceGraph.DDGDifference;
-import tools.ddg.DataDependenceGraph.DefUseRelation;
-import tools.ddg.DefUseCFG.DefUseCFG;
+import ddg.DDGCreator;
+import ddg.DataDependenceGraph.DDG;
+import ddg.DataDependenceGraph.DDGDifference;
+import ddg.DataDependenceGraph.DefUseRelation;
+import ddg.DefUseCFG.DefUseCFG;
 import traversals.readWriteDB.Traversals;
 
 public class DDGPatcher
@@ -54,7 +54,7 @@ public class DDGPatcher
 			properties.put("var", rel.symbol);
 			RelationshipType relType = DynamicRelationshipType.withName(EdgeTypes.REACHES);
 			
-			Neo4JDBInterface.addRelationship(rel.src, rel.dst, relType, properties);	
+			Neo4JDBInterface.addRelationship((Long) rel.src, (Long) rel.dst, relType, properties);	
 		}
 	}
 
@@ -63,7 +63,7 @@ public class DDGPatcher
 		List<DefUseRelation> relsToRemove = diff.getRelsToRemove();
 	
 		for(DefUseRelation rel : relsToRemove){
-			Node srcStatement = Neo4JDBInterface.getNodeById(rel.src);
+			Node srcStatement = Neo4JDBInterface.getNodeById((Long) rel.src);
 			
 			Iterable<Relationship> rels = srcStatement.getRelationships(Direction.OUTGOING);
 			
@@ -71,7 +71,7 @@ public class DDGPatcher
 				if(!reachRel.getType().toString().equals(EdgeTypes.REACHES))
 					continue;
 				
-				if(reachRel.getEndNode().getId() != rel.dst)
+				if(reachRel.getEndNode().getId() != (Long) rel.dst)
 					continue;
 				
 				Object var = reachRel.getProperty("var");

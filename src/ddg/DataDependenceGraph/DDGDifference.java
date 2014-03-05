@@ -1,4 +1,4 @@
-package tools.ddg.DataDependenceGraph;
+package ddg.DataDependenceGraph;
 
 import java.util.LinkedList;
 import java.util.List;

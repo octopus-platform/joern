@@ -1,4 +1,4 @@
-package tools.ddg.DataDependenceGraph;
+package ddg.DataDependenceGraph;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,7 +14,7 @@ public class DDG {
 		return defUseEdges;
 	}
 
-	public void add(long srcId, long dstId, String symbol)
+	public void add(Object srcId, Object dstId, String symbol)
 	{
 		DefUseRelation statementPair = new DefUseRelation(srcId, dstId, symbol);
 		defUseEdges.add(statementPair);

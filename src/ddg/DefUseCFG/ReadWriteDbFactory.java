@@ -1,4 +1,4 @@
-package tools.ddg.DefUseCFG;
+package ddg.DefUseCFG;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	public DefUseCFG create(Long funcId)
 	{
 		cfg = new DefUseCFG();
-		cfg.setFunctionId(funcId);
 		
 		getStatementsOfFunction(funcId);		
 		getUsesAndDefs();		
@@ -41,7 +40,8 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 
 	private void getUsesAndDefs()
 	{
-		for(Long statementId : cfg.getStatements()){
+		for(Object obj : cfg.getStatements()){
+			Long statementId = (Long) obj;
 			
 			List<Pair<Long,String>> used = Traversals.getSymbolsUsedByStatement(statementId);
 			for(Pair<Long, String> symbolIdAndCode : used){
@@ -63,7 +63,9 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	
 	private void getParentBlocks()
 	{
-		for(Long statementId : cfg.getStatements()){
+		for(Object obj : cfg.getStatements()){
+			Long statementId = (Long) obj;
+			
 			Node statement = Neo4JDBInterface.getNodeById(statementId);
 			Iterable<Relationship> rels = statement.getRelationships(Direction.INCOMING);
 			for(Relationship rel: rels){
@@ -77,7 +79,9 @@ public class ReadWriteDbFactory extends DefUseCFGFactory {
 	
 	private void getChildBlocks()
 	{
-		for(Long statementId : cfg.getStatements()){
+		for(Object obj : cfg.getStatements()){
+			Long statementId = (Long) obj;
+			
 			Node statement = Neo4JDBInterface.getNodeById(statementId);
 			Iterable<Relationship> rels = statement.getRelationships(Direction.OUTGOING);
 			for(Relationship rel: rels){

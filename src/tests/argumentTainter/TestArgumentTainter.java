@@ -10,12 +10,12 @@ import org.junit.Test;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 
+import ddg.DefUseCFG.DefUseCFG;
+import ddg.DefUseCFG.DefUseCFGFactory;
+import ddg.DefUseCFG.ReadWriteDbFactory;
 import tests.TestDBTestReadWriteDB;
 import tools.argumentTainter.DefUseCFGPatcher;
 import tools.argumentTainter.DefUseCFGPatcher.DefUseLink;
-import tools.ddg.DefUseCFG.DefUseCFG;
-import tools.ddg.DefUseCFG.DefUseCFGFactory;
-import tools.ddg.DefUseCFG.ReadWriteDbFactory;
 import traversals.readWriteDB.Traversals;
 
 public class TestArgumentTainter extends TestDBTestReadWriteDB

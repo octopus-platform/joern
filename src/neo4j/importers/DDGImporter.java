@@ -5,19 +5,27 @@ import java.util.Map;
 import java.util.Set;
 
 import neo4j.EdgeTypes;
+import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import tools.ddg.DataDependenceGraph.DDG;
-import tools.ddg.DataDependenceGraph.DefUseRelation;
+import ddg.DataDependenceGraph.DDG;
+import ddg.DataDependenceGraph.DefUseRelation;
 
 public class DDGImporter
 {
-
-	public void importDDG(DDG ddg)
+	GraphNodeStore nodeStore;
+	
+	public DDGImporter(GraphNodeStore aNodeStore)
 	{
+		nodeStore = aNodeStore;
+	}
+	
+	public void addDDGToDatabase(DDG ddg)
+	{
+		
 		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.REACHES);	
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
@@ -28,7 +36,11 @@ public class DDGImporter
 		
 		for(DefUseRelation defUseRel : defUseEdges){			
 			properties.put("var", defUseRel.symbol);
-			Neo4JBatchInserter.addRelationship(defUseRel.src, defUseRel.dst, rel, properties);		
+			
+			long srcId = nodeStore.getIdForObject(defUseRel.src);
+			long dstId = nodeStore.getIdForObject(defUseRel.dst);
+			
+			Neo4JBatchInserter.addRelationship(srcId, dstId, rel, properties);		
 		}
 	}
 	

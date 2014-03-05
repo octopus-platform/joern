@@ -1,11 +1,11 @@
-package tools.ddg.DataDependenceGraph;
+package ddg.DataDependenceGraph;
 
 public class DefUseRelation{		
-	public long src;
-	public long dst;
+	public Object src;
+	public Object dst;
 	public String symbol;
 	
-	public DefUseRelation(Long aSrc, long aDst, String aSymbol)
+	public DefUseRelation(Object aSrc, Object aDst, String aSymbol)
 	{
 		src = aSrc;
 		dst = aDst;
