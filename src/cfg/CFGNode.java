@@ -4,7 +4,7 @@ import astnodes.ASTNode;
 
 public class CFGNode {
 
-	ASTNode astNode;
+	public ASTNode astNode;
 	
 	public void setASTNode(ASTNode node)
 	{

@@ -27,29 +27,11 @@ public class CFGAndUDGToDefUseCFG {
 	}
 
 
-	private void initializeParentsAndChildren(CFG cfg, DefUseCFG defUseCFG)
-	{
-		Edges edges = cfg.getEdges();
-		Iterator<Entry<Object, List<Object>>> it = edges.getEntrySetIterator();
-		while(it.hasNext()){
-			Entry<Object, List<Object>> next = it.next();
-			Object src = next.getKey();
-			List<Object> dsts = next.getValue();
-			
-			for(Object dst : dsts){
-				defUseCFG.addChildBlock(src, dst);
-				defUseCFG.addParentBlock(dst, src);
-			}
-		}
-	}
-
-	
 	private void initializeStatements(CFG cfg, DefUseCFG defUseCFG)
 	{
 		for(CFGNode statement : cfg.getStatements()){
 			ASTNode astNode = statement.getASTNode();
 			Object id = (astNode != null)? astNode : statement;
-			
 			defUseCFG.addStatement(id);						
 		}
 	}
@@ -58,14 +40,19 @@ public class CFGAndUDGToDefUseCFG {
 	{
 		MultiHashMap useDefDict = udg.getUseDefDict();
 		Iterator<Entry<Object, List<Object>>> it = useDefDict.getEntrySetIterator();
+		
 		while(it.hasNext()){
 			Entry<Object, List<Object>> next = it.next();
 			
 			String symbol = (String) next.getKey();
+			
 			List<Object> defUseRecords = next.getValue();
 			
 			for(Object obj : defUseRecords){
 				UseOrDefRecord record = (UseOrDefRecord) obj;
+								
+				if(!record.astNode.isInCFG())
+					continue;
 				
 				if(record.isDef)
 					defUseCFG.addSymbolDefined(record.astNode, symbol);
@@ -75,5 +62,29 @@ public class CFGAndUDGToDefUseCFG {
 			
 		}
 	}
+	
+	private void initializeParentsAndChildren(CFG cfg, DefUseCFG defUseCFG)
+	{
+		Edges edges = cfg.getEdges();
+		Iterator<Entry<Object, List<Object>>> it = edges.getEntrySetIterator();
+		while(it.hasNext()){
+			Entry<Object, List<Object>> next = it.next();
+			CFGNode srcNode = (CFGNode) next.getKey();
+			List<Object> dsts = next.getValue();
+			
+			 
+			
+			for(Object dst : dsts){
+				CFGNode dstNode = (CFGNode) dst;
+			
+				Object srcId  = (srcNode.astNode != null)? srcNode.astNode : srcNode;
+				Object dstId  = (dstNode.astNode != null)? dstNode.astNode : dstNode;
+				
+				defUseCFG.addChildBlock(srcId, dstId);
+				defUseCFG.addParentBlock(dstId, srcId);
+			}
+		}
+	}
+
 	
 }
