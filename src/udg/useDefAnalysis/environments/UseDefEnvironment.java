@@ -15,10 +15,10 @@ public class UseDefEnvironment{
 	protected int childNum;
 	protected ASTProvider astProvider;
 	
-	Collection<String> symbolsForUpstream = new LinkedList<String>();
+	LinkedList<String> symbolsForUpstream = new LinkedList<String>();
 	
 	static final LinkedList<UseOrDef> emptyUseOrDef = new LinkedList<UseOrDef>();
-	static final Collection<String> emptySymbolList = new LinkedList<String>();
+	static final LinkedList<String> emptySymbolList = new LinkedList<String>();
 	
 	public boolean isUse() { return false; }
 	public boolean isDef() { return false; }
@@ -39,13 +39,13 @@ public class UseDefEnvironment{
 	// default behavior is simply to propagate all
 	// symbols received
 	
-	public Collection<String> upstreamSymbols()
+	public LinkedList<String> upstreamSymbols()
 	{
 		return symbolsForUpstream;
 	}
 
 	
-	public void addChildSymbols(Collection<String> childSymbols)
+	public void addChildSymbols(LinkedList<String> childSymbols)
 	{
 		symbolsForUpstream.addAll(childSymbols);
 	}

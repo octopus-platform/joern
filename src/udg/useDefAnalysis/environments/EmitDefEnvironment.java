@@ -10,20 +10,15 @@ public class EmitDefEnvironment extends UseDefEnvironment {
 
 	Collection<String> defSymbols = new LinkedList<String>();
 	
-	public void addChildSymbols(Collection<String> childSymbols)
+	public void addChildSymbols(LinkedList<String> childSymbols)
 	{
 		if(isDef()){
-			// add a definition for all but the first symbol,
-			// e.g. for x.y = 10, add a def only for x.y but
-			// not for x.
+			// add definition only for the last symbol, e.g.,
+			// for x.y.z = 10, add a def for x.y.z only.
+			
 			if(childSymbols.size() > 1) {
 				
-				Iterator<String> iterator = childSymbols.iterator();
-				iterator.next();
-				while(iterator.hasNext()){
-					String next = iterator.next();
-					defSymbols.add(next);
-				}
+				defSymbols.add(childSymbols.getLast());
 				
 			}else
 				defSymbols.addAll(childSymbols);

@@ -10,7 +10,7 @@ public class EmitDefAndUseEnvironment extends UseDefEnvironment {
 	Collection<String> defSymbols = new LinkedList<String>();
 	Collection<String> useSymbols = new LinkedList<String>();
 	
-	public void addChildSymbols(Collection<String> childSymbols)
+	public void addChildSymbols(LinkedList<String> childSymbols)
 	{
 		if(isDef())
 			defSymbols.addAll(childSymbols);
@@ -31,7 +31,7 @@ public class EmitDefAndUseEnvironment extends UseDefEnvironment {
 		return retval;
 	}
 	
-	public Collection<String> upstreamSymbols()
+	public LinkedList<String> upstreamSymbols()
 	{
 		return emptySymbolList;
 	}

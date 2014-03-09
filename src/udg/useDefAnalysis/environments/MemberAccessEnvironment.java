@@ -9,9 +9,7 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 
 	boolean emitted = false;
 	
-	String leftMostSymbol = "";
-	
-	public Collection<String> upstreamSymbols()
+	public LinkedList<String> upstreamSymbols()
 	{
 		if(emitted) return emptySymbolList;
 		
@@ -20,7 +18,7 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 		LinkedList<String> retval = new LinkedList<String>();
 		
 		// emit the left-most symbol
-		retval.add(leftMostSymbol);	
+		retval.addAll(symbolsForUpstream);	
 		
 		String codeStr = astProvider.getEscapedCodeStr();
 		
@@ -29,11 +27,11 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 		return retval; 
 	}
 
-	public void addChildSymbols(Collection<String> childSymbols)
+	public void addChildSymbols(LinkedList<String> childSymbols)
 	{
-		if(childNum == 0 && childSymbols.size() == 1){
-			leftMostSymbol = childSymbols.iterator().next();
-		}
+		if(childNum != 0) return;
+
+		super.addChildSymbols(childSymbols);
 	}
 	
 	public Collection<UseOrDef> useOrDefsFromChildSymbols()
@@ -41,10 +39,7 @@ public class MemberAccessEnvironment extends UseDefEnvironment {
 		if(childNum != 0)
 			return emptyUseOrDef;
 		
-		LinkedList<String> symbols = new LinkedList<String>();
-		symbols.add(leftMostSymbol);
-	
-		return createUsesForAllSymbols(symbols);
+		return createUsesForAllSymbols(symbolsForUpstream);
 	}
 		
 }

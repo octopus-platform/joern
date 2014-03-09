@@ -146,7 +146,7 @@ public class ASTDefUseAnalyzer {
 	
 	private void reportUpstream(UseDefEnvironment childEnv) {
 		
-		Collection<String> symbols = childEnv.upstreamSymbols();
+		LinkedList<String> symbols = childEnv.upstreamSymbols();
 		try{
 			UseDefEnvironment parentEnv = environmentStack.peek();
 			parentEnv.addChildSymbols(symbols);

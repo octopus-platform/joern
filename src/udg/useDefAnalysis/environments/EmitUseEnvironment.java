@@ -12,12 +12,12 @@ public class EmitUseEnvironment extends UseDefEnvironment {
 
 	Collection<String> useSymbols = new LinkedList<String>();
 	
-	public void addChildSymbols(Collection<String> childSymbols)
+	public void addChildSymbols(LinkedList<String> childSymbols)
 	{
 		useSymbols.addAll(childSymbols);
 	}
 	
-	public Collection<String> upstreamSymbols()
+	public LinkedList<String> upstreamSymbols()
 	{
 		// empty, unless a child-class adds something
 		return symbolsForUpstream;

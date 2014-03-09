@@ -64,3 +64,15 @@ int test_buf_def()
   // Currently, it's USE(buf), DEF(buf)
   buf[i] = x;
 }
+
+int complexInArgs()
+{
+  return foo( pLtv->u.u16 );
+}
+
+
+int complexAssign()
+{
+  pLtv->u.u16 = 1;
+  return 0;
+}

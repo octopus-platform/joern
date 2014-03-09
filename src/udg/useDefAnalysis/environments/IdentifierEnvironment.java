@@ -1,16 +1,15 @@
 package udg.useDefAnalysis.environments;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.LinkedList;
 
 
 public class IdentifierEnvironment extends UseDefEnvironment {
 
-	public Collection<String> upstreamSymbols()
+	public LinkedList<String> upstreamSymbols()
 	{
 		// pass the 'code' of the identifier up stream
 		String code = astProvider.getEscapedCodeStr();
-		ArrayList<String> retval = new ArrayList<String>();
+		LinkedList<String> retval = new LinkedList<String>();
 		retval.add(code);
 		return retval;
 	}
