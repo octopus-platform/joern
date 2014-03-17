@@ -3,7 +3,7 @@
   
   <property name="src.dir" location="src" />
   <property name="build.dir" location="bin" />
-  <property name="lib.dir" location="lib-dev" />
+  <property name="lib.dir" location="lib" />
   <property name="test.dir" location="src" />
   <property name="test.report.dir" location="testreport" />
 
