@@ -5,14 +5,12 @@ import java.util.Vector;
 
 import org.junit.Before;
 
-
 import tests.parseTreeToAST.FunctionContentTestUtil;
 import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
-
 import cfg.ASTToCFGConverter;
-import cfg.BasicBlock;
 import cfg.CFG;
+import cfg.CFGNode;
 
 
 
@@ -34,8 +32,8 @@ public class CFGCreatorTest
 	
 	protected ASTNode getConditionNode(CFG cfg)
 	{
-		Vector<BasicBlock> basicBlocks = cfg.getBasicBlocks();
-		BasicBlock conditionBlock = basicBlocks.get(0);
+		Vector<CFGNode> statements = cfg.getStatements();
+		CFGNode conditionBlock = statements.get(0);
 		ASTNode astNode = conditionBlock.getASTNode();
 		return astNode;
 	}

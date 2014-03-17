@@ -10,30 +10,29 @@ import java.util.Vector;
 // the first edge is the one taken if
 // condition evaluates to true.
 
-
 public class CFG {
 
-	Vector<BasicBlock> basicBlocks = new Vector<BasicBlock>();
+	Vector<CFGNode> statements = new Vector<CFGNode>();
 	
 	Edges edges = new Edges();
 	SwitchLabels switchLabels = new SwitchLabels();
 	
-	Vector<BasicBlock> jumpStatements = new Vector<BasicBlock>();
-	HashMap<String, BasicBlock> labels = new HashMap<String, BasicBlock>();
+	Vector<CFGNode> jumpStatements = new Vector<CFGNode>();
+	HashMap<String, CFGNode> labels = new HashMap<String, CFGNode>();
 	
-	HashMap<BasicBlock, BasicBlock> loopStart = new HashMap<BasicBlock, BasicBlock>();
+	HashMap<CFGNode, CFGNode> loopStart = new HashMap<CFGNode, CFGNode>();
 	
 	public void addCFG(CFG otherCFG)
 	{
-		if(basicBlocks.size() == 0){
+		if(statements.size() == 0){
 			replaceCFGBy(otherCFG);
 			return;
 		}
 		
-		Vector<BasicBlock> otherBlocks = otherCFG.getBasicBlocks();
+		Vector<CFGNode> otherBlocks = otherCFG.getStatements();
 		Edges otherEdges = otherCFG.getEdges();
 		switchLabels.addMultiHashMap(otherCFG.getSwitchLabels());
-		basicBlocks.addAll(otherBlocks);
+		statements.addAll(otherBlocks);
 		edges.addEdges(otherEdges);
 		
 		jumpStatements.addAll(otherCFG.getJumpStatements());
@@ -45,7 +44,7 @@ public class CFG {
 
 	public void replaceCFGBy(CFG otherCFG)
 	{
-		this.basicBlocks = otherCFG.basicBlocks;
+		this.statements = otherCFG.statements;
 		this.edges = otherCFG.edges;
 		this.switchLabels = otherCFG.switchLabels;
 		this.labels = otherCFG.labels;
@@ -54,20 +53,20 @@ public class CFG {
 	}
 
 	
-	public BasicBlock getBlockByLabel(String label)
+	public CFGNode getBlockByLabel(String label)
 	{
 		return labels.get(label);
 	}
 	
-	public void addSwitchLabel(BasicBlock surroundingSwitch,
-			BasicBlock labeledBlock)
+	public void addSwitchLabel(CFGNode surroundingSwitch,
+			CFGNode labeledBlock)
 	{
 		switchLabels.add(surroundingSwitch, labeledBlock);	
 	}
 
-	public BasicBlock getOuterLoop(BasicBlock thisBasicBlock)
+	public CFGNode getOuterLoop(CFGNode thisStatement)
 	{
-		return loopStart.get(thisBasicBlock);
+		return loopStart.get(thisStatement);
 	}
 
 	public SwitchLabels getSwitchLabels()
@@ -75,39 +74,39 @@ public class CFG {
 		return switchLabels;
 	}
 	
-	public BasicBlock getLastBlock()
+	public CFGNode getLastStatement()
 	{
 		try{
-			return basicBlocks.lastElement();
+			return statements.lastElement();
 		}catch(RuntimeException ex)
 		{
 			return null;
 		}
 	}
 	
-	public BasicBlock getFirstBlock()
+	public CFGNode getFirstStatement()
 	{	
 		try{
-			return basicBlocks.firstElement();
+			return statements.firstElement();
 		}catch(RuntimeException ex)
 		{
 			return null;
 		}
 	}
 	
-	public void labelBlock(String label, BasicBlock block) { labels.put(label, block); }
-	public void addBasicBlock(BasicBlock newBlock) { basicBlocks.add(newBlock); }
-	public void addEdge(BasicBlock srcBlock,
-			 BasicBlock dstBlock){ edges.addEdge(srcBlock, dstBlock); }
+	public void labelBlock(String label, CFGNode block) { labels.put(label, block); }
+	public void addStatement(CFGNode newBlock) { statements.add(newBlock); }
+	public void addEdge(CFGNode srcBlock,
+			 CFGNode dstBlock){ edges.addEdge(srcBlock, dstBlock); }
 	
-	public int getNumberOfBasicBlocks(){ return basicBlocks.size(); }
+	public int getNumberOfStatements(){ return statements.size(); }
 	
-	public Collection<? extends BasicBlock> getJumpStatements() { return jumpStatements; }
-	public HashMap<String,BasicBlock> getLabels(){ return labels; }
+	public Collection<? extends CFGNode> getJumpStatements() { return jumpStatements; }
+	public HashMap<String,CFGNode> getLabels(){ return labels; }
 	public Edges getEdges() { return edges; }
-	public Vector<BasicBlock> getBasicBlocks(){ return basicBlocks; }
+	public Vector<CFGNode> getStatements(){ return statements; }
 
-	public void addJumpStatement(BasicBlock block)
+	public void addJumpStatement(CFGNode block)
 	{
 		this.jumpStatements.add(block);
 	}

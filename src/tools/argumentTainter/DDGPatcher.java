@@ -4,20 +4,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import neo4j.EdgeTypes;
+import neo4j.readWriteDB.Neo4JDBInterface;
+
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
-import tools.ddg.DDG;
-import tools.ddg.DDGCreator;
-import tools.ddg.DDGDifference;
-import tools.ddg.DefUseRelation;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
+import ddg.DDGCreator;
+import ddg.DataDependenceGraph.DDG;
+import ddg.DataDependenceGraph.DDGDifference;
+import ddg.DataDependenceGraph.DefUseRelation;
+import ddg.DefUseCFG.DefUseCFG;
+import traversals.readWriteDB.Traversals;
 
 public class DDGPatcher
 {
@@ -28,7 +29,7 @@ public class DDGPatcher
 	{
 		Node node = Neo4JDBInterface.getNodeById(funcId);
 		
-		DDG oldDDG = QueryUtils.getDDGForFunction(node);
+		DDG oldDDG = Traversals.getDDGForFunction(node);
 		DDGCreator ddgCreator = new DDGCreator();
 		DDG newDDG = ddgCreator.createForDefUseCFG(defUseCFG);
 		
@@ -53,7 +54,7 @@ public class DDGPatcher
 			properties.put("var", rel.symbol);
 			RelationshipType relType = DynamicRelationshipType.withName(EdgeTypes.REACHES);
 			
-			Neo4JDBInterface.addRelationship(rel.src, rel.dst, relType, properties);	
+			Neo4JDBInterface.addRelationship((Long) rel.src, (Long) rel.dst, relType, properties);	
 		}
 	}
 
@@ -62,15 +63,15 @@ public class DDGPatcher
 		List<DefUseRelation> relsToRemove = diff.getRelsToRemove();
 	
 		for(DefUseRelation rel : relsToRemove){
-			Node srcBasicBlock = Neo4JDBInterface.getNodeById(rel.src);
+			Node srcStatement = Neo4JDBInterface.getNodeById((Long) rel.src);
 			
-			Iterable<Relationship> rels = srcBasicBlock.getRelationships(Direction.OUTGOING);
+			Iterable<Relationship> rels = srcStatement.getRelationships(Direction.OUTGOING);
 			
 			for(Relationship reachRel : rels){
 				if(!reachRel.getType().toString().equals(EdgeTypes.REACHES))
 					continue;
 				
-				if(reachRel.getEndNode().getId() != rel.dst)
+				if(reachRel.getEndNode().getId() != (Long) rel.dst)
 					continue;
 				
 				Object var = reachRel.getProperty("var");

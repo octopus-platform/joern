@@ -3,8 +3,8 @@ package parsing;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.ModuleParser;
 import antlr.FunctionParser;
+import antlr.ModuleParser;
 
 public class InitDeclContextWrapper
 {

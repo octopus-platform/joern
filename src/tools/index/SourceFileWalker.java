@@ -6,8 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import output.OutputModule;
-
 public class SourceFileWalker
 {
 	
@@ -43,7 +41,7 @@ public class SourceFileWalker
 		Files.walkFileTree(dir, sourceFileWalkerImpl);
 	}
 	
-	public void addListener(OutputModule listener)
+	public void addListener(SourceFileListener listener)
 	{
 		sourceFileWalkerImpl.addListener(listener);
 	}

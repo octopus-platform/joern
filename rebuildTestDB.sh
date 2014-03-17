@@ -5,8 +5,6 @@ ant tools
 
 rm -rf .testDB
 java -jar bin/joern.jar testCode -outdir .testDB
-java -jar bin/udg.jar -dbdir .testDB
-java -jar bin/ddg.jar -dbdir .testDB
 
 # Taint sources 
 

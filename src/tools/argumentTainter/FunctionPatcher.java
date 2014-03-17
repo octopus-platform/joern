@@ -6,15 +6,15 @@ import java.util.List;
 
 import org.neo4j.graphdb.Node;
 
-import output.neo4j.readWriteDB.QueryUtils;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.ddg.DefUseCFGFactories.DefUseCFGFactory;
-import tools.ddg.DefUseCFGFactories.ReadWriteDbFactory;
+import ddg.DefUseCFG.DefUseCFG;
+import ddg.DefUseCFG.DefUseCFGFactory;
+import ddg.DefUseCFG.ReadWriteDbFactory;
+import traversals.readWriteDB.Traversals;
 
 public class FunctionPatcher {
 
 	private DefUseCFGFactory defUseGraphFactory = new ReadWriteDbFactory();
-	private Collection<Node> basicBlocksToPatch = new LinkedList<Node>();
+	private Collection<Node> statementsToPatch = new LinkedList<Node>();
 	private DefUseCFG defUseCFG = null;
 	
 	private String sourceToPatch;
@@ -32,7 +32,7 @@ public class FunctionPatcher {
 	
 	public void reset()
 	{
-		basicBlocksToPatch.clear();
+		statementsToPatch.clear();
 		defUseCFG = null;
 	}
 	
@@ -47,9 +47,9 @@ public class FunctionPatcher {
 	
 	private void determineCallsToPatch(Long funcId)
 	{
-		List<Node> callNodes = QueryUtils.getCallsToForFunction(sourceToPatch, funcId);	
+		List<Node> callNodes = Traversals.getCallsToForFunction(sourceToPatch, funcId);	
 		for(Node callNode : callNodes){
-			basicBlocksToPatch.add(QueryUtils.getBasicBlockForASTNode(callNode));
+			statementsToPatch.add(Traversals.getStatementForASTNode(callNode));
 		}
 	}
 
@@ -62,7 +62,7 @@ public class FunctionPatcher {
 	{
 		DefUseCFGPatcher patcher = new DefUseCFGPatcher();
 		patcher.setSourceToPatch(sourceToPatch, argumentToPatch);
-		patcher.patchDefUseCFG(defUseCFG, basicBlocksToPatch);
+		patcher.patchDefUseCFG(defUseCFG, statementsToPatch);
 		patcher.writeChangesToDatabase();
 	}
 

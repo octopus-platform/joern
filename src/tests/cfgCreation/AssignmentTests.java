@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import astnodes.ASTNode;
-import cfg.BasicBlock;
 import cfg.CFG;
+import cfg.CFGNode;
 
 public class AssignmentTests extends CFGCreatorTest
 {
@@ -15,7 +15,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "x = y;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 2);
+		assertTrue(cfg.getStatements().size() == 2);
 	}
 
 	
@@ -24,8 +24,8 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "x = 10;";
 		CFG cfg = getCFGForCode(input);
-		BasicBlock basicBlock = cfg.getBasicBlocks().get(0);
-		ASTNode astNode = basicBlock.getASTNode();
+		CFGNode statement = cfg.getStatements().get(0);
+		ASTNode astNode = statement.getASTNode();
 		assertTrue(astNode != null);
 		System.out.println(astNode.getClass().getSimpleName());
 	}
@@ -36,7 +36,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "int x = 10;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getBasicBlocks().size() == 2);
+		assertTrue(cfg.getStatements().size() == 2);
 	}
 	
 	

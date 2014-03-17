@@ -5,19 +5,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import antlr.FunctionParser.StatementsContext;
-import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.expressions.Argument;
 import astnodes.expressions.ArgumentList;
 import astnodes.expressions.AssignmentExpr;
 import astnodes.expressions.CallExpression;
-import astnodes.expressions.Expression;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.CompoundStatement;
-import astnodes.statements.Condition;
-import astnodes.statements.DoStatement;
-import astnodes.statements.ElseStatement;
 import astnodes.statements.ExpressionStatement;
 import astnodes.statements.ForStatement;
 import astnodes.statements.IdentifierDeclStatement;
@@ -90,6 +85,7 @@ public class CodeNestingTest {
 		ForStatement forItem = (ForStatement) contentItem.getStatements().get(0);
 		
 		String condExprString = forItem.getCondition().getExpression().getEscapedCodeStr();
+		System.out.println(condExprString);
 		assertTrue(condExprString.equals("i < 10"));
 		
 	}

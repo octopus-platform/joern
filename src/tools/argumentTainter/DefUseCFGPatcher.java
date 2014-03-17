@@ -6,39 +6,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import neo4j.EdgeTypes;
+import neo4j.readWriteDB.Neo4JDBInterface;
+
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
-import output.neo4j.EdgeTypes;
-import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
-import tools.ddg.DefUseCFGFactories.DefUseCFG;
-import tools.udg.ASTDefUseAnalyzer;
-import tools.udg.DBProvider;
-import tools.udg.ReadWriteDBProvider;
-import tools.udg.UseOrDef;
+import ddg.DefUseCFG.DefUseCFG;
+import traversals.readWriteDB.Traversals;
+import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import udg.useDefGraph.ReadWriteDbASTProvider;
+import udg.useDefGraph.UseOrDef;
 
 public class DefUseCFGPatcher {
 
 	List<DefUseLink> newlyAddedLinks = new LinkedList<DefUseLink>();
 	DefUseCFG defUseCFG;
 	ASTDefUseAnalyzer astDefUseAnalyzer = new ASTDefUseAnalyzer();
-	DBProvider dbProvider = new ReadWriteDBProvider();
 
-	public DefUseCFGPatcher()
-	{
-		astDefUseAnalyzer.setDBProvider(dbProvider);
-	}
 	
 	public class DefUseLink{
-		public DefUseLink(String aSymbol, Long aBasicBlockId, boolean aIsDef) {
+		public DefUseLink(String aSymbol, Long aStatementId, boolean aIsDef) {
 			symbol = aSymbol;
-			basicBlock = aBasicBlockId;
+			statement = aStatementId;
 			isDef = aIsDef;
 		}
 		public String symbol;
-		public long basicBlock;
+		public long statement;
 		public boolean isDef;
 	}
 	
@@ -56,35 +51,39 @@ public class DefUseCFGPatcher {
 	}
 	
 
-	public void patchDefUseCFG(DefUseCFG defUseCFG, Collection<Node> basicBlocksToPatch)
+	public void patchDefUseCFG(DefUseCFG defUseCFG, Collection<Node> statementsToPatch)
 	{
 		this.defUseCFG = defUseCFG;
 		newlyAddedLinks.clear();
 		
-		for(Node basicBlock : basicBlocksToPatch){
+		for(Node statement : statementsToPatch){
 			
-			long basicBlockId = basicBlock.getId();
+			long statementId = statement.getId();
 			
-			Node astNode = QueryUtils.getASTForBasicBlock(basicBlock);
-			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astNode.getId());
+			Node node = Traversals.getASTForStatement(statement);
 			
-			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(basicBlockId);
-			updateDefsToAdd(oldDefs, newDefs, basicBlockId);
+			ReadWriteDbASTProvider astProvider = new ReadWriteDbASTProvider();
+			astProvider.setNodeId(node.getId());
+			
+			Collection<UseOrDef> newDefs = astDefUseAnalyzer.analyzeAST(astProvider);
+			
+			Collection<Object> oldDefs = defUseCFG.getSymbolsDefinedBy(statementId);
+			updateDefsToAdd(oldDefs, newDefs, statementId);
 			
 		}
 		
 	}
 	
 	private void updateDefsToAdd(Collection<Object> oldDefs,
-			Collection<UseOrDef> newDefs, Long basicBlockId)
+			Collection<UseOrDef> newDefs, Long statementId)
 	{
 		for(UseOrDef newDef : newDefs){
 			if(oldDefs.contains(newDef.symbol)) continue;
 			if(!newDef.isDef) continue;
-			DefUseLink e = new DefUseLink(newDef.symbol, basicBlockId, newDef.isDef);
+			DefUseLink e = new DefUseLink(newDef.symbol, statementId, newDef.isDef);
 			// add to newlyAddedLinks
 			newlyAddedLinks.add(e);
-			defUseCFG.addSymbolDefined(basicBlockId, newDef.symbol);
+			defUseCFG.addSymbolDefined(statementId, newDef.symbol);
 		}
 	}
 
@@ -99,8 +98,8 @@ public class DefUseCFGPatcher {
 		Neo4JDBInterface.startTransaction();
 		for(DefUseLink link : newlyAddedLinks){
 			
-			Long fromId = link.basicBlock;
-			Long toId = defUseCFG.getIdForSymbol(link.symbol); 
+			Long fromId = link.statement;
+			Long toId = (Long) defUseCFG.getIdForSymbol(link.symbol); 
 			
 			if(toId == null){
 				System.err.println("Warning: Trying to create DEF-link to unknown symbol: " + link.symbol);

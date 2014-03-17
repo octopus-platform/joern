@@ -3,7 +3,7 @@
   
   <property name="src.dir" location="src" />
   <property name="build.dir" location="bin" />
-  <property name="lib.dir" location="lib" />
+  <property name="lib.dir" location="lib-dev" />
   <property name="test.dir" location="src" />
   <property name="test.report.dir" location="testreport" />
 
@@ -17,11 +17,12 @@
   <path id="joern.classpath">
         <pathelement location="bin"/>
         <path refid="junit.class.path"/>
-        <pathelement location="lib/antlr4-runtime-4.0.1-SNAPSHOT.jar"/>
-	<pathelement location="lib/commons-cli-1.2.jar"/>
-        <pathelement location="lib/lucene-core-3.6.2.jar"/>
-        <pathelement location="lib/neo4j-kernel-1.9.jar"/>
-        <pathelement location="lib/neo4j-lucene-index-1.9.jar"/>
+        <pathelement location="${lib.dir}/antlr4-runtime-4.2.1-SNAPSHOT.jar"/>
+	<pathelement location="${lib.dir}/antlr4-annotations-4.2.1-SNAPSHOT.jar"/>
+	<pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
+        <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
+        <pathelement location="${lib.dir}/neo4j-kernel-1.9.5.jar"/>
+        <pathelement location="${lib.dir}/neo4j-lucene-index-1.9.5.jar"/>
     </path>
 	  
   <target name="clean">
@@ -53,7 +54,7 @@
     </jar>
   </target>
 
-  <target name="tools" depends="icfg,udg,ddg,argumentTainter">
+  <target name="tools" depends="icfg,argumentTainter">
   </target>
 
   <target name="icfg" depends="compile">
@@ -64,30 +65,6 @@
         <attribute name="Main-Class" value="tools.icfg.ICFGMain" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
-    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
-    </jar>
-  </target>
-
-  <target name="udg" depends="compile">
-    <jar destfile="${build.dir}/udg.jar"
-         basedir="${build.dir}"
-         includes="**/*.class">
-      <manifest>
-        <attribute name="Main-Class" value="tools.udg.UseDefGraphMain" />
-      </manifest>
-    <fileset dir="${build.dir}" includes="**/*.class" />
-    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
-    </jar>
-  </target>
-
-  <target name="ddg" depends="compile">
-    <jar destfile="${build.dir}/ddg.jar"
-         basedir="${build.dir}"
-         includes="**/*.class">
-      <manifest>
-        <attribute name="Main-Class" value="tools.ddg.DDGMain" />
-      </manifest>
-      <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
     </jar>
   </target>

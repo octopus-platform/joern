@@ -3,26 +3,23 @@ package parsing;
 import java.util.Iterator;
 import java.util.List;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.Interval;
 
 import antlr.ModuleBaseListener;
 import antlr.ModuleParser;
 import antlr.ModuleParser.Class_defContext;
-import antlr.ModuleParser.Compound_statementContext;
 import antlr.ModuleParser.DeclByClassContext;
-import antlr.ModuleParser.Function_defContext;
 import antlr.ModuleParser.Init_declarator_listContext;
 import antlr.ModuleParser.Type_nameContext;
 import astnodes.builders.ClassDefBuilder;
-import astnodes.builders.FunctionDefBuilder;
 import astnodes.builders.IdentifierDeclBuilder;
+import astnodes.builders.function.FunctionDefBuilder;
 import astnodes.declarations.IdentifierDecl;
 import astnodes.statements.CompoundStatement;
 import astnodes.statements.IdentifierDeclStatement;
 
 // Converts Parse Trees to ASTs for Modules
+
 
 public class ModuleParserTreeListener extends ModuleBaseListener
 {
@@ -45,7 +42,14 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 		p.notifyObserversOfUnitEnd(ctx);
 	}
 	
-	// Function Definitions
+	///////////////////////////////////////////////////////////////
+	// This is where the ModuleParser invokes the FunctionParser
+	///////////////////////////////////////////////////////////////
+	// This function is invoked when a Function_Def parse tree node
+	// is entered. This is where we hand over the function contents to
+	// the function parser and connect the AST node created for the
+	// function definition to the AST created by the function parser.
+	//////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void enterFunction_def(ModuleParser.Function_defContext ctx)
@@ -53,77 +57,46 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 		
 		FunctionDefBuilder builder = new FunctionDefBuilder();
 		builder.createNew(ctx);
-		p.itemStack.push(builder);
+		p.builderStack.push(builder);
 	
-		CompoundStatement functionContent = parseFunctionContents(ctx);
+		CompoundStatement functionContent =
+				ModuleFunctionParserInterface.parseFunctionContents(ctx);
 		builder.setContent(functionContent);
-		
-	}
-
-	
-	private String getCompoundStmtAsString(ModuleParser.Function_defContext ctx)
-	{
-		Compound_statementContext compound_statement = ctx.compound_statement();
-		
-		CharStream inputStream = compound_statement.start.getInputStream();
-		int startIndex = compound_statement.start.getStopIndex();
-		int stopIndex = compound_statement.stop.getStopIndex();
-		return inputStream.getText(new Interval(startIndex+1, stopIndex-1));
-	}
-	
-	
-	private CompoundStatement parseFunctionContents(Function_defContext ctx)
-	{
-		String text = getCompoundStmtAsString(ctx);
-		
-		FunctionParser parser = new FunctionParser();
-		
-		try{
-			// System.out.println(ctx.function_name().getText());
-			parser.parseAndWalkString(text);
-		}catch(RuntimeException ex){
-			System.err.println("Error parsing function " +
-							  ctx.function_name().getText()
-							  + ". skipping.");
-		
-			ex.printStackTrace();
-		}
-		return parser.getResult();
 	}
 
 	@Override
+	public void exitFunction_def(ModuleParser.Function_defContext ctx)
+	{
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.builderStack.pop();		
+		p.notifyObserversOfItem(builder.getItem());
+	}
+	
+	@Override
 	public void enterReturn_type(ModuleParser.Return_typeContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
-		builder.setReturnType(ctx, p.itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.builderStack.peek();
+		builder.setReturnType(ctx, p.builderStack);
 	}
 	
 	@Override
 	public void enterFunction_name(ModuleParser.Function_nameContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
-		builder.setName(ctx, p.itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.builderStack.peek();
+		builder.setName(ctx, p.builderStack);
 	}
 	
 	@Override
 	public void enterFunction_param_list(ModuleParser.Function_param_listContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
-		builder.setParameterList(ctx, p.itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.builderStack.peek();
+		builder.setParameterList(ctx, p.builderStack);
 	}
 	
 	@Override public void enterParameter_decl(ModuleParser.Parameter_declContext ctx)
 	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.peek();
-		builder.addParameter(ctx, p.itemStack);
+		FunctionDefBuilder builder = (FunctionDefBuilder) p.builderStack.peek();
+		builder.addParameter(ctx, p.builderStack);
 	}
-	
-	@Override
-	public void exitFunction_def(ModuleParser.Function_defContext ctx)
-	{
-		FunctionDefBuilder builder = (FunctionDefBuilder) p.itemStack.pop();		
-		p.notifyObserversOfItem(builder.getItem());
-	}	
 	
 	// DeclByType
 	
@@ -159,13 +132,25 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 	{
 		ClassDefBuilder builder = new ClassDefBuilder();
 		builder.createNew(ctx);
-		p.itemStack.push(builder);		
+		p.builderStack.push(builder);		
 	}
 
 	@Override
+	public void exitDeclByClass(ModuleParser.DeclByClassContext ctx)
+	{
+		ClassDefBuilder builder = (ClassDefBuilder) p.builderStack.pop();
+		
+		CompoundStatement content = parseClassContent(ctx);
+		builder.setContent(content);
+		
+		p.notifyObserversOfItem(builder.getItem());		
+		emitDeclarationsForClass(ctx);
+	}
+	
+	@Override
 	public void enterClass_name(ModuleParser.Class_nameContext ctx)
 	{
-		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.peek();
+		ClassDefBuilder builder = (ClassDefBuilder) p.builderStack.peek();
 		builder.setName(ctx);
 	}
 	
@@ -180,19 +165,6 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 		emitDeclarations(decl_list, typeName, ctx);
 	}
 	
-	
-	@Override
-	public void exitDeclByClass(ModuleParser.DeclByClassContext ctx)
-	{
-		ClassDefBuilder builder = (ClassDefBuilder) p.itemStack.pop();
-		
-		CompoundStatement content = parseClassContent(ctx);
-		builder.setContent(content);
-		
-		p.notifyObserversOfItem(builder.getItem());		
-		emitDeclarationsForClass(ctx);
-	}
-
 	private CompoundStatement parseClassContent(ModuleParser.DeclByClassContext ctx)
 	{
 		ANTLRModuleParserDriver shallowParser = createNewShallowParser();
@@ -219,7 +191,7 @@ public class ModuleParserTreeListener extends ModuleBaseListener
 	private ANTLRModuleParserDriver createNewShallowParser()
 	{
 		ANTLRModuleParserDriver shallowParser = new ANTLRModuleParserDriver();
-		shallowParser.setStack(p.itemStack);
+		shallowParser.setStack(p.builderStack);
 		return shallowParser;
 	}
 	

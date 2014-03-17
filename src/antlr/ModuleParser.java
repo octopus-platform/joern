@@ -1,4 +1,4 @@
-// Generated from src/antlr/Module.g4 by ANTLR 4.0.1-SNAPSHOT
+// Generated from src/antlr/Module.g4 by ANTLR 4.2.1-SNAPSHOT
 
 	package antlr;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-public class ModuleParser extends Parser<Token> {
+public class ModuleParser extends Parser {
 	public static final int
 		T__55=1, T__54=2, T__53=3, T__52=4, T__51=5, T__50=6, T__49=7, T__48=8, 
 		T__47=9, T__46=10, T__45=11, T__44=12, T__43=13, T__42=14, T__41=15, T__40=16, 
@@ -107,6 +107,9 @@ public class ModuleParser extends Parser<Token> {
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
+	@Override
+	public String getSerializedATN() { return _serializedATN; }
+
 
 	            public boolean skipToEndOfObject()
 	            {
@@ -169,28 +172,25 @@ public class ModuleParser extends Parser<Token> {
 	   }
 
 
-	public ModuleParser(TokenStream<? extends Token> input) {
+	public ModuleParser(TokenStream input) {
 		super(input);
-		_interp = new ParserATNSimulator<Token>(this,_ATN);
+		_interp = new ParserATNSimulator(this,_ATN);
 	}
-	public static class CodeContext extends ParserRuleContext<Token> {
+	public static class CodeContext extends ParserRuleContext {
 		public List<? extends WaterContext> water() {
 			return getRuleContexts(WaterContext.class);
 		}
 		public Using_directiveContext using_directive(int i) {
 			return getRuleContext(Using_directiveContext.class,i);
 		}
-		public List<? extends Function_defContext> function_def() {
-			return getRuleContexts(Function_defContext.class);
-		}
 		public Simple_declContext simple_decl(int i) {
 			return getRuleContext(Simple_declContext.class,i);
 		}
-		public List<? extends Using_directiveContext> using_directive() {
-			return getRuleContexts(Using_directiveContext.class);
-		}
 		public List<? extends Simple_declContext> simple_decl() {
 			return getRuleContexts(Simple_declContext.class);
+		}
+		public List<? extends Function_defContext> function_def() {
+			return getRuleContexts(Function_defContext.class);
 		}
 		public Function_defContext function_def(int i) {
 			return getRuleContext(Function_defContext.class,i);
@@ -198,16 +198,19 @@ public class ModuleParser extends Parser<Token> {
 		public WaterContext water(int i) {
 			return getRuleContext(WaterContext.class,i);
 		}
-		public CodeContext(ParserRuleContext<Token> parent, int invokingState) {
+		public List<? extends Using_directiveContext> using_directive() {
+			return getRuleContexts(Using_directiveContext.class);
+		}
+		public CodeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_code; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCode(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCode(this);
 		}
 	}
@@ -266,22 +269,22 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Using_directiveContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> USING() { return getToken(ModuleParser.USING, 0); }
+	public static class Using_directiveContext extends ParserRuleContext {
+		public TerminalNode USING() { return getToken(ModuleParser.USING, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public TerminalNode<Token> NAMESPACE() { return getToken(ModuleParser.NAMESPACE, 0); }
-		public Using_directiveContext(ParserRuleContext<Token> parent, int invokingState) {
+		public TerminalNode NAMESPACE() { return getToken(ModuleParser.NAMESPACE, 0); }
+		public Using_directiveContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_using_directive; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterUsing_directive(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitUsing_directive(this);
 		}
 	}
@@ -310,23 +313,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class ExprContext extends ParserRuleContext<Token> {
+	public static class ExprContext extends ParserRuleContext {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public Assign_exprContext assign_expr() {
 			return getRuleContext(Assign_exprContext.class,0);
 		}
-		public ExprContext(ParserRuleContext<Token> parent, int invokingState) {
+		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterExpr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitExpr(this);
 		}
 	}
@@ -362,7 +365,7 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Assign_exprContext extends ParserRuleContext<Token> {
+	public static class Assign_exprContext extends ParserRuleContext {
 		public Assignment_operatorContext assignment_operator() {
 			return getRuleContext(Assignment_operatorContext.class,0);
 		}
@@ -372,16 +375,16 @@ public class ModuleParser extends Parser<Token> {
 		public Assign_exprContext assign_expr() {
 			return getRuleContext(Assign_exprContext.class,0);
 		}
-		public Assign_exprContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Assign_exprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assign_expr; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_expr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_expr(this);
 		}
 	}
@@ -417,26 +420,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Conditional_expressionContext extends ParserRuleContext<Token> {
-		public Or_expressionContext or_expression() {
-			return getRuleContext(Or_expressionContext.class,0);
+	public static class Conditional_expressionContext extends ParserRuleContext {
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public Conditional_expressionContext conditional_expression() {
 			return getRuleContext(Conditional_expressionContext.class,0);
 		}
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public Or_expressionContext or_expression() {
+			return getRuleContext(Or_expressionContext.class,0);
 		}
-		public Conditional_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Conditional_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_conditional_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterConditional_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitConditional_expression(this);
 		}
 	}
@@ -474,23 +477,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Or_expressionContext extends ParserRuleContext<Token> {
-		public Or_expressionContext or_expression() {
-			return getRuleContext(Or_expressionContext.class,0);
-		}
+	public static class Or_expressionContext extends ParserRuleContext {
 		public And_expressionContext and_expression() {
 			return getRuleContext(And_expressionContext.class,0);
 		}
-		public Or_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Or_expressionContext or_expression() {
+			return getRuleContext(Or_expressionContext.class,0);
+		}
+		public Or_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_or_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterOr_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitOr_expression(this);
 		}
 	}
@@ -526,23 +529,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class And_expressionContext extends ParserRuleContext<Token> {
+	public static class And_expressionContext extends ParserRuleContext {
 		public Inclusive_or_expressionContext inclusive_or_expression() {
 			return getRuleContext(Inclusive_or_expressionContext.class,0);
 		}
 		public And_expressionContext and_expression() {
 			return getRuleContext(And_expressionContext.class,0);
 		}
-		public And_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public And_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_and_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAnd_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAnd_expression(this);
 		}
 	}
@@ -578,23 +581,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Inclusive_or_expressionContext extends ParserRuleContext<Token> {
+	public static class Inclusive_or_expressionContext extends ParserRuleContext {
 		public Inclusive_or_expressionContext inclusive_or_expression() {
 			return getRuleContext(Inclusive_or_expressionContext.class,0);
 		}
 		public Exclusive_or_expressionContext exclusive_or_expression() {
 			return getRuleContext(Exclusive_or_expressionContext.class,0);
 		}
-		public Inclusive_or_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Inclusive_or_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_inclusive_or_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInclusive_or_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInclusive_or_expression(this);
 		}
 	}
@@ -630,23 +633,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Exclusive_or_expressionContext extends ParserRuleContext<Token> {
-		public Exclusive_or_expressionContext exclusive_or_expression() {
-			return getRuleContext(Exclusive_or_expressionContext.class,0);
-		}
+	public static class Exclusive_or_expressionContext extends ParserRuleContext {
 		public Bit_and_expressionContext bit_and_expression() {
 			return getRuleContext(Bit_and_expressionContext.class,0);
 		}
-		public Exclusive_or_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Exclusive_or_expressionContext exclusive_or_expression() {
+			return getRuleContext(Exclusive_or_expressionContext.class,0);
+		}
+		public Exclusive_or_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exclusive_or_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterExclusive_or_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitExclusive_or_expression(this);
 		}
 	}
@@ -682,23 +685,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Bit_and_expressionContext extends ParserRuleContext<Token> {
+	public static class Bit_and_expressionContext extends ParserRuleContext {
 		public Equality_expressionContext equality_expression() {
 			return getRuleContext(Equality_expressionContext.class,0);
 		}
 		public Bit_and_expressionContext bit_and_expression() {
 			return getRuleContext(Bit_and_expressionContext.class,0);
 		}
-		public Bit_and_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Bit_and_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_bit_and_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBit_and_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBit_and_expression(this);
 		}
 	}
@@ -734,26 +737,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Equality_expressionContext extends ParserRuleContext<Token> {
-		public Equality_expressionContext equality_expression() {
-			return getRuleContext(Equality_expressionContext.class,0);
+	public static class Equality_expressionContext extends ParserRuleContext {
+		public Relational_expressionContext relational_expression() {
+			return getRuleContext(Relational_expressionContext.class,0);
 		}
 		public Equality_operatorContext equality_operator() {
 			return getRuleContext(Equality_operatorContext.class,0);
 		}
-		public Relational_expressionContext relational_expression() {
-			return getRuleContext(Relational_expressionContext.class,0);
+		public Equality_expressionContext equality_expression() {
+			return getRuleContext(Equality_expressionContext.class,0);
 		}
-		public Equality_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Equality_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_equality_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterEquality_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitEquality_expression(this);
 		}
 	}
@@ -789,26 +792,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Relational_expressionContext extends ParserRuleContext<Token> {
+	public static class Relational_expressionContext extends ParserRuleContext {
+		public Relational_expressionContext relational_expression() {
+			return getRuleContext(Relational_expressionContext.class,0);
+		}
 		public Shift_expressionContext shift_expression() {
 			return getRuleContext(Shift_expressionContext.class,0);
 		}
 		public Relational_operatorContext relational_operator() {
 			return getRuleContext(Relational_operatorContext.class,0);
 		}
-		public Relational_expressionContext relational_expression() {
-			return getRuleContext(Relational_expressionContext.class,0);
-		}
-		public Relational_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Relational_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_relational_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterRelational_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitRelational_expression(this);
 		}
 	}
@@ -844,23 +847,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Shift_expressionContext extends ParserRuleContext<Token> {
-		public Additive_expressionContext additive_expression() {
-			return getRuleContext(Additive_expressionContext.class,0);
-		}
+	public static class Shift_expressionContext extends ParserRuleContext {
 		public Shift_expressionContext shift_expression() {
 			return getRuleContext(Shift_expressionContext.class,0);
 		}
-		public Shift_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Additive_expressionContext additive_expression() {
+			return getRuleContext(Additive_expressionContext.class,0);
+		}
+		public Shift_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shift_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterShift_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitShift_expression(this);
 		}
 	}
@@ -901,23 +904,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Additive_expressionContext extends ParserRuleContext<Token> {
+	public static class Additive_expressionContext extends ParserRuleContext {
 		public Additive_expressionContext additive_expression() {
 			return getRuleContext(Additive_expressionContext.class,0);
 		}
 		public Multiplicative_expressionContext multiplicative_expression() {
 			return getRuleContext(Multiplicative_expressionContext.class,0);
 		}
-		public Additive_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Additive_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_additive_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAdditive_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAdditive_expression(this);
 		}
 	}
@@ -958,23 +961,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Multiplicative_expressionContext extends ParserRuleContext<Token> {
+	public static class Multiplicative_expressionContext extends ParserRuleContext {
 		public Cast_expressionContext cast_expression() {
 			return getRuleContext(Cast_expressionContext.class,0);
 		}
 		public Multiplicative_expressionContext multiplicative_expression() {
 			return getRuleContext(Multiplicative_expressionContext.class,0);
 		}
-		public Multiplicative_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Multiplicative_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_multiplicative_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterMultiplicative_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitMultiplicative_expression(this);
 		}
 	}
@@ -1015,26 +1018,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Cast_expressionContext extends ParserRuleContext<Token> {
+	public static class Cast_expressionContext extends ParserRuleContext {
 		public Cast_expressionContext cast_expression() {
 			return getRuleContext(Cast_expressionContext.class,0);
-		}
-		public Unary_expressionContext unary_expression() {
-			return getRuleContext(Unary_expressionContext.class,0);
 		}
 		public Cast_targetContext cast_target() {
 			return getRuleContext(Cast_targetContext.class,0);
 		}
-		public Cast_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Unary_expressionContext unary_expression() {
+			return getRuleContext(Unary_expressionContext.class,0);
+		}
+		public Cast_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_cast_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCast_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCast_expression(this);
 		}
 	}
@@ -1076,26 +1079,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Cast_targetContext extends ParserRuleContext<Token> {
-		public Ptr_operatorContext ptr_operator(int i) {
-			return getRuleContext(Ptr_operatorContext.class,i);
-		}
+	public static class Cast_targetContext extends ParserRuleContext {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
 		public List<? extends Ptr_operatorContext> ptr_operator() {
 			return getRuleContexts(Ptr_operatorContext.class);
 		}
-		public Cast_targetContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Ptr_operatorContext ptr_operator(int i) {
+			return getRuleContext(Ptr_operatorContext.class,i);
+		}
+		public Cast_targetContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_cast_target; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCast_target(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCast_target(this);
 		}
 	}
@@ -1135,21 +1138,9 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Unary_expressionContext extends ParserRuleContext<Token> {
+	public static class Unary_expressionContext extends ParserRuleContext {
 		public Cast_expressionContext cast_expression() {
 			return getRuleContext(Cast_expressionContext.class,0);
-		}
-		public Postfix_expressionContext postfix_expression() {
-			return getRuleContext(Postfix_expressionContext.class,0);
-		}
-		public Inc_decContext inc_dec() {
-			return getRuleContext(Inc_decContext.class,0);
-		}
-		public Unary_operatorContext unary_operator() {
-			return getRuleContext(Unary_operatorContext.class,0);
-		}
-		public Ptr_operatorContext ptr_operator(int i) {
-			return getRuleContext(Ptr_operatorContext.class,i);
 		}
 		public Unary_expressionContext unary_expression() {
 			return getRuleContext(Unary_expressionContext.class,0);
@@ -1157,19 +1148,31 @@ public class ModuleParser extends Parser<Token> {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
+		public Inc_decContext inc_dec() {
+			return getRuleContext(Inc_decContext.class,0);
+		}
 		public List<? extends Ptr_operatorContext> ptr_operator() {
 			return getRuleContexts(Ptr_operatorContext.class);
 		}
-		public Unary_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Unary_operatorContext unary_operator() {
+			return getRuleContext(Unary_operatorContext.class,0);
+		}
+		public Ptr_operatorContext ptr_operator(int i) {
+			return getRuleContext(Ptr_operatorContext.class,i);
+		}
+		public Postfix_expressionContext postfix_expression() {
+			return getRuleContext(Postfix_expressionContext.class,0);
+		}
+		public Unary_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unary_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterUnary_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitUnary_expression(this);
 		}
 	}
@@ -1244,17 +1247,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Inc_decContext extends ParserRuleContext<Token> {
-		public Inc_decContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Inc_decContext extends ParserRuleContext {
+		public Inc_decContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_inc_dec; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInc_dec(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInc_dec(this);
 		}
 	}
@@ -1286,8 +1289,8 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Postfix_expressionContext extends ParserRuleContext<Token> {
-		public Postfix_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Postfix_expressionContext extends ParserRuleContext {
+		public Postfix_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_postfix_expression; }
@@ -1303,46 +1306,46 @@ public class ModuleParser extends Parser<Token> {
 		}
 		public PrimaryOnlyContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPrimaryOnly(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPrimaryOnly(this);
 		}
 	}
 	public static class PtrMemberAccessContext extends Postfix_expressionContext {
-		public Postfix_expressionContext postfix_expression() {
-			return getRuleContext(Postfix_expressionContext.class,0);
-		}
-		public TerminalNode<Token> TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
+		public TerminalNode TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public Postfix_expressionContext postfix_expression() {
+			return getRuleContext(Postfix_expressionContext.class,0);
+		}
 		public PtrMemberAccessContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPtrMemberAccess(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPtrMemberAccess(this);
 		}
 	}
 	public static class ArrayIndexingContext extends Postfix_expressionContext {
-		public Postfix_expressionContext postfix_expression() {
-			return getRuleContext(Postfix_expressionContext.class,0);
-		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public Postfix_expressionContext postfix_expression() {
+			return getRuleContext(Postfix_expressionContext.class,0);
+		}
 		public ArrayIndexingContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterArrayIndexing(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitArrayIndexing(this);
 		}
 	}
@@ -1355,58 +1358,62 @@ public class ModuleParser extends Parser<Token> {
 		}
 		public IncDecOpContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterIncDecOp(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitIncDecOp(this);
 		}
 	}
 	public static class MemberAccessContext extends Postfix_expressionContext {
-		public Postfix_expressionContext postfix_expression() {
-			return getRuleContext(Postfix_expressionContext.class,0);
-		}
-		public TerminalNode<Token> TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
+		public TerminalNode TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public Postfix_expressionContext postfix_expression() {
+			return getRuleContext(Postfix_expressionContext.class,0);
+		}
 		public MemberAccessContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterMemberAccess(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitMemberAccess(this);
 		}
 	}
 	public static class FuncCallContext extends Postfix_expressionContext {
-		public Postfix_expressionContext postfix_expression() {
-			return getRuleContext(Postfix_expressionContext.class,0);
-		}
 		public Function_argument_listContext function_argument_list() {
 			return getRuleContext(Function_argument_listContext.class,0);
 		}
+		public Postfix_expressionContext postfix_expression() {
+			return getRuleContext(Postfix_expressionContext.class,0);
+		}
 		public FuncCallContext(Postfix_expressionContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFuncCall(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFuncCall(this);
 		}
 	}
 
 	@RuleVersion(0)
-	public final Postfix_expressionContext postfix_expression(int _p) throws RecognitionException {
-		ParserRuleContext<Token> _parentctx = _ctx;
+	public final Postfix_expressionContext postfix_expression() throws RecognitionException {
+		return postfix_expression(0);
+	}
+
+	private Postfix_expressionContext postfix_expression(int _p) throws RecognitionException {
+		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
 		Postfix_expressionContext _localctx = new Postfix_expressionContext(_ctx, _parentState);
 		Postfix_expressionContext _prevctx = _localctx;
 		int _startState = 38;
-		enterRecursionRule(_localctx, RULE_postfix_expression, _p);
+		enterRecursionRule(_localctx, 38, RULE_postfix_expression, _p);
 		int _la;
 		try {
 			int _alt;
@@ -1521,23 +1528,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Function_argument_listContext extends ParserRuleContext<Token> {
+	public static class Function_argument_listContext extends ParserRuleContext {
 		public Function_argumentContext function_argument(int i) {
 			return getRuleContext(Function_argumentContext.class,i);
 		}
 		public List<? extends Function_argumentContext> function_argument() {
 			return getRuleContexts(Function_argumentContext.class);
 		}
-		public Function_argument_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Function_argument_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function_argument_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_argument_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_argument_list(this);
 		}
 	}
@@ -1585,20 +1592,20 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Function_argumentContext extends ParserRuleContext<Token> {
+	public static class Function_argumentContext extends ParserRuleContext {
 		public Assign_exprContext assign_expr() {
 			return getRuleContext(Assign_exprContext.class,0);
 		}
-		public Function_argumentContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Function_argumentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function_argument; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_argument(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_argument(this);
 		}
 	}
@@ -1624,26 +1631,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Primary_expressionContext extends ParserRuleContext<Token> {
-		public ConstantContext constant() {
-			return getRuleContext(ConstantContext.class,0);
-		}
+	public static class Primary_expressionContext extends ParserRuleContext {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
+		}
+		public ConstantContext constant() {
+			return getRuleContext(ConstantContext.class,0);
 		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public Primary_expressionContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Primary_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primary_expression; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPrimary_expression(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPrimary_expression(this);
 		}
 	}
@@ -1698,17 +1705,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Unary_operatorContext extends ParserRuleContext<Token> {
-		public Unary_operatorContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Unary_operatorContext extends ParserRuleContext {
+		public Unary_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unary_operator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterUnary_operator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitUnary_operator(this);
 		}
 	}
@@ -1740,17 +1747,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Relational_operatorContext extends ParserRuleContext<Token> {
-		public Relational_operatorContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Relational_operatorContext extends ParserRuleContext {
+		public Relational_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_relational_operator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterRelational_operator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitRelational_operator(this);
 		}
 	}
@@ -1782,23 +1789,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class ConstantContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> CHAR() { return getToken(ModuleParser.CHAR, 0); }
-		public TerminalNode<Token> OCTAL_LITERAL() { return getToken(ModuleParser.OCTAL_LITERAL, 0); }
-		public TerminalNode<Token> HEX_LITERAL() { return getToken(ModuleParser.HEX_LITERAL, 0); }
-		public TerminalNode<Token> FLOATING_POINT_LITERAL() { return getToken(ModuleParser.FLOATING_POINT_LITERAL, 0); }
-		public TerminalNode<Token> DECIMAL_LITERAL() { return getToken(ModuleParser.DECIMAL_LITERAL, 0); }
-		public TerminalNode<Token> STRING() { return getToken(ModuleParser.STRING, 0); }
-		public ConstantContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class ConstantContext extends ParserRuleContext {
+		public TerminalNode OCTAL_LITERAL() { return getToken(ModuleParser.OCTAL_LITERAL, 0); }
+		public TerminalNode DECIMAL_LITERAL() { return getToken(ModuleParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode FLOATING_POINT_LITERAL() { return getToken(ModuleParser.FLOATING_POINT_LITERAL, 0); }
+		public TerminalNode CHAR() { return getToken(ModuleParser.CHAR, 0); }
+		public TerminalNode STRING() { return getToken(ModuleParser.STRING, 0); }
+		public TerminalNode HEX_LITERAL() { return getToken(ModuleParser.HEX_LITERAL, 0); }
+		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constant; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterConstant(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitConstant(this);
 		}
 	}
@@ -1830,17 +1837,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Function_decl_specifiersContext extends ParserRuleContext<Token> {
-		public Function_decl_specifiersContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Function_decl_specifiersContext extends ParserRuleContext {
+		public Function_decl_specifiersContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function_decl_specifiers; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_decl_specifiers(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_decl_specifiers(this);
 		}
 	}
@@ -1872,17 +1879,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Ptr_operatorContext extends ParserRuleContext<Token> {
-		public Ptr_operatorContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Ptr_operatorContext extends ParserRuleContext {
+		public Ptr_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ptr_operator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPtr_operator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPtr_operator(this);
 		}
 	}
@@ -1914,17 +1921,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Access_specifierContext extends ParserRuleContext<Token> {
-		public Access_specifierContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Access_specifierContext extends ParserRuleContext {
+		public Access_specifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_access_specifier; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAccess_specifier(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAccess_specifier(this);
 		}
 	}
@@ -1956,17 +1963,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class OperatorContext extends ParserRuleContext<Token> {
-		public OperatorContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class OperatorContext extends ParserRuleContext {
+		public OperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_operator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterOperator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitOperator(this);
 		}
 	}
@@ -2247,17 +2254,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Assignment_operatorContext extends ParserRuleContext<Token> {
-		public Assignment_operatorContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Assignment_operatorContext extends ParserRuleContext {
+		public Assignment_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assignment_operator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssignment_operator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssignment_operator(this);
 		}
 	}
@@ -2289,17 +2296,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Equality_operatorContext extends ParserRuleContext<Token> {
-		public Equality_operatorContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Equality_operatorContext extends ParserRuleContext {
+		public Equality_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_equality_operator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterEquality_operator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitEquality_operator(this);
 		}
 	}
@@ -2331,21 +2338,21 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Template_decl_startContext extends ParserRuleContext<Token> {
+	public static class Template_decl_startContext extends ParserRuleContext {
+		public TerminalNode TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
 		public Template_param_listContext template_param_list() {
 			return getRuleContext(Template_param_listContext.class,0);
 		}
-		public TerminalNode<Token> TEMPLATE() { return getToken(ModuleParser.TEMPLATE, 0); }
-		public Template_decl_startContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Template_decl_startContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_template_decl_start; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterTemplate_decl_start(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitTemplate_decl_start(this);
 		}
 	}
@@ -2374,29 +2381,29 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Template_param_listContext extends ParserRuleContext<Token> {
+	public static class Template_param_listContext extends ParserRuleContext {
 		public Template_param_listContext template_param_list(int i) {
 			return getRuleContext(Template_param_listContext.class,i);
-		}
-		public No_angle_brackets_or_bracketsContext no_angle_brackets_or_brackets(int i) {
-			return getRuleContext(No_angle_brackets_or_bracketsContext.class,i);
 		}
 		public List<? extends No_angle_brackets_or_bracketsContext> no_angle_brackets_or_brackets() {
 			return getRuleContexts(No_angle_brackets_or_bracketsContext.class);
 		}
+		public No_angle_brackets_or_bracketsContext no_angle_brackets_or_brackets(int i) {
+			return getRuleContext(No_angle_brackets_or_bracketsContext.class,i);
+		}
 		public List<? extends Template_param_listContext> template_param_list() {
 			return getRuleContexts(Template_param_listContext.class);
 		}
-		public Template_param_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Template_param_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_template_param_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterTemplate_param_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitTemplate_param_list(this);
 		}
 	}
@@ -2555,17 +2562,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_bracketsContext extends ParserRuleContext<Token> {
-		public No_bracketsContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_bracketsContext extends ParserRuleContext {
+		public No_bracketsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_brackets; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_brackets(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_brackets(this);
 		}
 	}
@@ -2597,17 +2604,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_brackets_curlies_or_squaresContext extends ParserRuleContext<Token> {
-		public No_brackets_curlies_or_squaresContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_brackets_curlies_or_squaresContext extends ParserRuleContext {
+		public No_brackets_curlies_or_squaresContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_brackets_curlies_or_squares; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_brackets_curlies_or_squares(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_brackets_curlies_or_squares(this);
 		}
 	}
@@ -2639,17 +2646,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_brackets_or_semicolonContext extends ParserRuleContext<Token> {
-		public No_brackets_or_semicolonContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_brackets_or_semicolonContext extends ParserRuleContext {
+		public No_brackets_or_semicolonContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_brackets_or_semicolon; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_brackets_or_semicolon(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_brackets_or_semicolon(this);
 		}
 	}
@@ -2681,17 +2688,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_angle_brackets_or_bracketsContext extends ParserRuleContext<Token> {
-		public No_angle_brackets_or_bracketsContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_angle_brackets_or_bracketsContext extends ParserRuleContext {
+		public No_angle_brackets_or_bracketsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_angle_brackets_or_brackets; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_angle_brackets_or_brackets(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_angle_brackets_or_brackets(this);
 		}
 	}
@@ -2723,17 +2730,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_curliesContext extends ParserRuleContext<Token> {
-		public No_curliesContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_curliesContext extends ParserRuleContext {
+		public No_curliesContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_curlies; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_curlies(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_curlies(this);
 		}
 	}
@@ -2765,17 +2772,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_squaresContext extends ParserRuleContext<Token> {
-		public No_squaresContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_squaresContext extends ParserRuleContext {
+		public No_squaresContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_squares; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_squares(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_squares(this);
 		}
 	}
@@ -2807,17 +2814,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_squares_or_semicolonContext extends ParserRuleContext<Token> {
-		public No_squares_or_semicolonContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_squares_or_semicolonContext extends ParserRuleContext {
+		public No_squares_or_semicolonContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_squares_or_semicolon; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_squares_or_semicolon(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_squares_or_semicolon(this);
 		}
 	}
@@ -2849,17 +2856,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class No_comma_or_semicolonContext extends ParserRuleContext<Token> {
-		public No_comma_or_semicolonContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class No_comma_or_semicolonContext extends ParserRuleContext {
+		public No_comma_or_semicolonContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_no_comma_or_semicolon; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNo_comma_or_semicolon(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNo_comma_or_semicolon(this);
 		}
 	}
@@ -2891,17 +2898,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Assign_waterContext extends ParserRuleContext<Token> {
-		public Assign_waterContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Assign_waterContext extends ParserRuleContext {
+		public Assign_waterContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assign_water; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_water(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_water(this);
 		}
 	}
@@ -2933,17 +2940,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Assign_water_l2Context extends ParserRuleContext<Token> {
-		public Assign_water_l2Context(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Assign_water_l2Context extends ParserRuleContext {
+		public Assign_water_l2Context(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assign_water_l2; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_water_l2(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_water_l2(this);
 		}
 	}
@@ -2975,17 +2982,17 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class WaterContext extends ParserRuleContext<Token> {
-		public WaterContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class WaterContext extends ParserRuleContext {
+		public WaterContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_water; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterWater(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitWater(this);
 		}
 	}
@@ -3012,9 +3019,18 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Function_defContext extends ParserRuleContext<Token> {
+	public static class Function_defContext extends ParserRuleContext {
 		public Function_param_listContext function_param_list() {
 			return getRuleContext(Function_param_listContext.class,0);
+		}
+		public Ctor_listContext ctor_list() {
+			return getRuleContext(Ctor_listContext.class,0);
+		}
+		public Return_typeContext return_type() {
+			return getRuleContext(Return_typeContext.class,0);
+		}
+		public Compound_statementContext compound_statement() {
+			return getRuleContext(Compound_statementContext.class,0);
 		}
 		public Template_decl_startContext template_decl_start() {
 			return getRuleContext(Template_decl_startContext.class,0);
@@ -3022,25 +3038,16 @@ public class ModuleParser extends Parser<Token> {
 		public Function_nameContext function_name() {
 			return getRuleContext(Function_nameContext.class,0);
 		}
-		public Return_typeContext return_type() {
-			return getRuleContext(Return_typeContext.class,0);
-		}
-		public Ctor_listContext ctor_list() {
-			return getRuleContext(Ctor_listContext.class,0);
-		}
-		public Compound_statementContext compound_statement() {
-			return getRuleContext(Compound_statementContext.class,0);
-		}
-		public Function_defContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Function_defContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function_def; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_def(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_def(this);
 		}
 	}
@@ -3093,32 +3100,32 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Return_typeContext extends ParserRuleContext<Token> {
+	public static class Return_typeContext extends ParserRuleContext {
+		public Type_nameContext type_name() {
+			return getRuleContext(Type_nameContext.class,0);
+		}
+		public List<? extends Ptr_operatorContext> ptr_operator() {
+			return getRuleContexts(Ptr_operatorContext.class);
+		}
+		public Function_decl_specifiersContext function_decl_specifiers(int i) {
+			return getRuleContext(Function_decl_specifiersContext.class,i);
+		}
 		public List<? extends Function_decl_specifiersContext> function_decl_specifiers() {
 			return getRuleContexts(Function_decl_specifiersContext.class);
 		}
 		public Ptr_operatorContext ptr_operator(int i) {
 			return getRuleContext(Ptr_operatorContext.class,i);
 		}
-		public Type_nameContext type_name() {
-			return getRuleContext(Type_nameContext.class,0);
-		}
-		public Function_decl_specifiersContext function_decl_specifiers(int i) {
-			return getRuleContext(Function_decl_specifiersContext.class,i);
-		}
-		public List<? extends Ptr_operatorContext> ptr_operator() {
-			return getRuleContexts(Ptr_operatorContext.class);
-		}
-		public Return_typeContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Return_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_return_type; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterReturn_type(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitReturn_type(this);
 		}
 	}
@@ -3173,27 +3180,27 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Function_param_listContext extends ParserRuleContext<Token> {
-		public List<? extends TerminalNode<Token>> CV_QUALIFIER() { return getTokens(ModuleParser.CV_QUALIFIER); }
+	public static class Function_param_listContext extends ParserRuleContext {
+		public List<? extends TerminalNode> CV_QUALIFIER() { return getTokens(ModuleParser.CV_QUALIFIER); }
+		public TerminalNode CV_QUALIFIER(int i) {
+			return getToken(ModuleParser.CV_QUALIFIER, i);
+		}
 		public Exception_specificationContext exception_specification() {
 			return getRuleContext(Exception_specificationContext.class,0);
 		}
 		public Parameter_decl_clauseContext parameter_decl_clause() {
 			return getRuleContext(Parameter_decl_clauseContext.class,0);
 		}
-		public TerminalNode<Token> CV_QUALIFIER(int i) {
-			return getToken(ModuleParser.CV_QUALIFIER, i);
-		}
-		public Function_param_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Function_param_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function_param_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_param_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_param_list(this);
 		}
 	}
@@ -3250,24 +3257,24 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Parameter_decl_clauseContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> VOID() { return getToken(ModuleParser.VOID, 0); }
+	public static class Parameter_decl_clauseContext extends ParserRuleContext {
+		public TerminalNode VOID() { return getToken(ModuleParser.VOID, 0); }
 		public List<? extends Parameter_declContext> parameter_decl() {
 			return getRuleContexts(Parameter_declContext.class);
 		}
 		public Parameter_declContext parameter_decl(int i) {
 			return getRuleContext(Parameter_declContext.class,i);
 		}
-		public Parameter_decl_clauseContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Parameter_decl_clauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameter_decl_clause; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_decl_clause(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_decl_clause(this);
 		}
 	}
@@ -3333,23 +3340,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Parameter_declContext extends ParserRuleContext<Token> {
-		public Param_decl_specifiersContext param_decl_specifiers() {
-			return getRuleContext(Param_decl_specifiersContext.class,0);
-		}
+	public static class Parameter_declContext extends ParserRuleContext {
 		public Parameter_idContext parameter_id() {
 			return getRuleContext(Parameter_idContext.class,0);
 		}
-		public Parameter_declContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Param_decl_specifiersContext param_decl_specifiers() {
+			return getRuleContext(Param_decl_specifiersContext.class,0);
+		}
+		public Parameter_declContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameter_decl; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_decl(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_decl(this);
 		}
 	}
@@ -3376,9 +3383,9 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Parameter_idContext extends ParserRuleContext<Token> {
-		public Type_suffixContext type_suffix() {
-			return getRuleContext(Type_suffixContext.class,0);
+	public static class Parameter_idContext extends ParserRuleContext {
+		public PtrsContext ptrs() {
+			return getRuleContext(PtrsContext.class,0);
 		}
 		public Parameter_idContext parameter_id() {
 			return getRuleContext(Parameter_idContext.class,0);
@@ -3386,19 +3393,19 @@ public class ModuleParser extends Parser<Token> {
 		public Parameter_nameContext parameter_name() {
 			return getRuleContext(Parameter_nameContext.class,0);
 		}
-		public PtrsContext ptrs() {
-			return getRuleContext(PtrsContext.class,0);
+		public Type_suffixContext type_suffix() {
+			return getRuleContext(Type_suffixContext.class,0);
 		}
-		public Parameter_idContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Parameter_idContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameter_id; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_id(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_id(this);
 		}
 	}
@@ -3460,18 +3467,18 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Compound_statementContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> OPENING_CURLY() { return getToken(ModuleParser.OPENING_CURLY, 0); }
-		public Compound_statementContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Compound_statementContext extends ParserRuleContext {
+		public TerminalNode OPENING_CURLY() { return getToken(ModuleParser.OPENING_CURLY, 0); }
+		public Compound_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_compound_statement; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCompound_statement(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCompound_statement(this);
 		}
 	}
@@ -3498,23 +3505,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Ctor_listContext extends ParserRuleContext<Token> {
-		public Ctor_initializerContext ctor_initializer(int i) {
-			return getRuleContext(Ctor_initializerContext.class,i);
-		}
+	public static class Ctor_listContext extends ParserRuleContext {
 		public List<? extends Ctor_initializerContext> ctor_initializer() {
 			return getRuleContexts(Ctor_initializerContext.class);
 		}
-		public Ctor_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Ctor_initializerContext ctor_initializer(int i) {
+			return getRuleContext(Ctor_initializerContext.class,i);
+		}
+		public Ctor_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ctor_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCtor_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCtor_list(this);
 		}
 	}
@@ -3556,23 +3563,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Ctor_initializerContext extends ParserRuleContext<Token> {
+	public static class Ctor_initializerContext extends ParserRuleContext {
 		public Initializer_idContext initializer_id() {
 			return getRuleContext(Initializer_idContext.class,0);
 		}
 		public Ctor_exprContext ctor_expr() {
 			return getRuleContext(Ctor_exprContext.class,0);
 		}
-		public Ctor_initializerContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Ctor_initializerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ctor_initializer; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCtor_initializer(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCtor_initializer(this);
 		}
 	}
@@ -3599,20 +3606,20 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Initializer_idContext extends ParserRuleContext<Token> {
+	public static class Initializer_idContext extends ParserRuleContext {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public Initializer_idContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Initializer_idContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_initializer_id; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInitializer_id(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInitializer_id(this);
 		}
 	}
@@ -3647,20 +3654,20 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Ctor_exprContext extends ParserRuleContext<Token> {
+	public static class Ctor_exprContext extends ParserRuleContext {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public Ctor_exprContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Ctor_exprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ctor_expr; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterCtor_expr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitCtor_expr(this);
 		}
 	}
@@ -3696,27 +3703,27 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Function_nameContext extends ParserRuleContext<Token> {
-		public Function_nameContext function_name() {
-			return getRuleContext(Function_nameContext.class,0);
-		}
-		public TerminalNode<Token> OPERATOR() { return getToken(ModuleParser.OPERATOR, 0); }
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
-		}
+	public static class Function_nameContext extends ParserRuleContext {
 		public OperatorContext operator() {
 			return getRuleContext(OperatorContext.class,0);
 		}
-		public Function_nameContext(ParserRuleContext<Token> parent, int invokingState) {
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public TerminalNode OPERATOR() { return getToken(ModuleParser.OPERATOR, 0); }
+		public Function_nameContext function_name() {
+			return getRuleContext(Function_nameContext.class,0);
+		}
+		public Function_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function_name; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterFunction_name(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitFunction_name(this);
 		}
 	}
@@ -3767,21 +3774,21 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Exception_specificationContext extends ParserRuleContext<Token> {
+	public static class Exception_specificationContext extends ParserRuleContext {
 		public Type_id_listContext type_id_list() {
 			return getRuleContext(Type_id_listContext.class,0);
 		}
-		public TerminalNode<Token> THROW() { return getToken(ModuleParser.THROW, 0); }
-		public Exception_specificationContext(ParserRuleContext<Token> parent, int invokingState) {
+		public TerminalNode THROW() { return getToken(ModuleParser.THROW, 0); }
+		public Exception_specificationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exception_specification; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterException_specification(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitException_specification(this);
 		}
 	}
@@ -3810,29 +3817,29 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Type_id_listContext extends ParserRuleContext<Token> {
+	public static class Type_id_listContext extends ParserRuleContext {
 		public List<? extends Type_id_listContext> type_id_list() {
 			return getRuleContexts(Type_id_listContext.class);
-		}
-		public Type_id_listContext type_id_list(int i) {
-			return getRuleContext(Type_id_listContext.class,i);
 		}
 		public No_bracketsContext no_brackets(int i) {
 			return getRuleContext(No_bracketsContext.class,i);
 		}
+		public Type_id_listContext type_id_list(int i) {
+			return getRuleContext(Type_id_listContext.class,i);
+		}
 		public List<? extends No_bracketsContext> no_brackets() {
 			return getRuleContexts(No_bracketsContext.class);
 		}
-		public Type_id_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Type_id_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type_id_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterType_id_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitType_id_list(this);
 		}
 	}
@@ -3899,26 +3906,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Init_declaratorContext extends ParserRuleContext<Token> {
-		public DeclaratorContext declarator() {
-			return getRuleContext(DeclaratorContext.class,0);
+	public static class Init_declaratorContext extends ParserRuleContext {
+		public Assign_expr_w_Context assign_expr_w_() {
+			return getRuleContext(Assign_expr_w_Context.class,0);
 		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public Assign_expr_w_Context assign_expr_w_() {
-			return getRuleContext(Assign_expr_w_Context.class,0);
+		public DeclaratorContext declarator() {
+			return getRuleContext(DeclaratorContext.class,0);
 		}
-		public Init_declaratorContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Init_declaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_init_declarator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInit_declarator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInit_declarator(this);
 		}
 	}
@@ -3977,26 +3984,26 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class DeclaratorContext extends ParserRuleContext<Token> {
-		public Type_suffixContext type_suffix() {
-			return getRuleContext(Type_suffixContext.class,0);
-		}
+	public static class DeclaratorContext extends ParserRuleContext {
 		public PtrsContext ptrs() {
 			return getRuleContext(PtrsContext.class,0);
+		}
+		public Type_suffixContext type_suffix() {
+			return getRuleContext(Type_suffixContext.class,0);
 		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public DeclaratorContext(ParserRuleContext<Token> parent, int invokingState) {
+		public DeclaratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_declarator; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterDeclarator(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitDeclarator(this);
 		}
 	}
@@ -4039,23 +4046,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Type_suffixContext extends ParserRuleContext<Token> {
+	public static class Type_suffixContext extends ParserRuleContext {
 		public Param_type_listContext param_type_list() {
 			return getRuleContext(Param_type_listContext.class,0);
 		}
 		public Constant_expr_w_Context constant_expr_w_() {
 			return getRuleContext(Constant_expr_w_Context.class,0);
 		}
-		public Type_suffixContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Type_suffixContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type_suffix; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterType_suffix(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitType_suffix(this);
 		}
 	}
@@ -4098,7 +4105,10 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Assign_expr_w_Context extends ParserRuleContext<Token> {
+	public static class Assign_expr_w_Context extends ParserRuleContext {
+		public List<? extends Assign_waterContext> assign_water() {
+			return getRuleContexts(Assign_waterContext.class);
+		}
 		public List<? extends Assign_expr_w__l2Context> assign_expr_w__l2() {
 			return getRuleContexts(Assign_expr_w__l2Context.class);
 		}
@@ -4108,19 +4118,16 @@ public class ModuleParser extends Parser<Token> {
 		public Assign_expr_w__l2Context assign_expr_w__l2(int i) {
 			return getRuleContext(Assign_expr_w__l2Context.class,i);
 		}
-		public List<? extends Assign_waterContext> assign_water() {
-			return getRuleContexts(Assign_waterContext.class);
-		}
-		public Assign_expr_w_Context(ParserRuleContext<Token> parent, int invokingState) {
+		public Assign_expr_w_Context(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assign_expr_w_; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_expr_w_(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_expr_w_(this);
 		}
 	}
@@ -4210,29 +4217,29 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Assign_expr_w__l2Context extends ParserRuleContext<Token> {
+	public static class Assign_expr_w__l2Context extends ParserRuleContext {
 		public List<? extends Assign_expr_w__l2Context> assign_expr_w__l2() {
 			return getRuleContexts(Assign_expr_w__l2Context.class);
-		}
-		public List<? extends Assign_water_l2Context> assign_water_l2() {
-			return getRuleContexts(Assign_water_l2Context.class);
 		}
 		public Assign_water_l2Context assign_water_l2(int i) {
 			return getRuleContext(Assign_water_l2Context.class,i);
 		}
+		public List<? extends Assign_water_l2Context> assign_water_l2() {
+			return getRuleContexts(Assign_water_l2Context.class);
+		}
 		public Assign_expr_w__l2Context assign_expr_w__l2(int i) {
 			return getRuleContext(Assign_expr_w__l2Context.class,i);
 		}
-		public Assign_expr_w__l2Context(ParserRuleContext<Token> parent, int invokingState) {
+		public Assign_expr_w__l2Context(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assign_expr_w__l2; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterAssign_expr_w__l2(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitAssign_expr_w__l2(this);
 		}
 	}
@@ -4322,29 +4329,29 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Constant_expr_w_Context extends ParserRuleContext<Token> {
-		public Constant_expr_w_Context constant_expr_w_(int i) {
-			return getRuleContext(Constant_expr_w_Context.class,i);
+	public static class Constant_expr_w_Context extends ParserRuleContext {
+		public No_squaresContext no_squares(int i) {
+			return getRuleContext(No_squaresContext.class,i);
 		}
 		public List<? extends No_squaresContext> no_squares() {
 			return getRuleContexts(No_squaresContext.class);
 		}
-		public No_squaresContext no_squares(int i) {
-			return getRuleContext(No_squaresContext.class,i);
-		}
 		public List<? extends Constant_expr_w_Context> constant_expr_w_() {
 			return getRuleContexts(Constant_expr_w_Context.class);
 		}
-		public Constant_expr_w_Context(ParserRuleContext<Token> parent, int invokingState) {
+		public Constant_expr_w_Context constant_expr_w_(int i) {
+			return getRuleContext(Constant_expr_w_Context.class,i);
+		}
+		public Constant_expr_w_Context(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constant_expr_w_; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterConstant_expr_w_(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitConstant_expr_w_(this);
 		}
 	}
@@ -4411,24 +4418,24 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Simple_declContext extends ParserRuleContext<Token> {
-		public Template_decl_startContext template_decl_start() {
-			return getRuleContext(Template_decl_startContext.class,0);
-		}
-		public TerminalNode<Token> TYPEDEF() { return getToken(ModuleParser.TYPEDEF, 0); }
+	public static class Simple_declContext extends ParserRuleContext {
+		public TerminalNode TYPEDEF() { return getToken(ModuleParser.TYPEDEF, 0); }
 		public Var_declContext var_decl() {
 			return getRuleContext(Var_declContext.class,0);
 		}
-		public Simple_declContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Template_decl_startContext template_decl_start() {
+			return getRuleContext(Template_decl_startContext.class,0);
+		}
+		public Simple_declContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_simple_decl; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterSimple_decl(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitSimple_decl(this);
 		}
 	}
@@ -4473,8 +4480,8 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Var_declContext extends ParserRuleContext<Token> {
-		public Var_declContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class Var_declContext extends ParserRuleContext {
+		public Var_declContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_var_decl; }
@@ -4485,36 +4492,36 @@ public class ModuleParser extends Parser<Token> {
 		}
 	}
 	public static class DeclByClassContext extends Var_declContext {
-		public Class_defContext class_def() {
-			return getRuleContext(Class_defContext.class,0);
-		}
 		public Init_declarator_listContext init_declarator_list() {
 			return getRuleContext(Init_declarator_listContext.class,0);
 		}
+		public Class_defContext class_def() {
+			return getRuleContext(Class_defContext.class,0);
+		}
 		public DeclByClassContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterDeclByClass(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitDeclByClass(this);
 		}
 	}
 	public static class DeclByTypeContext extends Var_declContext {
-		public Init_declarator_listContext init_declarator_list() {
-			return getRuleContext(Init_declarator_listContext.class,0);
-		}
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
+		public Init_declarator_listContext init_declarator_list() {
+			return getRuleContext(Init_declarator_listContext.class,0);
+		}
 		public DeclByTypeContext(Var_declContext ctx) { copyFrom(ctx); }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterDeclByType(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitDeclByType(this);
 		}
 	}
@@ -4562,23 +4569,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Init_declarator_listContext extends ParserRuleContext<Token> {
-		public List<? extends Init_declaratorContext> init_declarator() {
-			return getRuleContexts(Init_declaratorContext.class);
-		}
+	public static class Init_declarator_listContext extends ParserRuleContext {
 		public Init_declaratorContext init_declarator(int i) {
 			return getRuleContext(Init_declaratorContext.class,i);
 		}
-		public Init_declarator_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public List<? extends Init_declaratorContext> init_declarator() {
+			return getRuleContexts(Init_declaratorContext.class);
+		}
+		public Init_declarator_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_init_declarator_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInit_declarator_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInit_declarator_list(this);
 		}
 	}
@@ -4620,23 +4627,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class InitializerContext extends ParserRuleContext<Token> {
-		public Initializer_listContext initializer_list() {
-			return getRuleContext(Initializer_listContext.class,0);
-		}
+	public static class InitializerContext extends ParserRuleContext {
 		public Assign_exprContext assign_expr() {
 			return getRuleContext(Assign_exprContext.class,0);
 		}
-		public InitializerContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Initializer_listContext initializer_list() {
+			return getRuleContext(Initializer_listContext.class,0);
+		}
+		public InitializerContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_initializer; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInitializer(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInitializer(this);
 		}
 	}
@@ -4696,23 +4703,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Initializer_listContext extends ParserRuleContext<Token> {
-		public InitializerContext initializer(int i) {
-			return getRuleContext(InitializerContext.class,i);
-		}
+	public static class Initializer_listContext extends ParserRuleContext {
 		public List<? extends InitializerContext> initializer() {
 			return getRuleContexts(InitializerContext.class);
 		}
-		public Initializer_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public InitializerContext initializer(int i) {
+			return getRuleContext(InitializerContext.class,i);
+		}
+		public Initializer_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_initializer_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterInitializer_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitInitializer_list(this);
 		}
 	}
@@ -4753,25 +4760,25 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Class_defContext extends ParserRuleContext<Token> {
+	public static class Class_defContext extends ParserRuleContext {
+		public TerminalNode CLASS_KEY() { return getToken(ModuleParser.CLASS_KEY, 0); }
+		public TerminalNode OPENING_CURLY() { return getToken(ModuleParser.OPENING_CURLY, 0); }
 		public Base_classesContext base_classes() {
 			return getRuleContext(Base_classesContext.class,0);
 		}
 		public Class_nameContext class_name() {
 			return getRuleContext(Class_nameContext.class,0);
 		}
-		public TerminalNode<Token> CLASS_KEY() { return getToken(ModuleParser.CLASS_KEY, 0); }
-		public TerminalNode<Token> OPENING_CURLY() { return getToken(ModuleParser.OPENING_CURLY, 0); }
-		public Class_defContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Class_defContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_class_def; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterClass_def(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitClass_def(this);
 		}
 	}
@@ -4816,20 +4823,20 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Class_nameContext extends ParserRuleContext<Token> {
+	public static class Class_nameContext extends ParserRuleContext {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public Class_nameContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Class_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_class_name; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterClass_name(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitClass_name(this);
 		}
 	}
@@ -4855,23 +4862,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Base_classesContext extends ParserRuleContext<Token> {
-		public Base_classContext base_class(int i) {
-			return getRuleContext(Base_classContext.class,i);
-		}
+	public static class Base_classesContext extends ParserRuleContext {
 		public List<? extends Base_classContext> base_class() {
 			return getRuleContexts(Base_classContext.class);
 		}
-		public Base_classesContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Base_classContext base_class(int i) {
+			return getRuleContext(Base_classContext.class,i);
+		}
+		public Base_classesContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_base_classes; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBase_classes(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBase_classes(this);
 		}
 	}
@@ -4913,24 +4920,24 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Base_classContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> VIRTUAL() { return getToken(ModuleParser.VIRTUAL, 0); }
+	public static class Base_classContext extends ParserRuleContext {
 		public Access_specifierContext access_specifier() {
 			return getRuleContext(Access_specifierContext.class,0);
 		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public Base_classContext(ParserRuleContext<Token> parent, int invokingState) {
+		public TerminalNode VIRTUAL() { return getToken(ModuleParser.VIRTUAL, 0); }
+		public Base_classContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_base_class; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBase_class(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBase_class(this);
 		}
 	}
@@ -4973,15 +4980,15 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Type_nameContext extends ParserRuleContext<Token> {
-		public List<? extends TerminalNode<Token>> CV_QUALIFIER() { return getTokens(ModuleParser.CV_QUALIFIER); }
+	public static class Type_nameContext extends ParserRuleContext {
+		public List<? extends TerminalNode> CV_QUALIFIER() { return getTokens(ModuleParser.CV_QUALIFIER); }
+		public TerminalNode CLASS_KEY() { return getToken(ModuleParser.CLASS_KEY, 0); }
 		public Template_param_listContext template_param_list(int i) {
 			return getRuleContext(Template_param_listContext.class,i);
 		}
-		public TerminalNode<Token> SIGNED() { return getToken(ModuleParser.SIGNED, 0); }
-		public TerminalNode<Token> UNSIGNED() { return getToken(ModuleParser.UNSIGNED, 0); }
-		public List<? extends Template_param_listContext> template_param_list() {
-			return getRuleContexts(Template_param_listContext.class);
+		public TerminalNode SIGNED() { return getToken(ModuleParser.SIGNED, 0); }
+		public TerminalNode CV_QUALIFIER(int i) {
+			return getToken(ModuleParser.CV_QUALIFIER, i);
 		}
 		public Base_typeContext base_type(int i) {
 			return getRuleContext(Base_typeContext.class,i);
@@ -4989,20 +4996,20 @@ public class ModuleParser extends Parser<Token> {
 		public List<? extends Base_typeContext> base_type() {
 			return getRuleContexts(Base_typeContext.class);
 		}
-		public TerminalNode<Token> CV_QUALIFIER(int i) {
-			return getToken(ModuleParser.CV_QUALIFIER, i);
+		public TerminalNode UNSIGNED() { return getToken(ModuleParser.UNSIGNED, 0); }
+		public List<? extends Template_param_listContext> template_param_list() {
+			return getRuleContexts(Template_param_listContext.class);
 		}
-		public TerminalNode<Token> CLASS_KEY() { return getToken(ModuleParser.CLASS_KEY, 0); }
-		public Type_nameContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Type_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type_name; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterType_name(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitType_name(this);
 		}
 	}
@@ -5108,29 +5115,29 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Base_typeContext extends ParserRuleContext<Token> {
-		public List<? extends TerminalNode<Token>> VOID() { return getTokens(ModuleParser.VOID); }
-		public TerminalNode<Token> ALPHA_NUMERIC(int i) {
-			return getToken(ModuleParser.ALPHA_NUMERIC, i);
-		}
-		public List<? extends TerminalNode<Token>> ALPHA_NUMERIC() { return getTokens(ModuleParser.ALPHA_NUMERIC); }
-		public TerminalNode<Token> LONG(int i) {
-			return getToken(ModuleParser.LONG, i);
-		}
-		public TerminalNode<Token> VOID(int i) {
+	public static class Base_typeContext extends ParserRuleContext {
+		public List<? extends TerminalNode> ALPHA_NUMERIC() { return getTokens(ModuleParser.ALPHA_NUMERIC); }
+		public List<? extends TerminalNode> LONG() { return getTokens(ModuleParser.LONG); }
+		public TerminalNode VOID(int i) {
 			return getToken(ModuleParser.VOID, i);
 		}
-		public List<? extends TerminalNode<Token>> LONG() { return getTokens(ModuleParser.LONG); }
-		public Base_typeContext(ParserRuleContext<Token> parent, int invokingState) {
+		public List<? extends TerminalNode> VOID() { return getTokens(ModuleParser.VOID); }
+		public TerminalNode LONG(int i) {
+			return getToken(ModuleParser.LONG, i);
+		}
+		public TerminalNode ALPHA_NUMERIC(int i) {
+			return getToken(ModuleParser.ALPHA_NUMERIC, i);
+		}
+		public Base_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_base_type; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterBase_type(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitBase_type(this);
 		}
 	}
@@ -5181,22 +5188,22 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Param_decl_specifiersContext extends ParserRuleContext<Token> {
+	public static class Param_decl_specifiersContext extends ParserRuleContext {
 		public Type_nameContext type_name() {
 			return getRuleContext(Type_nameContext.class,0);
 		}
-		public TerminalNode<Token> REGISTER() { return getToken(ModuleParser.REGISTER, 0); }
-		public TerminalNode<Token> AUTO() { return getToken(ModuleParser.AUTO, 0); }
-		public Param_decl_specifiersContext(ParserRuleContext<Token> parent, int invokingState) {
+		public TerminalNode AUTO() { return getToken(ModuleParser.AUTO, 0); }
+		public TerminalNode REGISTER() { return getToken(ModuleParser.REGISTER, 0); }
+		public Param_decl_specifiersContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_decl_specifiers; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_decl_specifiers(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_decl_specifiers(this);
 		}
 	}
@@ -5236,20 +5243,20 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Parameter_nameContext extends ParserRuleContext<Token> {
+	public static class Parameter_nameContext extends ParserRuleContext {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public Parameter_nameContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Parameter_nameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameter_name; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParameter_name(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParameter_name(this);
 		}
 	}
@@ -5275,24 +5282,24 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Param_type_listContext extends ParserRuleContext<Token> {
-		public Param_typeContext param_type(int i) {
-			return getRuleContext(Param_typeContext.class,i);
-		}
+	public static class Param_type_listContext extends ParserRuleContext {
 		public List<? extends Param_typeContext> param_type() {
 			return getRuleContexts(Param_typeContext.class);
 		}
-		public TerminalNode<Token> VOID() { return getToken(ModuleParser.VOID, 0); }
-		public Param_type_listContext(ParserRuleContext<Token> parent, int invokingState) {
+		public TerminalNode VOID() { return getToken(ModuleParser.VOID, 0); }
+		public Param_typeContext param_type(int i) {
+			return getRuleContext(Param_typeContext.class,i);
+		}
+		public Param_type_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_type_list; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_type_list(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_type_list(this);
 		}
 	}
@@ -5355,23 +5362,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Param_typeContext extends ParserRuleContext<Token> {
+	public static class Param_typeContext extends ParserRuleContext {
 		public Param_type_idContext param_type_id() {
 			return getRuleContext(Param_type_idContext.class,0);
 		}
 		public Param_decl_specifiersContext param_decl_specifiers() {
 			return getRuleContext(Param_decl_specifiersContext.class,0);
 		}
-		public Param_typeContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Param_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_type; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_type(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_type(this);
 		}
 	}
@@ -5398,29 +5405,29 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class Param_type_idContext extends ParserRuleContext<Token> {
+	public static class Param_type_idContext extends ParserRuleContext {
+		public PtrsContext ptrs() {
+			return getRuleContext(PtrsContext.class,0);
+		}
 		public Param_type_idContext param_type_id() {
 			return getRuleContext(Param_type_idContext.class,0);
-		}
-		public Type_suffixContext type_suffix() {
-			return getRuleContext(Type_suffixContext.class,0);
 		}
 		public Parameter_nameContext parameter_name() {
 			return getRuleContext(Parameter_nameContext.class,0);
 		}
-		public PtrsContext ptrs() {
-			return getRuleContext(PtrsContext.class,0);
+		public Type_suffixContext type_suffix() {
+			return getRuleContext(Type_suffixContext.class,0);
 		}
-		public Param_type_idContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Param_type_idContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param_type_id; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterParam_type_id(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitParam_type_id(this);
 		}
 	}
@@ -5484,24 +5491,24 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class IdentifierContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> ALPHA_NUMERIC(int i) {
-			return getToken(ModuleParser.ALPHA_NUMERIC, i);
-		}
-		public List<? extends TerminalNode<Token>> ALPHA_NUMERIC() { return getTokens(ModuleParser.ALPHA_NUMERIC); }
+	public static class IdentifierContext extends ParserRuleContext {
+		public List<? extends TerminalNode> ALPHA_NUMERIC() { return getTokens(ModuleParser.ALPHA_NUMERIC); }
 		public Access_specifierContext access_specifier() {
 			return getRuleContext(Access_specifierContext.class,0);
 		}
-		public IdentifierContext(ParserRuleContext<Token> parent, int invokingState) {
+		public TerminalNode ALPHA_NUMERIC(int i) {
+			return getToken(ModuleParser.ALPHA_NUMERIC, i);
+		}
+		public IdentifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterIdentifier(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitIdentifier(this);
 		}
 	}
@@ -5561,20 +5568,20 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class NumberContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> OCTAL_LITERAL() { return getToken(ModuleParser.OCTAL_LITERAL, 0); }
-		public TerminalNode<Token> HEX_LITERAL() { return getToken(ModuleParser.HEX_LITERAL, 0); }
-		public TerminalNode<Token> DECIMAL_LITERAL() { return getToken(ModuleParser.DECIMAL_LITERAL, 0); }
-		public NumberContext(ParserRuleContext<Token> parent, int invokingState) {
+	public static class NumberContext extends ParserRuleContext {
+		public TerminalNode OCTAL_LITERAL() { return getToken(ModuleParser.OCTAL_LITERAL, 0); }
+		public TerminalNode DECIMAL_LITERAL() { return getToken(ModuleParser.DECIMAL_LITERAL, 0); }
+		public TerminalNode HEX_LITERAL() { return getToken(ModuleParser.HEX_LITERAL, 0); }
+		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_number; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterNumber(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitNumber(this);
 		}
 	}
@@ -5606,23 +5613,23 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public static class PtrsContext extends ParserRuleContext<Token> {
-		public Ptr_operatorContext ptr_operator(int i) {
-			return getRuleContext(Ptr_operatorContext.class,i);
-		}
+	public static class PtrsContext extends ParserRuleContext {
 		public List<? extends Ptr_operatorContext> ptr_operator() {
 			return getRuleContexts(Ptr_operatorContext.class);
 		}
-		public PtrsContext(ParserRuleContext<Token> parent, int invokingState) {
+		public Ptr_operatorContext ptr_operator(int i) {
+			return getRuleContext(Ptr_operatorContext.class,i);
+		}
+		public PtrsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ptrs; }
 		@Override
-		public void enterRule(ParseTreeListener<? super Token> listener) {
+		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).enterPtrs(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<? super Token> listener) {
+		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ModuleListener ) ((ModuleListener)listener).exitPtrs(this);
 		}
 	}
@@ -5661,7 +5668,7 @@ public class ModuleParser extends Parser<Token> {
 		return _localctx;
 	}
 
-	public boolean sempred(RuleContext<Token> _localctx, int ruleIndex, int predIndex) {
+	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 19: return postfix_expression_sempred((Postfix_expressionContext)_localctx, predIndex);
 		}
@@ -5679,113 +5686,114 @@ public class ModuleParser extends Parser<Token> {
 	}
 
 	public static final String _serializedATN =
-		"\5\3f\u0359\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4"+
-		"\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20"+
-		"\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27"+
-		"\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36"+
-		"\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4"+
-		")\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62"+
-		"\4\63\t\63\4\64\t\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:\4"+
-		";\t;\4<\t<\4=\t=\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\tD\4E\tE\4F\t"+
-		"F\4G\tG\4H\tH\4I\tI\4J\tJ\4K\tK\4L\tL\4M\tM\4N\tN\4O\tO\4P\tP\4Q\tQ\4"+
-		"R\tR\4S\tS\4T\tT\4U\tU\3\2\3\2\3\2\3\2\7\2\u00af\n\2\f\2\16\2\u00b2\13"+
-		"\2\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\5\4\u00bc\n\4\3\5\3\5\3\5\3\5\5\5\u00c2"+
-		"\n\5\3\6\3\6\3\6\3\6\3\6\3\6\5\6\u00ca\n\6\3\7\3\7\3\7\5\7\u00cf\n\7\3"+
-		"\b\3\b\3\b\5\b\u00d4\n\b\3\t\3\t\3\t\5\t\u00d9\n\t\3\n\3\n\3\n\5\n\u00de"+
-		"\n\n\3\13\3\13\3\13\5\13\u00e3\n\13\3\f\3\f\3\f\3\f\5\f\u00e9\n\f\3\r"+
-		"\3\r\3\r\3\r\5\r\u00ef\n\r\3\16\3\16\3\16\5\16\u00f4\n\16\3\17\3\17\3"+
-		"\17\5\17\u00f9\n\17\3\20\3\20\3\20\5\20\u00fe\n\20\3\21\3\21\3\21\3\21"+
-		"\3\21\3\21\5\21\u0106\n\21\3\22\3\22\7\22\u010a\n\22\f\22\16\22\u010d"+
-		"\13\22\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\7\23\u0119\n"+
-		"\23\f\23\16\23\u011c\13\23\3\23\3\23\3\23\3\23\3\23\5\23\u0123\n\23\3"+
-		"\24\3\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3"+
-		"\25\3\25\3\25\3\25\5\25\u0137\n\25\3\25\3\25\3\25\3\25\5\25\u013d\n\25"+
-		"\3\25\3\25\3\25\7\25\u0142\n\25\f\25\16\25\u0145\13\25\3\26\3\26\3\26"+
-		"\7\26\u014a\n\26\f\26\16\26\u014d\13\26\5\26\u014f\n\26\3\27\3\27\3\30"+
-		"\3\30\3\30\3\30\3\30\3\30\5\30\u0159\n\30\3\31\3\31\3\32\3\32\3\33\3\33"+
-		"\3\34\3\34\3\35\3\35\3\36\3\36\3\37\3\37\3\37\5\37\u016a\n\37\3\37\3\37"+
+		"\3\uaf6f\u8320\u479d\ub75c\u4880\u1605\u191c\uab37\3f\u0359\4\2\t\2\4"+
+		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
+		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
+		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
+		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
+		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
+		"\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:\4;\t;\4<\t<\4=\t="+
+		"\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\tD\4E\tE\4F\tF\4G\tG\4H\tH\4I"+
+		"\tI\4J\tJ\4K\tK\4L\tL\4M\tM\4N\tN\4O\tO\4P\tP\4Q\tQ\4R\tR\4S\tS\4T\tT"+
+		"\4U\tU\3\2\3\2\3\2\3\2\7\2\u00af\n\2\f\2\16\2\u00b2\13\2\3\3\3\3\3\3\3"+
+		"\3\3\3\3\4\3\4\3\4\5\4\u00bc\n\4\3\5\3\5\3\5\3\5\5\5\u00c2\n\5\3\6\3\6"+
+		"\3\6\3\6\3\6\3\6\5\6\u00ca\n\6\3\7\3\7\3\7\5\7\u00cf\n\7\3\b\3\b\3\b\5"+
+		"\b\u00d4\n\b\3\t\3\t\3\t\5\t\u00d9\n\t\3\n\3\n\3\n\5\n\u00de\n\n\3\13"+
+		"\3\13\3\13\5\13\u00e3\n\13\3\f\3\f\3\f\3\f\5\f\u00e9\n\f\3\r\3\r\3\r\3"+
+		"\r\5\r\u00ef\n\r\3\16\3\16\3\16\5\16\u00f4\n\16\3\17\3\17\3\17\5\17\u00f9"+
+		"\n\17\3\20\3\20\3\20\5\20\u00fe\n\20\3\21\3\21\3\21\3\21\3\21\3\21\5\21"+
+		"\u0106\n\21\3\22\3\22\7\22\u010a\n\22\f\22\16\22\u010d\13\22\3\23\3\23"+
+		"\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\7\23\u0119\n\23\f\23\16\23\u011c"+
+		"\13\23\3\23\3\23\3\23\3\23\3\23\5\23\u0123\n\23\3\24\3\24\3\25\3\25\3"+
+		"\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\5"+
+		"\25\u0137\n\25\3\25\3\25\3\25\3\25\5\25\u013d\n\25\3\25\3\25\3\25\7\25"+
+		"\u0142\n\25\f\25\16\25\u0145\13\25\3\26\3\26\3\26\7\26\u014a\n\26\f\26"+
+		"\16\26\u014d\13\26\5\26\u014f\n\26\3\27\3\27\3\30\3\30\3\30\3\30\3\30"+
+		"\3\30\5\30\u0159\n\30\3\31\3\31\3\32\3\32\3\33\3\33\3\34\3\34\3\35\3\35"+
+		"\3\36\3\36\3\37\3\37\3\37\5\37\u016a\n\37\3\37\3\37\3\37\3\37\3\37\3\37"+
 		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37"+
 		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37"+
-		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\5\37\u0194\n\37\3 "+
-		"\3 \3!\3!\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3#\3#\3#\3#\6#\u01a8\n#\r"+
-		"#\16#\u01a9\3$\3$\3%\3%\3&\3&\3\'\3\'\3(\3(\3)\3)\3*\3*\3+\3+\3,\3,\3"+
-		"-\3-\3.\3.\3/\5/\u01c3\n/\3/\5/\u01c6\n/\3/\3/\3/\5/\u01cb\n/\3/\3/\3"+
-		"\60\7\60\u01d0\n\60\f\60\16\60\u01d3\13\60\3\60\3\60\3\60\7\60\u01d8\n"+
-		"\60\f\60\16\60\u01db\13\60\3\61\3\61\5\61\u01df\n\61\3\61\3\61\7\61\u01e3"+
-		"\n\61\f\61\16\61\u01e6\13\61\3\61\5\61\u01e9\n\61\3\62\3\62\3\62\7\62"+
-		"\u01ee\n\62\f\62\16\62\u01f1\13\62\3\62\3\62\5\62\u01f5\n\62\3\62\5\62"+
-		"\u01f8\n\62\3\63\3\63\3\63\3\64\5\64\u01fe\n\64\3\64\3\64\3\64\3\64\3"+
-		"\64\5\64\u0205\n\64\3\64\5\64\u0208\n\64\3\65\3\65\3\65\3\66\3\66\3\66"+
-		"\3\66\7\66\u0211\n\66\f\66\16\66\u0214\13\66\3\67\3\67\3\67\38\58\u021a"+
-		"\n8\38\38\39\39\59\u0220\n9\39\39\3:\3:\3:\3:\3:\3:\3:\5:\u022b\n:\3;"+
-		"\3;\3;\3;\3;\3<\7<\u0233\n<\f<\16<\u0236\13<\3<\3<\3<\3<\7<\u023c\n<\f"+
-		"<\16<\u023f\13<\7<\u0241\n<\f<\16<\u0244\13<\3=\3=\3=\5=\u0249\n=\3=\3"+
-		"=\3=\5=\u024e\n=\3>\5>\u0251\n>\3>\3>\5>\u0255\n>\3?\3?\3?\3?\3?\5?\u025c"+
-		"\n?\3@\7@\u025f\n@\f@\16@\u0262\13@\3@\3@\3@\3@\3@\3@\3@\3@\3@\3@\3@\3"+
-		"@\5@\u0270\n@\3@\7@\u0273\n@\f@\16@\u0276\13@\7@\u0278\n@\f@\16@\u027b"+
-		"\13@\3A\7A\u027e\nA\fA\16A\u0281\13A\3A\3A\3A\3A\3A\3A\3A\3A\3A\3A\3A"+
-		"\3A\5A\u028f\nA\3A\7A\u0292\nA\fA\16A\u0295\13A\7A\u0297\nA\fA\16A\u029a"+
-		"\13A\3B\7B\u029d\nB\fB\16B\u02a0\13B\3B\3B\3B\3B\7B\u02a6\nB\fB\16B\u02a9"+
-		"\13B\7B\u02ab\nB\fB\16B\u02ae\13B\3C\5C\u02b1\nC\3C\5C\u02b4\nC\3C\3C"+
-		"\3D\3D\5D\u02ba\nD\3D\3D\3D\5D\u02bf\nD\3E\3E\3E\7E\u02c4\nE\fE\16E\u02c7"+
-		"\13E\3E\3E\3F\3F\3F\3F\3F\5F\u02d0\nF\3G\3G\3G\7G\u02d5\nG\fG\16G\u02d8"+
-		"\13G\3H\3H\5H\u02dc\nH\3H\5H\u02df\nH\3H\3H\3H\3I\3I\3J\3J\3J\3J\7J\u02ea"+
-		"\nJ\fJ\16J\u02ed\13J\3K\5K\u02f0\nK\3K\5K\u02f3\nK\3K\3K\3L\7L\u02f8\n"+
-		"L\fL\16L\u02fb\13L\3L\5L\u02fe\nL\3L\3L\3L\3L\3L\5L\u0305\nL\3L\3L\3L"+
-		"\3L\3L\3L\5L\u030d\nL\7L\u030f\nL\fL\16L\u0312\13L\3L\3L\5L\u0316\nL\3"+
-		"M\6M\u0319\nM\rM\16M\u031a\3N\5N\u031e\nN\3N\3N\3O\3O\3P\3P\3P\3P\3P\3"+
-		"P\3P\7P\u032b\nP\fP\16P\u032e\13P\5P\u0330\nP\3P\5P\u0333\nP\3Q\3Q\3Q"+
-		"\3R\5R\u0339\nR\3R\3R\3R\3R\3R\5R\u0340\nR\5R\u0342\nR\3R\5R\u0345\nR"+
-		"\3S\3S\3S\7S\u034a\nS\fS\16S\u034d\13S\3S\5S\u0350\nS\3T\3T\3U\6U\u0355"+
-		"\nU\rU\16U\u0356\3U\2\2\3(V\2\2\4\2\6\2\b\2\n\2\f\2\16\2\20\2\22\2\24"+
-		"\2\26\2\30\2\32\2\34\2\36\2 \2\"\2$\2&\2(\2*\2,\2.\2\60\2\62\2\64\2\66"+
-		"\28\2:\2<\2>\2@\2B\2D\2F\2H\2J\2L\2N\2P\2R\2T\2V\2X\2Z\2\\\2^\2`\2b\2"+
-		"d\2f\2h\2j\2l\2n\2p\2r\2t\2v\2x\2z\2|\2~\2\u0080\2\u0082\2\u0084\2\u0086"+
-		"\2\u0088\2\u008a\2\u008c\2\u008e\2\u0090\2\u0092\2\u0094\2\u0096\2\u0098"+
-		"\2\u009a\2\u009c\2\u009e\2\u00a0\2\u00a2\2\u00a4\2\u00a6\2\u00a8\2\2\35"+
-		"\4\n\n++\4\36\36//\5\4\4\f\f\67\67\4\7\7**\7\3\4\26\26\36\36//99\6\6\6"+
-		"\t\t\64\64::\3]b\5\17\20()LL\3\3\4\5\34\34\"\"\60\60\4\24\24,,\t\r\r\22"+
-		"\23\31\32!!$$&\'\65\66\4\b\b88\4\16\16  \7\5\5\16\16\30\30  XY\5\16\16"+
-		"  \61\61\6\6\6\16\16  \64\64\3XY\4\5\5\30\30\5\5\5\30\30\61\61\4\35\35"+
-		"\61\61\t\5\5\16\16\30\30\35\35  \61\61XY\7\5\5\16\16\30\30  XY\4HIVV\5"+
-		"GGJJWW\3RS\3]_\u0399\2\u00b0\3\2\2\2\4\u00b3\3\2\2\2\6\u00b8\3\2\2\2\b"+
-		"\u00bd\3\2\2\2\n\u00c3\3\2\2\2\f\u00cb\3\2\2\2\16\u00d0\3\2\2\2\20\u00d5"+
-		"\3\2\2\2\22\u00da\3\2\2\2\24\u00df\3\2\2\2\26\u00e4\3\2\2\2\30\u00ea\3"+
-		"\2\2\2\32\u00f0\3\2\2\2\34\u00f5\3\2\2\2\36\u00fa\3\2\2\2 \u0105\3\2\2"+
-		"\2\"\u0107\3\2\2\2$\u0122\3\2\2\2&\u0124\3\2\2\2(\u0126\3\2\2\2*\u014e"+
-		"\3\2\2\2,\u0150\3\2\2\2.\u0158\3\2\2\2\60\u015a\3\2\2\2\62\u015c\3\2\2"+
-		"\2\64\u015e\3\2\2\2\66\u0160\3\2\2\28\u0162\3\2\2\2:\u0164\3\2\2\2<\u0193"+
-		"\3\2\2\2>\u0195\3\2\2\2@\u0197\3\2\2\2B\u0199\3\2\2\2D\u01a7\3\2\2\2F"+
-		"\u01ab\3\2\2\2H\u01ad\3\2\2\2J\u01af\3\2\2\2L\u01b1\3\2\2\2N\u01b3\3\2"+
-		"\2\2P\u01b5\3\2\2\2R\u01b7\3\2\2\2T\u01b9\3\2\2\2V\u01bb\3\2\2\2X\u01bd"+
-		"\3\2\2\2Z\u01bf\3\2\2\2\\\u01c2\3\2\2\2^\u01d1\3\2\2\2`\u01dc\3\2\2\2"+
-		"b\u01f7\3\2\2\2d\u01f9\3\2\2\2f\u01fd\3\2\2\2h\u0209\3\2\2\2j\u020c\3"+
-		"\2\2\2l\u0215\3\2\2\2n\u0219\3\2\2\2p\u021d\3\2\2\2r\u022a\3\2\2\2t\u022c"+
-		"\3\2\2\2v\u0234\3\2\2\2x\u0245\3\2\2\2z\u0250\3\2\2\2|\u025b\3\2\2\2~"+
-		"\u0260\3\2\2\2\u0080\u027f\3\2\2\2\u0082\u029e\3\2\2\2\u0084\u02b0\3\2"+
-		"\2\2\u0086\u02be\3\2\2\2\u0088\u02c0\3\2\2\2\u008a\u02cf\3\2\2\2\u008c"+
-		"\u02d1\3\2\2\2\u008e\u02d9\3\2\2\2\u0090\u02e3\3\2\2\2\u0092\u02e5\3\2"+
-		"\2\2\u0094\u02ef\3\2\2\2\u0096\u0315\3\2\2\2\u0098\u0318\3\2\2\2\u009a"+
-		"\u031d\3\2\2\2\u009c\u0321\3\2\2\2\u009e\u0332\3\2\2\2\u00a0\u0334\3\2"+
-		"\2\2\u00a2\u0338\3\2\2\2\u00a4\u034f\3\2\2\2\u00a6\u0351\3\2\2\2\u00a8"+
-		"\u0354\3\2\2\2\u00aa\u00af\5\\/\2\u00ab\u00af\5\u0084C\2\u00ac\u00af\5"+
-		"\4\3\2\u00ad\u00af\5Z.\2\u00ae\u00aa\3\2\2\2\u00ae\u00ab\3\2\2\2\u00ae"+
-		"\u00ac\3\2\2\2\u00ae\u00ad\3\2\2\2\u00af\u00b2\3\2\2\2\u00b0\u00ae\3\2"+
-		"\2\2\u00b0\u00b1\3\2\2\2\u00b1\3\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b3\u00b4"+
-		"\7P\2\2\u00b4\u00b5\7Q\2\2\u00b5\u00b6\5\u00a4S\2\u00b6\u00b7\7\61\2\2"+
-		"\u00b7\5\3\2\2\2\u00b8\u00bb\5\b\5\2\u00b9\u00ba\7\35\2\2\u00ba\u00bc"+
-		"\5\6\4\2\u00bb\u00b9\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\7\3\2\2\2\u00bd"+
-		"\u00c1\5\n\6\2\u00be\u00bf\5> \2\u00bf\u00c0\5\b\5\2\u00c0\u00c2\3\2\2"+
-		"\2\u00c1\u00be\3\2\2\2\u00c1\u00c2\3\2\2\2\u00c2\t\3\2\2\2\u00c3\u00c9"+
-		"\5\f\7\2\u00c4\u00c5\7#\2\2\u00c5\u00c6\5\6\4\2\u00c6\u00c7\7\37\2\2\u00c7"+
-		"\u00c8\5\n\6\2\u00c8\u00ca\3\2\2\2\u00c9\u00c4\3\2\2\2\u00c9\u00ca\3\2"+
-		"\2\2\u00ca\13\3\2\2\2\u00cb\u00ce\5\16\b\2\u00cc\u00cd\7\63\2\2\u00cd"+
-		"\u00cf\5\f\7\2\u00ce\u00cc\3\2\2\2\u00ce\u00cf\3\2\2\2\u00cf\r\3\2\2\2"+
-		"\u00d0\u00d3\5\20\t\2\u00d1\u00d2\7\62\2\2\u00d2\u00d4\5\16\b\2\u00d3"+
-		"\u00d1\3\2\2\2\u00d3\u00d4\3\2\2\2\u00d4\17\3\2\2\2\u00d5\u00d8\5\22\n"+
-		"\2\u00d6\u00d7\7\25\2\2\u00d7\u00d9\5\20\t\2\u00d8\u00d6\3\2\2\2\u00d8"+
-		"\u00d9\3\2\2\2\u00d9\21\3\2\2\2\u00da\u00dd\5\24\13\2\u00db\u00dc\7-\2"+
-		"\2\u00dc\u00de\5\22\n\2\u00dd\u00db\3\2\2\2\u00dd\u00de\3\2\2\2\u00de"+
+		"\3\37\3\37\3\37\3\37\3\37\3\37\5\37\u0194\n\37\3 \3 \3!\3!\3\"\3\"\3\""+
+		"\3\"\3\"\3#\3#\3#\3#\3#\3#\3#\3#\3#\6#\u01a8\n#\r#\16#\u01a9\3$\3$\3%"+
+		"\3%\3&\3&\3\'\3\'\3(\3(\3)\3)\3*\3*\3+\3+\3,\3,\3-\3-\3.\3.\3/\5/\u01c3"+
+		"\n/\3/\5/\u01c6\n/\3/\3/\3/\5/\u01cb\n/\3/\3/\3\60\7\60\u01d0\n\60\f\60"+
+		"\16\60\u01d3\13\60\3\60\3\60\3\60\7\60\u01d8\n\60\f\60\16\60\u01db\13"+
+		"\60\3\61\3\61\5\61\u01df\n\61\3\61\3\61\7\61\u01e3\n\61\f\61\16\61\u01e6"+
+		"\13\61\3\61\5\61\u01e9\n\61\3\62\3\62\3\62\7\62\u01ee\n\62\f\62\16\62"+
+		"\u01f1\13\62\3\62\3\62\5\62\u01f5\n\62\3\62\5\62\u01f8\n\62\3\63\3\63"+
+		"\3\63\3\64\5\64\u01fe\n\64\3\64\3\64\3\64\3\64\3\64\5\64\u0205\n\64\3"+
+		"\64\5\64\u0208\n\64\3\65\3\65\3\65\3\66\3\66\3\66\3\66\7\66\u0211\n\66"+
+		"\f\66\16\66\u0214\13\66\3\67\3\67\3\67\38\58\u021a\n8\38\38\39\39\59\u0220"+
+		"\n9\39\39\3:\3:\3:\3:\3:\3:\3:\5:\u022b\n:\3;\3;\3;\3;\3;\3<\7<\u0233"+
+		"\n<\f<\16<\u0236\13<\3<\3<\3<\3<\7<\u023c\n<\f<\16<\u023f\13<\7<\u0241"+
+		"\n<\f<\16<\u0244\13<\3=\3=\3=\5=\u0249\n=\3=\3=\3=\5=\u024e\n=\3>\5>\u0251"+
+		"\n>\3>\3>\5>\u0255\n>\3?\3?\3?\3?\3?\5?\u025c\n?\3@\7@\u025f\n@\f@\16"+
+		"@\u0262\13@\3@\3@\3@\3@\3@\3@\3@\3@\3@\3@\3@\3@\5@\u0270\n@\3@\7@\u0273"+
+		"\n@\f@\16@\u0276\13@\7@\u0278\n@\f@\16@\u027b\13@\3A\7A\u027e\nA\fA\16"+
+		"A\u0281\13A\3A\3A\3A\3A\3A\3A\3A\3A\3A\3A\3A\3A\5A\u028f\nA\3A\7A\u0292"+
+		"\nA\fA\16A\u0295\13A\7A\u0297\nA\fA\16A\u029a\13A\3B\7B\u029d\nB\fB\16"+
+		"B\u02a0\13B\3B\3B\3B\3B\7B\u02a6\nB\fB\16B\u02a9\13B\7B\u02ab\nB\fB\16"+
+		"B\u02ae\13B\3C\5C\u02b1\nC\3C\5C\u02b4\nC\3C\3C\3D\3D\5D\u02ba\nD\3D\3"+
+		"D\3D\5D\u02bf\nD\3E\3E\3E\7E\u02c4\nE\fE\16E\u02c7\13E\3E\3E\3F\3F\3F"+
+		"\3F\3F\5F\u02d0\nF\3G\3G\3G\7G\u02d5\nG\fG\16G\u02d8\13G\3H\3H\5H\u02dc"+
+		"\nH\3H\5H\u02df\nH\3H\3H\3H\3I\3I\3J\3J\3J\3J\7J\u02ea\nJ\fJ\16J\u02ed"+
+		"\13J\3K\5K\u02f0\nK\3K\5K\u02f3\nK\3K\3K\3L\7L\u02f8\nL\fL\16L\u02fb\13"+
+		"L\3L\5L\u02fe\nL\3L\3L\3L\3L\3L\5L\u0305\nL\3L\3L\3L\3L\3L\3L\5L\u030d"+
+		"\nL\7L\u030f\nL\fL\16L\u0312\13L\3L\3L\5L\u0316\nL\3M\6M\u0319\nM\rM\16"+
+		"M\u031a\3N\5N\u031e\nN\3N\3N\3O\3O\3P\3P\3P\3P\3P\3P\3P\7P\u032b\nP\f"+
+		"P\16P\u032e\13P\5P\u0330\nP\3P\5P\u0333\nP\3Q\3Q\3Q\3R\5R\u0339\nR\3R"+
+		"\3R\3R\3R\3R\5R\u0340\nR\5R\u0342\nR\3R\5R\u0345\nR\3S\3S\3S\7S\u034a"+
+		"\nS\fS\16S\u034d\13S\3S\5S\u0350\nS\3T\3T\3U\6U\u0355\nU\rU\16U\u0356"+
+		"\3U\2\2\3(V\2\2\4\2\6\2\b\2\n\2\f\2\16\2\20\2\22\2\24\2\26\2\30\2\32\2"+
+		"\34\2\36\2 \2\"\2$\2&\2(\2*\2,\2.\2\60\2\62\2\64\2\66\28\2:\2<\2>\2@\2"+
+		"B\2D\2F\2H\2J\2L\2N\2P\2R\2T\2V\2X\2Z\2\\\2^\2`\2b\2d\2f\2h\2j\2l\2n\2"+
+		"p\2r\2t\2v\2x\2z\2|\2~\2\u0080\2\u0082\2\u0084\2\u0086\2\u0088\2\u008a"+
+		"\2\u008c\2\u008e\2\u0090\2\u0092\2\u0094\2\u0096\2\u0098\2\u009a\2\u009c"+
+		"\2\u009e\2\u00a0\2\u00a2\2\u00a4\2\u00a6\2\u00a8\2\2\34\4\2\n\n++\4\2"+
+		"\36\36//\5\2\4\4\f\f\67\67\4\2\7\7**\7\2\3\4\26\26\36\36//99\6\2\6\6\t"+
+		"\t\64\64::\3\2]b\5\2\17\20()LL\3\2\3\4\5\2\34\34\"\"\60\60\4\2\24\24,"+
+		",\t\2\r\r\22\23\31\32!!$$&\'\65\66\4\2\b\b88\4\2\16\16  \7\2\5\5\16\16"+
+		"\30\30  XY\5\2\16\16  \61\61\6\2\6\6\16\16  \64\64\3\2XY\4\2\5\5\30\30"+
+		"\5\2\5\5\30\30\61\61\4\2\35\35\61\61\t\2\5\5\16\16\30\30\35\35  \61\61"+
+		"XY\4\2HIVV\5\2GGJJWW\3\2RS\3\2]_\u0399\2\u00b0\3\2\2\2\4\u00b3\3\2\2\2"+
+		"\6\u00b8\3\2\2\2\b\u00bd\3\2\2\2\n\u00c3\3\2\2\2\f\u00cb\3\2\2\2\16\u00d0"+
+		"\3\2\2\2\20\u00d5\3\2\2\2\22\u00da\3\2\2\2\24\u00df\3\2\2\2\26\u00e4\3"+
+		"\2\2\2\30\u00ea\3\2\2\2\32\u00f0\3\2\2\2\34\u00f5\3\2\2\2\36\u00fa\3\2"+
+		"\2\2 \u0105\3\2\2\2\"\u0107\3\2\2\2$\u0122\3\2\2\2&\u0124\3\2\2\2(\u0126"+
+		"\3\2\2\2*\u014e\3\2\2\2,\u0150\3\2\2\2.\u0158\3\2\2\2\60\u015a\3\2\2\2"+
+		"\62\u015c\3\2\2\2\64\u015e\3\2\2\2\66\u0160\3\2\2\28\u0162\3\2\2\2:\u0164"+
+		"\3\2\2\2<\u0193\3\2\2\2>\u0195\3\2\2\2@\u0197\3\2\2\2B\u0199\3\2\2\2D"+
+		"\u01a7\3\2\2\2F\u01ab\3\2\2\2H\u01ad\3\2\2\2J\u01af\3\2\2\2L\u01b1\3\2"+
+		"\2\2N\u01b3\3\2\2\2P\u01b5\3\2\2\2R\u01b7\3\2\2\2T\u01b9\3\2\2\2V\u01bb"+
+		"\3\2\2\2X\u01bd\3\2\2\2Z\u01bf\3\2\2\2\\\u01c2\3\2\2\2^\u01d1\3\2\2\2"+
+		"`\u01dc\3\2\2\2b\u01f7\3\2\2\2d\u01f9\3\2\2\2f\u01fd\3\2\2\2h\u0209\3"+
+		"\2\2\2j\u020c\3\2\2\2l\u0215\3\2\2\2n\u0219\3\2\2\2p\u021d\3\2\2\2r\u022a"+
+		"\3\2\2\2t\u022c\3\2\2\2v\u0234\3\2\2\2x\u0245\3\2\2\2z\u0250\3\2\2\2|"+
+		"\u025b\3\2\2\2~\u0260\3\2\2\2\u0080\u027f\3\2\2\2\u0082\u029e\3\2\2\2"+
+		"\u0084\u02b0\3\2\2\2\u0086\u02be\3\2\2\2\u0088\u02c0\3\2\2\2\u008a\u02cf"+
+		"\3\2\2\2\u008c\u02d1\3\2\2\2\u008e\u02d9\3\2\2\2\u0090\u02e3\3\2\2\2\u0092"+
+		"\u02e5\3\2\2\2\u0094\u02ef\3\2\2\2\u0096\u0315\3\2\2\2\u0098\u0318\3\2"+
+		"\2\2\u009a\u031d\3\2\2\2\u009c\u0321\3\2\2\2\u009e\u0332\3\2\2\2\u00a0"+
+		"\u0334\3\2\2\2\u00a2\u0338\3\2\2\2\u00a4\u034f\3\2\2\2\u00a6\u0351\3\2"+
+		"\2\2\u00a8\u0354\3\2\2\2\u00aa\u00af\5\\/\2\u00ab\u00af\5\u0084C\2\u00ac"+
+		"\u00af\5\4\3\2\u00ad\u00af\5Z.\2\u00ae\u00aa\3\2\2\2\u00ae\u00ab\3\2\2"+
+		"\2\u00ae\u00ac\3\2\2\2\u00ae\u00ad\3\2\2\2\u00af\u00b2\3\2\2\2\u00b0\u00ae"+
+		"\3\2\2\2\u00b0\u00b1\3\2\2\2\u00b1\3\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b3"+
+		"\u00b4\7P\2\2\u00b4\u00b5\7Q\2\2\u00b5\u00b6\5\u00a4S\2\u00b6\u00b7\7"+
+		"\61\2\2\u00b7\5\3\2\2\2\u00b8\u00bb\5\b\5\2\u00b9\u00ba\7\35\2\2\u00ba"+
+		"\u00bc\5\6\4\2\u00bb\u00b9\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\7\3\2\2\2"+
+		"\u00bd\u00c1\5\n\6\2\u00be\u00bf\5> \2\u00bf\u00c0\5\b\5\2\u00c0\u00c2"+
+		"\3\2\2\2\u00c1\u00be\3\2\2\2\u00c1\u00c2\3\2\2\2\u00c2\t\3\2\2\2\u00c3"+
+		"\u00c9\5\f\7\2\u00c4\u00c5\7#\2\2\u00c5\u00c6\5\6\4\2\u00c6\u00c7\7\37"+
+		"\2\2\u00c7\u00c8\5\n\6\2\u00c8\u00ca\3\2\2\2\u00c9\u00c4\3\2\2\2\u00c9"+
+		"\u00ca\3\2\2\2\u00ca\13\3\2\2\2\u00cb\u00ce\5\16\b\2\u00cc\u00cd\7\63"+
+		"\2\2\u00cd\u00cf\5\f\7\2\u00ce\u00cc\3\2\2\2\u00ce\u00cf\3\2\2\2\u00cf"+
+		"\r\3\2\2\2\u00d0\u00d3\5\20\t\2\u00d1\u00d2\7\62\2\2\u00d2\u00d4\5\16"+
+		"\b\2\u00d3\u00d1\3\2\2\2\u00d3\u00d4\3\2\2\2\u00d4\17\3\2\2\2\u00d5\u00d8"+
+		"\5\22\n\2\u00d6\u00d7\7\25\2\2\u00d7\u00d9\5\20\t\2\u00d8\u00d6\3\2\2"+
+		"\2\u00d8\u00d9\3\2\2\2\u00d9\21\3\2\2\2\u00da\u00dd\5\24\13\2\u00db\u00dc"+
+		"\7-\2\2\u00dc\u00de\5\22\n\2\u00dd\u00db\3\2\2\2\u00dd\u00de\3\2\2\2\u00de"+
 		"\23\3\2\2\2\u00df\u00e2\5\26\f\2\u00e0\u00e1\7\3\2\2\u00e1\u00e3\5\24"+
 		"\13\2\u00e2\u00e0\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3\25\3\2\2\2\u00e4\u00e8"+
 		"\5\30\r\2\u00e5\u00e6\5@!\2\u00e6\u00e7\5\26\f\2\u00e7\u00e9\3\2\2\2\u00e8"+
@@ -5866,7 +5874,7 @@ public class ModuleParser extends Parser<Token> {
 		"\u01b2\n\22\2\2\u01b2M\3\2\2\2\u01b3\u01b4\n\23\2\2\u01b4O\3\2\2\2\u01b5"+
 		"\u01b6\n\24\2\2\u01b6Q\3\2\2\2\u01b7\u01b8\n\25\2\2\u01b8S\3\2\2\2\u01b9"+
 		"\u01ba\n\26\2\2\u01baU\3\2\2\2\u01bb\u01bc\n\27\2\2\u01bcW\3\2\2\2\u01bd"+
-		"\u01be\n\30\2\2\u01beY\3\2\2\2\u01bf\u01c0\13\2\2\2\u01c0[\3\2\2\2\u01c1"+
+		"\u01be\n\20\2\2\u01beY\3\2\2\2\u01bf\u01c0\13\2\2\2\u01c0[\3\2\2\2\u01c1"+
 		"\u01c3\5B\"\2\u01c2\u01c1\3\2\2\2\u01c2\u01c3\3\2\2\2\u01c3\u01c5\3\2"+
 		"\2\2\u01c4\u01c6\5^\60\2\u01c5\u01c4\3\2\2\2\u01c5\u01c6\3\2\2\2\u01c6"+
 		"\u01c7\3\2\2\2\u01c7\u01c8\5r:\2\u01c8\u01ca\5`\61\2\u01c9\u01cb\5j\66"+
@@ -5970,7 +5978,7 @@ public class ModuleParser extends Parser<Token> {
 		"\u02f3\5:\36\2\u02f2\u02f1\3\2\2\2\u02f2\u02f3\3\2\2\2\u02f3\u02f4\3\2"+
 		"\2\2\u02f4\u02f5\5\u00a4S\2\u02f5\u0095\3\2\2\2\u02f6\u02f8\7K\2\2\u02f7"+
 		"\u02f6\3\2\2\2\u02f8\u02fb\3\2\2\2\u02f9\u02f7\3\2\2\2\u02f9\u02fa\3\2"+
-		"\2\2\u02fa\u02fd\3\2\2\2\u02fb\u02f9\3\2\2\2\u02fc\u02fe\t\31\2\2\u02fd"+
+		"\2\2\u02fa\u02fd\3\2\2\2\u02fb\u02f9\3\2\2\2\u02fc\u02fe\t\30\2\2\u02fd"+
 		"\u02fc\3\2\2\2\u02fd\u02fe\3\2\2\2\u02fe\u02ff\3\2\2\2\u02ff\u0304\5\u0098"+
 		"M\2\u0300\u0301\7\6\2\2\u0301\u0302\5D#\2\u0302\u0303\7\64\2\2\u0303\u0305"+
 		"\3\2\2\2\u0304\u0300\3\2\2\2\u0304\u0305\3\2\2\2\u0305\u0310\3\2\2\2\u0306"+
@@ -5980,8 +5988,8 @@ public class ModuleParser extends Parser<Token> {
 		"\2\2\u0310\u030e\3\2\2\2\u0310\u0311\3\2\2\2\u0311\u0316\3\2\2\2\u0312"+
 		"\u0310\3\2\2\2\u0313\u0316\7H\2\2\u0314\u0316\7I\2\2\u0315\u02f9\3\2\2"+
 		"\2\u0315\u0313\3\2\2\2\u0315\u0314\3\2\2\2\u0316\u0097\3\2\2\2\u0317\u0319"+
-		"\t\32\2\2\u0318\u0317\3\2\2\2\u0319\u031a\3\2\2\2\u031a\u0318\3\2\2\2"+
-		"\u031a\u031b\3\2\2\2\u031b\u0099\3\2\2\2\u031c\u031e\t\33\2\2\u031d\u031c"+
+		"\t\31\2\2\u0318\u0317\3\2\2\2\u0319\u031a\3\2\2\2\u031a\u0318\3\2\2\2"+
+		"\u031a\u031b\3\2\2\2\u031b\u0099\3\2\2\2\u031c\u031e\t\32\2\2\u031d\u031c"+
 		"\3\2\2\2\u031d\u031e\3\2\2\2\u031e\u031f\3\2\2\2\u031f\u0320\5\u0096L"+
 		"\2\u0320\u009b\3\2\2\2\u0321\u0322\5\u00a4S\2\u0322\u009d\3\2\2\2\u0323"+
 		"\u0324\7 \2\2\u0324\u0325\7G\2\2\u0325\u0333\7\16\2\2\u0326\u032f\7 \2"+
@@ -5999,7 +6007,7 @@ public class ModuleParser extends Parser<Token> {
 		"\2\u0346\u034b\7W\2\2\u0347\u0348\7\21\2\2\u0348\u034a\7W\2\2\u0349\u0347"+
 		"\3\2\2\2\u034a\u034d\3\2\2\2\u034b\u0349\3\2\2\2\u034b\u034c\3\2\2\2\u034c"+
 		"\u0350\3\2\2\2\u034d\u034b\3\2\2\2\u034e\u0350\5:\36\2\u034f\u0346\3\2"+
-		"\2\2\u034f\u034e\3\2\2\2\u0350\u00a5\3\2\2\2\u0351\u0352\t\34\2\2\u0352"+
+		"\2\2\u034f\u034e\3\2\2\2\u0350\u00a5\3\2\2\2\u0351\u0352\t\33\2\2\u0352"+
 		"\u00a7\3\2\2\2\u0353\u0355\58\35\2\u0354\u0353\3\2\2\2\u0355\u0356\3\2"+
 		"\2\2\u0356\u0354\3\2\2\2\u0356\u0357\3\2\2\2\u0357\u00a9\3\2\2\2c\u00ae"+
 		"\u00b0\u00bb\u00c1\u00c9\u00ce\u00d3\u00d8\u00dd\u00e2\u00e8\u00ee\u00f3"+
@@ -6011,7 +6019,7 @@ public class ModuleParser extends Parser<Token> {
 		"\u02d6\u02db\u02de\u02eb\u02ef\u02f2\u02f9\u02fd\u0304\u030c\u0310\u0315"+
 		"\u031a\u031d\u032c\u032f\u0332\u0338\u033f\u0341\u0344\u034b\u034f\u0356";
 	public static final ATN _ATN =
-		ATNSimulator.deserialize(_serializedATN.toCharArray());
+		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
 	}
 }

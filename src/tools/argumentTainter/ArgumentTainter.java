@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import neo4j.readWriteDB.Neo4JDBInterface;
+
 import org.neo4j.graphdb.Node;
 
-import output.neo4j.readWriteDB.Neo4JDBInterface;
-import output.neo4j.readWriteDB.QueryUtils;
+import traversals.readWriteDB.Traversals;
 
 // Determine functions to patch and hand over
 // individual functions to FunctionPatcher
@@ -47,9 +48,9 @@ public class ArgumentTainter {
 
 	private void determineFunctionsToPatch(String source)
 	{
-		List<Node> hits = QueryUtils.getCallsTo(source);
+		List<Node> hits = Traversals.getCallsTo(source);
 		for(Node callASTNode : hits){
-			Long functionId = QueryUtils.getFunctionIdFromASTNode(callASTNode);		
+			Long functionId = Traversals.getFunctionIdFromASTNode(callASTNode);		
 			functionsToPatch.add(functionId);
 		}
 	}

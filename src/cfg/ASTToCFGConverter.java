@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
@@ -20,19 +21,37 @@ public class ASTToCFGConverter {
 	public CFG convert(FunctionDef node)
 	{
 		CFG cfg = convertFunctionDef(node);
+		markCFGNodes(cfg);
 		return cfg;
 	}
 	
-	public CFG convertFunctionDef(FunctionDef node)
+	private void markCFGNodes(CFG cfg)
 	{
+		Vector<CFGNode> statements = cfg.getStatements();
+		for(CFGNode statement: statements)
+			statement.markAsCFGNode();
+	}
+
+	private CFG convertFunctionDef(FunctionDef node)
+	{
+		// create a CFG for the parameter list
+		
 		ParameterList parameterList = node.getParameterList();
 		CFG cfg = convertParameterList(parameterList);
-		BasicBlock lastParamDefBlock = cfg.getLastBlock();
+		CFGNode lastParamDefBlock = cfg.getLastStatement();
+		
+		// create a CFG for the compound statement
 		
 		CompoundStatement content = node.getContent();
 		CFG compoundCFG = convertCompoundStatement(content);
-		BasicBlock firstCompoundStmtBlock = compoundCFG.getFirstBlock();
+		CFGNode firstCompoundStmtBlock = compoundCFG.getFirstStatement();
+
+		// add compound statement cfg to parameter list CFG
+		
 		cfg.addCFG(compoundCFG);
+		
+		// create an edge from the last parameter to the first
+		// statement from the compound statement if necessary.
 		
 		if(lastParamDefBlock != null && firstCompoundStmtBlock != null){
 			cfg.addEdge(lastParamDefBlock, firstCompoundStmtBlock);
@@ -70,41 +89,40 @@ public class ASTToCFGConverter {
 		
 		while(it.hasNext()){
 			Entry<Object, List<Object>> entry = it.next();
-			BasicBlock switchBlock = (BasicBlock) entry.getKey();
+			CFGNode switchBlock = (CFGNode) entry.getKey();
 			List<Object> labeledBlocks = entry.getValue();
 			
 			for(Object labeledBlock : labeledBlocks)
-				cfg.addEdge(switchBlock, (BasicBlock) labeledBlock);
+				cfg.addEdge(switchBlock, (CFGNode) labeledBlock);
 		}
 	}
 
 	private void fixJumps(CFG cfg)
 	{
-		Collection<? extends BasicBlock> jumpStatements = cfg.getJumpStatements();
-		Iterator<? extends BasicBlock> it = jumpStatements.iterator();
+		Collection<? extends CFGNode> jumpStatements = cfg.getJumpStatements();
+		Iterator<? extends CFGNode> it = jumpStatements.iterator();
 		
 		// if(jumpStatements.size() > 0){
 			// add an exit-block
 			
-			EmptyBasicBlock emptyBasicBlock = new EmptyBasicBlock();
-			if(cfg.getLastBlock() != null)
-				cfg.addEdge(cfg.getLastBlock(), emptyBasicBlock);
-			cfg.addBasicBlock(emptyBasicBlock);
+			CFGNode emptyStatement = new CFGNode();
+			if(cfg.getLastStatement() != null)
+				cfg.addEdge(cfg.getLastStatement(), emptyStatement);
+			cfg.addStatement(emptyStatement);
 		// }
 		
 		while(it.hasNext()){
-			BasicBlock basicBlock = it.next();
-			ASTNode statement = basicBlock.getASTNode();
+			CFGNode stmt = it.next();
+			ASTNode statement = stmt.getASTNode();
 			
 			jumpStatementVisitor.setCFG(cfg);
-			jumpStatementVisitor.setBasicBlock(basicBlock);
+			jumpStatementVisitor.setStatement(stmt);
 			
 			try{
 				statement.accept(jumpStatementVisitor);
 			}catch(RuntimeException ex){
 				System.err.println("While fixing jumps: " + ex.getMessage());
 			}
-		
 		
 		}
 	}

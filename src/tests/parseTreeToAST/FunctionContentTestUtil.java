@@ -18,7 +18,7 @@ public class FunctionContentTestUtil {
 		ANTLRFunctionParserDriver parser = new ANTLRFunctionParserDriver();		
 		TokenSubStream tokens = tokenStreamFromString(input);
 		parser.parseAndWalkTokenStream(tokens);
-		return parser.itemStack.peek().getItem();
+		return parser.builderStack.peek().getItem();
 	}
 	
 		
