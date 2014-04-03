@@ -1,7 +1,6 @@
 package udg.useDefAnalysis.environments;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import udg.ASTProvider;

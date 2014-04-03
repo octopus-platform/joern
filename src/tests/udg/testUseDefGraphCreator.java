@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import misc.MultiHashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 
