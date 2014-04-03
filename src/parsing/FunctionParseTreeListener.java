@@ -242,18 +242,20 @@ public class FunctionParseTreeListener extends FunctionBaseListener
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.exitAssignment(ctx);
 	}
+
 	
-	@Override public void enterConditional_expression(FunctionParser.Conditional_expressionContext ctx)
+	@Override public void enterCndExpr(FunctionParser.CndExprContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.enterConditionalExpr(ctx);
+
 	}
-	
-	@Override public void exitConditional_expression(FunctionParser.Conditional_expressionContext ctx)
+
+	@Override public void exitCndExpr(FunctionParser.CndExprContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.exitConditionalExpr(ctx);
-	}
+	}	
 	
 	@Override public void enterOr_expression(FunctionParser.Or_expressionContext ctx)
 	{

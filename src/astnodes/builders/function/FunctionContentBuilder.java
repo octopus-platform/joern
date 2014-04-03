@@ -257,6 +257,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitConditionalExpr(Conditional_expressionContext ctx)
 	{
+		introduceCndNodeForCndExpr();
 		nesting.consolidateSubExpression(ctx);
 	}
 
@@ -421,6 +422,23 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		expr.replaceFirstChild(callee);
 	}
 
+	private void introduceCndNodeForCndExpr()
+	{
+		ConditionalExpression expr;
+		try{
+			expr = (ConditionalExpression) stack.peek();
+		}catch(EmptyStackException ex){
+			return;
+		}
+		
+		ASTNode child = expr.getChild(0);
+		if(child == null) return;
+		Condition cnd = new Condition(); 
+		cnd.addChild(child);		
+		expr.replaceFirstChild(cnd);
+		
+	}
+	
 	public void enterArgumentList(Function_argument_listContext ctx)
 	{
 		ArgumentList expr = new ArgumentList();

@@ -3,7 +3,10 @@ grammar Expressions;
 expr: assign_expr (',' expr)?;
 
 assign_expr: conditional_expression (assignment_operator assign_expr)?;
-conditional_expression: or_expression ('?' expr ':' conditional_expression)?;
+conditional_expression: or_expression #normOr
+		      | or_expression ('?' expr ':' conditional_expression) #cndExpr;
+
+
 or_expression : and_expression ('||' or_expression)?;
 and_expression : inclusive_or_expression ('&&' and_expression)?;
 inclusive_or_expression: exclusive_or_expression ('|' inclusive_or_expression)?;

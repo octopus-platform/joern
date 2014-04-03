@@ -65,6 +65,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitType_suffix(@NotNull FunctionParser.Type_suffixContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FunctionParser#cndExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCndExpr(@NotNull FunctionParser.CndExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#cndExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCndExpr(@NotNull FunctionParser.CndExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FunctionParser#no_squares_or_semicolon}.
 	 * @param ctx the parse tree
 	 */
@@ -415,16 +425,6 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitInc_dec(@NotNull FunctionParser.Inc_decContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FunctionParser#conditional_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConditional_expression(@NotNull FunctionParser.Conditional_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FunctionParser#conditional_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConditional_expression(@NotNull FunctionParser.Conditional_expressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FunctionParser#initDeclSimple}.
 	 * @param ctx the parse tree
 	 */
@@ -734,6 +734,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#normOr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNormOr(@NotNull FunctionParser.NormOrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#normOr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNormOr(@NotNull FunctionParser.NormOrContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FunctionParser#Else_statement}.
 	 * @param ctx the parse tree

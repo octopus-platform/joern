@@ -65,6 +65,16 @@ public interface ModuleListener extends ParseTreeListener {
 	 */
 	void exitFunction_argument_list(@NotNull ModuleParser.Function_argument_listContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ModuleParser#cndExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCndExpr(@NotNull ModuleParser.CndExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ModuleParser#cndExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCndExpr(@NotNull ModuleParser.CndExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ModuleParser#multiplicative_expression}.
 	 * @param ctx the parse tree
 	 */
@@ -424,6 +434,16 @@ public interface ModuleListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitShift_expression(@NotNull ModuleParser.Shift_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ModuleParser#normOr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNormOr(@NotNull ModuleParser.NormOrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ModuleParser#normOr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNormOr(@NotNull ModuleParser.NormOrContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ModuleParser#type_name}.
 	 * @param ctx the parse tree
@@ -795,16 +815,6 @@ public interface ModuleListener extends ParseTreeListener {
 	 */
 	void exitInc_dec(@NotNull ModuleParser.Inc_decContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ModuleParser#conditional_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConditional_expression(@NotNull ModuleParser.Conditional_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ModuleParser#conditional_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConditional_expression(@NotNull ModuleParser.Conditional_expressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ModuleParser#and_expression}.
 	 * @param ctx the parse tree
 	 */
@@ -895,16 +905,6 @@ public interface ModuleListener extends ParseTreeListener {
 	 */
 	void exitInitializer(@NotNull ModuleParser.InitializerContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ModuleParser#cast_target}.
-	 * @param ctx the parse tree
-	 */
-	void enterCast_target(@NotNull ModuleParser.Cast_targetContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ModuleParser#cast_target}.
-	 * @param ctx the parse tree
-	 */
-	void exitCast_target(@NotNull ModuleParser.Cast_targetContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ModuleParser#assign_water}.
 	 * @param ctx the parse tree
 	 */
@@ -914,4 +914,14 @@ public interface ModuleListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssign_water(@NotNull ModuleParser.Assign_waterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ModuleParser#cast_target}.
+	 * @param ctx the parse tree
+	 */
+	void enterCast_target(@NotNull ModuleParser.Cast_targetContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ModuleParser#cast_target}.
+	 * @param ctx the parse tree
+	 */
+	void exitCast_target(@NotNull ModuleParser.Cast_targetContext ctx);
 }

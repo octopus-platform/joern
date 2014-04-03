@@ -83,6 +83,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCndExpr(@NotNull ModuleParser.CndExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCndExpr(@NotNull ModuleParser.CndExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultiplicative_expression(@NotNull ModuleParser.Multiplicative_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -510,6 +522,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitShift_expression(@NotNull ModuleParser.Shift_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNormOr(@NotNull ModuleParser.NormOrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNormOr(@NotNull ModuleParser.NormOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -959,18 +983,6 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditional_expression(@NotNull ModuleParser.Conditional_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditional_expression(@NotNull ModuleParser.Conditional_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAnd_expression(@NotNull ModuleParser.And_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1079,18 +1091,6 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCast_target(@NotNull ModuleParser.Cast_targetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCast_target(@NotNull ModuleParser.Cast_targetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAssign_water(@NotNull ModuleParser.Assign_waterContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1098,6 +1098,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssign_water(@NotNull ModuleParser.Assign_waterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCast_target(@NotNull ModuleParser.Cast_targetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCast_target(@NotNull ModuleParser.Cast_targetContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

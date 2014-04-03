@@ -83,6 +83,18 @@ public class FunctionBaseListener implements FunctionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCndExpr(@NotNull FunctionParser.CndExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCndExpr(@NotNull FunctionParser.CndExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNo_squares_or_semicolon(@NotNull FunctionParser.No_squares_or_semicolonContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -503,18 +515,6 @@ public class FunctionBaseListener implements FunctionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditional_expression(@NotNull FunctionParser.Conditional_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditional_expression(@NotNull FunctionParser.Conditional_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterInitDeclSimple(@NotNull FunctionParser.InitDeclSimpleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -882,6 +882,18 @@ public class FunctionBaseListener implements FunctionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNormOr(@NotNull FunctionParser.NormOrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNormOr(@NotNull FunctionParser.NormOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
