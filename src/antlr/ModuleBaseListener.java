@@ -479,18 +479,6 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnary_operator(@NotNull ModuleParser.Unary_operatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnary_operator(@NotNull ModuleParser.Unary_operatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNo_squares(@NotNull ModuleParser.No_squaresContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -498,6 +486,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNo_squares(@NotNull ModuleParser.No_squaresContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnary_operator(@NotNull ModuleParser.Unary_operatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnary_operator(@NotNull ModuleParser.Unary_operatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -539,6 +539,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSizeof(@NotNull ModuleParser.SizeofContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSizeof(@NotNull ModuleParser.SizeofContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType_name(@NotNull ModuleParser.Type_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -558,6 +570,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNo_brackets_curlies_or_squares(@NotNull ModuleParser.No_brackets_curlies_or_squaresContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSizeof_expression(@NotNull ModuleParser.Sizeof_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSizeof_expression(@NotNull ModuleParser.Sizeof_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -594,6 +618,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrimaryOnly(@NotNull ModuleParser.PrimaryOnlyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -659,18 +695,6 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEquality_operator(@NotNull ModuleParser.Equality_operatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEquality_operator(@NotNull ModuleParser.Equality_operatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNo_curlies(@NotNull ModuleParser.No_curliesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -678,6 +702,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNo_curlies(@NotNull ModuleParser.No_curliesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEquality_operator(@NotNull ModuleParser.Equality_operatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEquality_operator(@NotNull ModuleParser.Equality_operatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1050,6 +1086,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParameter_id(@NotNull ModuleParser.Parameter_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSizeof_operand(@NotNull ModuleParser.Sizeof_operandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSizeof_operand(@NotNull ModuleParser.Sizeof_operandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
