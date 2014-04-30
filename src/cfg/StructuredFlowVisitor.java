@@ -162,11 +162,15 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		CFGNode exprBlock = addEmptyCFGNode(cfg);
 		exprBlock.setASTNode(node.getExpression());
+		// empty block after for-loop
+		CFGNode emptyBlock = addEmptyCFGNode(cfg);
 		
 		cfg.addEdge(initBlock, conditionBlock);
 		cfg.addEdge(conditionBlock, statementCFG.getFirstStatement());
 		cfg.addEdge(statementCFG.getLastStatement(), exprBlock);		
 		cfg.addEdge(exprBlock, conditionBlock);
+		// jump to block after for-loop (if condition evaluates to false)
+		cfg.addEdge(conditionBlock, emptyBlock);
 		
 		returnCFG = cfg;
 	}
@@ -185,7 +189,8 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		cfg.addEdge(conditionBlock, statementCFG.getFirstStatement());
 		cfg.addEdge(statementCFG.getLastStatement(), emptyBlock);
-		cfg.addEdge(emptyBlock, conditionBlock);
+		//cfg.addEdge(emptyBlock, conditionBlock);
+		cfg.addEdge(conditionBlock, emptyBlock);
 		
 		returnCFG = cfg;
 		
@@ -205,7 +210,8 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		
 		cfg.addEdge(emptyBlock, statementCFG.getFirstStatement());
 		cfg.addEdge(statementCFG.getLastStatement(), conditionBlock);
-		cfg.addEdge(conditionBlock, emptyBlock);
+		//cfg.addEdge(conditionBlock, emptyBlock);
+		cfg.addEdge(emptyBlock, conditionBlock);
 		
 		returnCFG = cfg;
 	}
