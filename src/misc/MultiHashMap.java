@@ -69,7 +69,7 @@ public class MultiHashMap<K, V> {
      * @param values
      *            values to be associated with the specified key
      */
-    public void add(K key, List<V> values) {
+    public void addAll(K key, List<V> values) {
 	if (containsKey(key)) {
 	    hashMap.get(key).addAll(values);
 	} else {
@@ -80,7 +80,7 @@ public class MultiHashMap<K, V> {
 
     public void addAll(MultiHashMap<K, V> otherMap) {
 	for (Entry<K, List<V>> entry : otherMap.entrySet()) {
-	    add(entry.getKey(), entry.getValue());
+	    addAll(entry.getKey(), entry.getValue());
 	}
     }
 
