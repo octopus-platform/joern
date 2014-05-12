@@ -3,7 +3,7 @@ package cdg;
 import java.util.List;
 import java.util.Set;
 
-public interface WalkableGraph<V> {
+public interface Graph<V> extends Iterable<V> {
 
     public Set<V> getVertices();
 

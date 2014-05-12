@@ -5,7 +5,7 @@ import ddg.DefUseCFG.DefUseCFG;
 
 public class CDGCreator {
 
-    public CDG create(CFG cfg, DefUseCFG defUseCFG) {
+    public CDG<Object> create(CFG cfg, DefUseCFG defUseCFG) {
 	Object start = cfg.getFirstStatement();
 	Object exit = cfg.getLastStatement();
 	ReverseCFG<Object> reverseCFG;

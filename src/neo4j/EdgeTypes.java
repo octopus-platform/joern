@@ -38,4 +38,6 @@ public class EdgeTypes {
 
     public static final String POST_DOM = "POST_DOM";
 
+    public static final String CONTROLS = "CONTROLS";
+
 }

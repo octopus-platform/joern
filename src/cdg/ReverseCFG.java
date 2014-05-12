@@ -2,13 +2,21 @@ package cdg;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import misc.MultiHashMap;
 import ddg.DefUseCFG.DefUseCFG;
 
-public class ReverseCFG<V> implements WalkableGraph<V> {
+/**
+ * A reverse control flow graph augmented with an edge from the exit node to the
+ * start node.
+ * 
+ * @param <V>
+ *            the vertex type
+ */
+public class ReverseCFG<V> implements Graph<V> {
 
     private MultiHashMap<V, V> outNeighborhood;
     private MultiHashMap<V, V> inNeighborhood;
@@ -79,31 +87,49 @@ public class ReverseCFG<V> implements WalkableGraph<V> {
 
     @Override
     public Set<V> getVertices() {
-	return basicBlocks;
+	return Collections.unmodifiableSet(basicBlocks);
     }
 
 
     @Override
     public List<V> outNeighborhood(V block) {
+	if (!basicBlocks.contains(block)) {
+	    throw new IllegalArgumentException("Graph has no such vertex " + block);
+	}
 	return Collections.unmodifiableList(outNeighborhood.get(block));
     }
 
 
     @Override
     public List<V> inNeighborhood(V block) {
+	if (!basicBlocks.contains(block)) {
+	    throw new IllegalArgumentException("Graph has no such vertex " + block);
+	}
 	return Collections.unmodifiableList(inNeighborhood.get(block));
     }
 
 
     @Override
     public int outDegree(V block) {
+	if (!basicBlocks.contains(block)) {
+	    throw new IllegalArgumentException("Graph has no such vertex " + block);
+	}
 	return outNeighborhood.containsKey(block) ? outNeighborhood.get(block).size() : 0;
     }
 
 
     @Override
     public int inDegree(V block) {
+	if (!basicBlocks.contains(block)) {
+	    throw new IllegalArgumentException("Graph has no such vertex " + block);
+	}
 	return inNeighborhood.containsKey(block) ? inNeighborhood.get(block).size() : 0;
+    }
+
+
+    @Override
+    public Iterator<V> iterator() {
+	return getVertices().iterator();
     }
 
 
