@@ -87,7 +87,7 @@ public class DominatorTree<V> implements Graph<V> {
 
     @Override
     public List<V> inNeighborhood(V vertex) {
-	if (dominators.containsKey(vertex)) {
+	if (contains(vertex)) {
 	    List<V> list = new LinkedList<V>();
 	    list.add(dominators.get(vertex));
 	    return list;
@@ -115,7 +115,7 @@ public class DominatorTree<V> implements Graph<V> {
 
 
     private boolean addVertex(V vertex) {
-	if (!dominators.containsKey(vertex)) {
+	if (!contains(vertex)) {
 	    dominators.put(vertex, null);
 	    return true;
 	}
@@ -125,7 +125,7 @@ public class DominatorTree<V> implements Graph<V> {
 
     private boolean setDominator(V vertex, V dominator) {
 	boolean changed = false;
-	if (dominators.containsKey(vertex)) {
+	if (contains(vertex)) {
 	    V currentDominator = dominators.get(vertex);
 	    if (currentDominator == null && dominator != null) {
 		dominators.put(vertex, dominator);
@@ -245,6 +245,12 @@ public class DominatorTree<V> implements Graph<V> {
 	    dominatorTree.setDominator(entryNode, entryNode);
 	}
 
+    }
+
+
+    @Override
+    public boolean contains(V vertex) {
+	return dominators.containsKey(vertex);
     }
 
 }

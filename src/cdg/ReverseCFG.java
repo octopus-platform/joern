@@ -33,7 +33,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
 
     private boolean addVertex(V block) {
-	if (basicBlocks.contains(block)) {
+	if (contains(block)) {
 	    return false;
 	} else {
 	    basicBlocks.add(block);
@@ -43,7 +43,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
 
     private boolean setStartNode(V block) {
-	if (basicBlocks.contains(block)) {
+	if (contains(block)) {
 	    start = block;
 	    return true;
 	}
@@ -52,7 +52,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
 
     private boolean setExitNode(V block) {
-	if (basicBlocks.contains(block)) {
+	if (contains(block)) {
 	    exit = block;
 	    return true;
 	}
@@ -61,7 +61,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
 
     private boolean linkVertices(V sourceBlock, V targetBlock) {
-	if (basicBlocks.contains(sourceBlock) && basicBlocks.contains(targetBlock)) {
+	if (contains(sourceBlock) && contains(targetBlock)) {
 	    addLink(sourceBlock, targetBlock);
 	    return true;
 	}
@@ -93,7 +93,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
     @Override
     public List<V> outNeighborhood(V block) {
-	if (!basicBlocks.contains(block)) {
+	if (!contains(block)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + block);
 	}
 	return Collections.unmodifiableList(outNeighborhood.get(block));
@@ -102,7 +102,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
     @Override
     public List<V> inNeighborhood(V block) {
-	if (!basicBlocks.contains(block)) {
+	if (!contains(block)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + block);
 	}
 	return Collections.unmodifiableList(inNeighborhood.get(block));
@@ -111,7 +111,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
     @Override
     public int outDegree(V block) {
-	if (!basicBlocks.contains(block)) {
+	if (!contains(block)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + block);
 	}
 	return outNeighborhood.containsKey(block) ? outNeighborhood.get(block).size() : 0;
@@ -120,7 +120,7 @@ public class ReverseCFG<V> implements Graph<V> {
 
     @Override
     public int inDegree(V block) {
-	if (!basicBlocks.contains(block)) {
+	if (!contains(block)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + block);
 	}
 	return inNeighborhood.containsKey(block) ? inNeighborhood.get(block).size() : 0;
@@ -130,6 +130,12 @@ public class ReverseCFG<V> implements Graph<V> {
     @Override
     public Iterator<V> iterator() {
 	return getVertices().iterator();
+    }
+
+
+    @Override
+    public boolean contains(V vertex) {
+	return basicBlocks.contains(vertex);
     }
 
 

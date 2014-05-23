@@ -19,4 +19,7 @@ public interface Graph<V> extends Iterable<V> {
 
     public int outDegree(V vertex);
 
+
+    public boolean contains(V vertex);
+
 }

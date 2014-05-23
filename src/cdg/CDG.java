@@ -34,7 +34,7 @@ public class CDG<V> implements Graph<V> {
 
     @Override
     public List<V> outNeighborhood(V vertex) {
-	if (!vertices.contains(vertex)) {
+	if (!contains(vertex)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + vertex);
 	}
 	return Collections.unmodifiableList(controlEdges.get(vertex));
@@ -43,7 +43,7 @@ public class CDG<V> implements Graph<V> {
 
     @Override
     public List<V> inNeighborhood(V vertex) {
-	if (!vertices.contains(vertex)) {
+	if (!contains(vertex)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + vertex);
 	}
 	throw new UnsupportedOperationException();
@@ -53,7 +53,7 @@ public class CDG<V> implements Graph<V> {
 
     @Override
     public int inDegree(V vertex) {
-	if (!vertices.contains(vertex)) {
+	if (!contains(vertex)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + vertex);
 	}
 	throw new UnsupportedOperationException();
@@ -63,7 +63,7 @@ public class CDG<V> implements Graph<V> {
 
     @Override
     public int outDegree(V vertex) {
-	if (!vertices.contains(vertex)) {
+	if (!contains(vertex)) {
 	    throw new IllegalArgumentException("Graph has no such vertex " + vertex);
 	}
 	return controlEdges.containsKey(vertex) ? controlEdges.get(vertex).size() : 0;
@@ -94,7 +94,7 @@ public class CDG<V> implements Graph<V> {
 
 
     private boolean addVertex(V vertex) {
-	if (!vertices.contains(vertex)) {
+	if (!contains(vertex)) {
 	    vertices.add(vertex);
 	    return true;
 	}
@@ -109,6 +109,12 @@ public class CDG<V> implements Graph<V> {
 	    changed = true;
 	}
 	return changed;
+    }
+
+
+    @Override
+    public boolean contains(V vertex) {
+	return vertices.contains(vertex);
     }
 
 }
