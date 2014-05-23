@@ -84,7 +84,7 @@ public class ASTToCFGConverter {
 	private void fixSwitchBlocks(CFG cfg)
 	{
 		SwitchLabels switchLabels = cfg.getSwitchLabels();
-		Set<Entry<Object, List<Object>>> entrySet = switchLabels.hashMap.entrySet();
+		Set<Entry<Object, List<Object>>> entrySet = switchLabels.entrySet();
 		Iterator<Entry<Object, List<Object>>> it = entrySet.iterator();
 		
 		while(it.hasNext()){
