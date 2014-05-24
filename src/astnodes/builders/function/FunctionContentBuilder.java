@@ -3,8 +3,10 @@ package astnodes.builders.function;
 import java.util.EmptyStackException;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import parsing.InitDeclContextWrapper;
+import antlr.FunctionParser;
 import antlr.FunctionParser.Additive_expressionContext;
 import antlr.FunctionParser.And_expressionContext;
 import antlr.FunctionParser.ArrayIndexingContext;
@@ -50,6 +52,10 @@ import antlr.FunctionParser.PtrMemberAccessContext;
 import antlr.FunctionParser.Relational_expressionContext;
 import antlr.FunctionParser.ReturnStatementContext;
 import antlr.FunctionParser.Shift_expressionContext;
+import antlr.FunctionParser.SizeofContext;
+import antlr.FunctionParser.Sizeof_expressionContext;
+import antlr.FunctionParser.Sizeof_operand2Context;
+import antlr.FunctionParser.Sizeof_operandContext;
 import antlr.FunctionParser.StatementContext;
 import antlr.FunctionParser.StatementsContext;
 import antlr.FunctionParser.Switch_statementContext;
@@ -89,6 +95,9 @@ import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.PtrMemberAccess;
 import astnodes.expressions.RelationalExpression;
 import astnodes.expressions.ShiftExpression;
+import astnodes.expressions.Sizeof;
+import astnodes.expressions.SizeofExpr;
+import astnodes.expressions.SizeofOperand;
 import astnodes.expressions.UnaryExpression;
 import astnodes.statements.BlockCloser;
 import astnodes.statements.BlockStarter;
@@ -405,6 +414,17 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		nesting.consolidateSubExpression(ctx);
 	}
 
+	public void enterSizeof(SizeofContext ctx)
+	{
+		Sizeof expr = new Sizeof();
+		stack.push(expr);
+	}
+	
+	public void exitSizeof(SizeofContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+	
 	private void introduceCalleeNode()
 	{
 		CallExpression expr;
@@ -744,5 +764,38 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		stack.pop();
 		stack.push(item);
 	}
-	
+
+	public void enterSizeofExpr(Sizeof_expressionContext ctx)
+	{
+		SizeofExpr expr = new SizeofExpr();
+		stack.push(expr);
+	}
+
+	public void exitSizeofExpr(Sizeof_expressionContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void enterSizeofOperand2(Sizeof_operand2Context ctx)
+	{
+		SizeofOperand expr = new SizeofOperand();
+		stack.push(expr);
+	}
+
+	public void enterSizeofOperand(Sizeof_operandContext ctx)
+	{
+		SizeofOperand expr = new SizeofOperand();
+		stack.push(expr);
+	}
+
+	public void exitSizeofOperand2(Sizeof_operand2Context ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void exitSizeofOperand(Sizeof_operandContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
 }

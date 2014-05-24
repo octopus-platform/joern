@@ -29,10 +29,17 @@ cast_target: type_name ptr_operator*;
 
 unary_expression: inc_dec cast_expression
                 | unary_operator cast_expression
-                | 'sizeof' '(' type_name ptr_operator* ')'
-                | 'sizeof' unary_expression
+                | sizeof_expression 
                 | postfix_expression
                 ;
+
+sizeof_expression: sizeof '(' sizeof_operand ')'
+                 | sizeof sizeof_operand2;
+
+sizeof: 'sizeof';
+
+sizeof_operand: type_name ptr_operator *;
+sizeof_operand2: unary_expression;
 
 inc_dec: ('--' | '++');
 

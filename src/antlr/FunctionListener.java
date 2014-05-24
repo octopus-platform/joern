@@ -235,6 +235,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitBreakStatement(@NotNull FunctionParser.BreakStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FunctionParser#sizeof_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSizeof_expression(@NotNull FunctionParser.Sizeof_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#sizeof_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSizeof_expression(@NotNull FunctionParser.Sizeof_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FunctionParser#funcCall}.
 	 * @param ctx the parse tree
 	 */
@@ -685,16 +695,6 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitStatement(@NotNull FunctionParser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FunctionParser#initDeclWithCall}.
-	 * @param ctx the parse tree
-	 */
-	void enterInitDeclWithCall(@NotNull FunctionParser.InitDeclWithCallContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FunctionParser#initDeclWithCall}.
-	 * @param ctx the parse tree
-	 */
-	void exitInitDeclWithCall(@NotNull FunctionParser.InitDeclWithCallContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FunctionParser#param_type_id}.
 	 * @param ctx the parse tree
 	 */
@@ -704,6 +704,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParam_type_id(@NotNull FunctionParser.Param_type_idContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#initDeclWithCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitDeclWithCall(@NotNull FunctionParser.InitDeclWithCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#initDeclWithCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitDeclWithCall(@NotNull FunctionParser.InitDeclWithCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FunctionParser#additive_expression}.
 	 * @param ctx the parse tree
@@ -754,6 +764,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitElse_statement(@NotNull FunctionParser.Else_statementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#sizeof}.
+	 * @param ctx the parse tree
+	 */
+	void enterSizeof(@NotNull FunctionParser.SizeofContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#sizeof}.
+	 * @param ctx the parse tree
+	 */
+	void exitSizeof(@NotNull FunctionParser.SizeofContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FunctionParser#Switch_statement}.
 	 * @param ctx the parse tree
@@ -815,6 +835,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitPrimaryOnly(@NotNull FunctionParser.PrimaryOnlyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FunctionParser#sizeof_operand2}.
+	 * @param ctx the parse tree
+	 */
+	void enterSizeof_operand2(@NotNull FunctionParser.Sizeof_operand2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#sizeof_operand2}.
+	 * @param ctx the parse tree
+	 */
+	void exitSizeof_operand2(@NotNull FunctionParser.Sizeof_operand2Context ctx);
+	/**
 	 * Enter a parse tree produced by {@link FunctionParser#no_brackets_or_semicolon}.
 	 * @param ctx the parse tree
 	 */
@@ -845,16 +875,6 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitEquality_operator(@NotNull FunctionParser.Equality_operatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FunctionParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpr(@NotNull FunctionParser.ExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FunctionParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpr(@NotNull FunctionParser.ExprContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FunctionParser#param_type_list}.
 	 * @param ctx the parse tree
 	 */
@@ -864,6 +884,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParam_type_list(@NotNull FunctionParser.Param_type_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr(@NotNull FunctionParser.ExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr(@NotNull FunctionParser.ExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FunctionParser#simple_decl}.
 	 * @param ctx the parse tree
@@ -1004,4 +1034,14 @@ public interface FunctionListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclByType(@NotNull FunctionParser.DeclByTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FunctionParser#sizeof_operand}.
+	 * @param ctx the parse tree
+	 */
+	void enterSizeof_operand(@NotNull FunctionParser.Sizeof_operandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#sizeof_operand}.
+	 * @param ctx the parse tree
+	 */
+	void exitSizeof_operand(@NotNull FunctionParser.Sizeof_operandContext ctx);
 }
