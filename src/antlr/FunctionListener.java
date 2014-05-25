@@ -245,6 +245,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitSizeof_expression(@NotNull FunctionParser.Sizeof_expressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FunctionParser#unary_op_and_cast_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnary_op_and_cast_expr(@NotNull FunctionParser.Unary_op_and_cast_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#unary_op_and_cast_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnary_op_and_cast_expr(@NotNull FunctionParser.Unary_op_and_cast_exprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FunctionParser#funcCall}.
 	 * @param ctx the parse tree
 	 */

@@ -28,10 +28,12 @@ cast_target: type_name ptr_operator*;
 //
 
 unary_expression: inc_dec cast_expression
-                | unary_operator cast_expression
+                | unary_op_and_cast_expr
                 | sizeof_expression 
                 | postfix_expression
                 ;
+
+unary_op_and_cast_expr: unary_operator cast_expression;
 
 sizeof_expression: sizeof '(' sizeof_operand ')'
                  | sizeof sizeof_operand2;

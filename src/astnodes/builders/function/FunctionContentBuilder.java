@@ -61,6 +61,8 @@ import antlr.FunctionParser.StatementsContext;
 import antlr.FunctionParser.Switch_statementContext;
 import antlr.FunctionParser.Type_nameContext;
 import antlr.FunctionParser.Unary_expressionContext;
+import antlr.FunctionParser.Unary_op_and_cast_exprContext;
+import antlr.FunctionParser.Unary_operatorContext;
 import antlr.FunctionParser.While_statementContext;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
@@ -99,6 +101,8 @@ import astnodes.expressions.Sizeof;
 import astnodes.expressions.SizeofExpr;
 import astnodes.expressions.SizeofOperand;
 import astnodes.expressions.UnaryExpression;
+import astnodes.expressions.UnaryOp;
+import astnodes.expressions.UnaryOperator;
 import astnodes.statements.BlockCloser;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.BreakStatement;
@@ -798,4 +802,26 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		nesting.consolidateSubExpression(ctx);
 	}
 
+	public void enterUnaryOpAndCastExpr(Unary_op_and_cast_exprContext ctx)
+	{
+		UnaryOp expr = new UnaryOp();
+		stack.push(expr);
+	}
+
+	public void exitUnaryOpAndCastExpr(Unary_op_and_cast_exprContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void enterUnaryOperator(Unary_operatorContext ctx)
+	{
+		UnaryOperator expr = new UnaryOperator();
+		stack.push(expr);
+	}
+
+	public void exitUnaryOperator(Unary_operatorContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+	
 }

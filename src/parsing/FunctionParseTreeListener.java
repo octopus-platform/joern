@@ -442,6 +442,32 @@ public class FunctionParseTreeListener extends FunctionBaseListener
 		builder.exitSizeof(ctx);
 	}
 	
+	@Override public void enterUnary_op_and_cast_expr(@NotNull FunctionParser.Unary_op_and_cast_exprContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterUnaryOpAndCastExpr(ctx);
+	}
+
+	@Override public void exitUnary_op_and_cast_expr(@NotNull FunctionParser.Unary_op_and_cast_exprContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitUnaryOpAndCastExpr(ctx);
+	}
+	
+	@Override public void enterUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterUnaryOperator(ctx);
+	}
+
+	@Override public void exitUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitUnaryOperator(ctx);
+	}
+
+	
+	
 	@Override public void enterFunction_argument_list(FunctionParser.Function_argument_listContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();

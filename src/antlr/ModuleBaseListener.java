@@ -599,6 +599,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUnary_op_and_cast_expr(@NotNull ModuleParser.Unary_op_and_cast_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnary_op_and_cast_expr(@NotNull ModuleParser.Unary_op_and_cast_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFuncCall(@NotNull ModuleParser.FuncCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
