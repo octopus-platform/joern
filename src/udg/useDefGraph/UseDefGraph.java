@@ -3,7 +3,6 @@ package udg.useDefGraph;
 import java.util.List;
 
 import astnodes.ASTNode;
-import cfg.CFGNode;
 import misc.MultiHashMap;
 
 public class UseDefGraph {
@@ -13,16 +12,16 @@ public class UseDefGraph {
 	// is a list of the UseOrDefRecords
 	// of the identifier.
 	
-	MultiHashMap useOrDefRecordTable = new MultiHashMap();
+	MultiHashMap<String, UseOrDefRecord> useOrDefRecordTable = new MultiHashMap<String, UseOrDefRecord>();
 	
-	public MultiHashMap getUseDefDict()
+	public MultiHashMap<String, UseOrDefRecord> getUseDefDict()
 	{
 		return useOrDefRecordTable;
 	}
 	
-	public List<Object> getUsesAndDefsForSymbol(String symbol)
+	public List<UseOrDefRecord> getUsesAndDefsForSymbol(String symbol)
 	{
-		return useOrDefRecordTable.getListForKey(symbol);
+		return useOrDefRecordTable.get(symbol);
 	}
 	
 	public void addDefinition(String identifier, ASTNode astNode)

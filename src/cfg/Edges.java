@@ -4,7 +4,7 @@ import java.util.List;
 
 import misc.MultiHashMap;
 
-public class Edges extends MultiHashMap
+public class Edges extends MultiHashMap<Object,Object>
 {
 	public void addEdge(Object src, Object dst)
 	{
@@ -13,12 +13,12 @@ public class Edges extends MultiHashMap
 
 	public List<Object> getEdgesFrom(CFGNode src)
 	{
-		return getListForKey(src);
+		return get(src);
 	}
 	
 	public void addEdges(Edges otherEdges)
 	{
-		addMultiHashMap(otherEdges);
+		addAll(otherEdges);
 	}
 
 	public void removeEdge(CFGNode src, CFGNode dst)
@@ -28,7 +28,7 @@ public class Edges extends MultiHashMap
 	
 	public void removeAllEdgesFrom(CFGNode src)
 	{
-		removeAllForKey(src);
+		removeAll(src);
 	}
 	
 }

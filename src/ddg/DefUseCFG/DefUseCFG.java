@@ -18,10 +18,10 @@ import misc.MultiHashMap;
 public class DefUseCFG {
 
 	private LinkedList<Object> statements = new LinkedList<Object>();
-	private MultiHashMap symbolsUsed = new MultiHashMap();
-	private MultiHashMap symbolsDefined = new MultiHashMap();
-	private MultiHashMap parentBlocks = new MultiHashMap();
-	private MultiHashMap childBlocks = new MultiHashMap();
+	private MultiHashMap<Object, Object> symbolsUsed = new MultiHashMap<Object,Object>();
+	private MultiHashMap<Object, Object> symbolsDefined = new MultiHashMap<Object,Object>();
+	private MultiHashMap<Object,Object> parentBlocks = new MultiHashMap<Object,Object>();
+	private MultiHashMap<Object,Object> childBlocks = new MultiHashMap<Object,Object>();
 	private Map<String, Object> symbolIds = new HashMap<String, Object>();
 	
 	private static final List<Object> EMPTY_LIST = new LinkedList<Object>();
@@ -43,7 +43,7 @@ public class DefUseCFG {
 	
 	public Collection<Object> getSymbolsDefinedBy(Object blockId)
 	{
-		List<Object> listForKey = symbolsDefined.getListForKey(blockId);
+		List<Object> listForKey = symbolsDefined.get(blockId);
 		if(listForKey == null) return EMPTY_LIST;
 		return listForKey;
 	}
@@ -62,19 +62,19 @@ public class DefUseCFG {
 		return statements;
 	}
 	
-	public MultiHashMap getSymbolsUsed() {
+	public MultiHashMap<Object,Object> getSymbolsUsed() {
 		return symbolsUsed;
 	}
 		
-	public MultiHashMap getSymbolsDefined() {
+	public MultiHashMap<Object,Object> getSymbolsDefined() {
 		return symbolsDefined;
 	}
 	
-	public MultiHashMap getParentBlocks() {
+	public MultiHashMap<Object,Object> getParentBlocks() {
 		return parentBlocks;
 	}
 	
-	public MultiHashMap getChildBlocks() {
+	public MultiHashMap<Object,Object> getChildBlocks() {
 		return childBlocks;
 	}
 

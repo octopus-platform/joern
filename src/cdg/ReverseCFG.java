@@ -177,8 +177,12 @@ public class ReverseCFG<V> implements Graph<V> {
 
 
 	private void linkBlocks() {
-	    MultiHashMap<V, V> outNeighborhood = cfg.getChildBlocks();
-	    MultiHashMap<V, V> inNeighborhood = cfg.getParentBlocks();
+		// TODO:
+		// The cast below needs to be fixed. It essentially
+		// means that V has to be Object anyway. When stronger
+		// typing for the CFG has been implemented, revisit this.
+	    MultiHashMap<V, V> outNeighborhood = (MultiHashMap<V, V>) cfg.getChildBlocks();
+	    MultiHashMap<V, V> inNeighborhood = (MultiHashMap<V, V>) cfg.getParentBlocks();
 	    reverseCFG.inNeighborhood = outNeighborhood;
 	    reverseCFG.outNeighborhood = inNeighborhood;
 	    reverseCFG.linkVertices(exit, start);

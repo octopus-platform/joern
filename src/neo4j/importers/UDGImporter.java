@@ -34,26 +34,25 @@ public class UDGImporter {
 
 	public void addUDGToDatabase(UseDefGraph graph)
 	{
-		MultiHashMap useDefDict = graph.getUseDefDict();
+		MultiHashMap<String, UseOrDefRecord> useDefDict = graph.getUseDefDict();
 				
-		Iterator<Object> it = useDefDict.getKeySetIterator();
+		Iterator<String> it = useDefDict.getKeySetIterator();
 			
 		while(it.hasNext()){
-			String identifier = (String) it.next();							
+			String identifier = it.next();							
 			long symbolNodeId = createSymbolNode(identifier);			
 			addUseDefEdges(useDefDict, identifier, symbolNodeId);	
 		}
 	
 	}
 
-	private void addUseDefEdges(MultiHashMap useDefDict, String identifier,
+	private void addUseDefEdges(MultiHashMap<String,UseOrDefRecord> useDefDict, String identifier,
 			long symbolNodeId)
 	{
 		
-		List<Object> destinations = useDefDict.getListForKey(identifier);			
+		List<UseOrDefRecord> destinations = useDefDict.get(identifier);			
 		
-		for(Object d : destinations){
-			UseOrDefRecord item = (UseOrDefRecord) d;
+		for(UseOrDefRecord item : destinations){
 			addUseOrDefRecordToDatabase(symbolNodeId, item);			
 		}
 	}

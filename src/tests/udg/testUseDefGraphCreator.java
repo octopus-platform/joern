@@ -147,43 +147,39 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter {
 	
 	private void assertOnlyDefForXFound(UseDefGraph useDefGraph, String symbol)
 	{
-		List<Object> usesAndDefs = useDefGraph.getUsesAndDefsForSymbol(symbol);
+		List<UseOrDefRecord> usesAndDefs = useDefGraph.getUsesAndDefsForSymbol(symbol);
 		assertTrue(usesAndDefs != null);
 		assertTrue(usesAndDefs.size() > 0);
 		
 		// make sure only 'uses' of x exist
-		for( Object u : usesAndDefs){
-			UseOrDefRecord r = (UseOrDefRecord) u;
+		for( UseOrDefRecord r : usesAndDefs){
 			assertTrue(r.isDef);
 		}
 	}
 
 	private void assertOnlyUseForXFound(UseDefGraph useDefGraph, String symbol)
 	{
-		List<Object> usesAndDefs = useDefGraph.getUsesAndDefsForSymbol(symbol);
+		List<UseOrDefRecord> usesAndDefs = useDefGraph.getUsesAndDefsForSymbol(symbol);
 		assertTrue(usesAndDefs != null);
 		assertTrue(usesAndDefs.size() > 0);
 		
 		// make sure only 'uses' of x exist
-		for( Object u : usesAndDefs){
-			UseOrDefRecord r = (UseOrDefRecord) u;
+		for(UseOrDefRecord r : usesAndDefs){
 			assertTrue(!r.isDef);
 		}
 	}
 	
 	private void assertDefAndUseForXFound(UseDefGraph useDefGraph, String symbol) {
 		
-		List<Object> usesAndDefs = useDefGraph.getUsesAndDefsForSymbol(symbol);
+		List<UseOrDefRecord> usesAndDefs = useDefGraph.getUsesAndDefsForSymbol(symbol);
 		assertTrue(usesAndDefs != null);
 		assertTrue(usesAndDefs.size() > 0);
 		
 		boolean isDefined = false, isUsed = false;
 		
 		// make sure only 'definitions' of x exist
-		for( Object u : usesAndDefs){
-			UseOrDefRecord r = (UseOrDefRecord) u;
+		for( UseOrDefRecord r : usesAndDefs){
 			if(r.isDef) isDefined = true;
-			
 			if(!r.isDef) isUsed = true;
 		}
 	

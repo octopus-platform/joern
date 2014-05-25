@@ -38,18 +38,15 @@ public class CFGAndUDGToDefUseCFG {
 
 	private void initializeDefUses(UseDefGraph udg, DefUseCFG defUseCFG)
 	{
-		MultiHashMap useDefDict = udg.getUseDefDict();
-		Iterator<Entry<Object, List<Object>>> it = useDefDict.getEntrySetIterator();
+		MultiHashMap<String, UseOrDefRecord> useDefDict = udg.getUseDefDict();
+		Iterator<Entry<String, List<UseOrDefRecord>>> it = useDefDict.getEntrySetIterator();
 		
 		while(it.hasNext()){
-			Entry<Object, List<Object>> next = it.next();
-			
+			Entry<String, List<UseOrDefRecord>> next = it.next();	
 			String symbol = (String) next.getKey();
+			List<UseOrDefRecord> defUseRecords = next.getValue();
 			
-			List<Object> defUseRecords = next.getValue();
-			
-			for(Object obj : defUseRecords){
-				UseOrDefRecord record = (UseOrDefRecord) obj;
+			for(UseOrDefRecord record : defUseRecords){
 								
 				if(!record.astNode.isInCFG())
 					continue;
