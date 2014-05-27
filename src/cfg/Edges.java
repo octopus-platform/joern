@@ -1,34 +1,54 @@
 package cfg;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import misc.MultiHashMap;
 
-public class Edges extends MultiHashMap<Object,Object>
-{
-	public void addEdge(Object src, Object dst)
-	{
-		add(src, dst);
-	}
+public class Edges<E extends Edge<V>, V> extends MultiHashMap<V, E> implements Iterable<E> {
 
-	public List<Object> getEdgesFrom(CFGNode src)
-	{
-		return get(src);
-	}
-	
-	public void addEdges(Edges otherEdges)
-	{
-		addAll(otherEdges);
-	}
+    public void addEdge(E edge) {
+	add(edge.getSource(), edge);
+    }
 
-	public void removeEdge(CFGNode src, CFGNode dst)
-	{
-		remove(src, dst);
+
+    public List<E> getEdgesFrom(V src) {
+	return get(src);
+    }
+
+
+    public void addEdges(Edges<E, V> otherEdges) {
+	addAll(otherEdges);
+    }
+
+
+    public void removeEdge(V src, V dst) {
+	List<E> edges = get(src);
+	Iterator<E> it = edges.iterator();
+	E edge;
+	while (it.hasNext()) {
+	    edge = it.next();
+	    if (edge.getDestination() == dst) {
+		it.remove();
+	    }
 	}
-	
-	public void removeAllEdgesFrom(CFGNode src)
-	{
-		removeAll(src);
+    }
+
+
+    public void removeAllEdgesFrom(V src) {
+	removeAll(src);
+    }
+
+
+    @Override
+    public Iterator<E> iterator() {
+	// TODO
+	List<E> list = new LinkedList<E>();
+	for (V key : keySet()) {
+	    list.addAll(get(key));
 	}
-	
+	return list.iterator();
+    }
+
 }
