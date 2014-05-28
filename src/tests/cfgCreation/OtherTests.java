@@ -12,6 +12,7 @@ import cfg.CFG;
 import cfg.CFGNode;
 import cfg.Edges;
 
+
 public class OtherTests extends CFGCreatorTest
 {
 
@@ -38,7 +39,7 @@ public class OtherTests extends CFGCreatorTest
 		String input = "do{ bar(); }while(foo);";
 		CFG cfg = getCFGForCode(input);
 		System.out.println(cfg.getStatements().size());
-		assertTrue(cfg.getStatements().size() == 4);
+		assertTrue(cfg.getStatements().size() == 5);
 	}
 	
 	@Test
@@ -73,9 +74,8 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "switch(foo){ case 1: case2: case 3: }";
 		CFG cfg = getCFGForCode(input);
-		Edges edges = cfg.getEdges();
-		System.out.println(edges.size());
-		assertTrue(edges.size() == 9);
+		System.out.println(cfg.getNumberOfEdges());
+		assertTrue(cfg.getNumberOfEdges() == 9);
 	}
 	
 	@Test
@@ -91,8 +91,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "x = 10; y = 20;";
 		CFG cfg = getCFGForCode(input);
-		Edges edges = cfg.getEdges();
-		assertTrue(cfg.getEdges().size() == 2);
+		assertTrue(cfg.getNumberOfEdges() == 2);
 	}
 	
 	@Test
@@ -114,7 +113,7 @@ public class OtherTests extends CFGCreatorTest
 		CFGNode yAssignX = cfg.getStatements().get(3);
 		CFGNode exitBlock = cfg.getStatements().lastElement();
 		
-		assertTrue(cfg.getEdges().getEdgesFrom(yAssignX).contains(exitBlock));
+		assertTrue(cfg.isConnected(yAssignX, exitBlock));
 	}
 	
 	@Test
@@ -128,7 +127,7 @@ public class OtherTests extends CFGCreatorTest
 		CFGNode gotoStmt = statements.get(4);
 		CFGNode exitBlock = cfg.getLastStatement();
 		
-		assertFalse(cfg.getEdges().getEdgesFrom(gotoStmt).contains(exitBlock));
+		assertFalse(cfg.getAllEdgesFrom(gotoStmt).contains(exitBlock));
 	}
 
 }
