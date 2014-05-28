@@ -46,7 +46,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "for(i = 0; i < 10; i ++){ foo(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 5);
+		assertTrue(cfg.getStatements().size() == 6);
 	}
 	
 	@Test
