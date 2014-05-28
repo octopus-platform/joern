@@ -3,7 +3,6 @@ package cfg;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -34,7 +33,7 @@ public class CFG {
 
 	Vector<CFGNode> otherBlocks = otherCFG.getStatements();
 	Edges<CFGEdge, CFGNode> otherEdges = otherCFG.getEdges();
-	switchLabels.addMultiHashMap(otherCFG.getSwitchLabels());
+	switchLabels.addAll(otherCFG.getSwitchLabels());
 	statements.addAll(otherBlocks);
 	edges.addEdges(otherEdges);
 
@@ -122,6 +121,10 @@ public class CFG {
 
     public List<CFGEdge> getAllEdgesFrom(CFGNode srcBlock) {
 	return edges.getEdgesFrom(srcBlock);
+    }
+    
+    public boolean isConnected(CFGNode src, CFGNode dst) {
+	return edges.isConnected(src, dst);
     }
 
 

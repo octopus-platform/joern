@@ -84,9 +84,12 @@ public class IfBlockTests extends CFGCreatorTest {
 	assertTrue(cfg.getAllEdgesFrom(conditionBlock).size() == 2);
 	assertTrue(cfg.getAllEdgesFrom(ifStatements).size() == 1);
 
-	assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(ifStatements));
-	assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(emptyBlock));
-	assertTrue(cfg.getAllEdgesFrom(ifStatements).contains(emptyBlock));
+	//assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(ifStatements));
+	//assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(emptyBlock));
+	//assertTrue(cfg.getAllEdgesFrom(ifStatements).contains(emptyBlock));
+	assertTrue(cfg.isConnected(conditionBlock, ifStatements));
+	assertTrue(cfg.isConnected(conditionBlock, emptyBlock));
+	assertTrue(cfg.isConnected(ifStatements, emptyBlock));
     }
 
 
@@ -106,10 +109,14 @@ public class IfBlockTests extends CFGCreatorTest {
 	assertTrue(cfg.getAllEdgesFrom(conditionBlock).size() == 2);
 	assertTrue(cfg.getAllEdgesFrom(ifStatements).size() == 1);
 
-	assertTrue(cfg.getAllEdgesFrom(prevBlock).contains(conditionBlock));
-	assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(ifStatements));
-	assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(emptyBlock));
-	assertTrue(cfg.getAllEdgesFrom(ifStatements).contains(emptyBlock));
+	//assertTrue(cfg.getAllEdgesFrom(prevBlock).contains(conditionBlock));
+	//assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(ifStatements));
+	//assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(emptyBlock));
+	//assertTrue(cfg.getAllEdgesFrom(ifStatements).contains(emptyBlock));
+	assertTrue(cfg.isConnected(prevBlock, conditionBlock));
+	assertTrue(cfg.isConnected(conditionBlock, ifStatements));
+	assertTrue(cfg.isConnected(conditionBlock, emptyBlock));
+	assertTrue(cfg.isConnected(ifStatements, emptyBlock));
     }
 
 
@@ -137,10 +144,15 @@ public class IfBlockTests extends CFGCreatorTest {
 	assertTrue(cfg.getAllEdgesFrom(conditionBlock).size() == 2);
 	assertTrue(cfg.getAllEdgesFrom(ifStatements).size() == 1);
 
-	assertTrue(cfg.getAllEdgesFrom(emptyBlock).contains(nextBlock));
-	assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(ifStatements));
-	assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(emptyBlock));
-	assertTrue(cfg.getAllEdgesFrom(ifStatements).contains(emptyBlock));
+	//assertTrue(cfg.getAllEdgesFrom(emptyBlock).contains(nextBlock));
+	//assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(ifStatements));
+	//assertTrue(cfg.getAllEdgesFrom(conditionBlock).contains(emptyBlock));
+	//assertTrue(cfg.getAllEdgesFrom(ifStatements).contains(emptyBlock));
+	assertTrue(cfg.isConnected(emptyBlock, nextBlock));
+	assertTrue(cfg.isConnected(conditionBlock, ifStatements));
+	assertTrue(cfg.isConnected(conditionBlock, emptyBlock));
+	assertTrue(cfg.isConnected(ifStatements, emptyBlock));
+	
     }
 
 

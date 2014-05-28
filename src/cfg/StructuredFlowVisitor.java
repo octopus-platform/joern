@@ -125,24 +125,24 @@ public class StructuredFlowVisitor extends ASTNodeVisitor {
 
 	CFGNode conditionBlock = addConditionBlock(node, cfg, new CFGNode());
 	CFG statementCFG = addStatementBlock(node, cfg);
-	CFGNode emptyBlock;
+	CFGNode ifExit;
 
 	cfg.addEdge(conditionBlock, statementCFG.getFirstStatement(), CFGEdge.TRUE_LABEL);
 
 	ElseStatement elseNode = node.getElseNode();
 	if (elseNode == null) {
-	    emptyBlock = addEmptyCFGNode(cfg);
-	    cfg.addEdge(conditionBlock, emptyBlock, CFGEdge.FALSE_LABEL);
+	    ifExit = addEmptyCFGNode(cfg);
+	    cfg.addEdge(conditionBlock, ifExit, CFGEdge.FALSE_LABEL);
 	} else {
 	    Statement elseStatement = elseNode.getStatement();
 	    CFG elseCFG = convertStatement(elseStatement);
 	    cfg.addCFG(elseCFG);
 	    cfg.addEdge(conditionBlock, elseCFG.getFirstStatement(), CFGEdge.FALSE_LABEL);
-	    emptyBlock = addEmptyCFGNode(cfg);
-	    cfg.addEdge(elseCFG.getLastStatement(), emptyBlock);
+	    ifExit = addEmptyCFGNode(cfg);
+	    cfg.addEdge(elseCFG.getLastStatement(), ifExit);
 	}
 
-	cfg.addEdge(statementCFG.getLastStatement(), emptyBlock);
+	cfg.addEdge(statementCFG.getLastStatement(), ifExit);
 
 	returnCFG = cfg;
     }
@@ -227,10 +227,10 @@ public class StructuredFlowVisitor extends ASTNodeVisitor {
 	CFG statementCFG = addStatementBlock(node, cfg);
 	loopStack.pop();
 
-	CFGNode emptyBlock = addEmptyCFGNode(cfg);
+	CFGNode switchExit = addEmptyCFGNode(cfg);
 
 	cfg.addEdge(conditionBlock, statementCFG.getFirstStatement());
-	cfg.addEdge(statementCFG.getLastStatement(), emptyBlock);
+	cfg.addEdge(statementCFG.getLastStatement(), switchExit);
 
 	// HACK: We're adding an edge from the condition
 	// to the the end of the switch-statement here
@@ -239,7 +239,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor {
 	// the start of the switch statement
 	// This edge is removed by the JumpStatemetVisitor
 
-	cfg.addEdge(conditionBlock, emptyBlock);
+	cfg.addEdge(conditionBlock, switchExit);
 
 	returnCFG = cfg;
 

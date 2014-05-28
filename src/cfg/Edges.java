@@ -16,6 +16,23 @@ public class Edges<E extends Edge<V>, V> extends MultiHashMap<V, E> implements I
     public List<E> getEdgesFrom(V src) {
 	return get(src);
     }
+    
+    public List<V> outNeighborhood(V src) {
+	List<V> destinationList = new LinkedList<V>();
+	for (Edge<V> e : getEdgesFrom(src)) {
+	    destinationList.add(e.getDestination());
+	}
+	return destinationList;
+    }
+    
+    public boolean isConnected(V src, V dst) {
+	for (Edge<V> e : getEdgesFrom(src)) {
+	    if (e.getDestination().equals(dst)) {
+		return true;
+	    }
+	}
+	return false;
+    } 
 
 
     public void addEdges(Edges<E, V> otherEdges) {
