@@ -67,7 +67,7 @@ public class ExpressionParsingTest {
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem.getStatements().get(0);
 		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
 		ConditionalExpression right = (ConditionalExpression) expr.getRight();
-		assertTrue(right.getCondition().getEscapedCodeStr().equals("cond"));
+		assertTrue(right.getChild(0).getEscapedCodeStr().equals("cond"));
 	}
 	
 	@Test

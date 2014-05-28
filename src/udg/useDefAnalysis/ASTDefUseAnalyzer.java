@@ -19,11 +19,23 @@ import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefAnalysis.environments.UseEnvironment;
 import udg.useDefGraph.UseOrDef;
 
+/**
+ * The ASTDefUseAnalyzer determines symbol uses and definitions
+ * performed in a given AST. It is currently run on statement ASTs
+ * as the core step in the construction of the symbol graph (UDG).
+ * */
+
 public class ASTDefUseAnalyzer {
 
 	Stack<UseDefEnvironment> environmentStack = new Stack<UseDefEnvironment>();
 	HashSet<UseOrDef> useDefsOfBlock = new HashSet<UseOrDef>();
 	TaintSources taintSources = new TaintSources();
+	
+	/**
+	 * Analyze an AST to determine the symbols used and defined
+	 * by each AST node.
+	 
+	 * */
 	
 	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider)
 	{
@@ -32,6 +44,12 @@ public class ASTDefUseAnalyzer {
 		return useDefsOfBlock;
 	}
 
+	/**
+	 * Inform the ASTAnalyzer about (callee, argNum)-pairs
+	 * that define their arguments. For example, 'recv'
+	 * defines its first argument.
+	 * */
+	
 	public void addTaintSource(String callee, int argNum)
 	{
 		taintSources.add(callee, argNum);
@@ -50,6 +68,28 @@ public class ASTDefUseAnalyzer {
 		traverseASTChildren(astProvider, env);		
 	}
 	
+	private void traverseASTChildren(ASTProvider astProvider, UseDefEnvironment env)
+	{
+		
+		int numChildren = astProvider.getChildCount();
+		
+		environmentStack.push(env);
+		for(int i = 0; i < numChildren; i++){
+			ASTProvider childProvider = astProvider.getChild(i);
+			traverseAST(childProvider);
+			
+			Collection<UseOrDef> toEmit = env.useOrDefsFromSymbols(childProvider);
+			emitUseOrDefs(toEmit);
+		}
+		environmentStack.pop();
+		
+		reportUpstream(env);
+	}
+	
+	/**
+	 * Creates a UseDefEnvironment for a given AST node.
+	 * */
+	
 	private UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider)
 	{
 		
@@ -66,7 +106,7 @@ public class ASTDefUseAnalyzer {
 			return createCallEnvironment(astProvider);
 			
 		case "Argument":
-			return createArgumentEnvironment();
+			return createArgumentEnvironment(astProvider);
 			
 		case "PtrMemberAccess":
 		case "MemberAccess":
@@ -100,64 +140,38 @@ public class ASTDefUseAnalyzer {
 		return callEnv;
 	}
 
-	private ArgumentEnvironment createArgumentEnvironment()
+	private ArgumentEnvironment createArgumentEnvironment(ASTProvider astProvider)
 	{
 		ArgumentEnvironment argEnv = new ArgumentEnvironment();
-		UseDefEnvironment argListEnv = environmentStack.peek();
 		CallEnvironment callEnv =
 				(CallEnvironment) environmentStack.get(environmentStack.size() - 2);
-		
-		if(callEnv.isArgumentTainted(argListEnv.getChildNum()))
+				
+		if(callEnv.isArgumentTainted(astProvider.getChildNumber()))
 			argEnv.setIsTainted();
 		
 		return argEnv;
 	}
 	
-	private void traverseASTChildren(ASTProvider astProvider, UseDefEnvironment env)
-	{
-		
-		int numChildren = astProvider.getChildCount();
-		
-		for(int i = 0; i < numChildren; i++){
-			ASTProvider childProvider = astProvider.getChild(i);
-			
-			configureEnvironmentForChild(env, childProvider);
-			if(!env.shouldTraverse()) continue;
-			
-			environmentStack.push(env);
-			traverseAST(childProvider);
-			environmentStack.pop();
-			reportUpstream(env);
-		}
-		
-		if(numChildren == 0){
-			reportUpstream(env);
-		}
-		
-	}
+	/**
+	 * Gets upstream symbols from environment
+	 * and passes them to parent-environment by
+	 * calling addChildSymbols on the parent.
+	 * Asks parent-environment to generate useOrDefs
+	 * and emit them.
+	 * */
 	
-	private void configureEnvironmentForChild(UseDefEnvironment env, ASTProvider childProvider)
-	{
-		String childType = childProvider.getTypeAsString();
-		int childNumber = childProvider.getChildNumber();
-		env.setChild(childType, childNumber);
-	}
-	
-	
-	private void reportUpstream(UseDefEnvironment childEnv) {
+	private void reportUpstream(UseDefEnvironment env) {
 		
-		LinkedList<String> symbols = childEnv.upstreamSymbols();
+		LinkedList<String> symbols = env.upstreamSymbols();
+		ASTProvider astProvider = env.getASTProvider();
+		
 		try{
 			UseDefEnvironment parentEnv = environmentStack.peek();
-			parentEnv.addChildSymbols(symbols);
-			Collection<UseOrDef> toEmit = parentEnv.useOrDefsFromChildSymbols();
-			emitUseOrDefs(toEmit);
+			parentEnv.addChildSymbols(symbols, astProvider);
 		}catch(EmptyStackException ex)
 		{
 			// stack is empty, we've reached the root.
-			// Now emit anything that propagated this far
-			LinkedList<UseOrDef> toEmit = childEnv.createUsesForAllSymbols(symbols);
-			emitUseOrDefs(toEmit);
+			// Nothing to do.
 		}
 	}
 

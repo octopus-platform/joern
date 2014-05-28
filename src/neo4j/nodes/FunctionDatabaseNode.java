@@ -7,6 +7,8 @@ import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
+import cdg.CDG;
+import cdg.CDGCreator;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import ddg.CFGAndUDGToDefUseCFG;
@@ -24,6 +26,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 	CFG cfg;
 	UseDefGraph udg;
 	DDG ddg;
+	CDG cdg;
 	
 	String signature;
 	String name;
@@ -32,6 +35,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 	CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
 	CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
 	DDGCreator ddgCreator = new DDGCreator();
+	CDGCreator cdgCreator = new CDGCreator();
 	
 	@Override
 	public void initialize(Object node)
@@ -41,6 +45,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 		udg = cfgToUDG.convert(cfg);
 		DefUseCFG defUseCFG = udgAndCfgToDefUseCFG.convert(cfg, udg);
 		ddg = ddgCreator.createForDefUseCFG(defUseCFG);
+		cdg = cdgCreator.create(cfg, defUseCFG);
 		
 		setSignature(astRoot);
 	}
@@ -78,6 +83,11 @@ public class FunctionDatabaseNode extends DatabaseNode
 	public DDG getDDG()
 	{
 		return ddg;
+	}
+	
+	public CDG getCDG()
+	{
+		return cdg;
 	}
 	
 	public String getLocation()

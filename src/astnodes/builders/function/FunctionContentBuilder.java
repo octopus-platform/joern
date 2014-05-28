@@ -3,8 +3,10 @@ package astnodes.builders.function;
 import java.util.EmptyStackException;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import parsing.InitDeclContextWrapper;
+import antlr.FunctionParser;
 import antlr.FunctionParser.Additive_expressionContext;
 import antlr.FunctionParser.And_expressionContext;
 import antlr.FunctionParser.ArrayIndexingContext;
@@ -50,11 +52,17 @@ import antlr.FunctionParser.PtrMemberAccessContext;
 import antlr.FunctionParser.Relational_expressionContext;
 import antlr.FunctionParser.ReturnStatementContext;
 import antlr.FunctionParser.Shift_expressionContext;
+import antlr.FunctionParser.SizeofContext;
+import antlr.FunctionParser.Sizeof_expressionContext;
+import antlr.FunctionParser.Sizeof_operand2Context;
+import antlr.FunctionParser.Sizeof_operandContext;
 import antlr.FunctionParser.StatementContext;
 import antlr.FunctionParser.StatementsContext;
 import antlr.FunctionParser.Switch_statementContext;
 import antlr.FunctionParser.Type_nameContext;
 import antlr.FunctionParser.Unary_expressionContext;
+import antlr.FunctionParser.Unary_op_and_cast_exprContext;
+import antlr.FunctionParser.Unary_operatorContext;
 import antlr.FunctionParser.While_statementContext;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
@@ -89,7 +97,12 @@ import astnodes.expressions.PrimaryExpression;
 import astnodes.expressions.PtrMemberAccess;
 import astnodes.expressions.RelationalExpression;
 import astnodes.expressions.ShiftExpression;
+import astnodes.expressions.Sizeof;
+import astnodes.expressions.SizeofExpr;
+import astnodes.expressions.SizeofOperand;
 import astnodes.expressions.UnaryExpression;
+import astnodes.expressions.UnaryOp;
+import astnodes.expressions.UnaryOperator;
 import astnodes.statements.BlockCloser;
 import astnodes.statements.BlockStarter;
 import astnodes.statements.BreakStatement;
@@ -257,6 +270,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitConditionalExpr(Conditional_expressionContext ctx)
 	{
+		introduceCndNodeForCndExpr();
 		nesting.consolidateSubExpression(ctx);
 	}
 
@@ -404,6 +418,17 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		nesting.consolidateSubExpression(ctx);
 	}
 
+	public void enterSizeof(SizeofContext ctx)
+	{
+		Sizeof expr = new Sizeof();
+		stack.push(expr);
+	}
+	
+	public void exitSizeof(SizeofContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+	
 	private void introduceCalleeNode()
 	{
 		CallExpression expr;
@@ -421,6 +446,23 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		expr.replaceFirstChild(callee);
 	}
 
+	private void introduceCndNodeForCndExpr()
+	{
+		ConditionalExpression expr;
+		try{
+			expr = (ConditionalExpression) stack.peek();
+		}catch(EmptyStackException ex){
+			return;
+		}
+		
+		ASTNode child = expr.getChild(0);
+		if(child == null) return;
+		Condition cnd = new Condition(); 
+		cnd.addChild(child);		
+		expr.replaceFirstChild(cnd);
+		
+	}
+	
 	public void enterArgumentList(Function_argument_listContext ctx)
 	{
 		ArgumentList expr = new ArgumentList();
@@ -725,6 +767,61 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		stack.pop();
 		stack.push(item);
+	}
+
+	public void enterSizeofExpr(Sizeof_expressionContext ctx)
+	{
+		SizeofExpr expr = new SizeofExpr();
+		stack.push(expr);
+	}
+
+	public void exitSizeofExpr(Sizeof_expressionContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void enterSizeofOperand2(Sizeof_operand2Context ctx)
+	{
+		SizeofOperand expr = new SizeofOperand();
+		stack.push(expr);
+	}
+
+	public void enterSizeofOperand(Sizeof_operandContext ctx)
+	{
+		SizeofOperand expr = new SizeofOperand();
+		stack.push(expr);
+	}
+
+	public void exitSizeofOperand2(Sizeof_operand2Context ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void exitSizeofOperand(Sizeof_operandContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void enterUnaryOpAndCastExpr(Unary_op_and_cast_exprContext ctx)
+	{
+		UnaryOp expr = new UnaryOp();
+		stack.push(expr);
+	}
+
+	public void exitUnaryOpAndCastExpr(Unary_op_and_cast_exprContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
+	}
+
+	public void enterUnaryOperator(Unary_operatorContext ctx)
+	{
+		UnaryOperator expr = new UnaryOperator();
+		stack.push(expr);
+	}
+
+	public void exitUnaryOperator(Unary_operatorContext ctx)
+	{
+		nesting.consolidateSubExpression(ctx);
 	}
 	
 }

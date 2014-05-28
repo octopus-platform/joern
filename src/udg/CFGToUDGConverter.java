@@ -1,6 +1,7 @@
 package udg;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Vector;
 
 import astnodes.ASTNode;
@@ -31,36 +32,49 @@ public class CFGToUDGConverter {
 						
 		for(CFGNode cfgNode : statements){	
 			
-			ASTNode astNode = cfgNode.getASTNode();
+			ASTNode statementNode = cfgNode.getASTNode();
 			
 			// skip empty blocks
-			if(astNode == null)
+			if(statementNode == null)
 				continue;
 			
 			ASTNodeASTProvider provider = new ASTNodeASTProvider();
-			provider.setNode(astNode);
+			provider.setNode(statementNode);
 			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(provider);
-			addToUseDefGraph(useDefGraph, usesAndDefs, astNode);
+			addToUseDefGraph(useDefGraph, usesAndDefs, statementNode);
 		}
 			
 		return useDefGraph;
 	}
 	
-	private void addToUseDefGraph(UseDefGraph useDefGraph, Collection<UseOrDef> usesAndDefs, ASTNode astNode)
+	private void addToUseDefGraph(UseDefGraph useDefGraph, Collection<UseOrDef> usesAndDefs, ASTNode statementNode)
 	{
+		HashSet<String> insertedForStatementDef = new HashSet<String>();
+		HashSet<String> insertedForStatementUse = new HashSet<String>();
+		
 		for(UseOrDef useOrDef : usesAndDefs){
 			
 			ASTNodeASTProvider astProvider = (ASTNodeASTProvider) useOrDef.astProvider;
 			// CHECK?
 			ASTNode useOrDefNode = astProvider.getASTNode();
-			
+						
 			if(useOrDef.isDef){
-				useDefGraph.addDefinition(useOrDef.symbol, astNode);
-				if(useOrDefNode != null && useOrDefNode  != astNode)
+				
+				if(!insertedForStatementDef.contains(useOrDef.symbol)){
+					useDefGraph.addDefinition(useOrDef.symbol, statementNode);
+					insertedForStatementDef.add(useOrDef.symbol);
+				}
+				
+				if(useOrDefNode != null && useOrDefNode  != statementNode)
 					useDefGraph.addDefinition(useOrDef.symbol, useOrDefNode);
 			}else{
-				useDefGraph.addUse(useOrDef.symbol, astNode);
-				if(useOrDef.astProvider != null && useOrDefNode != astNode)
+				
+				if(!insertedForStatementUse.contains(useOrDef.symbol)){
+					useDefGraph.addUse(useOrDef.symbol, statementNode);
+					insertedForStatementUse.add(useOrDef.symbol);
+				}
+				
+				if(useOrDef.astProvider != null && useOrDefNode != statementNode)
 					useDefGraph.addUse(useOrDef.symbol, useOrDefNode);
 			}
 		}

@@ -14,6 +14,7 @@ public class UseOrDef {
 		return (isDef == other.isDef) &&
 				(symbol.equals(other.symbol)) &&
 				(astProvider.equals(other.astProvider));
+
 	}
 
 	@Override

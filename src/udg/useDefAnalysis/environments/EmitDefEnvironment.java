@@ -1,18 +1,18 @@
 package udg.useDefAnalysis.environments;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
+import udg.ASTProvider;
 import udg.useDefGraph.UseOrDef;
 
 public class EmitDefEnvironment extends UseDefEnvironment {
 
 	Collection<String> defSymbols = new LinkedList<String>();
 	
-	public void addChildSymbols(LinkedList<String> childSymbols)
+	public void addChildSymbols(LinkedList<String> childSymbols, ASTProvider child)
 	{
-		if(isDef()){
+		if(isDef(child)){
 			// add definition only for the last symbol, e.g.,
 			// for x.y.z = 10, add a def for x.y.z only.
 			
@@ -23,17 +23,14 @@ public class EmitDefEnvironment extends UseDefEnvironment {
 			}else
 				defSymbols.addAll(childSymbols);
 		}
-		if(isUse())
-			symbolsForUpstream.addAll(childSymbols);
+		if(isUse(child))
+			symbols.addAll(childSymbols);
 	}
 	
-	public Collection<UseOrDef> useOrDefsFromChildSymbols()
+	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
 	{
-		
-		if(!isDef())
-			return emptyUseOrDef;
-	
 		LinkedList<UseOrDef> retval = createDefsForAllSymbols(defSymbols);	
+		retval.addAll(createUsesForAllSymbols(symbols));
 		return retval;
 	}
 	

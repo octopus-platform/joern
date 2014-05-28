@@ -1,0 +1,34 @@
+Version 0.2 => Version 0.2.5
+=============================
+
+Version 0.2.5 introduces some new features and fixes a number of bugs.
+
+New features:
+-------------
+
+- Users now have access to a post-dominator tree. The post-dominator
+  tree was stacked onto the code property graph by introduction
+  post-dominator edges that connect statements and conditions to one
+  another. 
+
+- The program dependence graph now also contains control dependence
+  edges as it should be.
+
+- 'True/False' labels have been added to control flow edges since
+  users cannot be expected to know of our implicit labeling scheme.
+
+Bug fixes:
+----------
+
+Three small changes have been made to the abstract syntax tree.
+
+- Unary operators and sizeof-operators are now visible as separate
+  nodes in the AST
+- Exit-edges for while- and for- loops are now attached to the
+  condition node rather than the increment-node.
+- Conditions inside conditional expressions, e.g., 'x = foo? a: b;'
+  now also have separate condition nodes.
+
+Finally, in some cases, DEF/USE edges were added to the program
+dependence graph twice. This is now no longer the case.
+

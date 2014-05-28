@@ -3,7 +3,10 @@ grammar Expressions;
 expr: assign_expr (',' expr)?;
 
 assign_expr: conditional_expression (assignment_operator assign_expr)?;
-conditional_expression: or_expression ('?' expr ':' conditional_expression)?;
+conditional_expression: or_expression #normOr
+		      | or_expression ('?' expr ':' conditional_expression) #cndExpr;
+
+
 or_expression : and_expression ('||' or_expression)?;
 and_expression : inclusive_or_expression ('&&' and_expression)?;
 inclusive_or_expression: exclusive_or_expression ('|' inclusive_or_expression)?;
@@ -25,11 +28,20 @@ cast_target: type_name ptr_operator*;
 //
 
 unary_expression: inc_dec cast_expression
-                | unary_operator cast_expression
-                | 'sizeof' '(' type_name ptr_operator* ')'
-                | 'sizeof' unary_expression
+                | unary_op_and_cast_expr
+                | sizeof_expression 
                 | postfix_expression
                 ;
+
+unary_op_and_cast_expr: unary_operator cast_expression;
+
+sizeof_expression: sizeof '(' sizeof_operand ')'
+                 | sizeof sizeof_operand2;
+
+sizeof: 'sizeof';
+
+sizeof_operand: type_name ptr_operator *;
+sizeof_operand2: unary_expression;
 
 inc_dec: ('--' | '++');
 

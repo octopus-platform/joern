@@ -6,61 +6,68 @@ import java.util.LinkedList;
 import udg.ASTProvider;
 import udg.useDefGraph.UseOrDef;
 
-// This is both the base class of all UseDefEnvironments
-// and the default implementation
+/**
+ * Base-class and default implementation of
+ * UseDefEnvironment.
+ * */
 
-public class UseDefEnvironment{
+public class UseDefEnvironment {
 	
-	protected String childType;
-	protected int childNum;
 	protected ASTProvider astProvider;
-	
-	LinkedList<String> symbolsForUpstream = new LinkedList<String>();
+	LinkedList<String> symbols = new LinkedList<String>();
 	
 	static final LinkedList<UseOrDef> emptyUseOrDef = new LinkedList<UseOrDef>();
 	static final LinkedList<String> emptySymbolList = new LinkedList<String>();
 	
-	public boolean isUse() { return false; }
-	public boolean isDef() { return false; }
-	public boolean shouldTraverse() { return true; }
+	public boolean isUse(ASTProvider child) { return false; }
+	public boolean isDef(ASTProvider child) { return false; }
+	public boolean shouldTraverse(ASTProvider child) { return true; }
 
 	public void setASTProvider(ASTProvider anASTProvider)
 	{
 		this.astProvider = anASTProvider;
 	}
 	
-	public void setChild(String childType, int childNum)
+	public ASTProvider getASTProvider()
 	{
-		this.childType = childType;
-		this.childNum = childNum;
+		return astProvider;
 	}
 	
-	
-	// default behavior is simply to propagate all
-	// symbols received
+	/**
+	 * Propagate all symbols to upstream
+	 * */
 	
 	public LinkedList<String> upstreamSymbols()
 	{
-		return symbolsForUpstream;
+		return symbols;
 	}
 
+	/**
+	 * Add all given symbols without exception
+	 **/
 	
-	public void addChildSymbols(LinkedList<String> childSymbols)
-	{
-		symbolsForUpstream.addAll(childSymbols);
+	public void addChildSymbols(LinkedList<String> childSymbols, ASTProvider child)
+	{		
+		symbols.addAll(childSymbols);
 	}
 	
-	public Collection<UseOrDef> useOrDefsFromChildSymbols()
+	/**
+	 * By default, don't generate any uses or defs for symbols.
+	 * */
+	
+	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
 	{	
 		return emptyUseOrDef;
 	}
 
-	public LinkedList<UseOrDef> createDefsForAllSymbols(Collection<String> symbols)
+	/* Utilities below */
+	
+	protected LinkedList<UseOrDef> createDefsForAllSymbols(Collection<String> symbols)
 	{
 		return createDefOrUseForSymbols(symbols, true);
 	}
 	
-	public LinkedList<UseOrDef> createUsesForAllSymbols(Collection<String> symbols)
+	protected LinkedList<UseOrDef> createUsesForAllSymbols(Collection<String> symbols)
 	{
 		return createDefOrUseForSymbols(symbols, false);
 	}
@@ -76,10 +83,6 @@ public class UseDefEnvironment{
 			retval.add(useOrDef);
 		}
 		return retval;
-	}
-	public int getChildNum()
-	{
-		return childNum;
 	}
 	
 };

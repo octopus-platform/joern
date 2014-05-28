@@ -58,6 +58,11 @@ int condition_test()
   if(z) return 1;
 }
 
+int conditional_expr()
+{
+  int x = foo? bar: 0;
+}
+
 int test_buf_def()
 {
   // We need to improve pointer tracking here:

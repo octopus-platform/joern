@@ -1,6 +1,5 @@
 package astnodes.expressions;
 
-import astnodes.ASTNode;
 import astwalking.ASTNodeVisitor;
 
 public class CallExpression extends PostfixExpression {
@@ -12,11 +11,5 @@ public class CallExpression extends PostfixExpression {
 	}
 
 	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
-
-	public void replaceFirstChild(ASTNode node)
-	{
-		children.removeFirst();
-		children.addFirst(node);
-	}
 
 }

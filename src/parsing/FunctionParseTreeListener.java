@@ -1,5 +1,7 @@
 package parsing;
 
+import org.antlr.v4.runtime.misc.NotNull;
+
 import antlr.FunctionBaseListener;
 import antlr.FunctionParser;
 import astnodes.builders.function.FunctionContentBuilder;
@@ -242,18 +244,20 @@ public class FunctionParseTreeListener extends FunctionBaseListener
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.exitAssignment(ctx);
 	}
+
 	
-	@Override public void enterConditional_expression(FunctionParser.Conditional_expressionContext ctx)
+	@Override public void enterCndExpr(FunctionParser.CndExprContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.enterConditionalExpr(ctx);
+
 	}
-	
-	@Override public void exitConditional_expression(FunctionParser.Conditional_expressionContext ctx)
+
+	@Override public void exitCndExpr(FunctionParser.CndExprContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.exitConditionalExpr(ctx);
-	}
+	}	
 	
 	@Override public void enterOr_expression(FunctionParser.Or_expressionContext ctx)
 	{
@@ -412,7 +416,58 @@ public class FunctionParseTreeListener extends FunctionBaseListener
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.exitFuncCall(ctx);
 	}
+	
+	@Override public void enterSizeof_expression(@NotNull FunctionParser.Sizeof_expressionContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterSizeofExpr(ctx);
+	}
+	
+	@Override public void exitSizeof_expression(@NotNull FunctionParser.Sizeof_expressionContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitSizeofExpr(ctx);
+	}
+	
+	@Override public void enterSizeof(@NotNull FunctionParser.SizeofContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterSizeof(ctx);
+	}
+	
+	
+	@Override public void exitSizeof(@NotNull FunctionParser.SizeofContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitSizeof(ctx);
+	}
+	
+	@Override public void enterUnary_op_and_cast_expr(@NotNull FunctionParser.Unary_op_and_cast_exprContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterUnaryOpAndCastExpr(ctx);
+	}
 
+	@Override public void exitUnary_op_and_cast_expr(@NotNull FunctionParser.Unary_op_and_cast_exprContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitUnaryOpAndCastExpr(ctx);
+	}
+	
+	@Override public void enterUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterUnaryOperator(ctx);
+	}
+
+	@Override public void exitUnary_operator(@NotNull FunctionParser.Unary_operatorContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitUnaryOperator(ctx);
+	}
+
+	
+	
 	@Override public void enterFunction_argument_list(FunctionParser.Function_argument_listContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
@@ -561,6 +616,30 @@ public class FunctionParseTreeListener extends FunctionBaseListener
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
 		builder.exitInitializerList(ctx);
+	}
+	
+	@Override public void enterSizeof_operand2(@NotNull FunctionParser.Sizeof_operand2Context ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterSizeofOperand2(ctx);
+	}
+	
+	@Override public void exitSizeof_operand2(@NotNull FunctionParser.Sizeof_operand2Context ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitSizeofOperand2(ctx);
+	}
+	
+	@Override public void enterSizeof_operand(@NotNull FunctionParser.Sizeof_operandContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.enterSizeofOperand(ctx);
+	}
+	
+	@Override public void exitSizeof_operand(@NotNull FunctionParser.Sizeof_operandContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack.peek();
+		builder.exitSizeofOperand(ctx);
 	}
 	
 }
