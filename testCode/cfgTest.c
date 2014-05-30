@@ -21,10 +21,10 @@ void for_test(void) {
 }
 void if_test(int arg1, int arg2) {
 	if (arg1) {
-		printf('if\n');
+		printf("if\n");
 	} else if (arg2) {
-		printf('else if\n');
+		printf("else if\n");
 	} else {
-		printf('else\n');
+		printf("else\n");
 	}
 }
