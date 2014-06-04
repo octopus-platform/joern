@@ -19,3 +19,12 @@ void for_test(void) {
 	}
 	printf("%d", i);
 }
+void if_test(int arg1, int arg2) {
+	if (arg1) {
+		printf("if\n");
+	} else if (arg2) {
+		printf("else if\n");
+	} else {
+		printf("else\n");
+	}
+}
