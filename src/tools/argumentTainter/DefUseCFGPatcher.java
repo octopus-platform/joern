@@ -84,6 +84,16 @@ public class DefUseCFGPatcher {
 			// add to newlyAddedLinks
 			newlyAddedLinks.add(e);
 			defUseCFG.addSymbolDefined(statementId, newDef.symbol);
+		
+			// Add def-links from AST nodes to symbols
+			long nodeId = ((ReadWriteDbASTProvider) newDef.astProvider).getNodeId();
+			if(statementId != nodeId){
+				DefUseLink e2 = new DefUseLink(newDef.symbol, nodeId, newDef.isDef);
+				newlyAddedLinks.add(e2);
+				defUseCFG.addSymbolDefined(nodeId, newDef.symbol);
+			}
+				
+			
 		}
 	}
 

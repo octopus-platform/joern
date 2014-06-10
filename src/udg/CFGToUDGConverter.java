@@ -74,6 +74,7 @@ public class CFGToUDGConverter {
 					insertedForStatementUse.add(useOrDef.symbol);
 				}
 				
+				// Add use-links from AST nodes to symbols
 				if(useOrDef.astProvider != null && useOrDefNode != statementNode)
 					useDefGraph.addUse(useOrDef.symbol, useOrDefNode);
 			}

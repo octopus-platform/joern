@@ -1,5 +1,6 @@
 package udg;
 
+
 public abstract class ASTProvider {
 
 	public abstract String getTypeAsString();

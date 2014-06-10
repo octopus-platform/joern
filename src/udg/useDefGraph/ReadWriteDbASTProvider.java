@@ -19,6 +19,11 @@ public class ReadWriteDbASTProvider extends ASTProvider{
 	ArrayList<Long> children = new ArrayList<Long>();
 	
 	
+	public long getNodeId()
+	{
+		return nodeId;
+	}
+	
 	public void setNodeId(long aNodeId)
 	{
 		nodeId = aNodeId;
