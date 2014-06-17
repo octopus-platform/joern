@@ -98,8 +98,8 @@ public class NestingReconstructor {
 					if(lastIf != null)
 						lastIf.setElseNode((ElseStatement) curBlockStarter);
 					else
-						System.err.println("Warning: cannot find if for else");
-					
+						throw new RuntimeException("Warning: cannot find if for else");
+										
 					return;
 				}else if(curBlockStarter instanceof WhileStatement){
 					// add while statement to the previous do-statement

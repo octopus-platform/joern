@@ -39,8 +39,6 @@ public class FunctionDefBuilder extends ASTNodeBuilder {
 	public void setReturnType(Return_typeContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
-		//thisItem.returnType = new ReturnType();
-		//ReturnType returnType = thisItem.returnType;
 		ReturnType returnType = new ReturnType();
 		
 		returnType.initializeFromContext(ctx);

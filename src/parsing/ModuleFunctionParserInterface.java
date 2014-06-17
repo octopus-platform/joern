@@ -28,7 +28,7 @@ public class ModuleFunctionParserInterface
 							  ctx.function_name().getText()
 							  + ". skipping.");
 		
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 		return parser.getResult();
 	}
