@@ -39,12 +39,14 @@ public class FunctionDefBuilder extends ASTNodeBuilder {
 	public void setReturnType(Return_typeContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
-		thisItem.returnType = new ReturnType();
-		ReturnType returnType = thisItem.returnType;
+		//thisItem.returnType = new ReturnType();
+		//ReturnType returnType = thisItem.returnType;
+		ReturnType returnType = new ReturnType();
 		
 		returnType.initializeFromContext(ctx);
 		returnType.setBaseType(ParseTreeUtils.childTokenString(ctx.type_name()));
 		returnType.setCompleteType(ParseTreeUtils.childTokenString(ctx));
+		thisItem.setReturnType(returnType);
 	}
 
 	public void setParameterList(Function_param_listContext ctx,
