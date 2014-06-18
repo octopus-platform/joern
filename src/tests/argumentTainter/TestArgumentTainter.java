@@ -36,7 +36,7 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 	
 		Collection<DefUseLink> defUseLinksToAdd = defUseCFGPatcher.getDefUseLinksToAdd();
 		
-		assertTrue(defUseLinksToAdd.size() == 1);
+		assertTrue(defUseLinksToAdd.size() == 2);
 		for( DefUseLink a : defUseLinksToAdd){
 			assertTrue(a.symbol.equals("myVar"));
 		}

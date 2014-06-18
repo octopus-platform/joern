@@ -135,7 +135,7 @@ public class ModuleBuildersTest {
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		
 		System.out.println(codeItem.getChildCount());
-		assertTrue(codeItem.getChildCount() == 2);
+		assertTrue(codeItem.getChildCount() == 3);
 	}
 	
 	@Test
@@ -198,7 +198,7 @@ public class ModuleBuildersTest {
 		String input = "int foo(){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.getChildCount() == 2);
+		assertTrue(codeItem.getChildCount() == 3);
 		assertTrue(codeItem.getParameterList().getEscapedCodeStr().equals(""));
 	}
 	
