@@ -86,6 +86,10 @@ at http://mlsec.org/joern/lib/lib.tar.gz and extract the tarball.
 The JAR-files necessary to build joern should now be located in
 ``joern/lib/``.
 
+**Note**: If you want to build the development version, you need
+to download the build dependencies from
+http://mlsec.org/joern/lib/lib-dev.tar.gz .
+
 Build the project using ``ant`` by issuing the following command.
 
 .. code-block:: none
