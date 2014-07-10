@@ -103,7 +103,7 @@ create the following alias in your ``.bashrc``:
 
 .. code-block:: none
 
-	# ~\.bashrc
+	# ~/.bashrc
 	alias joern='java -jar $JOERN/bin/joern.jar'
 
 
