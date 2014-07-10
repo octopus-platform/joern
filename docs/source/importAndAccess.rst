@@ -134,6 +134,8 @@ assignments using a gremlin traversal:
 	from joern.all import JoernSteps
 
 	j = JoernSteps()
+	j.setGraphDbURL('http://localhost:7474/db/data/')
+	# j.addStepsDir('Use this to inject custom steps')
 	j.connectToDatabase()
 
 	query = 'queryNodeIndex("type:AssignmentExpr").code'
