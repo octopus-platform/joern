@@ -42,6 +42,8 @@ Contents:
 	installation		
 	importAndAccess
 	performance
+	databaseOverview
+	querying
 ..
    Indices and tables
    ==================
