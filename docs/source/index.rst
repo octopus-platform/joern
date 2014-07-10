@@ -44,6 +44,7 @@ Contents:
 	performance
 	databaseOverview
 	querying
+	development
 ..
    Indices and tables
    ==================

@@ -57,7 +57,7 @@ Walking the graph can now be achieved by attaching so called
 all nodes returned by the previous step, similar to the way Unix
 pipelines connect shell programs. While learning Gremlin, it can thus
 be a good idea to think of the dot-operator as an alias for the unix
-pipe operator ``\code{|}''. The following is a list of examples.
+pipe operator ``|``. The following is a list of examples.
 
 .. code-block:: none
 
@@ -93,3 +93,217 @@ the first of the two examples. In the second example, edges are handed
 to the filter routine and thus ``it.propKey`` refers to the property
 ``propKey`` of the incoming edge.
 
+Start Node Selection
+---------------------
+
+In practice, the ids of interesting start nodes are rarely
+known. Instead, start nodes are selected based on node properties, for
+example, one may want to select all calls to function ``memcpy`` as
+start nodes. To allow efficient start node selection based on node
+properties, we keep an (Apache Lucene) node index (see `Neo4J legacy
+indices <http://docs.neo4j.org/chunked/stable/indexing.html>`_). This
+index can be queried using Apache Lucene queries (see `Lucene Query
+Language
+<http://lucene.apache.org/core/2_9_4/queryparsersyntax.html>`_ for
+details on the syntax). For example, to retrieve all AST nodes
+representing callees with a name containing the substring \code{cpy},
+one may issue the following query:
+
+.. code-block:: none
+
+	queryNodeIndex("type:Callee AND name:*cpy*") \end{verbatim}
+
+The Gremlin step ``queryNodeIndex`` is defined in
+``joernsteps/lookup.groovy`` of ``python-joern``. In addition to
+``queryNodeIndex``, ``lookup.groovy`` defines various functions
+for common lookups. The example just given could have also been
+formulated as:
+
+.. code-block:: none
+
+	getCallsTo("*cpy*")
+
+Please do not hesitate to contribute short-hands for common lookup
+operations to include in ``joernsteps/lookup.groovy``.
+
+Traversing Syntax Trees
+------------------------
+
+In the previous section, we outlined how nodes can be selected based
+on their properties. As outline in Section `Gremlin Basics`_, these
+selected nodes can now be used as starting points for walks in the
+property graph.
+
+As an example, consider the task of finding all multiplications in
+first arguments of calls to the function ``malloc``. To solve this
+problem, we can first determine all call expressions to ``malloc``
+and then traverse from the call to its first argument in the syntax
+tree. We then determine all multiplicative expressions that are child
+nodes of the first argument.
+
+In principle, all of these tasks could be solved using the elementary
+Gremlin traversals presented in Section `Gremlin Basics`_. However,
+traversals can be greatly simplified by introducing the following
+user-defined gremlin-steps (see ``joernsteps/ast.py``). 
+
+.. code-block:: none
+
+	// Traverse to parent nodes in the AST
+	parents()
+
+	// Traverse to child nodes in the AST
+	children()
+
+	// Traverse to i'th children in the AST
+	ithChildren()
+
+	// Traverse to enclosing statement node
+	statements()
+
+	// Traverse to all nodes of the AST
+	// rooted at the input node
+	astNodes()
+
+Additionally, ``joernsteps/calls.groovy`` introduces user-defined
+steps for traversing calls, and in particular the step
+``ithArguments`` that traverses to i'th arguments of a given a call
+node. Using these steps, the exemplary traversal for multiplicative
+expressions inside first arguments to ``malloc`` simply becomes:
+
+.. code-block:: none
+
+	getCallsTo('malloc').ithArguments('0')
+	.astNodes().filter{ it.type == 'MultiplicativeExpression'}
+
+
+Syntax-Only Descriptions
+------------------------
+
+The file ``joernsteps/composition.groovy`` offers a number of
+elementary functions to combine other traversals and lookup
+functions. These composition functions allow arbitrary syntax-only
+descriptions to be constructed (see `Modeling and Discovering
+Vulnerabilities with Code Property Graphs
+<http://user.informatik.uni-goettingen.de/~fyamagu/pdfs/2014-oakland.pdf>`_
+). For example, to select all functions that contain a call to ``foo``
+AND a call to ``bar``, lookup functions can simply be chained, e.g.,
+
+.. code-block:: none
+
+	getCallsTo('foo').getCallsTo('bar')
+
+returns functions calling both ``foo`` and ``bar``. Similarly,
+functions calling \code{foo} OR \code{bar} can be selected as follows:
+
+.. code-block:: none
+
+	OR( getCallsTo('foo'), getCallsTo('bar') )
+
+
+Finally, the ``not``-traversal allows all nodes to be selected
+that do NOT match a traversal. For example, to select all functions
+calling `foo` but not `bar`, use the following traversal:
+
+.. code-block:: none
+
+	getCallsTo('foo').not{ getCallsTo('bar') }
+
+Traversing the Symbol Graph
+----------------------------
+
+As outlined in Section :doc:`databaseOverview`, the symbols used and
+defined by statements are made explicit in the graph database by
+adding symbol nodes to functions (see Appendix D of `Modeling and Discovering
+Vulnerabilities with Code Property Graphs
+<http://user.informatik.uni-goettingen.de/~fyamagu/pdfs/2014-oakland.pdf>`_). We
+provide utility traversals to make use of this in order to determine
+symbols defining variables, and thus simple access to types used by
+statements and expressions. In particular, the file
+``joernsteps/symbolGraph.groovy`` contains the following steps:
+
+.. code-block:: none
+
+	// traverse from statement to the symbols it uses
+	uses()
+
+	// traverse from statement to the symbols it defines
+	defines()
+
+	// traverse from statement to the definitions
+	// that it is affected by (assignments and
+	// declarations)
+	definitions()
+
+As an example, consider the task of finding all third arguments to
+``memcpy`` that are defined as parameters of a function. This can be achieved using the traversal
+
+.. code-block:: none
+
+	getArguments('memcpy', '2').definitions()
+	.filter{it.type == TYPE_PARAMETER}
+
+where ``getArguments`` is a lookup-function defined in
+``joernsteps/lookup.py``.
+
+As a second example, we can traverse to all functions that use a
+symbol named ``len`` in a third argument to ``memcpy`` that is not
+used by any condition in the function, and hence, may not be checked.
+
+.. code-block:: none
+
+	getArguments('memcpy', '2').uses()
+	.filter{it.code == 'len'}
+	.filter{
+		it.in('USES')
+		.filter{it.type == 'Condition'}.toList() == []
+	}
+
+This example also shows that traversals can be performed inside
+filter-expressions and that at any point, a list of nodes that the
+traversal reaches can be obtained using the function ``toList``
+defined on all Gremlin steps.
+
+Taint-Style Descriptions
+-------------------------
+
+The last example already gave a taste of the power you get when you
+can actually track where identifiers are used and defined. However,
+using only the augmented function symbol graph, you cannot be sure the
+definitions made by one statement actually *reach* another
+statement. To ensure this, the classical *reaching definitions*
+problem needs to be solved. In addition, you cannot track whether
+variables are sanitized on the way from a definition to a statement.
+
+Fortunately, joern allows you to solve both problems using the
+traversal ``unsanitized``. As an example, consider the case where
+you want to find all functions where a third argument to ``memcpy``
+is named ``len`` and is passed as a parameter to the function and a
+control flow path exists satisfying the following two conditions:
+
+\begin{itemize}
+\item The variable \code{len} is not re-defined on the way.
+\item The variable is not used inside a relational or equality
+expression on the way, i.e., its numerical value is not
+``checked'' against some other variable.
+\end{itemize}
+
+You can use the following traversal to achieve this:
+
+.. code-block:: none
+
+	getArguments('memcpy', '2')
+	.sideEffect{ paramName = '.*len.*' }
+	.filter{ it.code.matches(paramName) }
+	.unsanitized{ it.isCheck( paramName ) }
+	.params( paramName )
+
+where ``isCheck`` is a traversal defined in ``joerntools/misc.groovy``
+to check if a symbol occurs inside an equality or relational
+expression and \code{params} traverses to parameters matching its
+first parameter.
+
+Note, that in the above example, we are using a regular expression to
+determine arguments containing the sub-string ``len`` and that one may
+want to be a little more exact here. Also, we use the Gremlin step
+``sideEffect`` to save the regular expression in a variable, simply so
+that we do not have to re-type the regular expression over and over.
