@@ -40,7 +40,8 @@ Contents:
 	:maxdepth: 2
 	
 	installation		
-	importAndAccess
+	import
+	access
 	performance
 	databaseOverview
 	querying

@@ -1,8 +1,8 @@
-Importing and Accessing Code
-=============================
-
 Importing Code
---------------
+==============
+
+Populating the Database
+-----------------------
 
 Once joern has been installed, you can begin to import code into the
 database by simply pointing ``joern.jar`` to the directory containing
@@ -28,6 +28,29 @@ and contains a Neo4J database, ``joern.jar`` will add the code to the
 existing database. You can thus import additional code at any time. If
 however, you want to create a new database, make sure to delete
 ``.joernIndex`` prior to running ``joern.jar``.
+
+Tainting Arguments (Optional)
+-----------------------------
+
+Many times, an argument to a library function (e.g., the first
+argument to ``recv``) is tainted by the library function. There is
+no way to statically determine this when the code of the library
+function is not available. Also, Joern does not perform
+inter-procedural taint-analysis and therefore, by default, symbols
+passed to functions as arguments are considered *used* but not
+*defined*.
+
+To instruct Joern to consider arguments of a function to be tainted by
+calls to that function, you can use the tool ``argumentTainter``. For
+example, by executing
+
+.. code-block:: none
+
+	java -jar ./bin/argumentTainter.jar recv 0
+
+from the Joern root directory, all first arguments to ``recv`` will be
+considered tainted and dependency graphs will be recalculated
+accordingly.
 
 Starting the Database Server
 -----------------------------
@@ -87,62 +110,3 @@ Of course, in practice, you will not want to use your browser to query
 the database. Instead, you can use python-joern to access the REST
 API using Python as described in the following section.
 
-Tainting Arguments
--------------------
-
-Many times, an argument to a library function (e.g., the first
-argument to ``recv``) is tainted by the library function. There is
-no way to statically determine this when the code of the library
-function is not available. Also, Joern does not perform
-inter-procedural taint-analysis and therefore, by default, symbols
-passed to functions as arguments are considered *used* but not
-*defined*.
-
-To instruct Joern to consider arguments of a function to be tainted by
-calls to that function, you can use the tool ``argumentTainter``. For
-example, by executing
-
-.. code-block:: none
-
-	java -jar ./bin/argumentTainter.jar recv 0
-
-from the Joern root directory, all first arguments to ``recv`` will be
-considered tainted and dependency graphs will be recalculated
-accordingly.
-
-Accessing Code using python-joern
-----------------------------------
-
-Once code has been imported into a Neo4j database, it can be accessed
-using a number of different interfaces and programming languages. One
-of the simplest possibilities is to create a standalone Neo4J server
-instance as described in the previous section and connect to this
-server using python-joern, the python interface to joern.
-
-To do so, install python-joern using pip:
-
-.. code-block:: none
-	
-	sudo pip2 install git+git://github.com/fabsx00/python-joern.git
-
-Finally, run the following sample Python script, which prints all
-assignments using a gremlin traversal:
-
-.. code-block:: none
-
-	# Hello World Script
-	from joern.all import JoernSteps
-
-	j = JoernSteps()
-	j.connectToDatabase()
-
-	query = 'queryNodeIndex("type:AssignmentExpr").code'
-
-	y = j.runGremlinQuery(query)
-	for x in y:
-		print x
-
-It is highly recommended to test your installation on a small code
-base first. The same is true for early attempts of creating search
-queries, as erroneous queries will often run for a very long time on
-large code bases, making a trial-and-error approach unfeasible.
