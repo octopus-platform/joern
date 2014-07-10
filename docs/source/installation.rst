@@ -71,10 +71,10 @@ http://mlsec.org/joern/download.shtml. This will create the directory
 
 .. code-block:: none
 
-	wget https://github.com/fabsx00/joern/archive/v0.2.5.tar.gz
-	tar xfzv v0.2.5.tar.gz
+	wget https://github.com/fabsx00/joern/archive/0.2.5.tar.gz
+	tar xfzv 0.2.5.tar.gz
 
-Change to the directory ``joern/``. Next, download build dependencies
+Change to the directory ``joern-0.2.5/``. Next, download build dependencies
 at http://mlsec.org/joern/lib/lib.tar.gz and extract the tarball.
 
 .. code-block:: none
@@ -84,7 +84,7 @@ at http://mlsec.org/joern/lib/lib.tar.gz and extract the tarball.
 	tar xfzv lib.tar.gz
 
 The JAR-files necessary to build joern should now be located in
-``joern/lib/``.
+``joern-0.2.5/lib/``.
 
 **Note**: If you want to build the development version, you need
 to download the build dependencies from
@@ -97,7 +97,7 @@ Build the project using ``ant`` by issuing the following command.
 	ant
 
 Create symlinks (optional). The executable JAR file will be located in
-``joern/bin/joern.jar``. Simply place this JAR file somewhere on your
+``joern-0.2.5/bin/joern.jar``. Simply place this JAR file somewhere on your
 disk and you are done. If you are using bash, you can optionally
 create the following alias in your ``.bashrc``:
 
