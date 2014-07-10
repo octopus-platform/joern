@@ -62,8 +62,8 @@ the following projects.
 The following sections offer a step-by-step guide to the installation
 of Joern, including all of its dependencies.
 
-Building the Code
-------------------
+Building joern
+--------------
 
 Begin by downloading the latest stable version of joern at
 http://mlsec.org/joern/download.shtml. This will create the directory
@@ -118,7 +118,65 @@ Build additional tools (optional). Tools such as the
 	ant tools
 
 Upon successfully building the code, you can start importing C/C++
-code you would like to analyze.
+code you would like to analyze. To interact with the database using
+python and the shell, it is also highly recommended to install
+``python-joern`` and ``joern-tools`` as outlined in the following
+sections.
+
+Installing python-joern
+------------------------
+
+``python-joern`` is a thin python access layer for joern and a set of
+utility traversals. It depends on the following python modules:
+
+- py2neo 1.6.1 (http://book.py2neo.org/en/latest/)
+- py2neo-gremlin (https://github.com/fabsx00/py2neo-gremlin/)
+
+To install ``python-joern``, first make sure python setuptools are
+correctly installed. On Debian/Ubuntu, issuing the following command
+on the shell should be sufficient.
+
+.. code-block:: none
+	
+	sudo apt-get install python-setuptools python-dev	
 
 
+``python-joern`` and all its dependencies can then be installed as
+follows:
 
+.. code-block:: none
+
+	wget https://github.com/fabsx00/python-joern/archive/0.2.5.tar.gz
+	tar xfzv 0.2.5.tar.gz
+	cd python-joern-0.2.5
+	sudo python2 setup.py install
+
+
+Installing joern-tools
+-----------------------
+
+``joern-tools`` is a set of shell utilities for code analysis based on
+joern. It is at a very early stage of development and has not been
+labeled for release. However, it can be installed from github.
+
+``joern-tools`` depends on ``python-joern`` for database communication
+and graphviz/pygraphviz for graph visualization. To install it, make
+sure graphviz is installed. On Debian/Ubuntu, the following command
+will install graphviz:
+
+.. code-block:: none
+
+	sudo apt-get install graphviz libgraphviz-dev
+
+
+Just like ``python-joern``, ``joern-tools`` is installed using
+python-setuptools as follows:
+
+.. code-block:: none
+	
+	git clone https://github.com/fabsx00/joern-tools
+	cd joern-tools
+	sudo python2 setup.py install
+
+After installation, type ``joern-lookup`` to verify correct
+installation.
