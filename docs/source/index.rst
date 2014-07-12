@@ -46,6 +46,7 @@ Contents:
 	databaseOverview
 	querying
 	development
+	tutorials
 ..
    Indices and tables
    ==================

@@ -9,7 +9,7 @@ Joern currently consists of the following components:
 
 - `python-joern <https://github.com/fabsx00/python-joern/>`_ is a
   (minimal) python interface to the Joern database. It offers a
-  variety of utility traversals (so called \emph{steps}) for common
+  variety of utility traversals (so called *steps*) for common
   operations on the code property graph (think of these are stored
   procedures).
 
