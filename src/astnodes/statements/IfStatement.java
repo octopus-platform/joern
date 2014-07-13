@@ -3,38 +3,43 @@ package astnodes.statements;
 import astnodes.ASTNode;
 import astwalking.ASTNodeVisitor;
 
+public class IfStatement extends BlockStarter
+{
 
-
-public class IfStatement extends BlockStarter {
-	
 	private ElseStatement elseNode = null;
-	
+
 	public int getChildCount()
 	{
 		int childCount = super.getChildCount();
-		
-		if(getElseNode() != null) childCount++;
+
+		if (getElseNode() != null)
+			childCount++;
 		return childCount;
 	}
-	
+
 	public ASTNode getChild(int i)
 	{
-		if(i == 0)
+		if (i == 0)
 			return condition;
 		else if (i == 1)
 			return statement;
-		else if(i == 2)
+		else if (i == 2)
 			return getElseNode();
 		throw new RuntimeException("Invalid IfItem");
 	}
 
-	public ElseStatement getElseNode() {
+	public ElseStatement getElseNode()
+	{
 		return elseNode;
 	}
 
-	public void setElseNode(ElseStatement elseNode) {
+	public void setElseNode(ElseStatement elseNode)
+	{
 		this.elseNode = elseNode;
 	}
 
-	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

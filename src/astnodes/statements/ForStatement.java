@@ -7,7 +7,7 @@ public class ForStatement extends BlockStarter
 {
 	private ASTNode forInitStatement = null;
 	private ASTNode expression = null;
-	
+
 	public ASTNode getForInitStatement()
 	{
 		return forInitStatement;
@@ -27,18 +27,22 @@ public class ForStatement extends BlockStarter
 	{
 		this.expression = expression;
 	}
-	
+
 	@Override
 	public void addChild(ASTNode item)
-	{	
-		if(forInitStatement == null)
+	{
+		if (forInitStatement == null)
 			forInitStatement = item;
-		else if(expression == null && condition != null){
+		else if (expression == null && condition != null)
+		{
 			expression = item;
 		}
-		
+
 		super.addChild(item);
 	}
 
-	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

@@ -1,5 +1,6 @@
 package cfg;
 
-public class LoopBlock extends CFGNode {
+public class LoopBlock extends CFGNode
+{
 
 }

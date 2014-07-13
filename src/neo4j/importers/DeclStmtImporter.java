@@ -13,16 +13,17 @@ import org.neo4j.graphdb.RelationshipType;
 import astnodes.ASTNode;
 import astnodes.statements.IdentifierDeclStatement;
 
-public class DeclStmtImporter extends ASTNodeImporter {
-	
+public class DeclStmtImporter extends ASTNodeImporter
+{
+
 	DeclImporter declImporter = new DeclImporter();
-	
+
 	public void addToDatabaseSafe(ASTNode node)
 	{
 		DeclStmtDatabaseNode dbNode = new DeclStmtDatabaseNode();
 		dbNode.initialize(node);
-		addMainNode(dbNode);	
-		
+		addMainNode(dbNode);
+
 		addDeclarations(node);
 	}
 
@@ -31,7 +32,8 @@ public class DeclStmtImporter extends ASTNodeImporter {
 		IdentifierDeclStatement stmt = (IdentifierDeclStatement) node;
 		List<ASTNode> identifierDeclList = stmt.getIdentifierDeclList();
 		Iterator<ASTNode> it = identifierDeclList.iterator();
-		while(it.hasNext()){
+		while (it.hasNext())
+		{
 			ASTNode decl = it.next();
 			declImporter.addToDatabaseSafe(decl);
 			long declId = declImporter.getMainNodeId();
@@ -40,9 +42,10 @@ public class DeclStmtImporter extends ASTNodeImporter {
 	}
 
 	private void addLinkFromStmtToDecl(long mainNodeId, long declId)
-	{	
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.DECLARES);	
+	{
+		RelationshipType rel = DynamicRelationshipType
+				.withName(EdgeTypes.DECLARES);
 		Neo4JBatchInserter.addRelationship(mainNodeId, declId, rel, null);
 	}
-	
+
 }

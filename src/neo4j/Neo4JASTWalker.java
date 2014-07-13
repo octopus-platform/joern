@@ -11,18 +11,17 @@ import tools.index.IndexerState;
 import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 
-
 public class Neo4JASTWalker extends IndexerASTWalker
 {
 
 	Neo4JASTNodeVisitor neo4jASTVisitor = new Neo4JASTNodeVisitor();
 	Neo4JIndexerState state;
-	
+
 	public void setIndexerState(IndexerState aState)
 	{
 		state = (Neo4JIndexerState) aState;
 	}
-	
+
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
@@ -31,7 +30,9 @@ public class Neo4JASTWalker extends IndexerASTWalker
 	}
 
 	@Override
-	public void endOfUnit(ParserRuleContext ctx, String filename){}
+	public void endOfUnit(ParserRuleContext ctx, String filename)
+	{
+	}
 
 	@Override
 	public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
@@ -39,7 +40,14 @@ public class Neo4JASTWalker extends IndexerASTWalker
 		node.accept(neo4jASTVisitor);
 	}
 
-	@Override public void begin(){}
-	@Override public void end(){}	
+	@Override
+	public void begin()
+	{
+	}
+
+	@Override
+	public void end()
+	{
+	}
 
 }

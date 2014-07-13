@@ -1,3 +1,5 @@
 package astnodes.statements;
 
-public class ExpressionStatement extends ExpressionHolderStatement {}
+public class ExpressionStatement extends ExpressionHolderStatement
+{
+}

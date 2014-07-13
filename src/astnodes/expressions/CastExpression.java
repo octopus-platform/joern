@@ -2,17 +2,21 @@ package astnodes.expressions;
 
 import astnodes.ASTNode;
 
-public class CastExpression extends Expression {
-	
+public class CastExpression extends Expression
+{
+
 	Expression castTarget = null;
 	Expression castExpression = null;
-	
+
 	@Override
 	public void addChild(ASTNode expression)
 	{
-		if(castTarget == null){
+		if (castTarget == null)
+		{
 			castTarget = (Expression) expression;
-		}else{
+		}
+		else
+		{
 			castExpression = (Expression) expression;
 		}
 	}
@@ -21,15 +25,18 @@ public class CastExpression extends Expression {
 	public int getChildCount()
 	{
 		int childCount = 0;
-		if(castTarget != null) childCount++;
-		if(castExpression != null) childCount++;
+		if (castTarget != null)
+			childCount++;
+		if (castExpression != null)
+			childCount++;
 		return childCount;
 	}
 
 	@Override
 	public ASTNode getChild(int i)
 	{
-		if(i == 0) return castTarget;
+		if (i == 0)
+			return castTarget;
 		return castExpression;
 	}
 

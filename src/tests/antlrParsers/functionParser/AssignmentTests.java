@@ -7,7 +7,8 @@ import org.junit.Test;
 
 import parsing.ANTLRFunctionParserDriver;
 
-public class AssignmentTests {
+public class AssignmentTests
+{
 
 	@Test
 	public void testAssignmentExpr()
@@ -19,7 +20,7 @@ public class AssignmentTests {
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}
-	
+
 	@Test
 	public void testComplexAssignment()
 	{
@@ -30,7 +31,7 @@ public class AssignmentTests {
 		System.out.println(output);
 		assertTrue(output.contains("assign_expr"));
 	}
-	
+
 	@Test
 	public void testPrivateInName()
 	{
@@ -41,5 +42,5 @@ public class AssignmentTests {
 		System.out.println(output);
 		assertTrue(output.contains("simple_decl"));
 	}
-	
+
 }

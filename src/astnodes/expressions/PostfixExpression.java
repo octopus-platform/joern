@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class PostfixExpression extends Expression {}
+public class PostfixExpression extends Expression
+{
+}

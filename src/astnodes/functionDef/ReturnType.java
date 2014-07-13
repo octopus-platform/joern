@@ -6,7 +6,7 @@ public class ReturnType extends ASTNode
 {
 	String completeType;
 	String baseType;
-	
+
 	public void setCompleteType(String aCompleteType)
 	{
 		completeType = aCompleteType;

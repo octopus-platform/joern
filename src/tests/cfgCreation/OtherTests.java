@@ -10,8 +10,6 @@ import org.junit.Test;
 
 import cfg.CFG;
 import cfg.CFGNode;
-import cfg.Edges;
-
 
 public class OtherTests extends CFGCreatorTest
 {
@@ -23,8 +21,7 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getStatements().size() == 2);
 	}
-	
-	
+
 	@Test
 	public void testWhileNumberOfBlocks()
 	{
@@ -32,7 +29,7 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getStatements().size() == 4);
 	}
-	
+
 	@Test
 	public void testDoNumberOfBlocks()
 	{
@@ -41,7 +38,7 @@ public class OtherTests extends CFGCreatorTest
 		System.out.println(cfg.getStatements().size());
 		assertTrue(cfg.getStatements().size() == 5);
 	}
-	
+
 	@Test
 	public void testForNumberOfBlocks()
 	{
@@ -49,7 +46,7 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getStatements().size() == 6);
 	}
-	
+
 	@Test
 	public void testEmptyFor()
 	{
@@ -57,8 +54,7 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getStatements().get(1).getASTNode() == null);
 	}
-	
-	
+
 	@Test
 	public void testLabel()
 	{
@@ -68,7 +64,7 @@ public class OtherTests extends CFGCreatorTest
 		System.out.println(labels.size());
 		assertTrue(labels.size() == 1);
 	}
-	
+
 	@Test
 	public void testSwitchNumberOfEdges()
 	{
@@ -77,7 +73,7 @@ public class OtherTests extends CFGCreatorTest
 		System.out.println(cfg.getNumberOfEdges());
 		assertTrue(cfg.getNumberOfEdges() == 9);
 	}
-	
+
 	@Test
 	public void testTwoInstructions()
 	{
@@ -85,7 +81,7 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getStatements().size() == 3);
 	}
-	
+
 	@Test
 	public void testLinkBetweenBlocks()
 	{
@@ -93,40 +89,40 @@ public class OtherTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getNumberOfEdges() == 2);
 	}
-	
+
 	@Test
 	public void testReturnExitBlock()
 	{
 		String input = "if(!x) return 1; y = x; return 0;";
 		CFG cfg = getCFGForCode(input);
-		
-		CFGNode exitBlock = cfg.getStatements().lastElement();		
+
+		CFGNode exitBlock = cfg.getStatements().lastElement();
 		assertTrue(exitBlock.getEscapedCodeStr().equals(""));
 	}
-	
+
 	@Test
 	public void testReturnOneExitBlock()
 	{
 		String input = "if(!x) return 1; y = x;";
 		CFG cfg = getCFGForCode(input);
-		
+
 		CFGNode yAssignX = cfg.getStatements().get(3);
 		CFGNode exitBlock = cfg.getStatements().lastElement();
-		
+
 		assertTrue(cfg.isConnected(yAssignX, exitBlock));
 	}
-	
+
 	@Test
 	public void testGoto()
 	{
 		String input = "x = 0; foo: x++; if(x < 10) goto foo;";
 		CFG cfg = getCFGForCode(input);
-		
+
 		Vector<CFGNode> statements = cfg.getStatements();
-		
+
 		CFGNode gotoStmt = statements.get(4);
 		CFGNode exitBlock = cfg.getLastStatement();
-		
+
 		assertFalse(cfg.getAllEdgesFrom(gotoStmt).contains(exitBlock));
 	}
 
