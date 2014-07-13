@@ -8,65 +8,68 @@ import astnodes.statements.GotoStatement;
 import astnodes.statements.ReturnStatement;
 import astwalking.ASTNodeVisitor;
 
-public class JumpStatementVisitor extends ASTNodeVisitor {
+public class JumpStatementVisitor extends ASTNodeVisitor
+{
 
-    CFG thisCFG;
-    CFGNode thisStatement;
+	CFG thisCFG;
+	CFGNode thisStatement;
 
-
-    void setCFG(CFG cfg) {
-	thisCFG = cfg;
-    }
-
-
-    void setStatement(CFGNode statement) {
-	thisStatement = statement;
-    }
-
-
-    public void visit(ReturnStatement expression) {
-	// Edges edges = thisCFG.getEdges();
-	// edges.removeAllEdgesFrom(thisStatement);
-	thisCFG.removeAllEdgesFrom(thisStatement);
-	CFGNode exitBlock = thisCFG.getLastStatement();
-	if (exitBlock == null)
-	    throw new RuntimeException("error attaching return to exitBlock: no exitBlock");
-	// edges.addEdge(thisStatement, exitBlock);
-	thisCFG.addEdge(thisStatement, exitBlock);
-    }
-
-
-    public void visit(GotoStatement expression) {
-	String target = expression.getTarget();
-	CFGNode blockByLabel = thisCFG.getBlockByLabel(target);
-	if (blockByLabel == null) {
-	    throw new RuntimeException("cannot find label " + target);
+	void setCFG(CFG cfg)
+	{
+		thisCFG = cfg;
 	}
 
-	// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-	// thisCFG.getEdges().addEdge(thisStatement, blockByLabel);
-	thisCFG.removeAllEdgesFrom(thisStatement);
-	thisCFG.addEdge(thisStatement, blockByLabel);
-    }
+	void setStatement(CFGNode statement)
+	{
+		thisStatement = statement;
+	}
 
+	public void visit(ReturnStatement expression)
+	{
+		// Edges edges = thisCFG.getEdges();
+		// edges.removeAllEdgesFrom(thisStatement);
+		thisCFG.removeAllEdgesFrom(thisStatement);
+		CFGNode exitBlock = thisCFG.getLastStatement();
+		if (exitBlock == null)
+			throw new RuntimeException(
+					"error attaching return to exitBlock: no exitBlock");
+		// edges.addEdge(thisStatement, exitBlock);
+		thisCFG.addEdge(thisStatement, exitBlock);
+	}
 
-    public void visit(ContinueStatement expression) {
-	// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-	thisCFG.removeAllEdgesFrom(thisStatement);
-	CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
-	thisCFG.addEdge(thisStatement, outerLoop);
-    }
+	public void visit(GotoStatement expression)
+	{
+		String target = expression.getTarget();
+		CFGNode blockByLabel = thisCFG.getBlockByLabel(target);
+		if (blockByLabel == null)
+		{
+			throw new RuntimeException("cannot find label " + target);
+		}
 
+		// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
+		// thisCFG.getEdges().addEdge(thisStatement, blockByLabel);
+		thisCFG.removeAllEdgesFrom(thisStatement);
+		thisCFG.addEdge(thisStatement, blockByLabel);
+	}
 
-    public void visit(BreakStatement expression) {
-	// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-	thisCFG.removeAllEdgesFrom(thisStatement);
-	CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
+	public void visit(ContinueStatement expression)
+	{
+		// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
+		thisCFG.removeAllEdgesFrom(thisStatement);
+		CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
+		thisCFG.addEdge(thisStatement, outerLoop);
+	}
 
-	// List<Object> edgesFrom = thisCFG.edges.getEdgesFrom(outerLoop);
-	// CFGNode endOfLoop = (CFGNode) edgesFrom.get(1);
-	List<CFGEdge> edgesFrom = thisCFG.getAllEdgesFrom(outerLoop);
-	CFGNode endOfLoop = edgesFrom.get(1).getDestination();
-	thisCFG.addEdge(thisStatement, endOfLoop);
-    }
+	public void visit(BreakStatement expression)
+	{
+		// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
+		thisCFG.removeAllEdgesFrom(thisStatement);
+		CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
+
+		// List<Object> edgesFrom = thisCFG.edges.getEdgesFrom(outerLoop);
+		// CFGNode endOfLoop = (CFGNode) edgesFrom.get(1);
+		List<CFGEdge> edgesFrom = thisCFG.getAllEdgesFrom(outerLoop);
+		CFGNode endOfLoop = edgesFrom.get(1).getDestination();
+		thisCFG.addEdge(thisStatement, endOfLoop);
+	}
 }

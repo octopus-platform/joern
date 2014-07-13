@@ -13,7 +13,8 @@ import org.neo4j.graphdb.Relationship;
 
 import traversals.readWriteDB.Traversals;
 
-public class ReadWriteDBProvider extends DBProvider {
+public class ReadWriteDBProvider extends DBProvider
+{
 
 	@Override
 	public String getNodeType(Long nodeId)
@@ -32,29 +33,36 @@ public class ReadWriteDBProvider extends DBProvider {
 	{
 		List<Pair<Long, Integer>> retval = new LinkedList<Pair<Long, Integer>>();
 		Node node = Neo4JDBInterface.getNodeById(nodeId);
-		
+
 		Iterable<Relationship> rels = node.getRelationships();
-		
-		for(Relationship rel : rels){
+
+		for (Relationship rel : rels)
+		{
 			Node endNode = rel.getEndNode();
 			int childNumber;
-			
-			if(endNode.getId() == node.getId()) continue;
-			if(!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT)) continue;
-			
+
+			if (endNode.getId() == node.getId())
+				continue;
+			if (!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT))
+				continue;
+
 			long childId = endNode.getId();
-			
+
 			String childNum = null;
-			try{
+			try
+			{
 				childNum = (String) endNode.getProperty(NodeKeys.CHILD_NUMBER);
-			}catch(RuntimeException ex){ }
-		
-			if(childNum == null)
+			}
+			catch (RuntimeException ex)
+			{
+			}
+
+			if (childNum == null)
 				childNumber = 0;
 			else
 				childNumber = Integer.parseInt(childNum);
-		
-			retval.add(new Pair<Long,Integer>(childId, childNumber));
+
+			retval.add(new Pair<Long, Integer>(childId, childNumber));
 		}
 
 		return retval;

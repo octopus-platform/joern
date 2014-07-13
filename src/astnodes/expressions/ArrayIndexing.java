@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class ArrayIndexing extends Expression {}
+public class ArrayIndexing extends Expression
+{
+}

@@ -17,31 +17,33 @@ import ddg.DataDependenceGraph.DefUseRelation;
 public class DDGImporter
 {
 	GraphNodeStore nodeStore;
-	
+
 	public DDGImporter(GraphNodeStore aNodeStore)
 	{
 		nodeStore = aNodeStore;
 	}
-	
+
 	public void addDDGToDatabase(DDG ddg)
 	{
-		
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.REACHES);	
-		
+
+		RelationshipType rel = DynamicRelationshipType
+				.withName(EdgeTypes.REACHES);
+
 		Map<String, Object> properties = new HashMap<String, Object>();
-		
+
 		Set<DefUseRelation> defUseEdges = ddg.getDefUseEdges();
-		if(defUseEdges == null)
+		if (defUseEdges == null)
 			return;
-		
-		for(DefUseRelation defUseRel : defUseEdges){			
+
+		for (DefUseRelation defUseRel : defUseEdges)
+		{
 			properties.put("var", defUseRel.symbol);
-			
+
 			long srcId = nodeStore.getIdForObject(defUseRel.src);
 			long dstId = nodeStore.getIdForObject(defUseRel.dst);
-			
-			Neo4JBatchInserter.addRelationship(srcId, dstId, rel, properties);		
+
+			Neo4JBatchInserter.addRelationship(srcId, dstId, rel, properties);
 		}
 	}
-	
+
 }

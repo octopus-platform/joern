@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class ExclusiveOrExpression extends BinaryExpression {}
+public class ExclusiveOrExpression extends BinaryExpression
+{
+}

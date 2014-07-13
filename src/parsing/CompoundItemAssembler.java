@@ -9,12 +9,16 @@ import astnodes.ASTNodeBuilder;
 import astnodes.statements.CompoundStatement;
 import astwalking.ASTWalker;
 
-public class CompoundItemAssembler extends ASTWalker {
+public class CompoundItemAssembler extends ASTWalker
+{
 
 	private CompoundStatement compoundItem;
-	
-	public CompoundStatement getCompoundItem(){ return compoundItem; }
-	
+
+	public CompoundStatement getCompoundItem()
+	{
+		return compoundItem;
+	}
+
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
@@ -22,7 +26,9 @@ public class CompoundItemAssembler extends ASTWalker {
 	}
 
 	@Override
-	public void endOfUnit(ParserRuleContext ctx, String filename) {}
+	public void endOfUnit(ParserRuleContext ctx, String filename)
+	{
+	}
 
 	@Override
 	public void processItem(ASTNode item, Stack<ASTNodeBuilder> itemStack)
@@ -30,7 +36,14 @@ public class CompoundItemAssembler extends ASTWalker {
 		compoundItem.addStatement(item);
 	}
 
-	@Override public void begin(){}
-	@Override public void end(){}
+	@Override
+	public void begin()
+	{
+	}
+
+	@Override
+	public void end()
+	{
+	}
 
 }

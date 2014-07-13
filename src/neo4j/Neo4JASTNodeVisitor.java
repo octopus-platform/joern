@@ -24,13 +24,13 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 {
 	FileDatabaseNode currentFileNode;
 	Stack<Long> contextStack;
-	
+
 	public void handleStartOfUnit(FileDatabaseNode aCurrentFileNode)
 	{
 		currentFileNode = aCurrentFileNode;
-		contextStack =  new Stack<Long>();
+		contextStack = new Stack<Long>();
 	}
-	
+
 	public void visit(FunctionDef node)
 	{
 		ASTNodeImporter importer = new FunctionImporter();
@@ -39,17 +39,17 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 
 	public void visit(ClassDefStatement node)
 	{
-		ASTNodeImporter importer = new ClassDefImporter();		
-		long classNodeId = importNode(importer, node);		
+		ASTNodeImporter importer = new ClassDefImporter();
+		long classNodeId = importNode(importer, node);
 		visitClassDefContent(node, classNodeId);
 	}
-	
+
 	public void visit(IdentifierDeclStatement node)
 	{
 		ASTNodeImporter importer = new DeclStmtImporter();
 		importNode(importer, node);
 	}
-	
+
 	private long importNode(ASTNodeImporter importer, ASTNode node)
 	{
 		importer.setCurrentFile(currentFileNode);
@@ -62,10 +62,11 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 
 	private void addLinkToClassDef(long dstNodeId)
 	{
-		if(contextStack.size() == 0)
+		if (contextStack.size() == 0)
 			return;
 		Long classId = contextStack.peek();
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_CLASS_OF);
+		RelationshipType rel = DynamicRelationshipType
+				.withName(EdgeTypes.IS_CLASS_OF);
 		Neo4JBatchInserter.addRelationship(classId, dstNodeId, rel, null);
 	}
 
@@ -77,5 +78,5 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 		visit(node.content);
 		contextStack.pop();
 	}
-	
+
 }

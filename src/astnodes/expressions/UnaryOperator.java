@@ -2,8 +2,12 @@ package astnodes.expressions;
 
 import astwalking.ASTNodeVisitor;
 
-public class UnaryOperator extends Expression {
+public class UnaryOperator extends Expression
+{
 
-	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }	
-	
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
+
 }

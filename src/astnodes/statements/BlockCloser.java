@@ -1,4 +1,5 @@
 package astnodes.statements;
 
-
-public class BlockCloser extends Statement{}
+public class BlockCloser extends Statement
+{
+}

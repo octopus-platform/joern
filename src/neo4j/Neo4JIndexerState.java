@@ -18,10 +18,10 @@ public class Neo4JIndexerState extends IndexerState
 	{
 		currentFileNode = node;
 	}
-	
+
 	public FileDatabaseNode getCurrentFileNode()
 	{
 		return currentFileNode;
 	}
-	
+
 }

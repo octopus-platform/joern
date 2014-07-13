@@ -6,32 +6,37 @@ import java.util.LinkedList;
 import udg.ASTProvider;
 import udg.useDefGraph.UseOrDef;
 
-public class EmitDefEnvironment extends UseDefEnvironment {
+public class EmitDefEnvironment extends UseDefEnvironment
+{
 
 	Collection<String> defSymbols = new LinkedList<String>();
-	
-	public void addChildSymbols(LinkedList<String> childSymbols, ASTProvider child)
+
+	public void addChildSymbols(LinkedList<String> childSymbols,
+			ASTProvider child)
 	{
-		if(isDef(child)){
+		if (isDef(child))
+		{
 			// add definition only for the last symbol, e.g.,
 			// for x.y.z = 10, add a def for x.y.z only.
-			
-			if(childSymbols.size() > 1) {
-				
+
+			if (childSymbols.size() > 1)
+			{
+
 				defSymbols.add(childSymbols.getLast());
-				
-			}else
+
+			}
+			else
 				defSymbols.addAll(childSymbols);
 		}
-		if(isUse(child))
+		if (isUse(child))
 			symbols.addAll(childSymbols);
 	}
-	
+
 	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
 	{
-		LinkedList<UseOrDef> retval = createDefsForAllSymbols(defSymbols);	
+		LinkedList<UseOrDef> retval = createDefsForAllSymbols(defSymbols);
 		retval.addAll(createUsesForAllSymbols(symbols));
 		return retval;
 	}
-	
+
 }

@@ -8,6 +8,9 @@ public class GotoStatement extends JumpStatement
 	{
 		return getChild(0).getEscapedCodeStr();
 	}
-	
-	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

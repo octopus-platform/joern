@@ -3,11 +3,12 @@ package ddg.DataDependenceGraph;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DDGDifference {
+public class DDGDifference
+{
 
 	private List<DefUseRelation> relsToAdd = new LinkedList<DefUseRelation>();
 	private List<DefUseRelation> relsToRemove = new LinkedList<DefUseRelation>();
-	
+
 	public void addRelToAdd(DefUseRelation rel)
 	{
 		relsToAdd.add(rel);
@@ -22,10 +23,10 @@ public class DDGDifference {
 	{
 		return relsToAdd;
 	}
-	
+
 	public List<DefUseRelation> getRelsToRemove()
 	{
 		return relsToRemove;
 	}
-	
+
 }

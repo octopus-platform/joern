@@ -6,16 +6,17 @@ import astnodes.ASTNode;
 import astnodes.statements.DoStatement;
 import astnodes.statements.IfStatement;
 
-public class ContentBuilderStack {
+public class ContentBuilderStack
+{
 	private Stack<ASTNode> itemStack = new Stack<ASTNode>();
 	private ShadowStack shadowStack = new ShadowStack(itemStack);
-	
+
 	public void push(ASTNode statementItem)
 	{
 		shadowStack.push(statementItem);
 		itemStack.push(statementItem);
 	}
-	
+
 	public ASTNode pop()
 	{
 		shadowStack.pop();

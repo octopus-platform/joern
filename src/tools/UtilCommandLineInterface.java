@@ -23,21 +23,21 @@ public class UtilCommandLineInterface extends CommonCommandLineInterface
 	protected void initializeOptions()
 	{
 		super.initializeOptions();
-		
-		Option outputDirectory = OptionBuilder.withArgName( "dbdir" ).hasArg()
-				.withDescription(  "specifies the database directory" )
-				.create( "dbdir" );
+
+		Option outputDirectory = OptionBuilder.withArgName("dbdir").hasArg()
+				.withDescription("specifies the database directory")
+				.create("dbdir");
 
 		options.addOption(outputDirectory);
 
 	}
 
-	public void parseCommandLine(String [] args) throws ParseException
+	public void parseCommandLine(String[] args) throws ParseException
 	{
 		cmd = parser.parse(options, args);
 
-		if(cmd.hasOption( "dbdir"))		
+		if (cmd.hasOption("dbdir"))
 			dbDir = cmd.getOptionValue("dbdir");
 	}
-	
+
 }

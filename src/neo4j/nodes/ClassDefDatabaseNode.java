@@ -5,11 +5,12 @@ import java.util.Map;
 
 import astnodes.declarations.ClassDefStatement;
 
-public class ClassDefDatabaseNode extends DatabaseNode {
+public class ClassDefDatabaseNode extends DatabaseNode
+{
 
 	String name;
 	ClassDefStatement stmt;
-	
+
 	@Override
 	public void initialize(Object obj)
 	{

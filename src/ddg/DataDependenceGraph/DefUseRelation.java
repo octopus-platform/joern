@@ -1,10 +1,11 @@
 package ddg.DataDependenceGraph;
 
-public class DefUseRelation{		
+public class DefUseRelation
+{
 	public Object src;
 	public Object dst;
 	public String symbol;
-	
+
 	public DefUseRelation(Object aSrc, Object aDst, String aSymbol)
 	{
 		src = aSrc;
@@ -13,12 +14,12 @@ public class DefUseRelation{
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		DefUseRelation otherRel = (DefUseRelation) other;	
-		
-		return (src == otherRel.src) &&
-			   (dst == otherRel.dst) &&
-			   (symbol.equals(otherRel.symbol));
+	public boolean equals(Object other)
+	{
+		DefUseRelation otherRel = (DefUseRelation) other;
+
+		return (src == otherRel.src) && (dst == otherRel.dst)
+				&& (symbol.equals(otherRel.symbol));
 	}
 
 	@Override
@@ -26,5 +27,5 @@ public class DefUseRelation{
 	{
 		return symbol.hashCode();
 	}
-	
+
 }

@@ -11,7 +11,7 @@ public class InitDeclContextWrapper
 	ModuleParser.DeclaratorContext ctxCodeSensor = null;
 	FunctionParser.DeclaratorContext ctxFine = null;
 	int contextInUse;
-	
+
 	public InitDeclContextWrapper(ModuleParser.DeclaratorContext ctx)
 	{
 		ctxCodeSensor = ctx;
@@ -26,10 +26,14 @@ public class InitDeclContextWrapper
 
 	public InitDeclContextWrapper(ParseTree objToWrap)
 	{
-		if(objToWrap instanceof ModuleParser.Init_declaratorContext){
-			ctxCodeSensor = (ModuleParser.DeclaratorContext) objToWrap.getChild(0);
+		if (objToWrap instanceof ModuleParser.Init_declaratorContext)
+		{
+			ctxCodeSensor = (ModuleParser.DeclaratorContext) objToWrap
+					.getChild(0);
 			contextInUse = 0;
-		}else if(objToWrap instanceof FunctionParser.Init_declaratorContext){
+		}
+		else if (objToWrap instanceof FunctionParser.Init_declaratorContext)
+		{
 			ctxFine = (FunctionParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 2;
 		}
@@ -37,38 +41,50 @@ public class InitDeclContextWrapper
 
 	public ParserRuleContext getWrappedObject()
 	{
-		switch(contextInUse){
-		case 0: return ctxCodeSensor;
-		case 2: return ctxFine;
-	}
-	return null;
-	}
-	
-	public ParserRuleContext ptrs()
-	{
-		switch(contextInUse){
-			case 0: return ctxCodeSensor.ptrs();
-			case 2: return ctxFine.ptrs();
+		switch (contextInUse)
+		{
+			case 0:
+				return ctxCodeSensor;
+			case 2:
+				return ctxFine;
 		}
 		return null;
 	}
-	
+
+	public ParserRuleContext ptrs()
+	{
+		switch (contextInUse)
+		{
+			case 0:
+				return ctxCodeSensor.ptrs();
+			case 2:
+				return ctxFine.ptrs();
+		}
+		return null;
+	}
+
 	public ParserRuleContext type_suffix()
 	{
-		switch(contextInUse){
-			case 0: return ctxCodeSensor.type_suffix();
-			case 2: return ctxFine.type_suffix();
+		switch (contextInUse)
+		{
+			case 0:
+				return ctxCodeSensor.type_suffix();
+			case 2:
+				return ctxFine.type_suffix();
 		}
 		return null;
 	}
 
 	public ParserRuleContext identifier()
 	{
-		switch(contextInUse){
-		case 0: return ctxCodeSensor.identifier();
-		case 2: return ctxFine.identifier();
+		switch (contextInUse)
+		{
+			case 0:
+				return ctxCodeSensor.identifier();
+			case 2:
+				return ctxFine.identifier();
 		}
-	return null;
+		return null;
 	}
-	
+
 }

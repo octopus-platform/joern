@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class EqualityExpression extends BinaryExpression {}
+public class EqualityExpression extends BinaryExpression
+{
+}

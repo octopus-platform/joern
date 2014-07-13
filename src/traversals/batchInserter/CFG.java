@@ -22,12 +22,12 @@ public class CFG
 	{
 		return Elementary.getCodeOfChildrenConnectedBy(nodeId, EdgeTypes.DEF);
 	}
-	
+
 	public static IndexHits<Long> getStatementsFromIndex(long functionId)
-	{		
-		String query = String.format("%s:True AND %s:%d",
-				NodeKeys.IS_CFG_NODE, NodeKeys.FUNCTION_ID, functionId);
-		
+	{
+		String query = String.format("%s:True AND %s:%d", NodeKeys.IS_CFG_NODE,
+				NodeKeys.FUNCTION_ID, functionId);
+
 		return Neo4JBatchInserter.queryIndex(query);
 	}
 
@@ -35,11 +35,14 @@ public class CFG
 	{
 		List<Long> retval = new LinkedList<Long>();
 		Iterable<BatchRelationship> rels = Elementary.getEdges(statementId);
-		
-		for(BatchRelationship rel : rels){
-			if(!Elementary.isEdgeOfType(rel, EdgeTypes.FLOWS_TO)) continue;
-			if(rel.getStartNode() == statementId) continue;
-			retval.add(rel.getStartNode());		
+
+		for (BatchRelationship rel : rels)
+		{
+			if (!Elementary.isEdgeOfType(rel, EdgeTypes.FLOWS_TO))
+				continue;
+			if (rel.getStartNode() == statementId)
+				continue;
+			retval.add(rel.getStartNode());
 		}
 		return retval;
 	}
@@ -48,12 +51,15 @@ public class CFG
 	{
 		List<Long> retval = new LinkedList<Long>();
 		Iterable<BatchRelationship> rels = Elementary.getEdges(statementId);
-		for(BatchRelationship rel : rels){
-			if(!Elementary.isEdgeOfType(rel, EdgeTypes.FLOWS_TO)) continue;
-			if(rel.getEndNode() == statementId) continue;
+		for (BatchRelationship rel : rels)
+		{
+			if (!Elementary.isEdgeOfType(rel, EdgeTypes.FLOWS_TO))
+				continue;
+			if (rel.getEndNode() == statementId)
+				continue;
 			retval.add(rel.getEndNode());
 		}
 		return retval;
 	}
-	
+
 }
