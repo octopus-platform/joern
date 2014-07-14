@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class MultiplicativeExpression extends BinaryExpression {}
+public class MultiplicativeExpression extends BinaryExpression
+{
+}

@@ -18,7 +18,6 @@ public class AssignmentTests extends CFGCreatorTest
 		assertTrue(cfg.getStatements().size() == 2);
 	}
 
-	
 	@Test
 	public void testAssignmentASTLink()
 	{
@@ -29,8 +28,7 @@ public class AssignmentTests extends CFGCreatorTest
 		assertTrue(astNode != null);
 		System.out.println(astNode.getClass().getSimpleName());
 	}
-	
-	
+
 	@Test
 	public void testAssignmentInDecl()
 	{
@@ -38,6 +36,5 @@ public class AssignmentTests extends CFGCreatorTest
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.getStatements().size() == 2);
 	}
-	
-	
+
 }

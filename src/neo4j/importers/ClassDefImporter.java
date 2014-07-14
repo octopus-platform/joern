@@ -13,39 +13,43 @@ import astnodes.declarations.ClassDefStatement;
 
 public class ClassDefImporter extends ASTNodeImporter
 {
-	
+
 	public void addToDatabaseSafe(ASTNode node)
 	{
-		try{
+		try
+		{
 			ClassDefDatabaseNode classDefNode = new ClassDefDatabaseNode();
 			classDefNode.initialize(node);
 			addClassDefToDatabase(classDefNode);
-			
+
 			linkClassDefToFileNode(classDefNode, curFile);
-		}catch(RuntimeException ex)
+		}
+		catch (RuntimeException ex)
 		{
 			ex.printStackTrace();
-			System.err.println("Error adding class to database: " + ((ClassDefStatement) node).name.getEscapedCodeStr());
+			System.err.println("Error adding class to database: "
+					+ ((ClassDefStatement) node).name.getEscapedCodeStr());
 			return;
 		}
-				
+
 	}
 
 	private void linkClassDefToFileNode(ClassDefDatabaseNode classDefNode,
 			FileDatabaseNode fileNode)
 	{
-		RelationshipType rel = DynamicRelationshipType.withName(EdgeTypes.IS_FILE_OF);
-		
+		RelationshipType rel = DynamicRelationshipType
+				.withName(EdgeTypes.IS_FILE_OF);
+
 		long fileId = fileNode.getId();
 		long functionId = nodeStore.getIdForObject(classDefNode);
-		
+
 		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
 	}
 
 	private void addClassDefToDatabase(ClassDefDatabaseNode classDefNode)
 	{
 		addMainNode(classDefNode);
-		
+
 	}
-	
+
 }

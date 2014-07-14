@@ -1,6 +1,5 @@
 package astnodes.functionDef;
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import astnodes.ASTNode;
@@ -12,12 +11,12 @@ public class ParameterType extends ASTNode
 
 	public String getEscapedCodeStr()
 	{
-		if(codeStr != null)
+		if (codeStr != null)
 			return codeStr;
 		codeStr = completeType;
 		return codeStr;
 	}
-	
+
 	public void setCompleteType(String aCompleteType)
 	{
 		completeType = aCompleteType;
@@ -27,12 +26,12 @@ public class ParameterType extends ASTNode
 	{
 		baseType = aBaseType;
 	}
-	
+
 	public void initializeFromContext(ParserRuleContext aCtx)
-	{	
+	{
 		// use entire parameter as location. It's the best
 		// we can do right now.
 		super.initializeFromContext(aCtx);
-	}	
+	}
 
 }

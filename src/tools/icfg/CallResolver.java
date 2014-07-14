@@ -9,8 +9,9 @@ import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import traversals.batchInserter.Elementary;
 
-public class CallResolver {
-	
+public class CallResolver
+{
+
 	public IndexHits<Long> resolveByCallId(long callId)
 	{
 		String calleeString = getCalleeString(callId);
@@ -19,12 +20,16 @@ public class CallResolver {
 	}
 
 	private String getCalleeString(Long callId)
-	{	
-		try{
+	{
+		try
+		{
 			long firstChildId = getFirstChildId(callId);
-			String codeStr = (String) Neo4JBatchInserter.getNodeProperties(firstChildId).get("code");
-			return codeStr;			
-		}catch(RuntimeException ex){
+			String codeStr = (String) Neo4JBatchInserter.getNodeProperties(
+					firstChildId).get("code");
+			return codeStr;
+		}
+		catch (RuntimeException ex)
+		{
 			System.err.println(ex.getMessage());
 		}
 		return "";
@@ -32,44 +37,47 @@ public class CallResolver {
 
 	private long getFirstChildId(Long callId)
 	{
-		Iterable<BatchRelationship> rels = Neo4JBatchInserter.getRelationships(callId);
+		Iterable<BatchRelationship> rels = Neo4JBatchInserter
+				.getRelationships(callId);
 		long endNode;
-		
-		for(BatchRelationship rel : rels){
-			
+
+		for (BatchRelationship rel : rels)
+		{
+
 			// only consider outgoing nodes
 			endNode = rel.getEndNode();
-			
-			if(endNode == callId)
-				continue;
-			
-			// don't think we need this.
-			if(!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT))
-				continue;
-				
-			String childNum = Elementary.getNodeProperty(endNode, NodeKeys.CHILD_NUMBER);
-			
-			if(childNum == null)
-			    return endNode;
 
-			if(!childNum.equals("0"))
+			if (endNode == callId)
 				continue;
-						
-			return endNode;				
+
+			// don't think we need this.
+			if (!rel.getType().name().equals(EdgeTypes.IS_AST_PARENT))
+				continue;
+
+			String childNum = Elementary.getNodeProperty(endNode,
+					NodeKeys.CHILD_NUMBER);
+
+			if (childNum == null)
+				return endNode;
+
+			if (!childNum.equals("0"))
+				continue;
+
+			return endNode;
 		}
-		throw new RuntimeException("Warning: encountered CallExpression without child nodes.");
+		throw new RuntimeException(
+				"Warning: encountered CallExpression without child nodes.");
 	}
-	
+
 	private IndexHits<Long> lookupCallee(String callee)
 	{
-		if(callee.contains(" "))
+		if (callee.contains(" "))
 			return null;
-			
+
 		String query = "type:\"Function\" AND functionName:\"" + callee + "\"";
-		
-		IndexHits<Long> hits =
-				Neo4JBatchInserter.queryIndex(query);
-		
+
+		IndexHits<Long> hits = Neo4JBatchInserter.queryIndex(query);
+
 		return hits;
 	}
 

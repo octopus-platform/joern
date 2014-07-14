@@ -13,31 +13,31 @@ public class OtherTests extends FunctionDefinitionTests
 	public void testNestedFunctionName()
 	{
 		String input = "int (foo)(){}";
-		
+
 		ModuleParser parser = createParser(input);
-		String output = parser.function_def().toStringTree(parser);	
+		String output = parser.function_def().toStringTree(parser);
 		assertTrue(output.startsWith("(function_def "));
 	}
-	
+
 	@Test
 	public void testOperatorOverloading()
 	{
 		String input = "inline bool operator == (const PlMessageHeader &b) const {}";
-		
+
 		ModuleParser parser = createParser(input);
-		String output = parser.function_def().toStringTree(parser);	
-		
+		String output = parser.function_def().toStringTree(parser);
+
 		assertTrue(output.startsWith("(function_def "));
 	}
-	
+
 	@Test
 	public void testExceptionSpecificationCpp()
 	{
 		String input = "int foo() throw(){}";
-		
+
 		ModuleParser parser = createParser(input);
-		String output = parser.function_def().toStringTree(parser);	
-		
+		String output = parser.function_def().toStringTree(parser);
+
 		assertTrue(output.startsWith("(function_def "));
 	}
 }

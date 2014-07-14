@@ -2,11 +2,11 @@ package udg.useDefAnalysis.environments;
 
 import java.util.LinkedList;
 
-
-public class IdentifierEnvironment extends UseDefEnvironment {
+public class IdentifierEnvironment extends UseDefEnvironment
+{
 
 	// pass the 'code' of the identifier up-stream
-	
+
 	public LinkedList<String> upstreamSymbols()
 	{
 		String code = astProvider.getEscapedCodeStr();

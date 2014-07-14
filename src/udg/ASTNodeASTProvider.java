@@ -2,10 +2,11 @@ package udg;
 
 import astnodes.ASTNode;
 
-public class ASTNodeASTProvider extends ASTProvider {
+public class ASTNodeASTProvider extends ASTProvider
+{
 
 	ASTNode node;
-	
+
 	public void setNode(ASTNode astNode)
 	{
 		node = astNode;
@@ -15,14 +16,16 @@ public class ASTNodeASTProvider extends ASTProvider {
 	{
 		return node;
 	}
-	
+
 	@Override
-	public String getTypeAsString() {
+	public String getTypeAsString()
+	{
 		return node.getTypeAsString();
 	}
 
 	@Override
-	public ASTProvider getChild(int i) {
+	public ASTProvider getChild(int i)
+	{
 		ASTNodeASTProvider childProvider = new ASTNodeASTProvider();
 		childProvider.setNode(node.getChild(i));
 		return childProvider;
@@ -41,7 +44,8 @@ public class ASTNodeASTProvider extends ASTProvider {
 	}
 
 	@Override
-	public int getChildNumber() {
+	public int getChildNumber()
+	{
 		return node.getChildNumber();
 	}
 
@@ -57,5 +61,5 @@ public class ASTNodeASTProvider extends ASTProvider {
 	{
 		return node.getOperatorCode();
 	}
-	
+
 }

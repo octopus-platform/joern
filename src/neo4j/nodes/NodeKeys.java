@@ -1,6 +1,7 @@
 package neo4j.nodes;
 
-public class NodeKeys {
+public class NodeKeys
+{
 
 	public static final String TYPE = "type";
 	public static final String CODE = "code";
@@ -15,5 +16,5 @@ public class NodeKeys {
 	public static final String FILEPATH = "filepath";
 	public static final String FUNCTION_ID = "functionId";
 	public static final String CHILD_NUMBER = "childNum";
-	
+
 }

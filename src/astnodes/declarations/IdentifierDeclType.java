@@ -11,5 +11,5 @@ public class IdentifierDeclType extends ASTNode
 	{
 		return completeType;
 	}
-	
+
 }

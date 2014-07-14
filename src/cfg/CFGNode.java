@@ -2,13 +2,14 @@ package cfg;
 
 import astnodes.ASTNode;
 
-public class CFGNode {
+public class CFGNode
+{
 
 	public ASTNode astNode;
-	
+
 	public void setASTNode(ASTNode node)
 	{
-		astNode = node;		
+		astNode = node;
 	}
 
 	public ASTNode getASTNode()
@@ -18,15 +19,16 @@ public class CFGNode {
 
 	public String getEscapedCodeStr()
 	{
-		if(astNode == null)
+		if (astNode == null)
 			return "";
-		
+
 		return astNode.getEscapedCodeStr();
 	}
 
 	public void markAsCFGNode()
 	{
-		if(astNode == null) return;
+		if (astNode == null)
+			return;
 		astNode.markAsCFGNode();
 	}
 

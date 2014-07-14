@@ -5,16 +5,17 @@ import java.util.Map;
 
 import astnodes.declarations.IdentifierDecl;
 
-public class DeclDatabaseNode extends DatabaseNode {
+public class DeclDatabaseNode extends DatabaseNode
+{
 
 	IdentifierDecl decl;
 	String baseType;
 	String completeType;
 	String identifierString;
-	
+
 	@Override
 	public void initialize(Object obj)
-	{	
+	{
 		decl = (IdentifierDecl) obj;
 		baseType = decl.getType().baseType;
 		completeType = decl.getType().completeType;

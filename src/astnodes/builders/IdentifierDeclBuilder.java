@@ -14,11 +14,10 @@ import astnodes.declarations.IdentifierDecl;
 import astnodes.declarations.IdentifierDeclType;
 import astnodes.expressions.Identifier;
 
-
 public class IdentifierDeclBuilder extends ASTNodeBuilder
 {
 	IdentifierDecl thisItem;
-	
+
 	@Override
 	public void createNew(ParserRuleContext ctx)
 	{
@@ -28,17 +27,19 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 	}
 
 	public void setType(InitDeclContextWrapper decl_ctx,
-						ParserRuleContext typeName)
+			ParserRuleContext typeName)
 	{
 		String baseType = "";
-		if(typeName != null)
+		if (typeName != null)
 			baseType = ParseTreeUtils.childTokenString(typeName);
 		String completeType = baseType;
-		if(decl_ctx.ptrs() != null)
-			completeType += " " + ParseTreeUtils.childTokenString(decl_ctx.ptrs());
-		if(decl_ctx.type_suffix() != null)
-			completeType += " " + ParseTreeUtils.childTokenString(decl_ctx.type_suffix());
-		
+		if (decl_ctx.ptrs() != null)
+			completeType += " "
+					+ ParseTreeUtils.childTokenString(decl_ctx.ptrs());
+		if (decl_ctx.type_suffix() != null)
+			completeType += " "
+					+ ParseTreeUtils.childTokenString(decl_ctx.type_suffix());
+
 		IdentifierDeclType newType = new IdentifierDeclType();
 		newType.initializeFromContext(decl_ctx.getWrappedObject());
 		newType.baseType = baseType;
@@ -51,30 +52,30 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 		ParserRuleContext identifier = decl_ctx.identifier();
 		Identifier newName = new Identifier();
 		newName.initializeFromContext(identifier);
-		
+
 		thisItem.setName(newName);
 	}
-	
+
 	public List<IdentifierDecl> getDeclarations(ParserRuleContext decl_list,
-												ParserRuleContext typeName)
+			ParserRuleContext typeName)
 	{
 		List<IdentifierDecl> declarations = new LinkedList<IdentifierDecl>();
 		InitDeclContextWrapper decl_ctx;
-		for(Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
+		for (Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
 		{
-			
+
 			decl_ctx = new InitDeclContextWrapper(i.next());
 			// for ','s
-			if(decl_ctx.getWrappedObject() == null) continue;
-			
+			if (decl_ctx.getWrappedObject() == null)
+				continue;
+
 			createNew(decl_ctx.getWrappedObject());
 			setType(decl_ctx, typeName);
 			setName(decl_ctx);
-			
+
 			declarations.add((IdentifierDecl) getItem());
 		}
 		return declarations;
 	}
-	
-	
+
 }

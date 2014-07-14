@@ -7,8 +7,9 @@ import org.junit.Test;
 
 import parsing.ANTLRFunctionParserDriver;
 
-public class FunctionCallTests {
-	
+public class FunctionCallTests
+{
+
 	@Test
 	public void testFunctionCall()
 	{
@@ -18,7 +19,7 @@ public class FunctionCallTests {
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
-	
+
 	@Test
 	public void testTwoParameters()
 	{
@@ -28,7 +29,7 @@ public class FunctionCallTests {
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains(", (function_argument"));
 	}
-	
+
 	@Test
 	public void testCallViaPtr()
 	{
@@ -38,7 +39,7 @@ public class FunctionCallTests {
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("function_argument_list"));
 	}
-	
+
 	@Test
 	public void testCallWithExprInArg()
 	{

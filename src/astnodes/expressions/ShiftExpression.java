@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class ShiftExpression extends BinaryExpression {}
+public class ShiftExpression extends BinaryExpression
+{
+}

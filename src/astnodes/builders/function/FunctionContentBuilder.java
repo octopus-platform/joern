@@ -3,10 +3,8 @@ package astnodes.builders.function;
 import java.util.EmptyStackException;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import parsing.InitDeclContextWrapper;
-import antlr.FunctionParser;
 import antlr.FunctionParser.Additive_expressionContext;
 import antlr.FunctionParser.And_expressionContext;
 import antlr.FunctionParser.ArrayIndexingContext;
@@ -124,14 +122,13 @@ import astnodes.statements.SwitchStatement;
 import astnodes.statements.WhileStatement;
 
 /**
- * The FunctionContentBuilder is invoked while walking the
- * parse tree to create ASTs for the contents of functions,
- * i.e., the first-level compound statements of functions.
+ * The FunctionContentBuilder is invoked while walking the parse tree to create
+ * ASTs for the contents of functions, i.e., the first-level compound statements
+ * of functions.
  * 
- * Since the fuzzy parser avoids using nested grammar rules
- * as these rules often require reading all tokens of a file
- * only to realize that the default rule must be taken, the
- * most difficult task this code fulfills is to produce a
+ * Since the fuzzy parser avoids using nested grammar rules as these rules often
+ * require reading all tokens of a file only to realize that the default rule
+ * must be taken, the most difficult task this code fulfills is to produce a
  * correctly nested AST.
  */
 
@@ -139,17 +136,17 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 {
 	ContentBuilderStack stack = new ContentBuilderStack();
 	NestingReconstructor nesting = new NestingReconstructor(stack);
-	
+
 	// exitStatements is called when the entire
 	// function-content has been walked
 
 	public void exitStatements(StatementsContext ctx)
 	{
-		if(stack.size() != 1)
+		if (stack.size() != 1)
 			throw new RuntimeException("Broken stack while parsing");
-		
+
 	}
-	
+
 	// For all statements, begin by pushing a Statement Object
 	// onto the stack.
 
@@ -209,13 +206,14 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void exitStatement(StatementContext ctx)
 	{
-		if(stack.size() == 0)
+		if (stack.size() == 0)
 			throw new RuntimeException();
 
 		ASTNode itemToRemove = stack.peek();
 		itemToRemove.initializeFromContext(ctx);
 
-		if(itemToRemove instanceof BlockCloser){
+		if (itemToRemove instanceof BlockCloser)
+		{
 			closeCompoundStatement();
 			return;
 		}
@@ -223,19 +221,19 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		// We keep Block-starters and compound items
 		// on the stack. They are removed by following
 		// statements.
-		if(itemToRemove instanceof BlockStarter ||
-				itemToRemove instanceof CompoundStatement)
+		if (itemToRemove instanceof BlockStarter
+				|| itemToRemove instanceof CompoundStatement)
 			return;
 
-		nesting.consolidate();	
+		nesting.consolidate();
 	}
 
 	private void closeCompoundStatement()
 	{
 		stack.pop(); // remove 'CloseBlock'
-		
+
 		CompoundStatement compoundItem = (CompoundStatement) stack.pop();
-		nesting.consolidateBlockStarters(compoundItem);		
+		nesting.consolidateBlockStarters(compoundItem);
 	}
 
 	// Expression handling
@@ -252,7 +250,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	}
 
 	public void enterAssignment(Assign_exprContext ctx)
-	{	
+	{
 		AssignmentExpr expr = new AssignmentExpr();
 		stack.push(expr);
 	}
@@ -338,7 +336,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void exitBitAndExpression(Bit_and_expressionContext ctx)
 	{
 		nesting.consolidateSubExpression(ctx);
-	}	
+	}
 
 	public void enterRelationalExpression(Relational_expressionContext ctx)
 	{
@@ -371,15 +369,17 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void exitAdditiveExpression(Additive_expressionContext ctx)
 	{
 		nesting.consolidateSubExpression(ctx);
-	}	
+	}
 
-	public void enterMultiplicativeExpression(Multiplicative_expressionContext ctx)
+	public void enterMultiplicativeExpression(
+			Multiplicative_expressionContext ctx)
 	{
 		MultiplicativeExpression expr = new MultiplicativeExpression();
 		stack.push(expr);
 	}
 
-	public void exitMultiplicativeExpression(Multiplicative_expressionContext ctx)
+	public void exitMultiplicativeExpression(
+			Multiplicative_expressionContext ctx)
 	{
 		nesting.consolidateSubExpression(ctx);
 	}
@@ -423,25 +423,29 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		Sizeof expr = new Sizeof();
 		stack.push(expr);
 	}
-	
+
 	public void exitSizeof(SizeofContext ctx)
 	{
 		nesting.consolidateSubExpression(ctx);
 	}
-	
+
 	private void introduceCalleeNode()
 	{
 		CallExpression expr;
-		try{
+		try
+		{
 			expr = (CallExpression) stack.peek();
-		}catch(EmptyStackException ex){
+		}
+		catch (EmptyStackException ex)
+		{
 			return;
 		}
 
 		ASTNode child = expr.getChild(0);
-		if(child == null) return;
+		if (child == null)
+			return;
 
-		Callee callee = new Callee(); 
+		Callee callee = new Callee();
 		callee.addChild(child);
 		expr.replaceFirstChild(callee);
 	}
@@ -449,20 +453,24 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	private void introduceCndNodeForCndExpr()
 	{
 		ConditionalExpression expr;
-		try{
+		try
+		{
 			expr = (ConditionalExpression) stack.peek();
-		}catch(EmptyStackException ex){
+		}
+		catch (EmptyStackException ex)
+		{
 			return;
 		}
-		
+
 		ASTNode child = expr.getChild(0);
-		if(child == null) return;
-		Condition cnd = new Condition(); 
-		cnd.addChild(child);		
+		if (child == null)
+			return;
+		Condition cnd = new Condition();
+		cnd.addChild(child);
 		expr.replaceFirstChild(cnd);
-		
+
 	}
-	
+
 	public void enterArgumentList(Function_argument_listContext ctx)
 	{
 		ArgumentList expr = new ArgumentList();
@@ -481,7 +489,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	}
 
 	public void exitCondition(ConditionContext ctx)
-	{	
+	{
 		Condition cond = (Condition) stack.pop();
 		cond.initializeFromContext(ctx);
 		nesting.addItemToParent(cond);
@@ -501,22 +509,22 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	}
 
 	public void enterInitDeclSimple(InitDeclSimpleContext ctx)
-	{				
+	{
 		ASTNode identifierDecl = buildDeclarator(ctx);
-		stack.push(identifierDecl);	
+		stack.push(identifierDecl);
 	}
 
 	public void exitInitDeclSimple()
 	{
 		IdentifierDecl identifierDecl = (IdentifierDecl) stack.pop();
-		ASTNode stmt =  stack.peek();
+		ASTNode stmt = stack.peek();
 		stmt.addChild(identifierDecl);
 	}
 
 	public void enterInitDeclWithAssign(InitDeclWithAssignContext ctx)
 	{
-		IdentifierDecl identifierDecl = buildDeclarator(ctx);				
-		stack.push(identifierDecl);	
+		IdentifierDecl identifierDecl = buildDeclarator(ctx);
+		stack.push(identifierDecl);
 	}
 
 	public void exitInitDeclWithAssign(InitDeclWithAssignContext ctx)
@@ -536,20 +544,20 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 		identifierDecl.addChild(assign);
 
-		ASTNode stmt =  stack.peek();
+		ASTNode stmt = stack.peek();
 		stmt.addChild(identifierDecl);
 	}
 
 	public void enterInitDeclWithCall(InitDeclWithCallContext ctx)
 	{
 		ASTNode identifierDecl = buildDeclarator(ctx);
-		stack.push(identifierDecl);	
+		stack.push(identifierDecl);
 	}
 
 	public void exitInitDeclWithCall()
 	{
 		IdentifierDecl identifierDecl = (IdentifierDecl) stack.pop();
-		ASTNode stmt =  stack.peek();
+		ASTNode stmt = stack.peek();
 		stmt.addChild(identifierDecl);
 	}
 
@@ -566,14 +574,17 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	private ParserRuleContext getTypeFromParent()
 	{
-		ASTNode parentItem =  stack.peek();
+		ASTNode parentItem = stack.peek();
 		ParserRuleContext typeName;
-		if(parentItem instanceof IdentifierDeclStatement)
-			typeName = ((IdentifierDeclStatement) parentItem).getTypeNameContext();
+		if (parentItem instanceof IdentifierDeclStatement)
+			typeName = ((IdentifierDeclStatement) parentItem)
+					.getTypeNameContext();
 		else if (parentItem instanceof ClassDefStatement)
-			typeName = ((ClassDefStatement) parentItem).getName().getParseTreeNodeContext();
+			typeName = ((ClassDefStatement) parentItem).getName()
+					.getParseTreeNodeContext();
 		else
-			throw new RuntimeException("No matching declaration statement/class definiton for init declarator");
+			throw new RuntimeException(
+					"No matching declaration statement/class definiton for init declarator");
 		return typeName;
 	}
 
@@ -626,7 +637,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		PrimaryExpression expr = new PrimaryExpression();
 		stack.push(expr);
 	}
-	
+
 	public void exitPrimary(Primary_expressionContext ctx)
 	{
 		nesting.consolidateSubExpression(ctx);
@@ -742,17 +753,19 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void addLocalDecl(IdentifierDecl decl)
 	{
-		IdentifierDeclStatement declStmt = (IdentifierDeclStatement) stack.peek();
+		IdentifierDeclStatement declStmt = (IdentifierDeclStatement) stack
+				.peek();
 		declStmt.addChild(decl);
 	}
 
-	public void enterDeclByType(ParserRuleContext ctx, Type_nameContext type_nameContext)
+	public void enterDeclByType(ParserRuleContext ctx,
+			Type_nameContext type_nameContext)
 	{
 		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
 		declStmt.initializeFromContext(ctx);
 		declStmt.setTypeNameContext(type_nameContext);
 
-		if(stack.peek() instanceof Statement)
+		if (stack.peek() instanceof Statement)
 			replaceTopOfStack(declStmt);
 		else
 			stack.push(declStmt);
@@ -823,5 +836,5 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		nesting.consolidateSubExpression(ctx);
 	}
-	
+
 }

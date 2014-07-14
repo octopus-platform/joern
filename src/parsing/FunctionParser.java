@@ -5,7 +5,7 @@ import astnodes.statements.CompoundStatement;
 public class FunctionParser
 {
 	ANTLRParserDriver parser;
-	
+
 	public FunctionParser()
 	{
 		parser = new ANTLRFunctionParserDriver();
@@ -21,5 +21,5 @@ public class FunctionParser
 		// The result is what's left on the stack in the end
 		return parser.getResult();
 	}
-	
+
 }

@@ -1,5 +1,6 @@
 package cfg;
 
-public class SwitchBlock extends CFGNode {
+public class SwitchBlock extends CFGNode
+{
 
 }
