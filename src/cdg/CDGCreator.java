@@ -1,21 +1,18 @@
 package cdg;
 
 import cfg.CFG;
-import ddg.DefUseCFG.DefUseCFG;
+import cfg.CFGNode;
 
 public class CDGCreator
 {
 
-	public CDG<Object> create(CFG cfg, DefUseCFG defUseCFG)
+	public CDG create(CFG cfg)
 	{
-		Object start = cfg.getFirstStatement();
-		Object exit = cfg.getLastStatement();
-		ReverseCFG<Object> reverseCFG;
-		DominatorTree<Object> dominatorTree;
-
-		reverseCFG = ReverseCFG.newInstance(defUseCFG, start, exit);
+		ReverseCFG reverseCFG;
+		DominatorTree<CFGNode> dominatorTree;
+		reverseCFG = ReverseCFG.newInstance(cfg);
 		dominatorTree = DominatorTree.newInstance(reverseCFG,
-				reverseCFG.getExitNode());
+				reverseCFG.getEntryNode());
 		return CDG.newInstance(dominatorTree);
 	}
 }

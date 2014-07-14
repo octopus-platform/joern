@@ -6,14 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class PostorderIterator<V> implements Iterator<V>
+public class PostorderIterator<V, E extends Edge<V>> implements Iterator<V>
 {
 
-	private Graph<V> graph;
+	private AbstractGraph<V, E> graph;
 	Deque<V> remainingNodes;
 	List<V> visitedNodes;
 
-	public PostorderIterator(Graph<V> graph, V root)
+	public PostorderIterator(AbstractGraph<V, E> graph, V root)
 	{
 		this.graph = graph;
 		this.remainingNodes = new LinkedList<V>();
@@ -41,11 +41,11 @@ public class PostorderIterator<V> implements Iterator<V>
 			// predecessors first if any
 			if (graph.outDegree(root) > 0)
 			{
-				for (V next : graph.outNeighborhood(root))
+				for (E edge : graph.outgoingEdges(root))
 				{
-					if (!visitedNodes.contains(next))
+					if (!visitedNodes.contains(edge.getDestination()))
 					{
-						remainingNodes.push(next);
+						remainingNodes.push(edge.getDestination());
 						// depth first
 						break;
 					}

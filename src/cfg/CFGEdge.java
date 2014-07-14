@@ -21,6 +21,11 @@ public class CFGEdge extends Edge<CFGNode>
 		this.label = label;
 	}
 
+	public String getLabel()
+	{
+		return this.label;
+	}
+
 	@Override
 	public Map<String, Object> getProperties()
 	{

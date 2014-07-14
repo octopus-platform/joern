@@ -8,7 +8,9 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import cdg.CDG;
+import cdg.CDGEdge;
 import cdg.DominatorTree;
+import cfg.CFGNode;
 
 public class CDGImporter
 {
@@ -20,40 +22,45 @@ public class CDGImporter
 		this.nodeStore = nodeStore;
 	}
 
-	public void addCDGToDatabase(CDG<Object> cdg)
+	public void addCDGToDatabase(CDG cdg)
 	{
 
 		RelationshipType rel;
 
 		// Add post dominator edges
-		DominatorTree<Object> dominatorTree = cdg.getDominatorTree();
+		DominatorTree<CFGNode> dominatorTree = cdg.getDominatorTree();
 		rel = DynamicRelationshipType.withName(EdgeTypes.POST_DOM);
-		for (Object vertex : dominatorTree)
+		for (CFGNode vertex : dominatorTree.getVertices())
 		{
-
-			// System.out.println(dom.getDominator(vertex) + " --|POST_DOM|--> "
-			// + vertex);
-			long srcId = nodeStore.getIdForObject(dominatorTree
-					.getDominator(vertex));
-			long dstId = nodeStore.getIdForObject(vertex);
+			CFGNode dominator = dominatorTree.getDominator(vertex);
+			long srcId = nodeStore
+					.getIdForObject(dominator.astNode != null ? dominator.astNode
+							: dominator);
+			long dstId = nodeStore
+					.getIdForObject(vertex.astNode != null ? vertex.astNode
+							: vertex);
 
 			Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
 		}
 		// Add control edges
 		rel = DynamicRelationshipType.withName(EdgeTypes.CONTROLS);
-		for (Object src : cdg)
+		for (CFGNode src : cdg.getVertices())
 		{
 			if (cdg.outDegree(src) > 0)
 			{
-				for (Object dst : cdg.outNeighborhood(src))
+				for (CDGEdge edge : cdg.outgoingEdges(src))
 				{
+					CFGNode dst = edge.getDestination();
 					if (src.equals(dst))
 					{
 						continue;
 					}
-					// System.out.println(src + " --|CONTROLS|--> " + dst);
-					long srcId = nodeStore.getIdForObject(src);
-					long dstId = nodeStore.getIdForObject(dst);
+					long srcId = nodeStore
+							.getIdForObject(src.astNode != null ? src.astNode
+									: src);
+					long dstId = nodeStore
+							.getIdForObject(dst.astNode != null ? dst.astNode
+									: dst);
 
 					Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
 				}

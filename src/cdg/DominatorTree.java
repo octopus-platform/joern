@@ -1,9 +1,10 @@
 package cdg;
 
-import graphutils.Graph;
+import graphutils.AbstractTwoWayGraph;
+import graphutils.Edge;
 import graphutils.PostorderIterator;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,10 +12,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map.Entry;
 import java.util.Set;
 
-public class DominatorTree<V> implements Graph<V>
+public class DominatorTree<V>
 {
 
 	private HashMap<V, V> dominators;
@@ -28,12 +28,28 @@ public class DominatorTree<V> implements Graph<V>
 		postorderEnumeration = new HashMap<V, Integer>();
 	}
 
-	public static <T> DominatorTree<T> newInstance(Graph<T> graph, T entryNode)
+	public static <V, E extends Edge<V>> DominatorTree<V> newInstance(
+			AbstractTwoWayGraph<V, E> graph, V startNode)
 	{
-		return new DominatorTreeCreator<T>(graph, entryNode).create();
+		return new DominatorTreeCreator<V, E>(graph, startNode).create();
 	}
 
-	public V commonDominator(List<V> vertices)
+	public Collection<V> getVertices()
+	{
+		return dominators.keySet();
+	}
+
+	public V getDominator(V vertex)
+	{
+		return dominators.get(vertex);
+	}
+
+	public Set<V> dominanceFrontier(V vertex)
+	{
+		return dominanceFrontiers.get(vertex);
+	}
+
+	private V commonDominator(List<V> vertices)
 	{
 		Deque<V> stack = new LinkedList<V>();
 		for (V vertex : vertices)
@@ -54,7 +70,7 @@ public class DominatorTree<V> implements Graph<V>
 		return stack.pop();
 	}
 
-	public V commonDominator(V vertex1, V vertex2)
+	private V commonDominator(V vertex1, V vertex2)
 	{
 		V finger1 = vertex1;
 		V finger2 = vertex2;
@@ -73,58 +89,6 @@ public class DominatorTree<V> implements Graph<V>
 		}
 		assert finger1.equals(finger2) : "fingers do not match";
 		return finger1;
-	}
-
-	public V getDominator(V vertex)
-	{
-		return dominators.get(vertex);
-	}
-
-	public Set<V> dominanceFrontier(V vertex)
-	{
-		return dominanceFrontiers.get(vertex);
-	}
-
-	@Override
-	public Set<V> getVertices()
-	{
-		return Collections.unmodifiableSet(dominators.keySet());
-	}
-
-	@Override
-	public List<V> outNeighborhood(V vertex)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public List<V> inNeighborhood(V vertex)
-	{
-		if (contains(vertex))
-		{
-			List<V> list = new LinkedList<V>();
-			list.add(dominators.get(vertex));
-			return list;
-		}
-		return null;
-	}
-
-	@Override
-	public int inDegree(V vertex)
-	{
-		return 1;
-	}
-
-	@Override
-	public int outDegree(V vertex)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterator<V> iterator()
-	{
-		return getVertices().iterator();
 	}
 
 	private boolean addVertex(V vertex)
@@ -161,17 +125,9 @@ public class DominatorTree<V> implements Graph<V>
 		return changed;
 	}
 
-	void print()
+	private boolean contains(V vertex)
 	{
-		for (Entry<V, V> entry : dominators.entrySet())
-		{
-			System.out.println(entry.getValue() + " IDom " + entry.getKey());
-		}
-		for (Entry<V, Set<V>> entry : dominanceFrontiers.entrySet())
-		{
-			System.out.println("dominanceFrontier(" + entry.getKey() + ") = "
-					+ entry.getValue());
-		}
+		return dominators.containsKey(vertex);
 	}
 
 	private boolean hasDominator(V vertex)
@@ -179,20 +135,20 @@ public class DominatorTree<V> implements Graph<V>
 		return dominators.get(vertex) != null;
 	}
 
-	private static class DominatorTreeCreator<V>
+	private static class DominatorTreeCreator<V, E extends Edge<V>>
 	{
 
 		private DominatorTree<V> dominatorTree;
-		private Graph<V> graph;
+		private AbstractTwoWayGraph<V, E> graph;
 		private List<V> orderedVertices;
-		private V entryNode;
+		private V startNode;
 
-		public DominatorTreeCreator(Graph<V> graph, V startNode)
+		public DominatorTreeCreator(AbstractTwoWayGraph<V, E> graph, V startNode)
 		{
 			this.dominatorTree = new DominatorTree<V>();
 			this.graph = graph;
 			this.orderedVertices = new LinkedList<V>();
-			this.entryNode = startNode;
+			this.startNode = startNode;
 		}
 
 		public DominatorTree<V> create()
@@ -211,8 +167,9 @@ public class DominatorTree<V> implements Graph<V>
 				if (graph.inDegree(currentNode) > 1)
 				{
 					V runner;
-					for (V predecessor : graph.inNeighborhood(currentNode))
+					for (Edge<V> edge : graph.ingoingEdges(currentNode))
 					{
+						V predecessor = edge.getSource();
 						if (!orderedVertices.contains(predecessor))
 						{
 							continue;
@@ -246,14 +203,17 @@ public class DominatorTree<V> implements Graph<V>
 				ListIterator<V> reverseVertexIterator = orderedVertices
 						.listIterator(orderedVertices.size());
 				// Skip the root
-				V startNode = reverseVertexIterator.previous();
-				assert startNode.equals(entryNode) : "last node does not equal entry node";
+				reverseVertexIterator.previous();
 
 				while (reverseVertexIterator.hasPrevious())
 				{
 					V currentNode = reverseVertexIterator.previous();
-					V newIdom = dominatorTree.commonDominator(graph
-							.inNeighborhood(currentNode));
+					List<V> list = new LinkedList<V>();
+					for (Edge<V> edge : graph.ingoingEdges(currentNode))
+					{
+						list.add(edge.getSource());
+					}
+					V newIdom = dominatorTree.commonDominator(list);
 					dominatorTree.addVertex(currentNode);
 					if (dominatorTree.setDominator(currentNode, newIdom))
 					{
@@ -266,15 +226,15 @@ public class DominatorTree<V> implements Graph<V>
 		private void enumerateVertices()
 		{
 			int counter = 0;
-			Iterator<V> postorderIterator = new PostorderIterator<V>(graph,
-					entryNode);
+			Iterator<V> postorderIterator = new PostorderIterator<V, E>(graph,
+					startNode);
 			while (postorderIterator.hasNext())
 			{
 				V vertex = postorderIterator.next();
 				orderedVertices.add(vertex);
 				dominatorTree.postorderEnumeration.put(vertex, counter++);
 			}
-			if (orderedVertices.size() < graph.getVertices().size())
+			if (orderedVertices.size() < graph.size())
 			{
 				System.out.println("warning: incomplete control flow graph");
 			}
@@ -282,16 +242,10 @@ public class DominatorTree<V> implements Graph<V>
 
 		private void initializeDominatorTree()
 		{
-			dominatorTree.addVertex(entryNode);
-			dominatorTree.setDominator(entryNode, entryNode);
+			dominatorTree.addVertex(startNode);
+			dominatorTree.setDominator(startNode, startNode);
 		}
 
-	}
-
-	@Override
-	public boolean contains(V vertex)
-	{
-		return dominators.containsKey(vertex);
 	}
 
 }
