@@ -1,5 +1,8 @@
 package cdg;
 
+import graphutils.Graph;
+import graphutils.PostorderIterator;
+
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;

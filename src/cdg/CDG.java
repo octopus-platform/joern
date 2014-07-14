@@ -1,5 +1,7 @@
 package cdg;
 
+import graphutils.Graph;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;

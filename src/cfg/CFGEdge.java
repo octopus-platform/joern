@@ -1,5 +1,7 @@
 package cfg;
 
+import graphutils.Edge;
+
 import java.util.HashMap;
 import java.util.Map;
 
