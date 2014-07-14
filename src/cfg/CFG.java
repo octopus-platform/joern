@@ -1,12 +1,13 @@
 package cfg;
 
-import graphutils.Edges;
+import graphutils.AbstractTwoWayGraph;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
+
+import misc.MultiHashMap;
 
 // The first node added is the entry node
 // The last node added is the exitNode
@@ -14,48 +15,97 @@ import java.util.Vector;
 // the first edge is the one taken if
 // condition evaluates to true.
 
-public class CFG
+public class CFG extends AbstractTwoWayGraph<CFGNode, CFGEdge>
 {
 
-	Vector<CFGNode> statements = new Vector<CFGNode>();
+	List<CFGNode> jumpStatements;
+	HashMap<String, CFGNode> labels;
+	HashMap<CFGNode, CFGNode> loopStart;
+	MultiHashMap<CFGNode, CFGNode> switchLabels;
 
-	Edges<CFGEdge, CFGNode> edges = new Edges<CFGEdge, CFGNode>();
-	SwitchLabels switchLabels = new SwitchLabels();
+	public CFG()
+	{
+		jumpStatements = new LinkedList<CFGNode>();
+		labels = new HashMap<String, CFGNode>();
+		loopStart = new HashMap<CFGNode, CFGNode>();
+		switchLabels = new MultiHashMap<CFGNode, CFGNode>();
+	}
 
-	Vector<CFGNode> jumpStatements = new Vector<CFGNode>();
-	HashMap<String, CFGNode> labels = new HashMap<String, CFGNode>();
-
-	HashMap<CFGNode, CFGNode> loopStart = new HashMap<CFGNode, CFGNode>();
+	public void appendCFG(CFG otherCFG)
+	{
+		CFGNode src = getLastStatement();
+		CFGNode dst = otherCFG.getFirstStatement();
+		addCFG(otherCFG);
+		if (src != null && dst != null)
+		{
+			addEdge(src, dst);
+		}
+	}
 
 	public void addCFG(CFG otherCFG)
 	{
-		if (statements.size() == 0)
+		if (otherCFG.isEmpty())
 		{
-			replaceCFGBy(otherCFG);
 			return;
 		}
-
-		Vector<CFGNode> otherBlocks = otherCFG.getStatements();
-		Edges<CFGEdge, CFGNode> otherEdges = otherCFG.getEdges();
+		for (CFGNode statement : otherCFG.getVertices())
+		{
+			addVertex(statement);
+		}
+		for (CFGNode statement : otherCFG.getVertices())
+		{
+			for (CFGEdge edge : otherCFG.outgoingEdges(statement))
+			{
+				addEdge(edge);
+			}
+		}
 		switchLabels.addAll(otherCFG.getSwitchLabels());
-		statements.addAll(otherBlocks);
-		edges.addEdges(otherEdges);
-
 		jumpStatements.addAll(otherCFG.getJumpStatements());
 		labels.putAll(otherCFG.getLabels());
-
 		loopStart.putAll(otherCFG.loopStart);
-
 	}
 
-	public void replaceCFGBy(CFG otherCFG)
+	public void addEdge(CFGNode srcBlock, CFGNode dstBlock)
 	{
-		this.statements = otherCFG.statements;
-		this.edges = otherCFG.edges;
-		this.switchLabels = otherCFG.switchLabels;
-		this.labels = otherCFG.labels;
-		this.jumpStatements = otherCFG.jumpStatements;
-		this.loopStart = otherCFG.loopStart;
+		addEdge(srcBlock, dstBlock, CFGEdge.EMPTY_LABEL);
+	}
+
+	public void addEdge(CFGNode srcBlock, CFGNode dstBlock, String label)
+	{
+		CFGEdge edge = new CFGEdge(srcBlock, dstBlock, label);
+		addEdge(edge);
+	}
+
+	public void removeAllEdgesFrom(CFGNode srcBlock)
+	{
+		for (CFGEdge edge : outgoingEdges(srcBlock))
+		{
+			removeEdge(edge);
+		}
+	}
+
+	public CFGNode getLastStatement()
+	{
+		try
+		{
+			return getVertices().get(size() - 1);
+		}
+		catch (RuntimeException ex)
+		{
+			return null;
+		}
+	}
+
+	public CFGNode getFirstStatement()
+	{
+		try
+		{
+			return getVertices().get(0);
+		}
+		catch (RuntimeException ex)
+		{
+			return null;
+		}
 	}
 
 	public CFGNode getBlockByLabel(String label)
@@ -73,84 +123,14 @@ public class CFG
 		return loopStart.get(thisStatement);
 	}
 
-	public SwitchLabels getSwitchLabels()
+	public MultiHashMap<CFGNode, CFGNode> getSwitchLabels()
 	{
 		return switchLabels;
-	}
-
-	public CFGNode getLastStatement()
-	{
-		try
-		{
-			return statements.lastElement();
-		}
-		catch (RuntimeException ex)
-		{
-			return null;
-		}
-	}
-
-	public CFGNode getFirstStatement()
-	{
-		try
-		{
-			return statements.firstElement();
-		}
-		catch (RuntimeException ex)
-		{
-			return null;
-		}
 	}
 
 	public void labelBlock(String label, CFGNode block)
 	{
 		labels.put(label, block);
-	}
-
-	public void addStatement(CFGNode newBlock)
-	{
-		statements.add(newBlock);
-	}
-
-	public void addEdge(CFGNode srcBlock, CFGNode dstBlock)
-	{
-		addEdge(srcBlock, dstBlock, CFGEdge.EMPTY_LABEL);
-	}
-
-	public void addEdge(CFGNode srcBlock, CFGNode dstBlock, String label)
-	{
-		CFGEdge edge = new CFGEdge(srcBlock, dstBlock, label);
-		edges.addEdge(edge);
-	}
-
-	public void removeAllEdgesFrom(CFGNode srcBlock)
-	{
-		edges.removeAllEdgesFrom(srcBlock);
-	}
-
-	public List<CFGEdge> getAllEdgesFrom(CFGNode srcBlock)
-	{
-		return edges.getEdgesFrom(srcBlock);
-	}
-
-	public boolean isConnected(CFGNode src, CFGNode dst)
-	{
-		return edges.isConnected(src, dst);
-	}
-
-	public Iterator<CFGEdge> edgeIterator()
-	{
-		return edges.iterator();
-	}
-
-	public int getNumberOfStatements()
-	{
-		return statements.size();
-	}
-
-	public int getNumberOfEdges()
-	{
-		return edges.totalSize();
 	}
 
 	public Collection<? extends CFGNode> getJumpStatements()
@@ -161,16 +141,6 @@ public class CFG
 	public HashMap<String, CFGNode> getLabels()
 	{
 		return labels;
-	}
-
-	private Edges<CFGEdge, CFGNode> getEdges()
-	{
-		return edges;
-	}
-
-	public Vector<CFGNode> getStatements()
-	{
-		return statements;
 	}
 
 	public void addJumpStatement(CFGNode block)

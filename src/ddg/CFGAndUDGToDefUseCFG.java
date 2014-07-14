@@ -29,7 +29,7 @@ public class CFGAndUDGToDefUseCFG
 
 	private void initializeStatements(CFG cfg, DefUseCFG defUseCFG)
 	{
-		for (CFGNode statement : cfg.getStatements())
+		for (CFGNode statement : cfg.getVertices())
 		{
 			ASTNode astNode = statement.getASTNode();
 			Object id = (astNode != null) ? astNode : statement;
@@ -86,13 +86,11 @@ public class CFGAndUDGToDefUseCFG
 		// defUseCFG.addParentBlock(dstId, srcId);
 		// }
 		// }
-		Iterator<CFGEdge> iterator = cfg.edgeIterator();
-		CFGEdge edge;
+
 		CFGNode src;
 		CFGNode dst;
-		while (iterator.hasNext())
+		for (CFGEdge edge : cfg.getEdges())
 		{
-			edge = iterator.next();
 			src = edge.getSource();
 			dst = edge.getDestination();
 			Object srcId = (src.astNode != null) ? src.astNode : src;

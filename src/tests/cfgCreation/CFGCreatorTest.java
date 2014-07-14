@@ -1,6 +1,6 @@
 package tests.cfgCreation;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.junit.Before;
 
@@ -30,7 +30,7 @@ public class CFGCreatorTest
 
 	protected ASTNode getConditionNode(CFG cfg)
 	{
-		Vector<CFGNode> statements = cfg.getStatements();
+		List<CFGNode> statements = cfg.getVertices();
 		CFGNode conditionBlock = statements.get(0);
 		ASTNode astNode = conditionBlock.getASTNode();
 		return astNode;

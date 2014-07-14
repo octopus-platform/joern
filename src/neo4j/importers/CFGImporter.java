@@ -1,8 +1,6 @@
 package neo4j.importers;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 
 import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
@@ -54,11 +52,8 @@ public class CFGImporter
 		// database nodes when importing the CFG. All other CFG nodes
 		// are nodes of the AST and hence are already in the database.
 
-		Vector<CFGNode> statemens = cfg.getStatements();
-		Iterator<CFGNode> it = statemens.iterator();
-		while (it.hasNext())
+		for (CFGNode statement : cfg.getVertices())
 		{
-			CFGNode statement = it.next();
 
 			ASTNode astNode = statement.getASTNode();
 			if (astNode != null)
@@ -106,13 +101,10 @@ public class CFGImporter
 		// addFlowToLink(sourceBlock, dstBlock);
 		// }
 		// }
-		Iterator<CFGEdge> iterator = cfg.edgeIterator();
-		CFGEdge edge;
 		CFGNode src;
 		CFGNode dst;
-		while (iterator.hasNext())
+		for (CFGEdge edge : cfg.getEdges())
 		{
-			edge = iterator.next();
 			src = edge.getSource();
 			dst = edge.getDestination();
 

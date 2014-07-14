@@ -68,7 +68,7 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 
 		// List<Object> edgesFrom = thisCFG.edges.getEdgesFrom(outerLoop);
 		// CFGNode endOfLoop = (CFGNode) edgesFrom.get(1);
-		List<CFGEdge> edgesFrom = thisCFG.getAllEdgesFrom(outerLoop);
+		List<CFGEdge> edgesFrom = thisCFG.outgoingEdges(outerLoop);
 		CFGNode endOfLoop = edgesFrom.get(1).getDestination();
 		thisCFG.addEdge(thisStatement, endOfLoop);
 	}

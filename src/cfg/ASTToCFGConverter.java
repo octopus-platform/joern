@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Vector;
 
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
@@ -27,7 +25,7 @@ public class ASTToCFGConverter
 
 	private void markCFGNodes(CFG cfg)
 	{
-		Vector<CFGNode> statements = cfg.getStatements();
+		List<CFGNode> statements = cfg.getVertices();
 		for (CFGNode statement : statements)
 			statement.markAsCFGNode();
 	}
@@ -84,18 +82,17 @@ public class ASTToCFGConverter
 
 	private void fixSwitchBlocks(CFG cfg)
 	{
-		SwitchLabels switchLabels = cfg.getSwitchLabels();
-		Set<Entry<Object, List<Object>>> entrySet = switchLabels.entrySet();
-		Iterator<Entry<Object, List<Object>>> it = entrySet.iterator();
+		Iterator<Entry<CFGNode, List<CFGNode>>> it = cfg.getSwitchLabels()
+				.getEntrySetIterator();
 
 		while (it.hasNext())
 		{
-			Entry<Object, List<Object>> entry = it.next();
+			Entry<CFGNode, List<CFGNode>> entry = it.next();
 			CFGNode switchBlock = (CFGNode) entry.getKey();
-			List<Object> labeledBlocks = entry.getValue();
+			List<CFGNode> labeledBlocks = entry.getValue();
 
-			for (Object labeledBlock : labeledBlocks)
-				cfg.addEdge(switchBlock, (CFGNode) labeledBlock);
+			for (CFGNode labeledBlock : labeledBlocks)
+				cfg.addEdge(switchBlock, labeledBlock);
 		}
 	}
 
@@ -104,14 +101,17 @@ public class ASTToCFGConverter
 		Collection<? extends CFGNode> jumpStatements = cfg.getJumpStatements();
 		Iterator<? extends CFGNode> it = jumpStatements.iterator();
 
-		// if(jumpStatements.size() > 0){
-		// add an exit-block
-
 		CFGNode emptyStatement = new CFGNode();
 		if (cfg.getLastStatement() != null)
-			cfg.addEdge(cfg.getLastStatement(), emptyStatement);
-		cfg.addStatement(emptyStatement);
-		// }
+		{
+			CFGNode last = cfg.getLastStatement();
+			cfg.addVertex(emptyStatement);
+			cfg.addEdge(last, emptyStatement);
+		}
+		else
+		{
+			cfg.addVertex(emptyStatement);
+		}
 
 		while (it.hasNext())
 		{
@@ -132,5 +132,4 @@ public class ASTToCFGConverter
 
 		}
 	}
-
 }
