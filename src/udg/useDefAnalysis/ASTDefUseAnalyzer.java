@@ -14,6 +14,7 @@ import udg.useDefAnalysis.environments.AssignmentEnvironment;
 import udg.useDefAnalysis.environments.CallEnvironment;
 import udg.useDefAnalysis.environments.DeclEnvironment;
 import udg.useDefAnalysis.environments.IdentifierEnvironment;
+import udg.useDefAnalysis.environments.IncDecEnvironment;
 import udg.useDefAnalysis.environments.MemberAccessEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefAnalysis.environments.UseEnvironment;
@@ -102,6 +103,8 @@ public class ASTDefUseAnalyzer
 		{
 			case "AssignmentExpr":
 				return new AssignmentEnvironment();
+			case "IncDecOp":
+				return new IncDecEnvironment();
 			case "IdentifierDecl":
 			case "Parameter":
 				return new DeclEnvironment();
