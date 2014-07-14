@@ -1,25 +1,33 @@
-Code Analysis with joern-tools/python-joern
-===========================================
+Code Analysis with joern-tools
+==============================
 
 ..
    Short introduction/motivation
 
-This tutorial shows how the command line utilities ``joern-tools`` and
-the python interface ``python-joern`` can be used for code analysis on
-the shell. These tools have been created in light of the observation
-that programmatic code analysis (think: "idapython") can be extremely
-powerful, particularly when  dealing with large amounts of
-code. Consider them a useful addition to your GUI-based code browsing
-tools and not so much as a replacement. That being said, you may find
-yourself doing more and more of your code browsing on the shell with
-these tools.
+This tutorial shows how the command line utilities ``joern-tools`` can
+be used for code analysis on the shell. These tools have been created
+to enable fast programmatic code analysis, in particular to hunt for
+bugs and vulnerabilities. Consider them a possible addition to your
+GUI-based code browsing tools and not so much as a replacement. That
+being said, you may find yourself doing more and more of your code
+browsing on the shell with these tools.
 
-Importing the code
+This tutorial offers both short and concise commands that *get a job
+done* as well as more lengthly queries that illustrate the inner
+workings of the code analysis platform ``joern``. The later have been
+provided to enable you to quickly extend ``joern-tools`` to suit your
+specific needs.
+
+**Note:** If you end up writing tools that may be useful to others,
+please don't hesitate to send a pull-request to get them included in
+``joern-tools``.
+
+Importing the Code
 -------------------
 
 As an example, we will analyze the VLC media player, a medium sized
-code base containing code for both Windows and Linux/BSD. I assume
-that you have successfully installed joern into the directory
+code base containing code for both Windows and Linux/BSD. It is
+assumed that you have successfully installed joern into the directory
 ``$JOERN`` and Neo4J into ``$NEO4J`` as described in
 :doc:`../installation`. To begin, you can download and import the code
 as follows:
@@ -42,14 +50,20 @@ Next, please start the database server in a second terminal:
 We will now take a brief look at how the code base has been stored in
 the database and then move on to joern-tools.
 
-Database Contents
------------------
+
+Exploring Database Contents
+---------------------------
+
+The Neo4J Rest API
+""""""""""""""""""
 
 Before we start using ``joern-tools``, let's take a quick look at the
-way the code base has been stored in the database. To this end, we
-make use of the web-based API (REST API) offered by Neo4J, allowing us
-to see the database as the tools do. Once your database server has
-been launched, point your browser to
+way the code base has been stored in the database and how it can be
+accessed. ``joern-tools`` uses the web-based API to Neo4J (REST API)
+via the library ``python-joern`` that in turn wraps ``py2neo``. When
+working with ``joern-tools``, this will typically not be visible to
+you. However, to get an idea of what happens underneath, point your
+browser to:
 
 .. code-block:: none
 
@@ -59,57 +73,20 @@ This is the *reference node*, which is the root node of the graph
 database. Starting from this node, the entire database contents can be
 accessed using your browser. In particular, you can get an overview of
 all existing edge types as well as the properties attached to nodes
-and edges. Of course, in practice, you will not want to use your
-browser to query the database. Instead, you can use ``python-joern``
-to access the REST API using Python as we will do in the following.
+and edges. Of course, in practice, even for custom database queries,
+you will not want to use your browser to query the database. Instead,
+you can use the utility ``joern-lookup`` as illustrated in the next
+section. 
 
-The Directory Hierarchy
-""""""""""""""""""""""""
-**Inspecting node properties.** Let's begin by writing a small
-python-script, which outputs all nodes directly connected to the root
-node:
 
-.. code-block:: python
+Inspecting node and edge properties
+""""""""""""""""""""""""""""""""""""
 
-	#!/usr/bin/env python2
-	# tutorial/hierarchy.py
-
-	from joern.all import JoernSteps
-
-	j = JoernSteps()
-	j.connectToDatabase()
-
-	# Syntax:
-	# g: a reference to the neo4j graph
-	# g.v(id): retrieve node by id.
-	# g.v(id).out(): all nodes immediately
-	# connected to the node by an
-	# outgoing edge.
-
-	query = """ g.v(0).out() """
-	for x in j.runGremlinQuery(query):
-		print x
-
-Running this script yields the following result:
-
-.. code-block:: none
-
-	chmod u+x ./tutorial/hierarchy.py
-	python2 ./tutorial/hierarchy.py
-
-	(1 {"type":"Directory","filepath":"tutorial/vlc-2.1.4"})
-
-If this works, you have successfully injected a Gremlin script into
-the Neo4J database using the REST API with
-``python-joern``. Congratulations, btw. As you can see from the
-output, the reference node has a single child node. This node has two
-*attributes*: "type" and "filepath". In the joern database, each node
-has a "type" attribute, in this case "Directory". Directory nodes in
-particular have a second attribute, "filepath", which stores the
-complete path to the directory represented by this node.
-
-For short queries like these, creating scripts is a bit clumsy. You
-can use the shell utility ``joern-lookup`` instead. For example:
+To send custom queries to thedatabase, you can use the tool
+``joern-lookup``. By default, ``joern-lookup`` will perform node index
+lookups (see `Fast lookups using the Node Index`_). For Gremlin
+queries, the ``-g`` flag can be specified. Let's begin by retrieving
+all nodes directly connected to the root node using a Gremlin query:
 
 .. code-block:: none
 	
@@ -117,10 +94,16 @@ can use the shell utility ``joern-lookup`` instead. For example:
 
 	(1 {"type":"Directory","filepath":"tutorial/vlc-2.1.4"})
 
-gives the same result as ``hierarchy.py``.
+If this works, you have successfully injected a Gremlin script into
+the Neo4J database using the REST API via ``joern-tools``
+. Congratulations, btw. As you can see from the output, the reference
+node has a single child node. This node has two *attributes*: "type"
+and "filepath". In the joern database, each node has a "type"
+attribute, in this case "Directory". Directory nodes in particular
+have a second attribute, "filepath", which stores the complete path to
+the directory represented by this node.
 
-**Inspecting Edge Types.** Let's see where we can get by expanding
-outgoing edges:
+Let's see where we can get by expanding outgoing edges:
 
 .. code-block:: none
 
@@ -131,9 +114,9 @@ outgoing edges:
 	
 	14 IS_PARENT_DIR_OF
 
-This shows: the Directory node itself merely stores a filepath,
-however, it is connected to the rest of the directory hierarchy by
-edges of type 'IS_PARENT_DIR_OF', and thus its position in the
+This shows that, while the directory node only contains its path in
+the *filepath* attribute, it is connected to its sub-directories by
+edges of type *IS_PARENT_DIR_OF*, and thus its position in the
 directory hierarchy is encoded in the graph structure.
 
 **Filtering.** Starting from a directory node, we can recursively
@@ -150,10 +133,148 @@ the following query returns all files in the directory 'demux':
 	# loop(1){true}{true}: perform the preceeding traversal
 	# exhaustively and emit each node visited
 
-	echo 'g.v(0).out("IS_PARENT_DIR_OF").loop(1){true}{true}.
- 	      filter{ it.filepath.contains("/demux/") }' | joern-lookup -g
+	echo 'g.v(0).out("IS_PARENT_DIR_OF").loop(1){true}{true}.filter{ it.filepath.contains("/demux/") }' | joern-lookup -g
 
 File nodes are linked to all definitions they contain, i.e., type,
-variable and function definitions and this is where things start to
-become interesting.
+variable and function definitions. Before we look into functions,
+let's quickly take a look at the *node index*.
 
+Fast lookups using the Node Index
+"""""""""""""""""""""""""""""""""
+
+Before we discuss function definitions, let's quickly take a look at
+the node index, which you will probably need to make use of in all but
+the most basic queries. Instead of walking the graph database from its
+root node, you can lookup nodes by their properties. Under the hood,
+this index is implemented as an Apache Lucene Index and thus you can
+make use of the full Lucene query language to retrieve nodes. Let's
+see some examples.
+
+.. code-block:: none
+	
+	echo "type:File AND filepath:*demux*" | joern-lookup -c
+
+.. code-block:: none
+
+	echo 'queryNodeIndex("type:File AND filepath:*demux*")' | joern-lookup -g
+
+Advantage:
+
+.. code-block:: none
+
+	echo 'queryNodeIndex("type:File AND filepath:*demux*").out().filter{it.type == "Function"}.name' | joern-lookup -g
+
+
+Selecting Functions by Name
+---------------------------
+
+Lookup functions by name
+
+.. code-block:: none
+
+	echo 'type:Function AND name:main' | joern-lookup
+
+Use Wildcards:
+
+.. code-block:: none
+	
+	echo 'type:Function AND name:*write*' | joern-lookup
+
+Output all fields:
+
+.. code-block:: none
+
+	echo 'type:Function AND name:*write*' | joern-lookup -c
+
+Output specific fields:
+
+.. code-block:: none
+
+	echo 'type:Function AND name:*write*' | joern-lookup -a name
+
+
+Shorthand to list all functions:
+
+.. code-block:: none
+
+	joern-list-funcs
+
+Shorthand to list all functions matching pattern:
+
+.. code-block:: none
+
+	joern-list-funcs -p '*write*
+
+List signatures
+
+echo "getFunctionASTsByName('*write*').code" | joern-lookup -g
+
+
+Lookup by Function Content
+--------------------------
+
+**Lookup functions by parameters:**
+
+.. code-block:: none
+
+	echo "queryNodeIndex('type:Parameter AND code:*len*').functions().id" | joern-lookup -g
+
+Shorthand:
+
+.. code-block:: none
+
+	echo "getFunctionsByParameter('*len*').id" | joern-lookup -g
+	
+From function-ids to locations: joern-location
+
+.. code-block:: none
+
+	echo "getFunctionsByParameter('*len*').id" | joern-lookup -g | joern-location
+
+Dumping code to text-files:
+
+.. code-block:: none
+
+	echo "getFunctionsByParameter('*len*').id" | joern-lookup -g | joern-location | joern-code > dump.c
+
+Zapping through locations in an editor:
+
+.. code-block:: none
+
+	echo "getFunctionsByParameter('*len*').id" | joern-lookup -g | joern-location | tail -n 2 | joern-editor
+
+Need to be in the directory where code was imported or import using full paths.
+
+**Lookup functions by callees:**
+
+.. code-block:: none
+
+	echo "getCallsTo('memcpy').functions().id" | joern-lookup -g
+
+You can also use wildcards here. Of course, joern-location, joern-code
+and joern-editor can be used on function ids again to view the code.
+
+List calls expressions:
+
+.. code-block:: none
+
+	echo "getCallsTo('memcpy').code" | joern-lookup -g
+	
+
+List arguments:
+	
+.. code-block:: none
+
+	echo "getCallsTo('memcpy').ithArgument('2').code" | joern-lookup -g
+
+Analyzing Function Syntax
+-------------------------
+
+- Plot of AST
+- locate sub-trees and traverse to statements
+
+
+Analyzing Statement Interaction
+-------------------------------
+
+- some very basic traversals in the data flow graph
