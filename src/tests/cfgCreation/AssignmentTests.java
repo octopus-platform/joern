@@ -15,7 +15,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "x = y;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 2);
+		assertTrue(cfg.size() == 2);
 	}
 
 	@Test
@@ -23,7 +23,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "x = 10;";
 		CFG cfg = getCFGForCode(input);
-		CFGNode statement = cfg.getStatements().get(0);
+		CFGNode statement = cfg.getVertices().get(0);
 		ASTNode astNode = statement.getASTNode();
 		assertTrue(astNode != null);
 		System.out.println(astNode.getClass().getSimpleName());
@@ -34,7 +34,7 @@ public class AssignmentTests extends CFGCreatorTest
 	{
 		String input = "int x = 10;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 2);
+		assertTrue(cfg.size() == 2);
 	}
 
 }

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "foo();";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 2);
+		assertTrue(cfg.size() == 2);
 	}
 
 	@Test
@@ -27,7 +27,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "while(foo){ bar(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 4);
+		assertTrue(cfg.size() == 4);
 	}
 
 	@Test
@@ -35,8 +35,8 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "do{ bar(); }while(foo);";
 		CFG cfg = getCFGForCode(input);
-		System.out.println(cfg.getStatements().size());
-		assertTrue(cfg.getStatements().size() == 5);
+		System.out.println(cfg.size());
+		assertTrue(cfg.size() == 5);
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "for(i = 0; i < 10; i ++){ foo(); }";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 6);
+		assertTrue(cfg.size() == 6);
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "for(;;){}";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().get(1).getASTNode() == null);
+		assertTrue(cfg.getVertices().get(1).getASTNode() == null);
 	}
 
 	@Test
@@ -70,8 +70,8 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "switch(foo){ case 1: case2: case 3: }";
 		CFG cfg = getCFGForCode(input);
-		System.out.println(cfg.getNumberOfEdges());
-		assertTrue(cfg.getNumberOfEdges() == 9);
+		System.out.println(cfg.numberOfEdges());
+		assertTrue(cfg.numberOfEdges() == 9);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "x = 10; y = 20;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getStatements().size() == 3);
+		assertTrue(cfg.size() == 3);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class OtherTests extends CFGCreatorTest
 	{
 		String input = "x = 10; y = 20;";
 		CFG cfg = getCFGForCode(input);
-		assertTrue(cfg.getNumberOfEdges() == 2);
+		assertTrue(cfg.numberOfEdges() == 2);
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class OtherTests extends CFGCreatorTest
 		String input = "if(!x) return 1; y = x; return 0;";
 		CFG cfg = getCFGForCode(input);
 
-		CFGNode exitBlock = cfg.getStatements().lastElement();
+		CFGNode exitBlock = cfg.getLastStatement();
 		assertTrue(exitBlock.getEscapedCodeStr().equals(""));
 	}
 
@@ -106,8 +106,8 @@ public class OtherTests extends CFGCreatorTest
 		String input = "if(!x) return 1; y = x;";
 		CFG cfg = getCFGForCode(input);
 
-		CFGNode yAssignX = cfg.getStatements().get(3);
-		CFGNode exitBlock = cfg.getStatements().lastElement();
+		CFGNode yAssignX = cfg.getVertices().get(3);
+		CFGNode exitBlock = cfg.getLastStatement();
 
 		assertTrue(cfg.isConnected(yAssignX, exitBlock));
 	}
@@ -118,12 +118,12 @@ public class OtherTests extends CFGCreatorTest
 		String input = "x = 0; foo: x++; if(x < 10) goto foo;";
 		CFG cfg = getCFGForCode(input);
 
-		Vector<CFGNode> statements = cfg.getStatements();
+		List<CFGNode> statements = cfg.getVertices();
 
 		CFGNode gotoStmt = statements.get(4);
 		CFGNode exitBlock = cfg.getLastStatement();
 
-		assertFalse(cfg.getAllEdgesFrom(gotoStmt).contains(exitBlock));
+		assertFalse(cfg.outgoingEdges(gotoStmt).contains(exitBlock));
 	}
 
 }

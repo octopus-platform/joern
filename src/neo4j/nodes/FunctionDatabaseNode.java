@@ -45,7 +45,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 		udg = cfgToUDG.convert(cfg);
 		DefUseCFG defUseCFG = udgAndCfgToDefUseCFG.convert(cfg, udg);
 		ddg = ddgCreator.createForDefUseCFG(defUseCFG);
-		cdg = cdgCreator.create(cfg, defUseCFG);
+		cdg = cdgCreator.create(cfg);
 
 		setSignature(astRoot);
 	}

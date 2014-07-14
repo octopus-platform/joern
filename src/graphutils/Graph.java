@@ -1,4 +1,4 @@
-package cdg;
+package graphutils;
 
 import java.util.List;
 import java.util.Set;

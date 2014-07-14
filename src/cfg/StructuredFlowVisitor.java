@@ -103,8 +103,9 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		{
 			Statement child = (Statement) it.next();
 			CFG childCFG = convertStatement(child);
-			cfg.addEdge(cfg.getLastStatement(), childCFG.getFirstStatement());
-			cfg.addCFG(childCFG);
+			//cfg.addEdge(cfg.getLastStatement(), childCFG.getFirstStatement());
+			//cfg.addCFG(childCFG);
+			cfg.appendCFG(childCFG);
 		}
 	}
 
@@ -115,9 +116,9 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 
 		// if no statement is present, return
 		// a CFG containing an empty basic block.
-		if (returnCFG.getNumberOfStatements() == 0)
+		if (returnCFG.isEmpty())
 		{
-			returnCFG.addStatement(new CFGNode());
+			returnCFG.addVertex(new CFGNode());
 		}
 
 		return returnCFG;
@@ -343,7 +344,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	private CFGNode addEmptyCFGNode(CFG cfg)
 	{
 		CFGNode emptyBlock = new CFGNode();
-		cfg.addStatement(emptyBlock);
+		cfg.addVertex(emptyBlock);
 		return emptyBlock;
 	}
 
@@ -355,7 +356,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		if (condition != null)
 			container.setASTNode(condition);
 
-		cfg.addStatement(container);
+		cfg.addVertex(container);
 		return container;
 	}
 
@@ -371,7 +372,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		CFGNode statement = new CFGNode();
 		statement.setASTNode(child);
-		cfg.addStatement(statement);
+		cfg.addVertex(statement);
 	}
 
 }

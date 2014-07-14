@@ -1,5 +1,7 @@
 package cfg;
 
+import graphutils.Edge;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,11 @@ public class CFGEdge extends Edge<CFGNode>
 	{
 		super(source, destination);
 		this.label = label;
+	}
+
+	public String getLabel()
+	{
+		return this.label;
 	}
 
 	@Override
