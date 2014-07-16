@@ -98,10 +98,8 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 
 	public void removeVertex(V vertex)
 	{
-		for (Edge<V> e : outgoingEdges(vertex))
-		{
-			removeEdge(e);
-		}
+		removeEdgesFrom(vertex);
+		removeEdgesTo(vertex);
 		vertices.remove(vertex);
 	}
 
@@ -128,6 +126,29 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 			if (edge.getDestination() == dst)
 			{
 				it.remove();
+			}
+		}
+	}
+
+	public void removeEdgesFrom(V source)
+	{
+		outNeighborhood.removeAll(source);
+	}
+
+	public void removeEdgesTo(V destination)
+	{
+		Iterator<V> sourceIterator = outNeighborhood.getKeySetIterator();
+		while (sourceIterator.hasNext())
+		{
+			V source = sourceIterator.next();
+			Iterator<E> edgeIterator = outgoingEdges(source).iterator();
+			while (edgeIterator.hasNext())
+			{
+				E edge = edgeIterator.next();
+				if (edge.getDestination().equals(destination))
+				{
+					edgeIterator.remove();
+				}
 			}
 		}
 	}

@@ -28,7 +28,7 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 	{
 		// Edges edges = thisCFG.getEdges();
 		// edges.removeAllEdgesFrom(thisStatement);
-		thisCFG.removeAllEdgesFrom(thisStatement);
+		thisCFG.removeEdgesFrom(thisStatement);
 		CFGNode exitBlock = thisCFG.getLastStatement();
 		if (exitBlock == null)
 			throw new RuntimeException(
@@ -48,14 +48,14 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 
 		// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
 		// thisCFG.getEdges().addEdge(thisStatement, blockByLabel);
-		thisCFG.removeAllEdgesFrom(thisStatement);
+		thisCFG.removeEdgesFrom(thisStatement);
 		thisCFG.addEdge(thisStatement, blockByLabel);
 	}
 
 	public void visit(ContinueStatement expression)
 	{
 		// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-		thisCFG.removeAllEdgesFrom(thisStatement);
+		thisCFG.removeEdgesFrom(thisStatement);
 		CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
 		thisCFG.addEdge(thisStatement, outerLoop);
 	}
@@ -63,7 +63,7 @@ public class JumpStatementVisitor extends ASTNodeVisitor
 	public void visit(BreakStatement expression)
 	{
 		// thisCFG.getEdges().removeAllEdgesFrom(thisStatement);
-		thisCFG.removeAllEdgesFrom(thisStatement);
+		thisCFG.removeEdgesFrom(thisStatement);
 		CFGNode outerLoop = thisCFG.getOuterLoop(thisStatement);
 
 		// List<Object> edgesFrom = thisCFG.edges.getEdgesFrom(outerLoop);
