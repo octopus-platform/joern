@@ -110,7 +110,7 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 		outNeighborhood.add(edge.getSource(), edge);
 	}
 
-	public void removeEdge(Edge<V> edge)
+	public void removeEdge(E edge)
 	{
 		removeEdge(edge.getSource(), edge.getDestination());
 	}
