@@ -103,8 +103,6 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		{
 			Statement child = (Statement) it.next();
 			CFG childCFG = convertStatement(child);
-			//cfg.addEdge(cfg.getLastStatement(), childCFG.getFirstStatement());
-			//cfg.addCFG(childCFG);
 			cfg.appendCFG(childCFG);
 		}
 	}
@@ -212,12 +210,11 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 		CFG cfg = new CFG();
 
 		CFGNode loopEntry = addEmptyCFGNode(cfg);
+		CFGNode conditionBlock = addConditionBlock(node, cfg, new LoopBlock());
 
-		loopStack.push(loopEntry);
+		loopStack.push(conditionBlock);
 		CFG statementCFG = addStatementBlock(node, cfg);
 		loopStack.pop();
-
-		CFGNode conditionBlock = addConditionBlock(node, cfg, new LoopBlock());
 
 		CFGNode loopExit = addEmptyCFGNode(cfg);
 
@@ -287,6 +284,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 			return;
 		}
 
+		returnCFG.addJumpStatement(returnCFG.getFirstStatement());
 		returnCFG.loopStart.put(returnCFG.getFirstStatement(), surroundingLoop);
 
 	}
@@ -304,6 +302,7 @@ public class StructuredFlowVisitor extends ASTNodeVisitor
 			return;
 		}
 
+		returnCFG.addJumpStatement(returnCFG.getFirstStatement());
 		returnCFG.loopStart
 				.put(returnCFG.getFirstStatement(), surroundingBlock);
 	}
