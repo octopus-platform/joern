@@ -164,6 +164,13 @@ Advantage:
 
 	echo 'queryNodeIndex("type:File AND filepath:*demux*").out().filter{it.type == "Function"}.name' | joern-lookup -g
 
+Plotting Database Content
+-------------------------
+
+To enable users to familarize themselves with the database contents
+quickly, ``joern-tools`` offers utilities to retrieve graphs from the
+database and visualize them using *graphviz*.
+
 
 Selecting Functions by Name
 ---------------------------

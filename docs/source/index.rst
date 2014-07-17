@@ -45,6 +45,7 @@ Contents:
 	performance
 	databaseOverview
 	querying
+	joerntools
 	development
 	tutorials
 ..

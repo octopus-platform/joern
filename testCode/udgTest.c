@@ -86,3 +86,8 @@ int plusplus()
 {
   a ++;
 }
+
+int callWithRef()
+{
+  fooBar(&bar);
+}
