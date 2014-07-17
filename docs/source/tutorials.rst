@@ -5,3 +5,4 @@ Tutorials
 	:maxdepth: 2
 
 	tutorials/unixStyleCodeAnalysis
+	tutorials/extrapolation

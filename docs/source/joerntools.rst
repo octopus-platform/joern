@@ -4,5 +4,7 @@ Joern-tools
 .. toctree::
 	:maxdepth: 2
 
-	joerntools/extrapolation
+	joerntools/apiEmbedder
+	joerntools/knn
+
 	
