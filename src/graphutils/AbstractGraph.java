@@ -162,4 +162,20 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 		}
 	}
 
+	@Override
+	public String toString()
+	{
+		String res = "Graph with " + size() + " vertices and "
+				+ numberOfEdges() + " edges:\n";
+		for (V vertex : getVertices())
+		{
+			res += vertex.toString() + '\n';
+			for (E edge : outgoingEdges(vertex))
+			{
+				res += edge.toString() + '\n';
+			}
+		}
+		return res;
+	}
+
 }
