@@ -38,7 +38,8 @@ public abstract class AbstractTwoWayGraph<V, E extends Edge<V>> extends
 	@Override
 	public void removeEdgesFrom(V source)
 	{
-		for (E edge : outgoingEdges(source)) {
+		for (E edge : outgoingEdges(source))
+		{
 			ingoingEdges(edge.getDestination()).remove(edge);
 		}
 		super.removeEdgesFrom(source);
@@ -47,7 +48,8 @@ public abstract class AbstractTwoWayGraph<V, E extends Edge<V>> extends
 	@Override
 	public void removeEdgesTo(V destination)
 	{
-		for (E edge : ingoingEdges(destination)) {
+		for (E edge : ingoingEdges(destination))
+		{
 			outgoingEdges(edge.getSource()).remove(edge);
 		}
 		inNeighborhood.removeAll(destination);
