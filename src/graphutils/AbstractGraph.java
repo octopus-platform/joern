@@ -98,10 +98,8 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 
 	public void removeVertex(V vertex)
 	{
-		for (Edge<V> e : outgoingEdges(vertex))
-		{
-			removeEdge(e);
-		}
+		removeEdgesFrom(vertex);
+		removeEdgesTo(vertex);
 		vertices.remove(vertex);
 	}
 
@@ -112,7 +110,7 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 		outNeighborhood.add(edge.getSource(), edge);
 	}
 
-	public void removeEdge(Edge<V> edge)
+	public void removeEdge(E edge)
 	{
 		removeEdge(edge.getSource(), edge.getDestination());
 	}
@@ -132,6 +130,29 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 		}
 	}
 
+	public void removeEdgesFrom(V source)
+	{
+		outNeighborhood.removeAll(source);
+	}
+
+	public void removeEdgesTo(V destination)
+	{
+		Iterator<V> sourceIterator = outNeighborhood.getKeySetIterator();
+		while (sourceIterator.hasNext())
+		{
+			V source = sourceIterator.next();
+			Iterator<E> edgeIterator = outgoingEdges(source).iterator();
+			while (edgeIterator.hasNext())
+			{
+				E edge = edgeIterator.next();
+				if (edge.getDestination().equals(destination))
+				{
+					edgeIterator.remove();
+				}
+			}
+		}
+	}
+
 	public void failIfNotContained(V vertex)
 	{
 		if (!contains(vertex))
@@ -139,6 +160,22 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 			throw new NoSuchElementException("Graph has no such vertex : "
 					+ vertex);
 		}
+	}
+
+	@Override
+	public String toString()
+	{
+		String res = "Graph with " + size() + " vertices and "
+				+ numberOfEdges() + " edges:\n";
+		for (V vertex : getVertices())
+		{
+			res += vertex.toString() + '\n';
+			for (E edge : outgoingEdges(vertex))
+			{
+				res += edge.toString() + '\n';
+			}
+		}
+		return res;
 	}
 
 }
