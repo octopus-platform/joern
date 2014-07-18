@@ -76,14 +76,6 @@ public class CFG extends AbstractTwoWayGraph<CFGNode, CFGEdge>
 		addEdge(edge);
 	}
 
-	public void removeAllEdgesFrom(CFGNode srcBlock)
-	{
-		for (CFGEdge edge : outgoingEdges(srcBlock))
-		{
-			removeEdge(edge);
-		}
-	}
-
 	public CFGNode getLastStatement()
 	{
 		try
