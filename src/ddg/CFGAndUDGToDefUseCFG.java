@@ -7,10 +7,9 @@ import java.util.Map.Entry;
 import misc.MultiHashMap;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
-import astnodes.ASTNode;
 import cfg.CFG;
 import cfg.CFGEdge;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
 import ddg.DefUseCFG.DefUseCFG;
 
 public class CFGAndUDGToDefUseCFG
@@ -29,11 +28,11 @@ public class CFGAndUDGToDefUseCFG
 
 	private void initializeStatements(CFG cfg, DefUseCFG defUseCFG)
 	{
-		for (CFGNode statement : cfg.getVertices())
+		for (Object statement : cfg.getVertices())
 		{
-			ASTNode astNode = statement.getASTNode();
-			Object id = (astNode != null) ? astNode : statement;
-			defUseCFG.addStatement(id);
+			if (statement instanceof ASTNodeContainer)
+				statement = ((ASTNodeContainer) statement).getASTNode();
+			defUseCFG.addStatement(statement);
 		}
 	}
 
@@ -87,17 +86,18 @@ public class CFGAndUDGToDefUseCFG
 		// }
 		// }
 
-		CFGNode src;
-		CFGNode dst;
+		Object src;
+		Object dst;
 		for (CFGEdge edge : cfg.getEdges())
 		{
 			src = edge.getSource();
 			dst = edge.getDestination();
-			Object srcId = (src.astNode != null) ? src.astNode : src;
-			Object dstId = (dst.astNode != null) ? dst.astNode : dst;
-
-			defUseCFG.addChildBlock(srcId, dstId);
-			defUseCFG.addParentBlock(dstId, srcId);
+			if (src instanceof ASTNodeContainer)
+				src = ((ASTNodeContainer) src).getASTNode();
+			if (dst instanceof ASTNodeContainer)
+				dst = ((ASTNodeContainer) dst).getASTNode();
+			defUseCFG.addChildBlock(src, dst);
+			defUseCFG.addParentBlock(dst, src);
 		}
 	}
 

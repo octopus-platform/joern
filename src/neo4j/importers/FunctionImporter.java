@@ -11,7 +11,8 @@ import org.neo4j.graphdb.RelationshipType;
 import astnodes.ASTNode;
 import astnodes.functionDef.FunctionDef;
 import cfg.CFG;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 // Stays alive while importing a function into
 // the database
@@ -91,7 +92,7 @@ public class FunctionImporter extends ASTNodeImporter
 				.withName(EdgeTypes.IS_FUNCTION_OF_CFG);
 		long functionId = nodeStore.getIdForObject(function);
 
-		CFGNode firstBlock = cfg.getFirstStatement();
+		CFGNode firstBlock = cfg.getEntryNode();
 
 		long cfgRootId;
 		try
@@ -100,7 +101,9 @@ public class FunctionImporter extends ASTNodeImporter
 		}
 		catch (RuntimeException ex)
 		{
-			cfgRootId = nodeStore.getIdForObject(firstBlock.getASTNode());
+			cfgRootId = nodeStore
+					.getIdForObject(((ASTNodeContainer) firstBlock)
+							.getASTNode());
 		}
 
 		Neo4JBatchInserter.addRelationship(functionId, cfgRootId, rel, null);

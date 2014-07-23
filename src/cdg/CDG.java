@@ -4,7 +4,7 @@ import graphutils.AbstractGraph;
 
 import java.util.Set;
 
-import cfg.CFGNode;
+import cfg.nodes.CFGNode;
 
 public class CDG extends AbstractGraph<CFGNode, CDGEdge>
 {

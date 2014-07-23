@@ -1,7 +1,7 @@
 package cdg;
 
 import cfg.CFG;
-import cfg.CFGNode;
+import cfg.nodes.CFGNode;
 
 public class CDGCreator
 {

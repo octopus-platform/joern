@@ -10,7 +10,8 @@ import org.neo4j.graphdb.RelationshipType;
 import cdg.CDG;
 import cdg.CDGEdge;
 import cdg.DominatorTree;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 public class CDGImporter
 {
@@ -33,38 +34,36 @@ public class CDGImporter
 		for (CFGNode vertex : dominatorTree.getVertices())
 		{
 			CFGNode dominator = dominatorTree.getDominator(vertex);
-			long srcId = nodeStore
-					.getIdForObject(dominator.astNode != null ? dominator.astNode
-							: dominator);
-			long dstId = nodeStore
-					.getIdForObject(vertex.astNode != null ? vertex.astNode
-							: vertex);
-
-			Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
+			Neo4JBatchInserter.addRelationship(getId(dominator), getId(vertex),
+					rel, null);
 		}
+
 		// Add control edges
 		rel = DynamicRelationshipType.withName(EdgeTypes.CONTROLS);
 		for (CFGNode src : cdg.getVertices())
 		{
-			if (cdg.outDegree(src) > 0)
+			for (CDGEdge edge : cdg.outgoingEdges(src))
 			{
-				for (CDGEdge edge : cdg.outgoingEdges(src))
+				CFGNode dst = edge.getDestination();
+				if (!src.equals(dst))
 				{
-					CFGNode dst = edge.getDestination();
-					if (src.equals(dst))
-					{
-						continue;
-					}
-					long srcId = nodeStore
-							.getIdForObject(src.astNode != null ? src.astNode
-									: src);
-					long dstId = nodeStore
-							.getIdForObject(dst.astNode != null ? dst.astNode
-									: dst);
-
-					Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
+					Neo4JBatchInserter.addRelationship(getId(src), getId(dst),
+							rel, null);
 				}
 			}
+		}
+	}
+
+	private long getId(CFGNode node)
+	{
+		if (node instanceof ASTNodeContainer)
+		{
+			return nodeStore.getIdForObject(((ASTNodeContainer) node)
+					.getASTNode());
+		}
+		else
+		{
+			return nodeStore.getIdForObject(node);
 		}
 	}
 
