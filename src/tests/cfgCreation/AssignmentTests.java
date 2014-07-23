@@ -6,7 +6,8 @@ import org.junit.Test;
 
 import astnodes.ASTNode;
 import cfg.CFG;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 public class AssignmentTests extends CFGCreatorTest
 {
@@ -24,7 +25,7 @@ public class AssignmentTests extends CFGCreatorTest
 		String input = "x = 10;";
 		CFG cfg = getCFGForCode(input);
 		CFGNode statement = cfg.getVertices().get(0);
-		ASTNode astNode = statement.getASTNode();
+		ASTNode astNode = ((ASTNodeContainer) statement).getASTNode();
 		assertTrue(astNode != null);
 		System.out.println(astNode.getClass().getSimpleName());
 	}

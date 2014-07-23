@@ -3,7 +3,7 @@ package cdg;
 import graphutils.AbstractTwoWayGraph;
 import cfg.CFG;
 import cfg.CFGEdge;
-import cfg.CFGNode;
+import cfg.nodes.CFGNode;
 
 /**
  * A reverse control flow graph augmented with an edge from the exit node to the
@@ -35,8 +35,8 @@ public class ReverseCFG extends AbstractTwoWayGraph<CFGNode, CFGEdge>
 					edge.getSource(), edge.getLabel());
 			reverseCFG.addEdge(reverseEdge);
 		}
-		reverseCFG.entry = cfg.getLastStatement();
-		reverseCFG.exit = cfg.getFirstStatement();
+		reverseCFG.entry = cfg.getExitNode();
+		reverseCFG.exit = cfg.getEntryNode();
 		CFGEdge augmentedEdge = new CFGEdge(reverseCFG.getEntryNode(),
 				reverseCFG.getExitNode(), CFGEdge.EMPTY_LABEL);
 		reverseCFG.addEdge(augmentedEdge);

@@ -9,7 +9,8 @@ import astnodes.ASTNode;
 import astnodes.statements.CompoundStatement;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 public class CFGCreatorTest
 {
@@ -25,14 +26,15 @@ public class CFGCreatorTest
 	{
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		return converter.convertCompoundStatement(contentItem);
+		// return converter.convertCompoundStatement(contentItem);
+		return CFG.newInstance(contentItem);
 	}
 
 	protected ASTNode getConditionNode(CFG cfg)
 	{
 		List<CFGNode> statements = cfg.getVertices();
 		CFGNode conditionBlock = statements.get(0);
-		ASTNode astNode = conditionBlock.getASTNode();
+		ASTNode astNode = ((ASTNodeContainer) conditionBlock).getASTNode();
 		return astNode;
 	}
 

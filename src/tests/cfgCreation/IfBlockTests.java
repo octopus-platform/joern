@@ -9,7 +9,8 @@ import org.junit.Test;
 import astnodes.ASTNode;
 import astnodes.statements.ExpressionStatement;
 import cfg.CFG;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 public class IfBlockTests extends CFGCreatorTest
 {
@@ -65,7 +66,7 @@ public class IfBlockTests extends CFGCreatorTest
 
 		List<CFGNode> statements = cfg.getVertices();
 		CFGNode bodyBlock = statements.get(1);
-		ExpressionStatement exprStmt = (ExpressionStatement) bodyBlock
+		ExpressionStatement exprStmt = (ExpressionStatement) ((ASTNodeContainer) bodyBlock)
 				.getASTNode();
 
 		assertTrue(exprStmt.getEscapedCodeStr().equals("bar ( )"));

@@ -9,7 +9,8 @@ import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDef;
 import astnodes.ASTNode;
 import cfg.CFG;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 public class CFGToUDGConverter
 {
@@ -33,17 +34,17 @@ public class CFGToUDGConverter
 
 		for (CFGNode cfgNode : statements)
 		{
-
-			ASTNode statementNode = cfgNode.getASTNode();
-
 			// skip empty blocks
-			if (statementNode == null)
-				continue;
-
-			ASTNodeASTProvider provider = new ASTNodeASTProvider();
-			provider.setNode(statementNode);
-			Collection<UseOrDef> usesAndDefs = astAnalyzer.analyzeAST(provider);
-			addToUseDefGraph(useDefGraph, usesAndDefs, statementNode);
+			if (cfgNode instanceof ASTNodeContainer)
+			{
+				ASTNode statementNode = ((ASTNodeContainer) cfgNode)
+						.getASTNode();
+				ASTNodeASTProvider provider = new ASTNodeASTProvider();
+				provider.setNode(statementNode);
+				Collection<UseOrDef> usesAndDefs = astAnalyzer
+						.analyzeAST(provider);
+				addToUseDefGraph(useDefGraph, usesAndDefs, statementNode);
+			}
 		}
 
 		return useDefGraph;

@@ -5,17 +5,16 @@ import java.util.Map;
 import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.nodes.EmptyCFGDatabaseNode;
 import neo4j.nodes.FunctionDatabaseNode;
 import neo4j.nodes.NodeKeys;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import astnodes.ASTNode;
 import cfg.CFG;
 import cfg.CFGEdge;
-import cfg.CFGNode;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 public class CFGImporter
 {
@@ -55,18 +54,17 @@ public class CFGImporter
 		for (CFGNode statement : cfg.getVertices())
 		{
 
-			ASTNode astNode = statement.getASTNode();
-			if (astNode != null)
+			Map<String, Object> properties;
+			if (statement instanceof ASTNodeContainer)
 			{
 				// nothing to do for nodes that have already
 				// been imported by the ASTImporter.
 				continue;
 			}
-
-			EmptyCFGDatabaseNode emptyDatabaseNode = new EmptyCFGDatabaseNode();
-			emptyDatabaseNode.initialize(null);
-			Map<String, Object> properties = emptyDatabaseNode
-					.createProperties();
+			else
+			{
+				properties = statement.getProperties();
+			}
 			properties.put(NodeKeys.FUNCTION_ID,
 					nodeStore.getIdForObject(currentFunction));
 			nodeStore.addNeo4jNode(statement, properties);
@@ -76,42 +74,17 @@ public class CFGImporter
 
 	private void addCFGEdges(CFG cfg)
 	{
-
-		// Edges edges = cfg.getEdges();
-		// Iterator<Entry<Object, List<Object>>> it =
-		// edges.getEntrySetIterator();
-		// while(it.hasNext())
-		// {
-		// Entry<Object, List<Object>> entry = it.next();
-		// Object sourceBlock = (CFGNode) entry.getKey();
-		//
-		// // draw link from AST node if possible. Otherwise, this
-		// // is an empty block.
-		// ASTNode astNode = ((CFGNode) sourceBlock).getASTNode();
-		// if(astNode != null)
-		// sourceBlock = astNode;
-		//
-		// List<Object> dstBlockList = entry.getValue();
-		// for(Object dstBlock: dstBlockList){
-		//
-		// ASTNode dstASTNode = ((CFGNode) dstBlock).getASTNode();
-		// if(dstASTNode != null)
-		// addFlowToLink(sourceBlock, dstASTNode);
-		// else
-		// addFlowToLink(sourceBlock, dstBlock);
-		// }
-		// }
-		CFGNode src;
-		CFGNode dst;
+		Object src;
+		Object dst;
 		for (CFGEdge edge : cfg.getEdges())
 		{
 			src = edge.getSource();
 			dst = edge.getDestination();
-
-			Object srcBlock = (src.astNode != null) ? src.astNode : src;
-			Object dstBlock = (dst.astNode != null) ? dst.astNode : dst;
-			addFlowToLink(srcBlock, dstBlock, edge.getProperties());
-
+			if (src instanceof ASTNodeContainer)
+				src = ((ASTNodeContainer) src).getASTNode();
+			if (dst instanceof ASTNodeContainer)
+				dst = ((ASTNodeContainer) dst).getASTNode();
+			addFlowToLink(src, dst, edge.getProperties());
 		}
 	}
 

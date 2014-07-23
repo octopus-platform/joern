@@ -5,6 +5,8 @@ import graphutils.Edge;
 import java.util.HashMap;
 import java.util.Map;
 
+import cfg.nodes.CFGNode;
+
 public class CFGEdge extends Edge<CFGNode>
 {
 
@@ -74,6 +76,12 @@ public class CFGEdge extends Edge<CFGNode>
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return getSource() + " ==[" + getLabel() + "]==> " + getDestination();
 	}
 
 }
