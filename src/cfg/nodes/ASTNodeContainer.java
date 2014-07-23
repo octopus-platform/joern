@@ -11,7 +11,7 @@ public class ASTNodeContainer extends AbstractCFGNode
 	{
 		if (node == null)
 		{
-			throw new IllegalArgumentException("node must be null");
+			throw new IllegalArgumentException("node must not be null");
 		}
 		setASTNode(node);
 	}
