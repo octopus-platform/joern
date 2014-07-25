@@ -10,7 +10,8 @@ import astnodes.ASTNode;
 import astnodes.ASTNodeBuilder;
 import astwalking.ASTWalker;
 
-public class TestASTWalker extends ASTWalker {
+public class TestASTWalker extends ASTWalker
+{
 
 	public List<ASTNode> codeItems;
 
@@ -18,17 +19,17 @@ public class TestASTWalker extends ASTWalker {
 	{
 		codeItems = new LinkedList<ASTNode>();
 	}
-	
+
 	@Override
-	public void startOfUnit(ParserRuleContext ctx, String filename) 
+	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
-	
+
 	}
 
 	@Override
 	public void endOfUnit(ParserRuleContext ctx, String filename)
 	{
-		
+
 	}
 
 	@Override
@@ -38,15 +39,17 @@ public class TestASTWalker extends ASTWalker {
 	}
 
 	@Override
-	public void begin() {
+	public void begin()
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void end() {
+	public void end()
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

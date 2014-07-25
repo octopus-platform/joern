@@ -1,62 +1,87 @@
 package cfg;
 
+import graphutils.Edge;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class CFGEdge extends Edge<CFGNode> {
+import cfg.nodes.CFGNode;
 
-    public static final String EMPTY_LABEL = "";
-    public static final String TRUE_LABEL = "True";
-    public static final String FALSE_LABEL = "False";
+public class CFGEdge extends Edge<CFGNode>
+{
 
-    private String label;
-    private Map<String, Object> properties;
+	public static final String EMPTY_LABEL = "";
+	public static final String TRUE_LABEL = "True";
+	public static final String FALSE_LABEL = "False";
 
-    public CFGEdge(CFGNode source, CFGNode destination, String label) {
-	super(source, destination);
-	this.label = label;
-    }
+	private String label;
+	private Map<String, Object> properties;
 
-
-    @Override
-    public Map<String, Object> getProperties() {
-	if (this.properties == null) {
-	    this.properties = new HashMap<String, Object>();
-	    this.properties.put("flowLabel", label);
+	public CFGEdge(CFGNode source, CFGNode destination, String label)
+	{
+		super(source, destination);
+		this.label = label;
 	}
-	return this.properties;
-    }
 
+	public String getLabel()
+	{
+		return this.label;
+	}
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = super.hashCode();
-	result = prime * result + ((label == null) ? 0 : label.hashCode());
-	return result;
-    }
+	@Override
+	public Map<String, Object> getProperties()
+	{
+		if (this.properties == null)
+		{
+			this.properties = new HashMap<String, Object>();
+			this.properties.put("flowLabel", label);
+		}
+		return this.properties;
+	}
 
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((label == null) ? 0 : label.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (!super.equals(obj))
+		{
+			return false;
+		}
+		if (!(obj instanceof CFGEdge))
+		{
+			return false;
+		}
+		CFGEdge other = (CFGEdge) obj;
+		if (label == null)
+		{
+			if (other.label != null)
+			{
+				return false;
+			}
+		}
+		else if (!label.equals(other.label))
+		{
+			return false;
+		}
+		return true;
 	}
-	if (!super.equals(obj)) {
-	    return false;
+
+	@Override
+	public String toString()
+	{
+		return getSource() + " ==[" + getLabel() + "]==> " + getDestination();
 	}
-	if (!(obj instanceof CFGEdge)) {
-	    return false;
-	}
-	CFGEdge other = (CFGEdge) obj;
-	if (label == null) {
-	    if (other.label != null) {
-		return false;
-	    }
-	} else if (!label.equals(other.label)) {
-	    return false;
-	}
-	return true;
-    }
 
 }

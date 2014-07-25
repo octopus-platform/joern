@@ -27,16 +27,16 @@ public class FunctionDatabaseNode extends DatabaseNode
 	UseDefGraph udg;
 	DDG ddg;
 	CDG cdg;
-	
+
 	String signature;
 	String name;
-	
+
 	ASTToCFGConverter astToCFG = new ASTToCFGConverter();
 	CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
 	CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
 	DDGCreator ddgCreator = new DDGCreator();
 	CDGCreator cdgCreator = new CDGCreator();
-	
+
 	@Override
 	public void initialize(Object node)
 	{
@@ -45,12 +45,13 @@ public class FunctionDatabaseNode extends DatabaseNode
 		udg = cfgToUDG.convert(cfg);
 		DefUseCFG defUseCFG = udgAndCfgToDefUseCFG.convert(cfg, udg);
 		ddg = ddgCreator.createForDefUseCFG(defUseCFG);
-		cdg = cdgCreator.create(cfg, defUseCFG);
-		
+		cdg = cdgCreator.create(cfg);
+
 		setSignature(astRoot);
 	}
 
-	@Override public Map<String, Object> createProperties()
+	@Override
+	public Map<String, Object> createProperties()
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(NodeKeys.TYPE, "Function");
@@ -59,7 +60,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 		// properties.put("signature", this.getSignature());
 		return properties;
 	}
-	
+
 	public String getName()
 	{
 		return astRoot.name.getEscapedCodeStr();
@@ -74,7 +75,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		return cfg;
 	}
-	
+
 	public UseDefGraph getUDG()
 	{
 		return udg;
@@ -84,12 +85,12 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		return ddg;
 	}
-	
+
 	public CDG getCDG()
 	{
 		return cdg;
 	}
-	
+
 	public String getLocation()
 	{
 		return astRoot.getLocationString();
@@ -99,7 +100,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		return signature;
 	}
-	
+
 	private void setSignature(FunctionDef node)
 	{
 		signature = node.getFunctionSignature();

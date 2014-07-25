@@ -2,28 +2,32 @@ package udg.useDefGraph;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import misc.Pair;
 import neo4j.dbProviders.ReadWriteDBProvider;
 import udg.ASTProvider;
 
-public class ReadWriteDbASTProvider extends ASTProvider{
+public class ReadWriteDbASTProvider extends ASTProvider
+{
 
 	ReadWriteDBProvider dbProvider = new ReadWriteDBProvider();
-		
+
 	long nodeId;
-	boolean childrenLookupDone = false;	
+	boolean childrenLookupDone = false;
 
 	ArrayList<Long> children = new ArrayList<Long>();
-	
-	
+
+	public long getNodeId()
+	{
+		return nodeId;
+	}
+
 	public void setNodeId(long aNodeId)
 	{
 		nodeId = aNodeId;
 	}
-	
+
 	@Override
 	public String getTypeAsString()
 	{
@@ -33,8 +37,8 @@ public class ReadWriteDbASTProvider extends ASTProvider{
 	@Override
 	public ASTProvider getChild(int i)
 	{
-		if(!childrenLookupDone)
-				lookupChildren();
+		if (!childrenLookupDone)
+			lookupChildren();
 		ReadWriteDbASTProvider retval = new ReadWriteDbASTProvider();
 		retval.setNodeId(children.get(i));
 		return retval;
@@ -44,21 +48,22 @@ public class ReadWriteDbASTProvider extends ASTProvider{
 	{
 		List<Pair<Long, Integer>> pairs = dbProvider.getASTChildren(nodeId);
 		Iterator<Pair<Long, Integer>> it = pairs.iterator();
-		while(it.hasNext()){
+		while (it.hasNext())
+		{
 			Pair<Long, Integer> next = it.next();
 			Long childId = next.getL();
 			children.add(childId);
 		}
-		
+
 		childrenLookupDone = true;
 	}
 
 	@Override
 	public int getChildCount()
 	{
-		if(!childrenLookupDone)
+		if (!childrenLookupDone)
 			lookupChildren();
-		
+
 		return children.size();
 	}
 
@@ -75,8 +80,9 @@ public class ReadWriteDbASTProvider extends ASTProvider{
 	}
 
 	@Override
-	public String getOperatorCode() {
+	public String getOperatorCode()
+	{
 		return dbProvider.getOperatorCode(nodeId);
 	}
-	
+
 }

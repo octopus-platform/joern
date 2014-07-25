@@ -1,41 +1,42 @@
 package tests.cfgCreation;
 
-
-import java.util.Vector;
-
-import org.junit.Before;
-
 import tests.parseTreeToAST.FunctionContentTestUtil;
 import astnodes.ASTNode;
-import astnodes.statements.CompoundStatement;
-import cfg.ASTToCFGConverter;
 import cfg.CFG;
-import cfg.CFGNode;
-
-
+import cfg.nodes.CFGNode;
 
 public class CFGCreatorTest
 {
-	ASTToCFGConverter converter;
-	
-	@Before
-	public void init()
+	protected ASTNode getASTForCode(String input)
 	{
-		converter = new ASTToCFGConverter();
+		return FunctionContentTestUtil.parseAndWalk(input);
 	}
-	
-	public CFG getCFGForCode(String input)
+
+	protected CFG getCFGForCode(String input)
 	{
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		return converter.convertCompoundStatement(contentItem);
+		return CFG.convert(getASTForCode(input));
 	}
-	
-	protected ASTNode getConditionNode(CFG cfg)
+
+	protected CFGNode getNodeByCode(CFG cfg, String code)
 	{
-		Vector<CFGNode> statements = cfg.getStatements();
-		CFGNode conditionBlock = statements.get(0);
-		ASTNode astNode = conditionBlock.getASTNode();
-		return astNode;
+		for (CFGNode node : cfg.getVertices())
+		{
+			if (node.toString().equals("[" + code + "]"))
+			{
+				return node;
+			}
+		}
+		return null;
 	}
-	
+
+	protected boolean contains(CFG cfg, String code)
+	{
+		return getNodeByCode(cfg, code) != null;
+	}
+
+	protected boolean isConnected(CFG cfg, String srcCode, String dstCode)
+	{
+		return cfg.isConnected(getNodeByCode(cfg, srcCode),
+				getNodeByCode(cfg, dstCode));
+	}
 }

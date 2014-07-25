@@ -8,49 +8,63 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import cdg.CDG;
+import cdg.CDGEdge;
 import cdg.DominatorTree;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
-public class CDGImporter {
+public class CDGImporter
+{
 
-    GraphNodeStore nodeStore;
+	GraphNodeStore nodeStore;
 
-
-    public CDGImporter(GraphNodeStore nodeStore) {
-	this.nodeStore = nodeStore;
-    }
-
-
-    public void addCDGToDatabase(CDG<Object> cdg) {
-
-	RelationshipType rel;
-
-	// Add post dominator edges
-	DominatorTree<Object> dominatorTree = cdg.getDominatorTree();
-	rel = DynamicRelationshipType.withName(EdgeTypes.POST_DOM);
-	for (Object vertex : dominatorTree) {
-	    
-	    //System.out.println(dom.getDominator(vertex) + " --|POST_DOM|--> " + vertex);
-	    long srcId = nodeStore.getIdForObject(dominatorTree.getDominator(vertex));
-	    long dstId = nodeStore.getIdForObject(vertex);
-
-	    Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
+	public CDGImporter(GraphNodeStore nodeStore)
+	{
+		this.nodeStore = nodeStore;
 	}
-	// Add control edges
-	rel = DynamicRelationshipType.withName(EdgeTypes.CONTROLS);
-	for (Object src : cdg) {
-	    if (cdg.outDegree(src) > 0) {
-		for (Object dst : cdg.outNeighborhood(src)) {
-		    if (src.equals(dst)) {
-			continue;
-		    }
-		    //System.out.println(src + " --|CONTROLS|--> " + dst);
-		    long srcId = nodeStore.getIdForObject(src);
-		    long dstId = nodeStore.getIdForObject(dst);
 
-		    Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
+	public void addCDGToDatabase(CDG cdg)
+	{
+
+		RelationshipType rel;
+
+		// Add post dominator edges
+		DominatorTree<CFGNode> dominatorTree = cdg.getDominatorTree();
+		rel = DynamicRelationshipType.withName(EdgeTypes.POST_DOM);
+		for (CFGNode vertex : dominatorTree.getVertices())
+		{
+			CFGNode dominator = dominatorTree.getDominator(vertex);
+			Neo4JBatchInserter.addRelationship(getId(dominator), getId(vertex),
+					rel, null);
 		}
-	    }
+
+		// Add control edges
+		rel = DynamicRelationshipType.withName(EdgeTypes.CONTROLS);
+		for (CFGNode src : cdg.getVertices())
+		{
+			for (CDGEdge edge : cdg.outgoingEdges(src))
+			{
+				CFGNode dst = edge.getDestination();
+				if (!src.equals(dst))
+				{
+					Neo4JBatchInserter.addRelationship(getId(src), getId(dst),
+							rel, null);
+				}
+			}
+		}
 	}
-    }
+
+	private long getId(CFGNode node)
+	{
+		if (node instanceof ASTNodeContainer)
+		{
+			return nodeStore.getIdForObject(((ASTNodeContainer) node)
+					.getASTNode());
+		}
+		else
+		{
+			return nodeStore.getIdForObject(node);
+		}
+	}
 
 }

@@ -4,40 +4,57 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import astnodes.ASTNode;
 
-
 public class BinaryExpression extends Expression
 {
-	Expression subExpressions [] = new Expression[2];
+	Expression subExpressions[] = new Expression[2];
 	private String operator = "";
-		
-	
-	public Expression getLeft() { return subExpressions[0]; }
-	public Expression getRight() { return subExpressions[1];}
-	public void setLeft(Expression aLeft) { subExpressions[0] = aLeft; }
-	public void setRight(Expression aRight) {subExpressions[1] = aRight; }
-	
+
+	public Expression getLeft()
+	{
+		return subExpressions[0];
+	}
+
+	public Expression getRight()
+	{
+		return subExpressions[1];
+	}
+
+	public void setLeft(Expression aLeft)
+	{
+		subExpressions[0] = aLeft;
+	}
+
+	public void setRight(Expression aRight)
+	{
+		subExpressions[1] = aRight;
+	}
+
 	@Override
 	public void addChild(ASTNode item)
-	{	
+	{
 		Expression expression = (Expression) item;
-		if(getLeft() == null)
+		if (getLeft() == null)
 			setLeft(expression);
-		else if(getRight() == null)
+		else if (getRight() == null)
 			setRight(expression);
 		else
-			throw new RuntimeException("Error: attempting to add third child to binary expression");
-	
+			throw new RuntimeException(
+					"Error: attempting to add third child to binary expression");
+
 		super.addChild(item);
 	}
-	
+
 	@Override
 	public int getChildCount()
 	{
 		int childCount = 0;
-		if(getLeft() != null) childCount++;
-		if(getRight() != null) childCount++;
+		if (getLeft() != null)
+			childCount++;
+		if (getRight() != null)
+			childCount++;
 		return childCount;
 	}
+
 	@Override
 	public ASTNode getChild(int i)
 	{
@@ -48,18 +65,19 @@ public class BinaryExpression extends Expression
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
 		super.initializeFromContext(ctx);
-		
-		if(ctx.getChildCount() == 3)
-			setOperator(ctx.getChild(1).getText()); 
+
+		if (ctx.getChildCount() == 3)
+			setOperator(ctx.getChild(1).getText());
 	}
+
 	private void setOperator(String text)
 	{
 		operator = text;
 	}
-	
+
 	public String getOperator()
 	{
 		return operator;
 	}
-	
+
 }

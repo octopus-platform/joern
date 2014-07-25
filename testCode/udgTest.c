@@ -81,3 +81,13 @@ int complexAssign()
   pLtv->u.u16 = 1;
   return 0;
 }
+
+int plusplus()
+{
+  a ++;
+}
+
+int callWithRef()
+{
+  fooBar(&bar);
+}

@@ -5,7 +5,8 @@ import java.util.Map;
 import neo4j.batchInserter.ConfigurationGenerator;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
-public class GraphDbWalker {
+public class GraphDbWalker
+{
 
 	private static String databaseDirectory = ".joernIndex";
 
@@ -13,11 +14,12 @@ public class GraphDbWalker {
 	{
 		databaseDirectory = aDatabaseDirectory;
 	}
-	
+
 	protected static void initializeDatabase()
 	{
 		Neo4JBatchInserter.setIndexDirectoryName(databaseDirectory);
-		Map<String, String> config = ConfigurationGenerator.generateConfiguration();
+		Map<String, String> config = ConfigurationGenerator
+				.generateConfiguration();
 		Neo4JBatchInserter.setBatchInserterConfig(config);
 		Neo4JBatchInserter.openDatabase();
 	}
@@ -26,5 +28,5 @@ public class GraphDbWalker {
 	{
 		Neo4JBatchInserter.closeDatabase();
 	}
-	
+
 }

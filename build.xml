@@ -21,8 +21,8 @@
 	<pathelement location="${lib.dir}/antlr4-annotations-4.2.1-SNAPSHOT.jar"/>
 	<pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
         <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
-        <pathelement location="${lib.dir}/neo4j-kernel-1.9.5.jar"/>
-        <pathelement location="${lib.dir}/neo4j-lucene-index-1.9.5.jar"/>
+        <pathelement location="${lib.dir}/neo4j-kernel-1.9.8.jar"/>
+        <pathelement location="${lib.dir}/neo4j-lucene-index-1.9.8.jar"/>
     </path>
 	  
   <target name="clean">

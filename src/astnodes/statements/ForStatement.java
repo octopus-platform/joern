@@ -1,13 +1,14 @@
 package astnodes.statements;
 
 import astnodes.ASTNode;
+import astnodes.expressions.Expression;
 import astwalking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter
 {
 	private ASTNode forInitStatement = null;
 	private ASTNode expression = null;
-	
+
 	public ASTNode getForInitStatement()
 	{
 		return forInitStatement;
@@ -27,18 +28,23 @@ public class ForStatement extends BlockStarter
 	{
 		this.expression = expression;
 	}
-	
+
 	@Override
-	public void addChild(ASTNode item)
-	{	
-		if(forInitStatement == null)
-			forInitStatement = item;
-		else if(expression == null && condition != null){
-			expression = item;
-		}
-		
-		super.addChild(item);
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof Condition)
+			setCondition((Condition) node);
+		else if(node instanceof ForInit)
+			setForInitStatement(node);
+		else if(node instanceof Expression)
+			setExpression(node);
+		else if (node instanceof Statement)
+			setStatement((Statement) node);
+		super.addChild(node);
 	}
 
-	public void accept(ASTNodeVisitor visitor){ visitor.visit(this); }
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

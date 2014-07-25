@@ -7,7 +7,8 @@ import org.junit.Test;
 
 import parsing.ANTLRFunctionParserDriver;
 
-public class FunctionParserTest {
+public class FunctionParserTest
+{
 
 	@Test
 	public void testIf()
@@ -28,7 +29,7 @@ public class FunctionParserTest {
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("class_def"));
 	}
-	
+
 	@Test
 	public void testSizeofStruct()
 	{
@@ -38,5 +39,5 @@ public class FunctionParserTest {
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("selection_or_iteration while"));
 	}
-	
+
 }

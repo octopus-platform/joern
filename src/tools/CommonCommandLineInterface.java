@@ -12,12 +12,14 @@ public class CommonCommandLineInterface
 	{
 		initializeOptions();
 	}
-	
-	protected void initializeOptions() {}
+
+	protected void initializeOptions()
+	{
+	}
 
 	protected Options options = new Options();
 	protected CommandLineParser parser = new BasicParser();
 	protected HelpFormatter formater = new HelpFormatter();
 	protected CommandLine cmd = null;
-	
+
 }

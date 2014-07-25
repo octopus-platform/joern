@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class RelationalExpression extends BinaryExpression {}
+public class RelationalExpression extends BinaryExpression
+{
+}

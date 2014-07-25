@@ -1,3 +1,5 @@
 package astnodes.expressions;
 
-public class IncDecOp extends PostfixExpression {}
+public class IncDecOp extends PostfixExpression
+{
+}

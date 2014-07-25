@@ -9,7 +9,7 @@ import parsing.ANTLRFunctionParserDriver;
 
 public class ForLoopTests
 {
-	
+
 	@Test
 	public void testEmptyFor()
 	{
@@ -18,9 +18,9 @@ public class ForLoopTests
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
-		assertTrue(output.contains("for_init_statement"));
+		assertTrue(output.contains("selection_or_iteration"));
 	}
-	
+
 	@Test
 	public void testDeclInFor()
 	{
@@ -29,9 +29,10 @@ public class ForLoopTests
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
-		assertTrue(output.contains("for ( (for_init_statement (simple_decl (var_decl (type_name (base_type int))"));
+		assertTrue(output
+				.contains("for ( (for_init_statement (simple_decl (var_decl (type_name (base_type int))"));
 	}
-	
+
 	@Test
 	public void testComplexFor()
 	{

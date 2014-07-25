@@ -1,6 +1,5 @@
 package parsing;
 
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -9,8 +8,8 @@ import antlr.ModuleLexer;
 import antlr.ModuleParser;
 
 public class ANTLRModuleParserDriver extends ANTLRParserDriver
-{	
-	
+{
+
 	public ANTLRModuleParserDriver()
 	{
 		super();
@@ -21,19 +20,22 @@ public class ANTLRModuleParserDriver extends ANTLRParserDriver
 	public ParseTree parseTokenStreamImpl(TokenSubStream tokens)
 	{
 		ModuleParser parser = new ModuleParser(tokens);
-        ParseTree tree = null;
-        
-        try {
-    		setSLLMode(parser);
-        	tree = parser.code();
-        } catch (RuntimeException ex) {
-        	if (isRecognitionException(ex))
-        	{
-        		tokens.reset();
-        		setLLStarMode(parser);
-        		tree = parser.code();
-        	}
-        }
+		ParseTree tree = null;
+
+		try
+		{
+			setSLLMode(parser);
+			tree = parser.code();
+		}
+		catch (RuntimeException ex)
+		{
+			if (isRecognitionException(ex))
+			{
+				tokens.reset();
+				setLLStarMode(parser);
+				tree = parser.code();
+			}
+		}
 		return tree;
 	}
 
@@ -42,5 +44,5 @@ public class ANTLRModuleParserDriver extends ANTLRParserDriver
 	{
 		return new ModuleLexer(input);
 	}
-	
+
 }

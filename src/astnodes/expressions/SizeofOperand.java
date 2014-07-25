@@ -1,5 +1,6 @@
 package astnodes.expressions;
 
-public class SizeofOperand extends Expression {
+public class SizeofOperand extends Expression
+{
 
 }

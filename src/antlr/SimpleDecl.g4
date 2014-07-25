@@ -21,7 +21,7 @@ base_classes: ':' base_class (',' base_class)*;
 base_class: VIRTUAL? access_specifier? identifier;
 
 type_name : (CV_QUALIFIER* (CLASS_KEY | UNSIGNED | SIGNED)?
-            base_type ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>')? )*)
+            base_type ('<' template_param_list '>')? ('::' base_type ('<' template_param_list '>')? )*) CV_QUALIFIER?
           | UNSIGNED
           | SIGNED
           ;
@@ -49,4 +49,4 @@ param_type_id: ptrs? ('(' param_type_id ')' | parameter_name?) type_suffix?;
 identifier : (ALPHA_NUMERIC ('::' ALPHA_NUMERIC)*) | access_specifier;
 number: HEX_LITERAL | DECIMAL_LITERAL | OCTAL_LITERAL;
 
-ptrs: ptr_operator+;
+ptrs: (ptr_operator 'restrict'?)+;

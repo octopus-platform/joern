@@ -16,11 +16,12 @@ import astnodes.functionDef.ParameterList;
 import astnodes.functionDef.ReturnType;
 import astnodes.statements.CompoundStatement;
 
-public class FunctionDefBuilder extends ASTNodeBuilder {
+public class FunctionDefBuilder extends ASTNodeBuilder
+{
 
 	FunctionDef thisItem;
 	ParameterListBuilder paramListBuilder = new ParameterListBuilder();
-	
+
 	@Override
 	public void createNew(ParserRuleContext ctx)
 	{
@@ -35,27 +36,28 @@ public class FunctionDefBuilder extends ASTNodeBuilder {
 		thisItem.name = new Identifier();
 		thisItem.name.initializeFromContext(ctx);
 	}
-	
+
 	public void setReturnType(Return_typeContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
-		thisItem.returnType = new ReturnType();
-		ReturnType returnType = thisItem.returnType;
-		
+		ReturnType returnType = new ReturnType();
+
 		returnType.initializeFromContext(ctx);
-		returnType.setBaseType(ParseTreeUtils.childTokenString(ctx.type_name()));
+		returnType
+				.setBaseType(ParseTreeUtils.childTokenString(ctx.type_name()));
 		returnType.setCompleteType(ParseTreeUtils.childTokenString(ctx));
+		thisItem.setReturnType(returnType);
 	}
 
 	public void setParameterList(Function_param_listContext ctx,
-								 Stack<ASTNodeBuilder> itemStack)
+			Stack<ASTNodeBuilder> itemStack)
 	{
 		paramListBuilder.createNew(ctx);
 		thisItem.setParameterList((ParameterList) paramListBuilder.getItem());
 	}
 
 	public void addParameter(Parameter_declContext ctx,
-							 Stack<ASTNodeBuilder> itemStack)
+			Stack<ASTNodeBuilder> itemStack)
 	{
 		paramListBuilder.addParameter(ctx, itemStack);
 	}
@@ -64,5 +66,5 @@ public class FunctionDefBuilder extends ASTNodeBuilder {
 	{
 		thisItem.setContent(functionContent);
 	}
-	
+
 }
