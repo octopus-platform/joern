@@ -17,7 +17,7 @@ public class BlockStarter extends Statement
 		return condition;
 	}
 
-	private void setStatement(Statement aStatement)
+	protected void setStatement(Statement aStatement)
 	{
 		statement = aStatement;
 	}

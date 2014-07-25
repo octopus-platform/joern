@@ -52,17 +52,7 @@ public class OtherTests extends CFGCreatorTest
 		assertTrue(node instanceof InfiniteForNode);
 		assertTrue(cfg.size() == 3);
 	}
-
-	@Test
-	public void testLabel()
-	{
-		// String input = "foo: foo();";
-		// CFG cfg = getCFGForCode(input);
-		// HashMap<String, CFGNode> labels = cfg.getLabels();
-		// System.out.println(labels.size());
-		// assertTrue(labels.size() == 1);
-	}
-
+	
 	@Test
 	public void testSwitchNumberOfEdges()
 	{

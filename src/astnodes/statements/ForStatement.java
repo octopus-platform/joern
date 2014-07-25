@@ -1,6 +1,7 @@
 package astnodes.statements;
 
 import astnodes.ASTNode;
+import astnodes.expressions.Expression;
 import astwalking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter
@@ -29,16 +30,17 @@ public class ForStatement extends BlockStarter
 	}
 
 	@Override
-	public void addChild(ASTNode item)
+	public void addChild(ASTNode node)
 	{
-		if (forInitStatement == null)
-			forInitStatement = item;
-		else if (expression == null && condition != null)
-		{
-			expression = item;
-		}
-
-		super.addChild(item);
+		if (node instanceof Condition)
+			setCondition((Condition) node);
+		else if(node instanceof ForInit)
+			setForInitStatement(node);
+		else if(node instanceof Expression)
+			setExpression(node);
+		else if (node instanceof Statement)
+			setStatement((Statement) node);
+		super.addChild(node);
 	}
 
 	public void accept(ASTNodeVisitor visitor)
