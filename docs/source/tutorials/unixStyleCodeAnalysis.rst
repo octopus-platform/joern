@@ -1,5 +1,5 @@
-Code Analysis with joern-tools
-==============================
+Code Analysis with joern-tools (Work in progress)
+=================================================
 
 ..
    Short introduction/motivation
@@ -171,6 +171,7 @@ To enable users to familarize themselves with the database contents
 quickly, ``joern-tools`` offers utilities to retrieve graphs from the
 database and visualize them using *graphviz*.
 
+**Retrieve functions by name**
 
 .. code-block:: none
 
@@ -186,6 +187,8 @@ Usage of the shorthand getFunctionsByName. Reference to python-joern.
 
 	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-ast > foo.dot
 
+**Plot abstract syntax tree**
+
 Take the first one, use joern-plot-ast to generate .dot-file of AST.
 
 .. code-block:: none
@@ -195,6 +198,8 @@ Take the first one, use joern-plot-ast to generate .dot-file of AST.
 
 .. image:: ../_static/ast.svg
 
+**Plot control flow graph**
+
 .. code-block:: none
 
 	 echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -cfg > cfg.dot;
@@ -202,12 +207,26 @@ Take the first one, use joern-plot-ast to generate .dot-file of AST.
 
 .. image:: ../_static/cfg.svg
 
+**Show data flow edges**
+
 .. code-block:: none
 
 	 echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -ddg -cfg > ddgAndCfg.dot;
 	dot -Tsvg ddgAndCfg.dot -o ddgAndCfg.svg; eog ddgAndCfg.svg
 
 .. image:: ../_static/ddgAndCfg.svg
+
+**Mark nodes of a program slice**
+
+.. code-block:: none
+
+	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -ddg -cfg | joern-plot-slice 1856423 'p_buf' > slice.dot;
+	dot -Tsvg slice.dot -o slice.svg;
+
+.. image:: ../_static/slice.svg
+
+Note: You may need to exchange the id: 1856423.
+
 
 
 Selecting Functions by Name
