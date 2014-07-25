@@ -9,4 +9,4 @@ property graph stored in a Neo4J graph database. This allows code to
 be mined using complex queries formulated in the graph traversal
 languages Gremlin and Cypher.
 
-The documentation can be found [here](https://github.com/fabsx00/joern-docs/blob/master/README.md)
+The documentation can be found [here](http://joern.readthedocs.org/en/latest/)
