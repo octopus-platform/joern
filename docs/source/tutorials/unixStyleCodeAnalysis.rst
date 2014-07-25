@@ -172,6 +172,44 @@ quickly, ``joern-tools`` offers utilities to retrieve graphs from the
 database and visualize them using *graphviz*.
 
 
+.. code-block:: none
+
+	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | joern-location 
+
+	/home/fabs/targets/vlc-2.1.4/modules/codec/mpeg_audio.c:526:0:19045:19685
+	/home/fabs/targets/vlc-2.1.4/modules/codec/dts.c:400:0:13847:14459
+	/home/fabs/targets/vlc-2.1.4/modules/codec/a52.c:381:0:12882:13297
+
+Usage of the shorthand getFunctionsByName. Reference to python-joern.
+
+.. code-block:: none
+
+	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-ast > foo.dot
+
+Take the first one, use joern-plot-ast to generate .dot-file of AST.
+
+.. code-block:: none
+
+	dot -Tsvg foo.dot -o ast.svg; eog ast.svg
+
+
+.. image:: ../_static/ast.svg
+
+.. code-block:: none
+
+	 echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -cfg > cfg.dot;
+	dot -Tsvg cfg.dot -o cfg.svg; eog cfg.svg
+
+.. image:: ../_static/cfg.svg
+
+.. code-block:: none
+
+	 echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -ddg -cfg > ddgAndCfg.dot;
+	dot -Tsvg ddgAndCfg.dot -o ddgAndCfg.svg; eog ddgAndCfg.svg
+
+.. image:: ../_static/ddgAndCfg.svg
+
+
 Selecting Functions by Name
 ---------------------------
 
