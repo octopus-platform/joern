@@ -55,7 +55,7 @@ where ``VLCEyeTVPluginInitialize`` is the name of the function in this example.
 .. code-block:: none
 
 
-	joern-list-funcs -p VLCEyeTVPluginInitialize | awk -F "\t" '{print $2}' | joern-knn | joern-code
+	joern-list-funcs -p VLCEyeTVPluginInitialize | awk -F "\t" '{print $2}' | joern-knn | joern-location | joern-code
 
-	joern-list-funcs -p VLCEyeTVPluginInitialize | awk -F "\t" '{print $2}' | joern-knn | joern-editor
+	joern-list-funcs -p VLCEyeTVPluginInitialize | awk -F "\t" '{print $2}' | joern-knn | joern-location | joern-editor
 
