@@ -65,9 +65,12 @@ int conditional_expr()
 
 int test_buf_def()
 {
-  // We need to improve pointer tracking here:
-  // Currently, it's USE(buf), DEF(buf)
   buf[i] = x;
+}
+
+int arrUse()
+{
+  x = arr[i];
 }
 
 int complexInArgs()

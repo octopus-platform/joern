@@ -10,12 +10,15 @@ public class ArrayIndexingEnvironment extends EmitUseEnvironment
 	public void addChildSymbols(LinkedList<String> childSymbols,
 			ASTProvider child)
 	{
-		int childNum = child.getChildNumber();
-
-		if (childNum == 0)
-			symbols.addAll(childSymbols);
-		else
-			useSymbols.addAll(childSymbols);
+		
+		LinkedList<String> derefedChildren = new LinkedList<String>();
+		for(String c : childSymbols){
+			derefedChildren.add("* " + c);
+		}
+			
+		symbols.addAll(derefedChildren);
+			
+		useSymbols.addAll(childSymbols);
 	}
 
 }

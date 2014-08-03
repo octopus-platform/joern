@@ -16,17 +16,7 @@ public class EmitDefEnvironment extends UseDefEnvironment
 	{
 		if (isDef(child))
 		{
-			// add definition only for the last symbol, e.g.,
-			// for x.y.z = 10, add a def for x.y.z only.
-
-			if (childSymbols.size() > 1)
-			{
-
-				defSymbols.add(childSymbols.getLast());
-
-			}
-			else
-				defSymbols.addAll(childSymbols);
+			defSymbols.addAll(childSymbols);
 		}
 		if (isUse(child))
 			symbols.addAll(childSymbols);

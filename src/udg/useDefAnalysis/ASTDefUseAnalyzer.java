@@ -13,9 +13,11 @@ import udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
 import udg.useDefAnalysis.environments.AssignmentEnvironment;
 import udg.useDefAnalysis.environments.CallEnvironment;
 import udg.useDefAnalysis.environments.DeclEnvironment;
+import udg.useDefAnalysis.environments.UnaryOpEnvironment;
 import udg.useDefAnalysis.environments.IdentifierEnvironment;
 import udg.useDefAnalysis.environments.IncDecEnvironment;
 import udg.useDefAnalysis.environments.MemberAccessEnvironment;
+import udg.useDefAnalysis.environments.PtrMemberAccessEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefAnalysis.environments.UseEnvironment;
 import udg.useDefGraph.UseOrDef;
@@ -116,6 +118,8 @@ public class ASTDefUseAnalyzer
 				return createArgumentEnvironment(astProvider);
 
 			case "PtrMemberAccess":
+				return new PtrMemberAccessEnvironment();
+
 			case "MemberAccess":
 				return new MemberAccessEnvironment();
 
@@ -126,6 +130,9 @@ public class ASTDefUseAnalyzer
 			case "ArrayIndexing":
 				return new ArrayIndexingEnvironment();
 
+			case "UnaryOp":
+				return new UnaryOpEnvironment();
+				
 			case "Identifier":
 				return new IdentifierEnvironment();
 

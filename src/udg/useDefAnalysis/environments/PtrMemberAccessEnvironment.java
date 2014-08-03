@@ -6,16 +6,22 @@ import java.util.LinkedList;
 import udg.ASTProvider;
 import udg.useDefGraph.UseOrDef;
 
-public class MemberAccessEnvironment extends UseDefEnvironment
+public class PtrMemberAccessEnvironment extends UseDefEnvironment
 {
 
 	public LinkedList<String> upstreamSymbols()
 	{
 
 		LinkedList<String> retval = new LinkedList<String>();
+			
+		// emit all symbols as '* symbol'
 		
-		// emit all symbols
-		retval.addAll(symbols);
+		LinkedList<String> derefedChildren = new LinkedList<String>();
+		for(String c : symbols){
+			derefedChildren.add("* " + c);
+		}
+		
+		retval.addAll(derefedChildren);
 
 		// emit entire code string
 		String codeStr = astProvider.getEscapedCodeStr();
@@ -25,7 +31,7 @@ public class MemberAccessEnvironment extends UseDefEnvironment
 	}
 
 	public void addChildSymbols(LinkedList<String> childSymbols,
-			ASTProvider child)
+								ASTProvider child)
 	{
 		int childNum = child.getChildNumber();
 		// Only add the left child but never the right child

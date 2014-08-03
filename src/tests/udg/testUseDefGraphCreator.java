@@ -27,14 +27,10 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	{
 		Map<String, String> aMap = new HashMap<String, String>();
 		
-		aMap.put("udg_test_struct_field_use",
-				"int udg_test_struct_field_use(){ foo(x.y); }");
-		aMap.put("test_buf_def", "int f(){ buf[i] = x; }");
 		aMap.put("condition_test",
 				"int condition_test() { if(x && y) return 0; if(z) return 1; }");
 		aMap.put("udg_test_def_tainted_call", "int f(){foo(x);}");
 		aMap.put("plusEqualsUse", "int f(){ x += y; }");
-		aMap.put("udg_test_use_untainted_call", "int f(){foo(x);}");
 		aMap.put(
 				"ddg_test_struct",
 				"int ddg_test_struct(){ struct my_struct foo; foo.bar = 10; copy_somehwere(foo); }");
@@ -47,21 +43,6 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	{
 		astToCFG = new ASTToCFGConverter();
 		cfgToUDG = new CFGToUDGConverter();
-	}
-
-	@Test
-	public void test_use_untainted_call()
-	{
-		UseDefGraph useDefGraph = createUDGForFunction("udg_test_use_untainted_call");
-		assertOnlyUseForXFound(useDefGraph, "x");
-	}
-
-	@Test
-	public void test_struct_field_use()
-	{
-		UseDefGraph useDefGraph = createUDGForFunction("udg_test_struct_field_use");
-		assertOnlyUseForXFound(useDefGraph, "x . y");
-		assertOnlyUseForXFound(useDefGraph, "x");
 	}
 
 	@Test
@@ -100,15 +81,6 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		assertOnlyUseForXFound(useDefGraph, "z");
 	}
 
-	@Test
-	public void test_buf_def()
-	{
-		UseDefGraph useDefGraph = createUDGForFunction("test_buf_def");
-		// this, we want to improve. It should be DEF(*x) and USE(x),
-		// right now, it's just DEF(x).
-		assertOnlyDefForXFound(useDefGraph, "buf");
-		assertOnlyUseForXFound(useDefGraph, "i");
-	}
 
 	private UseDefGraph createUDGForFunction(String functionName)
 	{
