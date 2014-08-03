@@ -26,9 +26,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	static
 	{
 		Map<String, String> aMap = new HashMap<String, String>();
-		aMap.put("udg_test_simple_decl", "int f(){ int x; }");
-		aMap.put("udg_test_decl_with_assign", "int f(){ int x = 0; }");
-		aMap.put("udg_test_param_decl", "int f(int x){}");
+		
 		aMap.put("udg_test_struct_field_use",
 				"int udg_test_struct_field_use(){ foo(x.y); }");
 		aMap.put("test_buf_def", "int f(){ buf[i] = x; }");
@@ -49,27 +47,6 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	{
 		astToCFG = new ASTToCFGConverter();
 		cfgToUDG = new CFGToUDGConverter();
-	}
-
-	@Test
-	public void testSimpleDecl()
-	{
-		UseDefGraph useDefGraph = createUDGForFunction("udg_test_simple_decl");
-		assertOnlyDefForXFound(useDefGraph, "x");
-	}
-
-	@Test
-	public void testDeclWithAssignment()
-	{
-		UseDefGraph useDefGraph = createUDGForFunction("udg_test_decl_with_assign");
-		assertOnlyDefForXFound(useDefGraph, "x");
-	}
-
-	@Test
-	public void testParamDecl()
-	{
-		UseDefGraph useDefGraph = createUDGForFunction("udg_test_param_decl");
-		assertOnlyDefForXFound(useDefGraph, "x");
 	}
 
 	@Test
