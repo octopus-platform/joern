@@ -13,9 +13,11 @@ public class UnaryOpEnvironment extends EmitUseEnvironment
 		
 		String codeStr = astProvider.getEscapedCodeStr();
 		
-		if(codeStr == null|| !codeStr.startsWith("*"))
+		if(codeStr == null|| !codeStr.startsWith("*")){
+			symbols.addAll(childSymbols);
 			return;
-		
+		}
+			
 		LinkedList<String> retval = new LinkedList<String>();
 			
 		// emit all symbols as '* symbol'

@@ -94,3 +94,8 @@ int callWithRef()
 {
   fooBar(&bar);
 }
+
+int nonDerefUnary()
+{
+  x = ++ a;
+}
