@@ -1,4 +1,4 @@
-package neo4j;
+package databaseNodes;
 
 public class EdgeTypes
 {

@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import misc.MultiHashMap;
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
 import udg.useDefGraph.UseDefGraph;

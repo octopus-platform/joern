@@ -1,6 +1,5 @@
 package neo4j.importers;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -11,6 +10,7 @@ import astnodes.functionDef.FunctionDef;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
+import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
 

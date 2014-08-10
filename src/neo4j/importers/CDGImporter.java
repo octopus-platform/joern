@@ -1,6 +1,5 @@
 package neo4j.importers;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
@@ -12,6 +11,7 @@ import cdg.CDGEdge;
 import cdg.DominatorTree;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
+import databaseNodes.EdgeTypes;
 
 public class CDGImporter
 {

@@ -14,11 +14,11 @@ public class Neo4JASTWalker extends IndexerASTWalker
 {
 
 	Neo4JASTNodeVisitor neo4jASTVisitor = new Neo4JASTNodeVisitor();
-	Neo4JIndexerState state;
+	IndexerState state;
 
 	public void setIndexerState(IndexerState aState)
 	{
-		state = (Neo4JIndexerState) aState;
+		state = aState;
 	}
 
 	@Override

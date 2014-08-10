@@ -11,6 +11,7 @@ import neo4j.importers.FunctionImporter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;

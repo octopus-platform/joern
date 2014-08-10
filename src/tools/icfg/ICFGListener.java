@@ -3,7 +3,6 @@ package tools.icfg;
 import java.util.LinkedList;
 import java.util.List;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.ImportedNodeListener;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
@@ -11,6 +10,8 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
+
+import databaseNodes.EdgeTypes;
 
 public class ICFGListener extends ImportedNodeListener
 {

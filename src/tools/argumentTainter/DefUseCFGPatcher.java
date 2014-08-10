@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import neo4j.EdgeTypes;
 import neo4j.readWriteDB.Neo4JDBInterface;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -17,6 +16,7 @@ import traversals.readWriteDB.Traversals;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.ReadWriteDbASTProvider;
 import udg.useDefGraph.UseOrDef;
+import databaseNodes.EdgeTypes;
 import ddg.DefUseCFG.DefUseCFG;
 
 public class DefUseCFGPatcher

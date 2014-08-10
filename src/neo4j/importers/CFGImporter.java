@@ -2,7 +2,6 @@ package neo4j.importers;
 
 import java.util.Map;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
@@ -13,6 +12,7 @@ import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
+import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
 

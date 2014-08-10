@@ -5,17 +5,18 @@ import java.util.Map;
 import neo4j.batchInserter.ConfigurationGenerator;
 import neo4j.batchInserter.Neo4JBatchInserter;
 import tools.index.Indexer;
+import tools.index.IndexerState;
 
 
 public class Neo4JIndexer extends Indexer
 {
 
-	Neo4JIndexerState neo4jIndexerState;
+	IndexerState neo4jIndexerState;
 
 	@Override
 	protected void initializeIndexerState()
 	{
-		neo4jIndexerState = new Neo4JIndexerState(this);
+		neo4jIndexerState = new IndexerState(this);
 		state = neo4jIndexerState;
 	}
 

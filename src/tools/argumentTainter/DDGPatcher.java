@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import neo4j.EdgeTypes;
 import neo4j.readWriteDB.Neo4JDBInterface;
 
 import org.neo4j.graphdb.Direction;
@@ -14,6 +13,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 import traversals.readWriteDB.Traversals;
+import databaseNodes.EdgeTypes;
 import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DDGDifference;

@@ -3,13 +3,13 @@ package neo4j.importers;
 import java.util.Iterator;
 import java.util.List;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import databaseNodes.DeclStmtDatabaseNode;
+import databaseNodes.EdgeTypes;
 import astnodes.ASTNode;
 import astnodes.statements.IdentifierDeclStatement;
 

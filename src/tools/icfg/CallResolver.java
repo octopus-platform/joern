@@ -1,11 +1,11 @@
 package tools.icfg;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
+import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
 import traversals.batchInserter.Elementary;
 

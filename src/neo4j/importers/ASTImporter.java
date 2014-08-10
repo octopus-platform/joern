@@ -2,7 +2,6 @@ package neo4j.importers;
 
 import java.util.Map;
 
-import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
@@ -10,6 +9,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import databaseNodes.ASTDatabaseNode;
+import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
 import astnodes.ASTNode;
