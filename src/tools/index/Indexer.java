@@ -18,7 +18,6 @@ public abstract class Indexer extends SourceFileListener
 
 	protected String outputDir;
 
-	protected abstract void initializeIndexerState();
 
 	protected abstract void initializeDirectoryImporter();
 
@@ -29,6 +28,11 @@ public abstract class Indexer extends SourceFileListener
 	protected abstract void shutdownDatabase();
 
 
+	protected void initializeIndexerState()
+	{
+		state = new IndexerState(this);
+	}
+	
 	public void setOutputDir(String anOutputDir)
 	{
 		outputDir = anOutputDir;

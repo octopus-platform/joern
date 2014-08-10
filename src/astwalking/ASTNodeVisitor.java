@@ -1,5 +1,8 @@
 package astwalking;
 
+import java.util.Stack;
+
+import databaseNodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.expressions.Argument;
@@ -28,6 +31,15 @@ import astnodes.statements.WhileStatement;
 
 public class ASTNodeVisitor
 {
+	protected FileDatabaseNode currentFileNode;
+	protected Stack<Long> contextStack;
+
+	public void handleStartOfUnit(FileDatabaseNode aCurrentFileNode)
+	{
+		currentFileNode = aCurrentFileNode;
+		contextStack = new Stack<Long>();
+	}
+	
 	public void visit(ASTNode item)
 	{
 		visitChildren(item);

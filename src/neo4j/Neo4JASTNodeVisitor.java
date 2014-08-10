@@ -1,7 +1,5 @@
 package neo4j;
 
-import java.util.Stack;
-
 import neo4j.batchInserter.Neo4JBatchInserter;
 import neo4j.importers.ASTNodeImporter;
 import neo4j.importers.ClassDefImporter;
@@ -12,7 +10,6 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import databaseNodes.EdgeTypes;
-import databaseNodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.functionDef.FunctionDef;
@@ -23,14 +20,6 @@ import astwalking.ASTNodeVisitor;
 
 public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 {
-	FileDatabaseNode currentFileNode;
-	Stack<Long> contextStack;
-
-	public void handleStartOfUnit(FileDatabaseNode aCurrentFileNode)
-	{
-		currentFileNode = aCurrentFileNode;
-		contextStack = new Stack<Long>();
-	}
 
 	public void visit(FunctionDef node)
 	{
