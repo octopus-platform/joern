@@ -2,8 +2,10 @@ package tools.index;
 
 import java.nio.file.Path;
 
+import fileWalker.SourceFileListener;
 import neo4j.importers.DirectoryTreeImporter;
 import parsing.ModuleParser;
+
 
 public abstract class Indexer extends SourceFileListener
 {

@@ -6,6 +6,7 @@ import neo4j.batchInserter.ConfigurationGenerator;
 import neo4j.batchInserter.Neo4JBatchInserter;
 import tools.index.Indexer;
 
+
 public class Neo4JIndexer extends Indexer
 {
 

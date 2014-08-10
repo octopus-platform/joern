@@ -1,4 +1,4 @@
-package tools.index;
+package fileWalker;
 
 import java.nio.file.Path;
 

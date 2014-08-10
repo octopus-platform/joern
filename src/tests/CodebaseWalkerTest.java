@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import tools.index.SourceFileWalker;
+import fileWalker.SourceFileWalker;
 
 public class CodebaseWalkerTest
 {

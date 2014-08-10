@@ -1,4 +1,4 @@
-package tools.index;
+package fileWalker;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,12 +6,39 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 public class SourceFileWalker
 {
+	private final String DEFAULT_FILENAME_FILTER = "*.{c,cpp,h,cc,hpp,java}";
+	
+	private SourceFileWalkerImpl sourceFileWalkerImpl = new SourceFileWalkerImpl();
 
-	private SourceFileWalkerImpl sourceFileWalkerImpl = new SourceFileWalkerImpl(
-			"*.{c,cpp,h,cc,hpp}");
-
+	public SourceFileWalker()
+	{
+		sourceFileWalkerImpl.setFilenameFilter(DEFAULT_FILENAME_FILTER);
+	}
+		
+	public void setFilenameFilter(String filter)
+	{
+		sourceFileWalkerImpl.setFilenameFilter(filter);
+	}
+	
+	/**
+	 * Add a listener object that will be informed of all visited
+	 * source files and directories.
+	 * */
+	
+	public void addListener(SourceFileListener listener)
+	{
+		sourceFileWalkerImpl.addListener(listener);
+	}
+	
+	/**
+	 * Walk list of files and directory names and report them to
+	 * listeners.
+	 * @param fileAndDirNames: A list of file and/or directory names
+	 * */
+	
 	public void walk(String[] fileAndDirNames) throws IOException
 	{
 		for (String filename : fileAndDirNames)
@@ -45,8 +72,4 @@ public class SourceFileWalker
 		Files.walkFileTree(dir, sourceFileWalkerImpl);
 	}
 
-	public void addListener(SourceFileListener listener)
-	{
-		sourceFileWalkerImpl.addListener(listener);
-	}
 }

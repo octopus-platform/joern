@@ -6,10 +6,12 @@ import neo4j.Neo4JIndexer;
 
 import org.apache.commons.cli.ParseException;
 
+import fileWalker.SourceFileWalker;
+
 /**
  * Main Class for the indexer: This class parses command line arguments and
- * configures the indexer in accordance and then uses a SourceFileWalker to to
- * visit each source-files and directories and report them to the indexer.
+ * configures the indexer in accordance. It then uses a SourceFileWalker to
+ * visit source-files and directories and report them to the indexer.
  * */
 
 public class IndexMain

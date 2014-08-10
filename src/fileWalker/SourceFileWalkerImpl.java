@@ -1,4 +1,4 @@
-package tools.index;
+package fileWalker;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -12,14 +12,15 @@ import java.util.List;
 
 class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 {
-	private final PathMatcher matcher;
+	private PathMatcher matcher;
 	private List<SourceFileListener> listeners = new LinkedList<SourceFileListener>();
 
-	SourceFileWalkerImpl(String pattern)
+	public void setFilenameFilter(String pattern)
 	{
 		matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
 	}
-
+	
+	
 	public void addListener(SourceFileListener listener)
 	{
 		listeners.add(listener);

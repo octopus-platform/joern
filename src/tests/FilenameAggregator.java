@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-import tools.index.SourceFileListener;
+import fileWalker.SourceFileListener;
 
 public class FilenameAggregator extends SourceFileListener
 {
