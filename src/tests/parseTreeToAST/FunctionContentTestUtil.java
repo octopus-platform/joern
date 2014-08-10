@@ -4,24 +4,25 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import parsing.ANTLRFunctionParserDriver;
+import parsing.FunctionParser;
 import parsing.TokenSubStream;
 import antlr.FunctionLexer;
-import astnodes.ASTNode;
+import ast.ASTNode;
 
 public class FunctionContentTestUtil
 {
 
 	public static ASTNode parseAndWalk(String input)
 	{
-		ANTLRFunctionParserDriver parser = new ANTLRFunctionParserDriver();
+		FunctionParser parser = new FunctionParser();
 		TokenSubStream tokens = tokenStreamFromString(input);
 		parser.parseAndWalkTokenStream(tokens);
-		return parser.builderStack.peek().getItem();
+		return parser.getParser().builderStack.peek().getItem();
 	}
 
 	static ParseTree parse(String input)
 	{
-		ANTLRFunctionParserDriver parser = new ANTLRFunctionParserDriver();
+		FunctionParser parser = new FunctionParser();
 		return parser.parseString(input);
 	}
 

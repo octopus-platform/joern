@@ -5,8 +5,8 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import astnodes.ASTNode;
-import astnodes.functionDef.FunctionDef;
+import ast.ASTNode;
+import ast.functionDef.FunctionDef;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;

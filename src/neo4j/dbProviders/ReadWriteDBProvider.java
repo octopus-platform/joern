@@ -5,13 +5,13 @@ import java.util.List;
 
 import misc.Pair;
 import neo4j.readWriteDB.Neo4JDBInterface;
+import neo4j.traversals.readWriteDB.Traversals;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
-import traversals.readWriteDB.Traversals;
 
 public class ReadWriteDBProvider extends DBProvider
 {

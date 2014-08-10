@@ -1,6 +1,6 @@
 package cfg;
 
-import astnodes.functionDef.FunctionDef;
+import ast.functionDef.FunctionDef;
 
 public class ASTToCFGConverter
 {

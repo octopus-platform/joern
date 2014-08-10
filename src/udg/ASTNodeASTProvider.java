@@ -1,6 +1,6 @@
 package udg;
 
-import astnodes.ASTNode;
+import ast.ASTNode;
 
 public class ASTNodeASTProvider extends ASTProvider
 {

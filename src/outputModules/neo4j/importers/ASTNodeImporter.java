@@ -5,7 +5,7 @@ import java.util.Map;
 import databaseNodes.DatabaseNode;
 import databaseNodes.FileDatabaseNode;
 import neo4j.batchInserter.GraphNodeStore;
-import astnodes.ASTNode;
+import ast.ASTNode;
 
 public abstract class ASTNodeImporter
 {

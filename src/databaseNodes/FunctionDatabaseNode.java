@@ -5,8 +5,8 @@ import java.util.Map;
 
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
-import astnodes.ASTNode;
-import astnodes.functionDef.FunctionDef;
+import ast.ASTNode;
+import ast.functionDef.FunctionDef;
 import cdg.CDG;
 import cdg.CDGCreator;
 import cfg.ASTToCFGConverter;

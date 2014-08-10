@@ -4,25 +4,25 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import astnodes.declarations.IdentifierDecl;
-import astnodes.expressions.AdditiveExpression;
-import astnodes.expressions.AndExpression;
-import astnodes.expressions.AssignmentExpr;
-import astnodes.expressions.BitAndExpression;
-import astnodes.expressions.CallExpression;
-import astnodes.expressions.CastExpression;
-import astnodes.expressions.ConditionalExpression;
-import astnodes.expressions.EqualityExpression;
-import astnodes.expressions.ExclusiveOrExpression;
-import astnodes.expressions.InclusiveOrExpression;
-import astnodes.expressions.MultiplicativeExpression;
-import astnodes.expressions.OrExpression;
-import astnodes.expressions.RelationalExpression;
-import astnodes.expressions.ShiftExpression;
-import astnodes.statements.BlockStarter;
-import astnodes.statements.CompoundStatement;
-import astnodes.statements.ExpressionStatement;
-import astnodes.statements.IdentifierDeclStatement;
+import ast.declarations.IdentifierDecl;
+import ast.expressions.AdditiveExpression;
+import ast.expressions.AndExpression;
+import ast.expressions.AssignmentExpr;
+import ast.expressions.BitAndExpression;
+import ast.expressions.CallExpression;
+import ast.expressions.CastExpression;
+import ast.expressions.ConditionalExpression;
+import ast.expressions.EqualityExpression;
+import ast.expressions.ExclusiveOrExpression;
+import ast.expressions.InclusiveOrExpression;
+import ast.expressions.MultiplicativeExpression;
+import ast.expressions.OrExpression;
+import ast.expressions.RelationalExpression;
+import ast.expressions.ShiftExpression;
+import ast.statements.BlockStarter;
+import ast.statements.CompoundStatement;
+import ast.statements.ExpressionStatement;
+import ast.statements.IdentifierDeclStatement;
 
 public class ExpressionParsingTest
 {

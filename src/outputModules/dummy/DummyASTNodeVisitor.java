@@ -1,10 +1,10 @@
 package outputModules.dummy;
 
 import databaseNodes.FunctionDatabaseNode;
-import astnodes.declarations.ClassDefStatement;
-import astnodes.functionDef.FunctionDef;
-import astnodes.statements.IdentifierDeclStatement;
-import astwalking.ASTNodeVisitor;
+import ast.declarations.ClassDefStatement;
+import ast.functionDef.FunctionDef;
+import ast.statements.IdentifierDeclStatement;
+import ast.walking.ASTNodeVisitor;
 
 public class DummyASTNodeVisitor extends ASTNodeVisitor
 {

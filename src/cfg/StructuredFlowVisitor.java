@@ -1,19 +1,19 @@
 package cfg;
 
-import astnodes.ASTNode;
-import astnodes.functionDef.ParameterList;
-import astnodes.statements.BreakStatement;
-import astnodes.statements.CompoundStatement;
-import astnodes.statements.ContinueStatement;
-import astnodes.statements.DoStatement;
-import astnodes.statements.ForStatement;
-import astnodes.statements.GotoStatement;
-import astnodes.statements.IfStatement;
-import astnodes.statements.Label;
-import astnodes.statements.ReturnStatement;
-import astnodes.statements.SwitchStatement;
-import astnodes.statements.WhileStatement;
-import astwalking.ASTNodeVisitor;
+import ast.ASTNode;
+import ast.functionDef.ParameterList;
+import ast.statements.BreakStatement;
+import ast.statements.CompoundStatement;
+import ast.statements.ContinueStatement;
+import ast.statements.DoStatement;
+import ast.statements.ForStatement;
+import ast.statements.GotoStatement;
+import ast.statements.IfStatement;
+import ast.statements.Label;
+import ast.statements.ReturnStatement;
+import ast.statements.SwitchStatement;
+import ast.statements.WhileStatement;
+import ast.walking.ASTNodeVisitor;
 
 
 class StructuredFlowVisitor extends ASTNodeVisitor

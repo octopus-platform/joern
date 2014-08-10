@@ -10,14 +10,14 @@ import org.junit.Test;
 import parsing.ANTLRModuleParserDriver;
 import parsing.TokenSubStream;
 import antlr.ModuleLexer;
-import astnodes.ASTNode;
-import astnodes.declarations.ClassDefStatement;
-import astnodes.declarations.IdentifierDecl;
-import astnodes.expressions.Identifier;
-import astnodes.functionDef.FunctionDef;
-import astnodes.functionDef.Parameter;
-import astnodes.functionDef.ParameterType;
-import astnodes.statements.IdentifierDeclStatement;
+import ast.ASTNode;
+import ast.declarations.ClassDefStatement;
+import ast.declarations.IdentifierDecl;
+import ast.expressions.Identifier;
+import ast.functionDef.FunctionDef;
+import ast.functionDef.Parameter;
+import ast.functionDef.ParameterType;
+import ast.statements.IdentifierDeclStatement;
 
 public class ModuleBuildersTest
 {

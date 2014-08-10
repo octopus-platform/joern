@@ -12,7 +12,7 @@ import databaseNodes.ASTDatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
-import astnodes.ASTNode;
+import ast.ASTNode;
 
 public class ASTImporter
 {

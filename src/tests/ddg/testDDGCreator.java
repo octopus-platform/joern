@@ -5,13 +5,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
+import neo4j.traversals.batchInserter.Elementary;
+import neo4j.traversals.batchInserter.Function;
+
 import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
 import tests.TestDBTestsBatchInserter;
 import tests.udg.CFGCreator;
-import traversals.batchInserter.Elementary;
-import traversals.batchInserter.Function;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import cfg.CFG;

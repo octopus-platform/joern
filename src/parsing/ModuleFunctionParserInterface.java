@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.misc.Interval;
 import antlr.ModuleParser;
 import antlr.ModuleParser.Compound_statementContext;
 import antlr.ModuleParser.Function_defContext;
-import astnodes.statements.CompoundStatement;
+import ast.statements.CompoundStatement;
 
 public class ModuleFunctionParserInterface
 {

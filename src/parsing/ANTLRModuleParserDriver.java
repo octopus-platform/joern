@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import parsing.cModules.CModuleParserTreeListener;
 import antlr.ModuleLexer;
 import antlr.ModuleParser;
 
@@ -13,7 +14,7 @@ public class ANTLRModuleParserDriver extends ANTLRParserDriver
 	public ANTLRModuleParserDriver()
 	{
 		super();
-		setListener(new ModuleParserTreeListener(this));
+		setListener(new CModuleParserTreeListener(this));
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import java.util.List;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDef;
-import astnodes.ASTNode;
+import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;

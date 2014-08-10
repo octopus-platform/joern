@@ -1,6 +1,5 @@
 package parsing;
 
-import java.util.List;
 import java.util.Observer;
 
 public class ModuleParser
@@ -36,17 +35,6 @@ public class ModuleParser
 	public void addObserver(Observer anObserver)
 	{
 		parserDriver.addObserver(anObserver);
-	}
-
-	// Not used?
-	public void parseListOfFiles(List<String> filenames)
-	{
-		parserDriver.begin();
-
-		for (String filename : filenames)
-			parseFile(filename);
-
-		parserDriver.end();
 	}
 
 }

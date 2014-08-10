@@ -4,10 +4,10 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import astnodes.ASTNode;
-import astnodes.ASTNodeBuilder;
-import astnodes.statements.CompoundStatement;
-import astwalking.ASTWalker;
+import ast.ASTNode;
+import ast.ASTNodeBuilder;
+import ast.statements.CompoundStatement;
+import ast.walking.ASTWalker;
 
 public class CompoundItemAssembler extends ASTWalker
 {
@@ -36,14 +36,5 @@ public class CompoundItemAssembler extends ASTWalker
 		compoundItem.addStatement(item);
 	}
 
-	@Override
-	public void begin()
-	{
-	}
-
-	@Override
-	public void end()
-	{
-	}
 
 }

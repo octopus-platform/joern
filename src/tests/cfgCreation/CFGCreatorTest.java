@@ -1,7 +1,7 @@
 package tests.cfgCreation;
 
 import tests.parseTreeToAST.FunctionContentTestUtil;
-import astnodes.ASTNode;
+import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.CFGNode;
 

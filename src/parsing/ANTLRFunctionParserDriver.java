@@ -3,6 +3,7 @@ package parsing;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 import antlr.FunctionLexer;
 import antlr.FunctionParser;
@@ -10,12 +11,12 @@ import antlr.FunctionParser;
 public class ANTLRFunctionParserDriver extends ANTLRParserDriver
 {
 
-	public ANTLRFunctionParserDriver()
+	public ANTLRFunctionParserDriver(ParseTreeListener listener)
 	{
 		super();
-		setListener(new FunctionParseTreeListener(this));
+		setListener(listener);
 	}
-
+	
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
