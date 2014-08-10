@@ -2,10 +2,9 @@ package tools.index;
 
 import java.io.IOException;
 
-import neo4j.Neo4JIndexer;
-
 import org.apache.commons.cli.ParseException;
 
+import outputModules.neo4j.Neo4JIndexer;
 import fileWalker.SourceFileWalker;
 
 /**

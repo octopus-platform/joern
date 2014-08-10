@@ -2,8 +2,8 @@ package tools.index;
 
 import java.nio.file.Path;
 
+import outputModules.neo4j.importers.DirectoryTreeImporter;
 import fileWalker.SourceFileListener;
-import neo4j.importers.DirectoryTreeImporter;
 import parsing.ModuleParser;
 
 

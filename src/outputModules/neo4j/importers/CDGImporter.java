@@ -1,4 +1,4 @@
-package neo4j.importers;
+package outputModules.neo4j.importers;
 
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;

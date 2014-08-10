@@ -1,4 +1,4 @@
-package neo4j.importers;
+package outputModules.neo4j.importers;
 
 import java.util.Map;
 

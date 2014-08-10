@@ -1,14 +1,14 @@
-package neo4j;
+package outputModules.neo4j;
 
 
 import java.util.Map;
 
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.importers.DirectoryTreeImporter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import outputModules.neo4j.importers.DirectoryTreeImporter;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 

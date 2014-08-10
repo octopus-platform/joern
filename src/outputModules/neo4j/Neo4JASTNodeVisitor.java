@@ -1,14 +1,14 @@
-package neo4j;
+package outputModules.neo4j;
 
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.importers.ASTNodeImporter;
-import neo4j.importers.ClassDefImporter;
-import neo4j.importers.DeclStmtImporter;
-import neo4j.importers.FunctionImporter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import outputModules.neo4j.importers.ASTNodeImporter;
+import outputModules.neo4j.importers.ClassDefImporter;
+import outputModules.neo4j.importers.DeclStmtImporter;
+import outputModules.neo4j.importers.FunctionImporter;
 import databaseNodes.EdgeTypes;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
