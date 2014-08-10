@@ -575,6 +575,16 @@ public interface FunctionListener extends ParseTreeListener {
 	 */
 	void exitAssign_expr(@NotNull FunctionParser.Assign_exprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FunctionParser#new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNew_expression(@NotNull FunctionParser.New_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FunctionParser#new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNew_expression(@NotNull FunctionParser.New_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FunctionParser#expr_statement}.
 	 * @param ctx the parse tree
 	 */

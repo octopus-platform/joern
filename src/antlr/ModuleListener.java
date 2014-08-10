@@ -165,6 +165,16 @@ public interface ModuleListener extends ParseTreeListener {
 	 */
 	void exitNo_comma_or_semicolon(@NotNull ModuleParser.No_comma_or_semicolonContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ModuleParser#new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNew_expression(@NotNull ModuleParser.New_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ModuleParser#new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNew_expression(@NotNull ModuleParser.New_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ModuleParser#memberAccess}.
 	 * @param ctx the parse tree
 	 */
@@ -525,16 +535,6 @@ public interface ModuleListener extends ParseTreeListener {
 	 */
 	void exitPrimaryOnly(@NotNull ModuleParser.PrimaryOnlyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ModuleParser#sizeof_operand2}.
-	 * @param ctx the parse tree
-	 */
-	void enterSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx);
-	/**
-	 * Exit a parse tree produced by {@link ModuleParser#sizeof_operand2}.
-	 * @param ctx the parse tree
-	 */
-	void exitSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx);
-	/**
 	 * Enter a parse tree produced by {@link ModuleParser#inclusive_or_expression}.
 	 * @param ctx the parse tree
 	 */
@@ -544,6 +544,16 @@ public interface ModuleListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInclusive_or_expression(@NotNull ModuleParser.Inclusive_or_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ModuleParser#sizeof_operand2}.
+	 * @param ctx the parse tree
+	 */
+	void enterSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link ModuleParser#sizeof_operand2}.
+	 * @param ctx the parse tree
+	 */
+	void exitSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link ModuleParser#function_param_list}.
 	 * @param ctx the parse tree

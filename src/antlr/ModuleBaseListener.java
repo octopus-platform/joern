@@ -203,6 +203,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNew_expression(@NotNull ModuleParser.New_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNew_expression(@NotNull ModuleParser.New_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMemberAccess(@NotNull ModuleParser.MemberAccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -635,18 +647,6 @@ public class ModuleBaseListener implements ModuleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterInclusive_or_expression(@NotNull ModuleParser.Inclusive_or_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -654,6 +654,18 @@ public class ModuleBaseListener implements ModuleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInclusive_or_expression(@NotNull ModuleParser.Inclusive_or_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSizeof_operand2(@NotNull ModuleParser.Sizeof_operand2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

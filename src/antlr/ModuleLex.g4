@@ -27,6 +27,7 @@ AUTO: 'auto'; REGISTER: 'register';
 
 OPERATOR: 'operator';
 TEMPLATE: 'template';
+NEW: 'new';
 
 CLASS_KEY: ('struct' | 'class' | 'union' | 'enum');
 

@@ -24,14 +24,18 @@ cast_expression: ('(' cast_target ')' cast_expression)
 
 cast_target: type_name ptr_operator*;
 
-// currently does not implement new/delete
-//
+// currently does not implement delete
 
 unary_expression: inc_dec cast_expression
                 | unary_op_and_cast_expr
                 | sizeof_expression 
+                | new_expression
                 | postfix_expression
                 ;
+
+new_expression: '::'? NEW type_name '[' conditional_expression? ']' 
+              | '::'? NEW type_name '(' expr? ')'
+              ;
 
 unary_op_and_cast_expr: unary_operator cast_expression;
 

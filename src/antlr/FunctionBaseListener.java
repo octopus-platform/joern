@@ -695,6 +695,18 @@ public class FunctionBaseListener implements FunctionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNew_expression(@NotNull FunctionParser.New_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNew_expression(@NotNull FunctionParser.New_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpr_statement(@NotNull FunctionParser.Expr_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
