@@ -2,8 +2,6 @@ package neo4j.importers;
 
 import neo4j.EdgeTypes;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.nodes.FileDatabaseNode;
-import neo4j.nodes.FunctionDatabaseNode;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
@@ -13,6 +11,8 @@ import astnodes.functionDef.FunctionDef;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
+import databaseNodes.FileDatabaseNode;
+import databaseNodes.FunctionDatabaseNode;
 
 // Stays alive while importing a function into
 // the database

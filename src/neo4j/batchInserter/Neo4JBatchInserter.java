@@ -2,8 +2,6 @@ package neo4j.batchInserter;
 
 import java.util.Map;
 
-import neo4j.nodes.NodeKeys;
-
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.helpers.collection.MapUtil;
@@ -13,6 +11,8 @@ import org.neo4j.unsafe.batchinsert.BatchInserterIndex;
 import org.neo4j.unsafe.batchinsert.BatchInserterIndexProvider;
 import org.neo4j.unsafe.batchinsert.BatchInserters;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
+
+import databaseNodes.NodeKeys;
 
 public class Neo4JBatchInserter
 {

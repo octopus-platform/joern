@@ -5,12 +5,12 @@ import java.util.List;
 
 import misc.Pair;
 import neo4j.EdgeTypes;
-import neo4j.nodes.NodeKeys;
 import neo4j.readWriteDB.Neo4JDBInterface;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import databaseNodes.NodeKeys;
 import traversals.readWriteDB.Traversals;
 
 public class ReadWriteDBProvider extends DBProvider

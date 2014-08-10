@@ -1,6 +1,6 @@
 package neo4j;
 
-import neo4j.nodes.FileDatabaseNode;
+import databaseNodes.FileDatabaseNode;
 import tools.index.Indexer;
 import tools.index.IndexerState;
 

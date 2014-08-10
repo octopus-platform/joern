@@ -3,7 +3,7 @@ package cfg.nodes;
 import java.util.HashMap;
 import java.util.Map;
 
-import neo4j.nodes.NodeKeys;
+import databaseNodes.NodeKeys;
 
 public abstract class AbstractCFGNode implements CFGNode
 {

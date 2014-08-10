@@ -28,14 +28,11 @@ public abstract class Indexer extends SourceFileListener
 
 	protected abstract void shutdownDatabase();
 
-	// Configuration routines called before initialize
 
 	public void setOutputDir(String anOutputDir)
 	{
 		outputDir = anOutputDir;
 	}
-
-	// ////////////////
 
 	@Override
 	public void initialize()

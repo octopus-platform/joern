@@ -6,11 +6,11 @@ import java.util.Stack;
 
 import neo4j.batchInserter.Neo4JBatchInserter;
 import neo4j.importers.DirectoryTreeImporter;
-import neo4j.nodes.FileDatabaseNode;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.FileDatabaseNode;
 import tools.index.IndexerState;
 
 public class Neo4JDirectoryTreeImporter extends DirectoryTreeImporter

@@ -1,4 +1,4 @@
-package neo4j.nodes;
+package databaseNodes;
 
 public class NodeKeys
 {

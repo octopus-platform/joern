@@ -2,10 +2,9 @@ package neo4j;
 
 import java.util.Stack;
 
-import neo4j.nodes.FileDatabaseNode;
-
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import databaseNodes.FileDatabaseNode;
 import tools.index.IndexerASTWalker;
 import tools.index.IndexerState;
 import astnodes.ASTNode;

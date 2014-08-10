@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import misc.Pair;
-import neo4j.nodes.NodeKeys;
 
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
+import databaseNodes.NodeKeys;
 import traversals.batchInserter.AST;
 import traversals.batchInserter.Elementary;
 

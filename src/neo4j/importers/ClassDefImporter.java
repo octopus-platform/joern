@@ -2,12 +2,12 @@ package neo4j.importers;
 
 import neo4j.EdgeTypes;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.nodes.ClassDefDatabaseNode;
-import neo4j.nodes.FileDatabaseNode;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.ClassDefDatabaseNode;
+import databaseNodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 

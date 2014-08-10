@@ -9,12 +9,12 @@ import misc.MultiHashMap;
 import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.nodes.FunctionDatabaseNode;
-import neo4j.nodes.NodeKeys;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.FunctionDatabaseNode;
+import databaseNodes.NodeKeys;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
 

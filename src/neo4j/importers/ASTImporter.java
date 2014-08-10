@@ -5,13 +5,13 @@ import java.util.Map;
 import neo4j.EdgeTypes;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import neo4j.nodes.ASTDatabaseNode;
-import neo4j.nodes.FunctionDatabaseNode;
-import neo4j.nodes.NodeKeys;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.ASTDatabaseNode;
+import databaseNodes.FunctionDatabaseNode;
+import databaseNodes.NodeKeys;
 import astnodes.ASTNode;
 
 public class ASTImporter

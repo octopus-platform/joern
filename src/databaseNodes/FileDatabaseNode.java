@@ -1,4 +1,4 @@
-package neo4j.nodes;
+package databaseNodes;
 
 import java.nio.file.Path;
 import java.util.HashMap;

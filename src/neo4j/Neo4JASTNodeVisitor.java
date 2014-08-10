@@ -7,11 +7,11 @@ import neo4j.importers.ASTNodeImporter;
 import neo4j.importers.ClassDefImporter;
 import neo4j.importers.DeclStmtImporter;
 import neo4j.importers.FunctionImporter;
-import neo4j.nodes.FileDatabaseNode;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import databaseNodes.FileDatabaseNode;
 import astnodes.ASTNode;
 import astnodes.declarations.ClassDefStatement;
 import astnodes.functionDef.FunctionDef;

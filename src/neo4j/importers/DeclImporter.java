@@ -1,6 +1,6 @@
 package neo4j.importers;
 
-import neo4j.nodes.DeclDatabaseNode;
+import databaseNodes.DeclDatabaseNode;
 import astnodes.ASTNode;
 
 public class DeclImporter extends ASTNodeImporter

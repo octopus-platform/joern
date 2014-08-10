@@ -2,7 +2,7 @@ package cfg.nodes;
 
 import java.util.Map;
 
-import neo4j.nodes.NodeKeys;
+import databaseNodes.NodeKeys;
 
 public class CFGErrorNode extends AbstractCFGNode
 {
