@@ -30,6 +30,8 @@ public class FunctionImporter extends ASTNodeImporter
 		try
 		{
 			FunctionDatabaseNode function = new FunctionDatabaseNode();
+			// this actually constructs all other representations of
+			// the function.
 			function.initialize(node);
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
