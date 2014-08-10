@@ -8,18 +8,17 @@ import tools.index.IndexerState;
 
 public abstract class DirectoryTreeImporter
 {
+	protected IndexerState state;
+	protected Stack<FileDatabaseNode> directoryStack = new Stack<FileDatabaseNode>();
+	
 	protected abstract void linkWithParentDirectory(FileDatabaseNode node);
 	protected abstract void insertNode(FileDatabaseNode node);
 	
 	
-	protected IndexerState state;
-
 	public void setState(IndexerState aState)
 	{
 		state = aState;
 	}
-
-	protected Stack<FileDatabaseNode> directoryStack = new Stack<FileDatabaseNode>();
 
 	public void enterDir(Path dir)
 	{
