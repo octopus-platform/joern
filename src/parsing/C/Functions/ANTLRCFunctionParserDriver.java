@@ -1,21 +1,16 @@
-package parsing;
+package parsing.C.Functions;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
 
-import antlr.FunctionLexer;
-import antlr.FunctionParser;
+import parsing.ANTLRParserDriver;
+import parsing.TokenSubStream;
+import antlr.C.FunctionLexer;
+import antlr.C.FunctionParser;
 
-public class ANTLRFunctionParserDriver extends ANTLRParserDriver
+public class ANTLRCFunctionParserDriver extends ANTLRParserDriver
 {
-
-	public ANTLRFunctionParserDriver(ParseTreeListener listener)
-	{
-		super();
-		setListener(listener);
-	}
 	
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)

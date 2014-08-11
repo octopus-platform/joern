@@ -1,10 +1,10 @@
-package parsing;
+package parsing.C.Shared;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import antlr.FunctionParser;
-import antlr.ModuleParser;
+import antlr.C.FunctionParser;
+import antlr.C.ModuleParser;
 
 public class InitDeclContextWrapper
 {

@@ -1,23 +1,22 @@
-package parsing.cModules;
+package parsing.C.Modules;
 
 import java.util.Iterator;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import parsing.ANTLRModuleParserDriver;
 import parsing.ANTLRParserDriver;
 import parsing.CompoundItemAssembler;
-import parsing.ModuleFunctionParserInterface;
-import parsing.cModules.builder.FunctionDefBuilder;
-import parsing.cShared.builders.ClassDefBuilder;
-import parsing.cShared.builders.IdentifierDeclBuilder;
-import antlr.ModuleBaseListener;
-import antlr.ModuleParser;
-import antlr.ModuleParser.Class_defContext;
-import antlr.ModuleParser.DeclByClassContext;
-import antlr.ModuleParser.Init_declarator_listContext;
-import antlr.ModuleParser.Type_nameContext;
+import parsing.C.ModuleFunctionParserInterface;
+import parsing.C.Modules.builder.FunctionDefBuilder;
+import parsing.C.Shared.builders.ClassDefBuilder;
+import parsing.C.Shared.builders.IdentifierDeclBuilder;
+import antlr.C.ModuleBaseListener;
+import antlr.C.ModuleParser;
+import antlr.C.ModuleParser.Class_defContext;
+import antlr.C.ModuleParser.DeclByClassContext;
+import antlr.C.ModuleParser.Init_declarator_listContext;
+import antlr.C.ModuleParser.Type_nameContext;
 import ast.declarations.IdentifierDecl;
 import ast.statements.CompoundStatement;
 import ast.statements.IdentifierDeclStatement;
@@ -177,7 +176,7 @@ public class CModuleParserTreeListener extends ModuleBaseListener
 	private CompoundStatement parseClassContent(
 			ModuleParser.DeclByClassContext ctx)
 	{
-		ANTLRModuleParserDriver shallowParser = createNewShallowParser();
+		ANTLRCModuleParserDriver shallowParser = createNewShallowParser();
 		CompoundItemAssembler generator = new CompoundItemAssembler();
 		shallowParser.addObserver(generator);
 
@@ -198,9 +197,9 @@ public class CModuleParserTreeListener extends ModuleBaseListener
 		p.stream.restrict(startIndex + 1, stopIndex);
 	}
 
-	private ANTLRModuleParserDriver createNewShallowParser()
+	private ANTLRCModuleParserDriver createNewShallowParser()
 	{
-		ANTLRModuleParserDriver shallowParser = new ANTLRModuleParserDriver();
+		ANTLRCModuleParserDriver shallowParser = new ANTLRCModuleParserDriver();
 		shallowParser.setStack(p.builderStack);
 		return shallowParser;
 	}

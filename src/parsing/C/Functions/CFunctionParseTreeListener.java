@@ -1,14 +1,14 @@
-package parsing.cFunctions;
+package parsing.C.Functions;
 
 import org.antlr.v4.runtime.misc.NotNull;
 
 import parsing.ANTLRParserDriver;
-import parsing.cFunctions.builder.FunctionContentBuilder;
-import antlr.FunctionBaseListener;
-import antlr.FunctionParser;
+import parsing.C.Functions.builder.FunctionContentBuilder;
+import antlr.C.FunctionBaseListener;
+import antlr.C.FunctionParser;
 
 /**
- * This is where we hooks are registered for different types
+ * This is where hooks are registered for different types
  * of parse tree nodes.
  * */
 

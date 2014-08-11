@@ -5,17 +5,17 @@ import static org.junit.Assert.assertTrue;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import parsing.ANTLRFunctionParserDriver;
 import parsing.FunctionParser;
+import parsing.C.Functions.ANTLRCFunctionParserDriver;
 
-public class ForLoopTests
+public class ForLoopTests extends FunctionParserTestBase
 {
 
 	@Test
 	public void testEmptyFor()
 	{
 		String input = "for(; ;){}";
-		FunctionParser functionParser = new FunctionParser();
+		FunctionParser functionParser = createFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
@@ -26,7 +26,7 @@ public class ForLoopTests
 	public void testDeclInFor()
 	{
 		String input = "for(int k = 0; k < 10; k++ ){}";
-		FunctionParser functionParser = new FunctionParser();
+		FunctionParser functionParser = createFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
@@ -38,7 +38,7 @@ public class ForLoopTests
 	public void testComplexFor()
 	{
 		String input = "for(int k = 0; k < 10; ( k += ((c = text[k]) >= sBMHCharSetSize) ? patlen : skip[c]) ){}";
-		FunctionParser functionParser = new FunctionParser();
+		FunctionParser functionParser = createFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);

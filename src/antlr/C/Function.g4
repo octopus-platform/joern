@@ -2,7 +2,7 @@ grammar Function;
 import ModuleLex, Common, Expressions, FineSimpleDecl;
 
 @header{
-	package antlr;
+	package antlr.C;
 }
 
 statements: (pre_opener

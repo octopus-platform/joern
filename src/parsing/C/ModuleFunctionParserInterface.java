@@ -1,11 +1,14 @@
-package parsing;
+package parsing.C;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;
 
-import antlr.ModuleParser;
-import antlr.ModuleParser.Compound_statementContext;
-import antlr.ModuleParser.Function_defContext;
+import parsing.FunctionParser;
+import parsing.C.Functions.ANTLRCFunctionParserDriver;
+import parsing.C.Functions.CFunctionParseTreeListener;
+import antlr.C.ModuleParser;
+import antlr.C.ModuleParser.Compound_statementContext;
+import antlr.C.ModuleParser.Function_defContext;
 import ast.statements.CompoundStatement;
 
 public class ModuleFunctionParserInterface
@@ -20,7 +23,13 @@ public class ModuleFunctionParserInterface
 	{
 		String text = getCompoundStmtAsString(ctx);
 
-		FunctionParser parser = new FunctionParser();
+		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
+		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
+		driver.setListener(listener);
+		listener.setDriver(driver);
+		
+		
+		FunctionParser parser = new FunctionParser(driver);
 
 		try
 		{

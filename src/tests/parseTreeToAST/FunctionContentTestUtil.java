@@ -3,10 +3,11 @@ package tests.parseTreeToAST;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import parsing.ANTLRFunctionParserDriver;
 import parsing.FunctionParser;
 import parsing.TokenSubStream;
-import antlr.FunctionLexer;
+import parsing.C.Functions.ANTLRCFunctionParserDriver;
+import parsing.C.Functions.CFunctionParseTreeListener;
+import antlr.C.FunctionLexer;
 import ast.ASTNode;
 
 public class FunctionContentTestUtil
@@ -14,7 +15,12 @@ public class FunctionContentTestUtil
 
 	public static ASTNode parseAndWalk(String input)
 	{
-		FunctionParser parser = new FunctionParser();
+		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
+		FunctionParser parser = new FunctionParser(driver);
+		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
+		driver.setListener(listener);
+		listener.setDriver(driver);
+		
 		TokenSubStream tokens = tokenStreamFromString(input);
 		parser.parseAndWalkTokenStream(tokens);
 		return parser.getParser().builderStack.peek().getItem();
@@ -22,7 +28,12 @@ public class FunctionContentTestUtil
 
 	static ParseTree parse(String input)
 	{
-		FunctionParser parser = new FunctionParser();
+		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
+		FunctionParser parser = new FunctionParser(driver);
+		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
+		driver.setListener(listener);
+		listener.setDriver(driver);
+		
 		return parser.parseString(input);
 	}
 

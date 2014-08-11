@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ModuleParser;
+import parsing.C.Modules.ANTLRCModuleParserDriver;
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
 import ast.functionDef.FunctionDef;
@@ -63,7 +64,8 @@ public class CFGCreator
 
 	public CFG getCFGForCode(String code)
 	{
-		ModuleParser parser = new ModuleParser();
+		ANTLRCModuleParserDriver driver = new ANTLRCModuleParserDriver();
+		ModuleParser parser = new ModuleParser(driver);
 		Walker walker = new Walker();
 		parser.addObserver(walker);
 		parser.parseString(code);

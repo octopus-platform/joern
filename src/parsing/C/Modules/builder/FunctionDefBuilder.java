@@ -1,15 +1,15 @@
-package parsing.cModules.builder;
+package parsing.C.Modules.builder;
 
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ParseTreeUtils;
-import parsing.cFunctions.builder.ParameterListBuilder;
-import antlr.ModuleParser.Function_nameContext;
-import antlr.ModuleParser.Function_param_listContext;
-import antlr.ModuleParser.Parameter_declContext;
-import antlr.ModuleParser.Return_typeContext;
+import parsing.C.Functions.builder.ParameterListBuilder;
+import antlr.C.ModuleParser.Function_nameContext;
+import antlr.C.ModuleParser.Function_param_listContext;
+import antlr.C.ModuleParser.Parameter_declContext;
+import antlr.C.ModuleParser.Return_typeContext;
 import ast.ASTNodeBuilder;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;

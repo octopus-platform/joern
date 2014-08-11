@@ -1,8 +1,8 @@
-package parsing.cShared.builders;
+package parsing.C.Shared.builders;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.ModuleParser.Class_nameContext;
+import antlr.C.ModuleParser.Class_nameContext;
 import ast.ASTNodeBuilder;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
@@ -27,7 +27,7 @@ public class ClassDefBuilder extends ASTNodeBuilder
 		thisItem.name.initializeFromContext(ctx);
 	}
 
-	public void setName(antlr.FunctionParser.Class_nameContext ctx)
+	public void setName(antlr.C.FunctionParser.Class_nameContext ctx)
 	{
 		thisItem.name = new Identifier();
 		thisItem.name.initializeFromContext(ctx);

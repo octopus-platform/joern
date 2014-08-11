@@ -1,6 +1,6 @@
-// Generated from src/antlr/Module.g4 by ANTLR 4.2.1-SNAPSHOT
+// Generated from src/antlr/C/Module.g4 by ANTLR 4.2.1-SNAPSHOT
 
-	package antlr;
+	package antlr.C;
 
 
   import java.util.Stack;

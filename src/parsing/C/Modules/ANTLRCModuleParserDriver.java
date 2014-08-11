@@ -1,17 +1,18 @@
-package parsing;
+package parsing.C.Modules;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import parsing.cModules.CModuleParserTreeListener;
-import antlr.ModuleLexer;
-import antlr.ModuleParser;
+import parsing.ANTLRParserDriver;
+import parsing.TokenSubStream;
+import antlr.C.ModuleLexer;
+import antlr.C.ModuleParser;
 
-public class ANTLRModuleParserDriver extends ANTLRParserDriver
+public class ANTLRCModuleParserDriver extends ANTLRParserDriver
 {
 
-	public ANTLRModuleParserDriver()
+	public ANTLRCModuleParserDriver()
 	{
 		super();
 		setListener(new CModuleParserTreeListener(this));

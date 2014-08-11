@@ -2,9 +2,9 @@ package ast.functionDef;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.ModuleParser.Parameter_declContext;
-import antlr.ModuleParser.Parameter_idContext;
-import antlr.ModuleParser.Parameter_nameContext;
+import antlr.C.ModuleParser.Parameter_declContext;
+import antlr.C.ModuleParser.Parameter_idContext;
+import antlr.C.ModuleParser.Parameter_nameContext;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 

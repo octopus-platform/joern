@@ -1,4 +1,4 @@
-package parsing.cShared.builders;
+package parsing.C.Shared.builders;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,8 +7,8 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import parsing.InitDeclContextWrapper;
 import parsing.ParseTreeUtils;
+import parsing.C.Shared.InitDeclContextWrapper;
 import ast.ASTNodeBuilder;
 import ast.declarations.IdentifierDecl;
 import ast.declarations.IdentifierDeclType;

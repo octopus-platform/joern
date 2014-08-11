@@ -1,12 +1,12 @@
-package parsing.cFunctions.builder;
+package parsing.C.Functions.builder;
 
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ParseTreeUtils;
-import antlr.ModuleParser.Parameter_declContext;
-import antlr.ModuleParser.Parameter_idContext;
+import antlr.C.ModuleParser.Parameter_declContext;
+import antlr.C.ModuleParser.Parameter_idContext;
 import ast.ASTNodeBuilder;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
