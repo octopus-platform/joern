@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import parsing.FunctionParser;
 import parsing.TokenSubStream;
 import parsing.C.Functions.ANTLRCFunctionParserDriver;
-import parsing.C.Functions.CFunctionParseTreeListener;
+
 import antlr.C.FunctionLexer;
 import ast.ASTNode;
 
@@ -17,9 +17,6 @@ public class FunctionContentTestUtil
 	{
 		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
 		FunctionParser parser = new FunctionParser(driver);
-		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
-		driver.setListener(listener);
-		listener.setDriver(driver);
 		
 		TokenSubStream tokens = tokenStreamFromString(input);
 		parser.parseAndWalkTokenStream(tokens);
@@ -30,9 +27,6 @@ public class FunctionContentTestUtil
 	{
 		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
 		FunctionParser parser = new FunctionParser(driver);
-		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
-		driver.setListener(listener);
-		listener.setDriver(driver);
 		
 		return parser.parseString(input);
 	}

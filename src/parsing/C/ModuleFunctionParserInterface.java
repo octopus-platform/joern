@@ -24,11 +24,6 @@ public class ModuleFunctionParserInterface
 		String text = getCompoundStmtAsString(ctx);
 
 		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
-		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
-		driver.setListener(listener);
-		listener.setDriver(driver);
-		
-		
 		FunctionParser parser = new FunctionParser(driver);
 
 		try

@@ -9,9 +9,6 @@ public class FunctionParserTestBase
 	protected FunctionParser createFunctionParser()
 	{
 		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
-		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
-		driver.setListener(listener);
-		listener.setDriver(driver);
 		
 		FunctionParser functionParser = new FunctionParser(driver);
 		return functionParser;

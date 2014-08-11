@@ -12,6 +12,14 @@ import antlr.C.FunctionParser;
 public class ANTLRCFunctionParserDriver extends ANTLRParserDriver
 {
 	
+	public ANTLRCFunctionParserDriver()
+	{
+		super();
+		CFunctionParseTreeListener listener = new CFunctionParseTreeListener();
+		setListener(listener);
+		listener.setDriver(this);
+	}
+	
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
