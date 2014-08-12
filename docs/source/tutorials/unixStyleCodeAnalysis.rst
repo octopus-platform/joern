@@ -41,7 +41,17 @@ as follows:
 	cd ..
 	./joern tutorial/vlc-2.1.4/
 
-Next, please start the database server in a second terminal:
+Next, you need to point Neo4J to the generated data in ``.joernIndex``. 
+You can do this by editing the configuration file 
+``org.neo4j.server.database.location`` in the directory ``$NEO4J/conf``
+as follows 
+
+.. code-block:: none
+
+	# neo4j-server.properties
+	org.neo4j.server.database.location=$JOERN/.joernIndex/
+
+Finally, please start the database server in a second terminal:
 
 .. code-block:: none
 
