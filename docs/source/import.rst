@@ -77,14 +77,14 @@ Neo4J server configuration file in
 	# neo4j-server.properties
 	org.neo4j.server.database.location=/$path_to_index/.joernIndex/
 
-For example, if your ``.joern-index`` is located in
+For example, if your ``.joernIndex`` is located in
 ``/home/user/joern/.joernIndex``, your configuration file should
 contain the line:
 
 .. code-block:: none
 
 	# neo4j-server.properties
-	org.neo4j.server.database.location=/$path_to_index/.joernIndex/
+	org.neo4j.server.database.location=/home/user/joern/.joernIndex/
 
 Please also make sure that ``org.neo4j.server.database.location`` is
 set only once.
@@ -95,6 +95,15 @@ You can now start the database server by issuing the following command:
 	
 	$Neo4jDir/bin/neo4j console
 	
+If your installation of Neo4J is more recent than the libraries bundled
+with joern, the database might fail to start and request an upgrade of
+the stored data. This upgrade can be performed on the fly by enabling 
+``allow_store_upgrade`` in ``neo4j.properties`` as follows:
+
+.. code-block:: none
+
+	# neo4j.properties
+	allow_store_upgrade=true
 
 The Neo4J server offers a web interface and a web-based API (REST API)
 to explore and query the database. Once your database server has been
