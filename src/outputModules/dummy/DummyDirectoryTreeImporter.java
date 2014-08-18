@@ -1,7 +1,7 @@
 package outputModules.dummy;
 
-import databaseNodes.FileDatabaseNode;
 import outputModules.neo4j.importers.DirectoryTreeImporter;
+import databaseNodes.FileDatabaseNode;
 
 public class DummyDirectoryTreeImporter extends DirectoryTreeImporter
 {

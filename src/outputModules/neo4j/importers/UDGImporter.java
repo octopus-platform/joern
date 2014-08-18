@@ -12,11 +12,11 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import udg.useDefGraph.UseDefGraph;
+import udg.useDefGraph.UseOrDefRecord;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
-import udg.useDefGraph.UseDefGraph;
-import udg.useDefGraph.UseOrDefRecord;
 
 public class UDGImporter
 {

@@ -4,11 +4,11 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import databaseNodes.FileDatabaseNode;
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
 import ast.walking.ASTNodeVisitor;
 import ast.walking.ASTWalker;
+import databaseNodes.FileDatabaseNode;
 
 public abstract class IndexerASTWalker extends ASTWalker
 {

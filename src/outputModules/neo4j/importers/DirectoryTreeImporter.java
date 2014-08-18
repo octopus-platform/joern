@@ -3,8 +3,8 @@ package outputModules.neo4j.importers;
 import java.nio.file.Path;
 import java.util.Stack;
 
-import databaseNodes.FileDatabaseNode;
 import tools.index.IndexerState;
+import databaseNodes.FileDatabaseNode;
 
 public abstract class DirectoryTreeImporter
 {

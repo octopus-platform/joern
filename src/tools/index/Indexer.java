@@ -3,9 +3,9 @@ package tools.index;
 import java.nio.file.Path;
 
 import outputModules.neo4j.importers.DirectoryTreeImporter;
-import fileWalker.SourceFileListener;
 import parsing.ModuleParser;
 import parsing.C.Modules.ANTLRCModuleParserDriver;
+import fileWalker.SourceFileListener;
 
 
 public abstract class Indexer extends SourceFileListener

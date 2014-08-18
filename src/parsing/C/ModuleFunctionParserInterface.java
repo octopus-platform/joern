@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.misc.Interval;
 
 import parsing.FunctionParser;
 import parsing.C.Functions.ANTLRCFunctionParserDriver;
-import parsing.C.Functions.CFunctionParseTreeListener;
 import antlr.C.ModuleParser;
 import antlr.C.ModuleParser.Compound_statementContext;
 import antlr.C.ModuleParser.Function_defContext;

@@ -5,11 +5,11 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import ast.ASTNode;
+import ast.declarations.ClassDefStatement;
 import databaseNodes.ClassDefDatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
-import ast.ASTNode;
-import ast.declarations.ClassDefStatement;
 
 public class ClassDefImporter extends ASTNodeImporter
 {

@@ -8,11 +8,11 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import ast.ASTNode;
 import databaseNodes.ASTDatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
-import ast.ASTNode;
 
 public class ASTImporter
 {

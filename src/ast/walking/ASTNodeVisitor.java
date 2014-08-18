@@ -2,7 +2,6 @@ package ast.walking;
 
 import java.util.Stack;
 
-import databaseNodes.FileDatabaseNode;
 import ast.ASTNode;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Argument;
@@ -28,6 +27,7 @@ import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
 import ast.statements.WhileStatement;
+import databaseNodes.FileDatabaseNode;
 
 public class ASTNodeVisitor
 {

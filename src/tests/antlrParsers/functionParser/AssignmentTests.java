@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import parsing.FunctionParser;
-import parsing.C.Functions.ANTLRCFunctionParserDriver;
 
 public class AssignmentTests extends FunctionParserTestBase
 {

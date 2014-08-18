@@ -8,10 +8,10 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import databaseNodes.DeclStmtDatabaseNode;
-import databaseNodes.EdgeTypes;
 import ast.ASTNode;
 import ast.statements.IdentifierDeclStatement;
+import databaseNodes.DeclStmtDatabaseNode;
+import databaseNodes.EdgeTypes;
 
 public class DeclStmtImporter extends ASTNodeImporter
 {

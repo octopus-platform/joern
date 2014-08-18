@@ -1,7 +1,7 @@
 package cfg;
 
-import cfg.C.CCFGFactory;
 import ast.functionDef.FunctionDef;
+import cfg.C.CCFGFactory;
 
 public class ASTToCFGConverter
 {

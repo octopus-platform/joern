@@ -1,6 +1,5 @@
 package cfg.C;
 
-import cfg.CFG;
 import ast.ASTNode;
 import ast.functionDef.ParameterList;
 import ast.statements.BreakStatement;
@@ -15,6 +14,7 @@ import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
 import ast.statements.WhileStatement;
 import ast.walking.ASTNodeVisitor;
+import cfg.CFG;
 
 
 class StructuredFlowVisitor extends ASTNodeVisitor

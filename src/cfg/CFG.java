@@ -1,7 +1,6 @@
 package cfg;
 
 import graphutils.AbstractTwoWayGraph;
-
 import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGErrorNode;
 import cfg.nodes.CFGExitNode;

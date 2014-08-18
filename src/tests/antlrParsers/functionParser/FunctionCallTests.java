@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
 import parsing.FunctionParser;
-import parsing.FunctionParser;
 
 public class FunctionCallTests extends FunctionParserTestBase
 {

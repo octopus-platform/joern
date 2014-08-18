@@ -2,13 +2,6 @@ package cfg.C;
 
 import java.util.Map.Entry;
 
-import cfg.CFG;
-import cfg.CFGEdge;
-import cfg.CFGFactory;
-import cfg.nodes.ASTNodeContainer;
-import cfg.nodes.CFGErrorNode;
-import cfg.nodes.CFGNode;
-import cfg.nodes.InfiniteForNode;
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
@@ -24,6 +17,13 @@ import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
 import ast.statements.WhileStatement;
+import cfg.CFG;
+import cfg.CFGEdge;
+import cfg.CFGFactory;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGErrorNode;
+import cfg.nodes.CFGNode;
+import cfg.nodes.InfiniteForNode;
 
 public class CCFGFactory extends CFGFactory
 {
