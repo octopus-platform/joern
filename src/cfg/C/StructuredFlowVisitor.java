@@ -1,5 +1,6 @@
-package cfg;
+package cfg.C;
 
+import cfg.CFG;
 import ast.ASTNode;
 import ast.functionDef.ParameterList;
 import ast.statements.BreakStatement;
@@ -28,66 +29,66 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 
 	public void visit(ParameterList paramList)
 	{
-		returnCFG = CFG.newInstance(paramList);
+		returnCFG = CCFGFactory.newInstance(paramList);
 	}
 
 	public void visit(CompoundStatement content)
 	{
-		returnCFG = CFG.newInstance(content);
+		returnCFG = CCFGFactory.newInstance(content);
 	}
 
 	public void visit(ASTNode expression)
 	{
-		returnCFG = CFG.newInstance(expression);
+		returnCFG = CCFGFactory.newInstance(expression);
 	}
 
 	public void visit(ReturnStatement expression)
 	{
-		returnCFG = CFG.newInstance(expression);
+		returnCFG = CCFGFactory.newInstance(expression);
 	}
 
 	public void visit(GotoStatement expression)
 	{
-		returnCFG = CFG.newInstance(expression);
+		returnCFG = CCFGFactory.newInstance(expression);
 	}
 
 	public void visit(IfStatement node)
 	{
-		returnCFG = CFG.newInstance(node);
+		returnCFG = CCFGFactory.newInstance(node);
 	}
 
 	public void visit(ForStatement node)
 	{
-		returnCFG = CFG.newInstance(node);
+		returnCFG = CCFGFactory.newInstance(node);
 	}
 
 	public void visit(WhileStatement node)
 	{
-		returnCFG = CFG.newInstance(node);
+		returnCFG = CCFGFactory.newInstance(node);
 	}
 
 	public void visit(DoStatement node)
 	{
-		returnCFG = CFG.newInstance(node);
+		returnCFG = CCFGFactory.newInstance(node);
 	}
 
 	public void visit(SwitchStatement node)
 	{
-		returnCFG = CFG.newInstance(node);
+		returnCFG = CCFGFactory.newInstance(node);
 	}
 
 	public void visit(Label node)
 	{
-		returnCFG = CFG.newInstance(node);
+		returnCFG = CCFGFactory.newInstance(node);
 	}
 
 	public void visit(ContinueStatement expression)
 	{
-		returnCFG = CFG.newInstance(expression);
+		returnCFG = CCFGFactory.newInstance(expression);
 	}
 
 	public void visit(BreakStatement expression)
 	{
-		returnCFG = CFG.newInstance(expression);
+		returnCFG = CCFGFactory.newInstance(expression);
 	}
 }

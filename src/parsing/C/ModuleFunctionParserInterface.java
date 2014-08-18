@@ -35,7 +35,7 @@ public class ModuleFunctionParserInterface
 			System.err.println("Error parsing function "
 					+ ctx.function_name().getText() + ". skipping.");
 
-			// ex.printStackTrace();
+			ex.printStackTrace();
 		}
 		return parser.getResult();
 	}
