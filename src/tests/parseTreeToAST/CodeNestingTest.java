@@ -4,19 +4,19 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import antlr.FunctionParser.StatementsContext;
-import astnodes.declarations.ClassDefStatement;
-import astnodes.declarations.IdentifierDecl;
-import astnodes.expressions.Argument;
-import astnodes.expressions.ArgumentList;
-import astnodes.expressions.AssignmentExpr;
-import astnodes.expressions.CallExpression;
-import astnodes.statements.BlockStarter;
-import astnodes.statements.CompoundStatement;
-import astnodes.statements.ExpressionStatement;
-import astnodes.statements.ForStatement;
-import astnodes.statements.IdentifierDeclStatement;
-import astnodes.statements.IfStatement;
+import antlr.C.FunctionParser.StatementsContext;
+import ast.declarations.ClassDefStatement;
+import ast.declarations.IdentifierDecl;
+import ast.expressions.Argument;
+import ast.expressions.ArgumentList;
+import ast.expressions.AssignmentExpr;
+import ast.expressions.CallExpression;
+import ast.statements.BlockStarter;
+import ast.statements.CompoundStatement;
+import ast.statements.ExpressionStatement;
+import ast.statements.ForStatement;
+import ast.statements.IdentifierDeclStatement;
+import ast.statements.IfStatement;
 
 public class CodeNestingTest
 {

@@ -5,12 +5,14 @@ import java.nio.file.Path;
 import outputModules.neo4j.importers.DirectoryTreeImporter;
 import fileWalker.SourceFileListener;
 import parsing.ModuleParser;
+import parsing.C.Modules.ANTLRCModuleParserDriver;
 
 
 public abstract class Indexer extends SourceFileListener
 {
 
-	ModuleParser parser = new ModuleParser();
+	ANTLRCModuleParserDriver driver = new ANTLRCModuleParserDriver();
+	ModuleParser parser = new ModuleParser(driver);
 
 	protected IndexerState state;
 	protected IndexerASTWalker astWalker;

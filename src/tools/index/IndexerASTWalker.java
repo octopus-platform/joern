@@ -5,10 +5,10 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import databaseNodes.FileDatabaseNode;
-import astnodes.ASTNode;
-import astnodes.ASTNodeBuilder;
-import astwalking.ASTNodeVisitor;
-import astwalking.ASTWalker;
+import ast.ASTNode;
+import ast.ASTNodeBuilder;
+import ast.walking.ASTNodeVisitor;
+import ast.walking.ASTWalker;
 
 public abstract class IndexerASTWalker extends ASTWalker
 {
@@ -37,16 +37,6 @@ public abstract class IndexerASTWalker extends ASTWalker
 	public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
 	{
 		node.accept(astVisitor);
-	}
-
-	@Override
-	public void begin()
-	{
-	}
-
-	@Override
-	public void end()
-	{
 	}
 	
 }

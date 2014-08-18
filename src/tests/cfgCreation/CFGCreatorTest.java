@@ -1,8 +1,9 @@
 package tests.cfgCreation;
 
 import tests.parseTreeToAST.FunctionContentTestUtil;
-import astnodes.ASTNode;
+import ast.ASTNode;
 import cfg.CFG;
+import cfg.C.CCFGFactory;
 import cfg.nodes.CFGNode;
 
 public class CFGCreatorTest
@@ -14,7 +15,7 @@ public class CFGCreatorTest
 
 	protected CFG getCFGForCode(String input)
 	{
-		return CFG.convert(getASTForCode(input));
+		return CCFGFactory.convert(getASTForCode(input));
 	}
 
 	protected CFGNode getNodeByCode(CFG cfg, String code)

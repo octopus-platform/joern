@@ -4,11 +4,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import astnodes.expressions.Expression;
-import astnodes.statements.BlockStarter;
-import astnodes.statements.CompoundStatement;
-import astnodes.statements.ElseStatement;
-import astnodes.statements.IfStatement;
+import ast.expressions.Expression;
+import ast.statements.BlockStarter;
+import ast.statements.CompoundStatement;
+import ast.statements.ElseStatement;
+import ast.statements.IfStatement;
 
 public class IfNestingTests
 {

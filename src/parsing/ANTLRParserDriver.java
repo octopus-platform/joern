@@ -17,10 +17,10 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import astnodes.ASTNode;
-import astnodes.ASTNodeBuilder;
-import astnodes.statements.CompoundStatement;
-import astwalking.ASTWalkerEvent;
+import ast.ASTNode;
+import ast.ASTNodeBuilder;
+import ast.statements.CompoundStatement;
+import ast.walking.ASTWalkerEvent;
 
 abstract public class ANTLRParserDriver extends Observable
 {

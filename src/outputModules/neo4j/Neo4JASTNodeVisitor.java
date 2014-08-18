@@ -10,11 +10,11 @@ import outputModules.neo4j.importers.ClassDefImporter;
 import outputModules.neo4j.importers.DeclStmtImporter;
 import outputModules.neo4j.importers.FunctionImporter;
 import databaseNodes.EdgeTypes;
-import astnodes.ASTNode;
-import astnodes.declarations.ClassDefStatement;
-import astnodes.functionDef.FunctionDef;
-import astnodes.statements.IdentifierDeclStatement;
-import astwalking.ASTNodeVisitor;
+import ast.ASTNode;
+import ast.declarations.ClassDefStatement;
+import ast.functionDef.FunctionDef;
+import ast.statements.IdentifierDeclStatement;
+import ast.walking.ASTNodeVisitor;
 
 // Stays alive during the lifetime of the program
 

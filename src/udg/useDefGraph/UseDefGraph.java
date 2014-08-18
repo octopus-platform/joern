@@ -3,7 +3,7 @@ package udg.useDefGraph;
 import java.util.List;
 
 import misc.MultiHashMap;
-import astnodes.ASTNode;
+import ast.ASTNode;
 
 public class UseDefGraph
 {

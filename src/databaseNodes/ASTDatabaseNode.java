@@ -3,8 +3,8 @@ package databaseNodes;
 import java.util.HashMap;
 import java.util.Map;
 
-import astnodes.ASTNode;
-import astnodes.expressions.BinaryExpression;
+import ast.ASTNode;
+import ast.expressions.BinaryExpression;
 
 public class ASTDatabaseNode extends DatabaseNode
 {

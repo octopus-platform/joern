@@ -4,9 +4,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import neo4j.traversals.readWriteDB.Traversals;
+
 import org.neo4j.graphdb.Node;
 
-import traversals.readWriteDB.Traversals;
 import ddg.DefUseCFG.DefUseCFG;
 import ddg.DefUseCFG.DefUseCFGFactory;
 import ddg.DefUseCFG.ReadWriteDbFactory;

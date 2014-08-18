@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import neo4j.readWriteDB.Neo4JDBInterface;
+import neo4j.traversals.readWriteDB.Traversals;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
-import traversals.readWriteDB.Traversals;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.ReadWriteDbASTProvider;
 import udg.useDefGraph.UseOrDef;

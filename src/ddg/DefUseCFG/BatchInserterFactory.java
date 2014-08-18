@@ -2,9 +2,9 @@ package ddg.DefUseCFG;
 
 import java.util.List;
 
-import org.neo4j.graphdb.index.IndexHits;
+import neo4j.traversals.batchInserter.CFG;
 
-import traversals.batchInserter.CFG;
+import org.neo4j.graphdb.index.IndexHits;
 
 public class BatchInserterFactory extends DefUseCFGFactory
 {

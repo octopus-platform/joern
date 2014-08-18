@@ -1,12 +1,16 @@
 package parsing;
 
-import java.util.List;
 import java.util.Observer;
 
 public class ModuleParser
 {
-	ANTLRModuleParserDriver parserDriver = new ANTLRModuleParserDriver();
-
+	ANTLRParserDriver parserDriver;
+	
+	public ModuleParser(ANTLRParserDriver driver)
+	{
+		parserDriver = driver;
+	}
+	
 	public void parseFile(String filename)
 	{
 		System.out.println(filename);
@@ -21,6 +25,15 @@ public class ModuleParser
 		}
 	}
 
+	public void addObserver(Observer anObserver)
+	{
+		parserDriver.addObserver(anObserver);
+	}
+	
+	/*
+	 * Testing
+	 **/
+	
 	public void parseString(String code)
 	{
 		try
@@ -31,22 +44,6 @@ public class ModuleParser
 		{
 			System.err.println("Error parsing string.");
 		}
-	}
-
-	public void addObserver(Observer anObserver)
-	{
-		parserDriver.addObserver(anObserver);
-	}
-
-	// Not used?
-	public void parseListOfFiles(List<String> filenames)
-	{
-		parserDriver.begin();
-
-		for (String filename : filenames)
-			parseFile(filename);
-
-		parserDriver.end();
 	}
 
 }

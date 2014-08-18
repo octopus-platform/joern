@@ -1,7 +1,7 @@
 package outputModules.neo4j.importers;
 
 import databaseNodes.DeclDatabaseNode;
-import astnodes.ASTNode;
+import ast.ASTNode;
 
 public class DeclImporter extends ASTNodeImporter
 {

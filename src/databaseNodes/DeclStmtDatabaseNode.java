@@ -3,7 +3,7 @@ package databaseNodes;
 import java.util.HashMap;
 import java.util.Map;
 
-import astnodes.statements.IdentifierDeclStatement;
+import ast.statements.IdentifierDeclStatement;
 
 public class DeclStmtDatabaseNode extends DatabaseNode
 {

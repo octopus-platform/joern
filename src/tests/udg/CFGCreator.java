@@ -5,11 +5,12 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ModuleParser;
-import astnodes.ASTNode;
-import astnodes.ASTNodeBuilder;
-import astnodes.functionDef.FunctionDef;
-import astwalking.ASTNodeVisitor;
-import astwalking.ASTWalker;
+import parsing.C.Modules.ANTLRCModuleParserDriver;
+import ast.ASTNode;
+import ast.ASTNodeBuilder;
+import ast.functionDef.FunctionDef;
+import ast.walking.ASTNodeVisitor;
+import ast.walking.ASTWalker;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
 
@@ -47,15 +48,6 @@ public class CFGCreator
 		{
 		}
 
-		@Override
-		public void begin()
-		{
-		}
-
-		@Override
-		public void end()
-		{
-		}
 
 		@Override
 		public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
@@ -72,7 +64,8 @@ public class CFGCreator
 
 	public CFG getCFGForCode(String code)
 	{
-		ModuleParser parser = new ModuleParser();
+		ANTLRCModuleParserDriver driver = new ANTLRCModuleParserDriver();
+		ModuleParser parser = new ModuleParser(driver);
 		Walker walker = new Walker();
 		parser.addObserver(walker);
 		parser.parseString(code);

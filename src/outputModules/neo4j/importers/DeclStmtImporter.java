@@ -10,8 +10,8 @@ import org.neo4j.graphdb.RelationshipType;
 
 import databaseNodes.DeclStmtDatabaseNode;
 import databaseNodes.EdgeTypes;
-import astnodes.ASTNode;
-import astnodes.statements.IdentifierDeclStatement;
+import ast.ASTNode;
+import ast.statements.IdentifierDeclStatement;
 
 public class DeclStmtImporter extends ASTNodeImporter
 {

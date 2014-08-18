@@ -5,16 +5,16 @@ import static org.junit.Assert.assertTrue;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import parsing.ANTLRFunctionParserDriver;
+import parsing.FunctionParser;
 
-public class FunctionParserTest
+public class FunctionParserTest extends FunctionParserTestBase
 {
 
 	@Test
 	public void testIf()
 	{
 		String input = "if(foo){}";
-		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
+		FunctionParser functionParser = createFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("(selection_or_iteration if"));
@@ -24,7 +24,7 @@ public class FunctionParserTest
 	public void testStructInFunc()
 	{
 		String input = "class foo{ int x; };";
-		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
+		FunctionParser functionParser = createFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("class_def"));
@@ -34,7 +34,7 @@ public class FunctionParserTest
 	public void testSizeofStruct()
 	{
 		String input = "while((buffer + len) > (tmp + sizeof(struct stun_attrib))) {}";
-		ANTLRFunctionParserDriver functionParser = new ANTLRFunctionParserDriver();
+		FunctionParser functionParser = createFunctionParser();
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		assertTrue(output.contains("selection_or_iteration while"));
