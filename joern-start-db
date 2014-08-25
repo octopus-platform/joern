@@ -4,10 +4,12 @@ import ConfigParser
 import sys, os
 
 config = ConfigParser.RawConfigParser()
-config.read('joern.conf')
+JOERN_DIR = os.path.split(os.path.realpath(__file__))[0]
+CONF_FILE = os.path.join(JOERN_DIR, 'joern.conf')
+config.read(CONF_FILE)
 
-NEO4J = config.get('neo4j', 'exec')
-JOERN_INDEX = config.get('joern', 'index')
+NEO4J = os.path.join(JOERN_DIR, config.get('neo4j', 'exec'))
+JOERN_INDEX = os.path.join(JOERN_DIR, config.get('joern', 'index'))
 
 if len(sys.argv) > 1:
     
