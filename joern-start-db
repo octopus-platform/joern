@@ -10,12 +10,13 @@ config.read(CONF_FILE)
 
 NEO4J = os.path.join(JOERN_DIR, config.get('neo4j', 'exec'))
 JOERN_INDEX = os.path.join(JOERN_DIR, config.get('joern', 'index'))
+JOERN_INDEX = os.path.abspath(JOERN_INDEX)
 
 if len(sys.argv) > 1:
     
-    exists = os.path.exists(JOERN_INDEX)
+    exists = os.path.lexists(JOERN_INDEX)
     isLink = os.path.islink(JOERN_INDEX)
-    
+
     dbPath = sys.argv[1]
     newTarget = os.path.abspath(dbPath)
     
