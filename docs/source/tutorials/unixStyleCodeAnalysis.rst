@@ -339,7 +339,7 @@ List arguments:
 	
 .. code-block:: none
 
-	echo "getCallsTo('memcpy').ithArgument('2').code" | joern-lookup -g
+	echo "getCallsTo('memcpy').ithArguments('2').code" | joern-lookup -g
 
 Analyzing Function Syntax
 -------------------------
