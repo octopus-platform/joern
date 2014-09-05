@@ -6,6 +6,7 @@ import java.util.Map;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.BinaryExpression;
+import ast.statements.CompoundStatement;
 
 public class ASTDatabaseNode extends DatabaseNode
 {
@@ -36,6 +37,10 @@ public class ASTDatabaseNode extends DatabaseNode
 			properties.put(NodeKeys.LOCATION, getCorrectedLocationString());
 		}
 			
+		if (astNode instanceof CompoundStatement ){
+			properties.put(NodeKeys.LOCATION, astNode.getLocationString());
+		}
+		
 		if (astNode instanceof BinaryExpression)
 			properties.put(NodeKeys.OPERATOR,
 					((BinaryExpression) astNode).getOperator());
