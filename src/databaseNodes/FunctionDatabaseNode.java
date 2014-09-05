@@ -6,6 +6,7 @@ import java.util.Map;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import ast.ASTNode;
+import ast.CodeLocation;
 import ast.functionDef.FunctionDef;
 import cdg.CDG;
 import cdg.CDGCreator;
@@ -30,7 +31,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 
 	String signature;
 	String name;
-
+	
 	ASTToCFGConverter astToCFG = new ASTToCFGConverter();
 	CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
 	CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
@@ -95,7 +96,11 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		return astRoot.getLocationString();
 	}
-
+	
+	public CodeLocation getContentLocation(){
+		return astRoot.getContent().getLocation();
+	}
+	
 	public String getSignature()
 	{
 		return signature;
@@ -105,5 +110,5 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		signature = node.getFunctionSignature();
 	}
-
+	
 }

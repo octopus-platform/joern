@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ast.ASTNode;
+import ast.CodeLocation;
 import ast.expressions.BinaryExpression;
 
 public class ASTDatabaseNode extends DatabaseNode
 {
 
 	ASTNode astNode;
-
+	private FunctionDatabaseNode currentFunction;
+	
 	@Override
 	public void initialize(Object node)
 	{
@@ -29,9 +31,11 @@ public class ASTDatabaseNode extends DatabaseNode
 		// if(astNode.getChildCount() == 0)
 		properties.put(NodeKeys.CODE, astNode.getEscapedCodeStr());
 
-		if (astNode.isInCFG())
-			properties.put(NodeKeys.IS_CFG_NODE, "True");
-
+		if (astNode.isInCFG()){
+			properties.put(NodeKeys.IS_CFG_NODE, "True");			
+			properties.put(NodeKeys.LOCATION, getCorrectedLocationString());
+		}
+			
 		if (astNode instanceof BinaryExpression)
 			properties.put(NodeKeys.OPERATOR,
 					((BinaryExpression) astNode).getOperator());
@@ -42,6 +46,29 @@ public class ASTDatabaseNode extends DatabaseNode
 		// }
 
 		return properties;
+	}
+
+	private String getCorrectedLocationString()
+	{
+
+		CodeLocation funcLocation = currentFunction.getContentLocation();
+		CodeLocation location = astNode.getLocation();
+		
+		location.startIndex += funcLocation.startIndex + 1;
+		location.startLine += funcLocation.startLine - 1;
+		location.stopIndex += funcLocation.startIndex + 1;
+		
+		return location.toString();
+	}
+
+	public FunctionDatabaseNode getCurrentFunction()
+	{
+		return currentFunction;
+	}
+
+	public void setCurrentFunction(FunctionDatabaseNode currentFunction)
+	{
+		this.currentFunction = currentFunction;
 	}
 
 }

@@ -36,7 +36,9 @@ public class ModuleFunctionParserInterface
 
 			// ex.printStackTrace();
 		}
-		return parser.getResult();
+		CompoundStatement result = parser.getResult();
+		result.initializeFromContext(ctx.compound_statement());
+		return result;
 	}
 
 	private static String getCompoundStmtAsString(

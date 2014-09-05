@@ -55,8 +55,9 @@ public class ASTImporter
 	{
 		ASTDatabaseNode astDatabaseNode = new ASTDatabaseNode();
 		astDatabaseNode.initialize(node);
+		astDatabaseNode.setCurrentFunction(currentFunction);
 		Map<String, Object> properties = astDatabaseNode.createProperties();
-
+		
 		properties.put(NodeKeys.FUNCTION_ID,
 				nodeStore.getIdForObject(currentFunction));
 		nodeStore.addNeo4jNode(node, properties);

@@ -7,10 +7,10 @@ public class CodeLocation
 
 	final private int NOT_SET = -1;
 
-	int startLine = NOT_SET;
-	int startPos = NOT_SET;
-	int startIndex = NOT_SET;
-	int stopIndex = NOT_SET;
+	public int startLine = NOT_SET;
+	public int startPos = NOT_SET;
+	public int startIndex = NOT_SET;
+	public int stopIndex = NOT_SET;
 
 	public CodeLocation()
 	{

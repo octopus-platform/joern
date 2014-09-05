@@ -108,6 +108,13 @@ public class ASTNode
 		return location.toString();
 	}
 
+	public CodeLocation getLocation()
+	{
+		setLocation(parseTreeNodeContext);
+		return location;
+	}
+
+	
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
