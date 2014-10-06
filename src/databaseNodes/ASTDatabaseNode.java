@@ -6,6 +6,8 @@ import java.util.Map;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.BinaryExpression;
+import ast.functionDef.Parameter;
+import ast.functionDef.ReturnType;
 import ast.statements.CompoundStatement;
 
 public class ASTDatabaseNode extends DatabaseNode
@@ -59,10 +61,12 @@ public class ASTDatabaseNode extends DatabaseNode
 		CodeLocation funcLocation = currentFunction.getContentLocation();
 		CodeLocation location = astNode.getLocation();
 		
-		location.startIndex += funcLocation.startIndex + 1;
-		location.startLine += funcLocation.startLine - 1;
-		location.stopIndex += funcLocation.startIndex + 1;
-		
+		if(!(astNode instanceof Parameter) || (astNode instanceof ReturnType)){
+			location.startIndex += funcLocation.startIndex + 1;
+			location.startLine += funcLocation.startLine - 1;
+			location.stopIndex += funcLocation.startIndex + 1;
+		}
+			
 		return location.toString();
 	}
 
