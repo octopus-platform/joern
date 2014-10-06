@@ -12,6 +12,7 @@ public class CallExpression extends PostfixExpression
 		return (Expression) children.get(0);
 	}
 
+	// TODO: It should be possible to remove this function
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);

@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import parsing.ParseTreeUtils;
 import ast.expressions.BinaryExpression;
+import ast.expressions.Expression;
 import ast.walking.ASTNodeVisitor;
 
 public class ASTNode
@@ -142,12 +143,10 @@ public class ASTNode
 
 	public String getOperatorCode()
 	{
-		if (BinaryExpression.class.isAssignableFrom(this.getClass()))
+		if (Expression.class.isAssignableFrom(this.getClass()))
 		{
-			return ((BinaryExpression) this).getOperator();
+			return ((Expression) this).getOperator();
 		}
-
-		// TODO Auto-generated method stub
 		return null;
 	}
 

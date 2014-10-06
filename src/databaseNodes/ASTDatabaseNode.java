@@ -6,6 +6,7 @@ import java.util.Map;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.BinaryExpression;
+import ast.expressions.Expression;
 import ast.functionDef.Parameter;
 import ast.functionDef.ReturnType;
 import ast.statements.CompoundStatement;
@@ -43,10 +44,12 @@ public class ASTDatabaseNode extends DatabaseNode
 			properties.put(NodeKeys.LOCATION, astNode.getLocationString());
 		}
 		
-		if (astNode instanceof BinaryExpression)
-			properties.put(NodeKeys.OPERATOR,
-					((BinaryExpression) astNode).getOperator());
-
+		if (astNode instanceof Expression){
+			String operator = ((Expression) astNode).getOperator();
+			if(operator != "")
+				properties.put(NodeKeys.OPERATOR, operator);
+		}
+			
 		// if(astNode.getChildCount() > 1){
 		String childNumStr = Integer.toString(astNode.getChildNumber());
 		properties.put(NodeKeys.CHILD_NUMBER, childNumStr);
