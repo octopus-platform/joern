@@ -39,10 +39,10 @@ software should be installed:
   not build with Java 6. It has been tested with OpenJDK-7 but should
   also work fine with Oracle's JVM.
   
-- **Neo4J 1.9.7 Community Edition.**  The graph database `Neo4J
+- **Neo4J 1.9.8 Community Edition.**  The graph database `Neo4J
   <http://www.neo4j.org/download/other_versions>`_ provides access to 
-  the imported code. Note, that Joern has not been tested with the 2.0
-  branch of Neo4J.
+  the imported code. Note, that Joern *will not work with the 2.0
+  branch of Neo4J*.
 
 **Build Dependencies.** A tarball containing all necessary
 build-dependencies is available for download `here
@@ -53,8 +53,8 @@ the following projects.
 * `The ANTLRv4 Parser Generator <http://www.antlr.org/>`_ 
 * `Apache Commons CLI Command Line Parser 1.2
   <http://commons.apache.org/proper/commons-cli/>`_
-* `Neo4J 1.9.7 Community Edition
-  <http://www.neo4j.org/download/other_versions>`_
+* `Neo4J 1.9.8 Community Edition
+  <http://neo4j.com/artifact.php?name=neo4j-community-1.9.8-unix.tar.gz>`_
 
 * `The Apache Ant build tool <http://ant.apache.org/>`_ (tested with
   version 1.9.2).
