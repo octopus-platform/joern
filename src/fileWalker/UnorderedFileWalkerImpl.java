@@ -1,26 +1,23 @@
 package fileWalker;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
 
-class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
+class UnorderedFileWalkerImpl extends SimpleFileVisitor<Path>
 {
-	private PathMatcher matcher;
+	private FileNameMatcher matcher = new FileNameMatcher();
 	private List<SourceFileListener> listeners = new LinkedList<SourceFileListener>();
-
+	
 	public void setFilenameFilter(String pattern)
 	{
-		matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
+		matcher.setFilenameFilter(pattern);
 	}
-	
-	
+		
 	public void addListener(SourceFileListener listener)
 	{
 		listeners.add(listener);
@@ -60,7 +57,7 @@ class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 	{
 
-		if (!fileMatches(file))
+		if (!matcher.fileMatches(file))
 		{
 			return FileVisitResult.CONTINUE;
 		}
@@ -77,12 +74,5 @@ class SourceFileWalkerImpl extends SimpleFileVisitor<Path>
 		}
 	}
 
-	private boolean fileMatches(Path file)
-	{
-		Path name = file.getFileName();
-		if (name == null)
-			return false;
-		return matcher.matches(name);
-	}
 
 }
