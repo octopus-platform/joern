@@ -4,13 +4,33 @@ import ast.ASTNode;
 
 public class UseOrDefRecord
 {
-	public ASTNode astNode;
-	public boolean isDef;
+	private ASTNode astNode;
+	private boolean isDef;
 
 	public UseOrDefRecord(ASTNode anASTNode, boolean aIsDef)
 	{
-		astNode = anASTNode;
-		isDef = aIsDef;
+		setAstNode(anASTNode);
+		setDef(aIsDef);
+	}
+
+	public ASTNode getAstNode()
+	{
+		return astNode;
+	}
+
+	public void setAstNode(ASTNode astNode)
+	{
+		this.astNode = astNode;
+	}
+
+	public boolean isDef()
+	{
+		return isDef;
+	}
+
+	public void setDef(boolean isDef)
+	{
+		this.isDef = isDef;
 	}
 
 };

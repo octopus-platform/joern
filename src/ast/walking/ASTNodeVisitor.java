@@ -12,6 +12,7 @@ import ast.expressions.MemberAccess;
 import ast.expressions.PrimaryExpression;
 import ast.expressions.UnaryExpression;
 import ast.functionDef.FunctionDef;
+import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.statements.BreakStatement;
 import ast.statements.CompoundStatement;
@@ -50,6 +51,11 @@ public class ASTNodeVisitor
 		defaultHandler(item);
 	}
 
+	public void visit(Parameter item)
+	{
+		defaultHandler(item);
+	}
+	
 	public void visit(FunctionDef item)
 	{
 		defaultHandler(item);

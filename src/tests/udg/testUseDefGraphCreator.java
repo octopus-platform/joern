@@ -105,7 +105,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		// make sure only 'uses' of x exist
 		for (UseOrDefRecord r : usesAndDefs)
 		{
-			assertTrue(r.isDef);
+			assertTrue(r.isDef());
 		}
 	}
 
@@ -119,7 +119,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		// make sure only 'uses' of x exist
 		for (UseOrDefRecord r : usesAndDefs)
 		{
-			assertTrue(!r.isDef);
+			assertTrue(!r.isDef());
 		}
 	}
 
@@ -136,9 +136,9 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		// make sure only 'definitions' of x exist
 		for (UseOrDefRecord r : usesAndDefs)
 		{
-			if (r.isDef)
+			if (r.isDef())
 				isDefined = true;
-			if (!r.isDef)
+			if (!r.isDef())
 				isUsed = true;
 		}
 

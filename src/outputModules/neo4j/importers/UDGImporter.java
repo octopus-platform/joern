@@ -66,12 +66,12 @@ public class UDGImporter
 			UseOrDefRecord item)
 	{
 		RelationshipType rel;
-		if (item.isDef)
+		if (item.isDef())
 			rel = DynamicRelationshipType.withName(EdgeTypes.DEF);
 		else
 			rel = DynamicRelationshipType.withName(EdgeTypes.USE);
 
-		long nodeId = nodeStore.getIdForObject(item.astNode);
+		long nodeId = nodeStore.getIdForObject(item.getAstNode());
 
 		Neo4JBatchInserter.addRelationship(nodeId, symbolNodeId, rel, null);
 	}

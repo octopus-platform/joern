@@ -7,6 +7,7 @@ import antlr.C.ModuleParser.Parameter_idContext;
 import antlr.C.ModuleParser.Parameter_nameContext;
 import ast.ASTNode;
 import ast.expressions.Identifier;
+import ast.walking.ASTNodeVisitor;
 
 public class Parameter extends ASTNode
 {
@@ -39,4 +40,9 @@ public class Parameter extends ASTNode
 		return parameter_id.parameter_name();
 	}
 
+	@Override
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }
