@@ -41,7 +41,7 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 		assertTrue(defUseLinksToAdd.size() == 2);
 		for (DefUseLink a : defUseLinksToAdd)
 		{
-			assertTrue(a.symbol.equals("myVar"));
+			assertTrue(a.symbol.equals("* myVar"));
 		}
 
 	}

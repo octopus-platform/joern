@@ -126,10 +126,15 @@ public class DefUseCFGPatcher
 
 			if (toId == null)
 			{
-				System.err
-						.println("Warning: Trying to create DEF-link to unknown symbol: "
-								+ link.symbol);
-				break;
+				Map<String, Object> properties = new HashMap<String, Object>();
+				Node statementNode = Neo4JDBInterface.getNodeById(link.statement);
+				
+				properties.put("functionId", statementNode.getProperty("functionId"));
+				properties.put("type", "Symbol");
+				properties.put("code", "* " + link.symbol);
+				
+				Node symbolNode = Neo4JDBInterface.addNode(properties);
+				toId = (Long) symbolNode.getId();
 			}
 
 			RelationshipType relType = DynamicRelationshipType

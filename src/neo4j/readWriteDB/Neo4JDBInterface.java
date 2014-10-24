@@ -1,7 +1,9 @@
 package neo4j.readWriteDB;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -83,5 +85,20 @@ public class Neo4JDBInterface
 			rel.setProperty(entry.getKey(), entry.getValue());
 		}
 	}
+	
+	public static Node addNode(Map<String,Object> properties)
+	{
+		Node newNode = graphDb.createNode();
+		
+		Set<Entry<String, Object>> entrySet = properties.entrySet();
+		Iterator<Entry<String, Object>> it = entrySet.iterator();
+		while(it.hasNext()){
+			Entry<String, Object> next = it.next();
+			newNode.setProperty(next.getKey(), next.getValue());
+		}
+
+		return newNode;
+	}
+	
 
 }

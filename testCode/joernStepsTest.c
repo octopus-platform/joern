@@ -11,7 +11,7 @@ int test_call_get()
 
 int test_call_tainting()
 {
-	taint_source(x,y);
+	taint_source(&x,&y);
 
 	if(x == 0) return 1;
 	if(y == 0) return -1;
@@ -20,8 +20,8 @@ int test_call_tainting()
 
 int two_taint_sources()
 {
-	taint_source(x,y);	
-	second_taint_source(z);
+	taint_source(&x,&y);	
+	second_taint_source(&z);
 	
 	if(y == 0) return 1;
 	if(z == 0) return -1;
@@ -30,7 +30,7 @@ int two_taint_sources()
 
 int test_dataFlowFromRegex()
 {
-	taint_source(x,y);	
+	taint_source(&x,&y);	
 	if(x == 0) return;
 
 	sink(y);
@@ -38,7 +38,7 @@ int test_dataFlowFromRegex()
 
 int test_isNotSanitizedByRegex()
 {
-	taint_source(x,y);	
+	taint_source(&x,&y);	
 	
 	memset(y, 0, sizeof(y));
 
@@ -47,7 +47,7 @@ int test_isNotSanitizedByRegex()
 
 int test_dataFlowFromUntainted()
 {
-	not_a_taint_source(x,y);	
+	not_a_taint_source(&x,&y);	
 	if(x == 0) return;
 
 	sink(y);

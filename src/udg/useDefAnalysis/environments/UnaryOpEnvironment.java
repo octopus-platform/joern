@@ -13,6 +13,13 @@ public class UnaryOpEnvironment extends EmitUseEnvironment
 		
 		String codeStr = astProvider.getEscapedCodeStr();
 		
+		if(codeStr != null && codeStr.startsWith("&")){
+			for(String symbol : childSymbols){
+				symbols.add("& " + symbol);
+			}
+			return;
+		}
+		
 		if(codeStr == null|| !codeStr.startsWith("*")){
 			symbols.addAll(childSymbols);
 			return;
