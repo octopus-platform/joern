@@ -125,6 +125,7 @@ public class CCFG extends CFG
 		
 		super.addCFG(otherCFG);
 		
+		getParameters().addAll(otherCFG.getParameters());
 		getBreakStatements().addAll(otherCFG.getBreakStatements());
 		getContinueStatements().addAll(otherCFG.getContinueStatements());
 		getReturnStatements().addAll(otherCFG.getReturnStatements());

@@ -1,5 +1,8 @@
 package cfg;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import graphutils.AbstractTwoWayGraph;
 import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGErrorNode;
@@ -17,13 +20,15 @@ public class CFG extends AbstractTwoWayGraph<CFGNode, CFGEdge>
 	private CFGEntryNode entry;
 	private CFGExitNode exit;
 	private CFGErrorNode error;
-
+	private List<CFGNode> parameters;
+	
 	public CFG()
 	{
 		entry = new CFGEntryNode();
 		exit = new CFGExitNode();
 		addVertex(entry);
 		addVertex(exit);
+		parameters = new LinkedList<CFGNode>();
 	}
 
 	
@@ -55,6 +60,16 @@ public class CFG extends AbstractTwoWayGraph<CFGNode, CFGEdge>
 		return error;
 	}
 
+	public void registerParameter(CFGNode parameter)
+	{
+		parameters.add(parameter);
+	}
+	
+	public List<CFGNode> getParameters()
+	{
+		return parameters;
+	}
+	
 	public void addCFG(CFG otherCFG)
 	{
 		addVertices(otherCFG);

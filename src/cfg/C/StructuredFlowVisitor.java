@@ -1,6 +1,7 @@
 package cfg.C;
 
 import ast.ASTNode;
+import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.statements.BreakStatement;
 import ast.statements.CompoundStatement;
@@ -15,6 +16,8 @@ import ast.statements.SwitchStatement;
 import ast.statements.WhileStatement;
 import ast.walking.ASTNodeVisitor;
 import cfg.CFG;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 
 
 class StructuredFlowVisitor extends ASTNodeVisitor
@@ -32,6 +35,18 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 		returnCFG = CCFGFactory.newInstance(paramList);
 	}
 
+	public void visit(Parameter param)
+	{
+		returnCFG = CCFGFactory.newInstance(param);
+	
+		for(CFGNode node : returnCFG.getVertices()){
+			if(!(node instanceof ASTNodeContainer))
+				continue;
+			returnCFG.registerParameter(node);
+		}
+		
+	}
+	
 	public void visit(CompoundStatement content)
 	{
 		returnCFG = CCFGFactory.newInstance(content);
