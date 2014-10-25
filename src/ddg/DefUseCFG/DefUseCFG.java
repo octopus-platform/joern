@@ -23,7 +23,10 @@ public class DefUseCFG
 	private MultiHashMap<Object, Object> parentBlocks = new MultiHashMap<Object, Object>();
 	private MultiHashMap<Object, Object> childBlocks = new MultiHashMap<Object, Object>();
 	private Map<String, Object> symbolIds = new HashMap<String, Object>();
-
+	
+	private Object exitNode;
+	private List<String> parameters = new LinkedList<String>();
+	
 	private static final List<Object> EMPTY_LIST = new LinkedList<Object>();
 
 	public void addStatement(Object statementId)
@@ -94,4 +97,29 @@ public class DefUseCFG
 		symbolIds.put(symbolCode, symbolId);
 	}
 
+	public void addUsesForExitNode()
+	{
+
+		for (String symbol : parameters)
+		{
+			// this.addSymbolUsed(exitNode, symbol);
+			this.addSymbolUsed(exitNode, "* " + symbol);
+		}	
+	}
+
+	public void setExitNode(Object exitNode)
+	{
+		this.exitNode = exitNode;
+	}
+
+	public void setParameters(LinkedList<String> params)
+	{
+		parameters = params;
+	}
+
+	public void addParameter(String str)
+	{
+		parameters.add(str);
+	}
+	
 }

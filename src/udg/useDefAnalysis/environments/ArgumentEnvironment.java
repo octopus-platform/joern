@@ -18,6 +18,7 @@ public class ArgumentEnvironment extends EmitDefAndUseEnvironment
 			
 			LinkedList<String> derefChildSymbols = new LinkedList<String>();
 			for(String symbol : childSymbols){
+				
 				if(!symbol.startsWith("& "))
 					derefChildSymbols.add("* " + symbol);
 				else

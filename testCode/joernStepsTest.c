@@ -65,3 +65,12 @@ int test_checksSymbol(int count)
 		return;
 }
 
+int testParamTaint(char *buf)
+{
+  taint_source(buf, buf);
+}
+
+int testParamTaintAssign(char *ptr)
+{
+  *ptr = 1;
+}

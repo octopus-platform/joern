@@ -131,7 +131,7 @@ public class DefUseCFGPatcher
 				
 				properties.put("functionId", statementNode.getProperty("functionId"));
 				properties.put("type", "Symbol");
-				properties.put("code", "* " + link.symbol);
+				properties.put("code", link.symbol);
 				
 				Node symbolNode = Neo4JDBInterface.addNode(properties);
 				toId = (Long) symbolNode.getId();

@@ -2,6 +2,7 @@ package ddg;
 
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -24,23 +25,22 @@ public class CFGAndUDGToDefUseCFG
 
 		initializeStatements(cfg, defUseCFG);
 		initializeDefUses(udg, defUseCFG);
-		initializeUsesForExitNode(cfg, defUseCFG);
-		initializeParentsAndChildren(cfg, defUseCFG);
-
-		return defUseCFG;
-	}
-
-	private void initializeUsesForExitNode(CFG cfg, DefUseCFG defUseCFG)
-	{
-		CFGNode exitNode = cfg.getExitNode();
 		
+		LinkedList<String> parameters = new LinkedList<String>();
 		for (CFGNode parameterCFGNode : cfg.getParameters())
 		{
 			ASTNode astNode = ((ASTNodeContainer) parameterCFGNode).getASTNode();
 			String symbol = astNode.getChild(1).getEscapedCodeStr();
-			// defUseCFG.addSymbolUsed(exitNode, symbol);
-			defUseCFG.addSymbolUsed(exitNode, "* " + symbol);
-		}	
+			parameters.add(symbol);
+		}
+		
+		defUseCFG.setExitNode(cfg.getExitNode());
+		defUseCFG.setParameters(parameters);
+		
+		defUseCFG.addUsesForExitNode();
+		initializeParentsAndChildren(cfg, defUseCFG);
+
+		return defUseCFG;
 	}
 
 	private void initializeStatements(CFG cfg, DefUseCFG defUseCFG)
