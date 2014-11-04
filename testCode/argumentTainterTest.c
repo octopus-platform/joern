@@ -55,6 +55,15 @@ int p_caller()
   two_arg_sink_caller_p(a,b);
 }
 
+int p_caller2()
+{
+  int a = sourceA();
+  int b = sourceB();
+  if(b == 0) return;
+  
+  two_arg_sink_caller_p(a,b);
+}
+
 int two_arg_sink_caller_p(int x, int y)
 {
   asink(x,y);
