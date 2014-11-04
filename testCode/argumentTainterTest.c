@@ -16,3 +16,32 @@ int interproc_callee(int *x)
 {
   *x = source12();
 }
+
+
+/**
+   In the following setting, taintedArgs should NOT
+   detect a possible initialization of
+   "b = sourceB()" AND "a = sourceA()", because it's
+   either one, or the other.
+*/
+
+int caller1()
+{
+  int a = 0;
+  int b = sourceB();
+
+  two_arg_sink_caller(a,b);
+}
+
+int caller2()
+{
+  int a = sourceA();
+  int b = 0;
+
+  two_arg_sink_caller(a,b);
+}
+
+int two_arg_sink_caller(int x, int y)
+{
+  asink(x,y);
+}
