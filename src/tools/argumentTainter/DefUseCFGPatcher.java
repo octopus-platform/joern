@@ -60,7 +60,9 @@ public class DefUseCFGPatcher
 
 		for (Node statement : statementsToPatch)
 		{
-
+			
+			if(statement == null) continue;
+			
 			long statementId = statement.getId();
 
 			Node node = Traversals.getASTForStatement(statement);
