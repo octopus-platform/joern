@@ -32,7 +32,8 @@ public class Neo4JDBInterface
 	public static void finishTransaction()
 	{
 		tx.success();
-		tx.finish();
+		tx.close();
+		// tx.finish();
 	}
 
 	public static void setDatabaseDir(String aDir)
@@ -45,13 +46,37 @@ public class Neo4JDBInterface
 
 		Map<String, String> conf = ConfigurationGenerator
 				.generateConfiguration();
+		
 		graphDb = new GraphDatabaseFactory()
 				.newEmbeddedDatabaseBuilder(databaseDir).setConfig(conf)
 				.newGraphDatabase();
 
-		nodeIndex = graphDb.index().forNodes("nodeIndex");
+		registerShutdownHook();
+		
+		try ( Transaction tx = graphDb.beginTx() )
+		{
+			nodeIndex = graphDb.index().forNodes("nodeIndex");
+		    tx.success();
+		}
+		
 	}
-
+	 private static void registerShutdownHook()
+	 {
+		 // Registers a shutdown hook for the Neo4j and index service instances
+		 // so that it shuts down nicely when the VM exits (even if you
+		 // "Ctrl-C" the running example before it's completed)
+		 Runtime.getRuntime().addShutdownHook( new Thread()
+		 {
+			 @Override
+			 public void run()
+			 {
+				 graphDb.shutdown();
+			 }
+		 } );
+	 }
+	
+	
+	
 	public static IndexHits<Node> queryIndex(String query)
 	{
 		return nodeIndex.query(query);

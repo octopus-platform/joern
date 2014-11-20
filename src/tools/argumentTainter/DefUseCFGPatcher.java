@@ -55,6 +55,8 @@ public class DefUseCFGPatcher
 	public void patchDefUseCFG(DefUseCFG defUseCFG,
 			Collection<Node> statementsToPatch)
 	{
+		Neo4JDBInterface.startTransaction();
+		
 		this.defUseCFG = defUseCFG;
 		newlyAddedLinks.clear();
 
@@ -79,6 +81,8 @@ public class DefUseCFGPatcher
 
 		}
 
+		Neo4JDBInterface.finishTransaction();
+		
 	}
 
 	private void updateDefsToAdd(Collection<Object> oldDefs,

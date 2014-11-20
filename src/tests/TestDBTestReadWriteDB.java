@@ -12,7 +12,7 @@ public class TestDBTestReadWriteDB
 	public static void loadTestDatabase()
 	{
 		Neo4JDBInterface.setDatabaseDir(".testDB");
-		Neo4JDBInterface.openDatabase();
+		Neo4JDBInterface.openDatabase();	
 	}
 
 	@AfterClass

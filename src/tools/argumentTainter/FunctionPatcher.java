@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import neo4j.readWriteDB.Neo4JDBInterface;
 import neo4j.traversals.readWriteDB.Traversals;
 
 import org.neo4j.graphdb.Node;
@@ -40,14 +41,17 @@ public class FunctionPatcher
 
 	public void patch(Long funcId)
 	{
+		Neo4JDBInterface.startTransaction();
 		determineCallsToPatch(funcId);
 		retrieveDefUseCFGFromDatabase(funcId);
+		Neo4JDBInterface.finishTransaction();
 		patchDefUseCFG();
 		patchDDG(funcId);
 	}
 
 	private void determineCallsToPatch(Long funcId)
 	{
+		
 		List<Node> callNodes = Traversals.getCallsToForFunction(sourceToPatch,
 				funcId);
 		for (Node callNode : callNodes)
@@ -72,7 +76,9 @@ public class FunctionPatcher
 	private void patchDDG(Long funcId)
 	{
 		DDGPatcher patcher = new DDGPatcher();
+		Neo4JDBInterface.startTransaction();
 		patcher.patchDDG(defUseCFG, funcId);
+		Neo4JDBInterface.finishTransaction();
 		patcher.writeChangesToDatabase();
 	}
 }

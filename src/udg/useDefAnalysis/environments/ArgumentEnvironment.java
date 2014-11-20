@@ -22,7 +22,7 @@ public class ArgumentEnvironment extends EmitDefAndUseEnvironment
 				if(!symbol.startsWith("& ")){
 					derefChildSymbols.add("* " + symbol);
 					// !patch to see if we can detect macro-sources!
-					derefChildSymbols.add(symbol);
+					// derefChildSymbols.add(symbol);
 				}else
 					derefChildSymbols.add(symbol.substring(2));	
 			}
