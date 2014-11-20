@@ -83,7 +83,7 @@ at http://mlsec.org/joern/lib/lib.tar.gz and extract the tarball.
 
 .. code-block:: none
 
-	cd joern-0.2.5
+	cd joern-0.3.1
 	wget http://mlsec.org/joern/lib/lib.tar.gz
 	tar xfzv lib.tar.gz
 
