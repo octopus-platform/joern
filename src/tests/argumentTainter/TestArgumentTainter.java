@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import neo4j.readWriteDB.Neo4JDBInterface;
 import neo4j.traversals.readWriteDB.Traversals;
 
 import org.junit.Test;
@@ -26,22 +27,25 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 	@Test
 	public void testDefUseCFGPatcher()
 	{
+		Neo4JDBInterface.startTransaction();
 		Long funcId = getFunctionIdByFunctionName("arg_tainter_basic_test");
 		List<Node> statementsToPatch = getStatementsToPatch(funcId, "memset");
-
+		
 		DefUseCFGPatcher defUseCFGPatcher = new DefUseCFGPatcher();
 		DefUseCFG defUseCFG = defUseGraphFactory.create(funcId);
-
+		Neo4JDBInterface.finishTransaction();
+		
 		defUseCFGPatcher.setSourceToPatch("memset", 0);
 		defUseCFGPatcher.patchDefUseCFG(defUseCFG, statementsToPatch);
 
 		Collection<DefUseLink> defUseLinksToAdd = defUseCFGPatcher
 				.getDefUseLinksToAdd();
 
-		assertTrue(defUseLinksToAdd.size() == 2);
+		assertTrue(defUseLinksToAdd.size() == 4);
+		
 		for (DefUseLink a : defUseLinksToAdd)
 		{
-			assertTrue(a.symbol.equals("* myVar"));
+			assertTrue(a.symbol.contains("myVar"));
 		}
 
 	}

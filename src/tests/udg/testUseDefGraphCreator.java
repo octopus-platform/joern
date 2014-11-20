@@ -62,7 +62,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		UseDefGraph useDefGraph = myCFGToUDG.convert(cfg);
 
 		assertOnlyDefForXFound(useDefGraph, "* x");
-		assertOnlyUseForXFound(useDefGraph, "x");
+		assertDefAndUseForXFound(useDefGraph, "x");
 	}
 
 	@Test
