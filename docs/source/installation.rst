@@ -75,10 +75,10 @@ http://mlsec.org/joern/download.shtml. This will create the directory
 
 .. code-block:: none
 
-	wget https://github.com/fabsx00/joern/archive/0.3.5.tar.gz
-	tar xfzv 0.3.5.tar.gz
+	wget https://github.com/fabsx00/joern/archive/0.3.1.tar.gz
+	tar xfzv 0.3.1.tar.gz
 
-Change to the directory ``joern-0.3.5/``. Next, download build dependencies
+Change to the directory ``joern-0.3.1/``. Next, download build dependencies
 at http://mlsec.org/joern/lib/lib.tar.gz and extract the tarball.
 
 .. code-block:: none
@@ -88,7 +88,7 @@ at http://mlsec.org/joern/lib/lib.tar.gz and extract the tarball.
 	tar xfzv lib.tar.gz
 
 The JAR-files necessary to build joern should now be located in
-``joern-0.3.5/lib/``.
+``joern-0.3.1/lib/``.
 
 **Note**: If you want to build the development version, you need
 to download the build dependencies from
@@ -101,7 +101,7 @@ Build the project using ``ant`` by issuing the following command.
 	ant
 
 Create symlinks (optional). The executable JAR file will be located in
-``joern-0.3.5/bin/joern.jar``. Simply place this JAR file somewhere on your
+``joern-0.3.1/bin/joern.jar``. Simply place this JAR file somewhere on your
 disk and you are done. If you are using bash, you can optionally
 create the following alias in your ``.bashrc``:
 
@@ -149,9 +149,9 @@ follows:
 
 .. code-block:: none
 
-	wget https://github.com/fabsx00/python-joern/archive/0.3.5.tar.gz
-	tar xfzv 0.3.5.tar.gz
-	cd python-joern-0.3.5
+	wget https://github.com/fabsx00/python-joern/archive/0.3.1.tar.gz
+	tar xfzv 0.3.1.tar.gz
+	cd python-joern-0.3.1
 	sudo python2 setup.py install
 
 
