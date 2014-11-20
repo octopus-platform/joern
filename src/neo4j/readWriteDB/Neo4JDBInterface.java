@@ -32,8 +32,7 @@ public class Neo4JDBInterface
 	public static void finishTransaction()
 	{
 		tx.success();
-		tx.close();
-		// tx.finish();
+		tx.close();	
 	}
 
 	public static void setDatabaseDir(String aDir)
@@ -52,12 +51,9 @@ public class Neo4JDBInterface
 				.newGraphDatabase();
 
 		registerShutdownHook();
+		startTransaction();
 		
-		try ( Transaction tx = graphDb.beginTx() )
-		{
-			nodeIndex = graphDb.index().forNodes("nodeIndex");
-		    tx.success();
-		}
+		nodeIndex = graphDb.index().forNodes("nodeIndex");
 		
 	}
 	 private static void registerShutdownHook()
@@ -84,6 +80,7 @@ public class Neo4JDBInterface
 
 	public static void closeDatabase()
 	{
+		finishTransaction();
 		graphDb.shutdown();
 	}
 

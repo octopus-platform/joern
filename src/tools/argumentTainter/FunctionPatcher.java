@@ -41,10 +41,8 @@ public class FunctionPatcher
 
 	public void patch(Long funcId)
 	{
-		Neo4JDBInterface.startTransaction();
 		determineCallsToPatch(funcId);
 		retrieveDefUseCFGFromDatabase(funcId);
-		Neo4JDBInterface.finishTransaction();
 		patchDefUseCFG();
 		patchDDG(funcId);
 	}
@@ -76,9 +74,7 @@ public class FunctionPatcher
 	private void patchDDG(Long funcId)
 	{
 		DDGPatcher patcher = new DDGPatcher();
-		Neo4JDBInterface.startTransaction();
 		patcher.patchDDG(defUseCFG, funcId);
-		Neo4JDBInterface.finishTransaction();
 		patcher.writeChangesToDatabase();
 	}
 }

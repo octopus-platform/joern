@@ -55,7 +55,6 @@ public class DefUseCFGPatcher
 	public void patchDefUseCFG(DefUseCFG defUseCFG,
 			Collection<Node> statementsToPatch)
 	{
-		Neo4JDBInterface.startTransaction();
 		
 		this.defUseCFG = defUseCFG;
 		newlyAddedLinks.clear();
@@ -81,8 +80,6 @@ public class DefUseCFGPatcher
 
 		}
 
-		Neo4JDBInterface.finishTransaction();
-		
 	}
 
 	private void updateDefsToAdd(Collection<Object> oldDefs,
@@ -123,10 +120,8 @@ public class DefUseCFGPatcher
 			return;
 		}
 
-		Neo4JDBInterface.startTransaction();
 		for (DefUseLink link : newlyAddedLinks)
 		{
-
 			Long fromId = link.statement;
 			Long toId = (Long) defUseCFG.getIdForSymbol(link.symbol);
 
@@ -147,7 +142,8 @@ public class DefUseCFGPatcher
 					.withName(EdgeTypes.DEF);
 			Neo4JDBInterface.addRelationship(fromId, toId, relType, null);
 		}
-		Neo4JDBInterface.finishTransaction();
+		
+		
 	}
 
 }

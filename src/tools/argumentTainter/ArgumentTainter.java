@@ -40,9 +40,7 @@ public class ArgumentTainter
 
 	public void patch()
 	{
-		Neo4JDBInterface.startTransaction();
-		determineFunctionsToPatch(source);
-		Neo4JDBInterface.finishTransaction();
+		determineFunctionsToPatch(source);	
 		
 		for (Long funcId : functionsToPatch)
 			patchFunction(funcId);

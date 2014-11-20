@@ -27,13 +27,12 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 	@Test
 	public void testDefUseCFGPatcher()
 	{
-		Neo4JDBInterface.startTransaction();
+	
 		Long funcId = getFunctionIdByFunctionName("arg_tainter_basic_test");
 		List<Node> statementsToPatch = getStatementsToPatch(funcId, "memset");
 		
 		DefUseCFGPatcher defUseCFGPatcher = new DefUseCFGPatcher();
 		DefUseCFG defUseCFG = defUseGraphFactory.create(funcId);
-		Neo4JDBInterface.finishTransaction();
 		
 		defUseCFGPatcher.setSourceToPatch("memset", 0);
 		defUseCFGPatcher.patchDefUseCFG(defUseCFG, statementsToPatch);

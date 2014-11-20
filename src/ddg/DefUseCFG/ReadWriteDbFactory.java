@@ -109,7 +109,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory
 					.getRelationships(Direction.INCOMING);
 			for (Relationship rel : rels)
 			{
-				if (!rel.getType().toString().equals(EdgeTypes.FLOWS_TO))
+				if (!rel.getType().name().toString().equals(EdgeTypes.FLOWS_TO))
 					continue;
 				long parentId = rel.getStartNode().getId();
 				cfg.addParentBlock(statementId, parentId);
@@ -128,7 +128,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory
 					.getRelationships(Direction.OUTGOING);
 			for (Relationship rel : rels)
 			{
-				if (!rel.getType().toString().equals(EdgeTypes.FLOWS_TO))
+				if (!rel.getType().name().toString().equals(EdgeTypes.FLOWS_TO))
 					continue;
 
 				long childId = rel.getEndNode().getId();
