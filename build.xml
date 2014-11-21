@@ -23,6 +23,7 @@
         <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
         <pathelement location="${lib.dir}/neo4j-kernel-2.1.5.jar"/>
         <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.5.jar"/>
+	<pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.5.jar"/>
     </path>
 	  
   <target name="clean">
