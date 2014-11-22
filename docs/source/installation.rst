@@ -127,6 +127,42 @@ python and the shell, it is also highly recommended to install
 ``python-joern`` and ``joern-tools`` as outlined in the following
 sections.
 
+Installing the Neo4J Server
+----------------------------
+
+It is possible to access the graph database directly from your scripts
+by loading the database into memory on script startup. However, it is
+highly recommended to access data via the Neo4J server instead. The
+advantage of doing so is that the data is loaded only once for all
+scripts you may want to execute allowing you to benefit from Neo4J's
+caching for increased speed.
+
+To install the neo4j server, download version 2.1.5 from
+http://www.neo4j.org/download/.
+
+Once downloaded, unpack the archive into a directory of your choice,
+which we will call ``$Neo4jDir`` in the following. 
+
+Since Neo4J 2.0, the Gremlin plugin is no longer included by default,
+and hence, it needs to be installed separately. To do so, you can
+follow the instructions at
+
+https://github.com/neo4j-contrib/gremlin-plugin
+
+to build and install the plugin. Alternatively, you can find a
+pre-built version here:
+
+http://mlsec.org/joern/lib/neo4j-gremlin-plugin-2.1-SNAPSHOT-server-plugin.zip
+
+The plugin can be installed by issuing the following command:
+
+.. code-block:: none
+
+		unzip neo4j-gremlin-plugin-2.1-SNAPSHOT-server-plugin.zip -d $Neo4jDir/plugins/gremlin-plugin
+
+where, $Neo4JDir is the directory you installed Neo4J in.
+
+
 Installing python-joern
 ------------------------
 
@@ -183,3 +219,4 @@ python-setuptools as follows:
 
 After installation, type ``joern-lookup`` to verify correct
 installation.
+
