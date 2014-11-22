@@ -111,7 +111,7 @@ one may issue the following query:
 
 .. code-block:: none
 
-	queryNodeIndex("type:Callee AND name:*cpy*") \end{verbatim}
+	queryNodeIndex("type:Callee AND name:*cpy*")
 
 The Gremlin step ``queryNodeIndex`` is defined in
 ``joernsteps/lookup.groovy`` of ``python-joern``. In addition to
@@ -280,12 +280,11 @@ you want to find all functions where a third argument to ``memcpy``
 is named ``len`` and is passed as a parameter to the function and a
 control flow path exists satisfying the following two conditions:
 
-\begin{itemize}
-\item The variable \code{len} is not re-defined on the way.
-\item The variable is not used inside a relational or equality
-expression on the way, i.e., its numerical value is not
-``checked'' against some other variable.
-\end{itemize}
+
+* The variable ``len`` is not re-defined on the way.
+* The variable is not used inside a relational or equality expression
+  on the way, i.e., its numerical value is not ``checked'' against
+  some other variable.
 
 You can use the following traversal to achieve this:
 
