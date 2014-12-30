@@ -53,7 +53,7 @@ the unique node id as in the following query:
 	g.v(nodeId)
 
 Walking the graph can now be achieved by attaching so called
-\emph{Gremlin steps} to the start node. Each of these steps processes
+*Gremlin steps* to the start node. Each of these steps processes
 all nodes returned by the previous step, similar to the way Unix
 pipelines connect shell programs. While learning Gremlin, it can thus
 be a good idea to think of the dot-operator as an alias for the unix
@@ -106,7 +106,7 @@ index can be queried using Apache Lucene queries (see `Lucene Query
 Language
 <http://lucene.apache.org/core/2_9_4/queryparsersyntax.html>`_ for
 details on the syntax). For example, to retrieve all AST nodes
-representing callees with a name containing the substring \code{cpy},
+representing callees with a name containing the substring `cpy`,
 one may issue the following query:
 
 .. code-block:: none
@@ -193,7 +193,7 @@ AND a call to ``bar``, lookup functions can simply be chained, e.g.,
 	getCallsTo('foo').getCallsTo('bar')
 
 returns functions calling both ``foo`` and ``bar``. Similarly,
-functions calling \code{foo} OR \code{bar} can be selected as follows:
+functions calling `foo` OR `bar` can be selected as follows:
 
 .. code-block:: none
 
@@ -298,7 +298,7 @@ You can use the following traversal to achieve this:
 
 where ``isCheck`` is a traversal defined in ``joerntools/misc.groovy``
 to check if a symbol occurs inside an equality or relational
-expression and \code{params} traverses to parameters matching its
+expression and `params` traverses to parameters matching its
 first parameter.
 
 Note, that in the above example, we are using a regular expression to
