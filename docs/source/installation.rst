@@ -115,7 +115,7 @@ where ``$JOERN`` is the directory you installed joern into.
 
 
 Build additional tools (optional). Tools such as the
-\code{argumentTainter} can be built by issuing the following command.
+`argumentTainter` can be built by issuing the following command.
 
 .. code-block:: none
 	
