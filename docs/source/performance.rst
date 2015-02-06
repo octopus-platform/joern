@@ -126,7 +126,7 @@ performance. The following example code shows how this works::
 	j = JoernSteps()
 	j.connectToDatabase()
 	
-	ids =  j.runGremlinQuery('getAllStatements.id')
+	ids =  j.runGremlinQuery('getAllStatements().id')
 
 	CHUNK_SIZE = 256
 	for chunk in j.chunks(ids, CHUNK_SIZE):
