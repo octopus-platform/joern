@@ -111,7 +111,7 @@ one may issue the following query:
 
 .. code-block:: none
 
-	queryNodeIndex("type:Callee AND name:*cpy*")
+	queryNodeIndex("type:Callee AND code:*cpy*")
 
 The Gremlin step ``queryNodeIndex`` is defined in
 ``joernsteps/lookup.groovy`` of ``python-joern``. In addition to
@@ -121,7 +121,7 @@ formulated as:
 
 .. code-block:: none
 
-	getCallsTo("*cpy*")
+	getCallsTo("memcpy")
 
 Please do not hesitate to contribute short-hands for common lookup
 operations to include in ``joernsteps/lookup.groovy``.
