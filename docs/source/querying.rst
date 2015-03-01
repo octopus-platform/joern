@@ -121,7 +121,7 @@ formulated as:
 
 .. code-block:: none
 
-	getCallsTo("memcpy")
+	getCallsTo("*cpy*")
 
 Please do not hesitate to contribute short-hands for common lookup
 operations to include in ``joernsteps/lookup.groovy``.
