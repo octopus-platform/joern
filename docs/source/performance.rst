@@ -90,7 +90,7 @@ database can be kept in RAM and do not have to be loaded from disk
 (see
 http://docs.neo4j.org/chunked/stable/configuration-io-examples.html
 ). For example, for a machine with 8GB RAM the following
-``neo4j.conf`` configuration has been tested to work well:
+``neo4j.properties`` configuration has been tested to work well:
 
 .. code-block:: none
 
@@ -105,6 +105,26 @@ http://docs.neo4j.org/chunked/stable/configuration-io-examples.html
 	neostore.propertystore.db.index.keys.mapped_memory=200M
 	neostore.propertystore.db.index.mapped_memory=200M
 	keep_logical_logs=true
+
+Automatically Killing Runaway Queries
+-------------------------------------
+
+Inefficient graph traversals can consume unbounded amounts of
+resources.  Currently, Neo4j does not support killing active queries,
+instead it offers an execution guard that will kill queries running
+beyond a specified amount of time. It's recommended you enable it by
+adding the following to ``neo4j.properties``:
+
+.. code-block:: none
+
+  execution_guard_enabled=true
+
+And then specify the timeout (in millseconds) in
+``neo4j-server.properties`` as below:
+
+.. code-block:: none
+
+  org.neo4j.server.webserver.limit.executiontime=60000
 
 Chunking Traversals
 --------------------
