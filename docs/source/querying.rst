@@ -292,14 +292,13 @@ You can use the following traversal to achieve this:
 
 	getArguments('memcpy', '2')
 	.sideEffect{ paramName = '.*len.*' }
-	.filter{ it.code.matches(paramName) }
-	.unsanitized{ it.isCheck( paramName ) }
-	.params( paramName )
+	.unsanitized({ it, s -> it.isCheck(paramName) })
+	.match{ it.type == "Parameter" && it.code.matches(paramName) }.code
 
 where ``isCheck`` is a traversal defined in ``joerntools/misc.groovy``
 to check if a symbol occurs inside an equality or relational
-expression and `params` traverses to parameters matching its
-first parameter.
+expression and `match` looks for nodes matches the closure passed
+to it in the given syntax tree.
 
 Note, that in the above example, we are using a regular expression to
 determine arguments containing the sub-string ``len`` and that one may
