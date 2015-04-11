@@ -62,8 +62,8 @@ advantage of doing so is that the data is loaded only once for all
 scripts you may want to execute allowing you to benefit from Neo4J's
 caching for increased speed.
 
-To install the neo4j server, download version 2.1.5 from
-http://www.neo4j.org/download/.
+To install the neo4j server, download version 2.1.8 from
+http://www.neo4j.com/download/other-releases.
 
 Once downloaded, unpack the archive into a directory of your choice,
 which we will call ``$Neo4jDir`` in the following. 
