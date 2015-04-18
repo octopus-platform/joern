@@ -23,7 +23,7 @@ public class CodebaseWalkerTest
 
 		try
 		{
-			String expected = "[src/tests/samples/test.c, src/tests/samples/subdir/test.c, src/tests/samples/tiff.cpp]";
+			String expected = "[src/tests/samples/subdir/test.c, src/tests/samples/test.c, src/tests/samples/tiff.cpp]";
 			FilenameAggregator listener = new FilenameAggregator();
 			provider.addListener(listener);
 			provider.walk(args);
