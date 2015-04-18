@@ -39,7 +39,7 @@ software should be installed:
   not build with Java 6. It has been tested with OpenJDK-7 but should
   also work fine with Oracle's JVM.
   
-- **Neo4J 2.1.5 Community Edition.**  The graph database `Neo4J
+- **Neo4J 2.1.7 Community Edition.**  The graph database `Neo4J
   <http://www.neo4j.org/download/>`_ provides access to 
   the imported code.
 
@@ -137,7 +137,7 @@ advantage of doing so is that the data is loaded only once for all
 scripts you may want to execute allowing you to benefit from Neo4J's
 caching for increased speed.
 
-To install the neo4j server, download version 2.1.5 from
+To install the neo4j server, download version 2.1.7 from
 http://www.neo4j.org/download/.
 
 Once downloaded, unpack the archive into a directory of your choice,
