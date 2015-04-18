@@ -1,8 +1,5 @@
 #!/bin/bash
 
-ant
-ant tools
-
 rm -rf .testDB
 java -jar bin/joern.jar testCode -outdir .testDB
 

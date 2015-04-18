@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project name="Joern" default="jar" basedir=".">
-  
+
+  <property environment="env"/>
   <property name="src.dir" location="src" />
   <property name="build.dir" location="bin" />
   <property name="lib.dir" location="lib" />
@@ -9,22 +10,25 @@
 
   <!-- Junit class path -->
   <path id="junit.class.path">
-    <pathelement location="lib/junit.jar" />
+    <pathelement location="${lib.dir}/junit.jar" />
+    <pathelement location="${lib.dir}/hamcrest-core-1.3.jar" />
+    <pathelement location="${lib.dir}/geronimo-jta_1.1_spec-1.1.1.jar"/>
     <pathelement location="${build.dir}" />
   </path>
   
   <!-- Add jars to the classpath -->
   <path id="joern.classpath">
-        <pathelement location="bin"/>
-        <path refid="junit.class.path"/>
-        <pathelement location="${lib.dir}/antlr4-runtime-4.2.1-SNAPSHOT.jar"/>
+    <pathelement location="bin"/>
+    <path refid="junit.class.path"/>
+    <pathelement location="${lib.dir}/antlr4-runtime-4.2.1-SNAPSHOT.jar"/>
 	<pathelement location="${lib.dir}/antlr4-annotations-4.2.1-SNAPSHOT.jar"/>
 	<pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
-        <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
-        <pathelement location="${lib.dir}/neo4j-kernel-2.1.5.jar"/>
-        <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.5.jar"/>
-	<pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.5.jar"/>
-    </path>
+    <pathelement location="${lib.dir}/hamcrest-core-1.3.jar"/>
+    <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
+    <pathelement location="${lib.dir}/neo4j-kernel-2.1.7.jar"/>
+    <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.7.jar"/>
+	<pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.7.jar"/>
+  </path>
 	  
   <target name="clean">
     <delete dir="${build.dir}" />
@@ -50,12 +54,40 @@
       <manifest>
         <attribute name="Main-Class" value="tools.index.IndexMain" />
       </manifest>
-    <fileset dir="${build.dir}" includes="**/*.class" />
-    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+      <fileset dir="${build.dir}" includes="**/*.class" />
+      <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
     </jar>
   </target>
 
   <target name="tools" depends="icfg,argumentTainter">
+  </target>
+
+  <target name="prepareTestDB" depends="tools">
+    <exec executable="${env.SHELL}">
+      <arg value="rebuildTestDB.sh"/>
+    </exec>
+  </target>
+
+  <target name="test" depends="jar, prepareTestDB">
+    <junit printsummary="yes" haltonfailure="false">
+      <classpath refid="joern.classpath" />
+
+      <formatter type="xml" />
+
+      <batchtest fork="yes" todir="${test.report.dir}" skipnontests="true">
+        <fileset dir="${test.dir}">
+          <include name="tests/**/*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+
+    <junitreport todir="${test.report.dir}">
+      <fileset dir="${test.report.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${test.report.dir}/html"/>
+    </junitreport>
+
   </target>
 
   <target name="icfg" depends="compile">
@@ -77,10 +109,9 @@
       <manifest>
         <attribute name="Main-Class" value="tools.argumentTainter.ArgumentTainterMain" />
       </manifest>
-    <fileset dir="${build.dir}" includes="**/*.class" />
-    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+      <fileset dir="${build.dir}" includes="**/*.class" />
+      <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
     </jar>
   </target>
-
 
 </project>

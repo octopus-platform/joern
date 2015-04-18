@@ -1,5 +1,6 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -27,7 +28,7 @@ public class CodebaseWalkerTest
 			provider.addListener(listener);
 			provider.walk(args);
 
-			assertTrue(expected.equals(listener.filenames.toString()));
+			assertEquals(expected, listener.filenames.toString());
 		}
 		catch (IOException e)
 		{
