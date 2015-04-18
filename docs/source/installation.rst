@@ -39,8 +39,13 @@ software should be installed:
   not build with Java 6. It has been tested with OpenJDK-7 but should
   also work fine with Oracle's JVM.
   
+<<<<<<< HEAD
 - **Neo4J 2.1.7 Community Edition.**  The graph database `Neo4J
   <http://www.neo4j.org/download/>`_ provides access to 
+=======
+- **Neo4J 2.1.X Community Edition.**  The graph database `Neo4J
+  <http://www.neo4j.com/>`_ provides access to 
+>>>>>>> master
   the imported code.
 
 - **Gremlin for Neo4J 2.X.** The `Gremlin plugion for Neo4J 2.X
@@ -58,7 +63,7 @@ the following projects.
 * `Apache Commons CLI Command Line Parser 1.2
   <http://commons.apache.org/proper/commons-cli/>`_
 * `Neo4J 2.1.5 Community Edition
-  <http://www.neo4j.org/download/other_versions>`_
+  <http://www.neo4j.com/download/other-releases>`_
 
 * `The Apache Ant build tool <http://ant.apache.org/>`_ (tested with
   version 1.9.2).
@@ -137,8 +142,8 @@ advantage of doing so is that the data is loaded only once for all
 scripts you may want to execute allowing you to benefit from Neo4J's
 caching for increased speed.
 
-To install the neo4j server, download version 2.1.7 from
-http://www.neo4j.org/download/.
+To install the neo4j server, download version 2.1.8 from
+http://www.neo4j.com/download/other-releases.
 
 Once downloaded, unpack the archive into a directory of your choice,
 which we will call ``$Neo4jDir`` in the following. 
