@@ -38,9 +38,9 @@ software should be installed:
 - **A Java Virtual Machine 1.7.** Joern is written in Java 7 and does
   not build with Java 6. It has been tested with OpenJDK-7 but should
   also work fine with Oracle's JVM.
-  
+
 - **Neo4J 2.1.X Community Edition.**  The graph database `Neo4J
-  <http://www.neo4j.com/>`_ provides access to 
+  <http://www.neo4j.com/>`_ provides access to
   the imported code.
 
 - **Gremlin for Neo4J 2.X.** The `Gremlin plugion for Neo4J 2.X
