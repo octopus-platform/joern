@@ -12,17 +12,10 @@ clone the git repository by issuing the following command:
 
 	git clone https://github.com/fabsx00/joern.git
 
-Optionally, change to the branch of interest. For example, to test the
-development version, issue the following:
-
-.. code-block:: none
-
-	git checkout dev
-
 If you want to report issues or suggest new features, please do so via
 https://github.com/fabsx00/joern . For fixes, please fork the
 repository and issue a pull request or alternatively send a diff to
-the developers by mail. 
+the developers by mail.
 
 Modifying Grammar Definitions
 ------------------------------
