@@ -197,20 +197,5 @@ public class CodeNestingTest
 		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 	}
 
-	@Test
-	public void testClassContent()
-	{
-		// TODO: implement content-parsing for classes defined inside functions
-		String input = "struct foo{ int x; } foo;";
-
-		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil.parseAndWalk(input);
-		assertEquals(1, contentItem.getChildCount());
-
-		ClassDefStatement classDef = (ClassDefStatement) contentItem.getChild(0);
-		assertEquals(1, classDef.content.getChildCount());
-
-		IdentifierDeclStatement declStmt = (IdentifierDeclStatement) classDef.content.getChild(0);
-		assertEquals(1, declStmt.getChildCount());
-	}
 
 }

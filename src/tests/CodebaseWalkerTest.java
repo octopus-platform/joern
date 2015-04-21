@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -23,12 +25,16 @@ public class CodebaseWalkerTest
 
 		try
 		{
-			String expected = "[src/tests/samples/subdir/test.c, src/tests/samples/test.c, src/tests/samples/tiff.cpp]";
+			Set<String> expected = new HashSet<String>();
+			expected.add("src/tests/samples/subdir/test.c");
+			expected.add("src/tests/samples/test.c");
+			expected.add("src/tests/samples/tiff.cpp");
+
 			FilenameAggregator listener = new FilenameAggregator();
 			provider.addListener(listener);
 			provider.walk(args);
 
-			assertEquals(expected, listener.filenames.toString());
+			assertEquals(expected, new HashSet<String>(listener.filenames));
 		}
 		catch (IOException e)
 		{
