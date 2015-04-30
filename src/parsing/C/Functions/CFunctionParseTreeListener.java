@@ -8,8 +8,7 @@ import antlr.C.FunctionBaseListener;
 import antlr.C.FunctionParser;
 
 /**
- * This is where hooks are registered for different types
- * of parse tree nodes.
+ * This is where hooks are registered for different types of parse tree nodes.
  * */
 
 public class CFunctionParseTreeListener extends FunctionBaseListener
@@ -20,7 +19,7 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 	{
 		p = aP;
 	}
-	
+
 	@Override
 	public void enterStatements(FunctionParser.StatementsContext ctx)
 	{
@@ -126,21 +125,23 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 				.peek();
 		builder.enterLabel(ctx);
 	}
-	
+
 	@Override
-	public void enterTry_statement(FunctionParser.Try_statementContext ctx) {
+	public void enterTry_statement(FunctionParser.Try_statementContext ctx)
+	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
 		builder.enterTryStatement(ctx);
 	}
 
 	@Override
-	public void enterCatch_statement(FunctionParser.Catch_statementContext ctx) {
+	public void enterCatch_statement(FunctionParser.Catch_statementContext ctx)
+	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
 		builder.enterCatchStatement(ctx);
 	}
-	
+
 	@Override
 	public void enterBlock_starter(FunctionParser.Block_starterContext ctx)
 	{
@@ -861,6 +862,14 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
 		builder.exitSizeofOperand(ctx);
+	}
+
+	@Override
+	public void enterThrowStatement(FunctionParser.ThrowStatementContext ctx)
+	{
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
+				.peek();
+		builder.enterThrowStatement(ctx);
 	}
 
 }

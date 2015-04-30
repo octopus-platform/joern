@@ -60,6 +60,7 @@ import antlr.C.FunctionParser.Sizeof_operandContext;
 import antlr.C.FunctionParser.StatementContext;
 import antlr.C.FunctionParser.StatementsContext;
 import antlr.C.FunctionParser.Switch_statementContext;
+import antlr.C.FunctionParser.ThrowStatementContext;
 import antlr.C.FunctionParser.Try_statementContext;
 import antlr.C.FunctionParser.Type_nameContext;
 import antlr.C.FunctionParser.Unary_expressionContext;
@@ -122,6 +123,7 @@ import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.Statement;
 import ast.statements.SwitchStatement;
+import ast.statements.ThrowStatement;
 import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 
@@ -849,6 +851,11 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCatchStatement(Catch_statementContext ctx)
 	{
 		replaceTopOfStack(new CatchStatement());
+	}
+
+	public void enterThrowStatement(ThrowStatementContext ctx)
+	{
+		replaceTopOfStack(new ThrowStatement());
 	}
 
 }

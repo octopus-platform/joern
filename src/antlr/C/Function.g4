@@ -51,6 +51,7 @@ jump_statement: BREAK ';'		#breakStatement
               | CONTINUE ';' 		#continueStatement
               | GOTO identifier ';'	#gotoStatement
               | RETURN expr? ';'	#returnStatement
+              | THROW primary_expression?  ';'	#throwStatement
               ;
 
 label: CASE? (identifier | number | CHAR ) ':' ;
