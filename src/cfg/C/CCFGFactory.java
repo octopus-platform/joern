@@ -294,7 +294,7 @@ public class CCFGFactory extends CFGFactory
 						if (!edge.getDestination().equals(
 								catchBlock.getExitNode()))
 						{
-							tryBlock.addEdge(node, edge.getDestination());
+							tryBlock.addEdge(node, edge.getDestination(), CFGEdge.EXCEPT_LABEL);
 						}
 					}
 				}

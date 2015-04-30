@@ -13,6 +13,7 @@ public class CFGEdge extends Edge<CFGNode>
 	public static final String EMPTY_LABEL = "";
 	public static final String TRUE_LABEL = "True";
 	public static final String FALSE_LABEL = "False";
+	public static final String EXCEPT_LABEL = "except";
 
 	private String label;
 	private Map<String, Object> properties;
