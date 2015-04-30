@@ -1,5 +1,6 @@
 package cfg.C;
 
+import java.util.List;
 import java.util.Map.Entry;
 
 import ast.ASTNode;
@@ -16,6 +17,7 @@ import ast.statements.IfStatement;
 import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
+import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import cfg.CFG;
 import cfg.CFGEdge;
@@ -28,7 +30,7 @@ import cfg.nodes.InfiniteForNode;
 public class CCFGFactory extends CFGFactory
 {
 	private static StructuredFlowVisitor structuredFlowVisitior = new StructuredFlowVisitor();
-	
+
 	@Override
 	public CFG newInstance(FunctionDef functionDefinition)
 	{
@@ -92,7 +94,7 @@ public class CCFGFactory extends CFGFactory
 		errorBlock.addEdge(errorNode, errorBlock.getExitNode());
 		return errorBlock;
 	}
-	
+
 	public static CFG newInstance(IfStatement ifStatement)
 	{
 		try
@@ -197,7 +199,7 @@ public class CCFGFactory extends CFGFactory
 			{
 				forBlock.addEdge(forBlock.getEntryNode(), conditionContainer);
 			}
-			
+
 			if (expression != null)
 			{
 				CFGNode expressionContainer = new ASTNodeContainer(expression);
@@ -260,6 +262,65 @@ public class CCFGFactory extends CFGFactory
 		}
 	}
 
+	public static CFG newInstance(TryStatement tryStatement)
+	{
+		try
+		{
+			CCFG tryBlock = convert(tryStatement.getStatement());
+
+			if (tryStatement.getCatchNode() == null)
+			{
+				return tryBlock;
+			}
+
+			CCFG catchBlock = convert(tryStatement.getCatchNode()
+					.getStatement());
+
+			tryBlock.addCFG(catchBlock);
+
+			// Adding edges from all statements within the try block to the
+			// first statement in the catch block
+			for (CFGNode node : tryBlock.getVertices())
+			{
+				// Skip entry and exit node. Skip nodes from catch block since
+				// they are already added to the cfg
+				if (!node.equals(tryBlock.getEntryNode())
+						&& !node.equals(tryBlock.getExitNode())
+						&& !catchBlock.getVertices().contains(node))
+				{
+					for (CFGEdge edge : catchBlock.outgoingEdges(catchBlock
+							.getEntryNode()))
+					{
+						if (!edge.getDestination().equals(
+								catchBlock.getExitNode()))
+						{
+							tryBlock.addEdge(node, edge.getDestination());
+						}
+					}
+				}
+			}
+
+			// Adding edge from last statement of the catch block to the exit
+			// node.
+			for (CFGEdge edge : catchBlock.ingoingEdges(catchBlock
+					.getExitNode()))
+			{
+				if (!edge.getSource().equals(catchBlock.getEntryNode()))
+				{
+					tryBlock.addEdge(edge.getSource(), tryBlock.getExitNode());
+				}
+			}
+
+			return tryBlock;
+
+		}
+		catch (Exception e)
+		{
+			// e.printStackTrace();
+			return newErrorInstance();
+		}
+	}
+
 	public static CFG newInstance(SwitchStatement switchStatement)
 	{
 		try
@@ -276,7 +337,8 @@ public class CCFGFactory extends CFGFactory
 
 			boolean defaultLabel = false;
 
-			for (Entry<String, CFGNode> block : switchBody.getLabels().entrySet())
+			for (Entry<String, CFGNode> block : switchBody.getLabels()
+					.entrySet())
 			{
 				if (block.getKey().equals("default"))
 				{
@@ -443,7 +505,7 @@ public class CCFGFactory extends CFGFactory
 			return newErrorInstance();
 		}
 	}
-	
+
 	public static CCFG convert(ASTNode node)
 	{
 		CCFG cfg;
@@ -458,8 +520,7 @@ public class CCFGFactory extends CFGFactory
 		}
 		return cfg;
 	}
-	
-	
+
 	public static void fixBreakStatements(CCFG thisCFG, CFGNode target)
 	{
 		for (CFGNode breakStatement : thisCFG.getBreakStatements())
@@ -482,7 +543,8 @@ public class CCFGFactory extends CFGFactory
 
 	public static void fixGotoStatements(CCFG thisCFG)
 	{
-		for (Entry<CFGNode, String> entry : thisCFG.getGotoStatements().entrySet())
+		for (Entry<CFGNode, String> entry : thisCFG.getGotoStatements()
+				.entrySet())
 		{
 			CFGNode gotoStatement = entry.getKey();
 			String label = entry.getValue();
@@ -501,5 +563,5 @@ public class CCFGFactory extends CFGFactory
 		}
 		thisCFG.getReturnStatements().clear();
 	}
-	
+
 }

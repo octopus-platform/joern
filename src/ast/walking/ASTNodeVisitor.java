@@ -27,6 +27,7 @@ import ast.statements.IfStatement;
 import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
+import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import databaseNodes.FileDatabaseNode;
 
@@ -40,7 +41,7 @@ public class ASTNodeVisitor
 		currentFileNode = aCurrentFileNode;
 		contextStack = new Stack<Long>();
 	}
-	
+
 	public void visit(ASTNode item)
 	{
 		visitChildren(item);
@@ -55,7 +56,7 @@ public class ASTNodeVisitor
 	{
 		defaultHandler(item);
 	}
-	
+
 	public void visit(FunctionDef item)
 	{
 		defaultHandler(item);
@@ -167,6 +168,11 @@ public class ASTNodeVisitor
 	}
 
 	public void visit(SwitchStatement expression)
+	{
+		defaultHandler(expression);
+	}
+
+	public void visit(TryStatement expression)
 	{
 		defaultHandler(expression);
 	}

@@ -126,7 +126,21 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 				.peek();
 		builder.enterLabel(ctx);
 	}
+	
+	@Override
+	public void enterTry_statement(FunctionParser.Try_statementContext ctx) {
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
+				.peek();
+		builder.enterTryStatement(ctx);
+	}
 
+	@Override
+	public void enterCatch_statement(FunctionParser.Catch_statementContext ctx) {
+		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
+				.peek();
+		builder.enterCatchStatement(ctx);
+	}
+	
 	@Override
 	public void enterBlock_starter(FunctionParser.Block_starterContext ctx)
 	{
