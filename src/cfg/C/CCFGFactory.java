@@ -1,5 +1,6 @@
 package cfg.C;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -8,6 +9,7 @@ import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.statements.BreakStatement;
+import ast.statements.CatchStatement;
 import ast.statements.CompoundStatement;
 import ast.statements.ContinueStatement;
 import ast.statements.DoStatement;
@@ -266,52 +268,56 @@ public class CCFGFactory extends CFGFactory
 	{
 		try
 		{
-			CCFG tryBlock = convert(tryStatement.getStatement());
+			CCFG tryCFG = convert(tryStatement.getStatement());
 
-			if (tryStatement.getCatchNode() == null)
+			if (tryStatement.getCatchNodes() == null)
 			{
-				return tryBlock;
+				return tryCFG;
 			}
 
-			CCFG catchBlock = convert(tryStatement.getCatchNode()
-					.getStatement());
+			// Statements in the try block
+			List<CFGNode> tryNodes = new LinkedList<CFGNode>(
+					tryCFG.getVertices());
 
-			tryBlock.addCFG(catchBlock);
-
-			// Adding edges from all statements within the try block to the
-			// first statement in the catch block
-			for (CFGNode node : tryBlock.getVertices())
+			for (CatchStatement catchStatement : tryStatement.getCatchNodes())
 			{
-				// Skip entry and exit node. Skip nodes from catch block since
-				// they are already added to the cfg
-				if (!node.equals(tryBlock.getEntryNode())
-						&& !node.equals(tryBlock.getExitNode())
-						&& !catchBlock.getVertices().contains(node))
+				CCFG catchBlock = convert(catchStatement.getStatement());
+
+				tryCFG.addCFG(catchBlock);
+
+				// Adding edges from all statements within the try block to the
+				// first statement in the catch block
+				for (CFGNode node : tryNodes)
 				{
-					for (CFGEdge edge : catchBlock.outgoingEdges(catchBlock
-							.getEntryNode()))
+					// Skip entry and exit node.
+					if (!node.equals(tryCFG.getEntryNode())
+							&& !node.equals(tryCFG.getExitNode()))
 					{
-						if (!edge.getDestination().equals(
-								catchBlock.getExitNode()))
+						for (CFGEdge edge : catchBlock.outgoingEdges(catchBlock
+								.getEntryNode()))
 						{
-							tryBlock.addEdge(node, edge.getDestination(), CFGEdge.EXCEPT_LABEL);
+							if (!edge.getDestination().equals(
+									catchBlock.getExitNode()))
+							{
+								tryCFG.addEdge(node, edge.getDestination(),
+										CFGEdge.EXCEPT_LABEL);
+							}
 						}
 					}
 				}
-			}
 
-			// Adding edge from last statement of the catch block to the exit
-			// node.
-			for (CFGEdge edge : catchBlock.ingoingEdges(catchBlock
-					.getExitNode()))
-			{
-				if (!edge.getSource().equals(catchBlock.getEntryNode()))
+				// Adding edge from last statement of the catch block to the
+				// exit node.
+				for (CFGEdge edge : catchBlock.ingoingEdges(catchBlock
+						.getExitNode()))
 				{
-					tryBlock.addEdge(edge.getSource(), tryBlock.getExitNode());
+					if (!edge.getSource().equals(catchBlock.getEntryNode()))
+					{
+						tryCFG.addEdge(edge.getSource(), tryCFG.getExitNode());
+					}
 				}
 			}
-
-			return tryBlock;
+			return tryCFG;
 
 		}
 		catch (Exception e)

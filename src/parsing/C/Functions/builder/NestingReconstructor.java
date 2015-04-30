@@ -136,11 +136,11 @@ public class NestingReconstructor
 					if (tryStatement != null)
 					{
 						tryStatement
-								.setCatchNode((CatchStatement) curBlockStarter);
+								.addCatchNode((CatchStatement) curBlockStarter);
 					}
 					else
 						throw new RuntimeException(
-								"Warning: cannot find if for else");
+								"Warning: cannot find try for catch");
 
 					return;
 				}

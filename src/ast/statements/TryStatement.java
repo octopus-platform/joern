@@ -1,21 +1,29 @@
 package ast.statements;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
 public class TryStatement extends BlockStarter
 {
 
-	private CatchStatement catchNode = null;
+	private List<CatchStatement> catchNodes = new LinkedList<CatchStatement>();
 
-	public void setCatchNode(CatchStatement catchNode)
+	public void addCatchNode(CatchStatement catchNode)
 	{
-		this.catchNode = catchNode;
+		getCatchNodes().add(catchNode);
 	}
 
-	public CatchStatement getCatchNode()
+	public List<CatchStatement> getCatchNodes()
 	{
-		return this.catchNode;
+		return this.catchNodes;
+	}
+
+	public CatchStatement getCatchNode(int index)
+	{
+		return getCatchNodes().get(index);
 	}
 
 	public void accept(ASTNodeVisitor visitor)
@@ -25,20 +33,23 @@ public class TryStatement extends BlockStarter
 
 	public int getChildCount()
 	{
-		int childCount = super.getChildCount();
-
-		if (getCatchNode() != null)
-			childCount++;
-		return childCount;
+		return super.getChildCount() + getCatchNodes().size();
 	}
 
 	public ASTNode getChild(int i)
 	{
 		if (i == 0)
 			return getStatement();
-		else if (i == 1)
-			return getCatchNode();
-		throw new RuntimeException("Invalid IfItem");
+		else
+			try
+			{
+				return getCatchNode(i - 1);
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				throw new RuntimeException(
+						"Invalid child number for try statement");
+			}
 	}
 
 }

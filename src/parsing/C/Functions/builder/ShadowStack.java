@@ -147,7 +147,8 @@ public class ShadowStack
 
 		try
 		{
-			item = stack.pop();
+			// keep try statement on stack for further catch expressions
+			item = stack.peek();
 			retval = (TryStatement) item.ifOrDoOrTry;
 
 			if (itemStack.contains(retval))
