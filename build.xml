@@ -15,7 +15,7 @@
     <pathelement location="${lib.dir}/geronimo-jta_1.1_spec-1.1.1.jar"/>
     <pathelement location="${build.dir}" />
   </path>
-  
+
   <!-- Add jars to the classpath -->
   <path id="joern.classpath">
     <pathelement location="bin"/>
@@ -25,11 +25,11 @@
 	<pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
     <pathelement location="${lib.dir}/hamcrest-core-1.3.jar"/>
     <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
-    <pathelement location="${lib.dir}/neo4j-kernel-2.1.7.jar"/>
-    <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.7.jar"/>
-	<pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.7.jar"/>
+    <pathelement location="${lib.dir}/neo4j-kernel-2.1.5.jar"/>
+    <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.5.jar"/>
+	<pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.5.jar"/>
   </path>
-	  
+
   <target name="clean">
     <delete dir="${build.dir}" />
     <delete dir="${test.report.dir}" />
@@ -42,17 +42,17 @@
 
   <target name="compile">
     <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
-	<src path="src"/> 
+	<src path="src"/>
 	<classpath refid="joern.classpath"/>
     </javac>
   </target>
 
   <target name="jar" depends="clean,makedir,compile">
     <jar destfile="${build.dir}/joern.jar"
-         basedir="${build.dir}"
-         includes="**/*.class">
+	 basedir="${build.dir}"
+	 includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.index.IndexMain" />
+	<attribute name="Main-Class" value="tools.index.IndexMain" />
       </manifest>
       <fileset dir="${build.dir}" includes="**/*.class" />
       <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
@@ -75,15 +75,15 @@
       <formatter type="xml" />
 
       <batchtest fork="yes" todir="${test.report.dir}" skipnontests="true">
-        <fileset dir="${test.dir}">
-          <include name="tests/**/*.java" />
-        </fileset>
+	<fileset dir="${test.dir}">
+	  <include name="tests/**/*.java" />
+	</fileset>
       </batchtest>
     </junit>
 
     <junitreport todir="${test.report.dir}">
       <fileset dir="${test.report.dir}">
-        <include name="TEST-*.xml"/>
+	<include name="TEST-*.xml"/>
       </fileset>
       <report format="frames" todir="${test.report.dir}/html"/>
     </junitreport>
@@ -92,22 +92,22 @@
 
   <target name="icfg" depends="compile">
     <jar destfile="${build.dir}/icfg.jar"
-         basedir="${build.dir}"
-         includes="**/*.class">
+	 basedir="${build.dir}"
+	 includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.icfg.ICFGMain" />
+	<attribute name="Main-Class" value="tools.icfg.ICFGMain" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
     </jar>
   </target>
-  
+
   <target name="argumentTainter" depends="compile">
     <jar destfile="${build.dir}/argumentTainter.jar"
-         basedir="${build.dir}"
-         includes="**/*.class">
+	 basedir="${build.dir}"
+	 includes="**/*.class">
       <manifest>
-        <attribute name="Main-Class" value="tools.argumentTainter.ArgumentTainterMain" />
+	<attribute name="Main-Class" value="tools.argumentTainter.ArgumentTainterMain" />
       </manifest>
       <fileset dir="${build.dir}" includes="**/*.class" />
       <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
