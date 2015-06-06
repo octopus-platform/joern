@@ -57,7 +57,7 @@ the following projects.
 * `The ANTLRv4 Parser Generator <http://www.antlr.org/>`_
 * `Apache Commons CLI Command Line Parser 1.2
   <http://commons.apache.org/proper/commons-cli/>`_
-* `Neo4J 2.1.5 Community Edition
+* `Neo4J 2.1.X Community Edition
   <http://www.neo4j.com/download/other-releases>`_
 
 * `The Apache Ant build tool <http://ant.apache.org/>`_ (tested with
