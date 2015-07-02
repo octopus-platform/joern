@@ -13,6 +13,7 @@ import ast.statements.IfStatement;
 import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
+import ast.statements.ThrowStatement;
 import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import ast.walking.ASTNodeVisitor;
@@ -109,6 +110,12 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 	}
 
 	public void visit(TryStatement node)
+	{
+		returnCFG = CCFGFactory.newInstance(node);
+	}
+	
+	@Override
+	public void visit(ThrowStatement node)
 	{
 		returnCFG = CCFGFactory.newInstance(node);
 	}

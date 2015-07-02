@@ -27,6 +27,7 @@ import ast.statements.IfStatement;
 import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
+import ast.statements.ThrowStatement;
 import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import databaseNodes.FileDatabaseNode;
@@ -173,6 +174,11 @@ public class ASTNodeVisitor
 	}
 
 	public void visit(TryStatement expression)
+	{
+		defaultHandler(expression);
+	}
+	
+	public void visit(ThrowStatement expression)
 	{
 		defaultHandler(expression);
 	}
