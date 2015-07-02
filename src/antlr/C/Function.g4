@@ -29,7 +29,7 @@ closing_curly: '}';
 block_starter: selection_or_iteration;
 
 selection_or_iteration: TRY                      #Try_statement
-                      | CATCH '(' param_type ')' #Catch_statement
+                      | CATCH '(' (param_type | ELLIPSIS) ')' #Catch_statement
                       | IF '(' condition ')'     #If_statement
                       | ELSE                     #Else_statement
                       | SWITCH '(' condition ')' #Switch_statement
@@ -51,6 +51,7 @@ jump_statement: BREAK ';'		#breakStatement
               | CONTINUE ';' 		#continueStatement
               | GOTO identifier ';'	#gotoStatement
               | RETURN expr? ';'	#returnStatement
+              | THROW expr?  ';'	#throwStatement
               ;
 
 label: CASE? (identifier | number | CHAR ) ':' ;
