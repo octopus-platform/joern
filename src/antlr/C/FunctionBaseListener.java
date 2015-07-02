@@ -3,7 +3,11 @@
 	package antlr.C;
 
 
-  import org.antlr.v4.runtime.ParserRuleContext;
+  import java.util.Stack;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -578,6 +582,18 @@ public class FunctionBaseListener implements FunctionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGotoStatement(@NotNull FunctionParser.GotoStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterThrowStatement(@NotNull FunctionParser.ThrowStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitThrowStatement(@NotNull FunctionParser.ThrowStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
