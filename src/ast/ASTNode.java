@@ -9,7 +9,7 @@ import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
 import ast.walking.ASTNodeVisitor;
 
-public class ASTNode
+public class ASTNode implements Cloneable
 {
 
 	protected String codeStr = null;
@@ -148,6 +148,24 @@ public class ASTNode
 			return ((Expression) this).getOperator();
 		}
 		return null;
+	}
+	
+	public ASTNode clone() throws CloneNotSupportedException
+	{
+		ASTNode node = (ASTNode)super.clone();
+		node.setCodeStr(codeStr);
+		node.initializeFromContext(parseTreeNodeContext);
+		if(isInCFG())
+			node.markAsCFGNode();
+		if(children != null)
+		{
+			for(ASTNode n:children)
+			{
+				node.addChild(n.clone());
+			}
+		}
+		node.setChildNumber(childNumber);
+		return node;
 	}
 
 }
