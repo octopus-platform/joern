@@ -5,11 +5,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import ast.ASTNode;
 import ast.expressions.Expression;
 import ast.statements.BlockStarter;
+import ast.statements.CatchStatement;
 import ast.statements.CompoundStatement;
 import ast.statements.DoStatement;
 import ast.statements.ElseStatement;
 import ast.statements.ExpressionHolder;
 import ast.statements.IfStatement;
+import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 
 public class NestingReconstructor
@@ -69,7 +71,6 @@ public class NestingReconstructor
 
 	protected void consolidateBlockStarters(ASTNode node)
 	{
-
 		while (true)
 		{
 			try
@@ -129,6 +130,20 @@ public class NestingReconstructor
 						return;
 					}
 				}
+				else if (curBlockStarter instanceof CatchStatement)
+				{
+					TryStatement tryStatement = (TryStatement) stack.getTry();
+					if (tryStatement != null)
+					{
+						tryStatement
+								.addCatchNode((CatchStatement) curBlockStarter);
+					}
+					else
+						throw new RuntimeException(
+								"Warning: cannot find try for catch");
+
+					return;
+				}
 
 			}
 			catch (ClassCastException ex)
@@ -140,5 +155,4 @@ public class NestingReconstructor
 		ASTNode root = stack.peek();
 		root.addChild(node);
 	}
-
 }

@@ -1,5 +1,7 @@
 package cfg.C;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import ast.ASTNode;
@@ -7,6 +9,7 @@ import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.statements.BreakStatement;
+import ast.statements.CatchStatement;
 import ast.statements.CompoundStatement;
 import ast.statements.ContinueStatement;
 import ast.statements.DoStatement;
@@ -16,19 +19,24 @@ import ast.statements.IfStatement;
 import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
+import ast.statements.ThrowStatement;
+import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.CFGFactory;
 import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGErrorNode;
+import cfg.nodes.CFGExitNode;
 import cfg.nodes.CFGNode;
+import cfg.nodes.CFGExceptionNode;
 import cfg.nodes.InfiniteForNode;
 
 public class CCFGFactory extends CFGFactory
 {
 	private static StructuredFlowVisitor structuredFlowVisitior = new StructuredFlowVisitor();
-	
+
 	@Override
 	public CFG newInstance(FunctionDef functionDefinition)
 	{
@@ -51,6 +59,12 @@ public class CCFGFactory extends CFGFactory
 				System.err.println("warning: unresolved continue statement");
 				fixContinueStatement(function, function.getErrorNode());
 			}
+			if (function.hasExceptionNode())
+			{
+				function.addEdge(function.getExceptionNode(),
+						function.getExitNode(), CFGEdge.UNHANDLED_EXCEPT_LABEL);
+			}
+
 			return function;
 		}
 		catch (Exception e)
@@ -92,7 +106,7 @@ public class CCFGFactory extends CFGFactory
 		errorBlock.addEdge(errorNode, errorBlock.getExitNode());
 		return errorBlock;
 	}
-	
+
 	public static CFG newInstance(IfStatement ifStatement)
 	{
 		try
@@ -197,7 +211,7 @@ public class CCFGFactory extends CFGFactory
 			{
 				forBlock.addEdge(forBlock.getEntryNode(), conditionContainer);
 			}
-			
+
 			if (expression != null)
 			{
 				CFGNode expressionContainer = new ASTNodeContainer(expression);
@@ -260,6 +274,70 @@ public class CCFGFactory extends CFGFactory
 		}
 	}
 
+	public static CFG newInstance(TryStatement tryStatement)
+	{
+		try
+		{
+			CCFG tryCFG = convert(tryStatement.getStatement());
+			List<CFGNode> statements = new LinkedList<CFGNode>();
+
+			// Get all nodes within try not connected to an exception node.
+			for (CFGNode node : tryCFG.getVertices())
+			{
+				if (!(node instanceof CFGEntryNode)
+						&& !(node instanceof CFGExitNode))
+				{
+					boolean b = true;
+					for (CFGEdge edge : tryCFG.outgoingEdges(node))
+					{
+						CFGNode destination = edge.getDestination();
+						if (destination instanceof CFGExceptionNode)
+						{
+							b = false;
+							break;
+						}
+					}
+					if (b)
+						statements.add(node);
+				}
+			}
+
+			// Add exception node for current try block
+			if (!statements.isEmpty())
+			{
+				CFGExceptionNode exceptionNode = new CFGExceptionNode();
+				tryCFG.setExceptionNode(exceptionNode);
+				for (CFGNode node : statements)
+				{
+					tryCFG.addEdge(node, exceptionNode, CFGEdge.EXCEPT_LABEL);
+				}
+			}
+
+			if (tryStatement.getCatchNodes() == null)
+			{
+				System.err.println("warning: cannot find catch for try");
+				return tryCFG;
+			}
+
+			// Mount exception handlers
+			for (CatchStatement catchStatement : tryStatement.getCatchNodes())
+			{
+				CCFG catchBlock = convert(catchStatement.getStatement());
+				tryCFG.mountCFG(tryCFG.getExceptionNode(),
+						tryCFG.getExitNode(), catchBlock,
+						CFGEdge.HANDLED_EXCEPT_LABEL);
+			}
+
+			return tryCFG;
+
+		}
+		catch (Exception e)
+		{
+			// e.printStackTrace();
+			return newErrorInstance();
+		}
+	}
+
 	public static CFG newInstance(SwitchStatement switchStatement)
 	{
 		try
@@ -276,7 +354,8 @@ public class CCFGFactory extends CFGFactory
 
 			boolean defaultLabel = false;
 
-			for (Entry<String, CFGNode> block : switchBody.getLabels().entrySet())
+			for (Entry<String, CFGNode> block : switchBody.getLabels()
+					.entrySet())
 			{
 				if (block.getKey().equals("default"))
 				{
@@ -443,7 +522,29 @@ public class CCFGFactory extends CFGFactory
 			return newErrorInstance();
 		}
 	}
-	
+
+	public static CFG newInstance(ThrowStatement throwStatement)
+	{
+		try
+		{
+			CCFG throwBlock = new CCFG();
+			CFGNode throwContainer = new ASTNodeContainer(throwStatement);
+			CFGExceptionNode exceptionNode = new CFGExceptionNode();
+			throwBlock.addVertex(throwContainer);
+			throwBlock.setExceptionNode(exceptionNode);
+			throwBlock.addEdge(throwBlock.getEntryNode(), throwContainer);
+			throwBlock.addEdge(throwContainer, exceptionNode,
+					CFGEdge.EXCEPT_LABEL);
+			// throwBlock.addEdge(throwContainer, throwBlock.getExitNode());
+			return throwBlock;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return newErrorInstance();
+		}
+	}
+
 	public static CCFG convert(ASTNode node)
 	{
 		CCFG cfg;
@@ -458,8 +559,7 @@ public class CCFGFactory extends CFGFactory
 		}
 		return cfg;
 	}
-	
-	
+
 	public static void fixBreakStatements(CCFG thisCFG, CFGNode target)
 	{
 		for (CFGNode breakStatement : thisCFG.getBreakStatements())
@@ -482,7 +582,8 @@ public class CCFGFactory extends CFGFactory
 
 	public static void fixGotoStatements(CCFG thisCFG)
 	{
-		for (Entry<CFGNode, String> entry : thisCFG.getGotoStatements().entrySet())
+		for (Entry<CFGNode, String> entry : thisCFG.getGotoStatements()
+				.entrySet())
 		{
 			CFGNode gotoStatement = entry.getKey();
 			String label = entry.getValue();
@@ -501,5 +602,5 @@ public class CCFGFactory extends CFGFactory
 		}
 		thisCFG.getReturnStatements().clear();
 	}
-	
+
 }

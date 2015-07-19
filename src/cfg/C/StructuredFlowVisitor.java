@@ -13,12 +13,13 @@ import ast.statements.IfStatement;
 import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
+import ast.statements.ThrowStatement;
+import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import ast.walking.ASTNodeVisitor;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
-
 
 class StructuredFlowVisitor extends ASTNodeVisitor
 {
@@ -38,15 +39,16 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 	public void visit(Parameter param)
 	{
 		returnCFG = CCFGFactory.newInstance(param);
-	
-		for(CFGNode node : returnCFG.getVertices()){
-			if(!(node instanceof ASTNodeContainer))
+
+		for (CFGNode node : returnCFG.getVertices())
+		{
+			if (!(node instanceof ASTNodeContainer))
 				continue;
 			returnCFG.registerParameter(node);
 		}
-		
+
 	}
-	
+
 	public void visit(CompoundStatement content)
 	{
 		returnCFG = CCFGFactory.newInstance(content);
@@ -106,4 +108,16 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		returnCFG = CCFGFactory.newInstance(expression);
 	}
+
+	public void visit(TryStatement node)
+	{
+		returnCFG = CCFGFactory.newInstance(node);
+	}
+	
+	@Override
+	public void visit(ThrowStatement node)
+	{
+		returnCFG = CCFGFactory.newInstance(node);
+	}
+
 }

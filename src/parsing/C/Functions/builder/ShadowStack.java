@@ -7,6 +7,7 @@ import ast.ASTNode;
 import ast.statements.CompoundStatement;
 import ast.statements.DoStatement;
 import ast.statements.IfStatement;
+import ast.statements.TryStatement;
 
 public class ShadowStack
 {
@@ -18,11 +19,11 @@ public class ShadowStack
 	{
 
 		public ASTNode parentCompound;
-		public ASTNode ifOrDo;
+		public ASTNode ifOrDoOrTry;
 
 		public StackItem(ASTNode item, ASTNode parent)
 		{
-			ifOrDo = item;
+			ifOrDoOrTry = item;
 			parentCompound = parent;
 		}
 
@@ -36,7 +37,8 @@ public class ShadowStack
 	public void push(ASTNode statementItem)
 	{
 		if (statementItem instanceof IfStatement
-				|| statementItem instanceof DoStatement)
+				|| statementItem instanceof DoStatement
+				|| statementItem instanceof TryStatement)
 		{
 			ASTNode parentCompound = parentCompoundFromItemStack(itemStack);
 
@@ -63,7 +65,7 @@ public class ShadowStack
 		StackItem topItem = stack.pop();
 		StackItem returnItem = stack.pop();
 		stack.push(topItem);
-		return (IfStatement) returnItem.ifOrDo;
+		return (IfStatement) returnItem.ifOrDoOrTry;
 	}
 
 	public IfStatement getIf()
@@ -74,7 +76,7 @@ public class ShadowStack
 		try
 		{
 			item = stack.pop();
-			retval = (IfStatement) item.ifOrDo;
+			retval = (IfStatement) item.ifOrDoOrTry;
 		}
 		catch (EmptyStackException ex)
 		{
@@ -97,7 +99,7 @@ public class ShadowStack
 		try
 		{
 			item = stack.pop();
-			retval = (DoStatement) item.ifOrDo;
+			retval = (DoStatement) item.ifOrDoOrTry;
 
 			if (itemStack.contains(retval))
 			{
@@ -136,6 +138,37 @@ public class ShadowStack
 			}
 		}
 		return parentCompound;
+	}
+
+	public TryStatement getTry()
+	{
+		TryStatement retval;
+		StackItem item = null;
+
+		try
+		{
+			// keep try statement on stack for further catch expressions
+			item = stack.peek();
+			retval = (TryStatement) item.ifOrDoOrTry;
+
+			if (itemStack.contains(retval))
+			{
+				stack.push(item);
+				return null;
+			}
+
+		}
+		catch (EmptyStackException ex)
+		{
+			return null;
+		}
+		catch (ClassCastException ex)
+		{
+			stack.push(item);
+			return null;
+		}
+
+		return retval;
 	}
 
 }
