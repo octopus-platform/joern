@@ -545,7 +545,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		// This is also a bit of a hack. As we go up,
 		// we introduce an artificial assignment-node.
 
-		assign.addChild(identifierDecl.getName());
+		assign.addChild(identifierDecl.getName().clone());
 		assign.addChild(lastChild);
 
 		identifierDecl.addChild(assign);

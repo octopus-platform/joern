@@ -22,4 +22,10 @@ public class Expression extends ASTNode
 		return operator;
 	}
 	
+	public Expression clone() throws CloneNotSupportedException
+	{
+		Expression node = (Expression)super.clone();
+		node.setOperator(operator);
+		return node;
+	}
 }
