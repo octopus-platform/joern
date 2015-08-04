@@ -33,14 +33,16 @@ public class CommandLineInterface extends CommonCommandLineInterface
 	{
 		super.initializeOptions();
 
-		Option outputDirectory = OptionBuilder
-				.withArgName("outdir")
-				.hasArg()
-				.withDescription(
-						"specifies where the neo4j database will be written")
+		Option outputDirectory = OptionBuilder.withArgName("outdir").hasArg()
+				.withDescription("the directory the output will be written to")
 				.create("outdir");
 
+		Option outputFormat = OptionBuilder.withArgName("outformat").hasArg()
+				.withDescription("the output format: \"neo4j\" or \"csv\" ")
+				.create("outformat");
+
 		options.addOption(outputDirectory);
+		options.addOption(outputFormat);
 
 	}
 

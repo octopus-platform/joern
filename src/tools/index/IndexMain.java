@@ -7,7 +7,6 @@ import org.apache.commons.cli.ParseException;
 import outputModules.neo4j.Neo4JIndexer;
 import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
-import fileWalker.UnorderedWalker;
 
 /**
  * Main Class for the indexer: This class parses command line arguments and
@@ -22,9 +21,7 @@ public class IndexMain
 	// private static SourceFileWalker sourceFileWalker = new UnorderedWalker();
 	private static SourceFileWalker sourceFileWalker = new OrderedWalker();
 
-	
-	// In the future, allow other indexers to be instantiated
-	private static Indexer indexer = new Neo4JIndexer();
+	private static Indexer indexer;
 
 	public static void main(String[] args)
 	{
@@ -60,6 +57,8 @@ public class IndexMain
 
 	private static void setupIndexer()
 	{
+		// In the future, allow other indexers to be instantiated
+		indexer = new Neo4JIndexer();
 		String outputDir = cmd.getOutputDir();
 		indexer.setOutputDir(outputDir);
 		indexer.initialize();
