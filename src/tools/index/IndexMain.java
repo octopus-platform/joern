@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
+import outputModules.csv.CSVIndexer;
 import outputModules.neo4j.Neo4JIndexer;
 import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
@@ -17,7 +18,7 @@ import fileWalker.SourceFileWalker;
 public class IndexMain
 {
 
-	private static CommandLineInterface cmd = new CommandLineInterface();
+	private static ImporterCmdLineInterface cmd = new ImporterCmdLineInterface();
 	// private static SourceFileWalker sourceFileWalker = new UnorderedWalker();
 	private static SourceFileWalker sourceFileWalker = new OrderedWalker();
 
@@ -57,8 +58,15 @@ public class IndexMain
 
 	private static void setupIndexer()
 	{
-		// In the future, allow other indexers to be instantiated
-		indexer = new Neo4JIndexer();
+
+		String outputFormat = cmd.getOutputFormat();
+		if (outputFormat.equals("neo4j"))
+			indexer = new Neo4JIndexer();
+		else if (outputFormat.equals("csv"))
+			indexer = new CSVIndexer();
+		else
+			throw new RuntimeException("unknown output format");
+
 		String outputDir = cmd.getOutputDir();
 		indexer.setOutputDir(outputDir);
 		indexer.initialize();

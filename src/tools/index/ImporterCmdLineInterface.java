@@ -6,12 +6,13 @@ import org.apache.commons.cli.ParseException;
 
 import tools.CommonCommandLineInterface;
 
-public class CommandLineInterface extends CommonCommandLineInterface
+public class ImporterCmdLineInterface extends CommonCommandLineInterface
 {
 
 	private String[] filenames;
 
 	String outputDir = ".joernIndex/";
+	String outputFormat = "neo4j";
 
 	public String[] getFilenames()
 	{
@@ -23,7 +24,12 @@ public class CommandLineInterface extends CommonCommandLineInterface
 		return outputDir;
 	}
 
-	public CommandLineInterface()
+	public String getOutputFormat()
+	{
+		return outputFormat;
+	}
+
+	public ImporterCmdLineInterface()
 	{
 		super();
 	}
@@ -57,6 +63,10 @@ public class CommandLineInterface extends CommonCommandLineInterface
 
 		if (cmd.hasOption("outdir"))
 			outputDir = cmd.getOptionValue("outdir");
+
+		if (cmd.hasOption("outformat"))
+			outputFormat = cmd.getOptionValue("outformat");
+
 	}
 
 	public void printHelp()
