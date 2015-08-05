@@ -9,8 +9,12 @@ public class CSVDirectoryTreeImporter extends DirectoryTreeImporter
 	@Override
 	protected void insertNode(FileDatabaseNode node)
 	{
-		// Add any code required to insert the file node
-		// into the database
+		createDirForFileNode(node);
+	}
+
+	private void createDirForFileNode(FileDatabaseNode node)
+	{
+		System.out.println(outputDir);
 	}
 
 	@Override
@@ -22,5 +26,5 @@ public class CSVDirectoryTreeImporter extends DirectoryTreeImporter
 		// via the protected member 'directoryStack' of the
 		// base class.
 	}
-	
+
 }

@@ -33,6 +33,11 @@ public class FileDatabaseNode extends DatabaseNode
 		pathString = path.toString();
 	}
 
+	public String getPath()
+	{
+		return pathString;
+	}
+
 	@Override
 	public Map<String, Object> createProperties()
 	{

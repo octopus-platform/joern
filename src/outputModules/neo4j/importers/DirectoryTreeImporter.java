@@ -10,11 +10,13 @@ public abstract class DirectoryTreeImporter
 {
 	protected IndexerState state;
 	protected Stack<FileDatabaseNode> directoryStack = new Stack<FileDatabaseNode>();
-	
+
 	protected abstract void linkWithParentDirectory(FileDatabaseNode node);
+
 	protected abstract void insertNode(FileDatabaseNode node);
-	
-	
+
+	protected String outputDir;
+
 	public void setState(IndexerState aState)
 	{
 		state = aState;
@@ -55,7 +57,7 @@ public abstract class DirectoryTreeImporter
 		node.setType("File");
 		insertNode(node);
 	}
-	
+
 	protected long getSourceIdFromStack()
 	{
 		long srcId;
@@ -65,5 +67,15 @@ public abstract class DirectoryTreeImporter
 			srcId = directoryStack.peek().getId();
 		return srcId;
 	}
-	
+
+	public String getOutputDir()
+	{
+		return outputDir;
+	}
+
+	public void setOutputDir(String outputDir)
+	{
+		this.outputDir = outputDir;
+	}
+
 }

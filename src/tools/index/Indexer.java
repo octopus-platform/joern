@@ -7,7 +7,6 @@ import parsing.ModuleParser;
 import parsing.C.Modules.ANTLRCModuleParserDriver;
 import fileWalker.SourceFileListener;
 
-
 public abstract class Indexer extends SourceFileListener
 {
 
@@ -20,7 +19,6 @@ public abstract class Indexer extends SourceFileListener
 
 	protected String outputDir;
 
-
 	protected abstract void initializeDirectoryImporter();
 
 	protected abstract void initializeWalker();
@@ -29,12 +27,11 @@ public abstract class Indexer extends SourceFileListener
 
 	protected abstract void shutdownDatabase();
 
-
 	protected void initializeIndexerState()
 	{
 		state = new IndexerState(this);
 	}
-	
+
 	public void setOutputDir(String anOutputDir)
 	{
 		outputDir = anOutputDir;
@@ -79,6 +76,7 @@ public abstract class Indexer extends SourceFileListener
 	{
 		astWalker.setIndexerState(state);
 		dirTreeImporter.setState(state);
+		dirTreeImporter.setOutputDir(outputDir);
 		parser.addObserver(astWalker);
 	}
 
