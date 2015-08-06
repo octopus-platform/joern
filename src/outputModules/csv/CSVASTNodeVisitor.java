@@ -1,5 +1,6 @@
 package outputModules.csv;
 
+import outputModules.csv.importers.FunctionImporter;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;
@@ -10,17 +11,22 @@ public class CSVASTNodeVisitor extends ASTNodeVisitor
 {
 	public void visit(FunctionDef node)
 	{
-		// Called for each successfully parsed function
-		// You can use the following code to generate all other
-		// supported representations from the AST:
-		
-		try{ 
-			FunctionDatabaseNode dbNode = new FunctionDatabaseNode();
+		FunctionDatabaseNode dbNode;
+		try
+		{
+			dbNode = new FunctionDatabaseNode();
 			dbNode.initialize(node);
-		}catch (RuntimeException ex){
-			
 		}
-		
+		catch (RuntimeException ex)
+		{
+			System.err.println("Error adding function to database: "
+					+ ((FunctionDef) node).name.getEscapedCodeStr());
+			return;
+		}
+
+		FunctionImporter importer = new FunctionImporter();
+		importer.addFunction(dbNode);
+
 	}
 
 	public void visit(ClassDefStatement node)

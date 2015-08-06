@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/neo4j-primitive-collections-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/antlr4-annotations-4.5.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/antlr4-runtime-4.5.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

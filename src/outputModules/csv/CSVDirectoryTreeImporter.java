@@ -1,6 +1,7 @@
 package outputModules.csv;
 
 import java.io.File;
+import java.util.Map;
 
 import outputModules.neo4j.importers.DirectoryTreeImporter;
 import databaseNodes.FileDatabaseNode;
@@ -14,6 +15,9 @@ public class CSVDirectoryTreeImporter extends DirectoryTreeImporter
 		String dirNameForFileNode = genDirNameForFileNode(node);
 		createDirForFileNode(dirNameForFileNode);
 		CSVWriter.changeOutputDir(dirNameForFileNode);
+
+		Map<String, Object> properties = node.createProperties();
+		CSVWriter.addNode(node, properties);
 	}
 
 	private void createDirForFileNode(String dirNameForFileNode)
