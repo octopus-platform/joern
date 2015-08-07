@@ -5,6 +5,7 @@ import java.util.Map;
 import outputModules.csv.CSVWriter;
 import ast.ASTNode;
 import databaseNodes.ASTDatabaseNode;
+import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
 
@@ -37,15 +38,15 @@ public class ASTImporter
 
 	}
 
-	private void addASTLink(ASTNode node, ASTNode child)
+	private void addASTLink(ASTNode parent, ASTNode child)
 	{
-		// TODO Auto-generated method stub
-
+		long srcId = CSVWriter.getIdForObject(parent);
+		long dstId = CSVWriter.getIdForObject(child);
+		CSVWriter.addEdge(srcId, dstId, null, EdgeTypes.IS_AST_PARENT);
 	}
 
 	private void addASTNode(ASTNode node)
 	{
-		// TODO Auto-generated method stub
 		ASTDatabaseNode astDatabaseNode = new ASTDatabaseNode();
 		astDatabaseNode.initialize(node);
 		astDatabaseNode.setCurrentFunction(currentFunction);
@@ -53,6 +54,6 @@ public class ASTImporter
 
 		properties.put(NodeKeys.FUNCTION_ID,
 				CSVWriter.getIdForObject(currentFunction).toString());
-		CSVWriter.addNode(astDatabaseNode, properties);
+		CSVWriter.addNode(node, properties);
 	}
 }

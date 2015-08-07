@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import databaseNodes.DatabaseNode;
-
 public class CSVWriter
 {
 	final static String SEPARATOR = "\t";
@@ -43,8 +41,7 @@ public class CSVWriter
 		openEdgeFile(dirNameForFileNode);
 	}
 
-	public static void addNode(DatabaseNode dbNode,
-			Map<String, Object> properties)
+	public static void addNode(Object node, Map<String, Object> properties)
 	{
 		nodeWriter.write((new Long(lastNodeId)).toString());
 		for (String property : nodeProperties)
@@ -55,7 +52,7 @@ public class CSVWriter
 				nodeWriter.write(propValue);
 		}
 		nodeWriter.write("\n");
-		objectToId.put(dbNode, lastNodeId);
+		objectToId.put(node, lastNodeId);
 		lastNodeId++;
 	}
 
