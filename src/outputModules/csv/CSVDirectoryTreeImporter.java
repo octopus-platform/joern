@@ -15,6 +15,7 @@ public class CSVDirectoryTreeImporter extends DirectoryTreeImporter
 		String dirNameForFileNode = genDirNameForFileNode(node);
 		createDirForFileNode(dirNameForFileNode);
 		CSVWriter.changeOutputDir(dirNameForFileNode);
+		CSVWriter.reset();
 
 		Map<String, Object> properties = node.createProperties();
 		CSVWriter.addNode(node, properties);

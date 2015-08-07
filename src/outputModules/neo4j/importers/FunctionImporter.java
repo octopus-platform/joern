@@ -7,7 +7,6 @@ import org.neo4j.graphdb.RelationshipType;
 
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
-import ast.statements.CompoundStatement;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;

@@ -25,6 +25,7 @@ public class CSVASTNodeVisitor extends ASTNodeVisitor
 		}
 
 		FunctionImporter importer = new FunctionImporter();
+		importer.setCurrentFile(currentFileNode);
 		importer.addFunction(dbNode);
 
 	}

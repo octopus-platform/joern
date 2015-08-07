@@ -3,6 +3,7 @@ package outputModules.csv;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,10 +17,23 @@ public class CSVWriter
 	final static String[] nodeProperties = { "type", "code", "location",
 			"functionId", "name", "filepath" };
 
+	final static String[] edgeProperties = {};
+
 	static PrintWriter nodeWriter;
 	static PrintWriter edgeWriter;
 	static long lastNodeId = 0;
-	private static long curFunctionId = -1;
+
+	static Map<Object, Long> objectToId = new HashMap<Object, Long>();
+
+	public static void reset()
+	{
+		objectToId.clear();
+	}
+
+	static public Long getIdForObject(Object o)
+	{
+		return objectToId.get(o);
+	}
 
 	public static void changeOutputDir(String dirNameForFileNode)
 	{
@@ -41,13 +55,27 @@ public class CSVWriter
 				nodeWriter.write(propValue);
 		}
 		nodeWriter.write("\n");
+		objectToId.put(dbNode, lastNodeId);
 		lastNodeId++;
 	}
 
-	public static void addEdge(long nodeId, Map<String, String> properties,
-			String edgeType)
+	public static void addEdge(long srcId, long dstId,
+			Map<String, String> properties, String edgeType)
 	{
+		edgeWriter.print(srcId);
+		edgeWriter.print(SEPARATOR);
+		edgeWriter.print(dstId);
+		edgeWriter.print(SEPARATOR);
+		edgeWriter.print(edgeType);
 
+		for (String property : edgeProperties)
+		{
+			edgeWriter.write(SEPARATOR);
+			String propValue = (String) properties.get(property);
+			if (propValue != null)
+				edgeWriter.write(propValue);
+		}
+		edgeWriter.write("\n");
 	}
 
 	private static void openNodeFile(String outDir)
@@ -64,10 +92,18 @@ public class CSVWriter
 		nodeWriter.println(joined);
 	}
 
+	private static void writeEdgePropertyNames()
+	{
+		String joined = "start" + SEPARATOR + "end" + SEPARATOR + "type"
+				+ SEPARATOR + StringUtils.join(edgeProperties, SEPARATOR);
+		edgeWriter.println(joined);
+	}
+
 	private static void openEdgeFile(String outDir)
 	{
 		String path = outDir + File.separator + "edges.csv";
 		edgeWriter = createWriter(path);
+		writeEdgePropertyNames();
 	}
 
 	private static PrintWriter createWriter(String path)
@@ -92,16 +128,6 @@ public class CSVWriter
 	{
 		if (edgeWriter != null)
 			edgeWriter.close();
-	}
-
-	public static Long getCurFunctionId()
-	{
-		return curFunctionId;
-	}
-
-	public static void setCurFunctionId()
-	{
-		CSVWriter.curFunctionId = lastNodeId;
 	}
 
 }

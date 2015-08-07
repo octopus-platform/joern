@@ -32,8 +32,14 @@ public class ASTImporter
 		{
 			ASTNode child = node.getChild(i);
 			importAST(child);
-			// addASTLink(node, child);
+			addASTLink(node, child);
 		}
+
+	}
+
+	private void addASTLink(ASTNode node, ASTNode child)
+	{
+		// TODO Auto-generated method stub
 
 	}
 
@@ -45,9 +51,8 @@ public class ASTImporter
 		astDatabaseNode.setCurrentFunction(currentFunction);
 		Map<String, Object> properties = astDatabaseNode.createProperties();
 
-		properties.put(NodeKeys.FUNCTION_ID, CSVWriter.getCurFunctionId()
-				.toString());
+		properties.put(NodeKeys.FUNCTION_ID,
+				CSVWriter.getIdForObject(currentFunction).toString());
 		CSVWriter.addNode(astDatabaseNode, properties);
 	}
-
 }
