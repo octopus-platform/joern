@@ -8,25 +8,19 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import outputModules.ASTImporter;
 import ast.ASTNode;
 import databaseNodes.ASTDatabaseNode;
 import databaseNodes.EdgeTypes;
-import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
 
-public class ASTImporter
+public class Neo4JASTImporter extends ASTImporter
 {
 	GraphNodeStore nodeStore;
-	private FunctionDatabaseNode currentFunction;
 
-	public ASTImporter(GraphNodeStore aNodeStore)
+	public Neo4JASTImporter(GraphNodeStore aNodeStore)
 	{
 		nodeStore = aNodeStore;
-	}
-
-	public void setCurrentFunction(FunctionDatabaseNode func)
-	{
-		currentFunction = func;
 	}
 
 	public void addASTToDatabase(ASTNode node)
@@ -35,7 +29,8 @@ public class ASTImporter
 		addASTChildren(node);
 	}
 
-	private void addASTChildren(ASTNode node)
+	@Override
+	protected void addASTChildren(ASTNode node)
 	{
 		final int nChildren = node.getChildCount();
 
@@ -51,13 +46,14 @@ public class ASTImporter
 		}
 	}
 
-	private void addASTNode(ASTNode node)
+	@Override
+	protected void addASTNode(ASTNode node)
 	{
 		ASTDatabaseNode astDatabaseNode = new ASTDatabaseNode();
 		astDatabaseNode.initialize(node);
 		astDatabaseNode.setCurrentFunction(currentFunction);
 		Map<String, Object> properties = astDatabaseNode.createProperties();
-		
+
 		properties.put(NodeKeys.FUNCTION_ID,
 				nodeStore.getIdForObject(currentFunction));
 		nodeStore.addNeo4jNode(node, properties);
@@ -71,7 +67,8 @@ public class ASTImporter
 		nodeStore.indexNode(node, properties);
 	}
 
-	private void addASTLink(Object parent, ASTNode child)
+	@Override
+	protected void addASTLink(ASTNode parent, ASTNode child)
 	{
 		RelationshipType rel = DynamicRelationshipType
 				.withName(EdgeTypes.IS_AST_PARENT);
@@ -82,4 +79,5 @@ public class ASTImporter
 
 		Neo4JBatchInserter.addRelationship(parentId, childId, rel, properties);
 	}
+
 }

@@ -19,8 +19,8 @@ import databaseNodes.FunctionDatabaseNode;
 
 public class FunctionImporter extends ASTNodeImporter
 {
-	ASTImporter astImporter = new ASTImporter(nodeStore);
-	CFGImporter cfgImporter = new CFGImporter(nodeStore);
+	Neo4JASTImporter astImporter = new Neo4JASTImporter(nodeStore);
+	Neo4JCFGImporter cfgImporter = new Neo4JCFGImporter(nodeStore);
 	UDGImporter udgImporter = new UDGImporter(nodeStore);
 	DDGImporter ddgImporter = new DDGImporter(nodeStore);
 	CDGImporter cdgImporter = new CDGImporter(nodeStore);

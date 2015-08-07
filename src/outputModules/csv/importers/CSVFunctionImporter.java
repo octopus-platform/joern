@@ -7,10 +7,11 @@ import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
 
-public class FunctionImporter
+public class CSVFunctionImporter
 {
 
-	ASTImporter astImporter = new ASTImporter();
+	CSVASTImporter astImporter = new CSVASTImporter();
+	CSVCFGImporter cfgImporter = new CSVCFGImporter();
 
 	protected FileDatabaseNode curFile;
 
@@ -23,7 +24,9 @@ public class FunctionImporter
 	{
 		addMainNode(funcNode);
 		astImporter.setCurrentFunction(funcNode);
-		astImporter.importAST(funcNode.getASTRoot());
+		cfgImporter.setCurrentFunction(funcNode);
+		astImporter.addASTToDatabase(funcNode.getASTRoot());
+		cfgImporter.addCFGToDatabase(funcNode.getCFG());
 
 		linkFunctionToFileNode(funcNode);
 	}

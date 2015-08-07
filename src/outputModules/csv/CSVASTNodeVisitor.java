@@ -1,6 +1,6 @@
 package outputModules.csv;
 
-import outputModules.csv.importers.FunctionImporter;
+import outputModules.csv.importers.CSVFunctionImporter;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;
@@ -24,7 +24,7 @@ public class CSVASTNodeVisitor extends ASTNodeVisitor
 			return;
 		}
 
-		FunctionImporter importer = new FunctionImporter();
+		CSVFunctionImporter importer = new CSVFunctionImporter();
 		importer.setCurrentFile(currentFileNode);
 		importer.addFunction(dbNode);
 

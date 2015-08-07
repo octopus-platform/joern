@@ -1,31 +1,22 @@
-package outputModules.neo4j.importers;
+package outputModules;
 
 import java.util.Map;
-
-import neo4j.batchInserter.GraphNodeStore;
-import neo4j.batchInserter.Neo4JBatchInserter;
-
-import org.neo4j.graphdb.DynamicRelationshipType;
-import org.neo4j.graphdb.RelationshipType;
 
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
-import databaseNodes.EdgeTypes;
 import databaseNodes.FunctionDatabaseNode;
-import databaseNodes.NodeKeys;
 
-public class CFGImporter
+public abstract class CFGImporter
 {
+	protected abstract void writeCFGNode(CFGNode statement,
+			Map<String, Object> properties);
 
-	GraphNodeStore nodeStore;
-	private FunctionDatabaseNode currentFunction;
+	protected abstract void addFlowToLink(Object srcBlock, Object dstBlock,
+			Map<String, Object> properties);
 
-	public CFGImporter(GraphNodeStore aNodeStore)
-	{
-		nodeStore = aNodeStore;
-	}
+	protected FunctionDatabaseNode currentFunction;
 
 	public void setCurrentFunction(FunctionDatabaseNode func)
 	{
@@ -65,10 +56,9 @@ public class CFGImporter
 			{
 				properties = statement.getProperties();
 			}
-			properties.put(NodeKeys.FUNCTION_ID,
-					nodeStore.getIdForObject(currentFunction));
-			nodeStore.addNeo4jNode(statement, properties);
-			nodeStore.indexNode(statement, properties);
+
+			writeCFGNode(statement, properties);
+
 		}
 	}
 
@@ -86,18 +76,6 @@ public class CFGImporter
 				dst = ((ASTNodeContainer) dst).getASTNode();
 			addFlowToLink(src, dst, edge.getProperties());
 		}
-	}
-
-	private void addFlowToLink(Object srcBlock, Object dstBlock,
-			Map<String, Object> properties)
-	{
-		long srcId = nodeStore.getIdForObject(srcBlock);
-		long dstId = nodeStore.getIdForObject(dstBlock);
-
-		RelationshipType rel = DynamicRelationshipType
-				.withName(EdgeTypes.FLOWS_TO);
-		// Map<String, Object> properties = null;
-		Neo4JBatchInserter.addRelationship(srcId, dstId, rel, properties);
 	}
 
 }

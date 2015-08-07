@@ -8,12 +8,15 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import databaseNodes.NodeKeys;
+
 public class CSVWriter
 {
 	final static String SEPARATOR = "\t";
 
-	final static String[] nodeProperties = { "type", "code", "location",
-			"functionId", "name", "filepath" };
+	final static String[] nodeProperties = { NodeKeys.TYPE, NodeKeys.CODE,
+			NodeKeys.LOCATION, NodeKeys.FUNCTION_ID, NodeKeys.NAME,
+			NodeKeys.FILEPATH, NodeKeys.CHILD_NUMBER };
 
 	final static String[] edgeProperties = {};
 
@@ -57,7 +60,7 @@ public class CSVWriter
 	}
 
 	public static void addEdge(long srcId, long dstId,
-			Map<String, String> properties, String edgeType)
+			Map<String, Object> properties, String edgeType)
 	{
 		edgeWriter.print(srcId);
 		edgeWriter.print(SEPARATOR);
