@@ -1,68 +1,31 @@
 package outputModules.neo4j.importers;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import misc.MultiHashMap;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import udg.useDefGraph.UseDefGraph;
+import outputModules.UDGImporter;
 import udg.useDefGraph.UseOrDefRecord;
 import databaseNodes.EdgeTypes;
-import databaseNodes.FunctionDatabaseNode;
 import databaseNodes.NodeKeys;
 
-public class UDGImporter
+public class Neo4JUDGImporter extends UDGImporter
 {
 
 	GraphNodeStore nodeStore;
-	private FunctionDatabaseNode currentFunction;
 
-	public UDGImporter(GraphNodeStore aNodeStore)
+	public Neo4JUDGImporter(GraphNodeStore aNodeStore)
 	{
 		nodeStore = aNodeStore;
 	}
 
-	public void setCurrentFunction(FunctionDatabaseNode function)
-	{
-		currentFunction = function;
-	}
-
-	public void addUDGToDatabase(UseDefGraph graph)
-	{
-		MultiHashMap<String, UseOrDefRecord> useDefDict = graph.getUseDefDict();
-
-		Iterator<String> it = useDefDict.getKeySetIterator();
-
-		while (it.hasNext())
-		{
-			String identifier = it.next();
-			long symbolNodeId = createSymbolNode(identifier);
-			addUseDefEdges(useDefDict, identifier, symbolNodeId);
-		}
-
-	}
-
-	private void addUseDefEdges(
-			MultiHashMap<String, UseOrDefRecord> useDefDict, String identifier,
-			long symbolNodeId)
-	{
-
-		List<UseOrDefRecord> destinations = useDefDict.get(identifier);
-
-		for (UseOrDefRecord item : destinations)
-		{
-			addUseOrDefRecordToDatabase(symbolNodeId, item);
-		}
-	}
-
-	private void addUseOrDefRecordToDatabase(long symbolNodeId,
+	@Override
+	protected void addUseOrDefRecordToDatabase(long symbolNodeId,
 			UseOrDefRecord item)
 	{
 		RelationshipType rel;
@@ -76,7 +39,8 @@ public class UDGImporter
 		Neo4JBatchInserter.addRelationship(nodeId, symbolNodeId, rel, null);
 	}
 
-	private long createSymbolNode(String identifier)
+	@Override
+	protected long createSymbolNode(String identifier)
 	{
 		long functionId = nodeStore.getIdForObject(currentFunction);
 

@@ -3,29 +3,18 @@ package outputModules.neo4j.importers;
 import java.util.Map;
 
 import neo4j.batchInserter.GraphNodeStore;
+import outputModules.ASTNodeImporter;
 import ast.ASTNode;
 import databaseNodes.DatabaseNode;
-import databaseNodes.FileDatabaseNode;
 
-public abstract class ASTNodeImporter
+public abstract class Neo4JASTNodeImporter extends ASTNodeImporter
 {
 
-	protected Long mainNodeId;
 	protected GraphNodeStore nodeStore = new GraphNodeStore();
-	protected FileDatabaseNode curFile;
-
-	public void setCurrentFile(FileDatabaseNode fileNode)
-	{
-		curFile = fileNode;
-	}
-
-	public long getMainNodeId()
-	{
-		return mainNodeId;
-	}
 
 	public abstract void addToDatabaseSafe(ASTNode node);
 
+	@Override
 	protected void addMainNode(DatabaseNode dbNode)
 	{
 		Map<String, Object> properties = dbNode.createProperties();

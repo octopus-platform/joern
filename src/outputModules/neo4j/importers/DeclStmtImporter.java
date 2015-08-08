@@ -13,7 +13,7 @@ import ast.statements.IdentifierDeclStatement;
 import databaseNodes.DeclStmtDatabaseNode;
 import databaseNodes.EdgeTypes;
 
-public class DeclStmtImporter extends ASTNodeImporter
+public class DeclStmtImporter extends Neo4JASTNodeImporter
 {
 
 	DeclImporter declImporter = new DeclImporter();

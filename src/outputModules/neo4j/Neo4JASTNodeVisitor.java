@@ -5,10 +5,11 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.neo4j.importers.ASTNodeImporter;
+import outputModules.ASTNodeImporter;
 import outputModules.neo4j.importers.ClassDefImporter;
 import outputModules.neo4j.importers.DeclStmtImporter;
-import outputModules.neo4j.importers.FunctionImporter;
+import outputModules.neo4j.importers.Neo4JASTNodeImporter;
+import outputModules.neo4j.importers.Neo4JFunctionImporter;
 import ast.ASTNode;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
@@ -23,20 +24,20 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 
 	public void visit(FunctionDef node)
 	{
-		ASTNodeImporter importer = new FunctionImporter();
+		ASTNodeImporter importer = new Neo4JFunctionImporter();
 		importNode(importer, node);
 	}
 
 	public void visit(ClassDefStatement node)
 	{
-		ASTNodeImporter importer = new ClassDefImporter();
+		Neo4JASTNodeImporter importer = new ClassDefImporter();
 		long classNodeId = importNode(importer, node);
 		visitClassDefContent(node, classNodeId);
 	}
 
 	public void visit(IdentifierDeclStatement node)
 	{
-		ASTNodeImporter importer = new DeclStmtImporter();
+		Neo4JASTNodeImporter importer = new DeclStmtImporter();
 		importNode(importer, node);
 	}
 

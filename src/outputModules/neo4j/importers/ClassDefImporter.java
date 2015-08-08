@@ -11,7 +11,7 @@ import databaseNodes.ClassDefDatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 
-public class ClassDefImporter extends ASTNodeImporter
+public class ClassDefImporter extends Neo4JASTNodeImporter
 {
 
 	public void addToDatabaseSafe(ASTNode node)
