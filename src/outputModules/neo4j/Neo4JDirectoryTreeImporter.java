@@ -8,7 +8,7 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.neo4j.importers.DirectoryTreeImporter;
+import outputModules.DirectoryTreeImporter;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 

@@ -44,7 +44,7 @@ public class CSVWriter
 		openEdgeFile(dirNameForFileNode);
 	}
 
-	public static void addNode(Object node, Map<String, Object> properties)
+	public static long addNode(Object node, Map<String, Object> properties)
 	{
 		nodeWriter.write((new Long(lastNodeId)).toString());
 		for (String property : nodeProperties)
@@ -57,6 +57,7 @@ public class CSVWriter
 		nodeWriter.write("\n");
 		objectToId.put(node, lastNodeId);
 		lastNodeId++;
+		return lastNodeId - 1;
 	}
 
 	public static void addEdge(long srcId, long dstId,

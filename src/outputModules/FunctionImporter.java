@@ -1,7 +1,5 @@
 package outputModules;
 
-import outputModules.neo4j.importers.CDGImporter;
-import outputModules.neo4j.importers.DDGImporter;
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
 import cfg.CFG;
@@ -37,7 +35,7 @@ public abstract class FunctionImporter extends ASTNodeImporter
 		}
 		catch (RuntimeException ex)
 		{
-			// ex.printStackTrace();
+			ex.printStackTrace();
 			System.err.println("Error adding function to database: "
 					+ ((FunctionDef) node).name.getEscapedCodeStr());
 			return;

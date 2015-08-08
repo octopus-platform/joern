@@ -1,4 +1,4 @@
-package outputModules.neo4j.importers;
+package outputModules;
 
 import java.nio.file.Path;
 import java.util.Stack;

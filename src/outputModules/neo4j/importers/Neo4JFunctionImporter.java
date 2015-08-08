@@ -29,8 +29,8 @@ public class Neo4JFunctionImporter extends FunctionImporter
 		astImporter = new Neo4JASTImporter(nodeStore);
 		cfgImporter = new Neo4JCFGImporter(nodeStore);
 		udgImporter = new Neo4JUDGImporter(nodeStore);
-		ddgImporter = new DDGImporter(nodeStore);
-		cdgImporter = new CDGImporter(nodeStore);
+		ddgImporter = new Neo4JDDGImporter(nodeStore);
+		cdgImporter = new Neo4JCDGImporter(nodeStore);
 	}
 
 	// This is a copy of Neo4JaSTImporter.addMainNode

@@ -2,7 +2,7 @@ package tools.index;
 
 import java.nio.file.Path;
 
-import outputModules.neo4j.importers.DirectoryTreeImporter;
+import outputModules.DirectoryTreeImporter;
 import parsing.ModuleParser;
 import parsing.C.Modules.ANTLRCModuleParserDriver;
 import fileWalker.SourceFileListener;
