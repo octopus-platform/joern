@@ -74,6 +74,7 @@ public class CSVFunctionImporter extends FunctionImporter
 	{
 		Map<String, Object> properties = dbNode.createProperties();
 		CSVWriter.addNode(dbNode, properties);
+		mainNodeId = CSVWriter.getIdForObject(dbNode);
 	}
 
 }

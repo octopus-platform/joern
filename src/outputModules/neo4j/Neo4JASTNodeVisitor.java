@@ -7,9 +7,8 @@ import org.neo4j.graphdb.RelationshipType;
 
 import outputModules.ASTNodeImporter;
 import outputModules.OutModASTNodeVisitor;
-import outputModules.neo4j.importers.DeclStmtImporter;
-import outputModules.neo4j.importers.Neo4JASTNodeImporter;
 import outputModules.neo4j.importers.Neo4JClassDefImporter;
+import outputModules.neo4j.importers.Neo4JDeclStmtImporter;
 import outputModules.neo4j.importers.Neo4JFunctionImporter;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
@@ -36,7 +35,7 @@ public class Neo4JASTNodeVisitor extends OutModASTNodeVisitor
 
 	public void visit(IdentifierDeclStatement node)
 	{
-		Neo4JASTNodeImporter importer = new DeclStmtImporter();
+		ASTNodeImporter importer = new Neo4JDeclStmtImporter();
 		importNode(importer, node);
 	}
 

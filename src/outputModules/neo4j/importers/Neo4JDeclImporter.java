@@ -3,7 +3,7 @@ package outputModules.neo4j.importers;
 import ast.ASTNode;
 import databaseNodes.DeclDatabaseNode;
 
-public class DeclImporter extends Neo4JASTNodeImporter
+public class Neo4JDeclImporter extends Neo4JASTNodeImporter
 {
 
 	@Override

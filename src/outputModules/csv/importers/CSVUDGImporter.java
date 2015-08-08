@@ -34,7 +34,7 @@ public class CSVUDGImporter extends UDGImporter
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(NodeKeys.TYPE, "Symbol");
 		properties.put(NodeKeys.CODE, identifier);
-		properties.put(NodeKeys.FUNCTION_ID, functionId);
+		properties.put(NodeKeys.FUNCTION_ID, String.format("%d", functionId));
 
 		long newNodeId = CSVWriter.addNode(null, properties);
 		return newNodeId;

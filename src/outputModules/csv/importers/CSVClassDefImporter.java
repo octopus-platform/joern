@@ -1,24 +1,34 @@
 package outputModules.csv.importers;
 
-import ast.ASTNode;
-import databaseNodes.DatabaseNode;
-import outputModules.ASTNodeImporter;
+import java.util.Map;
 
-public class CSVClassDefImporter extends ASTNodeImporter
+import outputModules.ClassDefImporter;
+import outputModules.csv.CSVWriter;
+import databaseNodes.ClassDefDatabaseNode;
+import databaseNodes.DatabaseNode;
+import databaseNodes.EdgeTypes;
+import databaseNodes.FileDatabaseNode;
+
+public class CSVClassDefImporter extends ClassDefImporter
 {
 
 	@Override
-	public void addToDatabaseSafe(ASTNode node)
+	protected void linkClassDefToFileNode(ClassDefDatabaseNode classDefNode,
+			FileDatabaseNode fileNode)
 	{
-		// TODO Auto-generated method stub
 
+		long fileId = fileNode.getId();
+		long functionId = CSVWriter.getIdForObject(classDefNode);
+
+		CSVWriter.addEdge(fileId, functionId, null, EdgeTypes.IS_FILE_OF);
 	}
 
 	@Override
 	protected void addMainNode(DatabaseNode dbNode)
 	{
-		// TODO Auto-generated method stub
-
+		Map<String, Object> properties = dbNode.createProperties();
+		CSVWriter.addNode(dbNode, properties);
+		mainNodeId = CSVWriter.getIdForObject(dbNode);
 	}
 
 }

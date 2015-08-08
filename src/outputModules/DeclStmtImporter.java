@@ -1,22 +1,18 @@
-package outputModules.neo4j.importers;
+package outputModules;
 
 import java.util.Iterator;
 import java.util.List;
 
-import neo4j.batchInserter.Neo4JBatchInserter;
-
-import org.neo4j.graphdb.DynamicRelationshipType;
-import org.neo4j.graphdb.RelationshipType;
-
 import ast.ASTNode;
 import ast.statements.IdentifierDeclStatement;
 import databaseNodes.DeclStmtDatabaseNode;
-import databaseNodes.EdgeTypes;
 
-public class DeclStmtImporter extends Neo4JASTNodeImporter
+public abstract class DeclStmtImporter extends ASTNodeImporter
 {
 
-	DeclImporter declImporter = new DeclImporter();
+	protected ASTNodeImporter declImporter;
+
+	protected abstract void addLinkFromStmtToDecl(long mainNodeId, long declId);
 
 	public void addToDatabaseSafe(ASTNode node)
 	{
@@ -39,13 +35,6 @@ public class DeclStmtImporter extends Neo4JASTNodeImporter
 			long declId = declImporter.getMainNodeId();
 			addLinkFromStmtToDecl(mainNodeId, declId);
 		}
-	}
-
-	private void addLinkFromStmtToDecl(long mainNodeId, long declId)
-	{
-		RelationshipType rel = DynamicRelationshipType
-				.withName(EdgeTypes.DECLARES);
-		Neo4JBatchInserter.addRelationship(mainNodeId, declId, rel, null);
 	}
 
 }
