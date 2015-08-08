@@ -10,9 +10,9 @@ import databaseNodes.DatabaseNode;
 public abstract class Neo4JASTNodeImporter extends ASTNodeImporter
 {
 
-	protected GraphNodeStore nodeStore = new GraphNodeStore();
-
 	public abstract void addToDatabaseSafe(ASTNode node);
+
+	protected GraphNodeStore nodeStore = new GraphNodeStore();
 
 	@Override
 	protected void addMainNode(DatabaseNode dbNode)

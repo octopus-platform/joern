@@ -22,7 +22,6 @@ import databaseNodes.FunctionDatabaseNode;
 
 public class Neo4JFunctionImporter extends FunctionImporter
 {
-	protected GraphNodeStore nodeStore = new GraphNodeStore();
 
 	public Neo4JFunctionImporter()
 	{
@@ -31,19 +30,6 @@ public class Neo4JFunctionImporter extends FunctionImporter
 		udgImporter = new Neo4JUDGImporter(nodeStore);
 		ddgImporter = new Neo4JDDGImporter(nodeStore);
 		cdgImporter = new Neo4JCDGImporter(nodeStore);
-	}
-
-	// This is a copy of Neo4JaSTImporter.addMainNode
-	@Override
-	protected void addMainNode(DatabaseNode dbNode)
-	{
-		Map<String, Object> properties = dbNode.createProperties();
-		nodeStore.addNeo4jNode(dbNode, properties);
-
-		mainNodeId = nodeStore.getIdForObject(dbNode);
-
-		properties.remove("location");
-		nodeStore.indexNode(dbNode, properties);
 	}
 
 	@Override
@@ -56,7 +42,6 @@ public class Neo4JFunctionImporter extends FunctionImporter
 		long astNodeId = nodeStore.getIdForObject(function.getASTRoot());
 
 		Neo4JBatchInserter.addRelationship(functionId, astNodeId, rel, null);
-
 	}
 
 	@Override
@@ -95,6 +80,24 @@ public class Neo4JFunctionImporter extends FunctionImporter
 		long functionId = nodeStore.getIdForObject(function);
 
 		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
+	}
+
+	// The following code can also be found in the respective
+	// ClassDefImporter, DeclStmtImporter, etc. Multiple
+	// inheritance would be nice.
+
+	protected GraphNodeStore nodeStore = new GraphNodeStore();
+
+	@Override
+	protected void addMainNode(DatabaseNode dbNode)
+	{
+		Map<String, Object> properties = dbNode.createProperties();
+		nodeStore.addNeo4jNode(dbNode, properties);
+
+		mainNodeId = nodeStore.getIdForObject(dbNode);
+
+		properties.remove("location");
+		nodeStore.indexNode(dbNode, properties);
 	}
 
 }

@@ -55,7 +55,8 @@ public class CSVWriter
 				nodeWriter.write(propValue);
 		}
 		nodeWriter.write("\n");
-		objectToId.put(node, lastNodeId);
+		if (node != null)
+			objectToId.put(node, lastNodeId);
 		lastNodeId++;
 		return lastNodeId - 1;
 	}

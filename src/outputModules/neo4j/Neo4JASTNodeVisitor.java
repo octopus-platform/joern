@@ -6,20 +6,19 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import outputModules.ASTNodeImporter;
-import outputModules.neo4j.importers.ClassDefImporter;
+import outputModules.OutModASTNodeVisitor;
 import outputModules.neo4j.importers.DeclStmtImporter;
 import outputModules.neo4j.importers.Neo4JASTNodeImporter;
+import outputModules.neo4j.importers.Neo4JClassDefImporter;
 import outputModules.neo4j.importers.Neo4JFunctionImporter;
-import ast.ASTNode;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;
-import ast.walking.ASTNodeVisitor;
 import databaseNodes.EdgeTypes;
 
 // Stays alive during the lifetime of the program
 
-public class Neo4JASTNodeVisitor extends ASTNodeVisitor
+public class Neo4JASTNodeVisitor extends OutModASTNodeVisitor
 {
 
 	public void visit(FunctionDef node)
@@ -30,7 +29,7 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 
 	public void visit(ClassDefStatement node)
 	{
-		Neo4JASTNodeImporter importer = new ClassDefImporter();
+		ASTNodeImporter importer = new Neo4JClassDefImporter();
 		long classNodeId = importNode(importer, node);
 		visitClassDefContent(node, classNodeId);
 	}
@@ -41,33 +40,12 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 		importNode(importer, node);
 	}
 
-	private long importNode(ASTNodeImporter importer, ASTNode node)
+	@Override
+	protected void addEdgeFromClassToFunc(long dstNodeId, Long classId)
 	{
-		importer.setCurrentFile(currentFileNode);
-		importer.addToDatabaseSafe(node);
-		long mainNodeId = importer.getMainNodeId();
-		addLinkToClassDef(mainNodeId);
-		importer = null;
-		return mainNodeId;
-	}
-
-	private void addLinkToClassDef(long dstNodeId)
-	{
-		if (contextStack.size() == 0)
-			return;
-		Long classId = contextStack.peek();
 		RelationshipType rel = DynamicRelationshipType
 				.withName(EdgeTypes.IS_CLASS_OF);
 		Neo4JBatchInserter.addRelationship(classId, dstNodeId, rel, null);
-	}
-
-	private void visitClassDefContent(ClassDefStatement node, long classNodeId)
-	{
-		// visit compound statement, it might contain
-		// functions, declarations or other class definitions
-		contextStack.push(classNodeId);
-		visit(node.content);
-		contextStack.pop();
 	}
 
 }

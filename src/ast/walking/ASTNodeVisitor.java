@@ -32,7 +32,7 @@ import ast.statements.TryStatement;
 import ast.statements.WhileStatement;
 import databaseNodes.FileDatabaseNode;
 
-public class ASTNodeVisitor
+public abstract class ASTNodeVisitor
 {
 	protected FileDatabaseNode currentFileNode;
 	protected Stack<Long> contextStack;
@@ -177,7 +177,7 @@ public class ASTNodeVisitor
 	{
 		defaultHandler(expression);
 	}
-	
+
 	public void visit(ThrowStatement expression)
 	{
 		defaultHandler(expression);

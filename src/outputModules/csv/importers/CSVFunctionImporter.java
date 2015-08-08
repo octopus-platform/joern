@@ -5,6 +5,8 @@ import java.util.Map;
 import outputModules.FunctionImporter;
 import outputModules.csv.CSVWriter;
 import cfg.CFG;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
 import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
@@ -25,13 +27,34 @@ public class CSVFunctionImporter extends FunctionImporter
 	@Override
 	protected void linkFunctionWithAST(FunctionDatabaseNode function)
 	{
-		// TODO Auto-generated method stub
+		long functionId = CSVWriter.getIdForObject(function);
+		long astNodeId = CSVWriter.getIdForObject(function.getASTRoot());
+
+		CSVWriter.addEdge(functionId, astNodeId, null,
+				EdgeTypes.IS_FUNCTION_OF_AST);
 	}
 
 	@Override
 	protected void linkFunctionWithCFG(FunctionDatabaseNode function, CFG cfg)
 	{
-		// TODO Auto-generated method stub
+
+		long functionId = CSVWriter.getIdForObject(function);
+		CFGNode firstBlock = cfg.getEntryNode();
+
+		long cfgRootId;
+		try
+		{
+			cfgRootId = CSVWriter.getIdForObject(firstBlock);
+		}
+		catch (RuntimeException ex)
+		{
+			cfgRootId = CSVWriter
+					.getIdForObject(((ASTNodeContainer) firstBlock)
+							.getASTNode());
+		}
+
+		CSVWriter.addEdge(functionId, cfgRootId, null,
+				EdgeTypes.IS_FUNCTION_OF_CFG);
 
 	}
 

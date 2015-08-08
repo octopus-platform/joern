@@ -3,6 +3,8 @@ package outputModules.csv.importers;
 import java.util.Map;
 
 import outputModules.DDGImporter;
+import outputModules.csv.CSVWriter;
+import databaseNodes.EdgeTypes;
 import ddg.DataDependenceGraph.DefUseRelation;
 
 public class CSVDDGImporter extends DDGImporter
@@ -12,8 +14,9 @@ public class CSVDDGImporter extends DDGImporter
 	protected void addDDGEdge(Map<String, Object> properties,
 			DefUseRelation defUseRel)
 	{
-		// TODO Auto-generated method stub
-
+		long srcId = CSVWriter.getIdForObject(defUseRel.src);
+		long dstId = CSVWriter.getIdForObject(defUseRel.dst);
+		CSVWriter.addEdge(srcId, dstId, properties, EdgeTypes.REACHES);
 	}
 
 }
