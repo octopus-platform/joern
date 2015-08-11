@@ -1,8 +1,8 @@
 package outputModules.dummy;
 
-import tools.index.IndexerASTWalker;
+import tools.parser.ParserASTWalker;
 
-public class DummyASTWalker extends IndexerASTWalker
+public class DummyASTWalker extends ParserASTWalker
 {
 	DummyASTWalker()
 	{

@@ -1,8 +1,8 @@
 package outputModules.dummy;
 
-import tools.index.Indexer;
+import tools.parser.Parser;
 
-public class DummyIndexer extends Indexer
+public class DummyIndexer extends Parser
 {
 	@Override
 	protected void initializeDatabase()

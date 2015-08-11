@@ -1,4 +1,4 @@
-package tools.index;
+package tools.parser;
 
 import java.util.Stack;
 
@@ -10,13 +10,13 @@ import ast.walking.ASTNodeVisitor;
 import ast.walking.ASTWalker;
 import databaseNodes.FileDatabaseNode;
 
-public abstract class IndexerASTWalker extends ASTWalker
+public abstract class ParserASTWalker extends ASTWalker
 {
 
-	protected IndexerState state;
+	protected ParserState state;
 	protected ASTNodeVisitor astVisitor;
 	
-	public void setIndexerState(IndexerState aState)
+	public void setIndexerState(ParserState aState)
 	{
 		state = aState;
 	}

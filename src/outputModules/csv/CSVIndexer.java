@@ -2,9 +2,9 @@ package outputModules.csv;
 
 import java.io.File;
 
-import tools.index.Indexer;
+import tools.parser.Parser;
 
-public class CSVIndexer extends Indexer
+public class CSVIndexer extends Parser
 {
 
 	@Override

@@ -1,4 +1,4 @@
-package tools.index;
+package tools.parser;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;

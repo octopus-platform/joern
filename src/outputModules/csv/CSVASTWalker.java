@@ -1,8 +1,8 @@
 package outputModules.csv;
 
-import tools.index.IndexerASTWalker;
+import tools.parser.ParserASTWalker;
 
-public class CSVASTWalker extends IndexerASTWalker
+public class CSVASTWalker extends ParserASTWalker
 {
 	CSVASTWalker()
 	{

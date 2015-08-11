@@ -4,10 +4,10 @@ import java.util.Map;
 
 import neo4j.batchInserter.ConfigurationGenerator;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import tools.index.Indexer;
+import tools.parser.Parser;
 
 
-public class Neo4JIndexer extends Indexer
+public class Neo4JIndexer extends Parser
 {
 
 	@Override

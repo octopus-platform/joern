@@ -3,12 +3,12 @@ package outputModules;
 import java.nio.file.Path;
 import java.util.Stack;
 
-import tools.index.IndexerState;
+import tools.parser.ParserState;
 import databaseNodes.FileDatabaseNode;
 
 public abstract class DirectoryTreeImporter
 {
-	protected IndexerState state;
+	protected ParserState state;
 	protected Stack<FileDatabaseNode> directoryStack = new Stack<FileDatabaseNode>();
 
 	protected abstract void linkWithParentDirectory(FileDatabaseNode node);
@@ -17,7 +17,7 @@ public abstract class DirectoryTreeImporter
 
 	protected String outputDir;
 
-	public void setState(IndexerState aState)
+	public void setState(ParserState aState)
 	{
 		state = aState;
 	}

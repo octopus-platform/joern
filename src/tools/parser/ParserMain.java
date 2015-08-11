@@ -1,4 +1,4 @@
-package tools.index;
+package tools.parser;
 
 import java.io.IOException;
 
@@ -10,19 +10,19 @@ import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
 
 /**
- * Main Class for the indexer: This class parses command line arguments and
- * configures the indexer in accordance. It then uses a SourceFileWalker to
- * visit source-files and directories and report them to the indexer.
+ * Main Class for the parser: This class processes command line arguments and
+ * configures the parser in accordance. It then uses a SourceFileWalker to visit
+ * source-files and directories and report them to the parser.
  * */
 
-public class IndexMain
+public class ParserMain
 {
 
 	private static ImporterCmdLineInterface cmd = new ImporterCmdLineInterface();
 	// private static SourceFileWalker sourceFileWalker = new UnorderedWalker();
 	private static SourceFileWalker sourceFileWalker = new OrderedWalker();
 
-	private static Indexer indexer;
+	private static Parser indexer;
 
 	public static void main(String[] args)
 	{

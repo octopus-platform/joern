@@ -1,4 +1,4 @@
-package tools.index;
+package tools.parser;
 
 import java.nio.file.Path;
 
@@ -7,14 +7,14 @@ import parsing.ModuleParser;
 import parsing.C.Modules.ANTLRCModuleParserDriver;
 import fileWalker.SourceFileListener;
 
-public abstract class Indexer extends SourceFileListener
+public abstract class Parser extends SourceFileListener
 {
 
 	ANTLRCModuleParserDriver driver = new ANTLRCModuleParserDriver();
 	ModuleParser parser = new ModuleParser(driver);
 
-	protected IndexerState state;
-	protected IndexerASTWalker astWalker;
+	protected ParserState state;
+	protected ParserASTWalker astWalker;
 	protected DirectoryTreeImporter dirTreeImporter;
 
 	protected String outputDir;
@@ -29,7 +29,7 @@ public abstract class Indexer extends SourceFileListener
 
 	protected void initializeIndexerState()
 	{
-		state = new IndexerState(this);
+		state = new ParserState(this);
 	}
 
 	public void setOutputDir(String anOutputDir)
