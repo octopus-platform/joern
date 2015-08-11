@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import outputModules.csv.CSVIndexer;
-import outputModules.neo4j.Neo4JIndexer;
+import outputModules.csv.ParserCSVOutput;
+import outputModules.neo4j.ParserNeo4JOutput;
 import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
 
@@ -61,9 +61,9 @@ public class ParserMain
 
 		String outputFormat = cmd.getOutputFormat();
 		if (outputFormat.equals("neo4j"))
-			indexer = new Neo4JIndexer();
+			indexer = new ParserNeo4JOutput();
 		else if (outputFormat.equals("csv"))
-			indexer = new CSVIndexer();
+			indexer = new ParserCSVOutput();
 		else
 			throw new RuntimeException("unknown output format");
 

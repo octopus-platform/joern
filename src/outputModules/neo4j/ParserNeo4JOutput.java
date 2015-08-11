@@ -7,7 +7,7 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import tools.parser.Parser;
 
 
-public class Neo4JIndexer extends Parser
+public class ParserNeo4JOutput extends Parser
 {
 
 	@Override

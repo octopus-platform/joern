@@ -4,7 +4,7 @@ import java.io.File;
 
 import tools.parser.Parser;
 
-public class CSVIndexer extends Parser
+public class ParserCSVOutput extends Parser
 {
 
 	@Override

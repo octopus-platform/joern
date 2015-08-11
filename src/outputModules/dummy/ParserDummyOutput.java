@@ -2,7 +2,7 @@ package outputModules.dummy;
 
 import tools.parser.Parser;
 
-public class DummyIndexer extends Parser
+public class ParserDummyOutput extends Parser
 {
 	@Override
 	protected void initializeDatabase()
