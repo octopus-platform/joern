@@ -1,9 +1,9 @@
 package outputModules.dummy;
 
-import outputModules.DirectoryTreeImporter;
+import outputModules.common.DirectoryTreeExporter;
 import databaseNodes.FileDatabaseNode;
 
-public class DummyDirectoryTreeImporter extends DirectoryTreeImporter
+public class DummyDirectoryTreeImporter extends DirectoryTreeExporter
 {
 
 	@Override

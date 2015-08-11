@@ -2,7 +2,7 @@ package tools.parser;
 
 import java.nio.file.Path;
 
-import outputModules.DirectoryTreeImporter;
+import outputModules.common.DirectoryTreeExporter;
 import parsing.ModuleParser;
 import parsing.C.Modules.ANTLRCModuleParserDriver;
 import fileWalker.SourceFileListener;
@@ -15,7 +15,7 @@ public abstract class Parser extends SourceFileListener
 
 	protected ParserState state;
 	protected ParserASTWalker astWalker;
-	protected DirectoryTreeImporter dirTreeImporter;
+	protected DirectoryTreeExporter dirTreeImporter;
 
 	protected String outputDir;
 

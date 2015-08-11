@@ -8,11 +8,11 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.DirectoryTreeImporter;
+import outputModules.common.DirectoryTreeExporter;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 
-public class Neo4JDirectoryTreeImporter extends DirectoryTreeImporter
+public class Neo4JDirectoryTreeImporter extends DirectoryTreeExporter
 {
 
 	protected void linkWithParentDirectory(FileDatabaseNode node)

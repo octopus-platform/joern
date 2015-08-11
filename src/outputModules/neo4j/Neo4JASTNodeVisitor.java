@@ -5,11 +5,11 @@ import neo4j.batchInserter.Neo4JBatchInserter;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.ASTNodeImporter;
-import outputModules.OutModASTNodeVisitor;
-import outputModules.neo4j.importers.Neo4JClassDefImporter;
-import outputModules.neo4j.importers.Neo4JDeclStmtImporter;
-import outputModules.neo4j.importers.Neo4JFunctionImporter;
+import outputModules.common.ASTNodeExporter;
+import outputModules.common.OutModASTNodeVisitor;
+import outputModules.neo4j.exporters.Neo4JClassDefExporter;
+import outputModules.neo4j.exporters.Neo4JDeclStmtExporter;
+import outputModules.neo4j.exporters.Neo4JFunctionExporter;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;
@@ -22,20 +22,20 @@ public class Neo4JASTNodeVisitor extends OutModASTNodeVisitor
 
 	public void visit(FunctionDef node)
 	{
-		ASTNodeImporter importer = new Neo4JFunctionImporter();
+		ASTNodeExporter importer = new Neo4JFunctionExporter();
 		importNode(importer, node);
 	}
 
 	public void visit(ClassDefStatement node)
 	{
-		ASTNodeImporter importer = new Neo4JClassDefImporter();
+		ASTNodeExporter importer = new Neo4JClassDefExporter();
 		long classNodeId = importNode(importer, node);
 		visitClassDefContent(node, classNodeId);
 	}
 
 	public void visit(IdentifierDeclStatement node)
 	{
-		ASTNodeImporter importer = new Neo4JDeclStmtImporter();
+		ASTNodeExporter importer = new Neo4JDeclStmtExporter();
 		importNode(importer, node);
 	}
 

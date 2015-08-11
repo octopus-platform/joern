@@ -1,10 +1,10 @@
 package outputModules.csv;
 
-import outputModules.ASTNodeImporter;
-import outputModules.OutModASTNodeVisitor;
-import outputModules.csv.importers.CSVClassDefImporter;
-import outputModules.csv.importers.CSVDeclStmtImporter;
-import outputModules.csv.importers.CSVFunctionImporter;
+import outputModules.common.ASTNodeExporter;
+import outputModules.common.OutModASTNodeVisitor;
+import outputModules.csv.exporters.CSVClassDefExporter;
+import outputModules.csv.exporters.CSVDeclStmtExporter;
+import outputModules.csv.exporters.CSVFunctionExporter;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;
@@ -15,7 +15,7 @@ public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 	@Override
 	public void visit(FunctionDef node)
 	{
-		ASTNodeImporter importer = new CSVFunctionImporter();
+		ASTNodeExporter importer = new CSVFunctionExporter();
 		importNode(importer, node);
 	}
 
@@ -23,7 +23,7 @@ public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 	public void visit(ClassDefStatement node)
 	{
 
-		ASTNodeImporter importer = new CSVClassDefImporter();
+		ASTNodeExporter importer = new CSVClassDefExporter();
 		long classNodeId = importNode(importer, node);
 		visitClassDefContent(node, classNodeId);
 	}
@@ -31,7 +31,7 @@ public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 	@Override
 	public void visit(IdentifierDeclStatement node)
 	{
-		ASTNodeImporter importer = new CSVDeclStmtImporter();
+		ASTNodeExporter importer = new CSVDeclStmtExporter();
 		importNode(importer, node);
 	}
 

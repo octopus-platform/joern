@@ -1,6 +1,6 @@
 package outputModules.dummy;
 
-import outputModules.OutModASTNodeVisitor;
+import outputModules.common.OutModASTNodeVisitor;
 import ast.declarations.ClassDefStatement;
 import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;

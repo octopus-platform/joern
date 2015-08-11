@@ -3,10 +3,10 @@ package outputModules.csv;
 import java.io.File;
 import java.util.Map;
 
-import outputModules.DirectoryTreeImporter;
+import outputModules.common.DirectoryTreeExporter;
 import databaseNodes.FileDatabaseNode;
 
-public class CSVDirectoryTreeImporter extends DirectoryTreeImporter
+public class CSVDirectoryTreeImporter extends DirectoryTreeExporter
 {
 
 	@Override
