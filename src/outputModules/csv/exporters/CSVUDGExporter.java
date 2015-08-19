@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import outputModules.common.UDGExporter;
-import outputModules.csv.CSVWriter;
+import outputModules.common.Writer;
 import udg.useDefGraph.UseOrDefRecord;
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
@@ -22,21 +22,21 @@ public class CSVUDGExporter extends UDGExporter
 		else
 			edgeType = EdgeTypes.USE;
 
-		long nodeId = CSVWriter.getIdForObject(item.getAstNode());
-		CSVWriter.addEdge(nodeId, symbolNodeId, null, edgeType);
+		long nodeId = Writer.getIdForObject(item.getAstNode());
+		Writer.addEdge(nodeId, symbolNodeId, null, edgeType);
 	}
 
 	@Override
 	protected long createSymbolNode(String identifier)
 	{
-		long functionId = CSVWriter.getIdForObject(currentFunction);
+		long functionId = Writer.getIdForObject(currentFunction);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(NodeKeys.TYPE, "Symbol");
 		properties.put(NodeKeys.CODE, identifier);
 		properties.put(NodeKeys.FUNCTION_ID, String.format("%d", functionId));
 
-		long newNodeId = CSVWriter.addNode(null, properties);
+		long newNodeId = Writer.addNode(null, properties);
 		return newNodeId;
 	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import outputModules.common.DirectoryTreeExporter;
+import outputModules.common.Writer;
 import databaseNodes.FileDatabaseNode;
 
 public class CSVDirectoryTreeImporter extends DirectoryTreeExporter
@@ -14,11 +15,11 @@ public class CSVDirectoryTreeImporter extends DirectoryTreeExporter
 	{
 		String dirNameForFileNode = genDirNameForFileNode(node);
 		createDirForFileNode(dirNameForFileNode);
-		CSVWriter.changeOutputDir(dirNameForFileNode);
-		CSVWriter.reset();
+		Writer.changeOutputDir(dirNameForFileNode);
+		Writer.reset();
 
 		Map<String, Object> properties = node.createProperties();
-		long nodeId = CSVWriter.addNode(node, properties);
+		long nodeId = Writer.addNode(node, properties);
 		node.setId(nodeId);
 	}
 

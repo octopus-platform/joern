@@ -1,7 +1,7 @@
 package outputModules.csv.exporters;
 
 import outputModules.common.CDGExporter;
-import outputModules.csv.CSVWriter;
+import outputModules.common.Writer;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
 import databaseNodes.EdgeTypes;
@@ -14,7 +14,7 @@ public class CSVCDGExporter extends CDGExporter
 	{
 		long srcId = getId(src);
 		long dstId = getId(dst);
-		CSVWriter.addEdge(srcId, dstId, null, EdgeTypes.CONTROLS);
+		Writer.addEdge(srcId, dstId, null, EdgeTypes.CONTROLS);
 	}
 
 	@Override
@@ -22,19 +22,19 @@ public class CSVCDGExporter extends CDGExporter
 	{
 		long srcId = getId(dominator);
 		long dstId = getId(vertex);
-		CSVWriter.addEdge(srcId, dstId, null, EdgeTypes.POST_DOM);
+		Writer.addEdge(srcId, dstId, null, EdgeTypes.POST_DOM);
 	}
 
 	private long getId(CFGNode node)
 	{
 		if (node instanceof ASTNodeContainer)
 		{
-			return CSVWriter.getIdForObject(((ASTNodeContainer) node)
+			return Writer.getIdForObject(((ASTNodeContainer) node)
 					.getASTNode());
 		}
 		else
 		{
-			return CSVWriter.getIdForObject(node);
+			return Writer.getIdForObject(node);
 		}
 	}
 

@@ -2,10 +2,18 @@ package outputModules.csv;
 
 import java.io.File;
 
+import outputModules.common.Writer;
 import tools.parser.Parser;
 
 public class ParserCSVOutput extends Parser
 {
+
+	@Override
+	public void initialize()
+	{
+		Writer.setWriterImpl(new CSVWriterImpl());
+		super.initialize();
+	}
 
 	@Override
 	protected void initializeDatabase()
@@ -22,8 +30,7 @@ public class ParserCSVOutput extends Parser
 		try
 		{
 			outputDirectory.mkdirs();
-		}
-		catch (SecurityException ex)
+		} catch (SecurityException ex)
 		{
 			throw new RuntimeException(
 					"Cannot create output directory, permission denied.");

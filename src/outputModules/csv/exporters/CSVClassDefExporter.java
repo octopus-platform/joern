@@ -3,7 +3,7 @@ package outputModules.csv.exporters;
 import java.util.Map;
 
 import outputModules.common.ClassDefExporter;
-import outputModules.csv.CSVWriter;
+import outputModules.common.Writer;
 import databaseNodes.ClassDefDatabaseNode;
 import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
@@ -18,17 +18,17 @@ public class CSVClassDefExporter extends ClassDefExporter
 	{
 
 		long fileId = fileNode.getId();
-		long functionId = CSVWriter.getIdForObject(classDefNode);
+		long functionId = Writer.getIdForObject(classDefNode);
 
-		CSVWriter.addEdge(fileId, functionId, null, EdgeTypes.IS_FILE_OF);
+		Writer.addEdge(fileId, functionId, null, EdgeTypes.IS_FILE_OF);
 	}
 
 	@Override
 	protected void addMainNode(DatabaseNode dbNode)
 	{
 		Map<String, Object> properties = dbNode.createProperties();
-		CSVWriter.addNode(dbNode, properties);
-		mainNodeId = CSVWriter.getIdForObject(dbNode);
+		Writer.addNode(dbNode, properties);
+		mainNodeId = Writer.getIdForObject(dbNode);
 	}
 
 }

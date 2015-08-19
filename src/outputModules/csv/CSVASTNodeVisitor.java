@@ -2,6 +2,7 @@ package outputModules.csv;
 
 import outputModules.common.ASTNodeExporter;
 import outputModules.common.OutModASTNodeVisitor;
+import outputModules.common.Writer;
 import outputModules.csv.exporters.CSVClassDefExporter;
 import outputModules.csv.exporters.CSVDeclStmtExporter;
 import outputModules.csv.exporters.CSVFunctionExporter;
@@ -38,7 +39,7 @@ public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 	@Override
 	protected void addEdgeFromClassToFunc(long dstNodeId, Long classId)
 	{
-		CSVWriter.addEdge(classId, dstNodeId, null, EdgeTypes.IS_CLASS_OF);
+		Writer.addEdge(classId, dstNodeId, null, EdgeTypes.IS_CLASS_OF);
 	}
 
 }

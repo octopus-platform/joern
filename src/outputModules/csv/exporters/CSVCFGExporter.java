@@ -3,7 +3,7 @@ package outputModules.csv.exporters;
 import java.util.Map;
 
 import outputModules.common.CFGExporter;
-import outputModules.csv.CSVWriter;
+import outputModules.common.Writer;
 import cfg.nodes.CFGNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
@@ -16,8 +16,8 @@ public class CSVCFGExporter extends CFGExporter
 			Map<String, Object> properties)
 	{
 		properties.put(NodeKeys.FUNCTION_ID,
-				String.format("%d", CSVWriter.getIdForObject(currentFunction)));
-		CSVWriter.addNode(statement, properties);
+				String.format("%d", Writer.getIdForObject(currentFunction)));
+		Writer.addNode(statement, properties);
 	}
 
 	@Override
@@ -25,9 +25,9 @@ public class CSVCFGExporter extends CFGExporter
 			Map<String, Object> properties)
 	{
 
-		long srcId = CSVWriter.getIdForObject(srcBlock);
-		long dstId = CSVWriter.getIdForObject(dstBlock);
-		CSVWriter.addEdge(srcId, dstId, properties, EdgeTypes.FLOWS_TO);
+		long srcId = Writer.getIdForObject(srcBlock);
+		long dstId = Writer.getIdForObject(dstBlock);
+		Writer.addEdge(srcId, dstId, properties, EdgeTypes.FLOWS_TO);
 
 	}
 

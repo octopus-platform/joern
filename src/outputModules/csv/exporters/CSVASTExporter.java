@@ -3,7 +3,7 @@ package outputModules.csv.exporters;
 import java.util.Map;
 
 import outputModules.common.ASTExporter;
-import outputModules.csv.CSVWriter;
+import outputModules.common.Writer;
 import ast.ASTNode;
 import databaseNodes.ASTDatabaseNode;
 import databaseNodes.EdgeTypes;
@@ -15,9 +15,9 @@ public class CSVASTExporter extends ASTExporter
 	@Override
 	protected void addASTLink(ASTNode parent, ASTNode child)
 	{
-		long srcId = CSVWriter.getIdForObject(parent);
-		long dstId = CSVWriter.getIdForObject(child);
-		CSVWriter.addEdge(srcId, dstId, null, EdgeTypes.IS_AST_PARENT);
+		long srcId = Writer.getIdForObject(parent);
+		long dstId = Writer.getIdForObject(child);
+		Writer.addEdge(srcId, dstId, null, EdgeTypes.IS_AST_PARENT);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class CSVASTExporter extends ASTExporter
 		Map<String, Object> properties = astDatabaseNode.createProperties();
 
 		properties.put(NodeKeys.FUNCTION_ID,
-				CSVWriter.getIdForObject(currentFunction).toString());
-		CSVWriter.addNode(node, properties);
+				Writer.getIdForObject(currentFunction).toString());
+		Writer.addNode(node, properties);
 	}
 }
