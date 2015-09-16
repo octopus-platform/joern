@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import antlr.C.ModuleParser;
+import languages.c.antlr.ModuleParser;
 
 public class FunctionParameterTests extends FunctionDefinitionTests
 {

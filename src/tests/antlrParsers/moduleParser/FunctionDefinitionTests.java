@@ -3,8 +3,8 @@ package tests.antlrParsers.moduleParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import antlr.C.ModuleLexer;
-import antlr.C.ModuleParser;
+import languages.c.antlr.ModuleLexer;
+import languages.c.antlr.ModuleParser;
 
 public class FunctionDefinitionTests
 {

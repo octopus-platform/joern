@@ -5,9 +5,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import parsing.FunctionParser;
 import parsing.TokenSubStream;
-import parsing.C.Functions.ANTLRCFunctionParserDriver;
-import antlr.C.FunctionLexer;
 import ast.ASTNode;
+import languages.c.antlr.FunctionLexer;
+import languages.c.parsing.Functions.ANTLRCFunctionParserDriver;
 
 public class FunctionContentTestUtil
 {

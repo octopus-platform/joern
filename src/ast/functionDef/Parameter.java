@@ -2,12 +2,12 @@ package ast.functionDef;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import antlr.C.ModuleParser.Parameter_declContext;
-import antlr.C.ModuleParser.Parameter_idContext;
-import antlr.C.ModuleParser.Parameter_nameContext;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.walking.ASTNodeVisitor;
+import languages.c.antlr.ModuleParser.Parameter_declContext;
+import languages.c.antlr.ModuleParser.Parameter_idContext;
+import languages.c.antlr.ModuleParser.Parameter_nameContext;
 
 public class Parameter extends ASTNode
 {

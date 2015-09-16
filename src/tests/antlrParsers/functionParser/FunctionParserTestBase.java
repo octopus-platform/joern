@@ -1,7 +1,7 @@
 package tests.antlrParsers.functionParser;
 
+import languages.c.parsing.Functions.ANTLRCFunctionParserDriver;
 import parsing.FunctionParser;
-import parsing.C.Functions.ANTLRCFunctionParserDriver;
 
 public class FunctionParserTestBase
 {

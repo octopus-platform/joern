@@ -3,8 +3,8 @@ package tests.cfgCreation;
 import tests.parseTreeToAST.FunctionContentTestUtil;
 import ast.ASTNode;
 import cfg.CFG;
-import cfg.C.CCFGFactory;
 import cfg.nodes.CFGNode;
+import languages.c.cfg.CCFGFactory;
 
 public class CFGCreatorTest
 {

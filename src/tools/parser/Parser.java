@@ -4,8 +4,8 @@ import java.nio.file.Path;
 
 import outputModules.common.DirectoryTreeExporter;
 import parsing.ModuleParser;
-import parsing.C.Modules.ANTLRCModuleParserDriver;
 import fileWalker.SourceFileListener;
+import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
 
 public abstract class Parser extends SourceFileListener
 {
