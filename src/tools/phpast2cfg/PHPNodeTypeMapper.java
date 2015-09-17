@@ -9,7 +9,7 @@ public class PHPNodeTypeMapper extends NodeTypeMapper
 	@Override
 	protected void initMap()
 	{
-		stringMap.put("AST_METHOD", new FunctionDef().getSimpleName());
+		stringMap.put("AST_METHOD", new FunctionDef().getTypeAsString());
 		// TODO: add more types
 	}
 

@@ -28,11 +28,6 @@ public class ASTNode implements Cloneable
 		children.add(node);
 	}
 
-	public String getSimpleName()
-	{
-		return this.getClass().getSimpleName();
-	}
-
 	public int getChildCount()
 	{
 		if (children == null)
