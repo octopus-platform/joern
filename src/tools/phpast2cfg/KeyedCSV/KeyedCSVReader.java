@@ -61,11 +61,17 @@ public class KeyedCSVReader
 	{
 		int numberOfKeys = row.length;
 		keys = new CSVKey[numberOfKeys];
-		for (int i = 0; i < numberOfKeys; i++)
-			keys[i].setName(row[i]);
 
-		// TODO: key parsing: we need to split at ':'
-		// to separate name, type and nodeIndex.
+		for (int i = 0; i < numberOfKeys; i++)
+		{
+			String[] keyParts = row[i].split(":");
+			keys[i] = new CSVKey();
+			keys[i].setName(keyParts[0]);
+			if (keyParts.length > 1)
+				keys[i].setType(keyParts[1]);
+			if (keyParts.length > 2)
+				keys[i].setNodeIndex(keyParts[2]);
+		}
 	}
 
 }

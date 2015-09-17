@@ -3,6 +3,8 @@ package tools.phpast2cfg.KeyedCSV;
 public class CSVKey
 {
 	private String name;
+	private String type;
+	private String nodeIndex;
 
 	public String getName()
 	{
@@ -12,6 +14,16 @@ public class CSVKey
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public void setNodeIndex(String nodeIndex)
+	{
+		this.nodeIndex = nodeIndex;
 	}
 
 }

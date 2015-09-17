@@ -14,7 +14,8 @@ public class CSV2AST
 {
 	HashMap<Long, ASTNode> idToNode = new HashMap<Long, ASTNode>();
 	KeyedCSVReader reader;
-	CSVASTNodeFactory nodeFactory = new CSVASTNodeFactory(new PHPCSVASTNodeTypes());
+	CSVASTNodeFactory nodeFactory = new CSVASTNodeFactory(
+			new PHPCSVASTNodeTypes());
 
 	/**
 	 * Convert a node and an edge file (CSV format) into an AST.
@@ -103,7 +104,7 @@ public class CSV2AST
 
 	private void processCSVNode(KeyedCSVRow keyedRow)
 	{
-
+		ASTNode node = nodeFactory.createNode(keyedRow);
 	}
 
 	private void processCSVEdge(KeyedCSVRow keyedRow)
