@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import ast.ASTNodeBuilder;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 import languages.c.antlr.ModuleParser.Class_nameContext;
 
 public class ClassDefBuilder extends ASTNodeBuilder

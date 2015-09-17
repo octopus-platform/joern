@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTWalker;
 
 public class CompoundItemAssembler extends ASTWalker

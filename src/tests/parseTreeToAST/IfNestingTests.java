@@ -5,10 +5,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ast.expressions.Expression;
-import ast.statements.BlockStarter;
-import ast.statements.CompoundStatement;
-import ast.statements.ElseStatement;
-import ast.statements.IfStatement;
+import ast.logical.statements.BlockStarter;
+import ast.logical.statements.CompoundStatement;
+import ast.statements.blockstarters.ElseStatement;
+import ast.statements.blockstarters.IfStatement;
 
 public class IfNestingTests
 {

@@ -1,4 +1,4 @@
-package ast.statements;
+package ast.logical.statements;
 
 import java.util.LinkedList;
 import java.util.List;

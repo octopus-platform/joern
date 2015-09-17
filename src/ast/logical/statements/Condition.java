@@ -1,5 +1,6 @@
-package ast.statements;
+package ast.logical.statements;
 
+import ast.statements.ExpressionHolder;
 import ast.walking.ASTNodeVisitor;
 
 public class Condition extends ExpressionHolder

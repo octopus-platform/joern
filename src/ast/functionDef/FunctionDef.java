@@ -3,7 +3,7 @@ package ast.functionDef;
 import ast.ASTNode;
 import ast.DummyNameNode;
 import ast.expressions.Identifier;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
 
 public class FunctionDef extends ASTNode

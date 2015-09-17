@@ -1,7 +1,11 @@
-package ast.statements;
+package ast.statements.blockstarters;
 
 import ast.ASTNode;
 import ast.expressions.Expression;
+import ast.expressions.ForInit;
+import ast.logical.statements.BlockStarter;
+import ast.logical.statements.Condition;
+import ast.logical.statements.Statement;
 import ast.walking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter

@@ -10,7 +10,7 @@ import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.functionDef.ReturnType;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 import languages.c.antlr.ModuleParser.Function_nameContext;
 import languages.c.antlr.ModuleParser.Function_param_listContext;
 import languages.c.antlr.ModuleParser.Parameter_declContext;

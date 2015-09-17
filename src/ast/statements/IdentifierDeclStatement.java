@@ -5,6 +5,7 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
+import ast.logical.statements.Statement;
 import ast.walking.ASTNodeVisitor;
 
 public class IdentifierDeclStatement extends Statement

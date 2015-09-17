@@ -9,7 +9,7 @@ import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
 import ast.functionDef.Parameter;
 import ast.functionDef.ReturnType;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 
 public class ASTDatabaseNode extends DatabaseNode
 {

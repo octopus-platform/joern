@@ -1,6 +1,7 @@
-package ast.statements;
+package ast.statements.blockstarters;
 
 import ast.ASTNode;
+import ast.logical.statements.BlockStarter;
 import ast.walking.ASTNodeVisitor;
 
 public class CatchStatement extends BlockStarter

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 
 public class PreprocessorTests
 {

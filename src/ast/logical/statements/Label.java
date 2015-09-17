@@ -1,8 +1,8 @@
-package ast.statements;
+package ast.logical.statements;
 
 import ast.walking.ASTNodeVisitor;
 
-public class SwitchStatement extends BlockStarter
+public class Label extends Statement
 {
 	public void accept(ASTNodeVisitor visitor)
 	{

@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import parsing.ANTLRParserDriver;
 import parsing.CompoundItemAssembler;
 import ast.declarations.IdentifierDecl;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 import ast.statements.IdentifierDeclStatement;
 import languages.c.antlr.ModuleBaseListener;
 import languages.c.antlr.ModuleParser;

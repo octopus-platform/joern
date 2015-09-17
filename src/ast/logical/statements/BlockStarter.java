@@ -1,11 +1,11 @@
-package ast.statements;
+package ast.logical.statements;
 
 import ast.ASTNode;
 
 public class BlockStarter extends Statement
 {
-	Statement statement = null;
-	Condition condition = null;
+	protected Statement statement = null;
+	protected Condition condition = null;
 
 	public Statement getStatement()
 	{

@@ -19,7 +19,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTWalkerEvent;
 
 abstract public class ANTLRParserDriver extends Observable

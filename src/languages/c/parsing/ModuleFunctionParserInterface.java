@@ -3,8 +3,8 @@ package languages.c.parsing;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;
 
+import ast.logical.statements.CompoundStatement;
 import parsing.FunctionParser;
-import ast.statements.CompoundStatement;
 import languages.c.antlr.ModuleParser;
 import languages.c.antlr.ModuleParser.Compound_statementContext;
 import languages.c.antlr.ModuleParser.Function_defContext;

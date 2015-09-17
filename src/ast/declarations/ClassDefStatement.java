@@ -3,8 +3,8 @@ package ast.declarations;
 import ast.ASTNode;
 import ast.DummyNameNode;
 import ast.expressions.Identifier;
-import ast.statements.CompoundStatement;
-import ast.statements.Statement;
+import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Statement;
 import ast.walking.ASTNodeVisitor;
 
 public class ClassDefStatement extends Statement

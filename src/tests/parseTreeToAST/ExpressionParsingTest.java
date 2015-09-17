@@ -19,8 +19,8 @@ import ast.expressions.MultiplicativeExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.RelationalExpression;
 import ast.expressions.ShiftExpression;
-import ast.statements.BlockStarter;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.BlockStarter;
+import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 

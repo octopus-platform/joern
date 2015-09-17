@@ -3,7 +3,7 @@ package parsing;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import ast.statements.CompoundStatement;
+import ast.logical.statements.CompoundStatement;
 
 public class FunctionParser
 {

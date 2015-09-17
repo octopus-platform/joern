@@ -3,9 +3,9 @@ package languages.c.parsing.Functions.builder;
 import java.util.Stack;
 
 import ast.ASTNode;
-import ast.statements.DoStatement;
-import ast.statements.IfStatement;
-import ast.statements.TryStatement;
+import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.TryStatement;
 
 public class ContentBuilderStack
 {

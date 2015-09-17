@@ -1,4 +1,4 @@
-package ast.statements;
+package ast.logical.statements;
 
 import ast.ASTNode;
 

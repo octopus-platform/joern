@@ -11,12 +11,12 @@ import ast.expressions.Argument;
 import ast.expressions.ArgumentList;
 import ast.expressions.AssignmentExpr;
 import ast.expressions.CallExpression;
-import ast.statements.BlockStarter;
-import ast.statements.CompoundStatement;
+import ast.logical.statements.BlockStarter;
+import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionStatement;
-import ast.statements.ForStatement;
 import ast.statements.IdentifierDeclStatement;
-import ast.statements.IfStatement;
+import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.IfStatement;
 import languages.c.antlr.FunctionParser.StatementsContext;
 
 public class CodeNestingTest

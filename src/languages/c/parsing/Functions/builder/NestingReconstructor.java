@@ -4,15 +4,15 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
 import ast.expressions.Expression;
-import ast.statements.BlockStarter;
-import ast.statements.CatchStatement;
-import ast.statements.CompoundStatement;
-import ast.statements.DoStatement;
-import ast.statements.ElseStatement;
+import ast.logical.statements.BlockStarter;
+import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionHolder;
-import ast.statements.IfStatement;
-import ast.statements.TryStatement;
-import ast.statements.WhileStatement;
+import ast.statements.blockstarters.CatchStatement;
+import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ElseStatement;
+import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.TryStatement;
+import ast.statements.blockstarters.WhileStatement;
 
 public class NestingReconstructor
 {

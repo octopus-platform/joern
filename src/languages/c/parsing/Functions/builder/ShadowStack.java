@@ -4,10 +4,10 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 import ast.ASTNode;
-import ast.statements.CompoundStatement;
-import ast.statements.DoStatement;
-import ast.statements.IfStatement;
-import ast.statements.TryStatement;
+import ast.logical.statements.CompoundStatement;
+import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.TryStatement;
 
 public class ShadowStack
 {

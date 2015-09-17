@@ -1,6 +1,7 @@
 package ast.statements;
 
 import ast.expressions.Expression;
+import ast.logical.statements.Statement;
 
 public class ExpressionHolderStatement extends Statement
 {
