@@ -4,10 +4,9 @@ import java.util.LinkedList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import parsing.ParseTreeUtils;
-import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
 import ast.walking.ASTNodeVisitor;
+import parsing.ParseTreeUtils;
 
 public class ASTNode implements Cloneable
 {
@@ -29,6 +28,11 @@ public class ASTNode implements Cloneable
 		children.add(node);
 	}
 
+	public String getSimpleName()
+	{
+		return this.getClass().getSimpleName();
+	}
+
 	public int getChildCount()
 	{
 		if (children == null)
@@ -45,8 +49,7 @@ public class ASTNode implements Cloneable
 		try
 		{
 			retval = children.get(i);
-		}
-		catch (IndexOutOfBoundsException ex)
+		} catch (IndexOutOfBoundsException ex)
 		{
 			return null;
 		}
@@ -90,8 +93,8 @@ public class ASTNode implements Cloneable
 		if (codeStr != null)
 			return codeStr;
 
-		codeStr = escapeCodeStr(ParseTreeUtils
-				.childTokenString(parseTreeNodeContext));
+		codeStr = escapeCodeStr(
+				ParseTreeUtils.childTokenString(parseTreeNodeContext));
 		return codeStr;
 	}
 
@@ -115,7 +118,6 @@ public class ASTNode implements Cloneable
 		return location;
 	}
 
-	
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
@@ -149,17 +151,17 @@ public class ASTNode implements Cloneable
 		}
 		return null;
 	}
-	
+
 	public ASTNode clone() throws CloneNotSupportedException
 	{
-		ASTNode node = (ASTNode)super.clone();
+		ASTNode node = (ASTNode) super.clone();
 		node.setCodeStr(codeStr);
 		node.initializeFromContext(parseTreeNodeContext);
-		if(isInCFG())
+		if (isInCFG())
 			node.markAsCFGNode();
-		if(children != null)
+		if (children != null)
 		{
-			for(ASTNode n:children)
+			for (ASTNode n : children)
 			{
 				node.addChild(n.clone());
 			}

@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
-import tools.phpast2cfg.PHPCSVASTNodeTypes;
+import tools.phpast2cfg.PHPNodeTypeMapper;
 import tools.phpast2cfg.KeyedCSV.KeyedCSVReader;
 import tools.phpast2cfg.KeyedCSV.KeyedCSVRow;
 import tools.phpast2cfg.KeyedCSV.exceptions.InvalidCSVFile;
@@ -15,7 +15,7 @@ public class CSV2AST
 	HashMap<Long, ASTNode> idToNode = new HashMap<Long, ASTNode>();
 	KeyedCSVReader reader;
 	CSVASTNodeFactory nodeFactory = new CSVASTNodeFactory(
-			new PHPCSVASTNodeTypes());
+			new PHPNodeTypeMapper());
 
 	/**
 	 * Convert a node and an edge file (CSV format) into an AST.
@@ -65,7 +65,18 @@ public class CSV2AST
 		ASTNode node = nodeFactory.createNode(keyedRow);
 		if (!(node instanceof FunctionDef))
 			throw new InvalidCSVFile();
+
+		addNodeToMap(keyedRow, node);
+
 		return (FunctionDef) node;
+	}
+
+	private void addNodeToMap(KeyedCSVRow keyedRow, ASTNode node)
+	{
+		String nodeIdStr = keyedRow.lookup("nodeId");
+		if (nodeIdStr == null)
+			throw new RuntimeException("nodeId field required");
+		idToNode.put(Long.parseLong(nodeIdStr), node);
 	}
 
 	private void createASTEdges(String edgeFilename)
