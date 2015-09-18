@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import languages.c.parsing.CodeLocation;
+import languages.c.parsing.CodeLocationExtractor;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -22,24 +23,6 @@ public class ASTNode
 
 	protected LinkedList<ASTNode> children;
 	protected int childNumber;
-
-	public void setProperty(String key, String val)
-	{
-		if (properties == null)
-			properties = new HashMap<String, String>();
-		properties.put(key, val);
-	}
-
-	public String getProperty(String key)
-	{
-		if (properties == null)
-			return null;
-
-		String retval = properties.get(key);
-		if (retval == null)
-			return null;
-		return retval;
-	}
 
 	public ASTNode()
 	{
@@ -69,6 +52,24 @@ public class ASTNode
 				addChild(new ASTNode(n));
 			}
 		}
+	}
+
+	public void setProperty(String key, String val)
+	{
+		if (properties == null)
+			properties = new HashMap<String, String>();
+		properties.put(key, val);
+	}
+
+	public String getProperty(String key)
+	{
+		if (properties == null)
+			return null;
+
+		String retval = properties.get(key);
+		if (retval == null)
+			return null;
+		return retval;
 	}
 
 	public void addChild(ASTNode node)
@@ -127,7 +128,7 @@ public class ASTNode
 	{
 		if (ctx == null)
 			return;
-		location = new CodeLocation(ctx);
+		location = CodeLocationExtractor.extractFromContext(ctx);
 	}
 
 	public void setCodeStr(String aCodeStr)
