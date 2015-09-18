@@ -26,11 +26,21 @@ public class ASTNode
 
 	public ASTNode(ASTNode otherNode)
 	{
+		copyAttributes(otherNode);
+		copyChildren(otherNode);
+	}
+
+	private void copyAttributes(ASTNode otherNode)
+	{
 		setCodeStr(otherNode.codeStr);
 		initializeFromContext(otherNode.parseTreeNodeContext);
 		setChildNumber(otherNode.childNumber);
 		if (otherNode.isInCFG())
 			markAsCFGNode();
+	}
+
+	private void copyChildren(ASTNode otherNode)
+	{
 		if (otherNode.children != null)
 		{
 			for (ASTNode n : otherNode.children)
@@ -38,7 +48,6 @@ public class ASTNode
 				addChild(new ASTNode(n));
 			}
 		}
-
 	}
 
 	public void addChild(ASTNode node)
