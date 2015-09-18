@@ -5,7 +5,17 @@ import ast.ASTNode;
 public class Expression extends ASTNode
 {
 	private String operator = "";
-	
+
+	public Expression()
+	{
+	}
+
+	public Expression(Expression other)
+	{
+		super(other);
+		setOperator(other.operator);
+	}
+
 	public void replaceFirstChild(ASTNode node)
 	{
 		children.removeFirst();
@@ -21,11 +31,5 @@ public class Expression extends ASTNode
 	{
 		return operator;
 	}
-	
-	public Expression clone() throws CloneNotSupportedException
-	{
-		Expression node = (Expression)super.clone();
-		node.setOperator(operator);
-		return node;
-	}
+
 }

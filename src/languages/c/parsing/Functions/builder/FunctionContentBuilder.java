@@ -2,67 +2,6 @@ package languages.c.parsing.Functions.builder;
 
 import java.util.EmptyStackException;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
-import ast.ASTNode;
-import ast.ASTNodeBuilder;
-import ast.declarations.ClassDefStatement;
-import ast.declarations.IdentifierDecl;
-import ast.expressions.AdditiveExpression;
-import ast.expressions.AndExpression;
-import ast.expressions.Argument;
-import ast.expressions.ArgumentList;
-import ast.expressions.ArrayIndexing;
-import ast.expressions.AssignmentExpr;
-import ast.expressions.BitAndExpression;
-import ast.expressions.CallExpression;
-import ast.expressions.Callee;
-import ast.expressions.CastExpression;
-import ast.expressions.CastTarget;
-import ast.expressions.ConditionalExpression;
-import ast.expressions.EqualityExpression;
-import ast.expressions.ExclusiveOrExpression;
-import ast.expressions.Expression;
-import ast.expressions.ForInit;
-import ast.expressions.Identifier;
-import ast.expressions.IncDec;
-import ast.expressions.IncDecOp;
-import ast.expressions.InclusiveOrExpression;
-import ast.expressions.InitializerList;
-import ast.expressions.MemberAccess;
-import ast.expressions.MultiplicativeExpression;
-import ast.expressions.OrExpression;
-import ast.expressions.PrimaryExpression;
-import ast.expressions.PtrMemberAccess;
-import ast.expressions.RelationalExpression;
-import ast.expressions.ShiftExpression;
-import ast.expressions.Sizeof;
-import ast.expressions.SizeofExpr;
-import ast.expressions.SizeofOperand;
-import ast.expressions.UnaryExpression;
-import ast.expressions.UnaryOp;
-import ast.expressions.UnaryOperator;
-import ast.logical.statements.BlockCloser;
-import ast.logical.statements.BlockStarter;
-import ast.logical.statements.CompoundStatement;
-import ast.logical.statements.Condition;
-import ast.logical.statements.Label;
-import ast.logical.statements.Statement;
-import ast.statements.ExpressionStatement;
-import ast.statements.IdentifierDeclStatement;
-import ast.statements.blockstarters.CatchStatement;
-import ast.statements.blockstarters.DoStatement;
-import ast.statements.blockstarters.ElseStatement;
-import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
-import ast.statements.blockstarters.SwitchStatement;
-import ast.statements.blockstarters.TryStatement;
-import ast.statements.blockstarters.WhileStatement;
-import ast.statements.jump.BreakStatement;
-import ast.statements.jump.ContinueStatement;
-import ast.statements.jump.GotoStatement;
-import ast.statements.jump.ReturnStatement;
-import ast.statements.jump.ThrowStatement;
 import languages.c.antlr.FunctionParser.Additive_expressionContext;
 import languages.c.antlr.FunctionParser.And_expressionContext;
 import languages.c.antlr.FunctionParser.ArrayIndexingContext;
@@ -126,6 +65,68 @@ import languages.c.antlr.FunctionParser.While_statementContext;
 import languages.c.parsing.Shared.InitDeclContextWrapper;
 import languages.c.parsing.Shared.builders.ClassDefBuilder;
 import languages.c.parsing.Shared.builders.IdentifierDeclBuilder;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+
+import ast.ASTNode;
+import ast.ASTNodeBuilder;
+import ast.declarations.ClassDefStatement;
+import ast.declarations.IdentifierDecl;
+import ast.expressions.AdditiveExpression;
+import ast.expressions.AndExpression;
+import ast.expressions.Argument;
+import ast.expressions.ArgumentList;
+import ast.expressions.ArrayIndexing;
+import ast.expressions.AssignmentExpr;
+import ast.expressions.BitAndExpression;
+import ast.expressions.CallExpression;
+import ast.expressions.Callee;
+import ast.expressions.CastExpression;
+import ast.expressions.CastTarget;
+import ast.expressions.ConditionalExpression;
+import ast.expressions.EqualityExpression;
+import ast.expressions.ExclusiveOrExpression;
+import ast.expressions.Expression;
+import ast.expressions.ForInit;
+import ast.expressions.Identifier;
+import ast.expressions.IncDec;
+import ast.expressions.IncDecOp;
+import ast.expressions.InclusiveOrExpression;
+import ast.expressions.InitializerList;
+import ast.expressions.MemberAccess;
+import ast.expressions.MultiplicativeExpression;
+import ast.expressions.OrExpression;
+import ast.expressions.PrimaryExpression;
+import ast.expressions.PtrMemberAccess;
+import ast.expressions.RelationalExpression;
+import ast.expressions.ShiftExpression;
+import ast.expressions.Sizeof;
+import ast.expressions.SizeofExpr;
+import ast.expressions.SizeofOperand;
+import ast.expressions.UnaryExpression;
+import ast.expressions.UnaryOp;
+import ast.expressions.UnaryOperator;
+import ast.logical.statements.BlockCloser;
+import ast.logical.statements.BlockStarter;
+import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Condition;
+import ast.logical.statements.Label;
+import ast.logical.statements.Statement;
+import ast.statements.ExpressionStatement;
+import ast.statements.IdentifierDeclStatement;
+import ast.statements.blockstarters.CatchStatement;
+import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ElseStatement;
+import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.SwitchStatement;
+import ast.statements.blockstarters.TryStatement;
+import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.BreakStatement;
+import ast.statements.jump.ContinueStatement;
+import ast.statements.jump.GotoStatement;
+import ast.statements.jump.ReturnStatement;
+import ast.statements.jump.ThrowStatement;
 
 /**
  * The FunctionContentBuilder is invoked while walking the parse tree to create
@@ -541,11 +542,10 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		AssignmentExpr assign = new AssignmentExpr();
 		assign.initializeFromContext(ctx);
 
-		// watchout here, we're not making a copy.
-		// This is also a bit of a hack. As we go up,
+		// This is a bit of a hack. As we go up,
 		// we introduce an artificial assignment-node.
 
-		assign.addChild(identifierDecl.getName().clone());
+		assign.addChild(new Identifier(identifierDecl.getName()));
 		assign.addChild(lastChild);
 
 		identifierDecl.addChild(assign);

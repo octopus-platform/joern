@@ -7,6 +7,15 @@ import ast.walking.ASTNodeVisitor;
 public class Identifier extends Expression
 {
 
+	public Identifier()
+	{
+	}
+
+	public Identifier(Identifier name)
+	{
+		super(name);
+	}
+
 	public ParserRuleContext getParseTreeNodeContext()
 	{
 		return parseTreeNodeContext;
@@ -16,17 +25,5 @@ public class Identifier extends Expression
 	{
 		visitor.visit(this);
 	}
-	
-	public Identifier clone()
-	{
-		Identifier node = null;
-		try{
-			node = (Identifier)super.clone();
-		}
-		catch(CloneNotSupportedException e)
-		{
-			e.printStackTrace();
-		}
-		return node;
-	}
+
 }
