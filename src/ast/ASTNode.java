@@ -11,8 +11,8 @@ import ast.walking.ASTNodeVisitor;
 public class ASTNode
 {
 
-	protected String codeStr = null;
-	protected ParserRuleContext parseTreeNodeContext;
+	private String codeStr = null;
+	private ParserRuleContext parseTreeNodeContext;
 	private CodeLocation location = new CodeLocation();
 
 	private boolean isInCFG = false;
@@ -32,8 +32,8 @@ public class ASTNode
 
 	private void copyAttributes(ASTNode otherNode)
 	{
-		setCodeStr(otherNode.codeStr);
-		initializeFromContext(otherNode.parseTreeNodeContext);
+		setCodeStr(otherNode.getCodeStr());
+		initializeFromContext(otherNode.getParseTreeNodeContext());
 		setChildNumber(otherNode.childNumber);
 		if (otherNode.isInCFG())
 			markAsCFGNode();
@@ -99,7 +99,7 @@ public class ASTNode
 
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
-		parseTreeNodeContext = ctx;
+		setParseTreeNodeContext(ctx);
 	}
 
 	public void setLocation(ParserRuleContext ctx)
@@ -116,12 +116,12 @@ public class ASTNode
 
 	public String getEscapedCodeStr()
 	{
-		if (codeStr != null)
-			return codeStr;
+		if (getCodeStr() != null)
+			return getCodeStr();
 
-		codeStr = escapeCodeStr(ParseTreeUtils
-				.childTokenString(parseTreeNodeContext));
-		return codeStr;
+		setCodeStr(escapeCodeStr(ParseTreeUtils
+				.childTokenString(getParseTreeNodeContext())));
+		return getCodeStr();
 	}
 
 	private String escapeCodeStr(String codeStr)
@@ -134,13 +134,13 @@ public class ASTNode
 
 	public String getLocationString()
 	{
-		setLocation(parseTreeNodeContext);
+		setLocation(getParseTreeNodeContext());
 		return location.toString();
 	}
 
 	public CodeLocation getLocation()
 	{
-		setLocation(parseTreeNodeContext);
+		setLocation(getParseTreeNodeContext());
 		return location;
 	}
 
@@ -176,6 +176,22 @@ public class ASTNode
 			return ((Expression) this).getOperator();
 		}
 		return null;
+	}
+
+	protected String getCodeStr()
+	{
+		return codeStr;
+	}
+
+	public ParserRuleContext getParseTreeNodeContext()
+	{
+		return parseTreeNodeContext;
+	}
+
+	protected void setParseTreeNodeContext(
+			ParserRuleContext parseTreeNodeContext)
+	{
+		this.parseTreeNodeContext = parseTreeNodeContext;
 	}
 
 }

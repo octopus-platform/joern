@@ -69,13 +69,13 @@ public class ParameterList extends ASTNode
 	@Override
 	public String getEscapedCodeStr()
 	{
-		if (codeStr != null)
-			return codeStr;
+		if (getCodeStr() != null)
+			return getCodeStr();
 
 		if (parameters.size() == 0)
 		{
-			codeStr = "";
-			return codeStr;
+			setCodeStr("");
+			return getCodeStr();
 		}
 
 		Iterator<Parameter> i = parameters.iterator();
@@ -86,10 +86,10 @@ public class ParameterList extends ASTNode
 			s.append(param.getEscapedCodeStr() + " , ");
 		}
 
-		codeStr = s.toString();
-		codeStr = codeStr.substring(0, s.length() - 3);
+		setCodeStr(s.toString());
+		setCodeStr(getCodeStr().substring(0, s.length() - 3));
 
-		return codeStr;
+		return getCodeStr();
 	}
 
 	@Override

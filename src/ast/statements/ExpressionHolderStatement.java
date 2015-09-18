@@ -8,15 +8,15 @@ public class ExpressionHolderStatement extends Statement
 
 	public String getEscapedCodeStr()
 	{
-		if (codeStr != null)
-			return codeStr;
+		if (getCodeStr() != null)
+			return getCodeStr();
 
 		Expression expr = getExpression();
 		if (expr == null)
 			return "";
 
-		codeStr = expr.getEscapedCodeStr();
-		return codeStr;
+		setCodeStr(expr.getEscapedCodeStr());
+		return getCodeStr();
 	}
 
 	public Expression getExpression()
