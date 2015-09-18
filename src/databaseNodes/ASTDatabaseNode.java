@@ -3,8 +3,8 @@ package databaseNodes;
 import java.util.HashMap;
 import java.util.Map;
 
+import languages.c.parsing.CodeLocation;
 import ast.ASTNode;
-import ast.CodeLocation;
 import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
 import ast.functionDef.Parameter;

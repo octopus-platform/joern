@@ -3,10 +3,10 @@ package databaseNodes;
 import java.util.HashMap;
 import java.util.Map;
 
+import languages.c.parsing.CodeLocation;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import ast.ASTNode;
-import ast.CodeLocation;
 import ast.functionDef.FunctionDef;
 import cdg.CDG;
 import cdg.CDGCreator;

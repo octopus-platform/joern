@@ -1,6 +1,10 @@
 package ast;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+
+import languages.c.parsing.CodeLocation;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -10,8 +14,7 @@ import ast.walking.ASTNodeVisitor;
 
 public class ASTNode
 {
-
-	private String codeStr = null;
+	private Map<String, String> properties;
 	private ParserRuleContext parseTreeNodeContext;
 	private CodeLocation location = new CodeLocation();
 
@@ -19,6 +22,24 @@ public class ASTNode
 
 	protected LinkedList<ASTNode> children;
 	protected int childNumber;
+
+	public void setProperty(String key, String val)
+	{
+		if (properties == null)
+			properties = new HashMap<String, String>();
+		properties.put(key, val);
+	}
+
+	public String getProperty(String key)
+	{
+		if (properties == null)
+			return null;
+
+		String retval = properties.get(key);
+		if (retval == null)
+			return null;
+		return retval;
+	}
 
 	public ASTNode()
 	{
@@ -111,7 +132,7 @@ public class ASTNode
 
 	public void setCodeStr(String aCodeStr)
 	{
-		codeStr = aCodeStr;
+		setProperty(ASTNodeProperties.CODE, aCodeStr);
 	}
 
 	public String getEscapedCodeStr()
@@ -180,7 +201,7 @@ public class ASTNode
 
 	protected String getCodeStr()
 	{
-		return codeStr;
+		return getProperty(ASTNodeProperties.CODE);
 	}
 
 	public ParserRuleContext getParseTreeNodeContext()

@@ -1,4 +1,4 @@
-package ast;
+package languages.c.parsing;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
