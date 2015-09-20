@@ -15,11 +15,6 @@ import ast.walking.ASTNodeVisitor;
 
 public class ASTNode
 {
-	// TODO: get rid of parseTreeNodeContext, and instead, store the values
-	// generated from it. That way, we decouple ASTNode from ANTLR.
-
-	private ParserRuleContext parseTreeNodeContext;
-
 	private Map<String, String> properties;
 	private CodeLocation location = new CodeLocation();
 
@@ -128,7 +123,6 @@ public class ASTNode
 	{
 		if (ctx == null)
 			return;
-		this.parseTreeNodeContext = ctx;
 		location = CodeLocationExtractor.extractFromContext(ctx);
 		setCodeStr(escapeCodeStr(ParseTreeUtils.childTokenString(ctx)));
 
@@ -201,8 +195,4 @@ public class ASTNode
 		return getProperty(ASTNodeProperties.CODE);
 	}
 
-	public ParserRuleContext getParseTreeNodeContext()
-	{
-		return parseTreeNodeContext;
-	}
 }

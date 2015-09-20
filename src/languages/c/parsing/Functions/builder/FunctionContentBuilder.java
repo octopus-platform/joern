@@ -1,6 +1,7 @@
 package languages.c.parsing.Functions.builder;
 
 import java.util.EmptyStackException;
+import java.util.HashMap;
 
 import languages.c.antlr.FunctionParser.Additive_expressionContext;
 import languages.c.antlr.FunctionParser.And_expressionContext;
@@ -143,6 +144,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 {
 	ContentBuilderStack stack = new ContentBuilderStack();
 	NestingReconstructor nesting = new NestingReconstructor(stack);
+	HashMap<ASTNode, ParserRuleContext> nodeToRuleContext = new HashMap<ASTNode, ParserRuleContext>();
 
 	// exitStatements is called when the entire
 	// function-content has been walked
@@ -161,6 +163,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		ASTNode statementItem = new Statement();
 		statementItem.initializeFromContext(ctx);
+		nodeToRuleContext.put(statementItem, ctx);
 		stack.push(statementItem);
 	}
 
@@ -168,47 +171,47 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterOpeningCurly(Opening_curlyContext ctx)
 	{
-		replaceTopOfStack(new CompoundStatement());
+		replaceTopOfStack(new CompoundStatement(), ctx);
 	}
 
 	public void enterClosingCurly(Closing_curlyContext ctx)
 	{
-		replaceTopOfStack(new BlockCloser());
+		replaceTopOfStack(new BlockCloser(), ctx);
 	}
 
 	public void enterBlockStarter(Block_starterContext ctx)
 	{
-		replaceTopOfStack(new BlockStarter());
+		replaceTopOfStack(new BlockStarter(), ctx);
 	}
 
 	public void enterExprStatement(Expr_statementContext ctx)
 	{
-		replaceTopOfStack(new ExpressionStatement());
+		replaceTopOfStack(new ExpressionStatement(), ctx);
 	}
 
 	public void enterIf(If_statementContext ctx)
 	{
-		replaceTopOfStack(new IfStatement());
+		replaceTopOfStack(new IfStatement(), ctx);
 	}
 
 	public void enterFor(For_statementContext ctx)
 	{
-		replaceTopOfStack(new ForStatement());
+		replaceTopOfStack(new ForStatement(), ctx);
 	}
 
 	public void enterWhile(While_statementContext ctx)
 	{
-		replaceTopOfStack(new WhileStatement());
+		replaceTopOfStack(new WhileStatement(), ctx);
 	}
 
 	public void enterDo(Do_statementContext ctx)
 	{
-		replaceTopOfStack(new DoStatement());
+		replaceTopOfStack(new DoStatement(), ctx);
 	}
 
 	public void enterElse(Else_statementContext ctx)
 	{
-		replaceTopOfStack(new ElseStatement());
+		replaceTopOfStack(new ElseStatement(), ctx);
 	}
 
 	public void exitStatement(StatementContext ctx)
@@ -238,7 +241,6 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	private void closeCompoundStatement()
 	{
 		stack.pop(); // remove 'CloseBlock'
-
 		CompoundStatement compoundItem = (CompoundStatement) stack.pop();
 		nesting.consolidateBlockStarters(compoundItem);
 	}
@@ -248,6 +250,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterExpression(ExprContext ctx)
 	{
 		Expression expression = new Expression();
+		nodeToRuleContext.put(expression, ctx);
 		stack.push(expression);
 	}
 
@@ -259,6 +262,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterAssignment(Assign_exprContext ctx)
 	{
 		AssignmentExpr expr = new AssignmentExpr();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -270,6 +274,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterConditionalExpr(Conditional_expressionContext ctx)
 	{
 		ConditionalExpression expr = new ConditionalExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -282,6 +287,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterOrExpression(Or_expressionContext ctx)
 	{
 		OrExpression expr = new OrExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -293,6 +299,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterAndExpression(And_expressionContext ctx)
 	{
 		AndExpression expr = new AndExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -304,6 +311,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInclusiveOrExpression(Inclusive_or_expressionContext ctx)
 	{
 		InclusiveOrExpression expr = new InclusiveOrExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -315,6 +323,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterExclusiveOrExpression(Exclusive_or_expressionContext ctx)
 	{
 		ExclusiveOrExpression expr = new ExclusiveOrExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -326,12 +335,14 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterBitAndExpression(Bit_and_expressionContext ctx)
 	{
 		BitAndExpression expr = new BitAndExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
 	public void enterEqualityExpression(Equality_expressionContext ctx)
 	{
 		EqualityExpression expr = new EqualityExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -348,6 +359,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterRelationalExpression(Relational_expressionContext ctx)
 	{
 		RelationalExpression expr = new RelationalExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -359,6 +371,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterShiftExpression(Shift_expressionContext ctx)
 	{
 		ShiftExpression expr = new ShiftExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -370,6 +383,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterAdditiveExpression(Additive_expressionContext ctx)
 	{
 		AdditiveExpression expr = new AdditiveExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -382,6 +396,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			Multiplicative_expressionContext ctx)
 	{
 		MultiplicativeExpression expr = new MultiplicativeExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -394,6 +409,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCastExpression(Cast_expressionContext ctx)
 	{
 		CastExpression expr = new CastExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -405,6 +421,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCast_target(Cast_targetContext ctx)
 	{
 		CastTarget expr = new CastTarget();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -416,6 +433,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterFuncCall(FuncCallContext ctx)
 	{
 		CallExpression expr = new CallExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -428,6 +446,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterSizeof(SizeofContext ctx)
 	{
 		Sizeof expr = new Sizeof();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -481,6 +500,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterArgumentList(Function_argument_listContext ctx)
 	{
 		ArgumentList expr = new ArgumentList();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -492,6 +512,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterCondition(ConditionContext ctx)
 	{
 		Condition expr = new Condition();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -507,7 +528,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		ClassDefBuilder classDefBuilder = new ClassDefBuilder();
 		classDefBuilder.createNew(ctx);
 		classDefBuilder.setName(ctx.class_def().class_name());
-		replaceTopOfStack(classDefBuilder.getItem());
+		replaceTopOfStack(classDefBuilder.getItem(), ctx);
 	}
 
 	public void exitDeclByClass()
@@ -518,6 +539,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitDeclSimple(InitDeclSimpleContext ctx)
 	{
 		ASTNode identifierDecl = buildDeclarator(ctx);
+		nodeToRuleContext.put(identifierDecl, ctx);
 		stack.push(identifierDecl);
 	}
 
@@ -531,6 +553,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitDeclWithAssign(InitDeclWithAssignContext ctx)
 	{
 		IdentifierDecl identifierDecl = buildDeclarator(ctx);
+		nodeToRuleContext.put(identifierDecl, ctx);
 		stack.push(identifierDecl);
 	}
 
@@ -557,6 +580,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitDeclWithCall(InitDeclWithCallContext ctx)
 	{
 		ASTNode identifierDecl = buildDeclarator(ctx);
+		nodeToRuleContext.put(identifierDecl, ctx);
 		stack.push(identifierDecl);
 	}
 
@@ -586,8 +610,10 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			typeName = ((IdentifierDeclStatement) parentItem)
 					.getTypeNameContext();
 		else if (parentItem instanceof ClassDefStatement)
-			typeName = ((ClassDefStatement) parentItem).getName()
-					.getParseTreeNodeContext();
+		{
+			Identifier name = ((ClassDefStatement) parentItem).getName();
+			typeName = nodeToRuleContext.get(name);
+		}
 		else
 			throw new RuntimeException(
 					"No matching declaration statement/class definiton for init declarator");
@@ -597,6 +623,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterIncDec(Inc_decContext ctx)
 	{
 		IncDec expr = new IncDec();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -608,6 +635,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterArrayIndexing(ArrayIndexingContext ctx)
 	{
 		ArrayIndexing expr = new ArrayIndexing();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -619,6 +647,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterMemberAccess(MemberAccessContext ctx)
 	{
 		MemberAccess expr = new MemberAccess();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -630,6 +659,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterIncDecOp(IncDecOpContext ctx)
 	{
 		IncDecOp expr = new IncDecOp();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -641,6 +671,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterPrimary(Primary_expressionContext ctx)
 	{
 		PrimaryExpression expr = new PrimaryExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -652,6 +683,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterUnaryExpression(Unary_expressionContext ctx)
 	{
 		UnaryExpression expr = new UnaryExpression();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -663,6 +695,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterIdentifier(IdentifierContext ctx)
 	{
 		Identifier expr = new Identifier();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -674,6 +707,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterArgument(Function_argumentContext ctx)
 	{
 		Argument expr = new Argument();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -685,6 +719,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitializerList(Initializer_listContext ctx)
 	{
 		InitializerList expr = new InitializerList();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -696,6 +731,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterPtrMemberAccess(PtrMemberAccessContext ctx)
 	{
 		PtrMemberAccess expr = new PtrMemberAccess();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -707,12 +743,14 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterInitFor(For_init_statementContext ctx)
 	{
 		ForInit expr = new ForInit();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
 	public void exitInitFor(For_init_statementContext ctx)
 	{
 		ASTNode node = stack.pop();
+		nodeToRuleContext.remove(node);
 		node.initializeFromContext(ctx);
 		ForStatement forStatement = (ForStatement) stack.peek();
 		forStatement.addChild(node);
@@ -720,32 +758,32 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterSwitchStatement(Switch_statementContext ctx)
 	{
-		replaceTopOfStack(new SwitchStatement());
+		replaceTopOfStack(new SwitchStatement(), ctx);
 	}
 
 	public void enterLabel(LabelContext ctx)
 	{
-		replaceTopOfStack(new Label());
+		replaceTopOfStack(new Label(), ctx);
 	}
 
 	public void enterReturnStatement(ReturnStatementContext ctx)
 	{
-		replaceTopOfStack(new ReturnStatement());
+		replaceTopOfStack(new ReturnStatement(), ctx);
 	}
 
 	public void enterBreakStatement(BreakStatementContext ctx)
 	{
-		replaceTopOfStack(new BreakStatement());
+		replaceTopOfStack(new BreakStatement(), ctx);
 	}
 
 	public void enterContinueStatement(ContinueStatementContext ctx)
 	{
-		replaceTopOfStack(new ContinueStatement());
+		replaceTopOfStack(new ContinueStatement(), ctx);
 	}
 
 	public void enterGotoStatement(GotoStatementContext ctx)
 	{
-		replaceTopOfStack(new GotoStatement());
+		replaceTopOfStack(new GotoStatement(), ctx);
 	}
 
 	@Override
@@ -754,6 +792,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		item = new CompoundStatement();
 		CompoundStatement rootItem = (CompoundStatement) item;
 		item.initializeFromContext(ctx);
+		nodeToRuleContext.put(rootItem, ctx);
 		stack.push(rootItem);
 	}
 
@@ -772,9 +811,12 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		declStmt.setTypeNameContext(type_nameContext);
 
 		if (stack.peek() instanceof Statement)
-			replaceTopOfStack(declStmt);
+			replaceTopOfStack(declStmt, ctx);
 		else
+		{
+			nodeToRuleContext.put(declStmt, ctx);
 			stack.push(declStmt);
+		}
 	}
 
 	public void exitDeclByType()
@@ -782,15 +824,18 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		nesting.consolidate();
 	}
 
-	protected void replaceTopOfStack(ASTNode item)
+	protected void replaceTopOfStack(ASTNode item, ParserRuleContext ctx)
 	{
-		stack.pop();
+		ASTNode oldNode = stack.pop();
+		nodeToRuleContext.remove(oldNode);
+		nodeToRuleContext.put(item, ctx);
 		stack.push(item);
 	}
 
 	public void enterSizeofExpr(Sizeof_expressionContext ctx)
 	{
 		SizeofExpr expr = new SizeofExpr();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -802,6 +847,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterSizeofOperand2(Sizeof_operand2Context ctx)
 	{
 		SizeofOperand expr = new SizeofOperand();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -824,6 +870,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterUnaryOpAndCastExpr(Unary_op_and_cast_exprContext ctx)
 	{
 		UnaryOp expr = new UnaryOp();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -835,6 +882,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void enterUnaryOperator(Unary_operatorContext ctx)
 	{
 		UnaryOperator expr = new UnaryOperator();
+		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
 
@@ -845,17 +893,17 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterTryStatement(Try_statementContext ctx)
 	{
-		replaceTopOfStack(new TryStatement());
+		replaceTopOfStack(new TryStatement(), ctx);
 	}
 
 	public void enterCatchStatement(Catch_statementContext ctx)
 	{
-		replaceTopOfStack(new CatchStatement());
+		replaceTopOfStack(new CatchStatement(), ctx);
 	}
 
 	public void enterThrowStatement(ThrowStatementContext ctx)
 	{
-		replaceTopOfStack(new ThrowStatement());
+		replaceTopOfStack(new ThrowStatement(), ctx);
 	}
 
 }
