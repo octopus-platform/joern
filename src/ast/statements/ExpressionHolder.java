@@ -8,11 +8,9 @@ import ast.expressions.Expression;
 
 public class ExpressionHolder extends Expression
 {
+	@Override
 	public String getEscapedCodeStr()
 	{
-		if (getCodeStr() != null)
-			return getCodeStr();
-
 		Expression expr = getExpression();
 		if (expr == null)
 			return "";

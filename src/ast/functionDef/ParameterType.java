@@ -9,10 +9,9 @@ public class ParameterType extends ASTNode
 	String completeType = "";
 	String baseType = "";
 
+	@Override
 	public String getEscapedCodeStr()
 	{
-		if (getCodeStr() != null)
-			return getCodeStr();
 		setCodeStr(completeType);
 		return getCodeStr();
 	}

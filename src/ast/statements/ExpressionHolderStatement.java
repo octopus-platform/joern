@@ -5,11 +5,9 @@ import ast.logical.statements.Statement;
 
 public class ExpressionHolderStatement extends Statement
 {
-
+	@Override
 	public String getEscapedCodeStr()
 	{
-		if (getCodeStr() != null)
-			return getCodeStr();
 
 		Expression expr = getExpression();
 		if (expr == null)

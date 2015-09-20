@@ -15,8 +15,12 @@ import ast.walking.ASTNodeVisitor;
 
 public class ASTNode
 {
-	private Map<String, String> properties;
+	// TODO: get rid of parseTreeNodeContext, and instead, store the values
+	// generated from it. That way, we decouple ASTNode from ANTLR.
+
 	private ParserRuleContext parseTreeNodeContext;
+
+	private Map<String, String> properties;
 	private CodeLocation location = new CodeLocation();
 
 	private boolean isInCFG = false;
@@ -37,7 +41,7 @@ public class ASTNode
 	private void copyAttributes(ASTNode otherNode)
 	{
 		setCodeStr(otherNode.getCodeStr());
-		initializeFromContext(otherNode.getParseTreeNodeContext());
+		location = otherNode.location;
 		setChildNumber(otherNode.childNumber);
 		if (otherNode.isInCFG())
 			markAsCFGNode();
@@ -58,6 +62,7 @@ public class ASTNode
 	{
 		if (properties == null)
 			properties = new HashMap<String, String>();
+
 		properties.put(key, val);
 	}
 
@@ -121,14 +126,12 @@ public class ASTNode
 
 	public void initializeFromContext(ParserRuleContext ctx)
 	{
-		setParseTreeNodeContext(ctx);
-	}
-
-	public void setLocation(ParserRuleContext ctx)
-	{
 		if (ctx == null)
 			return;
+		this.parseTreeNodeContext = ctx;
 		location = CodeLocationExtractor.extractFromContext(ctx);
+		setCodeStr(escapeCodeStr(ParseTreeUtils.childTokenString(ctx)));
+
 	}
 
 	public void setCodeStr(String aCodeStr)
@@ -138,11 +141,6 @@ public class ASTNode
 
 	public String getEscapedCodeStr()
 	{
-		if (getCodeStr() != null)
-			return getCodeStr();
-
-		setCodeStr(escapeCodeStr(ParseTreeUtils
-				.childTokenString(getParseTreeNodeContext())));
 		return getCodeStr();
 	}
 
@@ -156,13 +154,11 @@ public class ASTNode
 
 	public String getLocationString()
 	{
-		setLocation(getParseTreeNodeContext());
 		return location.toString();
 	}
 
 	public CodeLocation getLocation()
 	{
-		setLocation(getParseTreeNodeContext());
 		return location;
 	}
 
@@ -209,11 +205,4 @@ public class ASTNode
 	{
 		return parseTreeNodeContext;
 	}
-
-	protected void setParseTreeNodeContext(
-			ParserRuleContext parseTreeNodeContext)
-	{
-		this.parseTreeNodeContext = parseTreeNodeContext;
-	}
-
 }
