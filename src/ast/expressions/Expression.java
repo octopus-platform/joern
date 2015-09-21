@@ -22,7 +22,7 @@ public class Expression extends ASTNode
 		children.addFirst(node);
 	}
 
-	protected void setOperator(String text)
+	public void setOperator(String text)
 	{
 		operator = text;
 	}

@@ -4,14 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import languages.c.parsing.CodeLocation;
-import languages.c.parsing.CodeLocationExtractor;
-
-import org.antlr.v4.runtime.ParserRuleContext;
-
-import parsing.ParseTreeUtils;
 import ast.expressions.Expression;
 import ast.walking.ASTNodeVisitor;
+import languages.c.parsing.CodeLocation;
 
 public class ASTNode
 {
@@ -118,15 +113,6 @@ public class ASTNode
 		return childNumber;
 	}
 
-	public void initializeFromContext(ParserRuleContext ctx)
-	{
-		if (ctx == null)
-			return;
-		location = CodeLocationExtractor.extractFromContext(ctx);
-		setCodeStr(escapeCodeStr(ParseTreeUtils.childTokenString(ctx)));
-
-	}
-
 	public void setCodeStr(String aCodeStr)
 	{
 		setProperty(ASTNodeProperties.CODE, aCodeStr);
@@ -135,14 +121,6 @@ public class ASTNode
 	public String getEscapedCodeStr()
 	{
 		return getCodeStr();
-	}
-
-	private String escapeCodeStr(String codeStr)
-	{
-		String retval = codeStr;
-		retval = retval.replace("\n", "\\n");
-		retval = retval.replace("\t", "\\t");
-		return retval;
 	}
 
 	public String getLocationString()
@@ -192,6 +170,11 @@ public class ASTNode
 	protected String getCodeStr()
 	{
 		return getProperty(ASTNodeProperties.CODE);
+	}
+
+	public void setLocation(CodeLocation loc)
+	{
+		this.location = loc;
 	}
 
 }

@@ -124,6 +124,7 @@ import languages.c.antlr.FunctionParser.Unary_expressionContext;
 import languages.c.antlr.FunctionParser.Unary_op_and_cast_exprContext;
 import languages.c.antlr.FunctionParser.Unary_operatorContext;
 import languages.c.antlr.FunctionParser.While_statementContext;
+import languages.c.parsing.ASTNodeFactory;
 import languages.c.parsing.Shared.InitDeclContextWrapper;
 import languages.c.parsing.Shared.builders.ClassDefBuilder;
 import languages.c.parsing.Shared.builders.IdentifierDeclBuilder;
@@ -160,8 +161,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterStatement(StatementContext ctx)
 	{
-		ASTNode statementItem = new Statement();
-		statementItem.initializeFromContext(ctx);
+		ASTNode statementItem = ASTNodeFactory.create(ctx);
 		nodeToRuleContext.put(statementItem, ctx);
 		stack.push(statementItem);
 	}
@@ -219,7 +219,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			throw new RuntimeException();
 
 		ASTNode itemToRemove = stack.peek();
-		itemToRemove.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(itemToRemove, ctx);
 
 		if (itemToRemove instanceof BlockCloser)
 		{
@@ -516,7 +516,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void exitCondition(ConditionContext ctx)
 	{
 		Condition cond = (Condition) stack.pop();
-		cond.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(cond, ctx);
 		nesting.addItemToParent(cond);
 	}
 
@@ -559,8 +559,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		IdentifierDecl identifierDecl = (IdentifierDecl) stack.pop();
 
 		Expression lastChild = (Expression) identifierDecl.popLastChild();
-		AssignmentExpr assign = new AssignmentExpr();
-		assign.initializeFromContext(ctx);
+		AssignmentExpr assign = ASTNodeFactory.create(ctx);
 
 		// This is a bit of a hack. As we go up,
 		// we introduce an artificial assignment-node.
@@ -746,7 +745,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	public void exitInitFor(For_init_statementContext ctx)
 	{
 		ASTNode node = stack.pop();
-		node.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(node, ctx);
 		ForStatement forStatement = (ForStatement) stack.peek();
 		forStatement.addChild(node);
 	}
@@ -786,7 +785,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		item = new CompoundStatement();
 		CompoundStatement rootItem = (CompoundStatement) item;
-		item.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(item, ctx);
 		nodeToRuleContext.put(rootItem, ctx);
 		stack.push(rootItem);
 	}
@@ -802,7 +801,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			Type_nameContext type_nameContext)
 	{
 		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
-		declStmt.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(declStmt, ctx);
 		declStmt.setTypeNameContext(type_nameContext);
 
 		if (stack.peek() instanceof Statement)

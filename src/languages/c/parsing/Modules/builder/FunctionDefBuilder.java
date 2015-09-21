@@ -4,7 +4,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import parsing.ParseTreeUtils;
 import ast.ASTNodeBuilder;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
@@ -15,7 +14,9 @@ import languages.c.antlr.ModuleParser.Function_nameContext;
 import languages.c.antlr.ModuleParser.Function_param_listContext;
 import languages.c.antlr.ModuleParser.Parameter_declContext;
 import languages.c.antlr.ModuleParser.Return_typeContext;
+import languages.c.parsing.ASTNodeFactory;
 import languages.c.parsing.Functions.builder.ParameterListBuilder;
+import parsing.ParseTreeUtils;
 
 public class FunctionDefBuilder extends ASTNodeBuilder
 {
@@ -27,7 +28,7 @@ public class FunctionDefBuilder extends ASTNodeBuilder
 	public void createNew(ParserRuleContext ctx)
 	{
 		item = new FunctionDef();
-		item.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(item, ctx);
 		thisItem = (FunctionDef) item;
 	}
 
@@ -35,15 +36,14 @@ public class FunctionDefBuilder extends ASTNodeBuilder
 			Stack<ASTNodeBuilder> itemStack)
 	{
 		thisItem.name = new Identifier();
-		thisItem.name.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(thisItem.name, ctx);
 	}
 
 	public void setReturnType(Return_typeContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
 		ReturnType returnType = new ReturnType();
-
-		returnType.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(returnType, ctx);
 		returnType
 				.setBaseType(ParseTreeUtils.childTokenString(ctx.type_name()));
 		returnType.setCompleteType(ParseTreeUtils.childTokenString(ctx));

@@ -13,6 +13,7 @@ import ast.statements.blockstarters.ElseStatement;
 import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
+import languages.c.parsing.ASTNodeFactory;
 
 public class NestingReconstructor
 {
@@ -33,7 +34,7 @@ public class NestingReconstructor
 	protected void consolidateSubExpression(ParserRuleContext ctx)
 	{
 		Expression expression = (Expression) stack.pop();
-		expression.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(expression, ctx);
 		if (!(expression instanceof ExpressionHolder))
 			expression = pullUpOnlyChild(expression);
 		addItemToParent(expression);

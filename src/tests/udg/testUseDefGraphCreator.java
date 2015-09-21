@@ -9,12 +9,12 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import cfg.ASTToCFGConverter;
+import cfg.CFG;
 import tests.TestDBTestsBatchInserter;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
-import cfg.ASTToCFGConverter;
-import cfg.CFG;
 
 public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 {

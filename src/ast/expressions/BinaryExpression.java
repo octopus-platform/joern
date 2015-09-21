@@ -1,7 +1,5 @@
 package ast.expressions;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 import ast.ASTNode;
 
 public class BinaryExpression extends Expression
@@ -58,15 +56,6 @@ public class BinaryExpression extends Expression
 	public ASTNode getChild(int i)
 	{
 		return subExpressions[i];
-	}
-
-	@Override
-	public void initializeFromContext(ParserRuleContext ctx)
-	{
-		super.initializeFromContext(ctx);
-
-		if (ctx.getChildCount() == 3)
-			setOperator(ctx.getChild(1).getText());
 	}
 
 }

@@ -4,11 +4,11 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;
 
 import ast.logical.statements.CompoundStatement;
-import parsing.FunctionParser;
 import languages.c.antlr.ModuleParser;
 import languages.c.antlr.ModuleParser.Compound_statementContext;
 import languages.c.antlr.ModuleParser.Function_defContext;
 import languages.c.parsing.Functions.ANTLRCFunctionParserDriver;
+import parsing.FunctionParser;
 
 public class ModuleFunctionParserInterface
 {
@@ -36,7 +36,8 @@ public class ModuleFunctionParserInterface
 			// ex.printStackTrace();
 		}
 		CompoundStatement result = parser.getResult();
-		result.initializeFromContext(ctx.compound_statement());
+		Compound_statementContext statementContext = ctx.compound_statement();
+		ASTNodeFactory.initializeFromContext(result, statementContext);
 		return result;
 	}
 

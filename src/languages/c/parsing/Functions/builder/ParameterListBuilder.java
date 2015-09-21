@@ -4,12 +4,13 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import parsing.ParseTreeUtils;
 import ast.ASTNodeBuilder;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import languages.c.antlr.ModuleParser.Parameter_declContext;
 import languages.c.antlr.ModuleParser.Parameter_idContext;
+import languages.c.parsing.ASTNodeFactory;
+import parsing.ParseTreeUtils;
 
 public class ParameterListBuilder extends ASTNodeBuilder
 {
@@ -21,7 +22,7 @@ public class ParameterListBuilder extends ASTNodeBuilder
 	{
 		item = new ParameterList();
 		thisItem = (ParameterList) item;
-		thisItem.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(thisItem, ctx);
 	}
 
 	public void addParameter(Parameter_declContext aCtx,
@@ -29,9 +30,7 @@ public class ParameterListBuilder extends ASTNodeBuilder
 	{
 		Parameter_declContext ctx = (Parameter_declContext) aCtx;
 		Parameter_idContext parameter_id = ctx.parameter_id();
-
-		Parameter param = new Parameter();
-		param.initializeFromContext(ctx);
+		Parameter param = ASTNodeFactory.create(ctx);
 
 		String baseType = ParseTreeUtils
 				.childTokenString(ctx.param_decl_specifiers());

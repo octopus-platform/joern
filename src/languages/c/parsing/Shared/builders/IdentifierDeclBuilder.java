@@ -7,12 +7,13 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import parsing.ParseTreeUtils;
 import ast.ASTNodeBuilder;
 import ast.declarations.IdentifierDecl;
 import ast.declarations.IdentifierDeclType;
 import ast.expressions.Identifier;
+import languages.c.parsing.ASTNodeFactory;
 import languages.c.parsing.Shared.InitDeclContextWrapper;
+import parsing.ParseTreeUtils;
 
 public class IdentifierDeclBuilder extends ASTNodeBuilder
 {
@@ -23,7 +24,7 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 	{
 		item = new IdentifierDecl();
 		thisItem = (IdentifierDecl) item;
-		item.initializeFromContext(ctx);
+		ASTNodeFactory.initializeFromContext(item, ctx);
 	}
 
 	public void setType(InitDeclContextWrapper decl_ctx,
@@ -41,7 +42,8 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 					+ ParseTreeUtils.childTokenString(decl_ctx.type_suffix());
 
 		IdentifierDeclType newType = new IdentifierDeclType();
-		newType.initializeFromContext(decl_ctx.getWrappedObject());
+		ASTNodeFactory.initializeFromContext(newType,
+				decl_ctx.getWrappedObject());
 		newType.baseType = baseType;
 		newType.completeType = completeType;
 		thisItem.setType(newType);
@@ -51,8 +53,7 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 	{
 		ParserRuleContext identifier = decl_ctx.identifier();
 		Identifier newName = new Identifier();
-		newName.initializeFromContext(identifier);
-
+		ASTNodeFactory.initializeFromContext(newName, identifier);
 		thisItem.setName(newName);
 	}
 
