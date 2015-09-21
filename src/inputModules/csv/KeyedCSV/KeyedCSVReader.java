@@ -1,77 +1,79 @@
 package inputModules.csv.KeyedCSV;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-import com.opencsv.CSVReader;
-
-import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 public class KeyedCSVReader
 {
-	private CSVReader csvReader;
-	CSVKey[] keys;
-	char separator = '\t';
+	private CSVKey[] keys;
+	private CSVParser parser;
+	private Iterator<CSVRecord> iterator;
 
-	public void setSeparator(char separator)
+	public void init(Reader reader) throws IOException
 	{
-		this.separator = separator;
+		parser = CSVFormat.DEFAULT.parse(reader);
+		initKeys();
 	}
 
-	public void open(String filename) throws InvalidCSVFile, IOException
+	private void initKeys()
 	{
-		initializeCSVReader(filename);
-		readKeysFromFirstRow();
+		iterator = parser.iterator();
+		CSVRecord header = iterator.next();
+		keys = new CSVKey[header.size()];
+
+		for (int i = 0; i < header.size(); i++)
+		{
+
+			String field = header.get(i);
+			keys[i] = createKeyFromFields(field);
+		}
+
 	}
 
-	public KeyedCSVRow getNextRow() throws IOException
+	private CSVKey createKeyFromFields(String field)
 	{
-		String[] row = csvReader.readNext();
-		if (row == null)
+		CSVKey key = new CSVKey();
+
+		String[] keyParts = field.split(":");
+		key.setName(keyParts[0]);
+		if (keyParts.length > 1)
+			key.setType(keyParts[1]);
+		if (keyParts.length > 2)
+			key.setNodeIndex(keyParts[2]);
+
+		return key;
+	}
+
+	public KeyedCSVRow getNextRow()
+	{
+		CSVRecord record;
+		try
+		{
+			record = iterator.next();
+		} catch (NoSuchElementException ex)
+		{
 			return null;
+		}
 
 		KeyedCSVRow keyedRow = new KeyedCSVRow(keys);
-		keyedRow.initFromRow(row);
+		keyedRow.initFromCSVRecord(record);
 		return keyedRow;
 	}
 
-	public void close() throws IOException
+	public void deinit() throws IOException
 	{
-		csvReader.close();
+		parser.close();
 	}
 
-	private void initializeCSVReader(String filename)
-			throws FileNotFoundException
+	public CSVKey[] getKeys()
 	{
-		FileReader fileReader = new FileReader(filename);
-		csvReader = new CSVReader(fileReader, separator);
-	}
-
-	private void readKeysFromFirstRow() throws InvalidCSVFile, IOException
-	{
-		String[] row = csvReader.readNext();
-		if (row == null)
-			throw new InvalidCSVFile();
-
-		initializeKeysFromRow(row);
-	}
-
-	private void initializeKeysFromRow(String[] row)
-	{
-		int numberOfKeys = row.length;
-		keys = new CSVKey[numberOfKeys];
-
-		for (int i = 0; i < numberOfKeys; i++)
-		{
-			String[] keyParts = row[i].split(":");
-			keys[i] = new CSVKey();
-			keys[i].setName(keyParts[0]);
-			if (keyParts.length > 1)
-				keys[i].setType(keyParts[1]);
-			if (keyParts.length > 2)
-				keys[i].setNodeIndex(keyParts[2]);
-		}
+		return keys;
 	}
 
 }

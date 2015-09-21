@@ -14,7 +14,7 @@ public class CSVASTNodeFactory
 
 	public ASTNode createNode(KeyedCSVRow keyedRow)
 	{
-		String nodeType = keyedRow.lookup("type");
+		String nodeType = keyedRow.getFieldForKey("type");
 		nodeType = nodeMapper.map(nodeType);
 		ASTNode newNode;
 

@@ -26,4 +26,14 @@ public class CSVKey
 		this.nodeIndex = nodeIndex;
 	}
 
+	public String getType()
+	{
+		return type;
+	}
+
+	public String getIndex()
+	{
+		return nodeIndex;
+	}
+
 }

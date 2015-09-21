@@ -12,6 +12,6 @@
 	<classpathentry kind="lib" path="lib/antlr4-annotations-4.5.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/antlr4-runtime-4.5.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.4.jar"/>
-	<classpathentry kind="lib" path="lib/opencsv-3.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-csv-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

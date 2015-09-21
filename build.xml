@@ -29,7 +29,7 @@
     <pathelement location="${lib.dir}/neo4j-kernel-2.1.8.jar"/>
     <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.8.jar"/>
     <pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.8.jar"/>
-    <pathelement location="${lib.dir}/opencsv-3.5.jar"/>
+    <pathelement location="${lib.dir}/commons-csv-1.2.jar"/>
   </path>
 
   <target name="clean">

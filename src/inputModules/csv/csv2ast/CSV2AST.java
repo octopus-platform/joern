@@ -1,6 +1,8 @@
 package inputModules.csv.csv2ast;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.HashMap;
 
 import ast.ASTNode;
@@ -24,39 +26,41 @@ public class CSV2AST
 	 * the root node.
 	 * 
 	 * @return The root node, or null, if conversion fails.
+	 * @throws InvalidCSVFile
+	 * @throws IOException
 	 */
 
 	public FunctionDef convert(String nodeFilename, String edgeFilename)
+			throws InvalidCSVFile, IOException
 	{
-		try
-		{
-			return createAST(nodeFilename);
-		} catch (IOException | InvalidCSVFile e)
-		{
-			return null;
-		}
+		FileReader nodeReader = new FileReader(nodeFilename);
+		FileReader edgeReader = new FileReader(edgeFilename);
+		return convert(nodeReader, edgeReader);
 	}
 
-	private FunctionDef createAST(String nodeFilename)
-			throws IOException, InvalidCSVFile
+	private void initReader(Reader in) throws IOException
 	{
-		FunctionDef rootNode;
-		rootNode = createASTNodes(nodeFilename);
-		createASTEdges(nodeFilename);
+		reader = new KeyedCSVReader();
+		reader.init(in);
+	}
+
+	public FunctionDef convert(Reader nodeReader, Reader edgeReader)
+			throws InvalidCSVFile, IOException
+	{
+		initReader(nodeReader);
+		FunctionDef rootNode = createASTNodes(nodeReader);
+		// createASTEdges(edgeReader);
 		return rootNode;
 	}
 
-	private FunctionDef createASTNodes(String nodeFilename)
-			throws IOException, InvalidCSVFile
+	private FunctionDef createASTNodes(Reader nodeReader) throws InvalidCSVFile
 	{
-		initCSVReader(nodeFilename);
 		FunctionDef rootNode = processRootNodeRow();
-		processCSVNodes();
-		deinitCSVReader();
+		// TODO
 		return rootNode;
 	}
 
-	private FunctionDef processRootNodeRow() throws InvalidCSVFile, IOException
+	private FunctionDef processRootNodeRow() throws InvalidCSVFile
 	{
 		KeyedCSVRow keyedRow = reader.getNextRow();
 		if (keyedRow == null)
@@ -73,59 +77,10 @@ public class CSV2AST
 
 	private void addNodeToMap(KeyedCSVRow keyedRow, ASTNode node)
 	{
-		String nodeIdStr = keyedRow.lookup("nodeId");
+		String nodeIdStr = keyedRow.getFieldForKey("nodeId");
 		if (nodeIdStr == null)
 			throw new RuntimeException("nodeId field required");
 		idToNode.put(Long.parseLong(nodeIdStr), node);
-	}
-
-	private void createASTEdges(String edgeFilename)
-			throws IOException, InvalidCSVFile
-	{
-		initCSVReader(edgeFilename);
-		processCSVEdges();
-		deinitCSVReader();
-	}
-
-	private void initCSVReader(String filename)
-			throws InvalidCSVFile, IOException
-	{
-		reader = new KeyedCSVReader();
-		reader.setSeparator(',');
-		reader.open(filename);
-	}
-
-	private void processCSVNodes() throws IOException
-	{
-		KeyedCSVRow keyedRow;
-		while ((keyedRow = reader.getNextRow()) != null)
-		{
-			processCSVNode(keyedRow);
-		}
-	}
-
-	private void processCSVEdges() throws IOException
-	{
-		KeyedCSVRow keyedRow;
-		while ((keyedRow = reader.getNextRow()) != null)
-		{
-			processCSVEdge(keyedRow);
-		}
-	}
-
-	private void processCSVNode(KeyedCSVRow keyedRow)
-	{
-		ASTNode node = nodeFactory.createNode(keyedRow);
-	}
-
-	private void processCSVEdge(KeyedCSVRow keyedRow)
-	{
-
-	}
-
-	private void deinitCSVReader() throws IOException
-	{
-		reader.close();
 	}
 
 }

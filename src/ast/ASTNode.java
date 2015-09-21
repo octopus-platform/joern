@@ -177,4 +177,9 @@ public class ASTNode
 		this.location = loc;
 	}
 
+	public String getFullTypeName()
+	{
+		return this.getClass().getName();
+	}
+
 }
