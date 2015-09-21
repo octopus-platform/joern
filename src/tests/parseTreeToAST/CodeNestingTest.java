@@ -1,5 +1,6 @@
 package tests.parseTreeToAST;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -136,7 +137,7 @@ public class CodeNestingTest
 				.getStatements().get(0);
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
 		System.out.println(decl.getType().getEscapedCodeStr());
-		assertTrue(decl.getType().getEscapedCodeStr().equals("int"));
+		assertEquals("int", decl.getType().getEscapedCodeStr());
 	}
 
 	@Test

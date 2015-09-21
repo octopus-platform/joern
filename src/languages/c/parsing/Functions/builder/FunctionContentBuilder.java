@@ -9,6 +9,7 @@ import ast.ASTNode;
 import ast.ASTNodeBuilder;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
+import ast.declarations.IdentifierDeclType;
 import ast.expressions.AdditiveExpression;
 import ast.expressions.AndExpression;
 import ast.expressions.Argument;
@@ -603,9 +604,11 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		ASTNode parentItem = stack.peek();
 		ParserRuleContext typeName;
 		if (parentItem instanceof IdentifierDeclStatement)
-			typeName = ((IdentifierDeclStatement) parentItem)
-					.getTypeNameContext();
-		else if (parentItem instanceof ClassDefStatement)
+		{
+			IdentifierDeclStatement stmt = ((IdentifierDeclStatement) parentItem);
+			IdentifierDeclType type = stmt.getType();
+			typeName = nodeToRuleContext.get(type);
+		} else if (parentItem instanceof ClassDefStatement)
 		{
 			Identifier name = ((ClassDefStatement) parentItem).getName();
 			typeName = nodeToRuleContext.get(name);
@@ -802,7 +805,11 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 	{
 		IdentifierDeclStatement declStmt = new IdentifierDeclStatement();
 		ASTNodeFactory.initializeFromContext(declStmt, ctx);
-		declStmt.setTypeNameContext(type_nameContext);
+
+		IdentifierDeclType type = new IdentifierDeclType();
+		ASTNodeFactory.initializeFromContext(type, type_nameContext);
+		nodeToRuleContext.put(type, type_nameContext);
+		declStmt.addChild(type);
 
 		if (stack.peek() instanceof Statement)
 			replaceTopOfStack(declStmt, ctx);
