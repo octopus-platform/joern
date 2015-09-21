@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import ast.ASTNode;
-import ast.expressions.Identifier;
 import ast.walking.ASTNodeVisitor;
 
 public class ParameterList extends ASTNode
@@ -22,46 +21,6 @@ public class ParameterList extends ASTNode
 	{
 		parameters.add(aParam);
 		this.addChild(aParam);
-	}
-
-	public Identifier[] getNames()
-	{
-		Identifier retNames[] = new Identifier[parameters.size()];
-		for (int i = 0; i < parameters.size(); i++)
-		{
-			retNames[i] = parameters.get(i).name;
-		}
-		return retNames;
-	}
-
-	public String[] getNameStrings()
-	{
-		String retStrings[] = new String[parameters.size()];
-		for (int i = 0; i < parameters.size(); i++)
-		{
-			retStrings[i] = parameters.get(i).name.getEscapedCodeStr();
-		}
-		return retStrings;
-	}
-
-	public ParameterType[] getTypes()
-	{
-		ParameterType retTypes[] = new ParameterType[parameters.size()];
-		for (int i = 0; i < parameters.size(); i++)
-		{
-			retTypes[i] = parameters.get(i).type;
-		}
-		return retTypes;
-	}
-
-	public String[] getTypeStrings()
-	{
-		String retStrings[] = new String[parameters.size()];
-		for (int i = 0; i < parameters.size(); i++)
-		{
-			retStrings[i] = parameters.get(i).type.getEscapedCodeStr();
-		}
-		return retStrings;
 	}
 
 	private LinkedList<Parameter> parameters = new LinkedList<Parameter>();

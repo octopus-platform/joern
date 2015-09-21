@@ -56,8 +56,18 @@ public class CSV2AST
 	private FunctionDef createASTNodes(Reader nodeReader) throws InvalidCSVFile
 	{
 		FunctionDef rootNode = processRootNodeRow();
-		// TODO
+		processRemainingNodes();
 		return rootNode;
+	}
+
+	private void processRemainingNodes()
+	{
+		KeyedCSVRow keyedRow;
+		while ((keyedRow = reader.getNextRow()) != null)
+		{
+			ASTNode node = nodeFactory.createNode(keyedRow);
+			addNodeToMap(keyedRow, node);
+		}
 	}
 
 	private FunctionDef processRootNodeRow() throws InvalidCSVFile

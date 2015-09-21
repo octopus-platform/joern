@@ -35,8 +35,8 @@ public class FunctionDefBuilder extends ASTNodeBuilder
 	public void setName(Function_nameContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
-		thisItem.name = new Identifier();
-		ASTNodeFactory.initializeFromContext(thisItem.name, ctx);
+		thisItem.setName(new Identifier());
+		ASTNodeFactory.initializeFromContext(thisItem.getName(), ctx);
 	}
 
 	public void setReturnType(Return_typeContext ctx,

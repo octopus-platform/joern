@@ -64,7 +64,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 
 	public String getName()
 	{
-		return astRoot.name.getEscapedCodeStr();
+		return astRoot.getName().getEscapedCodeStr();
 	}
 
 	public ASTNode getASTRoot()

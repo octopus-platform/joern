@@ -73,7 +73,7 @@ public class ModuleBuildersTest
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		FunctionDef funcItem = (FunctionDef) codeItem.content.getStatements()
 				.get(0);
-		assertTrue(funcItem.name.getEscapedCodeStr().equals("bar"));
+		assertTrue(funcItem.getName().getEscapedCodeStr().equals("bar"));
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class ModuleBuildersTest
 		String input = "void foo(){};";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.name.getEscapedCodeStr().equals("foo"));
+		assertTrue(codeItem.getName().getEscapedCodeStr().equals("foo"));
 	}
 
 	@Test
@@ -202,7 +202,7 @@ public class ModuleBuildersTest
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		System.out.println(codeItem.getEscapedCodeStr());
-		assertTrue(codeItem.name.getEscapedCodeStr().equals("foo"));
+		assertTrue(codeItem.getName().getEscapedCodeStr().equals("foo"));
 	}
 
 	@Test

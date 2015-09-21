@@ -18,7 +18,7 @@ public class ForStatement extends BlockStarter
 		return forInitStatement;
 	}
 
-	public void setForInitStatement(ASTNode forInitStatement)
+	private void setForInitStatement(ASTNode forInitStatement)
 	{
 		this.forInitStatement = forInitStatement;
 	}
@@ -28,7 +28,7 @@ public class ForStatement extends BlockStarter
 		return expression;
 	}
 
-	public void setExpression(ASTNode expression)
+	private void setExpression(ASTNode expression)
 	{
 		this.expression = expression;
 	}

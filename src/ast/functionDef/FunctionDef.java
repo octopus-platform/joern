@@ -9,24 +9,13 @@ import ast.walking.ASTNodeVisitor;
 public class FunctionDef extends ASTNode
 {
 
-	public Identifier name = new DummyNameNode();
+	private Identifier name = new DummyNameNode();
 	private ParameterList parameterList = new ParameterList();
-
-	CompoundStatement content = new CompoundStatement();
+	private CompoundStatement content = new CompoundStatement();
 
 	public CompoundStatement getContent()
 	{
 		return content;
-	}
-
-	public void addStatement(ASTNode statement)
-	{
-		content.addStatement(statement);
-	}
-
-	public void addParameter(Parameter aParameter)
-	{
-		getParameterList().addParameter(aParameter);
 	}
 
 	@Override
@@ -38,7 +27,7 @@ public class FunctionDef extends ASTNode
 
 	public String getFunctionSignature()
 	{
-		String retval = name.getEscapedCodeStr();
+		String retval = getName().getEscapedCodeStr();
 		if (getParameterList() != null)
 			retval += " (" + getParameterList().getEscapedCodeStr() + ")";
 		else
@@ -71,6 +60,16 @@ public class FunctionDef extends ASTNode
 	public void setReturnType(ReturnType returnType)
 	{
 		this.addChild(returnType);
+	}
+
+	public Identifier getName()
+	{
+		return name;
+	}
+
+	public void setName(Identifier name)
+	{
+		this.name = name;
 	}
 
 }
