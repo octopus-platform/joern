@@ -1,4 +1,4 @@
-package tools.phpast2cfg;
+package languages.php.cfg;
 
 import ast.functionDef.FunctionDef;
 import cfg.CFG;

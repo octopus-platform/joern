@@ -11,7 +11,6 @@ public class FunctionDef extends ASTNode
 
 	public Identifier name = new DummyNameNode();
 	private ParameterList parameterList = new ParameterList();
-	// private ReturnType returnType = new DummyReturnType();
 
 	CompoundStatement content = new CompoundStatement();
 
@@ -71,7 +70,6 @@ public class FunctionDef extends ASTNode
 
 	public void setReturnType(ReturnType returnType)
 	{
-		// this.returnType = returnType;
 		this.addChild(returnType);
 	}
 

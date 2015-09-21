@@ -4,6 +4,7 @@ import org.apache.commons.cli.ParseException;
 
 import ast.functionDef.FunctionDef;
 import cfg.CFG;
+import languages.php.cfg.PHPCFGFactory;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
 import tools.phpast2cfg.csv2ast.CSV2AST;
