@@ -1,7 +1,7 @@
-package tools.phpast2cfg.csv2ast;
+package inputModules.csv.csv2ast;
 
 import ast.ASTNode;
-import tools.phpast2cfg.KeyedCSV.KeyedCSVRow;
+import inputModules.csv.KeyedCSV.KeyedCSVRow;
 
 public class CSVASTNodeFactory
 {

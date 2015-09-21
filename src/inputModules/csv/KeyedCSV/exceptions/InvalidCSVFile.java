@@ -1,4 +1,4 @@
-package tools.phpast2cfg.KeyedCSV.exceptions;
+package inputModules.csv.KeyedCSV.exceptions;
 
 public class InvalidCSVFile extends Exception
 {

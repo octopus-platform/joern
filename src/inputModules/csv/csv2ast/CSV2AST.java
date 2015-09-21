@@ -1,14 +1,14 @@
-package tools.phpast2cfg.csv2ast;
+package inputModules.csv.csv2ast;
 
 import java.io.IOException;
 import java.util.HashMap;
 
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
+import inputModules.csv.KeyedCSV.KeyedCSVReader;
+import inputModules.csv.KeyedCSV.KeyedCSVRow;
+import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tools.phpast2cfg.PHPNodeTypeMapper;
-import tools.phpast2cfg.KeyedCSV.KeyedCSVReader;
-import tools.phpast2cfg.KeyedCSV.KeyedCSVRow;
-import tools.phpast2cfg.KeyedCSV.exceptions.InvalidCSVFile;
 
 public class CSV2AST
 {

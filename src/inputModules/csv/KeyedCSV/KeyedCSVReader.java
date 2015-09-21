@@ -1,4 +1,4 @@
-package tools.phpast2cfg.KeyedCSV;
+package inputModules.csv.KeyedCSV;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import com.opencsv.CSVReader;
 
-import tools.phpast2cfg.KeyedCSV.exceptions.InvalidCSVFile;
+import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 
 public class KeyedCSVReader
 {

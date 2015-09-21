@@ -1,4 +1,4 @@
-package tools.phpast2cfg.KeyedCSV;
+package inputModules.csv.KeyedCSV;
 
 public class CSVKey
 {

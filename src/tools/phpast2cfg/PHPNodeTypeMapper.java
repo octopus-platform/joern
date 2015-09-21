@@ -1,7 +1,7 @@
 package tools.phpast2cfg;
 
 import ast.functionDef.FunctionDef;
-import tools.phpast2cfg.csv2ast.NodeTypeMapper;
+import inputModules.csv.csv2ast.NodeTypeMapper;
 
 public class PHPNodeTypeMapper extends NodeTypeMapper
 {

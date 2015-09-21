@@ -1,4 +1,4 @@
-package tools.phpast2cfg.KeyedCSV;
+package inputModules.csv.KeyedCSV;
 
 import java.util.HashMap;
 
