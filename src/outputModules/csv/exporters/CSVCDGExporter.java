@@ -29,10 +29,9 @@ public class CSVCDGExporter extends CDGExporter
 	{
 		if (node instanceof ASTNodeContainer)
 		{
-			return Writer.getIdForObject(((ASTNodeContainer) node)
-					.getASTNode());
-		}
-		else
+			return Writer
+					.getIdForObject(((ASTNodeContainer) node).getASTNode());
+		} else
 		{
 			return Writer.getIdForObject(node);
 		}

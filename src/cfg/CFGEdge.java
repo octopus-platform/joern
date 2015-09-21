@@ -73,8 +73,7 @@ public class CFGEdge extends Edge<CFGNode>
 			{
 				return false;
 			}
-		}
-		else if (!label.equals(other.label))
+		} else if (!label.equals(other.label))
 		{
 			return false;
 		}

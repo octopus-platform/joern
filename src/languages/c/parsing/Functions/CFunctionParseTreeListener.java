@@ -9,7 +9,7 @@ import parsing.ANTLRParserDriver;
 
 /**
  * This is where hooks are registered for different types of parse tree nodes.
- * */
+ */
 
 public class CFunctionParseTreeListener extends FunctionBaseListener
 {
@@ -111,7 +111,8 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 	}
 
 	@Override
-	public void enterSwitch_statement(FunctionParser.Switch_statementContext ctx)
+	public void enterSwitch_statement(
+			FunctionParser.Switch_statementContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
@@ -274,7 +275,8 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 	}
 
 	@Override
-	public void enterInitDeclWithCall(FunctionParser.InitDeclWithCallContext ctx)
+	public void enterInitDeclWithCall(
+			FunctionParser.InitDeclWithCallContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
@@ -477,7 +479,8 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 	}
 
 	@Override
-	public void enterShift_expression(FunctionParser.Shift_expressionContext ctx)
+	public void enterShift_expression(
+			FunctionParser.Shift_expressionContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
@@ -763,7 +766,8 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 	}
 
 	@Override
-	public void enterUnary_expression(FunctionParser.Unary_expressionContext ctx)
+	public void enterUnary_expression(
+			FunctionParser.Unary_expressionContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();
@@ -813,7 +817,8 @@ public class CFunctionParseTreeListener extends FunctionBaseListener
 	}
 
 	@Override
-	public void enterInitializer_list(FunctionParser.Initializer_listContext ctx)
+	public void enterInitializer_list(
+			FunctionParser.Initializer_listContext ctx)
 	{
 		FunctionContentBuilder builder = (FunctionContentBuilder) p.builderStack
 				.peek();

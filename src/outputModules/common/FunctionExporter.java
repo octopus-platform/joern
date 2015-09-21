@@ -32,8 +32,7 @@ public abstract class FunctionExporter extends ASTNodeExporter
 			function.initialize(node);
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 			ex.printStackTrace();
 			System.err.println("Error adding function to database: "

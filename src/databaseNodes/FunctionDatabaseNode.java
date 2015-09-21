@@ -31,7 +31,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 
 	String signature;
 	String name;
-	
+
 	ASTToCFGConverter astToCFG = new ASTToCFGConverter();
 	CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
 	CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
@@ -96,11 +96,12 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		return astRoot.getLocationString();
 	}
-	
-	public CodeLocation getContentLocation(){
+
+	public CodeLocation getContentLocation()
+	{
 		return astRoot.getContent().getLocation();
 	}
-	
+
 	public String getSignature()
 	{
 		return signature;
@@ -110,5 +111,5 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		signature = node.getFunctionSignature();
 	}
-	
+
 }

@@ -102,8 +102,7 @@ abstract public class ANTLRParserDriver extends Observable
 		try
 		{
 			input = new ANTLRFileStream(filename);
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			throw new ParserException();
 		}

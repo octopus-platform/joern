@@ -12,27 +12,30 @@ public class ArgumentEnvironment extends EmitDefAndUseEnvironment
 	public void addChildSymbols(LinkedList<String> childSymbols,
 			ASTProvider child)
 	{
-		if (isDef(child)){
+		if (isDef(child))
+		{
 			// For tainted arguments, add "* symbol" instead of symbol
 			// to defined symbols. Make an exception if symbol starts with '& '
-			
+
 			LinkedList<String> derefChildSymbols = new LinkedList<String>();
-			for(String symbol : childSymbols){
-				
-				if(!symbol.startsWith("& ")){
+			for (String symbol : childSymbols)
+			{
+
+				if (!symbol.startsWith("& "))
+				{
 					derefChildSymbols.add("* " + symbol);
 					// !patch to see if we can detect macro-sources!
 					derefChildSymbols.add(symbol);
-				}else
-					derefChildSymbols.add(symbol.substring(2));	
+				} else
+					derefChildSymbols.add(symbol.substring(2));
 			}
-			
+
 			defSymbols.addAll(derefChildSymbols);
 		}
 		if (isUse(child))
 			useSymbols.addAll(childSymbols);
 	}
-	
+
 	public boolean isUse(ASTProvider child)
 	{
 		return true;

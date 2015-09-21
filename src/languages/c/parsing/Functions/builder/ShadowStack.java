@@ -77,12 +77,10 @@ public class ShadowStack
 		{
 			item = stack.pop();
 			retval = (IfStatement) item.ifOrDoOrTry;
-		}
-		catch (EmptyStackException ex)
+		} catch (EmptyStackException ex)
 		{
 			return null;
-		}
-		catch (ClassCastException ex)
+		} catch (ClassCastException ex)
 		{
 			stack.push(item);
 			return null;
@@ -107,12 +105,10 @@ public class ShadowStack
 				return null;
 			}
 
-		}
-		catch (EmptyStackException ex)
+		} catch (EmptyStackException ex)
 		{
 			return null;
-		}
-		catch (ClassCastException ex)
+		} catch (ClassCastException ex)
 		{
 			stack.push(item);
 			return null;
@@ -157,12 +153,10 @@ public class ShadowStack
 				return null;
 			}
 
-		}
-		catch (EmptyStackException ex)
+		} catch (EmptyStackException ex)
 		{
 			return null;
-		}
-		catch (ClassCastException ex)
+		} catch (ClassCastException ex)
 		{
 			stack.push(item);
 			return null;

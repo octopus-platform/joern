@@ -38,9 +38,9 @@ public class ForStatement extends BlockStarter
 	{
 		if (node instanceof Condition)
 			setCondition((Condition) node);
-		else if(node instanceof ForInit)
+		else if (node instanceof ForInit)
 			setForInitStatement(node);
-		else if(node instanceof Expression)
+		else if (node instanceof Expression)
 			setExpression(node);
 		else if (node instanceof Statement)
 			setStatement((Statement) node);

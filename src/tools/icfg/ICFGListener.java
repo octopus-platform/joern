@@ -101,8 +101,8 @@ public class ICFGListener extends ImportedNodeListener
 			if (childId == callNodeId)
 				continue;
 
-			String childType = (String) Neo4JBatchInserter.getNodeProperties(
-					childId).get("type");
+			String childType = (String) Neo4JBatchInserter
+					.getNodeProperties(childId).get("type");
 
 			if (childType.equals("ArgumentList"))
 				return childId;
@@ -125,8 +125,8 @@ public class ICFGListener extends ImportedNodeListener
 					continue;
 
 				long identifierNode = rel.getEndNode();
-				Object type = Neo4JBatchInserter.getNodeProperties(
-						identifierNode).get("type");
+				Object type = Neo4JBatchInserter
+						.getNodeProperties(identifierNode).get("type");
 				if (type.equals("Identifier"))
 				{
 					retval.add(identifierNode);

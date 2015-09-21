@@ -1,6 +1,5 @@
 package ddg;
 
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,18 +24,19 @@ public class CFGAndUDGToDefUseCFG
 
 		initializeStatements(cfg, defUseCFG);
 		initializeDefUses(udg, defUseCFG);
-		
+
 		LinkedList<String> parameters = new LinkedList<String>();
 		for (CFGNode parameterCFGNode : cfg.getParameters())
 		{
-			ASTNode astNode = ((ASTNodeContainer) parameterCFGNode).getASTNode();
+			ASTNode astNode = ((ASTNodeContainer) parameterCFGNode)
+					.getASTNode();
 			String symbol = astNode.getChild(1).getEscapedCodeStr();
 			parameters.add(symbol);
 		}
-		
+
 		defUseCFG.setExitNode(cfg.getExitNode());
 		defUseCFG.setParameters(parameters);
-		
+
 		defUseCFG.addUsesForExitNode();
 		initializeParentsAndChildren(cfg, defUseCFG);
 

@@ -29,8 +29,8 @@ public class ForLoopTests extends FunctionParserTestBase
 		ParseTree tree = functionParser.parseString(input);
 		String output = tree.toStringTree(functionParser.getAntlrParser());
 		System.out.println(output);
-		assertTrue(output
-				.contains("for ( (for_init_statement (simple_decl (var_decl (type_name (base_type int))"));
+		assertTrue(output.contains(
+				"for ( (for_init_statement (simple_decl (var_decl (type_name (base_type int))"));
 	}
 
 	@Test

@@ -16,7 +16,7 @@ public class FunctionContentTestUtil
 	{
 		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
 		FunctionParser parser = new FunctionParser(driver);
-		
+
 		TokenSubStream tokens = tokenStreamFromString(input);
 		parser.parseAndWalkTokenStream(tokens);
 		return parser.getParser().builderStack.peek().getItem();
@@ -26,7 +26,7 @@ public class FunctionContentTestUtil
 	{
 		ANTLRCFunctionParserDriver driver = new ANTLRCFunctionParserDriver();
 		FunctionParser parser = new FunctionParser(driver);
-		
+
 		return parser.parseString(input);
 	}
 

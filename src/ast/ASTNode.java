@@ -96,8 +96,7 @@ public class ASTNode
 		try
 		{
 			retval = children.get(i);
-		}
-		catch (IndexOutOfBoundsException ex)
+		} catch (IndexOutOfBoundsException ex)
 		{
 			return null;
 		}

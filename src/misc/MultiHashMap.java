@@ -52,8 +52,7 @@ public class MultiHashMap<K, V>
 		if (containsKey(key))
 		{
 			hashMap.get(key).add(value);
-		}
-		else
+		} else
 		{
 			List<V> list = new LinkedList<V>();
 			list.add(value);
@@ -77,8 +76,7 @@ public class MultiHashMap<K, V>
 		if (containsKey(key))
 		{
 			hashMap.get(key).addAll(values);
-		}
-		else
+		} else
 		{
 			hashMap.put(key, values);
 		}
@@ -94,8 +92,7 @@ public class MultiHashMap<K, V>
 
 	@Deprecated
 	/**
-	 * @deprecated
-	 * Use addAll instead.
+	 * @deprecated Use addAll instead.
 	 */
 	public void addMultiHashMap(MultiHashMap<K, V> otherHashMap)
 	{
@@ -136,8 +133,7 @@ public class MultiHashMap<K, V>
 
 	@Deprecated
 	/**
-	 * @deprecated
-	 * Use removeAll instead.
+	 * @deprecated Use removeAll instead.
 	 */
 	public void removeAllForKey(K key)
 	{
@@ -159,8 +155,7 @@ public class MultiHashMap<K, V>
 
 	@Deprecated
 	/**
-	 * @deprecated
-	 * Use totalSize instead.
+	 * @deprecated Use totalSize instead.
 	 */
 	// this could return hashMap.size()
 	public int size()
@@ -193,8 +188,7 @@ public class MultiHashMap<K, V>
 
 	@Deprecated
 	/**
-	 * @deprecated
-	 * Use get instead.
+	 * @deprecated Use get instead.
 	 */
 	public List<V> getListForKey(K k)
 	{

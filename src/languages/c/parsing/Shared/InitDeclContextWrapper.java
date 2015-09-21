@@ -31,8 +31,7 @@ public class InitDeclContextWrapper
 			ctxCodeSensor = (ModuleParser.DeclaratorContext) objToWrap
 					.getChild(0);
 			contextInUse = 0;
-		}
-		else if (objToWrap instanceof FunctionParser.Init_declaratorContext)
+		} else if (objToWrap instanceof FunctionParser.Init_declaratorContext)
 		{
 			ctxFine = (FunctionParser.DeclaratorContext) objToWrap.getChild(0);
 			contextInUse = 2;
@@ -43,10 +42,10 @@ public class InitDeclContextWrapper
 	{
 		switch (contextInUse)
 		{
-			case 0:
-				return ctxCodeSensor;
-			case 2:
-				return ctxFine;
+		case 0:
+			return ctxCodeSensor;
+		case 2:
+			return ctxFine;
 		}
 		return null;
 	}
@@ -55,10 +54,10 @@ public class InitDeclContextWrapper
 	{
 		switch (contextInUse)
 		{
-			case 0:
-				return ctxCodeSensor.ptrs();
-			case 2:
-				return ctxFine.ptrs();
+		case 0:
+			return ctxCodeSensor.ptrs();
+		case 2:
+			return ctxFine.ptrs();
 		}
 		return null;
 	}
@@ -67,10 +66,10 @@ public class InitDeclContextWrapper
 	{
 		switch (contextInUse)
 		{
-			case 0:
-				return ctxCodeSensor.type_suffix();
-			case 2:
-				return ctxFine.type_suffix();
+		case 0:
+			return ctxCodeSensor.type_suffix();
+		case 2:
+			return ctxFine.type_suffix();
 		}
 		return null;
 	}
@@ -79,10 +78,10 @@ public class InitDeclContextWrapper
 	{
 		switch (contextInUse)
 		{
-			case 0:
-				return ctxCodeSensor.identifier();
-			case 2:
-				return ctxFine.identifier();
+		case 0:
+			return ctxCodeSensor.identifier();
+		case 2:
+			return ctxFine.identifier();
 		}
 		return null;
 	}

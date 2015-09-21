@@ -59,8 +59,7 @@ public class NestingReconstructor
 		{
 			CompoundStatement compound = (CompoundStatement) topOfStack;
 			compound.addStatement(stmt);
-		}
-		else
+		} else
 		{
 			consolidateBlockStarters(stmt);
 		}
@@ -102,8 +101,7 @@ public class NestingReconstructor
 						return;
 					}
 
-				}
-				else if (curBlockStarter instanceof ElseStatement)
+				} else if (curBlockStarter instanceof ElseStatement)
 				{
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
@@ -116,8 +114,7 @@ public class NestingReconstructor
 								"Warning: cannot find if for else");
 
 					return;
-				}
-				else if (curBlockStarter instanceof WhileStatement)
+				} else if (curBlockStarter instanceof WhileStatement)
 				{
 					// add while statement to the previous do-statement
 					// if that exists. Otherwise, do nothing special.
@@ -129,24 +126,21 @@ public class NestingReconstructor
 								.getCondition());
 						return;
 					}
-				}
-				else if (curBlockStarter instanceof CatchStatement)
+				} else if (curBlockStarter instanceof CatchStatement)
 				{
 					TryStatement tryStatement = (TryStatement) stack.getTry();
 					if (tryStatement != null)
 					{
 						tryStatement
 								.addCatchNode((CatchStatement) curBlockStarter);
-					}
-					else
+					} else
 						throw new RuntimeException(
 								"Warning: cannot find try for catch");
 
 					return;
 				}
 
-			}
-			catch (ClassCastException ex)
+			} catch (ClassCastException ex)
 			{
 				break;
 			}

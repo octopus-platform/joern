@@ -7,10 +7,10 @@ import java.nio.file.PathMatcher;
 public class FileNameMatcher
 {
 	private PathMatcher matcher;
-	
+
 	public void setFilenameFilter(String pattern)
 	{
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 		matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
 	}
 
@@ -21,5 +21,5 @@ public class FileNameMatcher
 			return false;
 		return matcher.matches(name);
 	}
-	
+
 }

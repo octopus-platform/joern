@@ -6,7 +6,6 @@ import neo4j.batchInserter.ConfigurationGenerator;
 import neo4j.batchInserter.Neo4JBatchInserter;
 import tools.parser.Parser;
 
-
 public class ParserNeo4JOutput extends Parser
 {
 

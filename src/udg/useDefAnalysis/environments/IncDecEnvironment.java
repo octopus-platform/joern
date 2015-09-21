@@ -20,5 +20,5 @@ public class IncDecEnvironment extends EmitDefEnvironment
 
 		return false;
 	}
-	
+
 }

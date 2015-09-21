@@ -157,16 +157,16 @@ public abstract class AbstractGraph<V, E extends Edge<V>>
 	{
 		if (!contains(vertex))
 		{
-			throw new NoSuchElementException("Graph has no such vertex : "
-					+ vertex);
+			throw new NoSuchElementException(
+					"Graph has no such vertex : " + vertex);
 		}
 	}
 
 	@Override
 	public String toString()
 	{
-		String res = "Graph with " + size() + " vertices and "
-				+ numberOfEdges() + " edges:\n";
+		String res = "Graph with " + size() + " vertices and " + numberOfEdges()
+				+ " edges:\n";
 		for (V vertex : getVertices())
 		{
 			res += vertex.toString() + '\n';

@@ -38,5 +38,4 @@ public class TestASTWalker extends ASTWalker
 		codeItems.add(item);
 	}
 
-
 }

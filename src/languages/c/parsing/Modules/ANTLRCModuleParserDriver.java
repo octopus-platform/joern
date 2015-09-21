@@ -28,8 +28,7 @@ public class ANTLRCModuleParserDriver extends ANTLRParserDriver
 		{
 			setSLLMode(parser);
 			tree = parser.code();
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 			if (isRecognitionException(ex))
 			{

@@ -113,7 +113,7 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		returnCFG = CCFGFactory.newInstance(node);
 	}
-	
+
 	@Override
 	public void visit(ThrowStatement node)
 	{

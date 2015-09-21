@@ -18,7 +18,9 @@ public class EdgeTypes
 	/** Edges connecting the function node to the CFG pseudo node */
 	public static final String IS_FUNCTION_OF_CFG = "IS_FUNCTION_OF_CFG";
 
-	/** Edges connecting basic blocks with basic blocks they transfer control to */
+	/**
+	 * Edges connecting basic blocks with basic blocks they transfer control to
+	 */
 	public static final String FLOWS_TO = "FLOWS_TO";
 
 	/** Connects classes to their members */

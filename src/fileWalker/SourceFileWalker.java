@@ -6,22 +6,22 @@ import java.io.IOException;
 public abstract class SourceFileWalker
 {
 	protected final String DEFAULT_FILENAME_FILTER = "*.{c,cpp,h,cc,hpp,java}";
-	
+
 	public abstract void setFilenameFilter(String filter);
-	
+
 	/**
-	 * Add a listener object that will be informed of all visited
-	 * source files and directories.
-	 * */
-	
+	 * Add a listener object that will be informed of all visited source files
+	 * and directories.
+	 */
+
 	public abstract void addListener(SourceFileListener listener);
-	
+
 	/**
-	 * Walk list of files and directory names and report them to
-	 * listeners.
-	 * @param fileAndDirNames: A list of file and/or directory names
-	 * */
-	
+	 * Walk list of files and directory names and report them to listeners.
+	 * 
+	 * @param fileAndDirNames:
+	 *            A list of file and/or directory names
+	 */
 
 	public void walk(String[] fileAndDirNames) throws IOException
 	{
@@ -37,9 +37,10 @@ public abstract class SourceFileWalker
 			walkExistingFileOrDirectory(filename);
 		}
 	}
-	
-	protected abstract void walkExistingFileOrDirectory(String dirName) throws IOException;
-	
+
+	protected abstract void walkExistingFileOrDirectory(String dirName)
+			throws IOException;
+
 	private boolean pathIsAccessible(String path)
 	{
 		File file = new File(path);
@@ -51,5 +52,5 @@ public abstract class SourceFileWalker
 
 		return true;
 	}
-	
+
 }

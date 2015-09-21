@@ -52,8 +52,7 @@ public class ReadWriteDBProvider extends DBProvider
 			try
 			{
 				childNum = (String) endNode.getProperty(NodeKeys.CHILD_NUMBER);
-			}
-			catch (RuntimeException ex)
+			} catch (RuntimeException ex)
 			{
 			}
 

@@ -28,7 +28,7 @@ public class DDGPatcher
 	public void patchDDG(DefUseCFG defUseCFG, Long funcId)
 	{
 		Node node = Neo4JDBInterface.getNodeById(funcId);
-		
+
 		DDG oldDDG = Traversals.getDDGForFunction(node);
 		DDGCreator ddgCreator = new DDGCreator();
 		DDG newDDG = ddgCreator.createForDefUseCFG(defUseCFG);
@@ -47,7 +47,7 @@ public class DDGPatcher
 		List<DefUseRelation> relsToAdd = diff.getRelsToAdd();
 		for (DefUseRelation rel : relsToAdd)
 		{
-			
+
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("var", rel.symbol);
 			RelationshipType relType = DynamicRelationshipType

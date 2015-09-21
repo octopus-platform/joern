@@ -1,6 +1,5 @@
 package outputModules.neo4j;
 
-
 import java.util.Map;
 
 import neo4j.batchInserter.Neo4JBatchInserter;
@@ -22,7 +21,7 @@ public class Neo4JDirectoryTreeImporter extends DirectoryTreeExporter
 		RelationshipType rel = DynamicRelationshipType
 				.withName(EdgeTypes.IS_PARENT_DIR_OF);
 		Neo4JBatchInserter.addRelationship(srcId, dstId, rel, null);
-	}	
+	}
 
 	protected void insertNode(FileDatabaseNode node)
 	{

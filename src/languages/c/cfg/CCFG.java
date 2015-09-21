@@ -114,8 +114,8 @@ public class CCFG extends CFG
 		CFGNode block = getLabels().get(label);
 		if (block == null)
 		{
-			System.err.println("warning : can not find block for label "
-					+ label);
+			System.err
+					.println("warning : can not find block for label " + label);
 			return getErrorNode();
 		}
 		return block;
@@ -146,8 +146,7 @@ public class CCFG extends CFG
 					CFGEdge.UNHANDLED_EXCEPT_LABEL);
 			addEdge(otherCFG.getExceptionNode(), newExceptionNode,
 					CFGEdge.UNHANDLED_EXCEPT_LABEL);
-		}
-		else if (otherCFG.hasExceptionNode())
+		} else if (otherCFG.hasExceptionNode())
 		{
 			setExceptionNode(otherCFG.getExceptionNode());
 		}

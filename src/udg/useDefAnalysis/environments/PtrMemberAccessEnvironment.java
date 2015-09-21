@@ -13,14 +13,15 @@ public class PtrMemberAccessEnvironment extends UseDefEnvironment
 	{
 
 		LinkedList<String> retval = new LinkedList<String>();
-			
+
 		// emit all symbols as '* symbol'
-		
+
 		LinkedList<String> derefedChildren = new LinkedList<String>();
-		for(String c : symbols){
+		for (String c : symbols)
+		{
 			derefedChildren.add("* " + c);
 		}
-		
+
 		retval.addAll(derefedChildren);
 
 		// emit entire code string
@@ -31,7 +32,7 @@ public class PtrMemberAccessEnvironment extends UseDefEnvironment
 	}
 
 	public void addChildSymbols(LinkedList<String> childSymbols,
-								ASTProvider child)
+			ASTProvider child)
 	{
 		int childNum = child.getChildNumber();
 		// Only add the left child but never the right child

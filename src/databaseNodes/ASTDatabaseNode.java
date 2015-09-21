@@ -16,7 +16,7 @@ public class ASTDatabaseNode extends DatabaseNode
 
 	ASTNode astNode;
 	private FunctionDatabaseNode currentFunction;
-	
+
 	@Override
 	public void initialize(Object node)
 	{
@@ -35,21 +35,24 @@ public class ASTDatabaseNode extends DatabaseNode
 		// if(astNode.getChildCount() == 0)
 		properties.put(NodeKeys.CODE, astNode.getEscapedCodeStr());
 
-		if (astNode.isInCFG()){
-			properties.put(NodeKeys.IS_CFG_NODE, "True");			
+		if (astNode.isInCFG())
+		{
+			properties.put(NodeKeys.IS_CFG_NODE, "True");
 			properties.put(NodeKeys.LOCATION, getCorrectedLocationString());
 		}
-			
-		if (astNode instanceof CompoundStatement ){
+
+		if (astNode instanceof CompoundStatement)
+		{
 			properties.put(NodeKeys.LOCATION, astNode.getLocationString());
 		}
-		
-		if (astNode instanceof Expression){
+
+		if (astNode instanceof Expression)
+		{
 			String operator = ((Expression) astNode).getOperator();
-			if(operator != "")
+			if (operator != "")
 				properties.put(NodeKeys.OPERATOR, operator);
 		}
-			
+
 		// if(astNode.getChildCount() > 1){
 		String childNumStr = Integer.toString(astNode.getChildNumber());
 		properties.put(NodeKeys.CHILD_NUMBER, childNumStr);
@@ -63,13 +66,14 @@ public class ASTDatabaseNode extends DatabaseNode
 
 		CodeLocation funcLocation = currentFunction.getContentLocation();
 		CodeLocation location = astNode.getLocation();
-		
-		if(!(astNode instanceof Parameter) || (astNode instanceof ReturnType)){
+
+		if (!(astNode instanceof Parameter) || (astNode instanceof ReturnType))
+		{
 			location.startIndex += funcLocation.startIndex + 1;
 			location.startLine += funcLocation.startLine - 1;
 			location.stopIndex += funcLocation.startIndex + 1;
 		}
-			
+
 		return location.toString();
 	}
 

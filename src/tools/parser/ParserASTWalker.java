@@ -15,12 +15,12 @@ public abstract class ParserASTWalker extends ASTWalker
 
 	protected ParserState state;
 	protected ASTNodeVisitor astVisitor;
-	
+
 	public void setIndexerState(ParserState aState)
 	{
 		state = aState;
 	}
-	
+
 	@Override
 	public void startOfUnit(ParserRuleContext ctx, String filename)
 	{
@@ -38,5 +38,5 @@ public abstract class ParserASTWalker extends ASTWalker
 	{
 		node.accept(astVisitor);
 	}
-	
+
 }

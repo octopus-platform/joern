@@ -66,8 +66,8 @@ public class DDGCreator
 			if (!changed)
 				continue;
 
-			List<Object> children = cfg.getChildBlocks().getListForKey(
-					currentBlock);
+			List<Object> children = cfg.getChildBlocks()
+					.getListForKey(currentBlock);
 			if (children == null)
 				continue;
 
@@ -103,8 +103,8 @@ public class DDGCreator
 
 			out.removeAllForKey(statement);
 
-			List<Object> symsDefined = cfg.getSymbolsDefined().getListForKey(
-					statement);
+			List<Object> symsDefined = cfg.getSymbolsDefined()
+					.getListForKey(statement);
 			if (symsDefined == null)
 				continue;
 
@@ -199,8 +199,8 @@ public class DDGCreator
 			HashSet<Object> inForBlock = in.getListForKey(statement);
 			if (inForBlock == null)
 				continue;
-			List<Object> usedSymbols = cfg.getSymbolsUsed().getListForKey(
-					statement);
+			List<Object> usedSymbols = cfg.getSymbolsUsed()
+					.getListForKey(statement);
 			if (usedSymbols == null)
 				continue;
 

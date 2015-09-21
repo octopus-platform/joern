@@ -29,8 +29,8 @@ public class Elementary
 
 	public static String getNodeCode(Long nodeId)
 	{
-		return (String) Neo4JBatchInserter.getNodeProperties(nodeId).get(
-				NodeKeys.CODE);
+		return (String) Neo4JBatchInserter.getNodeProperties(nodeId)
+				.get(NodeKeys.CODE);
 	}
 
 	public static String getOperatorCode(Long nodeId)
@@ -49,8 +49,7 @@ public class Elementary
 		{
 			return Neo4JBatchInserter.getNodeProperties(nodeId).get(property)
 					.toString();
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 			return null;
 		}

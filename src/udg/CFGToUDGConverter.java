@@ -74,8 +74,7 @@ public class CFGToUDGConverter
 
 				if (useOrDefNode != null && useOrDefNode != statementNode)
 					useDefGraph.addDefinition(useOrDef.symbol, useOrDefNode);
-			}
-			else
+			} else
 			{
 
 				if (!insertedForStatementUse.contains(useOrDef.symbol))

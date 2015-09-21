@@ -133,9 +133,9 @@ public class Traversals
 	{
 		List<Node> retval = new LinkedList<Node>();
 
-		String query = String.format("%s:CallExpression AND %s:%d AND %s:%s"
-				+ "*", NodeKeys.TYPE, NodeKeys.FUNCTION_ID, functionId,
-				NodeKeys.CODE, source);
+		String query = String.format(
+				"%s:CallExpression AND %s:%d AND %s:%s" + "*", NodeKeys.TYPE,
+				NodeKeys.FUNCTION_ID, functionId, NodeKeys.CODE, source);
 
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for (Node n : hits)
@@ -184,8 +184,7 @@ public class Traversals
 			{
 				Object property = n.getProperty(NodeKeys.IS_CFG_NODE);
 				return n;
-			}
-			catch (NotFoundException ex)
+			} catch (NotFoundException ex)
 			{
 
 			}
@@ -222,8 +221,7 @@ public class Traversals
 			try
 			{
 				childNum = (String) endNode.getProperty(NodeKeys.CHILD_NUMBER);
-			}
-			catch (RuntimeException ex)
+			} catch (RuntimeException ex)
 			{
 				childNum = "0";
 			}
@@ -243,10 +241,9 @@ public class Traversals
 					String childNum2;
 					try
 					{
-						childNum2 = (String) rel2.getEndNode().getProperty(
-								NodeKeys.CHILD_NUMBER);
-					}
-					catch (RuntimeException ex)
+						childNum2 = (String) rel2.getEndNode()
+								.getProperty(NodeKeys.CHILD_NUMBER);
+					} catch (RuntimeException ex)
 					{
 						childNum2 = "0";
 					}
@@ -262,8 +259,8 @@ public class Traversals
 
 	public static Long getFunctionIdFromASTNode(Node astNode)
 	{
-		return Long.valueOf(astNode.getProperty(NodeKeys.FUNCTION_ID)
-				.toString());
+		return Long
+				.valueOf(astNode.getProperty(NodeKeys.FUNCTION_ID).toString());
 	}
 
 	public static IndexHits<Node> getFunctionsByName(String functionName)
@@ -303,8 +300,7 @@ public class Traversals
 						.getProperty(NodeKeys.CHILD_NUMBER);
 				if (childNumStr.equals("0"))
 					return endNode.getProperty(NodeKeys.CODE).toString();
-			}
-			catch (RuntimeException ex)
+			} catch (RuntimeException ex)
 			{
 				return endNode.getProperty(NodeKeys.CODE).toString();
 			}

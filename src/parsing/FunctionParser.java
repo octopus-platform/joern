@@ -8,12 +8,12 @@ import ast.logical.statements.CompoundStatement;
 public class FunctionParser
 {
 	ANTLRParserDriver driver;
-	
+
 	public FunctionParser(ANTLRParserDriver aDriver)
 	{
 		driver = aDriver;
 	}
-	
+
 	public void parseAndWalkString(String input)
 	{
 		driver.parseAndWalkString(input);
@@ -23,24 +23,23 @@ public class FunctionParser
 	{
 		return driver.parseString(input);
 	}
-	
+
 	public void parseAndWalkTokenStream(TokenSubStream tokens)
 			throws ParserException
 	{
 		driver.parseAndWalkTokenStream(tokens);
 	}
-	
+
 	public Parser getAntlrParser()
 	{
 		return driver.getAntlrParser();
 	}
-	
+
 	public ANTLRParserDriver getParser()
 	{
 		return driver;
 	}
-	
-	
+
 	public CompoundStatement getResult()
 	{
 		// The result is what's left on the stack in the end,

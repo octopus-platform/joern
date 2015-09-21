@@ -41,8 +41,7 @@ public class ArgumentTainterMain
 		try
 		{
 			cmd.parseCommandLine(args);
-		}
-		catch (RuntimeException | ParseException ex)
+		} catch (RuntimeException | ParseException ex)
 		{
 			printHelpAndTerminate(ex);
 		}

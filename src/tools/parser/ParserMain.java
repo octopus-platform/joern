@@ -13,7 +13,7 @@ import fileWalker.SourceFileWalker;
  * Main Class for the parser: This class processes command line arguments and
  * configures the parser in accordance. It then uses a SourceFileWalker to visit
  * source-files and directories and report them to the parser.
- * */
+ */
 
 public class ParserMain
 {
@@ -37,8 +37,7 @@ public class ParserMain
 		try
 		{
 			cmd.parseCommandLine(args);
-		}
-		catch (RuntimeException | ParseException ex)
+		} catch (RuntimeException | ParseException ex)
 		{
 			printHelpAndTerminate(ex);
 		}
@@ -78,13 +77,11 @@ public class ParserMain
 		try
 		{
 			sourceFileWalker.walk(fileAndDirNames);
-		}
-		catch (IOException err)
+		} catch (IOException err)
 		{
-			System.err.println("Error walking source files: "
-					+ err.getMessage());
-		}
-		finally
+			System.err
+					.println("Error walking source files: " + err.getMessage());
+		} finally
 		{
 			indexer.shutdown();
 		}

@@ -35,8 +35,7 @@ public class CodebaseWalkerTest
 			provider.walk(args);
 
 			assertEquals(expected, new HashSet<String>(listener.filenames));
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			fail("IO Error");
 		}

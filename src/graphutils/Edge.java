@@ -59,8 +59,7 @@ public abstract class Edge<V>
 			{
 				return false;
 			}
-		}
-		else if (!destination.equals(other.destination))
+		} else if (!destination.equals(other.destination))
 		{
 			return false;
 		}
@@ -70,8 +69,7 @@ public abstract class Edge<V>
 			{
 				return false;
 			}
-		}
-		else if (!source.equals(other.source))
+		} else if (!source.equals(other.source))
 		{
 			return false;
 		}

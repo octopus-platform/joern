@@ -24,9 +24,11 @@ public abstract class OutModASTNodeVisitor extends ASTNodeVisitor
 		addEdgeFromClassToFunc(dstNodeId, classId);
 	}
 
-	protected abstract void addEdgeFromClassToFunc(long dstNodeId, Long classId);
+	protected abstract void addEdgeFromClassToFunc(long dstNodeId,
+			Long classId);
 
-	protected void visitClassDefContent(ClassDefStatement node, long classNodeId)
+	protected void visitClassDefContent(ClassDefStatement node,
+			long classNodeId)
 	{
 		// visit compound statement, it might contain
 		// functions, declarations or other class definitions

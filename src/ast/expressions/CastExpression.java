@@ -14,8 +14,7 @@ public class CastExpression extends Expression
 		if (castTarget == null)
 		{
 			castTarget = (Expression) expression;
-		}
-		else
+		} else
 		{
 			castExpression = (Expression) expression;
 		}

@@ -51,8 +51,7 @@ public abstract class CFGExporter
 				// nothing to do for nodes that have already
 				// been imported by the ASTImporter.
 				continue;
-			}
-			else
+			} else
 			{
 				properties = statement.getProperties();
 			}

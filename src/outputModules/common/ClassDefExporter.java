@@ -18,8 +18,7 @@ public abstract class ClassDefExporter extends ASTNodeExporter
 			classDefNode.initialize(node);
 			addClassDefToDatabase(classDefNode);
 			linkClassDefToFileNode(classDefNode, curFile);
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 			ex.printStackTrace();
 			System.err.println("Error adding class to database: "

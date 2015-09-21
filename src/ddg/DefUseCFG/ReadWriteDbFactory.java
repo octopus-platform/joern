@@ -20,12 +20,12 @@ public class ReadWriteDbFactory extends DefUseCFGFactory
 
 	DefUseCFG cfg;
 	List<String> parameters;
-	
+
 	@Override
 	public DefUseCFG create(Long funcId)
 	{
 		cfg = new DefUseCFG();
-		
+
 		getStatementsOfFunction(funcId);
 		getUsesAndDefs();
 		getParentBlocks();
@@ -33,7 +33,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory
 		getExitNode(funcId);
 		getParameters(funcId);
 		cfg.addUsesForExitNode();
-		
+
 		return cfg;
 	}
 
@@ -46,20 +46,21 @@ public class ReadWriteDbFactory extends DefUseCFGFactory
 			Collection<Object> params = cfg.getSymbolsDefinedBy(node.getId());
 			for (Object o : params)
 			{
-				cfg.addParameter((String)o);
+				cfg.addParameter((String) o);
 			}
 		}
-		
+
 	}
 
 	private void getExitNode(Long funcId)
 	{
 		String query = "type:CFGExitNode AND functionId:" + funcId;
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
-		for (Node node : hits){
+		for (Node node : hits)
+		{
 			cfg.setExitNode(node.getId());
 		}
-		
+
 	}
 
 	private void getStatementsOfFunction(Long funcId)
@@ -67,7 +68,7 @@ public class ReadWriteDbFactory extends DefUseCFGFactory
 		String query = "isCFGNode:True AND functionId:" + funcId;
 		IndexHits<Node> hits = Neo4JDBInterface.queryIndex(query);
 		for (Node node : hits)
-			cfg.addStatement(node.getId());	
+			cfg.addStatement(node.getId());
 	}
 
 	private void getUsesAndDefs()

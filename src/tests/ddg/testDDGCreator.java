@@ -64,17 +64,17 @@ public class testDDGCreator extends TestDBTestsBatchInserter
 		UseDefGraph udg = converter.convert(cfg);
 		DefUseCFG defUseCfg = converter2.convert(cfg, udg);
 
-		assertEquals(defUseCfg.getStatements().size(), defUseCfgDb
-				.getStatements().size());
-		assertEquals(defUseCfg.getParentBlocks().size(), defUseCfgDb
-				.getParentBlocks().size());
-		assertEquals(defUseCfg.getChildBlocks().size(), defUseCfgDb
-				.getChildBlocks().size());
+		assertEquals(defUseCfg.getStatements().size(),
+				defUseCfgDb.getStatements().size());
+		assertEquals(defUseCfg.getParentBlocks().size(),
+				defUseCfgDb.getParentBlocks().size());
+		assertEquals(defUseCfg.getChildBlocks().size(),
+				defUseCfgDb.getChildBlocks().size());
 
-		assertEquals(defUseCfg.getSymbolsDefined().size(), defUseCfgDb
-				.getSymbolsDefined().size());
-		assertEquals(defUseCfg.getSymbolsUsed().size(), defUseCfgDb
-				.getSymbolsUsed().size());
+		assertEquals(defUseCfg.getSymbolsDefined().size(),
+				defUseCfgDb.getSymbolsDefined().size());
+		assertEquals(defUseCfg.getSymbolsUsed().size(),
+				defUseCfgDb.getSymbolsUsed().size());
 
 	}
 

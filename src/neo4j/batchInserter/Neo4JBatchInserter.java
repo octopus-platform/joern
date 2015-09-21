@@ -104,11 +104,10 @@ public class Neo4JBatchInserter
 		try
 		{
 			indexProvider.shutdown();
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
-			System.err
-					.println("Error while shutting down index provider. This may be harmless:");
+			System.err.println(
+					"Error while shutting down index provider. This may be harmless:");
 			// System.err.println(ex.getMessage());
 		}
 		inserter.shutdown();

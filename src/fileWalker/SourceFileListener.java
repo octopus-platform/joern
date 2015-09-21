@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 /**
  * Abstract base class for classes observing the SourceFileWalker.
- * */
+ */
 
 public abstract class SourceFileListener
 {

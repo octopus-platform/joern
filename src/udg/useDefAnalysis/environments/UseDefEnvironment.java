@@ -8,7 +8,7 @@ import udg.useDefGraph.UseOrDef;
 
 /**
  * Base-class and default implementation of UseDefEnvironment.
- * */
+ */
 
 public class UseDefEnvironment
 {
@@ -46,7 +46,7 @@ public class UseDefEnvironment
 
 	/**
 	 * Propagate all symbols to upstream
-	 * */
+	 */
 
 	public LinkedList<String> upstreamSymbols()
 	{
@@ -65,7 +65,7 @@ public class UseDefEnvironment
 
 	/**
 	 * By default, don't generate any uses or defs for symbols.
-	 * */
+	 */
 
 	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
 	{

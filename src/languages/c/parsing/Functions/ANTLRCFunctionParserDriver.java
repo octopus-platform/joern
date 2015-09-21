@@ -11,7 +11,7 @@ import parsing.TokenSubStream;
 
 public class ANTLRCFunctionParserDriver extends ANTLRParserDriver
 {
-	
+
 	public ANTLRCFunctionParserDriver()
 	{
 		super();
@@ -19,7 +19,7 @@ public class ANTLRCFunctionParserDriver extends ANTLRParserDriver
 		setListener(listener);
 		listener.setDriver(this);
 	}
-	
+
 	@Override
 	public Lexer createLexer(ANTLRInputStream input)
 	{
@@ -37,8 +37,7 @@ public class ANTLRCFunctionParserDriver extends ANTLRParserDriver
 		{
 			setSLLMode(getAntlrParser());
 			tree = thisParser.statements();
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 			if (isRecognitionException(ex))
 			{

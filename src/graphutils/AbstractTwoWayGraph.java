@@ -6,8 +6,8 @@ import java.util.List;
 
 import misc.MultiHashMap;
 
-public abstract class AbstractTwoWayGraph<V, E extends Edge<V>> extends
-		AbstractGraph<V, E>
+public abstract class AbstractTwoWayGraph<V, E extends Edge<V>>
+		extends AbstractGraph<V, E>
 {
 	private MultiHashMap<V, E> inNeighborhood;
 

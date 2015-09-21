@@ -26,7 +26,7 @@ import udg.useDefGraph.UseOrDef;
  * The ASTDefUseAnalyzer determines symbol uses and definitions performed in a
  * given AST. It is currently run on statement ASTs as the core step in the
  * construction of the symbol graph (UDG).
- * */
+ */
 
 public class ASTDefUseAnalyzer
 {
@@ -39,7 +39,7 @@ public class ASTDefUseAnalyzer
 	 * Analyze an AST to determine the symbols used and defined by each AST
 	 * node.
 	 * 
-	 * */
+	 */
 
 	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider)
 	{
@@ -51,7 +51,7 @@ public class ASTDefUseAnalyzer
 	/**
 	 * Inform the ASTAnalyzer about (callee, argNum)-pairs that define their
 	 * arguments. For example, 'recv' defines its first argument.
-	 * */
+	 */
 
 	public void addTaintSource(String callee, int argNum)
 	{
@@ -94,7 +94,7 @@ public class ASTDefUseAnalyzer
 
 	/**
 	 * Creates a UseDefEnvironment for a given AST node.
-	 * */
+	 */
 
 	private UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider)
 	{
@@ -103,41 +103,41 @@ public class ASTDefUseAnalyzer
 
 		switch (nodeType)
 		{
-			case "AssignmentExpr":
-				return new AssignmentEnvironment();
-			case "IncDecOp":
-				return new IncDecEnvironment();
-			case "IdentifierDecl":
-			case "Parameter":
-				return new DeclEnvironment();
+		case "AssignmentExpr":
+			return new AssignmentEnvironment();
+		case "IncDecOp":
+			return new IncDecEnvironment();
+		case "IdentifierDecl":
+		case "Parameter":
+			return new DeclEnvironment();
 
-			case "CallExpression":
-				return createCallEnvironment(astProvider);
+		case "CallExpression":
+			return createCallEnvironment(astProvider);
 
-			case "Argument":
-				return createArgumentEnvironment(astProvider);
+		case "Argument":
+			return createArgumentEnvironment(astProvider);
 
-			case "PtrMemberAccess":
-				return new PtrMemberAccessEnvironment();
+		case "PtrMemberAccess":
+			return new PtrMemberAccessEnvironment();
 
-			case "MemberAccess":
-				return new MemberAccessEnvironment();
+		case "MemberAccess":
+			return new MemberAccessEnvironment();
 
-			case "Condition":
-			case "ReturnStatement":
-				return new UseEnvironment();
+		case "Condition":
+		case "ReturnStatement":
+			return new UseEnvironment();
 
-			case "ArrayIndexing":
-				return new ArrayIndexingEnvironment();
+		case "ArrayIndexing":
+			return new ArrayIndexingEnvironment();
 
-			case "UnaryOp":
-				return new UnaryOpEnvironment();
-				
-			case "Identifier":
-				return new IdentifierEnvironment();
+		case "UnaryOp":
+			return new UnaryOpEnvironment();
 
-			default:
-				return new UseDefEnvironment();
+		case "Identifier":
+			return new IdentifierEnvironment();
+
+		default:
+			return new UseDefEnvironment();
 		}
 	}
 
@@ -173,7 +173,7 @@ public class ASTDefUseAnalyzer
 	 * Gets upstream symbols from environment and passes them to
 	 * parent-environment by calling addChildSymbols on the parent. Asks
 	 * parent-environment to generate useOrDefs and emit them.
-	 * */
+	 */
 
 	private void reportUpstream(UseDefEnvironment env)
 	{
@@ -185,8 +185,7 @@ public class ASTDefUseAnalyzer
 		{
 			UseDefEnvironment parentEnv = environmentStack.peek();
 			parentEnv.addChildSymbols(symbols, astProvider);
-		}
-		catch (EmptyStackException ex)
+		} catch (EmptyStackException ex)
 		{
 			// stack is empty, we've reached the root.
 			// Nothing to do.

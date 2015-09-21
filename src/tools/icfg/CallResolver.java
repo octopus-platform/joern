@@ -24,11 +24,10 @@ public class CallResolver
 		try
 		{
 			long firstChildId = getFirstChildId(callId);
-			String codeStr = (String) Neo4JBatchInserter.getNodeProperties(
-					firstChildId).get("code");
+			String codeStr = (String) Neo4JBatchInserter
+					.getNodeProperties(firstChildId).get("code");
 			return codeStr;
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 			System.err.println(ex.getMessage());
 		}

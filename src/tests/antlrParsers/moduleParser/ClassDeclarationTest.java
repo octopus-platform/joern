@@ -30,8 +30,8 @@ public class ClassDeclarationTest
 		ModuleParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
-		assertTrue(output
-				.startsWith("(simple_decl (var_decl (class_def struct (class_name (identifier foo))"));
+		assertTrue(output.startsWith(
+				"(simple_decl (var_decl (class_def struct (class_name (identifier foo))"));
 	}
 
 	@Test
@@ -66,8 +66,8 @@ public class ClassDeclarationTest
 		ModuleParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
-		assertTrue(output
-				.startsWith("(simple_decl (var_decl (class_def struct (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (declarator (identifier y))) ;)))"));
+		assertTrue(output.startsWith(
+				"(simple_decl (var_decl (class_def struct (class_name (identifier foo)) { int x ; }) (init_declarator_list (init_declarator (declarator (identifier y))) ;)))"));
 	}
 
 	@Test
@@ -77,8 +77,8 @@ public class ClassDeclarationTest
 		ModuleParser parser = createParser(input);
 		String output = parser.simple_decl().toStringTree(parser);
 		System.out.println(output);
-		assertTrue(output
-				.startsWith("(simple_decl (var_decl (type_name (base_type int)) (init_declarator_list (init_declarator (declarator (identifier foo) (type_suffix (param_type_list ( (param_type"));
+		assertTrue(output.startsWith(
+				"(simple_decl (var_decl (type_name (base_type int)) (init_declarator_list (init_declarator (declarator (identifier foo) (type_suffix (param_type_list ( (param_type"));
 	}
 
 	@Test

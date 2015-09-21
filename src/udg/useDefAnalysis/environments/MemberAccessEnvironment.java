@@ -13,7 +13,7 @@ public class MemberAccessEnvironment extends UseDefEnvironment
 	{
 
 		LinkedList<String> retval = new LinkedList<String>();
-		
+
 		// emit all symbols
 		retval.addAll(symbols);
 

@@ -12,19 +12,20 @@ class UnorderedFileWalkerImpl extends SimpleFileVisitor<Path>
 {
 	private FileNameMatcher matcher = new FileNameMatcher();
 	private List<SourceFileListener> listeners = new LinkedList<SourceFileListener>();
-	
+
 	public void setFilenameFilter(String pattern)
 	{
 		matcher.setFilenameFilter(pattern);
 	}
-		
+
 	public void addListener(SourceFileListener listener)
 	{
 		listeners.add(listener);
 	}
 
 	@Override
-	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+	public FileVisitResult preVisitDirectory(Path dir,
+			BasicFileAttributes attrs)
 	{
 		notifyListenersOfDirEntry(dir);
 		return FileVisitResult.CONTINUE;
@@ -73,6 +74,5 @@ class UnorderedFileWalkerImpl extends SimpleFileVisitor<Path>
 			listener.visitFile(filename);
 		}
 	}
-
 
 }

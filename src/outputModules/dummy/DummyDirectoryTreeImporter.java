@@ -22,5 +22,5 @@ public class DummyDirectoryTreeImporter extends DirectoryTreeExporter
 		// via the protected member 'directoryStack' of the
 		// base class.
 	}
-	
+
 }

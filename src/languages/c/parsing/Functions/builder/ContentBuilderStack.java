@@ -48,7 +48,7 @@ public class ContentBuilderStack
 	{
 		return shadowStack.getDo();
 	}
-	
+
 	public TryStatement getTry()
 	{
 		return shadowStack.getTry();

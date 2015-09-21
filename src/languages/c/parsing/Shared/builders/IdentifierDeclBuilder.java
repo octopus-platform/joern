@@ -61,7 +61,8 @@ public class IdentifierDeclBuilder extends ASTNodeBuilder
 	{
 		List<IdentifierDecl> declarations = new LinkedList<IdentifierDecl>();
 		InitDeclContextWrapper decl_ctx;
-		for (Iterator<ParseTree> i = decl_list.children.iterator(); i.hasNext();)
+		for (Iterator<ParseTree> i = decl_list.children.iterator(); i
+				.hasNext();)
 		{
 
 			decl_ctx = new InitDeclContextWrapper(i.next());

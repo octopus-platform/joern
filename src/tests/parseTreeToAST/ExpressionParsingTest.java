@@ -218,7 +218,8 @@ public class ExpressionParsingTest
 				.get(0);
 		CastExpression expr = (CastExpression) starter.getCondition()
 				.getExpression();
-		assertTrue(expr.getCastTarget().getEscapedCodeStr().equals("some_type"));
+		assertTrue(
+				expr.getCastTarget().getEscapedCodeStr().equals("some_type"));
 	}
 
 	@Test

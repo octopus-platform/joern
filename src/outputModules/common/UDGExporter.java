@@ -32,9 +32,8 @@ public abstract class UDGExporter
 
 	}
 
-	private void addUseDefEdges(
-			MultiHashMap<String, UseOrDefRecord> useDefDict, String identifier,
-			long symbolNodeId)
+	private void addUseDefEdges(MultiHashMap<String, UseOrDefRecord> useDefDict,
+			String identifier, long symbolNodeId)
 	{
 
 		List<UseOrDefRecord> destinations = useDefDict.get(identifier);

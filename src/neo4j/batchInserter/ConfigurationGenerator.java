@@ -11,7 +11,7 @@ public class ConfigurationGenerator
 	 * available to the JVM.
 	 * 
 	 * @return
-	 * */
+	 */
 
 	public static Map<String, String> generateConfiguration()
 	{
@@ -20,11 +20,11 @@ public class ConfigurationGenerator
 
 		if (maxMemory < 2000)
 		{
-			System.err
-					.println("Warning: your JVM has a maximum heap size of less than"
+			System.err.println(
+					"Warning: your JVM has a maximum heap size of less than"
 							+ " 2 Gig. You may need to import large code bases in batches.");
-			System.err
-					.println("If you have additional memory, you may want to allow your JVM to access it"
+			System.err.println(
+					"If you have additional memory, you may want to allow your JVM to access it"
 							+ " by using the -Xmx flag.");
 
 		}

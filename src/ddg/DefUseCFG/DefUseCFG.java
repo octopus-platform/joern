@@ -12,7 +12,7 @@ import misc.MultiHashMap;
  * A CFG decorated with USE and DEFs suitable to determine reaching definitions.
  * This contains the same information as a UseDefGraph (UDG) but in a format
  * better suited for DDG creation.
- * */
+ */
 
 public class DefUseCFG
 {
@@ -23,10 +23,10 @@ public class DefUseCFG
 	private MultiHashMap<Object, Object> parentBlocks = new MultiHashMap<Object, Object>();
 	private MultiHashMap<Object, Object> childBlocks = new MultiHashMap<Object, Object>();
 	private Map<String, Object> symbolIds = new HashMap<String, Object>();
-	
+
 	private Object exitNode;
 	private List<String> parameters = new LinkedList<String>();
-	
+
 	private static final List<Object> EMPTY_LIST = new LinkedList<Object>();
 
 	public void addStatement(Object statementId)
@@ -104,7 +104,7 @@ public class DefUseCFG
 		{
 			// this.addSymbolUsed(exitNode, symbol);
 			this.addSymbolUsed(exitNode, "* " + symbol);
-		}	
+		}
 	}
 
 	public void setExitNode(Object exitNode)
@@ -121,5 +121,5 @@ public class DefUseCFG
 	{
 		parameters.add(str);
 	}
-	
+
 }

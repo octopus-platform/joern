@@ -111,13 +111,11 @@ public class DominatorTree<V>
 			{
 				dominators.put(vertex, dominator);
 				changed = true;
-			}
-			else if (!currentDominator.equals(dominator))
+			} else if (!currentDominator.equals(dominator))
 			{
 				dominators.put(vertex, dominator);
 				changed = true;
-			}
-			else
+			} else
 			{
 				changed = false;
 			}
@@ -143,7 +141,8 @@ public class DominatorTree<V>
 		private List<V> orderedVertices;
 		private V startNode;
 
-		public DominatorTreeCreator(AbstractTwoWayGraph<V, E> graph, V startNode)
+		public DominatorTreeCreator(AbstractTwoWayGraph<V, E> graph,
+				V startNode)
 		{
 			this.dominatorTree = new DominatorTree<V>();
 			this.graph = graph;
@@ -175,8 +174,8 @@ public class DominatorTree<V>
 							continue;
 						}
 						runner = predecessor;
-						while (!runner.equals(dominatorTree
-								.getDominator(currentNode)))
+						while (!runner.equals(
+								dominatorTree.getDominator(currentNode)))
 						{
 							if (!dominatorTree.dominanceFrontiers
 									.containsKey(runner))
@@ -184,8 +183,8 @@ public class DominatorTree<V>
 								dominatorTree.dominanceFrontiers.put(runner,
 										new HashSet<V>());
 							}
-							dominatorTree.dominanceFrontiers.get(runner).add(
-									currentNode);
+							dominatorTree.dominanceFrontiers.get(runner)
+									.add(currentNode);
 							runner = dominatorTree.getDominator(runner);
 						}
 					}

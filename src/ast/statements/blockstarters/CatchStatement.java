@@ -10,11 +10,11 @@ public class CatchStatement extends BlockStarter
 	{
 		visitor.visit(this);
 	}
-	
+
 	@Override
 	public void addChild(ASTNode node)
 	{
 		super.addChild(node);
 	}
-	
+
 }

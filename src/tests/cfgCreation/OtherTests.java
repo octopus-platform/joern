@@ -52,7 +52,7 @@ public class OtherTests extends CFGCreatorTest
 		assertTrue(node instanceof InfiniteForNode);
 		assertTrue(cfg.size() == 3);
 	}
-	
+
 	@Test
 	public void testSwitchNumberOfEdges()
 	{
@@ -97,7 +97,7 @@ public class OtherTests extends CFGCreatorTest
 	public void testReturnExitBlock()
 	{
 		// this needs to be parsed as a function
-		
+
 		// String input = "int foo() { if(!x) return 1; y = x; return 0; }";
 		//
 		// CFG cfg = getCFGForCode(input);

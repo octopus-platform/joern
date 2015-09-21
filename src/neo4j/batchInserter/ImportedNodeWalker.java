@@ -8,7 +8,7 @@ import org.neo4j.graphdb.index.IndexHits;
 /**
  * Walks all nodes of a given type present in the Neo4J database by querying the
  * index.
- * */
+ */
 
 public class ImportedNodeWalker
 {
@@ -27,8 +27,8 @@ public class ImportedNodeWalker
 
 	public void walk()
 	{
-		IndexHits<Long> nodes = Neo4JBatchInserter.retrieveExactFromIndex(
-				"type", type);
+		IndexHits<Long> nodes = Neo4JBatchInserter
+				.retrieveExactFromIndex("type", type);
 		for (Long nodeId : nodes)
 		{
 			notifyListenersOfNode(nodeId);

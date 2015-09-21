@@ -1,6 +1,5 @@
 package languages.c.parsing;
 
-
 public class CodeLocation
 {
 

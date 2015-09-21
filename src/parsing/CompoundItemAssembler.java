@@ -36,5 +36,4 @@ public class CompoundItemAssembler extends ASTWalker
 		compoundItem.addStatement(item);
 	}
 
-
 }

@@ -7,7 +7,7 @@ import ast.ASTNode;
 public class BinaryExpression extends Expression
 {
 	Expression subExpressions[] = new Expression[2];
-	
+
 	public Expression getLeft()
 	{
 		return subExpressions[0];
@@ -68,7 +68,5 @@ public class BinaryExpression extends Expression
 		if (ctx.getChildCount() == 3)
 			setOperator(ctx.getChild(1).getText());
 	}
-
-	
 
 }

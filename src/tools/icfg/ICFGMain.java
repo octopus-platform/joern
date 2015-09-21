@@ -34,8 +34,7 @@ public class ICFGMain extends GraphDbWalker
 		try
 		{
 			cmd.parseCommandLine(args);
-		}
-		catch (RuntimeException | ParseException ex)
+		} catch (RuntimeException | ParseException ex)
 		{
 			printHelpAndTerminate(ex);
 		}

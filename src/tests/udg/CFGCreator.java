@@ -48,7 +48,6 @@ public class CFGCreator
 		{
 		}
 
-
 		@Override
 		public void processItem(ASTNode node, Stack<ASTNodeBuilder> nodeStack)
 		{

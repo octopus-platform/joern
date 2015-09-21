@@ -27,13 +27,13 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 	@Test
 	public void testDefUseCFGPatcher()
 	{
-	
+
 		Long funcId = getFunctionIdByFunctionName("arg_tainter_basic_test");
 		List<Node> statementsToPatch = getStatementsToPatch(funcId, "memset");
-		
+
 		DefUseCFGPatcher defUseCFGPatcher = new DefUseCFGPatcher();
 		DefUseCFG defUseCFG = defUseGraphFactory.create(funcId);
-		
+
 		defUseCFGPatcher.setSourceToPatch("memset", 0);
 		defUseCFGPatcher.patchDefUseCFG(defUseCFG, statementsToPatch);
 
@@ -41,7 +41,7 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 				.getDefUseLinksToAdd();
 
 		assertTrue(defUseLinksToAdd.size() == 4);
-		
+
 		for (DefUseLink a : defUseLinksToAdd)
 		{
 			assertTrue(a.symbol.contains("myVar"));

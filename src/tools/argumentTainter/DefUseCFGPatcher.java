@@ -55,15 +55,16 @@ public class DefUseCFGPatcher
 	public void patchDefUseCFG(DefUseCFG defUseCFG,
 			Collection<Node> statementsToPatch)
 	{
-		
+
 		this.defUseCFG = defUseCFG;
 		newlyAddedLinks.clear();
 
 		for (Node statement : statementsToPatch)
 		{
-			
-			if(statement == null) continue;
-			
+
+			if (statement == null)
+				continue;
+
 			long statementId = statement.getId();
 
 			Node node = Traversals.getASTForStatement(statement);
@@ -128,12 +129,14 @@ public class DefUseCFGPatcher
 			if (toId == null)
 			{
 				Map<String, Object> properties = new HashMap<String, Object>();
-				Node statementNode = Neo4JDBInterface.getNodeById(link.statement);
-				
-				properties.put("functionId", statementNode.getProperty("functionId"));
+				Node statementNode = Neo4JDBInterface
+						.getNodeById(link.statement);
+
+				properties.put("functionId",
+						statementNode.getProperty("functionId"));
 				properties.put("type", "Symbol");
 				properties.put("code", link.symbol);
-				
+
 				Node symbolNode = Neo4JDBInterface.addNode(properties);
 				toId = (Long) symbolNode.getId();
 			}
@@ -142,8 +145,7 @@ public class DefUseCFGPatcher
 					.withName(EdgeTypes.DEF);
 			Neo4JDBInterface.addRelationship(fromId, toId, relType, null);
 		}
-		
-		
+
 	}
 
 }

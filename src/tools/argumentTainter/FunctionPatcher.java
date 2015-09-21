@@ -49,7 +49,7 @@ public class FunctionPatcher
 
 	private void determineCallsToPatch(Long funcId)
 	{
-		
+
 		List<Node> callNodes = Traversals.getCallsToForFunction(sourceToPatch,
 				funcId);
 		for (Node callNode : callNodes)

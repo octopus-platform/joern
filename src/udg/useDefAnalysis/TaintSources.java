@@ -18,8 +18,7 @@ public class TaintSources
 			l = new LinkedList<Integer>();
 
 			calleeToArgIds.put(callee, l);
-		}
-		else
+		} else
 		{
 			l = calleeToArgIds.get(callee);
 		}

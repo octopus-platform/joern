@@ -28,8 +28,8 @@ public class CodeNestingTest
 		String input = "if(foo)\nbar();\nfoo()\n";
 		StatementsContext ctx = (StatementsContext) FunctionContentTestUtil
 				.parse(input);
-		assert (ctx.start.getLine() == 1);
-		assert (ctx.stop.getLine() == 3);
+		assert(ctx.start.getLine() == 1);
+		assert(ctx.stop.getLine() == 3);
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class CodeNestingTest
 		String input = "";
 		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		assert (item.getStatements().size() == 0);
+		assert(item.getStatements().size() == 0);
 	}
 
 	@Test
@@ -150,8 +150,8 @@ public class CodeNestingTest
 				.getStatements().get(0);
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
 
-		AssignmentExpr assign = (AssignmentExpr) decl.getChild(decl
-				.getChildCount() - 1);
+		AssignmentExpr assign = (AssignmentExpr) decl
+				.getChild(decl.getChildCount() - 1);
 		assertTrue(assign.getLeft().getEscapedCodeStr().equals("m"));
 		assertTrue(assign.getRight().getEscapedCodeStr()
 				.equals("\"Usage: untar [-tvx] [-f file] [file]\\n\""));
@@ -196,6 +196,5 @@ public class CodeNestingTest
 		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 	}
-
 
 }

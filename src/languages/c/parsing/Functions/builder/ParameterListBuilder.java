@@ -33,8 +33,8 @@ public class ParameterListBuilder extends ASTNodeBuilder
 		Parameter param = new Parameter();
 		param.initializeFromContext(ctx);
 
-		String baseType = ParseTreeUtils.childTokenString(ctx
-				.param_decl_specifiers());
+		String baseType = ParseTreeUtils
+				.childTokenString(ctx.param_decl_specifiers());
 		String completeType = determineCompleteType(parameter_id, baseType);
 
 		param.type.setBaseType(baseType);
@@ -61,11 +61,11 @@ public class ParameterListBuilder extends ASTNodeBuilder
 			newCompleteType += "(";
 
 			if (parameter_id.ptrs() != null)
-				newCompleteType += ParseTreeUtils.childTokenString(parameter_id
-						.ptrs()) + " ";
+				newCompleteType += ParseTreeUtils
+						.childTokenString(parameter_id.ptrs()) + " ";
 			if (parameter_id.type_suffix() != null)
-				newCompleteType += ParseTreeUtils.childTokenString(parameter_id
-						.type_suffix()) + " ";
+				newCompleteType += ParseTreeUtils
+						.childTokenString(parameter_id.type_suffix()) + " ";
 
 			newCompleteType += retType;
 			newCompleteType += ")";
@@ -77,9 +77,8 @@ public class ParameterListBuilder extends ASTNodeBuilder
 			retType += " "
 					+ ParseTreeUtils.childTokenString(parameter_id.ptrs());
 		if (parameter_id.type_suffix() != null)
-			retType += " "
-					+ ParseTreeUtils.childTokenString(parameter_id
-							.type_suffix());
+			retType += " " + ParseTreeUtils
+					.childTokenString(parameter_id.type_suffix());
 
 		return retType;
 	}

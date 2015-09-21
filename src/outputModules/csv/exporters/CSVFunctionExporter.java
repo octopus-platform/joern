@@ -45,12 +45,10 @@ public class CSVFunctionExporter extends FunctionExporter
 		try
 		{
 			cfgRootId = Writer.getIdForObject(firstBlock);
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
-			cfgRootId = Writer
-					.getIdForObject(((ASTNodeContainer) firstBlock)
-							.getASTNode());
+			cfgRootId = Writer.getIdForObject(
+					((ASTNodeContainer) firstBlock).getASTNode());
 		}
 
 		Writer.addEdge(functionId, cfgRootId, null,

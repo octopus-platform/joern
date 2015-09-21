@@ -43,7 +43,8 @@ public class CCFGFactory extends CFGFactory
 		try
 		{
 			CCFG function = newInstance();
-			CCFG parameterBlock = convert(functionDefinition.getParameterList());
+			CCFG parameterBlock = convert(
+					functionDefinition.getParameterList());
 			CCFG functionBody = convert(functionDefinition.getContent());
 			parameterBlock.appendCFG(functionBody);
 			function.appendCFG(parameterBlock);
@@ -66,8 +67,7 @@ public class CCFGFactory extends CFGFactory
 			}
 
 			return function;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -89,8 +89,7 @@ public class CCFGFactory extends CFGFactory
 			}
 			block.addEdge(last, block.getExitNode());
 			return block;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -123,20 +122,18 @@ public class CCFGFactory extends CFGFactory
 
 			if (ifStatement.getElseNode() != null)
 			{
-				CFG elseBlock = convert(ifStatement.getElseNode()
-						.getStatement());
+				CFG elseBlock = convert(
+						ifStatement.getElseNode().getStatement());
 				block.mountCFG(conditionContainer, block.getExitNode(),
 						elseBlock, CFGEdge.FALSE_LABEL);
-			}
-			else
+			} else
 			{
 				block.addEdge(conditionContainer, block.getExitNode(),
 						CFGEdge.FALSE_LABEL);
 			}
 
 			return block;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -164,8 +161,7 @@ public class CCFGFactory extends CFGFactory
 			fixContinueStatement(whileBlock, conditionContainer);
 
 			return whileBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -188,8 +184,7 @@ public class CCFGFactory extends CFGFactory
 			if (condition != null)
 			{
 				conditionContainer = new ASTNodeContainer(condition);
-			}
-			else
+			} else
 			{
 				conditionContainer = new InfiniteForNode();
 			}
@@ -206,8 +201,7 @@ public class CCFGFactory extends CFGFactory
 				forBlock.addEdge(forBlock.getEntryNode(),
 						initializationContainer);
 				forBlock.addEdge(initializationContainer, conditionContainer);
-			}
-			else
+			} else
 			{
 				forBlock.addEdge(forBlock.getEntryNode(), conditionContainer);
 			}
@@ -219,8 +213,7 @@ public class CCFGFactory extends CFGFactory
 				forBlock.addEdge(expressionContainer, conditionContainer);
 				forBlock.mountCFG(conditionContainer, expressionContainer,
 						forBody, CFGEdge.TRUE_LABEL);
-			}
-			else
+			} else
 			{
 				forBlock.mountCFG(conditionContainer, conditionContainer,
 						forBody, CFGEdge.TRUE_LABEL);
@@ -230,8 +223,7 @@ public class CCFGFactory extends CFGFactory
 			fixContinueStatement(forBlock, conditionContainer);
 
 			return forBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -253,8 +245,8 @@ public class CCFGFactory extends CFGFactory
 
 			CFG doBody = convert(doStatement.getStatement());
 
-			doBlock.mountCFG(doBlock.getEntryNode(), conditionContainer,
-					doBody, CFGEdge.EMPTY_LABEL);
+			doBlock.mountCFG(doBlock.getEntryNode(), conditionContainer, doBody,
+					CFGEdge.EMPTY_LABEL);
 
 			for (CFGEdge edge : doBody.outgoingEdges(doBody.getEntryNode()))
 			{
@@ -266,8 +258,7 @@ public class CCFGFactory extends CFGFactory
 			fixContinueStatement(doBlock, conditionContainer);
 
 			return doBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -323,15 +314,13 @@ public class CCFGFactory extends CFGFactory
 			for (CatchStatement catchStatement : tryStatement.getCatchNodes())
 			{
 				CCFG catchBlock = convert(catchStatement.getStatement());
-				tryCFG.mountCFG(tryCFG.getExceptionNode(),
-						tryCFG.getExitNode(), catchBlock,
-						CFGEdge.HANDLED_EXCEPT_LABEL);
+				tryCFG.mountCFG(tryCFG.getExceptionNode(), tryCFG.getExitNode(),
+						catchBlock, CFGEdge.HANDLED_EXCEPT_LABEL);
 			}
 
 			return tryCFG;
 
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -364,11 +353,11 @@ public class CCFGFactory extends CFGFactory
 				switchBlock.addEdge(conditionContainer, block.getValue(),
 						block.getKey());
 			}
-			for (CFGEdge edge : switchBody.ingoingEdges(switchBody
-					.getExitNode()))
+			for (CFGEdge edge : switchBody
+					.ingoingEdges(switchBody.getExitNode()))
 			{
-				switchBlock
-						.addEdge(edge.getSource(), switchBlock.getExitNode());
+				switchBlock.addEdge(edge.getSource(),
+						switchBlock.getExitNode());
 			}
 			if (!defaultLabel)
 			{
@@ -379,8 +368,7 @@ public class CCFGFactory extends CFGFactory
 			fixBreakStatements(switchBlock, switchBlock.getExitNode());
 
 			return switchBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -397,8 +385,7 @@ public class CCFGFactory extends CFGFactory
 				parameterListBlock.appendCFG(convert(parameter));
 			}
 			return parameterListBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -415,8 +402,7 @@ public class CCFGFactory extends CFGFactory
 				compoundBlock.appendCFG(convert(statement));
 			}
 			return compoundBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -434,8 +420,7 @@ public class CCFGFactory extends CFGFactory
 			returnBlock.addEdge(returnContainer, returnBlock.getExitNode());
 			returnBlock.addReturnStatement(returnContainer);
 			return returnBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -451,11 +436,10 @@ public class CCFGFactory extends CFGFactory
 			gotoBlock.addVertex(gotoContainer);
 			gotoBlock.addEdge(gotoBlock.getEntryNode(), gotoContainer);
 			gotoBlock.addEdge(gotoContainer, gotoBlock.getExitNode());
-			gotoBlock
-					.addGotoStatement(gotoContainer, gotoStatement.getTarget());
+			gotoBlock.addGotoStatement(gotoContainer,
+					gotoStatement.getTarget());
 			return gotoBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -475,8 +459,7 @@ public class CCFGFactory extends CFGFactory
 			label = label.substring(0, label.length() - 2);
 			continueBlock.addBlockLabel(label, labelContainer);
 			return continueBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -496,8 +479,7 @@ public class CCFGFactory extends CFGFactory
 					continueBlock.getExitNode());
 			continueBlock.addContinueStatement(continueContainer);
 			return continueBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -515,8 +497,7 @@ public class CCFGFactory extends CFGFactory
 			breakBlock.addEdge(breakContainer, breakBlock.getExitNode());
 			breakBlock.addBreakStatement(breakContainer);
 			return breakBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// e.printStackTrace();
 			return newErrorInstance();
@@ -537,8 +518,7 @@ public class CCFGFactory extends CFGFactory
 					CFGEdge.EXCEPT_LABEL);
 			// throwBlock.addEdge(throwContainer, throwBlock.getExitNode());
 			return throwBlock;
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			return newErrorInstance();
@@ -552,8 +532,7 @@ public class CCFGFactory extends CFGFactory
 		{
 			node.accept(structuredFlowVisitior);
 			cfg = (CCFG) structuredFlowVisitior.getCFG();
-		}
-		else
+		} else
 		{
 			cfg = newInstance();
 		}

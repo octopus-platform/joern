@@ -10,8 +10,7 @@ import ast.ASTNodeBuilder;
 public class ASTWalkerEvent
 {
 
-	public enum eventID
-	{
+	public enum eventID {
 		BEGIN, START_OF_UNIT, END_OF_UNIT, PROCESS_ITEM, END
 	};
 

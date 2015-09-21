@@ -18,8 +18,7 @@ public class DummyASTNodeVisitor extends OutModASTNodeVisitor
 		{
 			FunctionDatabaseNode dbNode = new FunctionDatabaseNode();
 			dbNode.initialize(node);
-		}
-		catch (RuntimeException ex)
+		} catch (RuntimeException ex)
 		{
 
 		}

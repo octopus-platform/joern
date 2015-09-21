@@ -45,8 +45,7 @@ public class TryStatement extends BlockStarter
 			try
 			{
 				return getCatchNode(i - 1);
-			}
-			catch (IndexOutOfBoundsException e)
+			} catch (IndexOutOfBoundsException e)
 			{
 				throw new RuntimeException(
 						"Invalid child number for try statement");

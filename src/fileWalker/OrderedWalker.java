@@ -11,12 +11,12 @@ public class OrderedWalker extends SourceFileWalker
 {
 	FileNameMatcher matcher = new FileNameMatcher();
 	List<SourceFileListener> listeners = new LinkedList<SourceFileListener>();
-	
+
 	public OrderedWalker()
 	{
 		setFilenameFilter(DEFAULT_FILENAME_FILTER);
-	}	
-	
+	}
+
 	@Override
 	public void setFilenameFilter(String filter)
 	{
@@ -41,48 +41,49 @@ public class OrderedWalker extends SourceFileWalker
 		File file = new File(dirOrFileName);
 		File[] dirContent = file.listFiles();
 		Path path = file.toPath();
-		
-		
+
 		// if this is not a directory
-		if(dirContent == null) return;
+		if (dirContent == null)
+			return;
 		Arrays.sort(dirContent);
-		
+
 		reportDirectoryEnter(path);
-		
-		for(File f : dirContent){
+
+		for (File f : dirContent)
+		{
 			Path filePath = f.toPath();
 			String absolutePath = f.getAbsolutePath();
-			
-			if(f.isDirectory()){	
+
+			if (f.isDirectory())
+			{
 				walk(absolutePath);
 				continue;
 			}
-			
-			if(matcher.fileMatches(filePath))
+
+			if (matcher.fileMatches(filePath))
 				reportFile(filePath);
 		}
-	
+
 		reportDirectoryLeave(path);
 	}
 
 	private void reportDirectoryEnter(Path path)
 	{
-		for(SourceFileListener listener: listeners )
+		for (SourceFileListener listener : listeners)
 			listener.preVisitDirectory(path);
 	}
-	
+
 	private void reportDirectoryLeave(Path path)
 	{
-		for(SourceFileListener listener: listeners )
+		for (SourceFileListener listener : listeners)
 			listener.postVisitDirectory(path);
 	}
 
 	private void reportFile(Path path)
 	{
-		for(SourceFileListener listener: listeners )
+		for (SourceFileListener listener : listeners)
 			listener.visitFile(path);
 
 	}
 
-	
 }

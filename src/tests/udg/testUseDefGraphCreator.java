@@ -23,16 +23,16 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	CFGToUDGConverter cfgToUDG;
 
 	private static final Map<String, String> functionMap;
+
 	static
 	{
 		Map<String, String> aMap = new HashMap<String, String>();
-		
+
 		aMap.put("condition_test",
 				"int condition_test() { if(x && y) return 0; if(z) return 1; }");
 		aMap.put("udg_test_def_tainted_call", "int f(){foo(x);}");
 		aMap.put("plusEqualsUse", "int f(){ x += y; }");
-		aMap.put(
-				"ddg_test_struct",
+		aMap.put("ddg_test_struct",
 				"int ddg_test_struct(){ struct my_struct foo; foo.bar = 10; copy_somehwere(foo); }");
 
 		functionMap = aMap;
@@ -82,7 +82,6 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		assertOnlyUseForXFound(useDefGraph, "z");
 	}
 
-
 	private UseDefGraph createUDGForFunction(String functionName)
 	{
 		String code = functionMap.get(functionName);
@@ -124,7 +123,8 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		}
 	}
 
-	private void assertDefAndUseForXFound(UseDefGraph useDefGraph, String symbol)
+	private void assertDefAndUseForXFound(UseDefGraph useDefGraph,
+			String symbol)
 	{
 
 		List<UseOrDefRecord> usesAndDefs = useDefGraph
