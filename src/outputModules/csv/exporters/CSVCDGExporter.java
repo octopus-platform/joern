@@ -1,10 +1,10 @@
 package outputModules.csv.exporters;
 
-import outputModules.common.CDGExporter;
-import outputModules.common.Writer;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
 import databaseNodes.EdgeTypes;
+import outputModules.common.CDGExporter;
+import outputModules.common.Writer;
 
 public class CSVCDGExporter extends CDGExporter
 {

@@ -4,7 +4,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import parsing.ModuleParser;
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
 import ast.functionDef.FunctionDef;
@@ -13,6 +12,7 @@ import ast.walking.ASTWalker;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
+import parsing.ModuleParser;
 
 public class CFGCreator
 {

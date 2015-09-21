@@ -1,15 +1,14 @@
 package outputModules.neo4j.exporters;
 
-import neo4j.batchInserter.GraphNodeStore;
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.common.CDGExporter;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
 import databaseNodes.EdgeTypes;
+import neo4j.batchInserter.GraphNodeStore;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import outputModules.common.CDGExporter;
 
 public class Neo4JCDGExporter extends CDGExporter
 {

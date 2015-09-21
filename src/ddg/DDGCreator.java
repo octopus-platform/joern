@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import misc.HashMapOfSets;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.BatchInserterFactory;
 import ddg.DefUseCFG.DefUseCFG;
 import ddg.DefUseCFG.DefUseCFGFactory;
+import misc.HashMapOfSets;
 
 public class DDGCreator
 {

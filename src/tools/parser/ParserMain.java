@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import outputModules.csv.ParserCSVOutput;
-import outputModules.neo4j.ParserNeo4JOutput;
 import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
+import outputModules.csv.ParserCSVOutput;
+import outputModules.neo4j.ParserNeo4JOutput;
 
 /**
  * Main Class for the parser: This class processes command line arguments and

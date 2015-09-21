@@ -3,11 +3,11 @@ package outputModules.csv.exporters;
 import java.util.HashMap;
 import java.util.Map;
 
+import databaseNodes.EdgeTypes;
+import databaseNodes.NodeKeys;
 import outputModules.common.UDGExporter;
 import outputModules.common.Writer;
 import udg.useDefGraph.UseOrDefRecord;
-import databaseNodes.EdgeTypes;
-import databaseNodes.NodeKeys;
 
 public class CSVUDGExporter extends UDGExporter
 {

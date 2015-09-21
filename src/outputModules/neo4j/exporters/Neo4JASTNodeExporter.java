@@ -2,10 +2,10 @@ package outputModules.neo4j.exporters;
 
 import java.util.Map;
 
-import neo4j.batchInserter.GraphNodeStore;
-import outputModules.common.ASTNodeExporter;
 import ast.ASTNode;
 import databaseNodes.DatabaseNode;
+import neo4j.batchInserter.GraphNodeStore;
+import outputModules.common.ASTNodeExporter;
 
 public abstract class Neo4JASTNodeExporter extends ASTNodeExporter
 {

@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import udg.useDefAnalysis.ASTDefUseAnalyzer;
-import udg.useDefGraph.UseDefGraph;
-import udg.useDefGraph.UseOrDef;
 import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
+import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import udg.useDefGraph.UseDefGraph;
+import udg.useDefGraph.UseOrDef;
 
 public class CFGToUDGConverter
 {

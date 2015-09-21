@@ -1,10 +1,9 @@
 package cdg;
 
-import graphutils.Edge;
-
 import java.util.Map;
 
 import cfg.nodes.CFGNode;
+import graphutils.Edge;
 
 public class CDGEdge extends Edge<CFGNode>
 {

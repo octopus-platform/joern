@@ -28,9 +28,9 @@ import cfg.CFGFactory;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGErrorNode;
+import cfg.nodes.CFGExceptionNode;
 import cfg.nodes.CFGExitNode;
 import cfg.nodes.CFGNode;
-import cfg.nodes.CFGExceptionNode;
 import cfg.nodes.InfiniteForNode;
 
 public class CCFGFactory extends CFGFactory

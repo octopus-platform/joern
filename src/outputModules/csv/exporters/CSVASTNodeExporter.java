@@ -2,10 +2,10 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import outputModules.common.ASTNodeExporter;
-import outputModules.common.Writer;
 import ast.ASTNode;
 import databaseNodes.DatabaseNode;
+import outputModules.common.ASTNodeExporter;
+import outputModules.common.Writer;
 
 public abstract class CSVASTNodeExporter extends ASTNodeExporter
 {

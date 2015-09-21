@@ -2,13 +2,9 @@ package outputModules.neo4j.exporters;
 
 import java.util.Map;
 
-import neo4j.batchInserter.GraphNodeStore;
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.common.FunctionExporter;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
@@ -16,6 +12,9 @@ import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
+import neo4j.batchInserter.GraphNodeStore;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import outputModules.common.FunctionExporter;
 
 // Stays alive while importing a function into
 // the database

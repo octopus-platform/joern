@@ -1,10 +1,10 @@
 package tests.cfgCreation;
 
-import tests.parseTreeToAST.FunctionContentTestUtil;
 import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.CFGNode;
 import languages.c.cfg.CCFGFactory;
+import tests.parseTreeToAST.FunctionContentTestUtil;
 
 public class CFGCreatorTest
 {

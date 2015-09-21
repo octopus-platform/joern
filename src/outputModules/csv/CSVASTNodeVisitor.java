@@ -1,15 +1,15 @@
 package outputModules.csv;
 
+import ast.declarations.ClassDefStatement;
+import ast.functionDef.FunctionDef;
+import ast.statements.IdentifierDeclStatement;
+import databaseNodes.EdgeTypes;
 import outputModules.common.ASTNodeExporter;
 import outputModules.common.OutModASTNodeVisitor;
 import outputModules.common.Writer;
 import outputModules.csv.exporters.CSVClassDefExporter;
 import outputModules.csv.exporters.CSVDeclStmtExporter;
 import outputModules.csv.exporters.CSVFunctionExporter;
-import ast.declarations.ClassDefStatement;
-import ast.functionDef.FunctionDef;
-import ast.statements.IdentifierDeclStatement;
-import databaseNodes.EdgeTypes;
 
 public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 {

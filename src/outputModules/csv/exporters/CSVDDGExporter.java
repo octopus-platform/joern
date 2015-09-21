@@ -2,10 +2,10 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import outputModules.common.DDGExporter;
-import outputModules.common.Writer;
 import databaseNodes.EdgeTypes;
 import ddg.DataDependenceGraph.DefUseRelation;
+import outputModules.common.DDGExporter;
+import outputModules.common.Writer;
 
 public class CSVDDGExporter extends DDGExporter
 {

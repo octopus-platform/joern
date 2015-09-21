@@ -3,11 +3,11 @@ package cfg;
 import java.util.LinkedList;
 import java.util.List;
 
-import graphutils.AbstractTwoWayGraph;
 import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGErrorNode;
 import cfg.nodes.CFGExitNode;
 import cfg.nodes.CFGNode;
+import graphutils.AbstractTwoWayGraph;
 
 /**
  * Control Flow Graph. Consider this to be the target format of CFGFactories.

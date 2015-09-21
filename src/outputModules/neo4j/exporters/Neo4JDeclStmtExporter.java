@@ -2,15 +2,14 @@ package outputModules.neo4j.exporters;
 
 import java.util.Map;
 
-import neo4j.batchInserter.GraphNodeStore;
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.common.DeclStmtExporter;
 import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
+import neo4j.batchInserter.GraphNodeStore;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import outputModules.common.DeclStmtExporter;
 
 public class Neo4JDeclStmtExporter extends DeclStmtExporter
 {

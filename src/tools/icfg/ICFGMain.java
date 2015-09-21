@@ -1,10 +1,9 @@
 package tools.icfg;
 
-import neo4j.batchInserter.ImportedNodeListener;
-import neo4j.batchInserter.ImportedNodeWalker;
-
 import org.apache.commons.cli.ParseException;
 
+import neo4j.batchInserter.ImportedNodeListener;
+import neo4j.batchInserter.ImportedNodeWalker;
 import tools.GraphDbWalker;
 
 public class ICFGMain extends GraphDbWalker

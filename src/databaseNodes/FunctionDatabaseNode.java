@@ -3,9 +3,6 @@ package databaseNodes;
 import java.util.HashMap;
 import java.util.Map;
 
-import languages.c.parsing.CodeLocation;
-import udg.CFGToUDGConverter;
-import udg.useDefGraph.UseDefGraph;
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
 import cdg.CDG;
@@ -16,6 +13,9 @@ import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
+import languages.c.parsing.CodeLocation;
+import udg.CFGToUDGConverter;
+import udg.useDefGraph.UseDefGraph;
 
 // Note: we currently use the FunctionDatabaseNode
 // as a container for the Function. That's not very

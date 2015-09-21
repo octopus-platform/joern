@@ -2,8 +2,6 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import outputModules.common.FunctionExporter;
-import outputModules.common.Writer;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
@@ -11,6 +9,8 @@ import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
+import outputModules.common.FunctionExporter;
+import outputModules.common.Writer;
 
 public class CSVFunctionExporter extends FunctionExporter
 {

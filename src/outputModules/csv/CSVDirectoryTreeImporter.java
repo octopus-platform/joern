@@ -3,9 +3,9 @@ package outputModules.csv;
 import java.io.File;
 import java.util.Map;
 
+import databaseNodes.FileDatabaseNode;
 import outputModules.common.DirectoryTreeExporter;
 import outputModules.common.Writer;
-import databaseNodes.FileDatabaseNode;
 
 public class CSVDirectoryTreeImporter extends DirectoryTreeExporter
 {

@@ -3,8 +3,8 @@ package outputModules.common;
 import java.nio.file.Path;
 import java.util.Stack;
 
-import tools.parser.ParserState;
 import databaseNodes.FileDatabaseNode;
+import tools.parser.ParserState;
 
 public abstract class DirectoryTreeExporter
 {

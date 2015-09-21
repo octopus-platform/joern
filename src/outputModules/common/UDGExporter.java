@@ -3,10 +3,10 @@ package outputModules.common;
 import java.util.Iterator;
 import java.util.List;
 
+import databaseNodes.FunctionDatabaseNode;
 import misc.MultiHashMap;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
-import databaseNodes.FunctionDatabaseNode;
 
 public abstract class UDGExporter
 {

@@ -1,7 +1,7 @@
 package outputModules.dummy;
 
-import outputModules.common.DirectoryTreeExporter;
 import databaseNodes.FileDatabaseNode;
+import outputModules.common.DirectoryTreeExporter;
 
 public class DummyDirectoryTreeImporter extends DirectoryTreeExporter
 {

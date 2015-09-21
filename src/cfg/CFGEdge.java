@@ -1,11 +1,10 @@
 package cfg;
 
-import graphutils.Edge;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import cfg.nodes.CFGNode;
+import graphutils.Edge;
 
 public class CFGEdge extends Edge<CFGNode>
 {

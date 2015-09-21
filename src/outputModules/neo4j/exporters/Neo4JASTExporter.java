@@ -2,17 +2,16 @@ package outputModules.neo4j.exporters;
 
 import java.util.Map;
 
-import neo4j.batchInserter.GraphNodeStore;
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.common.ASTExporter;
 import ast.ASTNode;
 import databaseNodes.ASTDatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
+import neo4j.batchInserter.GraphNodeStore;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import outputModules.common.ASTExporter;
 
 public class Neo4JASTExporter extends ASTExporter
 {

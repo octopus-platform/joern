@@ -1,9 +1,9 @@
 package cdg;
 
-import graphutils.AbstractTwoWayGraph;
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.nodes.CFGNode;
+import graphutils.AbstractTwoWayGraph;
 
 /**
  * A reverse control flow graph augmented with an edge from the exit node to the

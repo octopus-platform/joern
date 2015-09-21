@@ -2,12 +2,12 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import outputModules.common.ClassDefExporter;
-import outputModules.common.Writer;
 import databaseNodes.ClassDefDatabaseNode;
 import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
+import outputModules.common.ClassDefExporter;
+import outputModules.common.Writer;
 
 public class CSVClassDefExporter extends ClassDefExporter
 {

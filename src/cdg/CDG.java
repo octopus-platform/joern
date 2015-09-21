@@ -1,10 +1,9 @@
 package cdg;
 
-import graphutils.AbstractGraph;
-
 import java.util.Set;
 
 import cfg.nodes.CFGNode;
+import graphutils.AbstractGraph;
 
 public class CDG extends AbstractGraph<CFGNode, CDGEdge>
 {

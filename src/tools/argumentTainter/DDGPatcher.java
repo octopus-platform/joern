@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import neo4j.readWriteDB.Neo4JDBInterface;
-import neo4j.traversals.readWriteDB.Traversals;
-
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
@@ -19,6 +16,8 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DDGDifference;
 import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.DefUseCFG;
+import neo4j.readWriteDB.Neo4JDBInterface;
+import neo4j.traversals.readWriteDB.Traversals;
 
 public class DDGPatcher
 {

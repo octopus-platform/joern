@@ -2,11 +2,11 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import outputModules.common.CFGExporter;
-import outputModules.common.Writer;
 import cfg.nodes.CFGNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
+import outputModules.common.CFGExporter;
+import outputModules.common.Writer;
 
 public class CSVCFGExporter extends CFGExporter
 {

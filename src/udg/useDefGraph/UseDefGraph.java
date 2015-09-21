@@ -2,8 +2,8 @@ package udg.useDefGraph;
 
 import java.util.List;
 
-import misc.MultiHashMap;
 import ast.ASTNode;
+import misc.MultiHashMap;
 
 public class UseDefGraph
 {

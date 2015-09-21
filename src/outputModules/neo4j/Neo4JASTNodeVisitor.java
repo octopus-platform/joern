@@ -1,19 +1,18 @@
 package outputModules.neo4j;
 
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import ast.declarations.ClassDefStatement;
+import ast.functionDef.FunctionDef;
+import ast.statements.IdentifierDeclStatement;
+import databaseNodes.EdgeTypes;
+import neo4j.batchInserter.Neo4JBatchInserter;
 import outputModules.common.ASTNodeExporter;
 import outputModules.common.OutModASTNodeVisitor;
 import outputModules.neo4j.exporters.Neo4JClassDefExporter;
 import outputModules.neo4j.exporters.Neo4JDeclStmtExporter;
 import outputModules.neo4j.exporters.Neo4JFunctionExporter;
-import ast.declarations.ClassDefStatement;
-import ast.functionDef.FunctionDef;
-import ast.statements.IdentifierDeclStatement;
-import databaseNodes.EdgeTypes;
 
 // Stays alive during the lifetime of the program
 

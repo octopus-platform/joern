@@ -3,13 +3,12 @@ package neo4j.traversals.batchInserter;
 import java.util.LinkedList;
 import java.util.List;
 
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.unsafe.batchinsert.BatchRelationship;
 
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
+import neo4j.batchInserter.Neo4JBatchInserter;
 
 public class CFG
 {

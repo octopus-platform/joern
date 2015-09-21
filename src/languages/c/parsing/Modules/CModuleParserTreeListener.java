@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import parsing.ANTLRParserDriver;
-import parsing.CompoundItemAssembler;
 import ast.declarations.IdentifierDecl;
 import ast.logical.statements.CompoundStatement;
 import ast.statements.IdentifierDeclStatement;
@@ -20,6 +18,8 @@ import languages.c.parsing.ModuleFunctionParserInterface;
 import languages.c.parsing.Modules.builder.FunctionDefBuilder;
 import languages.c.parsing.Shared.builders.ClassDefBuilder;
 import languages.c.parsing.Shared.builders.IdentifierDeclBuilder;
+import parsing.ANTLRParserDriver;
+import parsing.CompoundItemAssembler;
 
 // Converts Parse Trees to ASTs for Modules
 

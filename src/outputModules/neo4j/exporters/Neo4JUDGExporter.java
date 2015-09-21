@@ -3,16 +3,15 @@ package outputModules.neo4j.exporters;
 import java.util.HashMap;
 import java.util.Map;
 
-import neo4j.batchInserter.GraphNodeStore;
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import outputModules.common.UDGExporter;
-import udg.useDefGraph.UseOrDefRecord;
 import databaseNodes.EdgeTypes;
 import databaseNodes.NodeKeys;
+import neo4j.batchInserter.GraphNodeStore;
+import neo4j.batchInserter.Neo4JBatchInserter;
+import outputModules.common.UDGExporter;
+import udg.useDefGraph.UseOrDefRecord;
 
 public class Neo4JUDGExporter extends UDGExporter
 {

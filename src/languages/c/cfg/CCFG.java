@@ -6,8 +6,8 @@ import java.util.List;
 
 import cfg.CFG;
 import cfg.CFGEdge;
-import cfg.nodes.CFGNode;
 import cfg.nodes.CFGExceptionNode;
+import cfg.nodes.CFGNode;
 
 public class CCFG extends CFG
 {

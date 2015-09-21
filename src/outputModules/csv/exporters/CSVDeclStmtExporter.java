@@ -2,10 +2,10 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import outputModules.common.DeclStmtExporter;
-import outputModules.common.Writer;
 import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
+import outputModules.common.DeclStmtExporter;
+import outputModules.common.Writer;
 
 public class CSVDeclStmtExporter extends DeclStmtExporter
 {

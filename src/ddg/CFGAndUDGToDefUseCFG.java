@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import ast.ASTNode;
-import misc.MultiHashMap;
-import udg.useDefGraph.UseDefGraph;
-import udg.useDefGraph.UseOrDefRecord;
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
 import ddg.DefUseCFG.DefUseCFG;
+import misc.MultiHashMap;
+import udg.useDefGraph.UseDefGraph;
+import udg.useDefGraph.UseOrDefRecord;
 
 public class CFGAndUDGToDefUseCFG
 {

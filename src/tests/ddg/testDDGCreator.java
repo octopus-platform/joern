@@ -5,16 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
-import neo4j.traversals.batchInserter.Elementary;
-import neo4j.traversals.batchInserter.Function;
-
 import org.junit.Test;
 import org.neo4j.graphdb.index.IndexHits;
 
-import tests.TestDBTestsBatchInserter;
-import tests.udg.CFGCreator;
-import udg.CFGToUDGConverter;
-import udg.useDefGraph.UseDefGraph;
 import cfg.CFG;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
@@ -22,6 +15,12 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.BatchInserterFactory;
 import ddg.DefUseCFG.DefUseCFG;
+import neo4j.traversals.batchInserter.Elementary;
+import neo4j.traversals.batchInserter.Function;
+import tests.TestDBTestsBatchInserter;
+import tests.udg.CFGCreator;
+import udg.CFGToUDGConverter;
+import udg.useDefGraph.UseDefGraph;
 
 public class testDDGCreator extends TestDBTestsBatchInserter
 {

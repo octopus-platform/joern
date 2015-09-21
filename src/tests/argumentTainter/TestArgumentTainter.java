@@ -6,19 +6,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import neo4j.readWriteDB.Neo4JDBInterface;
-import neo4j.traversals.readWriteDB.Traversals;
-
 import org.junit.Test;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.IndexHits;
 
-import tests.TestDBTestReadWriteDB;
-import tools.argumentTainter.DefUseCFGPatcher;
-import tools.argumentTainter.DefUseCFGPatcher.DefUseLink;
 import ddg.DefUseCFG.DefUseCFG;
 import ddg.DefUseCFG.DefUseCFGFactory;
 import ddg.DefUseCFG.ReadWriteDbFactory;
+import neo4j.traversals.readWriteDB.Traversals;
+import tests.TestDBTestReadWriteDB;
+import tools.argumentTainter.DefUseCFGPatcher;
+import tools.argumentTainter.DefUseCFGPatcher.DefUseLink;
 
 public class TestArgumentTainter extends TestDBTestReadWriteDB
 {

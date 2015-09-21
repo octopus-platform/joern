@@ -1,9 +1,9 @@
 package tests;
 
-import neo4j.batchInserter.Neo4JBatchInserter;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
+import neo4j.batchInserter.Neo4JBatchInserter;
 
 public class TestDBTestsBatchInserter
 {

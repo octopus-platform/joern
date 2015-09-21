@@ -1,9 +1,5 @@
 package cdg;
 
-import graphutils.AbstractTwoWayGraph;
-import graphutils.Edge;
-import graphutils.PostorderIterator;
-
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
@@ -13,6 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+
+import graphutils.AbstractTwoWayGraph;
+import graphutils.Edge;
+import graphutils.PostorderIterator;
 
 public class DominatorTree<V>
 {

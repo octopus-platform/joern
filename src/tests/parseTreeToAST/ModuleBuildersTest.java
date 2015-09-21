@@ -4,13 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import languages.c.antlr.ModuleLexer;
-import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
-import parsing.TokenSubStream;
 import ast.ASTNode;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
@@ -19,6 +15,9 @@ import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterType;
 import ast.statements.IdentifierDeclStatement;
+import languages.c.antlr.ModuleLexer;
+import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
+import parsing.TokenSubStream;
 
 public class ModuleBuildersTest
 {
