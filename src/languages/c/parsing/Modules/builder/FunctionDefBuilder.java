@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import ast.ASTNodeBuilder;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
-import ast.functionDef.ParameterList;
 import ast.functionDef.ReturnType;
 import ast.logical.statements.CompoundStatement;
 import languages.c.antlr.ModuleParser.Function_nameContext;
@@ -35,7 +34,7 @@ public class FunctionDefBuilder extends ASTNodeBuilder
 	public void setName(Function_nameContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
-		thisItem.setName(new Identifier());
+		thisItem.addChild(new Identifier());
 		ASTNodeFactory.initializeFromContext(thisItem.getName(), ctx);
 	}
 
@@ -47,14 +46,14 @@ public class FunctionDefBuilder extends ASTNodeBuilder
 		returnType
 				.setBaseType(ParseTreeUtils.childTokenString(ctx.type_name()));
 		returnType.setCompleteType(ParseTreeUtils.childTokenString(ctx));
-		thisItem.setReturnType(returnType);
+		thisItem.addChild(returnType);
 	}
 
 	public void setParameterList(Function_param_listContext ctx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
 		paramListBuilder.createNew(ctx);
-		thisItem.setParameterList((ParameterList) paramListBuilder.getItem());
+		thisItem.addChild(paramListBuilder.getItem());
 	}
 
 	public void addParameter(Parameter_declContext ctx,
@@ -65,7 +64,7 @@ public class FunctionDefBuilder extends ASTNodeBuilder
 
 	public void setContent(CompoundStatement functionContent)
 	{
-		thisItem.setContent(functionContent);
+		thisItem.addChild(functionContent);
 	}
 
 }

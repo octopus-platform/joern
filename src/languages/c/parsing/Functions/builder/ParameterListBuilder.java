@@ -36,10 +36,10 @@ public class ParameterListBuilder extends ASTNodeBuilder
 				.childTokenString(ctx.param_decl_specifiers());
 		String completeType = determineCompleteType(parameter_id, baseType);
 
-		param.type.setBaseType(baseType);
-		param.type.setCompleteType(completeType);
+		param.getType().setBaseType(baseType);
+		param.getType().setCompleteType(completeType);
 
-		thisItem.addParameter(param);
+		thisItem.addChild(param);
 	}
 
 	public String determineCompleteType(Parameter_idContext parameter_id,

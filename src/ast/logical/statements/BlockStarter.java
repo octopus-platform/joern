@@ -22,7 +22,7 @@ public class BlockStarter extends Statement
 		statement = aStatement;
 	}
 
-	public void setCondition(Condition expression)
+	protected void setCondition(Condition expression)
 	{
 		condition = expression;
 	}

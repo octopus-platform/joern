@@ -13,6 +13,18 @@ public class FunctionDef extends ASTNode
 	private ParameterList parameterList = new ParameterList();
 	private CompoundStatement content = new CompoundStatement();
 
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof CompoundStatement)
+			setContent((CompoundStatement) node);
+		else if (node instanceof ParameterList)
+			setParameterList((ParameterList) node);
+		else if (node instanceof Identifier)
+			setName((Identifier) node);
+
+		super.addChild(node);
+	}
+
 	public CompoundStatement getContent()
 	{
 		return content;
@@ -35,10 +47,9 @@ public class FunctionDef extends ASTNode
 		return retval;
 	}
 
-	public void setContent(CompoundStatement functionContent)
+	private void setContent(CompoundStatement functionContent)
 	{
-		content = functionContent;
-		addChild(content);
+		this.content = functionContent;
 	}
 
 	public void accept(ASTNodeVisitor visitor)
@@ -51,15 +62,9 @@ public class FunctionDef extends ASTNode
 		return parameterList;
 	}
 
-	public void setParameterList(ParameterList parameterList)
+	private void setParameterList(ParameterList parameterList)
 	{
 		this.parameterList = parameterList;
-		this.addChild(this.parameterList);
-	}
-
-	public void setReturnType(ReturnType returnType)
-	{
-		this.addChild(returnType);
 	}
 
 	public Identifier getName()
@@ -67,7 +72,7 @@ public class FunctionDef extends ASTNode
 		return name;
 	}
 
-	public void setName(Identifier name)
+	private void setName(Identifier name)
 	{
 		this.name = name;
 	}

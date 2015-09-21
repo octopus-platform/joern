@@ -6,7 +6,9 @@ import ast.ASTNode;
 import ast.expressions.AssignmentExpr;
 import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
+import ast.expressions.Identifier;
 import ast.functionDef.Parameter;
+import ast.functionDef.ParameterType;
 import ast.logical.statements.Statement;
 import languages.c.antlr.FunctionParser.InitDeclWithAssignContext;
 import languages.c.antlr.FunctionParser.StatementContext;
@@ -66,12 +68,14 @@ public class ASTNodeFactory
 		Parameter_declContext paramCtx = (Parameter_declContext) ctx;
 		Parameter_nameContext paramName = getNameOfParameter(paramCtx);
 
-		initializeFromContext(param.type, ctx);
-		initializeFromContext(param.name, paramName);
+		Identifier name = new Identifier();
+		ParameterType type = new ParameterType();
+		initializeFromContext(type, ctx);
+		initializeFromContext(name, paramName);
 		initializeFromContext(param, ctx);
 
-		param.addChild(param.type);
-		param.addChild(param.name);
+		param.addChild(type);
+		param.addChild(name);
 
 		return param;
 	}

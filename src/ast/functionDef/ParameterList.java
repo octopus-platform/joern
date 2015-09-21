@@ -9,6 +9,13 @@ import ast.walking.ASTNodeVisitor;
 public class ParameterList extends ASTNode
 {
 
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof Parameter)
+			addParameter((Parameter) node);
+		super.addChild(node);
+	}
+
 	// TODO: we don't want to give back a reference to the list,
 	// we need to provide iterators for type and name
 
@@ -17,10 +24,9 @@ public class ParameterList extends ASTNode
 		return parameters;
 	}
 
-	public void addParameter(Parameter aParam)
+	private void addParameter(Parameter aParam)
 	{
 		parameters.add(aParam);
-		this.addChild(aParam);
 	}
 
 	private LinkedList<Parameter> parameters = new LinkedList<Parameter>();

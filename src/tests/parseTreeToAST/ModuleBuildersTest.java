@@ -145,7 +145,7 @@ public class ModuleBuildersTest
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 
 		System.out.println(codeItem.getChildCount());
-		assertTrue(codeItem.getChildCount() == 3);
+		assertTrue(codeItem.getChildCount() == 4);
 	}
 
 	@Test
@@ -179,7 +179,7 @@ public class ModuleBuildersTest
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		Identifier name = codeItem.getParameterList().getParameters()
-				.get(0).name;
+				.get(0).getName();
 		assertTrue(name.getEscapedCodeStr().equals("myParam"));
 	}
 
@@ -190,7 +190,7 @@ public class ModuleBuildersTest
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		ParameterType type = codeItem.getParameterList().getParameters()
-				.get(0).type;
+				.get(0).getType();
 		System.out.println(type.getEscapedCodeStr());
 		assertTrue(type.getEscapedCodeStr().equals("char *"));
 	}
@@ -211,7 +211,7 @@ public class ModuleBuildersTest
 		String input = "int foo(){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.getChildCount() == 3);
+		assertTrue(codeItem.getChildCount() == 4);
 		assertTrue(codeItem.getParameterList().getEscapedCodeStr().equals(""));
 	}
 

@@ -11,23 +11,21 @@ public class IdentifierDecl extends ASTNode
 	public void addChild(ASTNode node)
 	{
 		if (node instanceof Identifier)
-		{
 			setName((Identifier) node);
-			return;
-		}
+		else if (node instanceof IdentifierDeclType)
+			setType((IdentifierDeclType) node);
+
 		super.addChild(node);
 	}
 
-	public void setName(Identifier name)
+	private void setName(Identifier name)
 	{
 		this.name = name;
-		super.addChild(name);
 	}
 
-	public void setType(IdentifierDeclType type)
+	private void setType(IdentifierDeclType type)
 	{
 		this.type = type;
-		super.addChild(type);
 	}
 
 	public Identifier getName()

@@ -16,12 +16,12 @@ public class BinaryExpression extends Expression
 		return subExpressions[1];
 	}
 
-	public void setLeft(Expression aLeft)
+	private void setLeft(Expression aLeft)
 	{
 		subExpressions[0] = aLeft;
 	}
 
-	public void setRight(Expression aRight)
+	private void setRight(Expression aRight)
 	{
 		subExpressions[1] = aRight;
 	}
