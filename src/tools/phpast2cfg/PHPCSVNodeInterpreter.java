@@ -4,6 +4,10 @@ import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
+import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
@@ -22,6 +26,18 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			break;
 		case "AST_STMT_LIST":
 			handleCompound(row, ast);
+			break;
+		case "AST_IF":
+			handleIf(row, ast);
+			break;
+		case "AST_WHILE":
+			handleWhile(row, ast);
+			break;
+		case "AST_DO_WHILE":
+			handleDo(row, ast);
+			break;
+		case "AST_FOR":
+			handleFor(row, ast);
 			break;
 
 		default:
@@ -57,8 +73,36 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private void handleCompound(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
-		CompoundStatement compound = new CompoundStatement();
-		ast.addNodeWithId(compound, id);
+		CompoundStatement newNode = new CompoundStatement();
+		ast.addNodeWithId(newNode, id);
+	}
+
+	private void handleIf(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		IfStatement newNode = new IfStatement();
+		ast.addNodeWithId(newNode, id);
+	}
+
+	private void handleFor(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ForStatement newNode = new ForStatement();
+		ast.addNodeWithId(newNode, id);
+	}
+
+	private void handleDo(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		DoStatement newNode = new DoStatement();
+		ast.addNodeWithId(newNode, id);
+	}
+
+	private void handleWhile(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		WhileStatement newNode = new WhileStatement();
+		ast.addNodeWithId(newNode, id);
 	}
 
 }
