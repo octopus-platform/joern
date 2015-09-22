@@ -31,11 +31,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private void defaultHandler(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		String type = row.getFieldForKey("type");
-		Long id = Long.parseLong(row.getFieldForKey("nodeId"));
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 
 		ASTNode newNode = new ASTNode();
-		newNode.setProperty("type", type);
+		newNode.setProperty(PHPCSVNodeTypes.TYPE, type);
 		ast.addNodeWithId(newNode, id);
 	}
 
@@ -45,18 +45,18 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		FunctionDef newNode = new FunctionDef();
 		Identifier nameNode = new Identifier();
 
-		String name = row.getFieldForKey("name");
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		nameNode.setCodeStr(name);
 		newNode.addChild(nameNode);
 
-		Long id = Long.parseLong(row.getFieldForKey("nodeId"));
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
 		ast.setRootNode(newNode);
 	}
 
 	private void handleCompound(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		Long id = Long.parseLong(row.getFieldForKey("nodeId"));
+		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		CompoundStatement compound = new CompoundStatement();
 		ast.addNodeWithId(compound, id);
 	}
