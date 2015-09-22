@@ -17,7 +17,10 @@ public class KeyedCSVRow
 
 	public String getFieldForKey(String key)
 	{
-		return values.get(key);
+		String val = values.get(key);
+		if (val == null)
+			return "";
+		return val;
 	}
 
 	public void initFromCSVRecord(CSVRecord record)
