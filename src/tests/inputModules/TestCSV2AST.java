@@ -11,16 +11,19 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
+import ast.logical.statements.CompoundStatement;
 import inputModules.csv.csv2ast.CSV2AST;
 
 public class TestCSV2AST
 {
 
+	String edgeFileHeader = "START_ID, END_ID, TYPE";
+
 	@Test
 	public void testMethodCreation() throws IOException
 	{
 		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
-		FunctionDef func = createASTFromString(str);
+		FunctionDef func = createASTFromStrings(str, edgeFileHeader);
 		assertTrue(func != null);
 	}
 
@@ -28,7 +31,7 @@ public class TestCSV2AST
 	public void testMethodName() throws IOException
 	{
 		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
-		FunctionDef funcDef = createASTFromString(str);
+		FunctionDef funcDef = createASTFromStrings(str, edgeFileHeader);
 		assertEquals("foo", funcDef.getName().getEscapedCodeStr());
 	}
 
@@ -36,7 +39,7 @@ public class TestCSV2AST
 	public void testMissingMethodName() throws IOException
 	{
 		String str = "nodeId:ID,type\n1,AST_METHOD";
-		FunctionDef funcDef = createASTFromString(str);
+		FunctionDef funcDef = createASTFromStrings(str, edgeFileHeader);
 		assertEquals("", funcDef.getName().getEscapedCodeStr());
 	}
 
@@ -44,17 +47,31 @@ public class TestCSV2AST
 	public void testEdgeBetweenFuncAndName() throws IOException
 	{
 		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
-		FunctionDef funcDef = createASTFromString(str);
+		FunctionDef funcDef = createASTFromStrings(str, edgeFileHeader);
 		ASTNode child = funcDef.getChild(0);
 		assertTrue(child instanceof Identifier);
 	}
 
-	private FunctionDef createASTFromString(String str) throws IOException
+	@Test
+	public void testSimpleEdgeImport() throws IOException
+	{
+		String nodeStr = "nodeId:ID,type,name\n1,AST_METHOD,foo\n"
+				+ "2,AST_STMT_LIST\n" + "3,AST_ASSIGN";
+		String edgeStr = "START_ID,END_ID,TYPE\n1,2\n2,3\n";
+
+		FunctionDef funcDef = createASTFromStrings(nodeStr, edgeStr);
+		CompoundStatement content = funcDef.getContent();
+		assertEquals(1, content.getChildCount());
+	}
+
+	private FunctionDef createASTFromStrings(String nodeStr, String edgeStr)
+			throws IOException
 	{
 		CSV2AST csv2AST = new CSV2AST();
-		StringReader nodeReader = new StringReader(str);
+		StringReader nodeReader = new StringReader(nodeStr);
+		StringReader edgeReader = new StringReader(edgeStr);
 		csv2AST.setLanguage("PHP");
-		return csv2AST.convert(nodeReader, null);
+		return csv2AST.convert(nodeReader, edgeReader);
 	}
 
 }

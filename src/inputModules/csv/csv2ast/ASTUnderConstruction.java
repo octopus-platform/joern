@@ -15,7 +15,7 @@ public class ASTUnderConstruction
 		return rootNode;
 	}
 
-	public void addNodeWithId(FunctionDef newNode, Long id)
+	public void addNodeWithId(ASTNode newNode, Long id)
 	{
 		idToNode.put(id, newNode);
 	}
@@ -23,5 +23,10 @@ public class ASTUnderConstruction
 	public void setRootNode(FunctionDef node)
 	{
 		rootNode = node;
+	}
+
+	public ASTNode getNodeById(Long id)
+	{
+		return idToNode.get(id);
 	}
 }
