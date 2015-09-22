@@ -10,11 +10,6 @@ public class CompoundStatement extends Statement
 {
 	protected static final List<ASTNode> emptyList = new LinkedList<ASTNode>();
 
-	public void addStatement(ASTNode stmt)
-	{
-		super.addChild(stmt);
-	}
-
 	public List<ASTNode> getStatements()
 	{
 		if (children == null)

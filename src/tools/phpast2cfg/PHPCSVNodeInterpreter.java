@@ -18,7 +18,15 @@ public class PHPCSVNodeInterpreter implements CSVNodeInterpreter
 		case "AST_METHOD":
 			handleFunction(row, ast);
 			break;
+		default:
+			defaultHandler(row, ast);
 		}
+	}
+
+	private void defaultHandler(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 	private static void handleFunction(KeyedCSVRow row,

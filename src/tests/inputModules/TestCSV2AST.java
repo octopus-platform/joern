@@ -8,6 +8,8 @@ import java.io.StringReader;
 
 import org.junit.Test;
 
+import ast.ASTNode;
+import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import inputModules.csv.csv2ast.CSV2AST;
 
@@ -36,6 +38,15 @@ public class TestCSV2AST
 		String str = "nodeId:ID,type\n1,AST_METHOD";
 		FunctionDef funcDef = createASTFromString(str);
 		assertEquals("", funcDef.getName().getEscapedCodeStr());
+	}
+
+	@Test
+	public void testEdgeBetweenFuncAndName() throws IOException
+	{
+		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
+		FunctionDef funcDef = createASTFromString(str);
+		ASTNode child = funcDef.getChild(0);
+		assertTrue(child instanceof Identifier);
 	}
 
 	private FunctionDef createASTFromString(String str) throws IOException

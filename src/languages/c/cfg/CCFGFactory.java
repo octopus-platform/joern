@@ -527,16 +527,11 @@ public class CCFGFactory extends CFGFactory
 
 	public static CCFG convert(ASTNode node)
 	{
-		CCFG cfg;
-		if (node != null)
-		{
-			node.accept(structuredFlowVisitior);
-			cfg = (CCFG) structuredFlowVisitior.getCFG();
-		} else
-		{
-			cfg = newInstance();
-		}
-		return cfg;
+		if (node == null)
+			return newInstance();
+
+		node.accept(structuredFlowVisitior);
+		return (CCFG) structuredFlowVisitior.getCFG();
 	}
 
 	public static void fixBreakStatements(CCFG thisCFG, CFGNode target)

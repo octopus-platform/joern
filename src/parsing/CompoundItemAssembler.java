@@ -33,7 +33,7 @@ public class CompoundItemAssembler extends ASTWalker
 	@Override
 	public void processItem(ASTNode item, Stack<ASTNodeBuilder> itemStack)
 	{
-		compoundItem.addStatement(item);
+		compoundItem.addChild(item);
 	}
 
 }

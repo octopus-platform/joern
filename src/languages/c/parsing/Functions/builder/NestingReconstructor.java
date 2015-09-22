@@ -59,7 +59,7 @@ public class NestingReconstructor
 		if (topOfStack instanceof CompoundStatement)
 		{
 			CompoundStatement compound = (CompoundStatement) topOfStack;
-			compound.addStatement(stmt);
+			compound.addChild(stmt);
 		} else
 		{
 			consolidateBlockStarters(stmt);
