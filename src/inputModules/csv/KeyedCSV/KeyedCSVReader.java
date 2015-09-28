@@ -53,6 +53,7 @@ public class KeyedCSVReader
 	public KeyedCSVRow getNextRow()
 	{
 		CSVRecord record;
+
 		try
 		{
 			record = iterator.next();
