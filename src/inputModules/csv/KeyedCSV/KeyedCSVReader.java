@@ -38,7 +38,7 @@ public class KeyedCSVReader
 
 	}
 
-	protected int getCurrentLineNumber()
+	public int getCurrentLineNumber()
 	{
 		return currentLineNumber;
 	}
