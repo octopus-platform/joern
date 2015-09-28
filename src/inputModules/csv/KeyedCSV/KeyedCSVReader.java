@@ -14,11 +14,13 @@ public class KeyedCSVReader
 	private CSVKey[] keys;
 	private CSVParser parser;
 	private Iterator<CSVRecord> iterator;
+	private int currentLineNumber;
 
 	public void init(Reader reader) throws IOException
 	{
 		parser = CSVFormat.DEFAULT.parse(reader);
 		initKeys();
+		currentLineNumber = 0;
 	}
 
 	private void initKeys()
@@ -34,6 +36,11 @@ public class KeyedCSVReader
 			keys[i] = createKeyFromFields(field);
 		}
 
+	}
+
+	protected int getCurrentLineNumber()
+	{
+		return currentLineNumber;
 	}
 
 	private CSVKey createKeyFromFields(String field)
@@ -62,6 +69,7 @@ public class KeyedCSVReader
 			return null;
 		}
 
+		currentLineNumber++;
 		KeyedCSVRow keyedRow = new KeyedCSVRow(keys);
 		keyedRow.initFromCSVRecord(record);
 		return keyedRow;

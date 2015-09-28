@@ -1,8 +1,5 @@
 package inputModules.csv.csvFuncExtractor;
 
-import java.io.IOException;
-import java.io.Reader;
-
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 
@@ -14,22 +11,15 @@ public class FilteredKeyedCSVReader extends KeyedCSVReader
 {
 
 	protected RowFilter filterFunc;
-	protected int lineNo;
-
-	@Override
-	public void init(Reader reader) throws IOException
-	{
-		super.init(reader);
-		lineNo = 0;
-	}
 
 	public KeyedCSVRow getNextRow()
 	{
-		lineNo++;
 
 		// skip lines that are not in range.
-		while (!filterFunc.lineNoIsInRange(lineNo))
+		while (!filterFunc.lineNoIsInRange(getCurrentLineNumber() + 1))
 		{
+			// TODO: Optimization: skip the row instead of parsing it
+			// and then discarding it.
 			KeyedCSVRow nextRow = super.getNextRow();
 			if (nextRow == null)
 				return null;
