@@ -11,13 +11,14 @@ import inputModules.csv.csv2ast.CSV2AST;
 public class CSVFunctionExtractor
 {
 
-	String functionId = null;
+	String functionId = "";
 	KeyedCSVReader nodeReader;
 	KeyedCSVReader edgeReader;
 	CSVAST csvAST;
-	CSVAST topLevelFuncAST = new CSVAST();
+	CSVAST topLevelFuncAST;
 
 	KeyedCSVRow lastNodeRow;
+	private boolean topLevelReturned = false;
 
 	public void initialize(Reader nodeStrReader, Reader edgeStrReader)
 			throws IOException
@@ -26,27 +27,34 @@ public class CSVFunctionExtractor
 		edgeReader = new KeyedCSVReader();
 		nodeReader.init(nodeStrReader);
 		edgeReader.init(edgeStrReader);
+		initTopLevelFuncAST();
 	}
 
 	public FunctionDef getNextFunction() throws IOException
 	{
 
-		initCSVAST();
-		readNextCSV();
-
-		if (csvAST == null)
-			return null;
-
-		System.out.println(csvAST.getNodesAsString());
-
 		CSV2AST csv2ast = new CSV2AST();
 		csv2ast.setLanguage("PHP");
-		return csv2ast.convert(csvAST);
+
+		initCSVAST();
+		boolean rowsLeft = readNextCSV();
+
+		if (csvAST != topLevelFuncAST && csvAST.getNumberOfNodes() != 0)
+			return csv2ast.convert(csvAST);
+
+		else if (csvAST == topLevelFuncAST && rowsLeft == false
+				&& csvAST.getNumberOfNodes() > 1 && !topLevelReturned)
+		{
+			topLevelReturned = true;
+			return csv2ast.convert(topLevelFuncAST);
+		}
+
+		return null;
 	}
 
 	private void initCSVAST()
 	{
-		if (functionId == null)
+		if (functionId.equals(""))
 			csvAST = topLevelFuncAST;
 		else
 		{
@@ -59,22 +67,41 @@ public class CSVFunctionExtractor
 			csvAST.addNodeRow(lastNodeRow.toString());
 	}
 
-	private void readNextCSV()
+	private void initTopLevelFuncAST()
 	{
-		addNodeRowsUntilNextFunctionId();
+		topLevelFuncAST = new CSVAST();
+		topLevelFuncAST.addNodeRow(nodeReader.getKeyRow());
+		topLevelFuncAST.addNodeRow("-1,AST_METHOD,,<topLevel>\n");
+		topLevelFuncAST.addEdgeRow(edgeReader.getKeyRow());
 	}
 
-	private void addNodeRowsUntilNextFunctionId()
+	private boolean readNextCSV()
 	{
-		while (nodeReader.hasNextRow())
+		return addNodeRowsUntilNextFunctionId();
+	}
+
+	private boolean addNodeRowsUntilNextFunctionId()
+	{
+		boolean rowsLeft;
+
+		while (true)
 		{
+			rowsLeft = nodeReader.hasNextRow();
+			if (!rowsLeft)
+				break;
+
 			lastNodeRow = nodeReader.getNextRow();
 			String newFuncId = lastNodeRow.getFieldForKey("funcId");
-			if (newFuncId != functionId)
+
+			if (!newFuncId.equals(functionId))
 			{
-				if (functionId != null)
+				if (!functionId.equals(""))
+				{
+					// we were last inside a function.
+					// By breaking, we just return it.
+					functionId = newFuncId;
 					break;
-				else
+				} else
 				{
 					// finished top-level scope
 					functionId = newFuncId;
@@ -86,8 +113,7 @@ public class CSVFunctionExtractor
 			csvAST.addNodeRow(lastNodeRow.toString());
 		}
 
-		if (csvAST.getNumberOfNodes() == 0)
-			csvAST = null;
+		return rowsLeft;
 	}
 
 }

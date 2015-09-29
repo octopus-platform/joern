@@ -33,7 +33,7 @@ public class CSVAST
 
 	public int getNumberOfNodes()
 	{
-		return nodeRows.size();
+		return nodeRows.size() - 1;
 	}
 
 }
