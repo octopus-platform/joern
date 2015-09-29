@@ -62,6 +62,22 @@ public class TestKeyedCSVReader
 		assertEquals(row, null);
 	}
 
+	@Test
+	public void testQuoting() throws IOException
+	{
+		KeyedCSVReader csvReader = initReaderWithString("foo,bar\n\"1\",2");
+		KeyedCSVRow row = csvReader.getNextRow();
+		assertEquals("1", row.getFieldForKey("foo"));
+	}
+
+	@Test
+	public void testQuoteInQuote() throws IOException
+	{
+		KeyedCSVReader csvReader = initReaderWithString("foo,bar\n\"\\\"1\",2");
+		KeyedCSVRow row = csvReader.getNextRow();
+		assertEquals("\"1", row.getFieldForKey("foo"));
+	}
+
 	private KeyedCSVReader initReaderWithString(String str) throws IOException
 	{
 		KeyedCSVReader csvReader = new KeyedCSVReader();

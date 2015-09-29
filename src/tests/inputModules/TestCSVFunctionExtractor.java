@@ -24,6 +24,7 @@ public class TestCSVFunctionExtractor
 	public void init()
 	{
 		extractor = new CSVFunctionExtractor();
+		extractor.setLanguage("PHP");
 		nodeReader = new StringReader(nodeHeader);
 		edgeReader = new StringReader(edgeHeader);
 	}

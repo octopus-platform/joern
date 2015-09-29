@@ -16,9 +16,15 @@ public class CSVFunctionExtractor
 	KeyedCSVReader edgeReader;
 	CSVAST csvAST;
 	CSVAST topLevelFuncAST;
+	CSV2AST csv2ast = new CSV2AST();
 
 	KeyedCSVRow lastNodeRow;
 	private boolean topLevelReturned = false;
+
+	public void setLanguage(String language)
+	{
+		csv2ast.setLanguage(language);
+	}
 
 	public void initialize(Reader nodeStrReader, Reader edgeStrReader)
 			throws IOException
@@ -32,9 +38,6 @@ public class CSVFunctionExtractor
 
 	public FunctionDef getNextFunction() throws IOException
 	{
-
-		CSV2AST csv2ast = new CSV2AST();
-		csv2ast.setLanguage("PHP");
 
 		initCSVAST();
 		boolean rowsLeft = readNextCSV();
@@ -91,6 +94,7 @@ public class CSVFunctionExtractor
 				break;
 
 			lastNodeRow = nodeReader.getNextRow();
+			System.out.println(lastNodeRow);
 			String newFuncId = lastNodeRow.getFieldForKey("funcId");
 
 			if (!newFuncId.equals(functionId))

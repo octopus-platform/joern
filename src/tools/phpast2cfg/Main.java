@@ -1,5 +1,6 @@
 package tools.phpast2cfg;
 
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
@@ -8,6 +9,7 @@ import ast.functionDef.FunctionDef;
 import cfg.CFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
+import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import languages.php.cfg.PHPCFGFactory;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
@@ -26,9 +28,19 @@ public class Main
 
 		String nodeFilename = cmdLine.getNodeFile();
 		String edgeFilename = cmdLine.getNodeFile();
+		FileReader nodeFileReader = new FileReader(nodeFilename);
+		FileReader edgeFileReader = new FileReader(edgeFilename);
 
-		FunctionDef ast = csv2astConverter.convert(nodeFilename, edgeFilename);
-		CFG cfg = cfgFactory.newInstance(ast);
+		CSVFunctionExtractor extractor = new CSVFunctionExtractor();
+		extractor.setLanguage("PHP");
+		extractor.initialize(nodeFileReader, edgeFileReader);
+
+		FunctionDef funcAST;
+		while ((funcAST = extractor.getNextFunction()) != null)
+		{
+			CFG cfg = cfgFactory.newInstance(funcAST);
+		}
+
 	}
 
 	private static void parseCommandLine(String[] args)
