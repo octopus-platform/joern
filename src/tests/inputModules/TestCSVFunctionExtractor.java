@@ -16,7 +16,7 @@ public class TestCSVFunctionExtractor
 	CSVFunctionExtractor extractor;
 	StringReader nodeReader;
 	StringReader edgeReader;
-	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment";
+	String nodeHeader = "id:ID,type,funcid:int,code\n";
 	String edgeHeader = "from,to,type\n";
 
 	@Before
@@ -28,21 +28,10 @@ public class TestCSVFunctionExtractor
 	}
 
 	@Test
-	public void testEmptyFiles() throws IOException
-	{
-		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		assertTrue(function == null);
-	}
-
-	@Test
 	public void testHeaderOnly() throws IOException
 	{
-		nodeReader = new StringReader(nodeHeader);
-
 		extractor.initialize(nodeReader, edgeReader);
 		FunctionDef function = extractor.getNextFunction();
-
 		assertTrue(function == null);
 	}
 
@@ -50,13 +39,26 @@ public class TestCSVFunctionExtractor
 	public void testTopLevelOnlyNoStmtList() throws IOException
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "0,File,,,,,,,\"wp-login.php\",";
-		StringReader nodeReader = new StringReader(nodeStr);
+		nodeStr += "0,File,,\"foo\"";
+		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
 		FunctionDef function = extractor.getNextFunction();
 
 		assertTrue(function == null);
+	}
+
+	@Test
+	public void testSingleFunctionNodes() throws IOException
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "0,AST_METHOD,1\n";
+		nodeStr += "1,type,1\n";
+		nodeReader = new StringReader(nodeStr);
+
+		extractor.initialize(nodeReader, edgeReader);
+		FunctionDef function = extractor.getNextFunction();
+		assertTrue(function != null);
 	}
 
 	@Test

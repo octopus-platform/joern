@@ -3,11 +3,13 @@ package inputModules.csv.csv2ast;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 
 import ast.functionDef.FunctionDef;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
+import inputModules.csv.csvFuncExtractor.CSVAST;
 import tools.phpast2cfg.PHPCSVEdgeInterpreter;
 import tools.phpast2cfg.PHPCSVNodeInterpreter;
 
@@ -32,11 +34,31 @@ public class CSV2AST
 		ast = new ASTUnderConstruction();
 
 		initReader(nodeReader);
-		createASTNodes(nodeReader);
+		createASTNodes();
 
 		initReader(edgeReader);
-		createASTEdges(edgeReader);
+		createASTEdges();
 		return ast.getRootNode();
+	}
+
+	public FunctionDef convert(CSVAST csvAST) throws IOException
+	{
+		ast = new ASTUnderConstruction();
+
+		initReader(csvAST.getNodesAsString());
+		createASTNodes();
+
+		initReader(csvAST.getEdgesAsString());
+		createASTNodes();
+
+		return ast.getRootNode();
+	}
+
+	private void initReader(String str) throws IOException
+	{
+		StringReader stringReader = new StringReader(str);
+		reader = new KeyedCSVReader();
+		reader.init(stringReader);
 	}
 
 	private void initReader(Reader in) throws IOException
@@ -45,7 +67,7 @@ public class CSV2AST
 		reader.init(in);
 	}
 
-	private void createASTNodes(Reader nodeReader)
+	private void createASTNodes()
 	{
 		KeyedCSVRow keyedRow;
 		while ((keyedRow = reader.getNextRow()) != null)
@@ -54,7 +76,7 @@ public class CSV2AST
 		}
 	}
 
-	private void createASTEdges(Reader edgeReader)
+	private void createASTEdges()
 	{
 		KeyedCSVRow keyedRow;
 		while ((keyedRow = reader.getNextRow()) != null)

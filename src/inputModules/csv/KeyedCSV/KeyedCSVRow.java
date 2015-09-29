@@ -9,6 +9,7 @@ public class KeyedCSVRow
 {
 	private CSVKey[] keys;
 	private Map<String, String> values = new HashMap<String, String>();
+	private String stringRepr;
 
 	public KeyedCSVRow(CSVKey[] keys)
 	{
@@ -25,14 +26,21 @@ public class KeyedCSVRow
 
 	public void initFromCSVRecord(CSVRecord record)
 	{
+		stringRepr = "";
 		int i = 0;
 		for (String r : record)
 		{
 			String keyStr = keys[i].getName();
 			values.put(keyStr, r);
+			stringRepr += r + ",";
 			i++;
 		}
+	}
 
+	@Override
+	public String toString()
+	{
+		return stringRepr;
 	}
 
 }

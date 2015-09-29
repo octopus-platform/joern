@@ -2,140 +2,92 @@ package inputModules.csv.csvFuncExtractor;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.LinkedList;
-import java.util.List;
 
 import ast.functionDef.FunctionDef;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
-import tools.phpast2cfg.PHPCSVNodeTypes;
+import inputModules.csv.csv2ast.CSV2AST;
 
 public class CSVFunctionExtractor
 {
 
-	List<Range> functionRanges = new LinkedList<Range>();
-	List<Range> topLevelRanges = new LinkedList<Range>();
+	String functionId = null;
+	KeyedCSVReader nodeReader;
+	KeyedCSVReader edgeReader;
+	CSVAST csvAST;
+	CSVAST topLevelFuncAST = new CSVAST();
 
-	private static final int TOP_LEVEL_ID = -1;
-	CSVFunctionExtractorState state;
+	KeyedCSVRow lastNodeRow;
 
-	private static final int STATE_TOP_LEVEL = 1;
-	private static final int STATE_IN_FUNC = 2;
-
-	public void initialize(Reader nodeReader, Reader edgeReader)
+	public void initialize(Reader nodeStrReader, Reader edgeStrReader)
 			throws IOException
 	{
-		cleanTopLevelState();
-		initializeRanges(nodeReader, edgeReader);
+		nodeReader = new KeyedCSVReader();
+		edgeReader = new KeyedCSVReader();
+		nodeReader.init(nodeStrReader);
+		edgeReader.init(edgeStrReader);
 	}
 
-	private void initializeRanges(Reader nodeReader, Reader edgeReader)
-			throws IOException
+	public FunctionDef getNextFunction() throws IOException
 	{
-		initializeNodeRanges(nodeReader);
-		// initializeEdgeRanges(edgeReader);
+
+		initCSVAST();
+		readNextCSV();
+
+		if (csvAST == null)
+			return null;
+
+		System.out.println(csvAST.getNodesAsString());
+
+		CSV2AST csv2ast = new CSV2AST();
+		csv2ast.setLanguage("PHP");
+		return csv2ast.convert(csvAST);
 	}
 
-	private void cleanTopLevelState()
+	private void initCSVAST()
 	{
-		state = new CSVFunctionExtractorState(0, 0);
-		state.functionId = TOP_LEVEL_ID;
-	}
-
-	private void initializeNodeRanges(Reader reader) throws IOException
-	{
-		KeyedCSVReader csvReader = new KeyedCSVReader();
-		csvReader.init(reader);
-
-		KeyedCSVRow row;
-		while ((row = csvReader.getNextRow()) != null)
+		if (functionId == null)
+			csvAST = topLevelFuncAST;
+		else
 		{
-			processNodeRow(row);
-		}
-		finishNodeRangeInitialization();
-	}
-
-	private void processNodeRow(KeyedCSVRow row)
-	{
-
-		Integer functionId = getFunctionId(row);
-
-		switch (state.getCurrentStateId())
-		{
-		case STATE_TOP_LEVEL:
-			if (functionId != TOP_LEVEL_ID)
-				changeToNewFunction();
-			break;
-		case STATE_IN_FUNC:
-
-			if (functionId == TOP_LEVEL_ID)
-				changeToTopLevel();
-			else if (functionId != state.getCurrentFunctionId())
-				changeToNewFunction();
-			break;
+			csvAST = new CSVAST();
+			csvAST.addNodeRow(nodeReader.getKeyRow());
+			csvAST.addEdgeRow(edgeReader.getKeyRow());
 		}
 
-		updateRange();
+		if (lastNodeRow != null)
+			csvAST.addNodeRow(lastNodeRow.toString());
 	}
 
-	private void changeToTopLevel()
+	private void readNextCSV()
 	{
-		storeCurrentFunction();
-		swapInTopLevelFunction();
+		addNodeRowsUntilNextFunctionId();
 	}
 
-	private void storeCurrentFunction()
+	private void addNodeRowsUntilNextFunctionId()
 	{
-		// TODO Auto-generated method stub
+		while (nodeReader.hasNextRow())
+		{
+			lastNodeRow = nodeReader.getNextRow();
+			String newFuncId = lastNodeRow.getFieldForKey("funcId");
+			if (newFuncId != functionId)
+			{
+				if (functionId != null)
+					break;
+				else
+				{
+					// finished top-level scope
+					functionId = newFuncId;
+					initCSVAST();
+					continue;
+				}
+			}
 
-	}
+			csvAST.addNodeRow(lastNodeRow.toString());
+		}
 
-	private void swapInTopLevelFunction()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	private void changeToNewFunction()
-	{
-		storeCurrentFunction();
-		createNewFunction();
-	}
-
-	private void createNewFunction()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	private Integer getFunctionId(KeyedCSVRow row)
-	{
-		String rowFuncId = row.getFieldForKey(PHPCSVNodeTypes.FUNCID);
-		if (rowFuncId == null)
-			return TOP_LEVEL_ID;
-
-		return Integer.parseInt((rowFuncId));
-	}
-
-	private void updateRange()
-	{
-		state.increaseRightBorder();
-	}
-
-	private void finishNodeRangeInitialization()
-	{
-		storeCurrentFunction();
-	}
-
-	// private void initializeEdgeRanges()
-	// {
-
-	// }
-
-	public FunctionDef getNextFunction()
-	{
-		// TODO Auto-generated method stub
-		return null;
+		if (csvAST.getNumberOfNodes() == 0)
+			csvAST = null;
 	}
 
 }

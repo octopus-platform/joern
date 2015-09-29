@@ -22,7 +22,7 @@ public class TestCSV2AST
 	@Test
 	public void testMethodCreation() throws IOException
 	{
-		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
+		String str = "id:ID,type,name\n1,AST_METHOD,foo";
 		FunctionDef func = createASTFromStrings(str, edgeFileHeader);
 		assertTrue(func != null);
 	}
@@ -30,7 +30,7 @@ public class TestCSV2AST
 	@Test
 	public void testMethodName() throws IOException
 	{
-		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
+		String str = "id:ID,type,name\n1,AST_METHOD,foo";
 		FunctionDef funcDef = createASTFromStrings(str, edgeFileHeader);
 		assertEquals("foo", funcDef.getName().getEscapedCodeStr());
 	}
@@ -38,7 +38,7 @@ public class TestCSV2AST
 	@Test
 	public void testMissingMethodName() throws IOException
 	{
-		String str = "nodeId:ID,type\n1,AST_METHOD";
+		String str = "id:ID,type\n1,AST_METHOD";
 		FunctionDef funcDef = createASTFromStrings(str, edgeFileHeader);
 		assertEquals("", funcDef.getName().getEscapedCodeStr());
 	}
@@ -46,7 +46,7 @@ public class TestCSV2AST
 	@Test
 	public void testEdgeBetweenFuncAndName() throws IOException
 	{
-		String str = "nodeId:ID,type,name\n1,AST_METHOD,foo";
+		String str = "id:ID,type,name\n1,AST_METHOD,foo";
 		FunctionDef funcDef = createASTFromStrings(str, edgeFileHeader);
 		ASTNode child = funcDef.getChild(0);
 		assertTrue(child instanceof Identifier);
@@ -55,7 +55,7 @@ public class TestCSV2AST
 	@Test
 	public void testSimpleEdgeImport() throws IOException
 	{
-		String nodeStr = "nodeId:ID,type,name\n1,AST_METHOD,foo\n"
+		String nodeStr = "id:ID,type,name\n1,AST_METHOD,foo\n"
 				+ "2,AST_STMT_LIST\n" + "3,AST_ASSIGN";
 		String edgeStr = "START_ID,END_ID,TYPE\n1,2\n2,3\n";
 
