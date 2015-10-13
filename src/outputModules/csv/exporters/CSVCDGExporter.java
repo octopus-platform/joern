@@ -17,21 +17,14 @@ public class CSVCDGExporter extends CDGExporter
 		Writer.addEdge(srcId, dstId, null, EdgeTypes.CONTROLS);
 	}
 
-	@Override
-	protected void addPostDomEdge(CFGNode vertex, CFGNode dominator)
-	{
-		long srcId = getId(dominator);
-		long dstId = getId(vertex);
-		Writer.addEdge(srcId, dstId, null, EdgeTypes.POST_DOM);
-	}
-
 	private long getId(CFGNode node)
 	{
 		if (node instanceof ASTNodeContainer)
 		{
 			return Writer
 					.getIdForObject(((ASTNodeContainer) node).getASTNode());
-		} else
+		}
+		else
 		{
 			return Writer.getIdForObject(node);
 		}

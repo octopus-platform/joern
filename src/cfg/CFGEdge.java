@@ -72,7 +72,8 @@ public class CFGEdge extends Edge<CFGNode>
 			{
 				return false;
 			}
-		} else if (!label.equals(other.label))
+		}
+		else if (!label.equals(other.label))
 		{
 			return false;
 		}
@@ -83,6 +84,13 @@ public class CFGEdge extends Edge<CFGNode>
 	public String toString()
 	{
 		return getSource() + " ==[" + getLabel() + "]==> " + getDestination();
+	}
+
+	@Override
+	public CFGEdge reverse()
+	{
+		return new CFGEdge(getDestination(), getSource(), getLabel());
+
 	}
 
 }

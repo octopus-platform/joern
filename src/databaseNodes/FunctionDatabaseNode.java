@@ -9,10 +9,12 @@ import cdg.CDG;
 import cdg.CDGCreator;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import cfg.nodes.CFGNode;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
+import dom.DominatorTree;
 import languages.c.parsing.CodeLocation;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
@@ -28,6 +30,8 @@ public class FunctionDatabaseNode extends DatabaseNode
 	UseDefGraph udg;
 	DDG ddg;
 	CDG cdg;
+	DominatorTree<CFGNode> dom;
+	DominatorTree<CFGNode> postDom;
 
 	String signature;
 	String name;
@@ -43,10 +47,12 @@ public class FunctionDatabaseNode extends DatabaseNode
 	{
 		astRoot = (FunctionDef) node;
 		cfg = astToCFG.convert(astRoot);
+		dom = DominatorTree.newDominatorTree(cfg);
+		postDom = DominatorTree.newPostDominatorTree(cfg);
 		udg = cfgToUDG.convert(cfg);
 		DefUseCFG defUseCFG = udgAndCfgToDefUseCFG.convert(cfg, udg);
 		ddg = ddgCreator.createForDefUseCFG(defUseCFG);
-		cdg = cdgCreator.create(cfg);
+		cdg = CDGCreator.create(cfg, postDom);
 
 		setSignature(astRoot);
 	}
@@ -90,6 +96,16 @@ public class FunctionDatabaseNode extends DatabaseNode
 	public CDG getCDG()
 	{
 		return cdg;
+	}
+
+	public DominatorTree<CFGNode> getDominatorTree()
+	{
+		return dom;
+	}
+
+	public DominatorTree<CFGNode> getPostDominatorTree()
+	{
+		return postDom;
 	}
 
 	public String getLocation()

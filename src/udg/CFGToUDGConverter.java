@@ -2,8 +2,6 @@ package udg;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-
 import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
@@ -30,7 +28,7 @@ public class CFGToUDGConverter
 
 		UseDefGraph useDefGraph = new UseDefGraph();
 
-		List<CFGNode> statements = cfg.getVertices();
+		Collection<CFGNode> statements = cfg.getVertices();
 
 		for (CFGNode cfgNode : statements)
 		{
@@ -74,7 +72,8 @@ public class CFGToUDGConverter
 
 				if (useOrDefNode != null && useOrDefNode != statementNode)
 					useDefGraph.addDefinition(useOrDef.symbol, useOrDefNode);
-			} else
+			}
+			else
 			{
 
 				if (!insertedForStatementUse.contains(useOrDef.symbol))
