@@ -16,6 +16,8 @@ public abstract class CSVASTNodeExporter extends ASTNodeExporter
 	{
 		Map<String, Object> properties = dbNode.createProperties();
 		Writer.addNode(dbNode, properties);
+
+		mainNodeId = Writer.getIdForObject(dbNode);
 	}
 
 }
