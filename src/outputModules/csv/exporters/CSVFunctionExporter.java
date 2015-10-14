@@ -22,6 +22,7 @@ public class CSVFunctionExporter extends FunctionExporter
 		udgImporter = new CSVUDGExporter();
 		ddgImporter = new CSVDDGExporter();
 		cdgImporter = new CSVCDGExporter();
+		domExporter = new CSVDOMExporter();
 	}
 
 	@Override
@@ -45,7 +46,8 @@ public class CSVFunctionExporter extends FunctionExporter
 		try
 		{
 			cfgRootId = Writer.getIdForObject(firstBlock);
-		} catch (RuntimeException ex)
+		}
+		catch (RuntimeException ex)
 		{
 			cfgRootId = Writer.getIdForObject(
 					((ASTNodeContainer) firstBlock).getASTNode());

@@ -13,6 +13,7 @@ public abstract class FunctionExporter extends ASTNodeExporter
 	protected UDGExporter udgImporter;
 	protected DDGExporter ddgImporter;
 	protected CDGExporter cdgImporter;
+	protected DOMExporter domExporter;
 
 	protected abstract void linkFunctionWithAST(FunctionDatabaseNode function);
 
@@ -32,7 +33,9 @@ public abstract class FunctionExporter extends ASTNodeExporter
 			function.initialize(node);
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
-		} catch (RuntimeException ex)
+
+		}
+		catch (RuntimeException ex)
 		{
 			ex.printStackTrace();
 			System.err.println("Error adding function to database: "
@@ -55,6 +58,9 @@ public abstract class FunctionExporter extends ASTNodeExporter
 		udgImporter.addUDGToDatabase(function.getUDG());
 		ddgImporter.addDDGToDatabase(function.getDDG());
 		cdgImporter.addCDGToDatabase(function.getCDG());
+		domExporter.addDominatorTreeToDatabase(function.getDominatorTree());
+		domExporter.addPostDominatorTreeToDatabase(
+				function.getPostDominatorTree());
 
 		linkFunctionToASTAndCFG(function);
 

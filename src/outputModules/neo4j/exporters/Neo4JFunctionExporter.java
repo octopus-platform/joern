@@ -29,6 +29,7 @@ public class Neo4JFunctionExporter extends FunctionExporter
 		udgImporter = new Neo4JUDGExporter(nodeStore);
 		ddgImporter = new Neo4JDDGExporter(nodeStore);
 		cdgImporter = new Neo4JCDGExporter(nodeStore);
+		domExporter = new Neo4JDOMExporter(nodeStore);
 	}
 
 	@Override
@@ -56,7 +57,8 @@ public class Neo4JFunctionExporter extends FunctionExporter
 		try
 		{
 			cfgRootId = nodeStore.getIdForObject(firstBlock);
-		} catch (RuntimeException ex)
+		}
+		catch (RuntimeException ex)
 		{
 			cfgRootId = nodeStore.getIdForObject(
 					((ASTNodeContainer) firstBlock).getASTNode());

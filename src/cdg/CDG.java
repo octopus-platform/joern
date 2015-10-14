@@ -1,42 +1,14 @@
 package cdg;
 
-import java.util.Set;
-
+import graphutils.IncidenceListGraph;
 import cfg.nodes.CFGNode;
-import graphutils.AbstractGraph;
 
-public class CDG extends AbstractGraph<CFGNode, CDGEdge>
+public class CDG extends IncidenceListGraph<CFGNode, CDGEdge>
 {
 
-	private DominatorTree<CFGNode> dominatorTree;
-
-	private CDG()
+	void addEdge(CFGNode source, CFGNode destination)
 	{
-	}
-
-	public DominatorTree<CFGNode> getDominatorTree()
-	{
-		return this.dominatorTree;
-	}
-
-	public static CDG newInstance(DominatorTree<CFGNode> dominatorTree)
-	{
-		CDG cdg = new CDG();
-		cdg.dominatorTree = dominatorTree;
-		for (CFGNode vertex : dominatorTree.getVertices())
-		{
-			Set<CFGNode> frontier = dominatorTree.dominanceFrontier(vertex);
-			if (frontier != null)
-			{
-				cdg.addVertex(vertex);
-				for (CFGNode f : frontier)
-				{
-					cdg.addVertex(f);
-					cdg.addEdge(new CDGEdge(f, vertex));
-				}
-			}
-		}
-		return cdg;
+		addEdge(new CDGEdge(source, destination));
 	}
 
 }

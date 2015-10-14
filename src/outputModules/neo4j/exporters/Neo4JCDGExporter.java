@@ -28,22 +28,14 @@ public class Neo4JCDGExporter extends CDGExporter
 		Neo4JBatchInserter.addRelationship(getId(src), getId(dst), rel, null);
 	}
 
-	@Override
-	protected void addPostDomEdge(CFGNode vertex, CFGNode dominator)
-	{
-		RelationshipType rel;
-		rel = DynamicRelationshipType.withName(EdgeTypes.POST_DOM);
-		Neo4JBatchInserter.addRelationship(getId(dominator), getId(vertex), rel,
-				null);
-	}
-
 	private long getId(CFGNode node)
 	{
 		if (node instanceof ASTNodeContainer)
 		{
 			return nodeStore
 					.getIdForObject(((ASTNodeContainer) node).getASTNode());
-		} else
+		}
+		else
 		{
 			return nodeStore.getIdForObject(node);
 		}
