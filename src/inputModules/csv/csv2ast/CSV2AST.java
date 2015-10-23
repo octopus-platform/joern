@@ -38,6 +38,7 @@ public class CSV2AST
 
 		initReader(edgeReader);
 		createASTEdges();
+		
 		return ast.getRootNode();
 	}
 
@@ -49,7 +50,7 @@ public class CSV2AST
 		createASTNodes();
 
 		initReader(csvAST.getEdgesAsString());
-		createASTNodes();
+		createASTEdges();
 
 		return ast.getRootNode();
 	}

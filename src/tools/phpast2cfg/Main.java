@@ -27,7 +27,7 @@ public class Main
 		parseCommandLine(args);
 
 		String nodeFilename = cmdLine.getNodeFile();
-		String edgeFilename = cmdLine.getNodeFile();
+		String edgeFilename = cmdLine.getEdgeFile();
 		FileReader nodeFileReader = new FileReader(nodeFilename);
 		FileReader edgeFileReader = new FileReader(edgeFilename);
 
@@ -40,7 +40,6 @@ public class Main
 		{
 			CFG cfg = cfgFactory.newInstance(funcAST);
 		}
-
 	}
 
 	private static void parseCommandLine(String[] args)

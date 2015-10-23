@@ -71,7 +71,7 @@ public class ImporterCmdLineInterface extends CommonCommandLineInterface
 
 	public void printHelp()
 	{
-		formater.printHelp("joern [SOURCE_DIR1] ...", options);
+		formatter.printHelp("joern [SOURCE_DIR1] ...", options);
 	}
 
 }

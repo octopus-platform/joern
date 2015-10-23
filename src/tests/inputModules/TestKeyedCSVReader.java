@@ -41,7 +41,7 @@ public class TestKeyedCSVReader
 		CSVKey[] keys = csvReader.getKeys();
 		assertEquals("foo", keys[0].getName());
 		assertEquals("type", keys[0].getType());
-		assertEquals("nodeIndex", keys[0].getIndex());
+		assertEquals("nodeIndex", keys[0].getNodeIndex());
 	}
 
 	@Test

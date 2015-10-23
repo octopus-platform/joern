@@ -21,7 +21,7 @@ public class CommandLineInterface extends CommonCommandLineInterface
 
 	public void printHelp()
 	{
-		formater.printHelp("importer <nodes.csv> <edges.csv> ...", options);
+		formatter.printHelp("importer <nodes.csv> <edges.csv> ...", options);
 	}
 
 	public void parseCommandLine(String[] args) throws ParseException
