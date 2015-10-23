@@ -19,7 +19,7 @@ public class CommonCommandLineInterface
 
 	protected Options options = new Options();
 	protected CommandLineParser parser = new BasicParser();
-	protected HelpFormatter formater = new HelpFormatter();
+	protected HelpFormatter formatter = new HelpFormatter();
 	protected CommandLine cmd = null;
 
 }

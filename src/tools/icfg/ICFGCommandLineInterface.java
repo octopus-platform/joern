@@ -7,6 +7,6 @@ public class ICFGCommandLineInterface extends UtilCommandLineInterface
 
 	public void printHelp()
 	{
-		formater.printHelp("icfg", options);
+		formatter.printHelp("icfg", options);
 	}
 }
