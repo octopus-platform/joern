@@ -11,6 +11,16 @@ public class CSVKey
 		return name;
 	}
 
+	public String getType()
+	{
+		return type;
+	}
+
+	public String getNodeIndex()
+	{
+		return nodeIndex;
+	}
+
 	public void setName(String name)
 	{
 		this.name = name;
@@ -24,16 +34,6 @@ public class CSVKey
 	public void setNodeIndex(String nodeIndex)
 	{
 		this.nodeIndex = nodeIndex;
-	}
-
-	public String getType()
-	{
-		return type;
-	}
-
-	public String getIndex()
-	{
-		return nodeIndex;
 	}
 
 }
