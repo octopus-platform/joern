@@ -42,10 +42,8 @@ public class TestCSVFunctionExtractor
 	{
 		extractor.initialize(nodeReader, edgeReader);
 		FunctionDef function = extractor.getNextFunction();
-		// Currently we always generate exactly one top-level CSVAST.
-		// TODO this will change once we introduce File nodes.
-		//assertTrue(function == null);
-		assertEquals("<toplevel>", function.getName().getEscapedCodeStr());
+
+		assertTrue(function == null);
 	}
 
 	/**
@@ -55,8 +53,8 @@ public class TestCSVFunctionExtractor
 	public void testSingleFunction() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
 		nodeStr += "4,NULL,,3,,1,2,,,\n";
@@ -70,7 +68,7 @@ public class TestCSVFunctionExtractor
 		FunctionDef function2 = extractor.getNextFunction();
 		
 		assertEquals("foo", function.getName().getEscapedCodeStr());
-		assertEquals("<toplevel>", function2.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function2.getName().getEscapedCodeStr());
 	}
 
 	/**
@@ -81,8 +79,8 @@ public class TestCSVFunctionExtractor
 	public void testFunctionPlusTopLevel() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
 		nodeStr += "4,NULL,,3,,1,2,,,\n";
@@ -100,7 +98,7 @@ public class TestCSVFunctionExtractor
 		FunctionDef function3 = extractor.getNextFunction();
 		
 		assertEquals("foo", function.getName().getEscapedCodeStr());
-		assertEquals("<toplevel>", function2.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function2.getName().getEscapedCodeStr());
 		assertTrue(function3 == null);
 	}
 
@@ -113,8 +111,8 @@ public class TestCSVFunctionExtractor
 	public void testTopLevelFuncTopLevel() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
 		nodeStr += "2,AST_CONST,,3,,0,,,,\n";
 		nodeStr += "3,AST_NAME,NAME_NOT_FQ,3,,0,,,,\n";
 		nodeStr += "4,string,,3,\"true\",0,,,,\n";
@@ -135,7 +133,7 @@ public class TestCSVFunctionExtractor
 		FunctionDef function3 = extractor.getNextFunction();
 
 		assertEquals("foo", function.getName().getEscapedCodeStr());
-		assertEquals("<toplevel>", function2.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function2.getName().getEscapedCodeStr());
 		assertTrue(function3 == null);
 	}
 
@@ -147,8 +145,8 @@ public class TestCSVFunctionExtractor
 	public void testTwoFunctions() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
 		nodeStr += "4,NULL,,3,,1,2,,,\n";
@@ -169,7 +167,7 @@ public class TestCSVFunctionExtractor
 
 		assertEquals("foo", function.getName().getEscapedCodeStr());
 		assertEquals("bar", function2.getName().getEscapedCodeStr());
-		assertEquals("<toplevel>", function3.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function3.getName().getEscapedCodeStr());
 	}
 	
 	/**
@@ -181,8 +179,8 @@ public class TestCSVFunctionExtractor
 	public void testFunctionWithInnerFunction() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,5,foo,\n";
 		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
 		nodeStr += "4,NULL,,3,,1,2,,,\n";
@@ -203,7 +201,7 @@ public class TestCSVFunctionExtractor
 
 		assertEquals("bar", function.getName().getEscapedCodeStr());
 		assertEquals("foo", function2.getName().getEscapedCodeStr());
-		assertEquals("<toplevel>", function3.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function3.getName().getEscapedCodeStr());
 	}
 	
 	/**
@@ -233,7 +231,6 @@ public class TestCSVFunctionExtractor
 		nodeStr += "14,NULL,,7,,1,12,,,\n";
 		nodeStr += "15,AST_STMT_LIST,,7,,2,12,,,\n";
 		nodeStr += "16,NULL,,7,,3,12,,,\n";
-
 	
 		nodeReader = new StringReader(nodeStr);
 
@@ -246,7 +243,72 @@ public class TestCSVFunctionExtractor
 		assertEquals("bar", function.getName().getEscapedCodeStr());
 		assertEquals("foo", function2.getName().getEscapedCodeStr());
 		assertEquals("buz", function3.getName().getEscapedCodeStr());
-		assertEquals("<toplevel>", function4.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function4.getName().getEscapedCodeStr());
+	}
+
+	/**
+	 * foo.php
+	 * -------
+	 * function foo() {}
+	 *
+	 * bar.php
+	 * -------
+	 * function bar() {}
+	 */
+	@Test
+	public void testTwoFiles() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "0,Directory,,,,,,,\"foobar\",\n";
+		nodeStr += "1,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "2,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,,3,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,NULL,,3,,3,3,,,\n";
+		nodeStr += "8,File,,,,,,,\"bar.php\",\n";
+		nodeStr += "9,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "10,AST_FUNC_DECL,,3,,0,,3,bar,\n";
+		nodeStr += "11,AST_PARAM_LIST,,3,,0,10,,,\n";
+		nodeStr += "12,NULL,,3,,1,10,,,\n";
+		nodeStr += "13,AST_STMT_LIST,,3,,2,10,,,\n";
+		nodeStr += "14,NULL,,3,,3,10,,,\n";
+
+		nodeReader = new StringReader(nodeStr);
+
+		extractor.initialize(nodeReader, edgeReader);
+		FunctionDef function = extractor.getNextFunction();
+		FunctionDef function2 = extractor.getNextFunction();
+		FunctionDef function3 = extractor.getNextFunction();
+		FunctionDef function4 = extractor.getNextFunction();
+
+		assertEquals("foo", function.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function2.getName().getEscapedCodeStr());
+		assertEquals("bar", function3.getName().getEscapedCodeStr());
+		assertEquals("<bar.php>", function4.getName().getEscapedCodeStr());
+	}
+
+	/**
+	 * An invalid CSV file which contains no file node to
+	 * initialize top-level code.
+	 */
+	@Test(expected=InvalidCSVFile.class)
+	public void testInvalidNoFileNode() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
+		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
+		nodeStr += "4,NULL,,3,,1,2,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,2,2,,,\n";
+		nodeStr += "6,NULL,,3,,3,2,,,\n";
+
+		nodeReader = new StringReader(nodeStr);
+
+		extractor.initialize(nodeReader, edgeReader);
+		extractor.getNextFunction();
 	}
 	
 	/**
@@ -258,8 +320,8 @@ public class TestCSVFunctionExtractor
 	public void testInvalidUninitializedFuncId() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		//nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
 		//nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
 		nodeStr += "4,NULL,,3,,1,2,,,\n";

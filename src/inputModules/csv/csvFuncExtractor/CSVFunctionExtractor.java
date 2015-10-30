@@ -19,6 +19,7 @@ public class CSVFunctionExtractor
 	Stack<CSVAST> csvStack = new Stack<CSVAST>();
 	Stack<String> funcIdStack = new Stack<String>();
 	int finishedFunctions = 0;
+	String topLevelFuncId;
 	CSV2AST csv2ast = new CSV2AST();
 
 	public void setLanguage(String language)
@@ -33,12 +34,9 @@ public class CSVFunctionExtractor
 		edgeReader = new KeyedCSVReader();
 		nodeReader.init(nodeStrReader);
 		edgeReader.init(edgeStrReader);
-		// TODO eventually, initiating a top-level function CSVAST will
-		// not happen here, but upon encountering a File node
-		initTopLevelFuncAST();
 	}
 
-	private void initTopLevelFuncAST()
+	private void initTopLevelFuncAST(String topLevelFuncName)
 	{
 		CSVAST topLevelFuncAST = new CSVAST();
 		topLevelFuncAST.addNodeRow(nodeReader.getKeyRow());
@@ -46,13 +44,10 @@ public class CSVFunctionExtractor
 		// These have different properties and different children
 		// and should be unambiguously distinguishable from
 		// AST_FUNC_DECL, AST_METHOD and AST_CLOSURE nodes.
-		// TODO Currently we intentionally assign id -1 the AST_TOPLEVEL node;
-		// this is fine since we only support one top-level function for now.
-		// We will improve on this once we add File nodes.
-		topLevelFuncAST.addNodeRow("-1," + PHPCSVNodeTypes.TYPE_TOPLEVEL + ",,,,,,,<toplevel>,");
+		topLevelFuncAST.addNodeRow(topLevelFuncId + "," + PHPCSVNodeTypes.TYPE_TOPLEVEL + ",,,,,,," + topLevelFuncName + ",");
 		topLevelFuncAST.addEdgeRow(edgeReader.getKeyRow());
 		csvStack.push(topLevelFuncAST);
-		funcIdStack.push("-1");
+		funcIdStack.push(topLevelFuncId);
 	}
 
 	private void initFuncAST(String funcId)
@@ -116,11 +111,49 @@ public class CSVFunctionExtractor
 			KeyedCSVRow currNodeRow = nodeReader.getNextRow();
 			System.out.println(currNodeRow);
 			String currType = currNodeRow.getFieldForKey(PHPCSVNodeTypes.TYPE);
+
+			// ignore dir nodes
+			if( currType.equals(PHPCSVNodeTypes.TYPE_DIRECTORY))
+				continue;
+
+			// if we met a file node, empty the csvStack and create a new
+			// top-level function
+			if( currType.equals(PHPCSVNodeTypes.TYPE_FILE)) {
+
+				// to empty the csvStack later
+				finishedFunctions = csvStack.size();
+
+				// create a new top-level function at the bottom of the stack
+				Stack<CSVAST> tmpCSVStack = new Stack<CSVAST>();
+				Stack<String> tmpFuncIdStack = new Stack<String>();
+				for( int i = 0; i < finishedFunctions; i++) {
+					tmpCSVStack.push( csvStack.pop());
+					tmpFuncIdStack.push( funcIdStack.pop());
+				}
+				topLevelFuncId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
+				initTopLevelFuncAST("<" + currNodeRow.getFieldForKey(PHPCSVNodeTypes.NAME) + ">");
+				for( int i = 0; i < finishedFunctions; i++) {
+					csvStack.push( tmpCSVStack.pop());
+					funcIdStack.push( tmpFuncIdStack.pop());
+				}
+
+				// If there are finished functions on the stack (this should always be the case
+				// except at the very beginning when we never yet created a top-level function),
+				// then we have to return them first. Otherwise, we just continue the loop
+				if( 0 != finishedFunctions)
+					break;
+				else
+					continue;
+			}
+
 			String currFuncId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.FUNCID);
-								
 			// if this is a top-level node, use id of artificial top-level function
-			if( currFuncId.equals("")) currFuncId = "-1";
+			if( currFuncId.equals("")) currFuncId = topLevelFuncId;
 								
+			// make sure stack is not empty at this point
+			if( csvStack.empty())
+				throw new InvalidCSVFile( "No file node to initialize top-level code was found.");
+
 			// the funcid is still the same
 			if( currFuncId.equals( funcIdStack.peek()))
 				addRowAndInitASTForFuncType(currNodeRow, currType);
