@@ -4,6 +4,7 @@ import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
+import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.IfStatement;
@@ -16,46 +17,70 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 {
 
 	@Override
-	public void handle(KeyedCSVRow row, ASTUnderConstruction ast)
+	public long handle(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
+		long retval = -1;
 		String type = row.getFieldForKey("type");
 		switch (type)
 		{
-		case "AST_METHOD":
-			handleFunction(row, ast);
+		case "AST_TOPLEVEL":
+			retval = handleTopLevelFunction(row, ast);
+			break;
+		case "AST_FUNC_DECL":
+			retval = handleFunction(row, ast);
 			break;
 		case "AST_STMT_LIST":
-			handleCompound(row, ast);
+			retval = handleCompound(row, ast);
 			break;
 		case "AST_IF":
-			handleIf(row, ast);
+			retval = handleIf(row, ast);
 			break;
 		case "AST_WHILE":
-			handleWhile(row, ast);
+			retval = handleWhile(row, ast);
 			break;
 		case "AST_DO_WHILE":
-			handleDo(row, ast);
+			retval = handleDo(row, ast);
 			break;
 		case "AST_FOR":
-			handleFor(row, ast);
+			retval = handleFor(row, ast);
 			break;
 
 		default:
-			defaultHandler(row, ast);
+			retval = defaultHandler(row, ast);
 		}
+		
+		return retval;
 	}
 
-	private void defaultHandler(KeyedCSVRow row, ASTUnderConstruction ast)
+	private long defaultHandler(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 
 		ASTNode newNode = new ASTNode();
 		newNode.setProperty(PHPCSVNodeTypes.TYPE, type);
 		ast.addNodeWithId(newNode, id);
+		
+		return id;
 	}
 
-	private static void handleFunction(KeyedCSVRow row,
+	private static long handleTopLevelFunction(KeyedCSVRow row,
+			ASTUnderConstruction ast)
+	{
+		TopLevelFunctionDef newNode = new TopLevelFunctionDef();
+		Identifier nameNode = new Identifier();
+
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		nameNode.setCodeStr(name);
+		newNode.addChild(nameNode);
+		
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+		
+		return id;
+	}
+	
+	private static long handleFunction(KeyedCSVRow row,
 			ASTUnderConstruction ast)
 	{
 		FunctionDef newNode = new FunctionDef();
@@ -65,44 +90,55 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		nameNode.setCodeStr(name);
 		newNode.addChild(nameNode);
 
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
-		ast.setRootNode(newNode);
+		
+		return id;
 	}
 
-	private void handleCompound(KeyedCSVRow row, ASTUnderConstruction ast)
+	private long handleCompound(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		CompoundStatement newNode = new CompoundStatement();
 		ast.addNodeWithId(newNode, id);
+		
+		return id;
 	}
 
-	private void handleIf(KeyedCSVRow row, ASTUnderConstruction ast)
+	private long handleIf(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		IfStatement newNode = new IfStatement();
 		ast.addNodeWithId(newNode, id);
+		
+		return id;
 	}
 
-	private void handleFor(KeyedCSVRow row, ASTUnderConstruction ast)
+	private long handleFor(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ForStatement newNode = new ForStatement();
 		ast.addNodeWithId(newNode, id);
+		
+		return id;
 	}
 
-	private void handleDo(KeyedCSVRow row, ASTUnderConstruction ast)
+	private long handleDo(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		DoStatement newNode = new DoStatement();
 		ast.addNodeWithId(newNode, id);
+		
+		return id;
 	}
 
-	private void handleWhile(KeyedCSVRow row, ASTUnderConstruction ast)
+	private long handleWhile(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		Long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		WhileStatement newNode = new WhileStatement();
 		ast.addNodeWithId(newNode, id);
+		
+		return id;
 	}
 
 }

@@ -12,6 +12,7 @@ import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVAST;
 import tools.phpast2cfg.PHPCSVEdgeInterpreter;
 import tools.phpast2cfg.PHPCSVNodeInterpreter;
+import tools.phpast2cfg.PHPCSVNodeTypes;
 
 public class CSV2AST
 {
@@ -21,15 +22,23 @@ public class CSV2AST
 	ASTUnderConstruction ast;
 
 	public FunctionDef convert(String nodeFilename, String edgeFilename)
-			throws InvalidCSVFile, IOException
+			throws IOException, InvalidCSVFile
 	{
 		FileReader nodeReader = new FileReader(nodeFilename);
 		FileReader edgeReader = new FileReader(edgeFilename);
 		return convert(nodeReader, edgeReader);
 	}
 
+	public FunctionDef convert(CSVAST csvAST)
+			throws IOException, InvalidCSVFile
+	{
+		StringReader nodeReader = new StringReader(csvAST.getNodesAsString());
+		StringReader edgeReader = new StringReader(csvAST.getEdgesAsString());
+		return convert(nodeReader, edgeReader);
+	}
+	
 	public FunctionDef convert(Reader nodeReader, Reader edgeReader)
-			throws IOException
+			throws IOException, InvalidCSVFile
 	{
 		ast = new ASTUnderConstruction();
 
@@ -42,35 +51,25 @@ public class CSV2AST
 		return ast.getRootNode();
 	}
 
-	public FunctionDef convert(CSVAST csvAST) throws IOException
-	{
-		ast = new ASTUnderConstruction();
-
-		initReader(csvAST.getNodesAsString());
-		createASTNodes();
-
-		initReader(csvAST.getEdgesAsString());
-		createASTEdges();
-
-		return ast.getRootNode();
-	}
-
-	private void initReader(String str) throws IOException
-	{
-		StringReader stringReader = new StringReader(str);
-		reader = new KeyedCSVReader();
-		reader.init(stringReader);
-	}
-
 	private void initReader(Reader in) throws IOException
 	{
 		reader = new KeyedCSVReader();
 		reader.init(in);
 	}
 
-	private void createASTNodes()
+	private void createASTNodes() throws InvalidCSVFile
 	{
 		KeyedCSVRow keyedRow;
+
+		// first row must be a function type;
+		// otherwise we cannot create a function node
+		keyedRow = reader.getNextRow();
+		if( null == keyedRow || !PHPCSVNodeTypes.funcTypes.contains(keyedRow.getFieldForKey("type")))
+			throw new InvalidCSVFile( "Type of first row is not a function declaration.");
+		
+		FunctionDef root = (FunctionDef) ast.getNodeById( nodeInterpreter.handle(keyedRow, ast));
+		ast.setRootNode(root);
+
 		while ((keyedRow = reader.getNextRow()) != null)
 		{
 			nodeInterpreter.handle(keyedRow, ast);

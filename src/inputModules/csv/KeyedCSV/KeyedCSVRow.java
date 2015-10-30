@@ -1,6 +1,7 @@
 package inputModules.csv.KeyedCSV;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.csv.CSVRecord;
@@ -28,11 +29,15 @@ public class KeyedCSVRow
 	{
 		stringRepr = "";
 		int i = 0;
-		for (String r : record)
+		Iterator<String> recIt = record.iterator();
+		while (recIt.hasNext())
 		{
+			String r = recIt.next();
 			String keyStr = keys[i].getName();
 			values.put(keyStr, r);
-			stringRepr += r + ",";
+			stringRepr += r;
+			if (recIt.hasNext())
+				stringRepr += ",";
 			i++;
 		}
 	}
