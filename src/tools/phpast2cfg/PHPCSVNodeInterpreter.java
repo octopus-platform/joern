@@ -4,6 +4,7 @@ import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
+import ast.php.functionDef.Closure;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
@@ -28,6 +29,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			break;
 		case PHPCSVNodeTypes.TYPE_FUNC_DECL:
 			retval = handleFunction(row, ast);
+			break;
+		case PHPCSVNodeTypes.TYPE_CLOSURE:
+			retval = handleClosure(row, ast);
 			break;
 		case PHPCSVNodeTypes.TYPE_STMT_LIST:
 			retval = handleCompound(row, ast);
@@ -93,6 +97,22 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
 		
+		return id;
+	}
+
+	private static long handleClosure(KeyedCSVRow row,
+			ASTUnderConstruction ast)
+	{
+		Closure newNode = new Closure();
+		Identifier nameNode = new Identifier();
+
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		nameNode.setCodeStr(name);
+		newNode.addChild(nameNode);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
 		return id;
 	}
 

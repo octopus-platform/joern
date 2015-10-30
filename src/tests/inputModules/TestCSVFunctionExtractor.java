@@ -247,6 +247,40 @@ public class TestCSVFunctionExtractor
 	}
 
 	/**
+	 * function foo() {
+	 *   function() {};
+	 * }
+	 */
+	@Test
+	public void testFunctionWithClosure() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_STMT_LIST,,1,,0,,,,\n";
+		nodeStr += "2,AST_FUNC_DECL,,3,,0,,5,foo,\n";
+		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
+		nodeStr += "4,NULL,,3,,1,2,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,2,2,,,\n";
+		nodeStr += "6,AST_CLOSURE,,4,,0,2,4,{closure},\n";
+		nodeStr += "7,AST_PARAM_LIST,,4,,0,6,,,\n";
+		nodeStr += "8,NULL,,4,,1,6,,,\n";
+		nodeStr += "9,AST_STMT_LIST,,4,,2,6,,,\n";
+		nodeStr += "10,NULL,,4,,3,6,,,\n";
+		nodeStr += "11,NULL,,3,,3,2,,,\n";
+
+		nodeReader = new StringReader(nodeStr);
+
+		extractor.initialize(nodeReader, edgeReader);
+		FunctionDef function = extractor.getNextFunction();
+		FunctionDef function2 = extractor.getNextFunction();
+		FunctionDef function3 = extractor.getNextFunction();
+
+		assertEquals("{closure}", function.getName().getEscapedCodeStr());
+		assertEquals("foo", function2.getName().getEscapedCodeStr());
+		assertEquals("<foo.php>", function3.getName().getEscapedCodeStr());
+	}
+
+	/**
 	 * foo.php
 	 * -------
 	 * function foo() {}
