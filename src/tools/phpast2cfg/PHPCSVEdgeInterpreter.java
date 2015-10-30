@@ -11,8 +11,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	@Override
 	public long handle(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		long startId = Long.parseLong(row.getFieldForKey("START_ID"));
-		long endId = Long.parseLong(row.getFieldForKey("END_ID"));
+		long startId = Long.parseLong(row.getFieldForKey(PHPCSVEdgeTypes.START_ID));
+		long endId = Long.parseLong(row.getFieldForKey(PHPCSVEdgeTypes.END_ID));
 
 		ASTNode startNode = ast.getNodeById(startId);
 		ASTNode endNode = ast.getNodeById(endId);

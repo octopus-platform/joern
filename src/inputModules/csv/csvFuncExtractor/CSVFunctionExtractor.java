@@ -49,7 +49,7 @@ public class CSVFunctionExtractor
 		// TODO Currently we intentionally assign id -1 the AST_TOPLEVEL node;
 		// this is fine since we only support one top-level function for now.
 		// We will improve on this once we add File nodes.
-		topLevelFuncAST.addNodeRow("-1,AST_TOPLEVEL,,,,,,,<toplevel>,");
+		topLevelFuncAST.addNodeRow("-1," + PHPCSVNodeTypes.TYPE_TOPLEVEL + ",,,,,,,<toplevel>,");
 		topLevelFuncAST.addEdgeRow(edgeReader.getKeyRow());
 		csvStack.push(topLevelFuncAST);
 		funcIdStack.push("-1");
@@ -115,8 +115,8 @@ public class CSVFunctionExtractor
 
 			KeyedCSVRow currNodeRow = nodeReader.getNextRow();
 			System.out.println(currNodeRow);
-			String currType = currNodeRow.getFieldForKey("type");		
-			String currFuncId = currNodeRow.getFieldForKey("funcid");
+			String currType = currNodeRow.getFieldForKey(PHPCSVNodeTypes.TYPE);
+			String currFuncId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.FUNCID);
 								
 			// if this is a top-level node, use id of artificial top-level function
 			if( currFuncId.equals("")) currFuncId = "-1";
@@ -176,7 +176,7 @@ public class CSVFunctionExtractor
 		csvStack.peek().addNodeRow( currNodeRow.toString());
 		if( PHPCSVNodeTypes.funcTypes.contains(currType)) {
 			// if we met a function declaration node, push a new CSVAST atop the stack
-			String currId = currNodeRow.getFieldForKey("id");
+			String currId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
 			initFuncAST(currId);
 			// *also* add the declaration onto the newly created CSVAST
 			// (see javadoc of getNextFunction())

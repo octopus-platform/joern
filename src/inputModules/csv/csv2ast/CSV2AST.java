@@ -64,7 +64,7 @@ public class CSV2AST
 		// first row must be a function type;
 		// otherwise we cannot create a function node
 		keyedRow = reader.getNextRow();
-		if( null == keyedRow || !PHPCSVNodeTypes.funcTypes.contains(keyedRow.getFieldForKey("type")))
+		if( null == keyedRow || !PHPCSVNodeTypes.funcTypes.contains(keyedRow.getFieldForKey(PHPCSVNodeTypes.TYPE)))
 			throw new InvalidCSVFile( "Type of first row is not a function declaration.");
 		
 		FunctionDef root = (FunctionDef) ast.getNodeById( nodeInterpreter.handle(keyedRow, ast));

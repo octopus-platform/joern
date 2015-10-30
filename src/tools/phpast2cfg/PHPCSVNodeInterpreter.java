@@ -20,28 +20,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	public long handle(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		long retval = -1;
-		String type = row.getFieldForKey("type");
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		switch (type)
 		{
-		case "AST_TOPLEVEL":
+		case PHPCSVNodeTypes.TYPE_TOPLEVEL:
 			retval = handleTopLevelFunction(row, ast);
 			break;
-		case "AST_FUNC_DECL":
+		case PHPCSVNodeTypes.TYPE_FUNC_DECL:
 			retval = handleFunction(row, ast);
 			break;
-		case "AST_STMT_LIST":
+		case PHPCSVNodeTypes.TYPE_STMT_LIST:
 			retval = handleCompound(row, ast);
 			break;
-		case "AST_IF":
+		case PHPCSVNodeTypes.TYPE_IF:
 			retval = handleIf(row, ast);
 			break;
-		case "AST_WHILE":
+		case PHPCSVNodeTypes.TYPE_WHILE:
 			retval = handleWhile(row, ast);
 			break;
-		case "AST_DO_WHILE":
+		case PHPCSVNodeTypes.TYPE_DO_WHILE:
 			retval = handleDo(row, ast);
 			break;
-		case "AST_FOR":
+		case PHPCSVNodeTypes.TYPE_FOR:
 			retval = handleFor(row, ast);
 			break;
 
