@@ -36,7 +36,9 @@ public class KeyedCSVReader
 		{
 			String field = header.get(i);
 			keys[i] = createKeyFromFields(field);
-			keyRow += field + ",";
+			keyRow += field;
+			if( i < header.size() - 1)
+				keyRow += ",";
 		}
 
 	}
