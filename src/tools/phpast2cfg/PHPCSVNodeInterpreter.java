@@ -5,6 +5,7 @@ import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
 import ast.php.functionDef.Closure;
+import ast.php.functionDef.Method;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
@@ -29,6 +30,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			break;
 		case PHPCSVNodeTypes.TYPE_FUNC_DECL:
 			retval = handleFunction(row, ast);
+			break;
+		case PHPCSVNodeTypes.TYPE_METHOD:
+			retval = handleMethod(row, ast);
 			break;
 		case PHPCSVNodeTypes.TYPE_CLOSURE:
 			retval = handleClosure(row, ast);
@@ -75,7 +79,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		Identifier nameNode = new Identifier();
 
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
-		nameNode.setCodeStr(name);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_FILE))
+			nameNode.setCodeStr("<" + name + ">");
+		else if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_CLASS))
+			nameNode.setCodeStr("[" + name + "]");
+		// TODO: else throw exception?
 		newNode.addChild(nameNode);
 		
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
@@ -88,6 +97,22 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			ASTUnderConstruction ast)
 	{
 		FunctionDef newNode = new FunctionDef();
+		Identifier nameNode = new Identifier();
+
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		nameNode.setCodeStr(name);
+		newNode.addChild(nameNode);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+		
+		return id;
+	}
+	
+	private static long handleMethod(KeyedCSVRow row,
+			ASTUnderConstruction ast)
+	{
+		Method newNode = new Method();
 		Identifier nameNode = new Identifier();
 
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
