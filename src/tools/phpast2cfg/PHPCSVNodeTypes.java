@@ -7,9 +7,10 @@ public class PHPCSVNodeTypes
 {
 	/* node row keys */
 	public static final String NODE_ID = "id";
-	public static final String NAME = "name";
 	public static final String TYPE = "type";
+	public static final String FLAGS = "flags";
 	public static final String FUNCID = "funcid";
+	public static final String NAME = "name";
 
 	/* node types */
 	// directory/file types
@@ -36,6 +37,10 @@ public class PHPCSVNodeTypes
 	// nodes with exactly 4 children
 	public static final String TYPE_FOR = "AST_FOR";
 
+	/* node flags */
+	// flags for toplevel nodes
+	public static final String FLAG_TOPLEVEL_FILE = "TOPLEVEL_FILE"; // artificial
+	public static final String FLAG_TOPLEVEL_CLASS = "TOPLEVEL_CLASS"; // artificial
 
 
 }
