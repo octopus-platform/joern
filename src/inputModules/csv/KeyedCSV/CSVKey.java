@@ -1,5 +1,7 @@
 package inputModules.csv.KeyedCSV;
 
+import java.util.Objects;
+
 public class CSVKey
 {
 	private String name;
@@ -47,15 +49,6 @@ public class CSVKey
 	 */
 	@Override
 	public int hashCode() {
-		// see {@link http://stackoverflow.com/a/113600}
-		int result = 1;
-		
-		String[] arr = {this.name, this.type};
-		for( String f : arr) {
-			int c = (null == f) ? 0 : f.hashCode();
-			result = 37 * result + c;
-		}
-
-		return result;
+		return Objects.hash(this.name, this.type);
 	}
 }
