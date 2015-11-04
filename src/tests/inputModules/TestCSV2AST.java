@@ -20,9 +20,7 @@ public class TestCSV2AST
 	// See {@link http://neo4j.com/docs/stable/import-tool-header-format.html} for detailed
 	// information about the header file format
 	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
-	// TODO the edge header contains types, not names, i.e., it should be:
-	//String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
-	String edgeHeader = "START_ID,END_ID,TYPE\n";
+	String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
 
 	@Test
 	public void testFunctionCreation() throws IOException, InvalidCSVFile

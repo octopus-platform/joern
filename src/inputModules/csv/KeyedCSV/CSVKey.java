@@ -4,8 +4,17 @@ public class CSVKey
 {
 	private String name;
 	private String type;
-	private String nodeIndex;
+	public static final String DEFAULT_TYPE = "string";
 
+	public CSVKey(String name) {
+		this(name, DEFAULT_TYPE);
+	}
+
+	public CSVKey(String name, String type) {
+		this.name = name;
+		this.type = type;
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -14,11 +23,6 @@ public class CSVKey
 	public String getType()
 	{
 		return type;
-	}
-
-	public String getNodeIndex()
-	{
-		return nodeIndex;
 	}
 
 	public void setName(String name)
@@ -30,10 +34,28 @@ public class CSVKey
 	{
 		this.type = type;
 	}
-
-	public void setNodeIndex(String nodeIndex)
-	{
-		this.nodeIndex = nodeIndex;
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof CSVKey))
+			return false;
+		return this.name.equals(((CSVKey)obj).name) && this.type.equals(((CSVKey)obj).type);
 	}
+	
+	/**
+	 * Needed for HashMap<CSVKey,T>
+	 */
+	@Override
+	public int hashCode() {
+		// see {@link http://stackoverflow.com/a/113600}
+		int result = 1;
+		
+		String[] arr = {this.name, this.type};
+		for( String f : arr) {
+			int c = (null == f) ? 0 : f.hashCode();
+			result = 37 * result + c;
+		}
 
+		return result;
+	}
 }

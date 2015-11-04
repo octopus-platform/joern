@@ -1,11 +1,13 @@
 package tools.phpast2cfg;
 
+import inputModules.csv.KeyedCSV.CSVKey;
+
 public class PHPCSVEdgeTypes
 {
 	/* edge row key types */
-	public static final String START_ID = "START_ID";
-	public static final String END_ID = "END_ID";
-	public static final String TYPE = "TYPE";
+	public static final CSVKey START_ID = new CSVKey("", "START_ID");
+	public static final CSVKey END_ID = new CSVKey("", "END_ID");
+	public static final CSVKey TYPE = new CSVKey("", "TYPE");
 
 	/* edge types */
 	public static final String TYPE_FILE_OF = "FILE_OF";

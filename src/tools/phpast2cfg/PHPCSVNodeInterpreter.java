@@ -66,7 +66,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 
 		ASTNode newNode = new ASTNode();
-		newNode.setProperty(PHPCSVNodeTypes.TYPE, type);
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
 		ast.addNodeWithId(newNode, id);
 		
 		return id;
