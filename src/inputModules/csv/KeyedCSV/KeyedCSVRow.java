@@ -9,20 +9,12 @@ import org.apache.commons.csv.CSVRecord;
 public class KeyedCSVRow
 {
 	private CSVKey[] keys;
-	private Map<String, String> values = new HashMap<String, String>();
+	private Map<CSVKey,String> values = new HashMap<CSVKey,String>();
 	private String stringRepr;
 
 	public KeyedCSVRow(CSVKey[] keys)
 	{
 		this.keys = keys;
-	}
-
-	public String getFieldForKey(String key)
-	{
-		String val = values.get(key);
-		if (val == null)
-			return "";
-		return val;
 	}
 
 	public void initFromCSVRecord(CSVRecord record)
@@ -33,8 +25,7 @@ public class KeyedCSVRow
 		while (recIt.hasNext())
 		{
 			String r = recIt.next();
-			String keyStr = keys[i].getName();
-			values.put(keyStr, r);
+			values.put(keys[i], r);
 			stringRepr += r;
 			if (recIt.hasNext())
 				stringRepr += ",";
@@ -42,6 +33,12 @@ public class KeyedCSVRow
 		}
 	}
 
+	public String getFieldForKey(CSVKey key)
+	{
+		String val = values.get(key);
+		return (null == val) ? "" : val;
+	}
+	
 	@Override
 	public String toString()
 	{

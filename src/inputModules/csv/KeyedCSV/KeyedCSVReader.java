@@ -43,22 +43,13 @@ public class KeyedCSVReader
 
 	}
 
-	public int getCurrentLineNumber()
-	{
-		return currentLineNumber;
-	}
-
 	private CSVKey createKeyFromFields(String field)
-	{
-		CSVKey key = new CSVKey();
-
+	{		
 		String[] keyParts = field.split(":");
-		key.setName(keyParts[0]);
+		CSVKey key = new CSVKey(keyParts[0]);
 		if (keyParts.length > 1)
 			key.setType(keyParts[1]);
-		if (keyParts.length > 2)
-			key.setNodeIndex(keyParts[2]);
-
+		
 		return key;
 	}
 
@@ -80,19 +71,25 @@ public class KeyedCSVReader
 		return keyedRow;
 	}
 
+
+	public boolean hasNextRow()
+	{
+		return iterator.hasNext();
+	}
+	
 	public void deinit() throws IOException
 	{
 		parser.close();
 	}
 
+	public int getCurrentLineNumber()
+	{
+		return currentLineNumber;
+	}
+	
 	public CSVKey[] getKeys()
 	{
 		return keys;
-	}
-
-	public boolean hasNextRow()
-	{
-		return iterator.hasNext();
 	}
 
 	public String getKeyRow()

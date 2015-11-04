@@ -17,7 +17,9 @@ public class TestKeyedCSVReader
 	@Test
 	public void testSimpleHeaderParsing() throws IOException
 	{
-		KeyedCSVReader csvReader = initReaderWithString("foo,bar\n1,2");
+		String csvStr = "foo,bar\n";
+		csvStr += "1,2";
+		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		CSVKey[] keys = csvReader.getKeys();
 		assertEquals(keys.length, 2);
 		assertEquals("foo", keys[0].getName());
@@ -27,37 +29,40 @@ public class TestKeyedCSVReader
 	@Test
 	public void testHeaderWithTypeParsing() throws IOException
 	{
-		KeyedCSVReader csvReader = initReaderWithString("foo:type,bar\n1,2");
+		String csvStr = "foo:type,bar\n";
+		csvStr += "1,2";
+		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		CSVKey[] keys = csvReader.getKeys();
 		assertEquals("foo", keys[0].getName());
 		assertEquals("type", keys[0].getType());
-	}
-
-	@Test
-	public void testHeaderWithTypeAndIndexParsing() throws IOException
-	{
-		KeyedCSVReader csvReader = initReaderWithString(
-				"foo:type:nodeIndex,bar\n1,2");
-		CSVKey[] keys = csvReader.getKeys();
-		assertEquals("foo", keys[0].getName());
-		assertEquals("type", keys[0].getType());
-		assertEquals("nodeIndex", keys[0].getNodeIndex());
+		assertEquals("bar", keys[1].getName());
+		assertEquals("string", keys[1].getType());
 	}
 
 	@Test
 	public void testFieldRetrieval() throws IOException
 	{
-		KeyedCSVReader csvReader = initReaderWithString("foo,bar\n1,2");
+		String csvStr = "foo,bar:int,:unnamedtype\n";
+		csvStr += "1,2,3";
+		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();
 
-		String field = row.getFieldForKey("foo");
+		String field = row.getFieldForKey(new CSVKey("foo"));
+		String samefield = row.getFieldForKey(new CSVKey("foo", "string"));
+		String field2 = row.getFieldForKey(new CSVKey("bar", "int"));
+		String field3 = row.getFieldForKey(new CSVKey("", "unnamedtype"));
+
 		assertEquals("1", field);
+		assertEquals("1", samefield);
+		assertEquals("2", field2);
+		assertEquals("3", field3);
 	}
 
 	@Test
 	public void testEOF() throws IOException
 	{
-		KeyedCSVReader csvReader = initReaderWithString("foo,bar");
+		String csvStr = "foo,bar";
+		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();
 		assertEquals(row, null);
 	}
@@ -65,17 +70,23 @@ public class TestKeyedCSVReader
 	@Test
 	public void testQuoting() throws IOException
 	{
-		KeyedCSVReader csvReader = initReaderWithString("foo,bar\n\"1\",2");
+		String csvStr = "foo,bar\n";
+		csvStr += "\"1\",2";
+
+		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();
-		assertEquals("1", row.getFieldForKey("foo"));
+		assertEquals("1", row.getFieldForKey(new CSVKey("foo")));
 	}
 
 	@Test
 	public void testQuoteInQuote() throws IOException
 	{
-		KeyedCSVReader csvReader = initReaderWithString("foo,bar\n\"\\\"1\",2");
+		String csvStr = "foo,bar\n";
+		csvStr += "\"\\\"1\",2";
+		
+		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();
-		assertEquals("\"1", row.getFieldForKey("foo"));
+		assertEquals("\"1", row.getFieldForKey(new CSVKey("foo")));
 	}
 
 	private KeyedCSVReader initReaderWithString(String str) throws IOException

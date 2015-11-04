@@ -3,14 +3,16 @@ package tools.phpast2cfg;
 import java.util.Arrays;
 import java.util.List;
 
+import inputModules.csv.KeyedCSV.CSVKey;
+
 public class PHPCSVNodeTypes
 {
 	/* node row keys */
-	public static final String NODE_ID = "id";
-	public static final String TYPE = "type";
-	public static final String FLAGS = "flags";
-	public static final String FUNCID = "funcid";
-	public static final String NAME = "name";
+	public static final CSVKey NODE_ID = new CSVKey("id","ID");
+	public static final CSVKey TYPE = new CSVKey("type");
+	public static final CSVKey FLAGS = new CSVKey("flags","string[]");
+	public static final CSVKey FUNCID =new CSVKey("funcid","int");
+	public static final CSVKey NAME = new CSVKey("name");
 
 	/* node types */
 	// directory/file types
