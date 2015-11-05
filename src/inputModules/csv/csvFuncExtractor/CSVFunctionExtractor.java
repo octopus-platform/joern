@@ -2,6 +2,8 @@ package inputModules.csv.csvFuncExtractor;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 import ast.functionDef.FunctionDef;
@@ -18,7 +20,7 @@ public class CSVFunctionExtractor
 	KeyedCSVReader edgeReader;
 	Stack<CSVAST> csvStack = new Stack<CSVAST>();
 	Stack<String> funcIdStack = new Stack<String>();
-	int finishedFunctions = 0;
+	Queue<CSVAST> csvFifoQueue = new LinkedList<CSVAST>();
 	CSV2AST csv2ast = new CSV2AST();
 
 	public void setLanguage(String language)
@@ -34,29 +36,33 @@ public class CSVFunctionExtractor
 		nodeReader.init(nodeStrReader);
 		edgeReader.init(edgeStrReader);
 	}
-
-	private void initFuncAST(String funcId)
-	{
-		CSVAST csvAST = new CSVAST();
-		csvAST.addNodeRow(nodeReader.getKeyRow());
-		csvAST.addEdgeRow(edgeReader.getKeyRow());
-		csvStack.push(csvAST);
-		funcIdStack.push(funcId);
-	}
 	
 	public FunctionDef getNextFunction()
 			throws IOException, InvalidCSVFile
-	{
-		CSVAST csvAST = null;
-		csvAST = getNodeRowsOfNextFunction();
+	{	
+		if( csvFifoQueue.isEmpty()) {
+
+			// there are no functions in the queue, let's get some
+			assert csvStack.empty() : "There are unfinished CSVASTs on the stack and they are not going to be converted.";
+			addNodeRowsUntilNextFile();
+			// addEdgeRowsUntilNextFile();
+		}
+		
 		FunctionDef function = null;
-		if(csvAST != null)
+		
+		if( !csvFifoQueue.isEmpty()) {
+
+			CSVAST csvAST = csvFifoQueue.remove();
+			System.out.println("Converting " + csvAST);
 			function = csv2ast.convert(csvAST);
+		}
+
 		return function;
 	}
 
 	/**
-	 * This function reads lines from the nodeReader:
+	 * This function reads lines from the nodeReader, file by file.
+	 * 
 	 * 1. It first continuously adds lines that have the same funcid as the
 	 *    funcid currently on top of the funcIdStack to the CSVAST on top of
 	 *    the csvStack.
@@ -78,21 +84,14 @@ public class CSVFunctionExtractor
 	 *       Additionally, we know that we finished scanning at least one function (since
 	 *       we got back to the "outer" scope). The distance from the top of the stack to
 	 *       the csvAST that we just added the current line to is the number of functions
-	 *       that we finished scanning. We set the global variable finishedFunctions to that
-	 *       number. For the next that many calls of getNodeRowsOfNextFunction(), we simply
-	 *       pop the csvStack (and the funcIdStack) and return the topmost CSVAST.
-	 *      
-	 *  @return The CSV lines corresponding to the next function, or null if we arrived at
-	 *          the end of the CSV file and there is nothing more to return.
+	 *       that we finished scanning. We pop the csvStack (and the funcIdStack) that many
+	 *       times and put the popped CSVAST's in the csvFifoQueue.
 	 */
-	private CSVAST getNodeRowsOfNextFunction() throws InvalidCSVFile
-	{
-		
-		CSVAST csvAST = null;
-		
-		while( 0 == finishedFunctions && nodeReader.hasNextRow())
+	private void addNodeRowsUntilNextFile() throws InvalidCSVFile
+	{		
+		while( nodeReader.hasNextRow())
 		{
-
+			
 			KeyedCSVRow currNodeRow = nodeReader.getNextRow();
 			System.out.println(currNodeRow);
 			String currType = currNodeRow.getFieldForKey(PHPCSVNodeTypes.TYPE);
@@ -101,15 +100,11 @@ public class CSVFunctionExtractor
 			if( currType.equals(PHPCSVNodeTypes.TYPE_DIRECTORY))
 				continue;
 
-			// if we met a file node, empty the csvStack
+			// If we met a file node and we finished some new functions, break.
+			// There should always be some new functions except at the very beginning
+			// when this function is called for the first time.
 			if( currType.equals(PHPCSVNodeTypes.TYPE_FILE)) {
-
-				finishedFunctions = csvStack.size();
-				
-				// If there are finished functions on the stack (this should always be the case
-				// except at the very beginning when we never yet created a top-level function),
-				// then we have to return them first. Otherwise, we just continue the loop
-				if( 0 != finishedFunctions)
+				if( !csvStack.isEmpty())
 					break;
 				else
 					continue;
@@ -127,7 +122,7 @@ public class CSVFunctionExtractor
 				
 				// create a new top-level function at the bottom of the stack and add current row
 				String topLevelFuncId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
-				initFuncAST(topLevelFuncId);
+				initCSVAST(topLevelFuncId);
 				csvStack.peek().addNodeRow( currNodeRow.toString());
 
 				continue;
@@ -146,48 +141,40 @@ public class CSVFunctionExtractor
 			// the funcid changed
 			else {
 				// how many functions did we just finish?
-				finishedFunctions = funcIdStack.search(currFuncId) - 1;
+				int finishedFunctions = funcIdStack.search(currFuncId) - 1;
 				// if currFuncId is not in the stack, fail; this should never happen with a valid CSV file
 				if( finishedFunctions < 1)
 					throw new InvalidCSVFile("funcid " + currFuncId +
 							" has never been initialized by a function declaration.");
+				// put finished functions into the finished functions queue
+				for( int i = 0; i < finishedFunctions; i++) {
+					csvFifoQueue.add( csvStack.pop());
+					funcIdStack.pop();
+				}
 				// put the current line on the correct CSVAST
-				Stack<CSVAST> tmpCSVStack = new Stack<CSVAST>();
-				Stack<String> tmpFuncIdStack = new Stack<String>();
-				for( int i = 0; i < finishedFunctions; i++) {
-					tmpCSVStack.push( csvStack.pop());
-					tmpFuncIdStack.push( funcIdStack.pop());
-				}
 				addRowAndInitASTForFuncType(currNodeRow, currType);
-				// put everything back
-				for( int i = 0; i < finishedFunctions; i++) {
-					csvStack.push( tmpCSVStack.pop());
-					funcIdStack.push( tmpFuncIdStack.pop());
-				}
-				// We finished at least one function.
-				// By breaking, we just return it.
-				break;
 			}
 		}
-		
-		if( !nodeReader.hasNextRow())
-			finishedFunctions = csvStack.size();
-			
+
 		// If we are here, it means one of two things:
-		// - We broke out of the loop because we finished scanning a function;
-		//   then, finishedFunctions is greater than 0 and there are at least
-		//   that many CSVAST's on the stack
+		// - We broke out of the loop because we finished scanning a file;
 		// - The nodeReader does not have any more rows to read.
-		//   In this case, just pop the stack and return the popped element.
-		//   This can occur several times, e.g., if a function was at the very end
-		//   of a file, first that function will be returned, then the top-level function.
-		if( finishedFunctions > 0) {
-			csvAST = csvStack.pop();
+		// In both cases, we just push the remaining (now finished) functions
+		// on the csvStack onto the csvFifoQueue.
+		while( !csvStack.empty()) {
+			csvFifoQueue.add( csvStack.pop());
 			funcIdStack.pop();
-			finishedFunctions--;
 		}
-		
-		return csvAST;
+	}
+	
+	private void initCSVAST(String funcId)
+	{
+		CSVAST csvAST = new CSVAST();
+		System.out.println("New CSVAST " + csvAST);
+		csvAST.addNodeRow(nodeReader.getKeyRow());
+		csvAST.addEdgeRow(edgeReader.getKeyRow());
+		csvStack.push(csvAST);
+		funcIdStack.push(funcId);
 	}
 
 	private void addRowAndInitASTForFuncType(KeyedCSVRow currNodeRow, String currType)
@@ -196,7 +183,7 @@ public class CSVFunctionExtractor
 		if( PHPCSVNodeTypes.funcTypes.contains(currType)) {
 			// if we met a function declaration node, push a new CSVAST atop the stack
 			String currId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
-			initFuncAST(currId);
+			initCSVAST(currId);
 			// *also* add the declaration onto the newly created CSVAST
 			// (see javadoc of getNextFunction())
 			csvStack.peek().addNodeRow( currNodeRow.toString());
