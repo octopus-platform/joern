@@ -1,7 +1,7 @@
 package ast.functionDef;
 
 import ast.ASTNode;
-import ast.DummyNameNode;
+import ast.DummyIdentifierNode;
 import ast.expressions.Identifier;
 import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
@@ -9,7 +9,7 @@ import ast.walking.ASTNodeVisitor;
 public class FunctionDef extends ASTNode
 {
 
-	private Identifier name = new DummyNameNode();
+	private Identifier identifier = new DummyIdentifierNode();
 	private ParameterList parameterList = new ParameterList();
 	private CompoundStatement content = new CompoundStatement();
 
@@ -20,7 +20,7 @@ public class FunctionDef extends ASTNode
 		else if (node instanceof ParameterList)
 			setParameterList((ParameterList) node);
 		else if (node instanceof Identifier)
-			setName((Identifier) node);
+			setIdentifier((Identifier) node);
 
 		super.addChild(node);
 	}
@@ -39,7 +39,7 @@ public class FunctionDef extends ASTNode
 
 	public String getFunctionSignature()
 	{
-		String retval = getName().getEscapedCodeStr();
+		String retval = getIdentifier().getEscapedCodeStr();
 		if (getParameterList() != null)
 			retval += " (" + getParameterList().getEscapedCodeStr() + ")";
 		else
@@ -67,14 +67,14 @@ public class FunctionDef extends ASTNode
 		this.parameterList = parameterList;
 	}
 
-	public Identifier getName()
+	public Identifier getIdentifier()
 	{
-		return name;
+		return identifier;
 	}
 
-	private void setName(Identifier name)
+	private void setIdentifier(Identifier identifier)
 	{
-		this.name = name;
+		this.identifier = identifier;
 	}
 
 }

@@ -39,7 +39,7 @@ public class TestCSV2AST
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
-		assertEquals("foo", func.getName().getEscapedCodeStr());
+		assertEquals("foo", func.getIdentifier().getEscapedCodeStr());
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class TestCSV2AST
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,,\n";
 		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
-		assertEquals("", func.getName().getEscapedCodeStr());
+		assertEquals("", func.getIdentifier().getEscapedCodeStr());
 	}
 
 	// TODO remove this.

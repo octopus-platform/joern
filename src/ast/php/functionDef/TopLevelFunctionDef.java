@@ -17,7 +17,7 @@ public class TopLevelFunctionDef extends FunctionDef
 	@Override
 	public String getFunctionSignature()
 	{
-		return getName().getEscapedCodeStr();
+		return getIdentifier().getEscapedCodeStr();
 	}
 
 	@Override

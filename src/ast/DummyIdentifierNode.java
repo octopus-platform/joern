@@ -2,9 +2,9 @@ package ast;
 
 import ast.expressions.Identifier;
 
-public class DummyNameNode extends Identifier
+public class DummyIdentifierNode extends Identifier
 {
-	public DummyNameNode()
+	public DummyIdentifierNode()
 	{
 		super();
 	}

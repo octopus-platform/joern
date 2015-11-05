@@ -1,7 +1,7 @@
 package ast.declarations;
 
 import ast.ASTNode;
-import ast.DummyNameNode;
+import ast.DummyIdentifierNode;
 import ast.expressions.Identifier;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
@@ -10,7 +10,7 @@ import ast.walking.ASTNodeVisitor;
 public class ClassDefStatement extends Statement
 {
 
-	public Identifier name = new DummyNameNode();
+	public Identifier name = new DummyIdentifierNode();
 	public CompoundStatement content = new CompoundStatement();
 
 	public void addChild(ASTNode expression)
