@@ -2,8 +2,12 @@ package inputModules.csv.csvFuncExtractor;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 import ast.functionDef.FunctionDef;
@@ -11,6 +15,7 @@ import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
+import tools.phpast2cfg.PHPCSVEdgeTypes;
 import tools.phpast2cfg.PHPCSVNodeTypes;
 
 public class CSVFunctionExtractor
@@ -21,8 +26,8 @@ public class CSVFunctionExtractor
 	Stack<CSVAST> csvStack = new Stack<CSVAST>();
 	Stack<String> funcIdStack = new Stack<String>();
 	Queue<CSVAST> csvFifoQueue = new LinkedList<CSVAST>();
+	Map<CSVAST,Set<String>> csvNodeIds = new HashMap<CSVAST,Set<String>>();
 	CSV2AST csv2ast = new CSV2AST();
-
 	public void setLanguage(String language)
 	{
 		csv2ast.setLanguage(language);
@@ -45,7 +50,7 @@ public class CSVFunctionExtractor
 			// there are no functions in the queue, let's get some
 			assert csvStack.empty() : "There are unfinished CSVASTs on the stack and they are not going to be converted.";
 			addNodeRowsUntilNextFile();
-			// addEdgeRowsUntilNextFile();
+			addEdgeRowsUntilNextFile();
 		}
 		
 		FunctionDef function = null;
@@ -53,7 +58,6 @@ public class CSVFunctionExtractor
 		if( !csvFifoQueue.isEmpty()) {
 
 			CSVAST csvAST = csvFifoQueue.remove();
-			System.out.println("Converting " + csvAST);
 			function = csv2ast.convert(csvAST);
 		}
 
@@ -117,13 +121,15 @@ public class CSVFunctionExtractor
 				
 				// make sure stack is empty
 				if( !csvStack.empty())
-					throw new InvalidCSVFile( "A toplevel node of a file was found when the toplevel function"
+					throw new InvalidCSVFile( "nodeReader, line " + nodeReader.getCurrentLineNumber() + ": "
+							+ " A toplevel node of a file was found when the toplevel function"
 							+ " of the previous file was not finished scanning.");
 				
 				// create a new top-level function at the bottom of the stack and add current row
 				String topLevelFuncId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
 				initCSVAST(topLevelFuncId);
 				csvStack.peek().addNodeRow( currNodeRow.toString());
+				addIdToTopCSVNodeIds(topLevelFuncId);
 
 				continue;
 			}
@@ -131,7 +137,8 @@ public class CSVFunctionExtractor
 			// we are looking neither at a dir node, file node, nor toplevel node of a file
 			// make sure stack is not empty at this point
 			if( csvStack.empty())
-				throw new InvalidCSVFile( "No toplevel node of a file to initialize top-level code was found.");
+				throw new InvalidCSVFile( "nodeReader, line " + nodeReader.getCurrentLineNumber() + ": "
+						+ "No toplevel node of a file to initialize top-level code was found.");
 
 			String currFuncId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.FUNCID);
 
@@ -144,8 +151,8 @@ public class CSVFunctionExtractor
 				int finishedFunctions = funcIdStack.search(currFuncId) - 1;
 				// if currFuncId is not in the stack, fail; this should never happen with a valid CSV file
 				if( finishedFunctions < 1)
-					throw new InvalidCSVFile("funcid " + currFuncId +
-							" has never been initialized by a function declaration.");
+					throw new InvalidCSVFile( "nodeReader, line " + nodeReader.getCurrentLineNumber() + ": "
+							+ "funcid " + currFuncId + " has never been initialized by a function declaration.");
 				// put finished functions into the finished functions queue
 				for( int i = 0; i < finishedFunctions; i++) {
 					csvFifoQueue.add( csvStack.pop());
@@ -167,27 +174,82 @@ public class CSVFunctionExtractor
 		}
 	}
 	
-	private void initCSVAST(String funcId)
+	/**
+	 * Reads lines from the edgeReader, file by file.
+	 * 
+	 * Assumes that the functions currently in the csvNodeIds map are
+	 * exactly those referenced by the next edge rows until meeting the
+	 * next FILE_OF edge.
+	 */
+	private void addEdgeRowsUntilNextFile() throws InvalidCSVFile
+	{	
+
+		while( edgeReader.hasNextRow())
+		{		
+			KeyedCSVRow currEdgeRow = edgeReader.getNextRow();
+			System.out.println(currEdgeRow);
+			String currType = currEdgeRow.getFieldForKey(PHPCSVEdgeTypes.TYPE);
+
+			// ignore dir edges
+			if( currType.equals(PHPCSVEdgeTypes.TYPE_DIRECTORY_OF))
+				continue;
+			
+			// break at file edges
+			if( currType.equals(PHPCSVEdgeTypes.TYPE_FILE_OF))
+				break;
+			
+			if( !currType.equals(PHPCSVEdgeTypes.TYPE_AST_PARENT_OF))
+				throw new InvalidCSVFile( "edgeReader, line " + edgeReader.getCurrentLineNumber() + ": "
+						+ "Unknown edge type " + currType + ".");
+			
+			String startId = currEdgeRow.getFieldForKey(PHPCSVEdgeTypes.START_ID);
+			String endId = currEdgeRow.getFieldForKey(PHPCSVEdgeTypes.END_ID);
+			
+			for( CSVAST csvAST : csvNodeIds.keySet()) {
+				Set<String> nodeSet = csvNodeIds.get(csvAST);
+				if( nodeSet.contains(startId) && nodeSet.contains(endId))
+					csvAST.addEdgeRow(currEdgeRow.toString());
+			}
+		}
+		
+		// We're done with the set of CSVASTs in the current file, let's clean up
+		csvNodeIds.clear();
+	}
+	
+	private void initCSVAST(String functionNodeId)
 	{
 		CSVAST csvAST = new CSVAST();
-		System.out.println("New CSVAST " + csvAST);
 		csvAST.addNodeRow(nodeReader.getKeyRow());
 		csvAST.addEdgeRow(edgeReader.getKeyRow());
 		csvStack.push(csvAST);
-		funcIdStack.push(funcId);
+		funcIdStack.push(functionNodeId);
 	}
 
 	private void addRowAndInitASTForFuncType(KeyedCSVRow currNodeRow, String currType)
 	{
+		String currId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
 		csvStack.peek().addNodeRow( currNodeRow.toString());
+		addIdToTopCSVNodeIds(currId);
 		if( PHPCSVNodeTypes.funcTypes.contains(currType)) {
 			// if we met a function declaration node, push a new CSVAST atop the stack
-			String currId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
 			initCSVAST(currId);
 			// *also* add the declaration onto the newly created CSVAST
 			// (see javadoc of getNextFunction())
 			csvStack.peek().addNodeRow( currNodeRow.toString());
+			addIdToTopCSVNodeIds(currId);
 		}
 	}
-
+	
+	/**
+	 * Adds a given nodeId to the set of nodes for the CSVAST currently
+	 * on top of the stack. Initializes a new Set if it has not been
+	 * initialized yet.
+	 */
+	private void addIdToTopCSVNodeIds(String nodeId) {
+		CSVAST csvAST = csvStack.peek();
+		if( !csvNodeIds.containsKey(csvAST))
+			csvNodeIds.put(csvAST, new HashSet<String>());
+		Set<String> nodeSet = csvNodeIds.get(csvAST);
+		nodeSet.add(nodeId);
+	}
 }
