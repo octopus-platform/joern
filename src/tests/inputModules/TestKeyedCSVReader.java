@@ -14,6 +14,14 @@ import inputModules.csv.KeyedCSV.KeyedCSVRow;
 public class TestKeyedCSVReader
 {
 
+	private KeyedCSVReader initReaderWithString(String str) throws IOException
+	{
+		KeyedCSVReader csvReader = new KeyedCSVReader();
+		StringReader reader = new StringReader(str);
+		csvReader.init(reader);
+		return csvReader;
+	}
+	
 	@Test
 	public void testSimpleHeaderParsing() throws IOException
 	{
@@ -88,13 +96,4 @@ public class TestKeyedCSVReader
 		KeyedCSVRow row = csvReader.getNextRow();
 		assertEquals("\"1", row.getFieldForKey(new CSVKey("foo")));
 	}
-
-	private KeyedCSVReader initReaderWithString(String str) throws IOException
-	{
-		KeyedCSVReader csvReader = new KeyedCSVReader();
-		StringReader reader = new StringReader(str);
-		csvReader.init(reader);
-		return csvReader;
-	}
-
 }

@@ -75,8 +75,8 @@ public class TestCSVFunctionExtractor
 		FunctionDef function2 = extractor.getNextFunction();
 		FunctionDef function3 = extractor.getNextFunction();
 
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function2.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("<foo.php>", function2.getName());
 		assertEquals(null, function3);
 	}
 
@@ -107,8 +107,8 @@ public class TestCSVFunctionExtractor
 		FunctionDef function2 = extractor.getNextFunction();
 		FunctionDef function3 = extractor.getNextFunction();
 		
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function2.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("<foo.php>", function2.getName());
 		assertEquals(null, function3);
 	}
 
@@ -143,8 +143,8 @@ public class TestCSVFunctionExtractor
 		FunctionDef function2 = extractor.getNextFunction();
 		FunctionDef function3 = extractor.getNextFunction();
 
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function2.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("<foo.php>", function2.getName());
 		assertEquals(null, function3);
 	}
 
@@ -178,9 +178,9 @@ public class TestCSVFunctionExtractor
 		FunctionDef function3 = extractor.getNextFunction();
 		FunctionDef function4 = extractor.getNextFunction();
 
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("bar", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function3.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("bar", function2.getName());
+		assertEquals("<foo.php>", function3.getName());
 		assertEquals(null, function4);
 	}
 	
@@ -215,9 +215,9 @@ public class TestCSVFunctionExtractor
 		FunctionDef function3 = extractor.getNextFunction();
 		FunctionDef function4 = extractor.getNextFunction();
 
-		assertEquals("bar", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("foo", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function3.getIdentifier().getEscapedCodeStr());
+		assertEquals("bar", function.getName());
+		assertEquals("foo", function2.getName());
+		assertEquals("<foo.php>", function3.getName());
 		assertEquals(null, function4);
 	}
 	
@@ -259,10 +259,10 @@ public class TestCSVFunctionExtractor
 		FunctionDef function4 = extractor.getNextFunction();
 		FunctionDef function5 = extractor.getNextFunction();
 
-		assertEquals("bar", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("foo", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("buz", function3.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function4.getIdentifier().getEscapedCodeStr());
+		assertEquals("bar", function.getName());
+		assertEquals("foo", function2.getName());
+		assertEquals("buz", function3.getName());
+		assertEquals("<foo.php>", function4.getName());
 		assertEquals(null, function5);
 	}
 
@@ -297,9 +297,9 @@ public class TestCSVFunctionExtractor
 		FunctionDef function3 = extractor.getNextFunction();
 		FunctionDef function4 = extractor.getNextFunction();
 
-		assertEquals("{closure}", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("foo", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function3.getIdentifier().getEscapedCodeStr());
+		assertEquals("{closure}", function.getName());
+		assertEquals("foo", function2.getName());
+		assertEquals("<foo.php>", function3.getName());
 		assertEquals(null, function4);
 	}
 
@@ -343,10 +343,10 @@ public class TestCSVFunctionExtractor
 		FunctionDef function4 = extractor.getNextFunction();
 		FunctionDef function5 = extractor.getNextFunction();
 
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foobar/foo.php>", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("bar", function3.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foobar/bar.php>", function4.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("<foobar/foo.php>", function2.getName());
+		assertEquals("bar", function3.getName());
+		assertEquals("<foobar/bar.php>", function4.getName());
 		assertEquals(null, function5);
 	}
 	
@@ -373,8 +373,8 @@ public class TestCSVFunctionExtractor
 		FunctionDef function2 = extractor.getNextFunction();
 		FunctionDef function3 = extractor.getNextFunction();
 
-		assertEquals("[foo]", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function2.getIdentifier().getEscapedCodeStr());
+		assertEquals("[foo]", function.getName());
+		assertEquals("<foo.php>", function2.getName());
 		assertEquals(null, function3);
 	}
 	
@@ -423,11 +423,11 @@ public class TestCSVFunctionExtractor
 		FunctionDef function5 = extractor.getNextFunction();
 		FunctionDef function6 = extractor.getNextFunction();
 
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("bar", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("[foo]", function3.getIdentifier().getEscapedCodeStr());
-		assertEquals("[buz]", function4.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foo.php>", function5.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("bar", function2.getName());
+		assertEquals("[foo]", function3.getName());
+		assertEquals("[buz]", function4.getName());
+		assertEquals("<foo.php>", function5.getName());
 		assertEquals(null, function6);
 	}
 	
@@ -486,12 +486,12 @@ public class TestCSVFunctionExtractor
 		FunctionDef function5 = extractor.getNextFunction();
 		FunctionDef function6 = extractor.getNextFunction();
 
-		assertEquals("foo", function.getIdentifier().getEscapedCodeStr());
-		assertEquals("[foo]", function2.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foobar/foo.php>", function3.getIdentifier().getEscapedCodeStr());
-		assertEquals("bar", function4.getIdentifier().getEscapedCodeStr());
-		assertEquals("[bar]", function5.getIdentifier().getEscapedCodeStr());
-		assertEquals("<foobar/bar.php>", function6.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", function.getName());
+		assertEquals("[foo]", function2.getName());
+		assertEquals("<foobar/foo.php>", function3.getName());
+		assertEquals("bar", function4.getName());
+		assertEquals("[bar]", function5.getName());
+		assertEquals("<foobar/bar.php>", function6.getName());
 	}
 
 	/**
@@ -605,13 +605,8 @@ public class TestCSVFunctionExtractor
 		FunctionDef function = extractor.getNextFunction();
 		FunctionDef function2 = extractor.getNextFunction();
 
-		// TODO should be 5, not 4
-		// We have 5 here because currently every FunctionDef node
-		// has an unwanted child (Identifier). Remove that.
-		assertEquals(5, function.getChildCount());
-		// TODO equally, for toplevel functions, it should be 1, not 2
-		assertEquals(2, function2.getChildCount());
-		
+		assertEquals(4, function.getChildCount());
+		assertEquals(1, function2.getChildCount());
 		assertEquals(1, function2.getContent().getChildCount());
 	}
 	
@@ -673,12 +668,10 @@ public class TestCSVFunctionExtractor
 		FunctionDef function3 = extractor.getNextFunction();
 		FunctionDef function4 = extractor.getNextFunction();
 
-		// TODO again, it should be 4 instead of 5 for normal functions,
-		// and 1 instead of 2 for toplevel functions
-		assertEquals(5, function.getChildCount());
-		assertEquals(2, function2.getChildCount());
-		assertEquals(5, function3.getChildCount());
-		assertEquals(2, function4.getChildCount());
+		assertEquals(4, function.getChildCount());
+		assertEquals(1, function2.getChildCount());
+		assertEquals(4, function3.getChildCount());
+		assertEquals(1, function4.getChildCount());
 		
 		assertEquals(0, function.getContent().getChildCount());
 		assertEquals(1, function2.getContent().getChildCount());

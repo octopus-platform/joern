@@ -1,7 +1,6 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
-import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
 import ast.php.functionDef.Closure;
@@ -76,16 +75,15 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			ASTUnderConstruction ast)
 	{
 		TopLevelFunctionDef newNode = new TopLevelFunctionDef();
-		Identifier nameNode = new Identifier();
 
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		
 		if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_FILE))
-			nameNode.setCodeStr("<" + name + ">");
+			newNode.setName("<" + name + ">");
 		else if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_CLASS))
-			nameNode.setCodeStr("[" + name + "]");
+			newNode.setName("[" + name + "]");
 		// TODO: else throw exception?
-		newNode.addChild(nameNode);
 		
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
@@ -97,11 +95,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			ASTUnderConstruction ast)
 	{
 		FunctionDef newNode = new FunctionDef();
-		Identifier nameNode = new Identifier();
 
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
-		nameNode.setCodeStr(name);
-		newNode.addChild(nameNode);
+		
+		newNode.setName(name);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
@@ -113,11 +110,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			ASTUnderConstruction ast)
 	{
 		Method newNode = new Method();
-		Identifier nameNode = new Identifier();
 
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
-		nameNode.setCodeStr(name);
-		newNode.addChild(nameNode);
+		
+		newNode.setName(name);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
@@ -129,11 +125,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			ASTUnderConstruction ast)
 	{
 		Closure newNode = new Closure();
-		Identifier nameNode = new Identifier();
 
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
-		nameNode.setCodeStr(name);
-		newNode.addChild(nameNode);
+		
+		newNode.setName(name);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);

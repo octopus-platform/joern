@@ -8,8 +8,6 @@ import java.io.StringReader;
 
 import org.junit.Test;
 
-import ast.ASTNode;
-import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -22,6 +20,16 @@ public class TestCSV2AST
 	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
 	String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
 
+	private FunctionDef createASTFromStrings(String nodeStr, String edgeStr)
+			throws IOException, InvalidCSVFile
+	{
+		CSV2AST csv2AST = new CSV2AST();
+		StringReader nodeReader = new StringReader(nodeStr);
+		StringReader edgeReader = new StringReader(edgeStr);
+		csv2AST.setLanguage("PHP");
+		return csv2AST.convert(nodeReader, edgeReader);
+	}
+	
 	@Test
 	public void testFunctionCreation() throws IOException, InvalidCSVFile
 	{
@@ -39,30 +47,17 @@ public class TestCSV2AST
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
-		assertEquals("foo", func.getIdentifier().getEscapedCodeStr());
+		assertEquals("foo", func.getName());
 	}
 
 	@Test
-	public void testMissingFunctiondName() throws IOException, InvalidCSVFile
+	public void testMissingFunctionName() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,,\n";
 		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
-		assertEquals("", func.getIdentifier().getEscapedCodeStr());
-	}
-
-	// TODO remove this.
-	// Function names should be stored as a property of FunctionDef in PHP ASTs.
-	@Test
-	public void testEdgeBetweenFuncAndName() throws IOException, InvalidCSVFile
-	{
-		String nodeStr = nodeHeader;
-		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		ASTNode child = func.getChild(0);
-		
-		assertTrue(child instanceof Identifier);
+		assertEquals("", func.getName());
 	}
 
 	/**
@@ -100,14 +95,15 @@ public class TestCSV2AST
 		assertEquals(1, content.getChildCount());
 	}
 
-	private FunctionDef createASTFromStrings(String nodeStr, String edgeStr)
-			throws IOException, InvalidCSVFile
+	/**
+	 * An invalid CSV file that does not start with a function declaration.
+	 */
+	@Test(expected=InvalidCSVFile.class)
+	public void testInvalidCSVNoFuncType() throws IOException, InvalidCSVFile
 	{
-		CSV2AST csv2AST = new CSV2AST();
-		StringReader nodeReader = new StringReader(nodeStr);
-		StringReader edgeReader = new StringReader(edgeStr);
-		csv2AST.setLanguage("PHP");
-		return csv2AST.convert(nodeReader, edgeReader);
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		
+		createASTFromStrings(nodeStr, edgeHeader);
 	}
-
 }

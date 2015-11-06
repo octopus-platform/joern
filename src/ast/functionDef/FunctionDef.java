@@ -1,6 +1,7 @@
 package ast.functionDef;
 
 import ast.ASTNode;
+import ast.ASTNodeProperties;
 import ast.DummyIdentifierNode;
 import ast.expressions.Identifier;
 import ast.logical.statements.CompoundStatement;
@@ -23,6 +24,14 @@ public class FunctionDef extends ASTNode
 			setIdentifier((Identifier) node);
 
 		super.addChild(node);
+	}
+	
+	public String getName() {
+		return getProperty(ASTNodeProperties.NAME);
+	}
+	
+	public void setName(String name) {
+		setProperty(ASTNodeProperties.NAME, name);
 	}
 
 	public CompoundStatement getContent()
