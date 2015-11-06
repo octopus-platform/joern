@@ -75,11 +75,12 @@ public class TestCSV2AST
 	public void testMethodLocation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,6,bar,\n";
+		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,36,bar,\n";
 		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertEquals("bar", func.getName());
 		assertEquals(6, func.getLocation().startLine);
+		assertEquals(36, func.getLocation().endLine);
 	}
 	
 	/**

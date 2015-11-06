@@ -91,10 +91,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
+		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_FILE))
 			newNode.setName("<" + name + ">");
@@ -118,10 +120,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
+		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setName(name);
 
@@ -139,10 +143,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
+		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setName(name);
 
@@ -160,10 +166,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
+		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setName(name);
 

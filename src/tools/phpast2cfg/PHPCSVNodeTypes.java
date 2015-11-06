@@ -16,6 +16,7 @@ public class PHPCSVNodeTypes
 	public static final CSVKey LINENO = new CSVKey("lineno","int");
 	// node properties for declaration nodes  (cf. ast\Node\Decl specification
 	// in {@link https://github.com/nikic/php-ast}
+	public static final CSVKey ENDLINENO = new CSVKey("endlineno","int");
 	public static final CSVKey NAME = new CSVKey("name");
 	// meta-properties
 	public static final CSVKey CODE = new CSVKey("code");
