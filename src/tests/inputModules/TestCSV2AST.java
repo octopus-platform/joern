@@ -88,6 +88,44 @@ public class TestCSV2AST
 	 * }
 	 */
 	@Test
+	public void testCodeStr() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
+		nodeStr += "3,AST_PARAM_LIST,,3,,0,2,,,\n";
+		nodeStr += "4,NULL,,3,,1,2,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,2,2,,,\n";
+		nodeStr += "6,AST_ASSIGN,,4,,0,2,,,\n";
+		nodeStr += "7,AST_VAR,,4,,0,2,,,\n";
+		nodeStr += "8,string,,4,\"a\",0,2,,,\n";
+		nodeStr += "9,integer,,4,3,1,2,,,\n";
+		nodeStr += "10,NULL,,3,,3,2,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "2,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "2,5,PARENT_OF\n";
+		edgeStr += "2,10,PARENT_OF\n";
+
+		FunctionDef func = createASTFromStrings(nodeStr, edgeStr);
+		CompoundStatement content = func.getContent();
+
+		// TODO: well this is gonna look a lot nicer once we mapped all PHP AST constructs
+		// and have an inherent understanding of their structure. But for now this shows it works ;)
+		assertEquals("a", content.getStatements().get(0).getChild(0).getChild(0).getEscapedCodeStr());
+		assertEquals("3", content.getStatements().get(0).getChild(1).getEscapedCodeStr());
+	}
+	
+	/**
+	 * function foo() {
+	 *   $a = 3;
+	 * }
+	 */
+	@Test
 	public void testSimpleEdgeImport() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;

@@ -18,6 +18,7 @@ public class PHPCSVNodeTypes
 	// in {@link https://github.com/nikic/php-ast}
 	public static final CSVKey NAME = new CSVKey("name");
 	// meta-properties
+	public static final CSVKey CODE = new CSVKey("code");
 	public static final CSVKey FUNCID = new CSVKey("funcid","int");
 
 	/* node types */

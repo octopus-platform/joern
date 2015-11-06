@@ -68,12 +68,14 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String code = row.getFieldForKey(PHPCSVNodeTypes.CODE);
 
 		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
 		newNode.setLocation(codeloc);
+		newNode.setCodeStr(code);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
