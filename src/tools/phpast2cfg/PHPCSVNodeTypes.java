@@ -9,10 +9,20 @@ public class PHPCSVNodeTypes
 {
 	/* node row keys */
 	public static final CSVKey NODE_ID = new CSVKey("id","ID");
+	// node properties shared by all nodes (cf. ast\Node specification
+	// in {@link https://github.com/nikic/php-ast})
 	public static final CSVKey TYPE = new CSVKey("type");
 	public static final CSVKey FLAGS = new CSVKey("flags","string[]");
-	public static final CSVKey FUNCID =new CSVKey("funcid","int");
+	public static final CSVKey LINENO = new CSVKey("lineno","int");
+	// node properties for declaration nodes  (cf. ast\Node\Decl specification
+	// in {@link https://github.com/nikic/php-ast}
+	public static final CSVKey ENDLINENO = new CSVKey("endlineno","int");
 	public static final CSVKey NAME = new CSVKey("name");
+	public static final CSVKey DOCCOMMENT = new CSVKey("doccomment");
+	// meta-properties
+	public static final CSVKey CODE = new CSVKey("code");
+	public static final CSVKey CHILDNUM = new CSVKey("childnum","int");
+	public static final CSVKey FUNCID = new CSVKey("funcid","int");
 
 	/* node types */
 	// directory/file types

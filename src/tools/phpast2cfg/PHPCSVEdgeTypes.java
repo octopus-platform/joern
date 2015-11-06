@@ -4,7 +4,7 @@ import inputModules.csv.KeyedCSV.CSVKey;
 
 public class PHPCSVEdgeTypes
 {
-	/* edge row key types */
+	/* edge row keys */
 	public static final CSVKey START_ID = new CSVKey("", "START_ID");
 	public static final CSVKey END_ID = new CSVKey("", "END_ID");
 	public static final CSVKey TYPE = new CSVKey("", "TYPE");
