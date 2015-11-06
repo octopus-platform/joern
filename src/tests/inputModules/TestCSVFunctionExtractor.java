@@ -687,8 +687,7 @@ public class TestCSVFunctionExtractor
 	}
 	
 	/**
-	 * An invalid CSV file which contains a toplevel node of a file
-	 * before the previous file has been cleared by a new File node.
+	 * An invalid CSV file which contains an invalid edge type.
 	 */
 	@Test(expected=InvalidCSVFile.class)
 	public void testInvalidEdgeType() throws IOException, InvalidCSVFile
