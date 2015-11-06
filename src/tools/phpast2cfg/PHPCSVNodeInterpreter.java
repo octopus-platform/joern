@@ -90,18 +90,20 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
-		codeloc.startLine = Integer.parseInt(lineno);
-		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_FILE))
 			newNode.setName("<" + name + ">");
-		else if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_CLASS))
+		else if( flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_CLASS)) {
+			// TODO: define startLine and endLine for toplevel nodes of files also
+			codeloc.startLine = Integer.parseInt(lineno);
+			codeloc.endLine = Integer.parseInt(endlineno);
 			newNode.setName("[" + name + "]");
+		}
 		else
 			throw new InvalidCSVFile("While trying to handle row " + row.toString() + ": "
 					+ "Invalid toplevel flags " + flags + ".");
@@ -119,8 +121,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
@@ -142,8 +144,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
@@ -165,8 +167,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();

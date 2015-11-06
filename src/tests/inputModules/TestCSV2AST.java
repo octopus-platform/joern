@@ -171,7 +171,7 @@ public class TestCSV2AST
 	/**
 	 * An invalid CSV file that contains a toplevel node with invalid flags.
 	 */
-	@Test
+	@Test(expected=InvalidCSVFile.class)
 	public void testInvalidTopLevelFuncFlags() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
