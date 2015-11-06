@@ -33,6 +33,14 @@ public class FunctionDef extends ASTNode
 	public void setName(String name) {
 		setProperty(ASTNodeProperties.NAME, name);
 	}
+	
+	public String getDocComment() {
+		return getProperty(ASTNodeProperties.DOCCOMMENT);
+	}
+	
+	public void setDocComment(String doccomment) {
+		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
+	}
 
 	public CompoundStatement getContent()
 	{

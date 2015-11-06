@@ -123,6 +123,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String doccomment = row.getFieldForKey(PHPCSVNodeTypes.DOCCOMMENT);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
@@ -130,6 +131,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setName(name);
+		newNode.setDocComment(doccomment);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
@@ -146,6 +148,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String doccomment = row.getFieldForKey(PHPCSVNodeTypes.DOCCOMMENT);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
@@ -153,6 +156,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setName(name);
+		newNode.setDocComment(doccomment);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
@@ -169,6 +173,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String doccomment = row.getFieldForKey(PHPCSVNodeTypes.DOCCOMMENT);
 		
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
@@ -176,6 +181,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setName(name);
+		newNode.setDocComment(doccomment);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);

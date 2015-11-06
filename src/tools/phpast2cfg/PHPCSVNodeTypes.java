@@ -18,6 +18,7 @@ public class PHPCSVNodeTypes
 	// in {@link https://github.com/nikic/php-ast}
 	public static final CSVKey ENDLINENO = new CSVKey("endlineno","int");
 	public static final CSVKey NAME = new CSVKey("name");
+	public static final CSVKey DOCCOMMENT = new CSVKey("doccomment");
 	// meta-properties
 	public static final CSVKey CODE = new CSVKey("code");
 	public static final CSVKey CHILDNUM = new CSVKey("childnum","int");

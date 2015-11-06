@@ -83,6 +83,17 @@ public class TestCSV2AST
 		assertEquals(36, func.getLocation().endLine);
 	}
 	
+	@Test
+	public void testDocComment() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,4,,0,1,4,foo,\"/** This is a doccomment */\"\n";
+		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		
+		assertEquals("foo", func.getName());
+		assertEquals("/** This is a doccomment */", func.getDocComment());
+	}
+	
 	/**
 	 * function foo() {
 	 *   $a = 3;
