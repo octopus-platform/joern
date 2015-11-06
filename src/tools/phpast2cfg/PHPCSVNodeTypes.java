@@ -19,6 +19,7 @@ public class PHPCSVNodeTypes
 	public static final CSVKey NAME = new CSVKey("name");
 	// meta-properties
 	public static final CSVKey CODE = new CSVKey("code");
+	public static final CSVKey CHILDNUM = new CSVKey("childnum","int");
 	public static final CSVKey FUNCID = new CSVKey("funcid","int");
 
 	/* node types */
