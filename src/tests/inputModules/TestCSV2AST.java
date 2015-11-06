@@ -71,6 +71,17 @@ public class TestCSV2AST
 		assertEquals("MODIFIER_PUBLIC", func.getFlags());
 	}
 
+	@Test
+	public void testMethodLocation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,6,bar,\n";
+		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		
+		assertEquals("bar", func.getName());
+		assertEquals(6, func.getLocation().startLine);
+	}
+	
 	/**
 	 * function foo() {
 	 *   $a = 3;
