@@ -66,6 +66,14 @@ public class ASTNode
 			return null;
 		return retval;
 	}
+	
+	public void setFlags(String flags) {
+		setProperty(ASTNodeProperties.FLAGS, flags);
+	}
+	
+	public String getFlags() {
+		return getProperty(ASTNodeProperties.FLAGS);
+	}
 
 	public void addChild(ASTNode node)
 	{

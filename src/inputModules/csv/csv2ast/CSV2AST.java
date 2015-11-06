@@ -76,7 +76,7 @@ public class CSV2AST
 		}
 	}
 
-	private void createASTEdges()
+	private void createASTEdges() throws InvalidCSVFile
 	{
 		KeyedCSVRow keyedRow;
 		while ((keyedRow = reader.getNextRow()) != null)

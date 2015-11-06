@@ -59,6 +59,17 @@ public class TestCSV2AST
 		
 		assertEquals("", func.getName());
 	}
+	
+	@Test
+	public void testMethodFlags() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,6,bar,\n";
+		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		
+		assertEquals("bar", func.getName());
+		assertEquals("MODIFIER_PUBLIC", func.getFlags());
+	}
 
 	/**
 	 * function foo() {
@@ -103,6 +114,18 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		
+		createASTFromStrings(nodeStr, edgeHeader);
+	}
+	
+	/**
+	 * An invalid CSV file that contains a toplevel node with invalid flags.
+	 */
+	@Test
+	public void testInvalidTopLevelFuncFlags() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "1,AST_TOPLEVEL,somerandomflags,,,,,,\"foo.php\",\n";
 		
 		createASTFromStrings(nodeStr, edgeHeader);
 	}
