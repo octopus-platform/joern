@@ -1,4 +1,4 @@
-package languages.c.parsing;
+package ast;
 
 public class CodeLocation
 {

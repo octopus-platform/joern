@@ -2,6 +2,8 @@ package languages.c.parsing;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import ast.CodeLocation;
+
 public class CodeLocationExtractor
 {
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ast.ASTNode;
+import ast.CodeLocation;
 import ast.functionDef.FunctionDef;
 import cdg.CDG;
 import cdg.CDGCreator;
@@ -15,7 +16,6 @@ import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
 import dom.DominatorTree;
-import languages.c.parsing.CodeLocation;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 

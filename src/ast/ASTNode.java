@@ -6,7 +6,6 @@ import java.util.Map;
 
 import ast.expressions.Expression;
 import ast.walking.ASTNodeVisitor;
-import languages.c.parsing.CodeLocation;
 
 public class ASTNode
 {

@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ast.ASTNode;
+import ast.CodeLocation;
 import ast.expressions.Expression;
 import ast.functionDef.Parameter;
 import ast.functionDef.ReturnType;
 import ast.logical.statements.CompoundStatement;
-import languages.c.parsing.CodeLocation;
 
 public class ASTDatabaseNode extends DatabaseNode
 {
