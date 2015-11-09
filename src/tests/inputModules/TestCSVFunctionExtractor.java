@@ -60,7 +60,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -89,7 +89,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,5,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -122,7 +122,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,7,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_CONST,,3,,0,1,,,\n";
 		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
@@ -157,7 +157,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,5,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -194,7 +194,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,5,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -232,7 +232,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,7,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -276,7 +276,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,5,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -318,7 +318,7 @@ public class TestCSVFunctionExtractor
 		String nodeStr = nodeHeader;
 		nodeStr += "0,Directory,,,,,,,\"foobar\",\n";
 		nodeStr += "1,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foobar/foo.php\",\n";
+		nodeStr += "2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foobar/foo.php\",\n";
 		nodeStr += "3,AST_STMT_LIST,,1,,0,2,,,\n";
 		nodeStr += "4,AST_FUNC_DECL,,3,,0,2,3,foo,\n";
 		nodeStr += "5,AST_PARAM_LIST,,3,,0,4,,,\n";
@@ -326,7 +326,7 @@ public class TestCSVFunctionExtractor
 		nodeStr += "7,AST_STMT_LIST,,3,,2,4,,,\n";
 		nodeStr += "8,NULL,,3,,3,4,,,\n";
 		nodeStr += "9,File,,,,,,,\"bar.php\",\n";
-		nodeStr += "10,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foobar/bar.php\",\n";
+		nodeStr += "10,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foobar/bar.php\",\n";
 		nodeStr += "11,AST_STMT_LIST,,1,,0,10,,,\n";
 		nodeStr += "12,AST_FUNC_DECL,,3,,0,10,3,bar,\n";
 		nodeStr += "13,AST_PARAM_LIST,,3,,0,12,,,\n";
@@ -358,7 +358,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
 		nodeStr += "4,NULL,,3,,0,1,,,\n";
@@ -390,7 +390,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,9,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -450,7 +450,7 @@ public class TestCSVFunctionExtractor
 		String nodeStr = nodeHeader;
 		nodeStr += "0,Directory,,,,,,,\"foobar\",\n";
 		nodeStr += "1,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foobar/foo.php\",\n";
+		nodeStr += "2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,6,\"foobar/foo.php\",\n";
 		nodeStr += "3,AST_STMT_LIST,,1,,0,2,,,\n";
 		nodeStr += "4,AST_CLASS,,3,,0,2,5,foo,\n";
 		nodeStr += "5,NULL,,3,,0,2,,,\n";
@@ -463,7 +463,7 @@ public class TestCSVFunctionExtractor
 		nodeStr += "12,AST_STMT_LIST,,4,,2,9,,,\n";
 		nodeStr += "13,NULL,,4,,3,9,,,\n";
 		nodeStr += "14,File,,,,,,,\"bar.php\",\n";
-		nodeStr += "15,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foobar/bar.php\",\n";
+		nodeStr += "15,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,5,\"foobar/bar.php\",\n";
 		nodeStr += "16,AST_STMT_LIST,,1,,0,15,,,\n";
 		nodeStr += "17,AST_CLASS,,3,,0,15,5,bar,\n";
 		nodeStr += "18,NULL,,3,,0,15,,,\n";
@@ -581,7 +581,7 @@ public class TestCSVFunctionExtractor
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
@@ -625,7 +625,7 @@ public class TestCSVFunctionExtractor
 		String nodeStr = nodeHeader;
 		nodeStr += "0,Directory,,,,,,,\"foobar\",\n";
 		nodeStr += "1,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foobar/foo.php\",\n";
+		nodeStr += "2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foobar/foo.php\",\n";
 		nodeStr += "3,AST_STMT_LIST,,1,,0,2,,,\n";
 		nodeStr += "4,AST_FUNC_DECL,,3,,0,2,3,foo,\n";
 		nodeStr += "5,AST_PARAM_LIST,,3,,0,4,,,\n";
@@ -633,7 +633,7 @@ public class TestCSVFunctionExtractor
 		nodeStr += "7,AST_STMT_LIST,,3,,2,4,,,\n";
 		nodeStr += "8,NULL,,3,,3,4,,,\n";
 		nodeStr += "9,File,,,,,,,\"bar.php\",\n";
-		nodeStr += "10,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foobar/bar.php\",\n";
+		nodeStr += "10,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foobar/bar.php\",\n";
 		nodeStr += "11,AST_STMT_LIST,,1,,0,10,,,\n";
 		nodeStr += "12,AST_FUNC_DECL,,3,,0,10,3,bar,\n";
 		nodeStr += "13,AST_PARAM_LIST,,3,,0,12,,,\n";

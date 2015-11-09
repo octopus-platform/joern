@@ -186,7 +186,7 @@ public class TestCSV2AST
 	public void testInvalidTopLevelFuncFlags() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "1,AST_TOPLEVEL,somerandomflags,,,,,,\"foo.php\",\n";
+		nodeStr += "1,AST_TOPLEVEL,somerandomflags,1,,,,3,\"foo.php\",\n";
 		
 		createASTFromStrings(nodeStr, edgeHeader);
 	}

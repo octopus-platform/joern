@@ -97,16 +97,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		newNode.setLocation(codeloc);
+		codeloc.startLine = Integer.parseInt(lineno);
+		codeloc.endLine = Integer.parseInt(endlineno);
 		if (flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_FILE))
 			newNode.setName("<" + name + ">");
 		else if (flags.contains(PHPCSVNodeTypes.FLAG_TOPLEVEL_CLASS))
-		{
-			// TODO: define startLine and endLine for toplevel nodes of files
-			// also
-			codeloc.startLine = Integer.parseInt(lineno);
-			codeloc.endLine = Integer.parseInt(endlineno);
 			newNode.setName("[" + name + "]");
-		}
 		else
 			throw new InvalidCSVFile("While trying to handle row "
 					+ row.toString() + ": " + "Invalid toplevel flags " + flags
