@@ -10,6 +10,7 @@ import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
 import ast.php.functionDef.Closure;
+import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
@@ -31,6 +32,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			// special nodes
 			case PHPCSVNodeTypes.TYPE_NAME:
 				retval = handleName(row, ast);
+				break;
+
+			case PHPCSVNodeTypes.TYPE_CLOSURE_VAR:
+				retval = handleClosureVar(row, ast);
 				break;
 			
 			// declaration nodes
@@ -103,6 +108,24 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleName(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Identifier newNode = new Identifier();
+
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleClosureVar(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		ClosureVar newNode = new ClosureVar();
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);

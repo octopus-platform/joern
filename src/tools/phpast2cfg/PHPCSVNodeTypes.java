@@ -31,7 +31,8 @@ public class PHPCSVNodeTypes
 	
 	// special nodes
 	public static final String TYPE_NAME = "AST_NAME";
-	
+	public static final String TYPE_CLOSURE_VAR = "AST_CLOSURE_VAR";
+
 	// declaration nodes
 	public static final String TYPE_TOPLEVEL = "AST_TOPLEVEL"; // artificial
 	public static final String TYPE_FUNC_DECL = "AST_FUNC_DECL";
