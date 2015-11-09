@@ -33,7 +33,6 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_NAME:
 				retval = handleName(row, ast);
 				break;
-
 			case PHPCSVNodeTypes.TYPE_CLOSURE_VAR:
 				retval = handleClosureVar(row, ast);
 				break;
@@ -45,11 +44,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_FUNC_DECL:
 				retval = handleFunction(row, ast);
 				break;
-			case PHPCSVNodeTypes.TYPE_METHOD:
-				retval = handleMethod(row, ast);
-				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE:
 				retval = handleClosure(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_METHOD:
+				retval = handleMethod(row, ast);
 				break;
 
 			// nodes with exactly 2 children
