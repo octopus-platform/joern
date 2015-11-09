@@ -42,6 +42,8 @@ public class PHPCSVNodeTypes
 	public static final List<String> funcTypes =
 			Arrays.asList(TYPE_TOPLEVEL, TYPE_FUNC_DECL, TYPE_METHOD, TYPE_CLOSURE);
 	
+	public static final String TYPE_CLASS = "AST_CLASS";
+
 	// nodes with exactly 2 children
 	public static final String TYPE_WHILE = "AST_WHILE";
 	public static final String TYPE_DO_WHILE = "AST_DO_WHILE";

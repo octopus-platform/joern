@@ -22,7 +22,7 @@ public abstract class ClassDefExporter extends ASTNodeExporter
 		{
 			ex.printStackTrace();
 			System.err.println("Error adding class to database: "
-					+ ((ClassDefStatement) node).name.getEscapedCodeStr());
+					+ ((ClassDefStatement) node).identifier.getEscapedCodeStr());
 			return;
 		}
 

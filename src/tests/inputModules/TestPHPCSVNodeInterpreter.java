@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
@@ -341,6 +342,53 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( ((Method)node).getContent(), instanceOf(CompoundStatement.class));
 		assertThat( ((Method)node).getReturnType(), instanceOf(Identifier.class));
 		assertEquals( "int", ((Identifier)((Method)node).getReturnType()).getName().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_CLASS nodes are used to declare classes.
+	 * 
+	 * Any AST_CLASS node has exactly three children:
+	 * 1) AST_NAME or NULL, indicating the parent class
+	 * 2) AST_NAME_LIST or NULL, indicating the implemented interfaces
+	 * 3) AST_TOPLEVEL, this class's top-level method
+	 * 
+	 * This test checks a class's name and its children in the following PHP code:
+	 * 
+	 * class foo extends bar implements buz {}
+	 */
+	@Test
+	public void testClassCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "6,AST_NAME_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
+		nodeStr += "10,AST_STMT_LIST,,3,,0,9,,,\n";
+		
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(ClassDefStatement.class));
+		assertEquals( "foo", ((ClassDefStatement)node).getName());
+		assertThat( ((ClassDefStatement)node).getExtends(), instanceOf(Identifier.class));
+		assertEquals( "bar", ((ClassDefStatement)node).getExtends().getName().getEscapedCodeStr());
+		// TODO map AST_NAME_LIST to IdentifierList and check here
+		assertThat( ((ClassDefStatement)node).getTopLevelFunc(), instanceOf(TopLevelFunctionDef.class));
+		assertEquals( "[foo]", ((ClassDefStatement)node).getTopLevelFunc().getName());
 	}
 	
 }

@@ -6,6 +6,7 @@ import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
+import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
@@ -49,6 +50,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_METHOD:
 				retval = handleMethod(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_CLASS:
+				retval = handleClass(row, ast);
 				break;
 
 			// nodes with exactly 2 children
@@ -224,6 +228,30 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private static long handleMethod(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Method newNode = new Method();
+
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
+		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
+		String doccomment = row.getFieldForKey(PHPCSVNodeTypes.DOCCOMMENT);
+
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		codeloc.endLine = Integer.parseInt(endlineno);
+		newNode.setLocation(codeloc);
+		newNode.setName(name);
+		newNode.setDocComment(doccomment);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private static long handleClass(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		ClassDefStatement newNode = new ClassDefStatement();
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);

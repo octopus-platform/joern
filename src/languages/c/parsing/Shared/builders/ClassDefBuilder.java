@@ -24,14 +24,14 @@ public class ClassDefBuilder extends ASTNodeBuilder
 	// TODO: merge the following two by introducing a wrapper
 	public void setName(Class_nameContext ctx)
 	{
-		thisItem.name = new Identifier();
-		ASTNodeFactory.initializeFromContext(thisItem.name, ctx);
+		thisItem.identifier = new Identifier();
+		ASTNodeFactory.initializeFromContext(thisItem.identifier, ctx);
 	}
 
 	public void setName(languages.c.antlr.FunctionParser.Class_nameContext ctx)
 	{
-		thisItem.name = new Identifier();
-		ASTNodeFactory.initializeFromContext(thisItem.name, ctx);
+		thisItem.identifier = new Identifier();
+		ASTNodeFactory.initializeFromContext(thisItem.identifier, ctx);
 	}
 
 	public void setContent(CompoundStatement content)

@@ -1,34 +1,58 @@
 package ast.declarations;
 
 import ast.ASTNode;
+import ast.ASTNodeProperties;
 import ast.DummyIdentifierNode;
 import ast.expressions.Identifier;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
-import ast.walking.ASTNodeVisitor;
+import ast.php.functionDef.TopLevelFunctionDef;
 
 public class ClassDefStatement extends Statement
 {
 
-	public Identifier name = new DummyIdentifierNode();
+	public Identifier identifier = new DummyIdentifierNode();
+	public TopLevelFunctionDef toplevelfunc = new TopLevelFunctionDef();
 	public CompoundStatement content = new CompoundStatement();
 
 	public void addChild(ASTNode expression)
 	{
 		if (expression instanceof Identifier)
-			name = (Identifier) expression;
+			identifier = (Identifier) expression;
+		else if (expression instanceof TopLevelFunctionDef)
+			toplevelfunc = (TopLevelFunctionDef) expression;
 		else
 			super.addChild(expression);
 	}
 
-	public Identifier getName()
+	public Identifier getIdentifier()
 	{
-		return name;
+		return identifier;
 	}
 
-	public void accept(ASTNodeVisitor visitor)
-	{
-		visitor.visit(this);
+	public String getName() {
+		return getProperty(ASTNodeProperties.NAME);
 	}
-
+	
+	public void setName(String name) {
+		setProperty(ASTNodeProperties.NAME, name);
+	}
+	
+	public Identifier getExtends()
+	{
+		return this.identifier;
+	}
+	
+	public TopLevelFunctionDef getTopLevelFunc()
+	{
+		return this.toplevelfunc;
+	}
+	
+	public String getDocComment() {
+		return getProperty(ASTNodeProperties.DOCCOMMENT);
+	}
+	
+	public void setDocComment(String doccomment) {
+		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
+	}
 }
