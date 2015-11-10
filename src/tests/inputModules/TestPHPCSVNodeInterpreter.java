@@ -105,9 +105,9 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)7);
 		
 		assertThat( node, instanceOf(Identifier.class));
-		assertEquals( "bar", ((Identifier)node).getName().getEscapedCodeStr());
+		assertEquals( "bar", ((Identifier)node).getNameChild().getEscapedCodeStr());
 		assertThat( node2, instanceOf(Identifier.class));
-		assertEquals( "buz", ((Identifier)node2).getName().getEscapedCodeStr());
+		assertEquals( "buz", ((Identifier)node2).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -246,7 +246,7 @@ public class TestPHPCSVNodeInterpreter
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		assertThat( ((FunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
 		assertThat( ((FunctionDef)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((FunctionDef)node).getReturnType()).getName().getEscapedCodeStr());
+		assertEquals( "int", ((Identifier)((FunctionDef)node).getReturnType()).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -295,7 +295,7 @@ public class TestPHPCSVNodeInterpreter
 		// TODO map AST_CLOSURE_USES to ClosureUses and check here
 		assertThat( ((FunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
 		assertThat( ((FunctionDef)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((Closure)node).getReturnType()).getName().getEscapedCodeStr());
+		assertEquals( "int", ((Identifier)((Closure)node).getReturnType()).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -341,7 +341,7 @@ public class TestPHPCSVNodeInterpreter
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		assertThat( ((Method)node).getContent(), instanceOf(CompoundStatement.class));
 		assertThat( ((Method)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((Method)node).getReturnType()).getName().getEscapedCodeStr());
+		assertEquals( "int", ((Identifier)((Method)node).getReturnType()).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -385,7 +385,7 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( "foo", ((PHPClassDef)node).getName());
 		assertThat( ((PHPClassDef)node).getExtends(), instanceOf(Identifier.class));
-		assertEquals( "bar", ((PHPClassDef)node).getExtends().getName().getEscapedCodeStr());
+		assertEquals( "bar", ((PHPClassDef)node).getExtends().getNameChild().getEscapedCodeStr());
 		// TODO map AST_NAME_LIST to IdentifierList and check here
 		assertThat( ((PHPClassDef)node).getTopLevelFunc(), instanceOf(TopLevelFunctionDef.class));
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
