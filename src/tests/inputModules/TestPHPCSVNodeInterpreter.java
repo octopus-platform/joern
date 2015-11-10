@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
-import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
+import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
@@ -382,13 +382,13 @@ public class TestPHPCSVNodeInterpreter
 
 		ASTNode node = ast.getNodeById((long)3);
 		
-		assertThat( node, instanceOf(ClassDefStatement.class));
-		assertEquals( "foo", ((ClassDefStatement)node).getName());
-		assertThat( ((ClassDefStatement)node).getExtends(), instanceOf(Identifier.class));
-		assertEquals( "bar", ((ClassDefStatement)node).getExtends().getName().getEscapedCodeStr());
+		assertThat( node, instanceOf(PHPClassDef.class));
+		assertEquals( "foo", ((PHPClassDef)node).getName());
+		assertThat( ((PHPClassDef)node).getExtends(), instanceOf(Identifier.class));
+		assertEquals( "bar", ((PHPClassDef)node).getExtends().getName().getEscapedCodeStr());
 		// TODO map AST_NAME_LIST to IdentifierList and check here
-		assertThat( ((ClassDefStatement)node).getTopLevelFunc(), instanceOf(TopLevelFunctionDef.class));
-		assertEquals( "[foo]", ((ClassDefStatement)node).getTopLevelFunc().getName());
+		assertThat( ((PHPClassDef)node).getTopLevelFunc(), instanceOf(TopLevelFunctionDef.class));
+		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
 	}
 	
 }
