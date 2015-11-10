@@ -3,6 +3,7 @@ package tests.inputModules;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
+import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
@@ -105,10 +107,12 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)7);
 		
 		assertThat( node, instanceOf(Identifier.class));
+		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((Identifier)node).getNameChild());
 		assertEquals( "bar", ((Identifier)node).getNameChild().getEscapedCodeStr());
 		
 		assertThat( node2, instanceOf(Identifier.class));
+		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((Identifier)node2).getNameChild());
 		assertEquals( "buz", ((Identifier)node2).getNameChild().getEscapedCodeStr());
 	}
@@ -153,10 +157,12 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)8);
 		
 		assertThat( node, instanceOf(ClosureVar.class));
+		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((ClosureVar)node).getNameChild());
 		assertEquals( "foo", ((ClosureVar)node).getNameChild().getEscapedCodeStr());
 		
 		assertThat( node2, instanceOf(ClosureVar.class));
+		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((ClosureVar)node2).getNameChild());
 		assertEquals( "bar", ((ClosureVar)node2).getNameChild().getEscapedCodeStr());
 	}
@@ -202,10 +208,12 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)6);
 		
 		assertThat( node, instanceOf(TopLevelFunctionDef.class));
+		assertEquals( 1, node.getChildCount());
 		assertEquals( "<foo.php>", ((TopLevelFunctionDef)node).getName());
 		assertEquals( ast.getNodeById((long)2), ((TopLevelFunctionDef)node).getContent());
 		
 		assertThat( node2, instanceOf(TopLevelFunctionDef.class));
+		assertEquals( 1, node2.getChildCount());
 		assertEquals( "[bar]", ((TopLevelFunctionDef)node2).getName());
 		assertEquals( ast.getNodeById((long)7), ((TopLevelFunctionDef)node2).getContent());
 	}
@@ -249,6 +257,7 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(FunctionDef.class));
 		assertEquals( "foo", ((FunctionDef)node).getName());
+		assertEquals( 4, node.getChildCount());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
 		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnTypeIdentifier());
@@ -298,6 +307,7 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
+		assertEquals( 4, node.getChildCount());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		// TODO map AST_CLOSURE_USES to ClosureUses and check here
 		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
@@ -346,6 +356,7 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
+		assertEquals( 4, node.getChildCount());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
 		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnTypeIdentifier());
@@ -393,6 +404,7 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( "foo", ((PHPClassDef)node).getName());
+		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPClassDef)node).getExtends());
 		assertEquals( ast.getNodeById((long)5), ((PHPClassDef)node).getExtends().getNameChild());
 		assertEquals( "bar", ((PHPClassDef)node).getExtends().getNameChild().getEscapedCodeStr());
@@ -400,5 +412,67 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getTopLevelFunc());
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
 		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
+	}
+	
+	
+	/* nodes with an arbitrary number of children */
+
+	/**
+	 * AST_STMT_LIST nodes are used to declare lists (or "blocks") of statements.
+	 * 
+	 * Any AST_STMT_LIST node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one statement in the list.
+	 * 
+	 * This test checks statements lists' children in the following PHP code:
+	 * 
+	 * function foo() {}
+	 * foo();
+	 */
+	@Test
+	public void testCompoundStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,4,\"foo.php\",\n";
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,NULL,,3,,3,3,,,\n";
+		nodeStr += "8,AST_CALL,,4,,1,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
+		edgeStr += "1,2,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)2);
+		ASTNode node2 = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(CompoundStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((CompoundStatement)node).getStatements().size());
+		for( ASTNode stmt : (CompoundStatement)node)
+			assertTrue( ast.containsValue(stmt));
+		assertEquals( ast.getNodeById((long)3), node.getChild(0));
+		assertEquals( ast.getNodeById((long)8), node.getChild(1));
+
+		assertThat( node2, instanceOf(CompoundStatement.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( 0, ((CompoundStatement)node2).getStatements().size());
+		for( ASTNode stmt : (CompoundStatement)node2)
+			assertTrue( ast.containsValue(stmt));
 	}
 }
