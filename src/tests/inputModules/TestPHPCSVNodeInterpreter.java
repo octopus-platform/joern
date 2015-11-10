@@ -67,7 +67,8 @@ public class TestPHPCSVNodeInterpreter
 	/**
 	 * AST_NAME nodes are used to identify certain names in PHP code,
 	 * such as for example the name of a class that a class declaration extends,
-	 * or the name of an interface that a class declaration implements.
+	 * the name of an interface that a class declaration implements,
+	 * or the name of a type returned by a function.
 	 * Other examples include names of called functions/methods, class
 	 * names associated with 'new' or 'instanceof' operators, etc.
 	 * 
@@ -150,9 +151,9 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)8);
 		
 		assertThat( node, instanceOf(ClosureVar.class));
-		assertEquals( "foo", ((ClosureVar)node).getName().getEscapedCodeStr());
+		assertEquals( "foo", ((ClosureVar)node).getNameChild().getEscapedCodeStr());
 		assertThat( node2, instanceOf(ClosureVar.class));
-		assertEquals( "bar", ((ClosureVar)node2).getName().getEscapedCodeStr());
+		assertEquals( "bar", ((ClosureVar)node2).getNameChild().getEscapedCodeStr());
 	}
 	
 	
