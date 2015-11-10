@@ -8,11 +8,13 @@ import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
+import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
@@ -63,6 +65,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				retval = handleDo(row, ast);
 				break;
 
+			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_PARAM:
+				retval = handleParameter(row, ast);
+				break;
+
 			// nodes with exactly 4 children
 			case PHPCSVNodeTypes.TYPE_FOR:
 				retval = handleFor(row, ast);
@@ -74,6 +81,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_IF:
 				retval = handleIf(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_PARAM_LIST:
+				retval = handleParameterList(row, ast);
 				break;
 
 			default:
@@ -311,6 +321,27 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
+
+
+	/* nodes with exactly 3 children */
+
+	private long handleParameter(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPParameter newNode = new PHPParameter();
+
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
 	
 	
 	/* nodes with exactly 4 children */
@@ -357,6 +388,24 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleIf(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		IfStatement newNode = new IfStatement();
+
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleParameterList(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		ParameterList newNode = new ParameterList();
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);

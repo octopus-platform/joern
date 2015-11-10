@@ -1,16 +1,18 @@
 package ast.php.functionDef;
 
 import ast.ASTNode;
+import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
+import ast.logical.statements.CompoundStatement;
 
 public class TopLevelFunctionDef extends FunctionDef
 {
 
 	public void addChild(ASTNode node)
 	{
-		// do not allow ParameterList's in top-level functions
-		if (!(node instanceof ParameterList))
+		// only allow CompoundStatements as children
+		if (node instanceof CompoundStatement)
 			super.addChild(node);
 	}
 
@@ -19,5 +21,10 @@ public class TopLevelFunctionDef extends FunctionDef
 	{
 		return null;
 	}
-
+	
+	@Override
+	public Identifier getReturnTypeIdentifier()
+	{
+		return null;
+	}
 }

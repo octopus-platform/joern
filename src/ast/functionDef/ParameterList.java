@@ -6,8 +6,9 @@ import java.util.LinkedList;
 import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
-public class ParameterList extends ASTNode
+public class ParameterList extends ASTNode implements Iterable<Parameter>
 {
+	private LinkedList<Parameter> parameters = new LinkedList<Parameter>();
 
 	public void addChild(ASTNode node)
 	{
@@ -16,20 +17,19 @@ public class ParameterList extends ASTNode
 		super.addChild(node);
 	}
 
-	// TODO: we don't want to give back a reference to the list,
-	// we need to provide iterators for type and name
-
-	public LinkedList<Parameter> getParameters()
+	public int size()
 	{
-		return parameters;
+		return this.parameters.size();
+	}
+	
+	public Parameter getParameter(int i) {
+		return this.parameters.get(i);
 	}
 
-	private void addParameter(Parameter aParam)
+	private void addParameter(Parameter parameter)
 	{
-		parameters.add(aParam);
+		this.parameters.add(parameter);
 	}
-
-	private LinkedList<Parameter> parameters = new LinkedList<Parameter>();
 
 	@Override
 	public String getEscapedCodeStr()
@@ -59,5 +59,10 @@ public class ParameterList extends ASTNode
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
+	}
+
+	@Override
+	public Iterator<Parameter> iterator() {
+		return this.parameters.iterator();
 	}
 }

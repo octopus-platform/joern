@@ -3,6 +3,7 @@ package tests.inputModules;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -13,11 +14,14 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
+import ast.functionDef.Parameter;
+import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -67,7 +71,8 @@ public class TestPHPCSVNodeInterpreter
 	/**
 	 * AST_NAME nodes are used to identify certain names in PHP code,
 	 * such as for example the name of a class that a class declaration extends,
-	 * or the name of an interface that a class declaration implements.
+	 * the name of an interface that a class declaration implements,
+	 * or the name of a type returned by a function.
 	 * Other examples include names of called functions/methods, class
 	 * names associated with 'new' or 'instanceof' operators, etc.
 	 * 
@@ -105,8 +110,13 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)7);
 		
 		assertThat( node, instanceOf(Identifier.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((Identifier)node).getNameChild());
 		assertEquals( "bar", ((Identifier)node).getNameChild().getEscapedCodeStr());
+		
 		assertThat( node2, instanceOf(Identifier.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((Identifier)node2).getNameChild());
 		assertEquals( "buz", ((Identifier)node2).getNameChild().getEscapedCodeStr());
 	}
 	
@@ -150,9 +160,14 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)8);
 		
 		assertThat( node, instanceOf(ClosureVar.class));
-		assertEquals( "foo", ((ClosureVar)node).getName().getEscapedCodeStr());
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((ClosureVar)node).getNameChild());
+		assertEquals( "foo", ((ClosureVar)node).getNameChild().getEscapedCodeStr());
+		
 		assertThat( node2, instanceOf(ClosureVar.class));
-		assertEquals( "bar", ((ClosureVar)node2).getName().getEscapedCodeStr());
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((ClosureVar)node2).getNameChild());
+		assertEquals( "bar", ((ClosureVar)node2).getNameChild().getEscapedCodeStr());
 	}
 	
 	
@@ -196,12 +211,14 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)6);
 		
 		assertThat( node, instanceOf(TopLevelFunctionDef.class));
+		assertEquals( 1, node.getChildCount());
 		assertEquals( "<foo.php>", ((TopLevelFunctionDef)node).getName());
-		assertThat( ((TopLevelFunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
+		assertEquals( ast.getNodeById((long)2), ((TopLevelFunctionDef)node).getContent());
 		
 		assertThat( node2, instanceOf(TopLevelFunctionDef.class));
+		assertEquals( 1, node2.getChildCount());
 		assertEquals( "[bar]", ((TopLevelFunctionDef)node2).getName());
-		assertThat( ((TopLevelFunctionDef)node2).getContent(), instanceOf(CompoundStatement.class));
+		assertEquals( ast.getNodeById((long)7), ((TopLevelFunctionDef)node2).getContent());
 	}
 	
 	/**
@@ -243,10 +260,12 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(FunctionDef.class));
 		assertEquals( "foo", ((FunctionDef)node).getName());
+		assertEquals( 4, node.getChildCount());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
-		assertThat( ((FunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
-		assertThat( ((FunctionDef)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((FunctionDef)node).getReturnType()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
+		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnTypeIdentifier());
+		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnTypeIdentifier().getNameChild());
+		assertEquals( "int", ((FunctionDef)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -291,11 +310,13 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
+		assertEquals( 4, node.getChildCount());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		// TODO map AST_CLOSURE_USES to ClosureUses and check here
-		assertThat( ((FunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
-		assertThat( ((FunctionDef)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((Closure)node).getReturnType()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
+		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnTypeIdentifier());
+		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnTypeIdentifier().getNameChild());
+		assertEquals( "int", ((Closure)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -338,10 +359,12 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
+		assertEquals( 4, node.getChildCount());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
-		assertThat( ((Method)node).getContent(), instanceOf(CompoundStatement.class));
-		assertThat( ((Method)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((Method)node).getReturnType()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
+		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnTypeIdentifier());
+		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnTypeIdentifier().getNameChild());
+		assertEquals( "int", ((Method)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -384,11 +407,195 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( "foo", ((PHPClassDef)node).getName());
-		assertThat( ((PHPClassDef)node).getExtends(), instanceOf(Identifier.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPClassDef)node).getExtends());
+		assertEquals( ast.getNodeById((long)5), ((PHPClassDef)node).getExtends().getNameChild());
 		assertEquals( "bar", ((PHPClassDef)node).getExtends().getNameChild().getEscapedCodeStr());
 		// TODO map AST_NAME_LIST to IdentifierList and check here
-		assertThat( ((PHPClassDef)node).getTopLevelFunc(), instanceOf(TopLevelFunctionDef.class));
+		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getTopLevelFunc());
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
+		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
 	
+	
+	/* nodes with exactly 3 children */
+	
+	/**
+	 * AST_PARAM nodes are used for function parameters.
+	 * 
+	 * Any AST_PARAM node has exactly three children:
+	 * 1) AST_NAME, representing the parameter's type
+	 * 2) string, indicating the parameter's name
+	 * 3) various possible child types, representing the default value
+	 *    (e.g., node type could be "string", "integer", but also AST_CONST, etc.)
+	 * 
+	 * This test checks a parameter's children in the following PHP code:
+	 * 
+	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
+	 */
+	@Test
+	public void testParameterCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"int\",0,3,,,\n";
+		nodeStr += "8,string,,3,\"bar\",1,3,,,\n";
+		nodeStr += "9,integer,,3,3,2,3,,,\n";
+		nodeStr += "10,AST_PARAM,,3,,1,3,,,\n";
+		nodeStr += "11,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "12,string,,3,\"string\",0,3,,,\n";
+		nodeStr += "13,string,,3,\"buz\",1,3,,,\n";
+		nodeStr += "14,string,,3,\"yabadabadoo\",2,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "5,9,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "10,14,PARENT_OF\n";
+		edgeStr += "4,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node2 = ast.getNodeById((long)10);
+		
+		assertThat( node, instanceOf(PHPParameter.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((PHPParameter)node).getType());
+		assertEquals( ast.getNodeById((long)7), ((PHPParameter)node).getType().getNameChild());
+		assertEquals( "int", ((PHPParameter)node).getType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)8), ((PHPParameter)node).getNameChild());
+		assertEquals( "bar", ((PHPParameter)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((PHPParameter)node).getDefault());
+		assertEquals( "3", ((PHPParameter)node).getDefault().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(PHPParameter.class));
+		assertEquals( 3, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((PHPParameter)node2).getType());
+		assertEquals( ast.getNodeById((long)12), ((PHPParameter)node2).getType().getNameChild());
+		assertEquals( "string", ((PHPParameter)node2).getType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((PHPParameter)node2).getNameChild());
+		assertEquals( "buz", ((PHPParameter)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node2).getDefault());
+		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
+	}
+	
+	
+	/* nodes with an arbitrary number of children */
+
+	/**
+	 * AST_STMT_LIST nodes are used to declare lists (or "blocks") of statements.
+	 * 
+	 * Any AST_STMT_LIST node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one statement in the list.
+	 * 
+	 * This test checks statements lists' children in the following PHP code:
+	 * 
+	 * function foo() {}
+	 * foo();
+	 */
+	@Test
+	public void testCompoundStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,4,\"foo.php\",\n";
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,NULL,,3,,3,3,,,\n";
+		nodeStr += "8,AST_CALL,,4,,1,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
+		edgeStr += "1,2,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)2);
+		ASTNode node2 = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(CompoundStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((CompoundStatement)node).getStatements().size());
+		for( ASTNode stmt : (CompoundStatement)node)
+			assertTrue( ast.containsValue(stmt));
+		assertEquals( ast.getNodeById((long)3), node.getChild(0));
+		assertEquals( ast.getNodeById((long)8), node.getChild(1));
+
+		assertThat( node2, instanceOf(CompoundStatement.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( 0, ((CompoundStatement)node2).getStatements().size());
+		for( ASTNode stmt : (CompoundStatement)node2)
+			assertTrue( ast.containsValue(stmt));
+	}
+	
+	/**
+	 * AST_PARAM_LIST nodes are used for function parameters.
+	 * 
+	 * Any AST_PARAM_LIST node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one parameter in the list.
+	 * 
+	 * This test checks a parameter list's children in the following PHP code:
+	 * 
+	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
+	 */
+	@Test
+	public void testParameterListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"int\",0,3,,,\n";
+		nodeStr += "8,string,,3,\"bar\",1,3,,,\n";
+		nodeStr += "9,integer,,3,3,2,3,,,\n";
+		nodeStr += "10,AST_PARAM,,3,,1,3,,,\n";
+		nodeStr += "11,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "12,string,,3,\"string\",0,3,,,\n";
+		nodeStr += "13,string,,3,\"buz\",1,3,,,\n";
+		nodeStr += "14,string,,3,\"yabadabadoo\",2,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "5,9,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "10,14,PARENT_OF\n";
+		edgeStr += "4,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		
+		assertThat( node, instanceOf(ParameterList.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((ParameterList)node).getParameter(0));
+		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(1));
+		for( Parameter parameter : (ParameterList)node)
+			assertTrue( ast.containsValue(parameter));
+	}
 }
