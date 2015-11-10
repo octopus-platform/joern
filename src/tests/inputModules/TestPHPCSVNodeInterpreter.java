@@ -14,11 +14,14 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
+import ast.functionDef.Parameter;
+import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -415,6 +418,76 @@ public class TestPHPCSVNodeInterpreter
 	}
 	
 	
+	/* nodes with exactly 3 children */
+	
+	/**
+	 * AST_PARAM nodes are used for function parameters.
+	 * 
+	 * Any AST_PARAM node has exactly three children:
+	 * 1) AST_NAME, representing the parameter's type
+	 * 2) string, indicating the parameter's name
+	 * 3) various possible child types, representing the default value
+	 *    (e.g., node type could be "string", "integer", but also AST_CONST, etc.)
+	 * 
+	 * This test checks a parameter's children in the following PHP code:
+	 * 
+	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
+	 */
+	@Test
+	public void testParameterCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"int\",0,3,,,\n";
+		nodeStr += "8,string,,3,\"bar\",1,3,,,\n";
+		nodeStr += "9,integer,,3,3,2,3,,,\n";
+		nodeStr += "10,AST_PARAM,,3,,1,3,,,\n";
+		nodeStr += "11,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "12,string,,3,\"string\",0,3,,,\n";
+		nodeStr += "13,string,,3,\"buz\",1,3,,,\n";
+		nodeStr += "14,string,,3,\"yabadabadoo\",2,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "5,9,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "10,14,PARENT_OF\n";
+		edgeStr += "4,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node2 = ast.getNodeById((long)10);
+		
+		assertThat( node, instanceOf(PHPParameter.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((PHPParameter)node).getType());
+		assertEquals( ast.getNodeById((long)7), ((PHPParameter)node).getType().getNameChild());
+		assertEquals( "int", ((PHPParameter)node).getType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)8), ((PHPParameter)node).getNameChild());
+		assertEquals( "bar", ((PHPParameter)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((PHPParameter)node).getDefault());
+		assertEquals( "3", ((PHPParameter)node).getDefault().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(PHPParameter.class));
+		assertEquals( 3, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((PHPParameter)node2).getType());
+		assertEquals( ast.getNodeById((long)12), ((PHPParameter)node2).getType().getNameChild());
+		assertEquals( "string", ((PHPParameter)node2).getType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((PHPParameter)node2).getNameChild());
+		assertEquals( "buz", ((PHPParameter)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node2).getDefault());
+		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
+	}
+	
+	
 	/* nodes with an arbitrary number of children */
 
 	/**
@@ -474,5 +547,55 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( 0, ((CompoundStatement)node2).getStatements().size());
 		for( ASTNode stmt : (CompoundStatement)node2)
 			assertTrue( ast.containsValue(stmt));
+	}
+	
+	/**
+	 * AST_PARAM_LIST nodes are used for function parameters.
+	 * 
+	 * Any AST_PARAM_LIST node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one parameter in the list.
+	 * 
+	 * This test checks a parameter list's children in the following PHP code:
+	 * 
+	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
+	 */
+	@Test
+	public void testParameterListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;	
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"int\",0,3,,,\n";
+		nodeStr += "8,string,,3,\"bar\",1,3,,,\n";
+		nodeStr += "9,integer,,3,3,2,3,,,\n";
+		nodeStr += "10,AST_PARAM,,3,,1,3,,,\n";
+		nodeStr += "11,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
+		nodeStr += "12,string,,3,\"string\",0,3,,,\n";
+		nodeStr += "13,string,,3,\"buz\",1,3,,,\n";
+		nodeStr += "14,string,,3,\"yabadabadoo\",2,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "5,9,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "10,14,PARENT_OF\n";
+		edgeStr += "4,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		
+		assertThat( node, instanceOf(ParameterList.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((ParameterList)node).getParameter(0));
+		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(1));
+		for( Parameter parameter : (ParameterList)node)
+			assertTrue( ast.containsValue(parameter));
 	}
 }

@@ -7,14 +7,15 @@ import ast.walking.ASTNodeVisitor;
 public class Parameter extends ASTNode
 {
 	private ParameterType type = new ParameterType();
-	private Identifier name = new Identifier();
+	private Identifier identifier = new Identifier();
 
 	public void addChild(ASTNode node)
 	{
+		// Note: 2 children for C ASTs: ParameterType and Identifier.
 		if (node instanceof ParameterType)
 			setType((ParameterType) node);
 		else if (node instanceof Identifier)
-			setName((Identifier) node);
+			setIdentifier((Identifier) node);
 
 		super.addChild(node);
 	}
@@ -25,7 +26,9 @@ public class Parameter extends ASTNode
 		visitor.visit(this);
 	}
 
-	public ParameterType getType()
+	// for C ASTs, this returns a ParameterType
+	// for PHP ASTs, this returns an Identifier
+	public ASTNode getType()
 	{
 		return type;
 	}
@@ -35,13 +38,15 @@ public class Parameter extends ASTNode
 		this.type = type;
 	}
 
-	public Identifier getName()
+	// for C ASTs, returns the name
+	// for PHP ASTs, undefined: we use getNameChild() instead, see PHPParameter class
+	public Identifier getIdentifier()
 	{
-		return name;
+		return identifier;
 	}
 
-	private void setName(Identifier name)
+	private void setIdentifier(Identifier identifier)
 	{
-		this.name = name;
+		this.identifier = identifier;
 	}
 }

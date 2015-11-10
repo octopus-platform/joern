@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import ast.ASTNodeBuilder;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
+import ast.functionDef.ParameterType;
 import languages.c.antlr.ModuleParser.Parameter_declContext;
 import languages.c.antlr.ModuleParser.Parameter_idContext;
 import languages.c.parsing.ASTNodeFactory;
@@ -36,8 +37,8 @@ public class ParameterListBuilder extends ASTNodeBuilder
 				.childTokenString(ctx.param_decl_specifiers());
 		String completeType = determineCompleteType(parameter_id, baseType);
 
-		param.getType().setBaseType(baseType);
-		param.getType().setCompleteType(completeType);
+		((ParameterType)param.getType()).setBaseType(baseType);
+		((ParameterType)param.getType()).setCompleteType(completeType);
 
 		thisItem.addChild(param);
 	}

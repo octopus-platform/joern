@@ -392,7 +392,7 @@ public class CCFGFactory extends CFGFactory
 		try
 		{
 			CFG parameterListBlock = newInstance();
-			for (Parameter parameter : paramList.getParameters())
+			for (Parameter parameter : paramList)
 			{
 				parameterListBlock.appendCFG(convert(parameter));
 			}
