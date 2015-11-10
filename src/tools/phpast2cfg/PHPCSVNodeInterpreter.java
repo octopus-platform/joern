@@ -6,10 +6,10 @@ import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
-import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
+import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
@@ -251,7 +251,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	
 	private static long handleClass(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		ClassDefStatement newNode = new ClassDefStatement();
+		PHPClassDef newNode = new PHPClassDef();
 
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
