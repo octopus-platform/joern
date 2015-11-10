@@ -17,15 +17,15 @@ public class Identifier extends Expression
 	
 	public void addChild(ASTNode node)
 	{
-		setName(node);
+		setNameChild(node);
 		super.addChild(node);
 	}
 	
-	public void setName(ASTNode name) {
+	public void setNameChild(ASTNode name) {
 		this.name = name;
 	}
 	
-	public ASTNode getName() {
+	public ASTNode getNameChild() {
 		return this.name;
 	}
 
