@@ -166,8 +166,8 @@ public class CodeNestingTest
 		assertTrue(contentItem.getChildCount() == 1);
 		ClassDefStatement classDef = (ClassDefStatement) contentItem
 				.getChild(0);
-		assertTrue(classDef.getChildCount() == 1);
-		IdentifierDecl decl = (IdentifierDecl) classDef.getChild(0);
+		assertTrue(classDef.getChildCount() == 2);
+		IdentifierDecl decl = (IdentifierDecl) classDef.getChild(1);
 		assertTrue(decl.getName().getEscapedCodeStr().equals("foo"));
 	}
 

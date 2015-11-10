@@ -16,8 +16,8 @@ public class ClassDefStatement extends Statement
 	{
 		if (expression instanceof Identifier)
 			identifier = (Identifier) expression;
-		else
-			super.addChild(expression);
+
+		super.addChild(expression);
 	}
 
 	public Identifier getIdentifier()
