@@ -13,7 +13,6 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
-import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureVar;
@@ -106,8 +105,11 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)7);
 		
 		assertThat( node, instanceOf(Identifier.class));
+		assertEquals( ast.getNodeById((long)5), ((Identifier)node).getNameChild());
 		assertEquals( "bar", ((Identifier)node).getNameChild().getEscapedCodeStr());
+		
 		assertThat( node2, instanceOf(Identifier.class));
+		assertEquals( ast.getNodeById((long)8), ((Identifier)node2).getNameChild());
 		assertEquals( "buz", ((Identifier)node2).getNameChild().getEscapedCodeStr());
 	}
 	
@@ -151,8 +153,11 @@ public class TestPHPCSVNodeInterpreter
 		ASTNode node2 = ast.getNodeById((long)8);
 		
 		assertThat( node, instanceOf(ClosureVar.class));
+		assertEquals( ast.getNodeById((long)7), ((ClosureVar)node).getNameChild());
 		assertEquals( "foo", ((ClosureVar)node).getNameChild().getEscapedCodeStr());
+		
 		assertThat( node2, instanceOf(ClosureVar.class));
+		assertEquals( ast.getNodeById((long)9), ((ClosureVar)node2).getNameChild());
 		assertEquals( "bar", ((ClosureVar)node2).getNameChild().getEscapedCodeStr());
 	}
 	
@@ -198,11 +203,11 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( "<foo.php>", ((TopLevelFunctionDef)node).getName());
-		assertThat( ((TopLevelFunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
+		assertEquals( ast.getNodeById((long)2), ((TopLevelFunctionDef)node).getContent());
 		
 		assertThat( node2, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( "[bar]", ((TopLevelFunctionDef)node2).getName());
-		assertThat( ((TopLevelFunctionDef)node2).getContent(), instanceOf(CompoundStatement.class));
+		assertEquals( ast.getNodeById((long)7), ((TopLevelFunctionDef)node2).getContent());
 	}
 	
 	/**
@@ -245,9 +250,10 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(FunctionDef.class));
 		assertEquals( "foo", ((FunctionDef)node).getName());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
-		assertThat( ((FunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
-		assertThat( ((FunctionDef)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((FunctionDef)node).getReturnType()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
+		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnTypeIdentifier());
+		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnTypeIdentifier().getNameChild());
+		assertEquals( "int", ((FunctionDef)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -294,9 +300,10 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( "{closure}", ((Closure)node).getName());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
 		// TODO map AST_CLOSURE_USES to ClosureUses and check here
-		assertThat( ((FunctionDef)node).getContent(), instanceOf(CompoundStatement.class));
-		assertThat( ((FunctionDef)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((Closure)node).getReturnType()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
+		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnTypeIdentifier());
+		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnTypeIdentifier().getNameChild());
+		assertEquals( "int", ((Closure)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -340,9 +347,10 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
 		// TODO map AST_PARAM_LIST to ParameterList and check here
-		assertThat( ((Method)node).getContent(), instanceOf(CompoundStatement.class));
-		assertThat( ((Method)node).getReturnType(), instanceOf(Identifier.class));
-		assertEquals( "int", ((Identifier)((Method)node).getReturnType()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
+		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnTypeIdentifier());
+		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnTypeIdentifier().getNameChild());
+		assertEquals( "int", ((Method)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -385,11 +393,12 @@ public class TestPHPCSVNodeInterpreter
 		
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( "foo", ((PHPClassDef)node).getName());
-		assertThat( ((PHPClassDef)node).getExtends(), instanceOf(Identifier.class));
+		assertEquals( ast.getNodeById((long)4), ((PHPClassDef)node).getExtends());
+		assertEquals( ast.getNodeById((long)5), ((PHPClassDef)node).getExtends().getNameChild());
 		assertEquals( "bar", ((PHPClassDef)node).getExtends().getNameChild().getEscapedCodeStr());
 		// TODO map AST_NAME_LIST to IdentifierList and check here
-		assertThat( ((PHPClassDef)node).getTopLevelFunc(), instanceOf(TopLevelFunctionDef.class));
+		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getTopLevelFunc());
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
+		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
-	
 }

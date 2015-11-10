@@ -47,7 +47,7 @@ public class FunctionDef extends ASTNode
 		return content;
 	}
 	
-	public Identifier getReturnType()
+	public Identifier getReturnTypeIdentifier()
 	{
 		return this.identifier;
 	}
