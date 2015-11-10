@@ -34,8 +34,8 @@ public class ModuleBuildersTest
 				.getStatements().get(0);
 
 		assertTrue(codeItems.size() == 1);
-		assertTrue(yClass.getName().getEscapedCodeStr().equals("y"));
-		assertTrue(zClass.getName().getEscapedCodeStr().equals("z"));
+		assertTrue(yClass.getIdentifier().getEscapedCodeStr().equals("y"));
+		assertTrue(zClass.getIdentifier().getEscapedCodeStr().equals("z"));
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class ModuleBuildersTest
 		String input = "struct foo{};";
 		List<ASTNode> codeItems = parseInput(input);
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
-		assertTrue(codeItem.name.getEscapedCodeStr().equals("foo"));
+		assertTrue(codeItem.identifier.getEscapedCodeStr().equals("foo"));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class ModuleBuildersTest
 		String input = "struct {int x; } a;";
 		List<ASTNode> codeItems = parseInput(input);
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
-		assertTrue(codeItem.name.getEscapedCodeStr().equals("<unnamed>"));
+		assertTrue(codeItem.identifier.getEscapedCodeStr().equals("<unnamed>"));
 	}
 
 	@Test
@@ -113,7 +113,7 @@ public class ModuleBuildersTest
 		IdentifierDecl decl = (IdentifierDecl) identifierCodeItem
 				.getIdentifierDeclList().get(0);
 
-		assertTrue(classCodeItem.name.getEscapedCodeStr().equals("foo"));
+		assertTrue(classCodeItem.identifier.getEscapedCodeStr().equals("foo"));
 		assertTrue(decl.getName().getEscapedCodeStr().equals("x"));
 	}
 

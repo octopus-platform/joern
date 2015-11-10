@@ -610,7 +610,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 			typeName = nodeToRuleContext.get(type);
 		} else if (parentItem instanceof ClassDefStatement)
 		{
-			Identifier name = ((ClassDefStatement) parentItem).getName();
+			Identifier name = ((ClassDefStatement) parentItem).getIdentifier();
 			typeName = nodeToRuleContext.get(name);
 		} else
 			throw new RuntimeException(

@@ -46,6 +46,11 @@ public class FunctionDef extends ASTNode
 	{
 		return content;
 	}
+	
+	public Identifier getReturnType()
+	{
+		return this.identifier;
+	}
 
 	@Override
 	public String getEscapedCodeStr()

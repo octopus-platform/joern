@@ -15,7 +15,7 @@ public class ClassDefDatabaseNode extends DatabaseNode
 	public void initialize(Object obj)
 	{
 		stmt = (ClassDefStatement) obj;
-		name = stmt.name.getEscapedCodeStr();
+		name = stmt.identifier.getEscapedCodeStr();
 	}
 
 	@Override

@@ -1,19 +1,10 @@
-package ast.expressions;
+package ast.php.functionDef;
 
 import ast.ASTNode;
 
-public class Identifier extends Expression
+public class ClosureVar extends ASTNode
 {
 	private ASTNode name = new ASTNode();
-	
-	public Identifier()
-	{
-	}
-
-	public Identifier(Identifier name)
-	{
-		super(name);
-	}
 	
 	public void addChild(ASTNode node)
 	{
@@ -28,5 +19,4 @@ public class Identifier extends Expression
 	public ASTNode getName() {
 		return this.name;
 	}
-
 }
