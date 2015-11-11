@@ -261,7 +261,7 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(FunctionDef.class));
 		assertEquals( "foo", ((FunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
-		// TODO map AST_PARAM_LIST to ParameterList and check here
+		assertEquals( ast.getNodeById((long)4), ((FunctionDef)node).getParameterList());
 		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
 		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnTypeIdentifier());
 		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnTypeIdentifier().getNameChild());
@@ -311,7 +311,7 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
 		assertEquals( 4, node.getChildCount());
-		// TODO map AST_PARAM_LIST to ParameterList and check here
+		assertEquals( ast.getNodeById((long)4), ((Closure)node).getParameterList());
 		// TODO map AST_CLOSURE_USES to ClosureUses and check here
 		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
 		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnTypeIdentifier());
@@ -360,7 +360,7 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
 		assertEquals( 4, node.getChildCount());
-		// TODO map AST_PARAM_LIST to ParameterList and check here
+		assertEquals( ast.getNodeById((long)9), ((Method)node).getParameterList());
 		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
 		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnTypeIdentifier());
 		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnTypeIdentifier().getNameChild());
