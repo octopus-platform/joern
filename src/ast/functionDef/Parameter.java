@@ -16,8 +16,8 @@ public class Parameter extends ASTNode
 			setType((ParameterType) node);
 		else if (node instanceof Identifier)
 			setIdentifier((Identifier) node);
-
-		super.addChild(node);
+		else
+			super.addChild(node);
 	}
 
 	@Override
@@ -33,9 +33,11 @@ public class Parameter extends ASTNode
 		return type;
 	}
 
-	private void setType(ParameterType type)
+	public void setType(ASTNode type)
 	{
-		this.type = type;
+		if( type instanceof ParameterType)
+			this.type = (ParameterType)type;
+		super.addChild(type);
 	}
 
 	// for C ASTs, returns the name
@@ -48,5 +50,6 @@ public class Parameter extends ASTNode
 	private void setIdentifier(Identifier identifier)
 	{
 		this.identifier = identifier;
+		super.addChild(identifier);
 	}
 }

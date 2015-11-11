@@ -14,7 +14,8 @@ public class ParameterList extends ASTNode implements Iterable<Parameter>
 	{
 		if (node instanceof Parameter)
 			addParameter((Parameter) node);
-		super.addChild(node);
+		else
+			super.addChild(node);
 	}
 
 	public int size()
@@ -26,9 +27,10 @@ public class ParameterList extends ASTNode implements Iterable<Parameter>
 		return this.parameters.get(i);
 	}
 
-	private void addParameter(Parameter parameter)
+	public void addParameter(Parameter parameter)
 	{
 		this.parameters.add(parameter);
+		super.addChild(parameter);
 	}
 
 	@Override

@@ -30,7 +30,7 @@ import inputModules.csv.csv2ast.ASTUnderConstruction;
 import tools.phpast2cfg.PHPCSVEdgeInterpreter;
 import tools.phpast2cfg.PHPCSVNodeInterpreter;
 
-public class TestPHPCSVNodeInterpreter
+public class TestPHPCSVASTBuilder
 {
 	PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
 	PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
@@ -263,9 +263,9 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( 4, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((FunctionDef)node).getParameterList());
 		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
-		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnTypeIdentifier());
-		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnTypeIdentifier().getNameChild());
-		assertEquals( "int", ((FunctionDef)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnType());
+		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnType().getNameChild());
+		assertEquals( "int", ((FunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -314,9 +314,9 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( ast.getNodeById((long)4), ((Closure)node).getParameterList());
 		// TODO map AST_CLOSURE_USES to ClosureUses and check here
 		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
-		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnTypeIdentifier());
-		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnTypeIdentifier().getNameChild());
-		assertEquals( "int", ((Closure)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnType());
+		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnType().getNameChild());
+		assertEquals( "int", ((Closure)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -362,9 +362,9 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( 4, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((Method)node).getParameterList());
 		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
-		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnTypeIdentifier());
-		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnTypeIdentifier().getNameChild());
-		assertEquals( "int", ((Method)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnType());
+		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnType().getNameChild());
+		assertEquals( "int", ((Method)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -424,10 +424,10 @@ public class TestPHPCSVNodeInterpreter
 	 * AST_PARAM nodes are used for function parameters.
 	 * 
 	 * Any AST_PARAM node has exactly three children:
-	 * 1) AST_NAME, representing the parameter's type
+	 * 1) AST_NAME or NULL, representing the parameter's type
 	 * 2) string, indicating the parameter's name
 	 * 3) various possible child types, representing the default value
-	 *    (e.g., node type could be "string", "integer", but also AST_CONST, etc.)
+	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
 	 * 
 	 * This test checks a parameter's children in the following PHP code:
 	 * 

@@ -10,18 +10,8 @@ import ast.php.functionDef.TopLevelFunctionDef;
 public class PHPClassDef extends ClassDefStatement
 {
 
-	public Identifier parent = new DummyIdentifierNode();
-	public TopLevelFunctionDef toplevelfunc = new TopLevelFunctionDef();
-
-	public void addChild(ASTNode node)
-	{
-		if (node instanceof Identifier)
-			parent = (Identifier) node;
-		else if (node instanceof TopLevelFunctionDef)
-			toplevelfunc = (TopLevelFunctionDef) node;
-
-		super.addChild(node);
-	}
+	private Identifier parent = new DummyIdentifierNode();
+	private TopLevelFunctionDef toplevelfunc = new TopLevelFunctionDef();
 
 	public String getName() {
 		return getProperty(ASTNodeProperties.NAME);
@@ -31,9 +21,24 @@ public class PHPClassDef extends ClassDefStatement
 		setProperty(ASTNodeProperties.NAME, name);
 	}
 	
+	public String getDocComment() {
+		return getProperty(ASTNodeProperties.DOCCOMMENT);
+	}
+	
+	public void setDocComment(String doccomment) {
+		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
+	}
+	
 	public Identifier getExtends()
 	{
 		return this.parent;
+	}
+	
+	public void setExtends(ASTNode parent)
+	{
+		if( parent instanceof Identifier)
+			this.parent = (Identifier)parent;
+		super.addChild(parent);
 	}
 	
 	public TopLevelFunctionDef getTopLevelFunc()
@@ -41,11 +46,9 @@ public class PHPClassDef extends ClassDefStatement
 		return this.toplevelfunc;
 	}
 	
-	public String getDocComment() {
-		return getProperty(ASTNodeProperties.DOCCOMMENT);
-	}
-	
-	public void setDocComment(String doccomment) {
-		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
+	public void setTopLevelFunc(TopLevelFunctionDef toplevelfunc)
+	{
+		this.toplevelfunc = toplevelfunc;
+		super.addChild(toplevelfunc);
 	}
 }
