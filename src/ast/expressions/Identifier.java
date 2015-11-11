@@ -1,6 +1,7 @@
 package ast.expressions;
 
 import ast.ASTNode;
+import ast.walking.ASTNodeVisitor;
 
 public class Identifier extends Expression
 {
@@ -29,4 +30,9 @@ public class Identifier extends Expression
 		return this.name;
 	}
 
+	@Override
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

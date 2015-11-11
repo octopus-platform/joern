@@ -22,6 +22,7 @@ public class CompoundStatement extends Statement implements Iterable<ASTNode>
 		return "";
 	}
 
+	@Override
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);

@@ -5,6 +5,7 @@ import ast.DummyIdentifierNode;
 import ast.expressions.Identifier;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
+import ast.walking.ASTNodeVisitor;
 
 public class ClassDefStatement extends Statement
 {
@@ -23,5 +24,11 @@ public class ClassDefStatement extends Statement
 	public Identifier getIdentifier()
 	{
 		return identifier;
+	}
+	
+	@Override
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
 	}
 }
