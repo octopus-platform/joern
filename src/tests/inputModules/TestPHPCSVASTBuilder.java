@@ -19,6 +19,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
+import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
@@ -312,7 +313,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "{closure}", ((Closure)node).getName());
 		assertEquals( 4, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((Closure)node).getParameterList());
-		// TODO map AST_CLOSURE_USES to ClosureUses and check here
+		assertEquals( ast.getNodeById((long)5), ((Closure)node).getClosureUses());
 		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
 		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnType());
 		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnType().getNameChild());
@@ -597,5 +598,52 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(1));
 		for( Parameter parameter : (ParameterList)node)
 			assertTrue( ast.containsValue(parameter));
+	}
+	
+	/**
+	 * AST_CLOSURE_USES nodes are used for holding a list of variables that
+	 * occur within the 'use' language construct of closure declarations.
+	 * 
+	 * Any AST_CLOSURE_USES node has between 0 and an arbitrarily large number
+	 * of children. Each child corresponds to one closure variable in the list.
+	 * 
+	 * This test checks a closure 'uses' list's children in the following PHP code:
+	 * 
+	 * function() use ($foo,$bar) {};
+	 */
+	@Test
+	public void testClosureUsesCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLOSURE,,3,,0,1,3,{closure},\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_CLOSURE_USES,,3,,1,3,,,\n";
+		nodeStr += "6,AST_CLOSURE_VAR,,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"foo\",0,3,,,\n";
+		nodeStr += "8,AST_CLOSURE_VAR,,3,,1,3,,,\n";
+		nodeStr += "9,string,,3,\"bar\",0,3,,,\n";
+		nodeStr += "10,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "11,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,10,PARENT_OF\n";
+		edgeStr += "3,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(ClosureUses.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((ClosureUses)node).getClosureVar(0));
+		assertEquals( ast.getNodeById((long)8), ((ClosureUses)node).getClosureVar(1));
+		for( ClosureVar closurevar : (ClosureUses)node)
+			assertTrue( ast.containsValue(closurevar));
 	}
 }

@@ -7,6 +7,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
+import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
@@ -74,6 +75,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_PARAM_LIST:
 				errno = handleParameterList((ParameterList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CLOSURE_USES:
+				errno = handleClosureUses((ClosureUses)startNode, endNode, childnum);
 				break;
 				
 			default:
@@ -189,7 +193,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setParameterList((ParameterList)endNode);
 				break;
 			case 1: // uses child: either ClosureUses or NULL node
-				startNode.addChild(endNode); // TODO introduce ClosureUses and setClosureUses
+				startNode.setClosureUses(endNode);
 				break;
 			case 2: // stmts child
 				startNode.setContent((CompoundStatement)endNode);
@@ -293,6 +297,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleParameterList( ParameterList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addParameter((PHPParameter)endNode);
+
+		return 0;
+	}
+	
+	private int handleClosureUses( ClosureUses startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addClosureVar((ClosureVar)endNode);
 
 		return 0;
 	}
