@@ -13,6 +13,7 @@ public class FunctionDef extends ASTNode
 	private Identifier identifier = new DummyIdentifierNode();
 	private ParameterList parameterList = new ParameterList();
 	private CompoundStatement content = new CompoundStatement();
+	private Identifier returnType = null;
 
 	public void addChild(ASTNode node)
 	{
@@ -22,8 +23,8 @@ public class FunctionDef extends ASTNode
 			setParameterList((ParameterList) node);
 		else if (node instanceof Identifier)
 			setIdentifier((Identifier) node);
-
-		super.addChild(node);
+		else
+			super.addChild(node);
 	}
 	
 	public String getName() {
@@ -44,12 +45,25 @@ public class FunctionDef extends ASTNode
 
 	public CompoundStatement getContent()
 	{
-		return content;
+		return this.content;
 	}
 	
-	public Identifier getReturnTypeIdentifier()
+	public void setContent(CompoundStatement content)
 	{
-		return this.identifier;
+		this.content = content;
+		super.addChild(content);
+	}
+	
+	public Identifier getReturnType()
+	{
+		return this.returnType;
+	}
+	
+	public void setReturnType(ASTNode returnType)
+	{
+		if( returnType instanceof Identifier)
+			this.returnType = (Identifier)returnType;
+		super.addChild(returnType);
 	}
 
 	@Override
@@ -69,11 +83,6 @@ public class FunctionDef extends ASTNode
 		return retval;
 	}
 
-	private void setContent(CompoundStatement functionContent)
-	{
-		this.content = functionContent;
-	}
-
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
@@ -81,22 +90,24 @@ public class FunctionDef extends ASTNode
 
 	public ParameterList getParameterList()
 	{
-		return parameterList;
+		return this.parameterList;
 	}
 
-	private void setParameterList(ParameterList parameterList)
+	public void setParameterList(ParameterList parameterList)
 	{
 		this.parameterList = parameterList;
+		super.addChild(parameterList);
 	}
 
 	public Identifier getIdentifier()
 	{
-		return identifier;
+		return this.identifier;
 	}
 
 	private void setIdentifier(Identifier identifier)
 	{
 		this.identifier = identifier;
+		super.addChild(identifier);
 	}
 
 }

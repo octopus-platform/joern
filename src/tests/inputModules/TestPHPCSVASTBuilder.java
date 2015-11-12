@@ -19,6 +19,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
+import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
@@ -30,7 +31,7 @@ import inputModules.csv.csv2ast.ASTUnderConstruction;
 import tools.phpast2cfg.PHPCSVEdgeInterpreter;
 import tools.phpast2cfg.PHPCSVNodeInterpreter;
 
-public class TestPHPCSVNodeInterpreter
+public class TestPHPCSVASTBuilder
 {
 	PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
 	PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
@@ -261,11 +262,11 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(FunctionDef.class));
 		assertEquals( "foo", ((FunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
-		// TODO map AST_PARAM_LIST to ParameterList and check here
+		assertEquals( ast.getNodeById((long)4), ((FunctionDef)node).getParameterList());
 		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
-		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnTypeIdentifier());
-		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnTypeIdentifier().getNameChild());
-		assertEquals( "int", ((FunctionDef)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnType());
+		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnType().getNameChild());
+		assertEquals( "int", ((FunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -311,12 +312,12 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
 		assertEquals( 4, node.getChildCount());
-		// TODO map AST_PARAM_LIST to ParameterList and check here
-		// TODO map AST_CLOSURE_USES to ClosureUses and check here
+		assertEquals( ast.getNodeById((long)4), ((Closure)node).getParameterList());
+		assertEquals( ast.getNodeById((long)5), ((Closure)node).getClosureUses());
 		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
-		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnTypeIdentifier());
-		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnTypeIdentifier().getNameChild());
-		assertEquals( "int", ((Closure)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnType());
+		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnType().getNameChild());
+		assertEquals( "int", ((Closure)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -360,11 +361,11 @@ public class TestPHPCSVNodeInterpreter
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
 		assertEquals( 4, node.getChildCount());
-		// TODO map AST_PARAM_LIST to ParameterList and check here
+		assertEquals( ast.getNodeById((long)9), ((Method)node).getParameterList());
 		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
-		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnTypeIdentifier());
-		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnTypeIdentifier().getNameChild());
-		assertEquals( "int", ((Method)node).getReturnTypeIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnType());
+		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnType().getNameChild());
+		assertEquals( "int", ((Method)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -424,10 +425,10 @@ public class TestPHPCSVNodeInterpreter
 	 * AST_PARAM nodes are used for function parameters.
 	 * 
 	 * Any AST_PARAM node has exactly three children:
-	 * 1) AST_NAME, representing the parameter's type
+	 * 1) AST_NAME or NULL, representing the parameter's type
 	 * 2) string, indicating the parameter's name
 	 * 3) various possible child types, representing the default value
-	 *    (e.g., node type could be "string", "integer", but also AST_CONST, etc.)
+	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
 	 * 
 	 * This test checks a parameter's children in the following PHP code:
 	 * 
@@ -597,5 +598,52 @@ public class TestPHPCSVNodeInterpreter
 		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(1));
 		for( Parameter parameter : (ParameterList)node)
 			assertTrue( ast.containsValue(parameter));
+	}
+	
+	/**
+	 * AST_CLOSURE_USES nodes are used for holding a list of variables that
+	 * occur within the 'use' language construct of closure declarations.
+	 * 
+	 * Any AST_CLOSURE_USES node has between 0 and an arbitrarily large number
+	 * of children. Each child corresponds to one closure variable in the list.
+	 * 
+	 * This test checks a closure 'uses' list's children in the following PHP code:
+	 * 
+	 * function() use ($foo,$bar) {};
+	 */
+	@Test
+	public void testClosureUsesCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLOSURE,,3,,0,1,3,{closure},\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_CLOSURE_USES,,3,,1,3,,,\n";
+		nodeStr += "6,AST_CLOSURE_VAR,,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"foo\",0,3,,,\n";
+		nodeStr += "8,AST_CLOSURE_VAR,,3,,1,3,,,\n";
+		nodeStr += "9,string,,3,\"bar\",0,3,,,\n";
+		nodeStr += "10,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "11,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,10,PARENT_OF\n";
+		edgeStr += "3,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(ClosureUses.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((ClosureUses)node).getClosureVar(0));
+		assertEquals( ast.getNodeById((long)8), ((ClosureUses)node).getClosureVar(1));
+		for( ClosureVar closurevar : (ClosureUses)node)
+			assertTrue( ast.containsValue(closurevar));
 	}
 }

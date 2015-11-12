@@ -1,6 +1,7 @@
 package ast.expressions;
 
 import ast.ASTNode;
+import ast.walking.ASTNodeVisitor;
 
 public class Identifier extends Expression
 {
@@ -14,19 +15,19 @@ public class Identifier extends Expression
 	{
 		super(name);
 	}
-	
-	public void addChild(ASTNode node)
-	{
-		setNameChild(node);
-		super.addChild(node);
-	}
-	
+
 	public void setNameChild(ASTNode name) {
 		this.name = name;
+		super.addChild(name);
 	}
 	
 	public ASTNode getNameChild() {
 		return this.name;
 	}
 
+	@Override
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }
