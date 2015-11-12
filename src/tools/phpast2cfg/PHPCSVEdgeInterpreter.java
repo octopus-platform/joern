@@ -13,6 +13,7 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -70,6 +71,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// nodes with exactly 2 children
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
+				break;
+				
+			case PHPCSVNodeTypes.TYPE_DO_WHILE:
+				errno = handleDo((DoStatement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 3 children
@@ -286,6 +291,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // stmts child
 				startNode.setContent((CompoundStatement)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleDo( DoStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // stmts child
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+			case 1: // cond child
+				startNode.setCondition(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BlockStarter.condition to be an Expression instead
+				// of a generic ASTNode, and getCondition() and setCondition() accordingly
 				break;
 
 			default:
