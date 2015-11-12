@@ -2,16 +2,17 @@ package ast.php.declarations;
 
 import ast.ASTNode;
 import ast.ASTNodeProperties;
-import ast.DummyIdentifierNode;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
+import ast.expressions.IdentifierList;
 import ast.php.functionDef.TopLevelFunctionDef;
 
 public class PHPClassDef extends ClassDefStatement
 {
 
-	private Identifier parent = new DummyIdentifierNode();
-	private TopLevelFunctionDef toplevelfunc = new TopLevelFunctionDef();
+	private Identifier parent = null;
+	private IdentifierList interfaces = null;
+	private TopLevelFunctionDef toplevelfunc = null;
 
 	public String getName() {
 		return getProperty(ASTNodeProperties.NAME);
@@ -39,6 +40,18 @@ public class PHPClassDef extends ClassDefStatement
 		if( parent instanceof Identifier)
 			this.parent = (Identifier)parent;
 		super.addChild(parent);
+	}
+	
+	public IdentifierList getImplements()
+	{
+		return this.interfaces;
+	}
+	
+	public void setImplements(ASTNode interfaces)
+	{
+		if( interfaces instanceof IdentifierList)
+			this.interfaces = (IdentifierList)interfaces;
+		super.addChild(interfaces);
 	}
 	
 	public TopLevelFunctionDef getTopLevelFunc()

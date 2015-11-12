@@ -7,6 +7,7 @@ import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.Identifier;
+import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -88,6 +89,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE_USES:
 				retval = handleClosureUses(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_NAME_LIST:
+				retval = handleIdentifierList(row, ast);
 				break;
 
 			default:
@@ -486,6 +490,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleClosureUses(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ClosureUses newNode = new ClosureUses();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleIdentifierList(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		IdentifierList newNode = new IdentifierList();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

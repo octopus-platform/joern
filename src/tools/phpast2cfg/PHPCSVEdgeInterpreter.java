@@ -2,6 +2,7 @@ package tools.phpast2cfg;
 
 import ast.ASTNode;
 import ast.expressions.Identifier;
+import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -78,6 +79,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE_USES:
 				errno = handleClosureUses((ClosureUses)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_NAME_LIST:
+				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
 				break;
 				
 			default:
@@ -244,8 +248,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // extends child: either Identifier or NULL node
 				startNode.setExtends(endNode);
 				break;
-			case 1: // implements child
-				startNode.addChild(endNode); // TODO introduce IdentifierList and setImplements
+			case 1: // implements child: either IdentifierList or NULL node
+				startNode.setImplements(endNode);
 				break;
 			case 2: // toplevel child
 				startNode.setTopLevelFunc((TopLevelFunctionDef)endNode);
@@ -304,6 +308,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleClosureUses( ClosureUses startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addClosureVar((ClosureVar)endNode);
+
+		return 0;
+	}
+	
+	private int handleIdentifierList( IdentifierList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addIdentifier((Identifier)endNode);
 
 		return 0;
 	}

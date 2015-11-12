@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import ast.ASTNode;
 import ast.expressions.Identifier;
+import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
@@ -412,13 +413,16 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)4), ((PHPClassDef)node).getExtends());
 		assertEquals( ast.getNodeById((long)5), ((PHPClassDef)node).getExtends().getNameChild());
 		assertEquals( "bar", ((PHPClassDef)node).getExtends().getNameChild().getEscapedCodeStr());
-		// TODO map AST_NAME_LIST to IdentifierList and check here
+		assertEquals( ast.getNodeById((long)6), ((PHPClassDef)node).getImplements());
+		assertEquals( ast.getNodeById((long)7), ((PHPClassDef)node).getImplements().getIdentifier(0));
+		assertEquals( ast.getNodeById((long)8), ((PHPClassDef)node).getImplements().getIdentifier(0).getNameChild());
+		assertEquals( "buz", ((PHPClassDef)node).getImplements().getIdentifier(0).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getTopLevelFunc());
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
 		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
-	
-	
+
+
 	/* nodes with exactly 3 children */
 	
 	/**
@@ -645,5 +649,54 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)8), ((ClosureUses)node).getClosureVar(1));
 		for( ClosureVar closurevar : (ClosureUses)node)
 			assertTrue( ast.containsValue(closurevar));
+	}
+	
+	/**
+	 * AST_NAME_LIST nodes are used for holding a list of identifiers, e.g.,
+	 * a list of names referring to interfaces that a class extends.
+	 * 
+	 * Any AST_NAME_LIST node has between 0 and an arbitrarily large number
+	 * of children. Each child corresponds to one identifier in the list.
+	 * 
+	 * This test checks an identifier list's children in the following PHP code:
+	 * 
+	 * class foo extends bar implements buz, qux {}
+	 */
+	@Test
+	public void testIdentifierList() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "6,AST_NAME_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,3,,1,1,,,\n";
+		nodeStr += "10,string,,3,\"qux\",0,1,,,\n";
+		nodeStr += "11,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
+		nodeStr += "12,AST_STMT_LIST,,3,,0,11,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "3,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(IdentifierList.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((IdentifierList)node).getIdentifier(0));
+		assertEquals( ast.getNodeById((long)9), ((IdentifierList)node).getIdentifier(1));
+		for( Identifier identifier : (IdentifierList)node)
+			assertTrue( ast.containsValue(identifier));
 	}
 }
