@@ -4,27 +4,42 @@ import ast.ASTNode;
 
 public class BlockStarter extends Statement
 {
+	protected ASTNode condition = null;
 	protected Statement statement = null;
-	protected Condition condition = null;
 
+	public ASTNode getCondition()
+	{
+		return this.condition;
+	}
+
+	public void setCondition(ASTNode expression)
+	{
+		this.condition = expression;
+		super.addChild(expression);
+	}
+	
+	// for C, getStatement() and setStatement()
 	public Statement getStatement()
 	{
-		return statement;
+		return this.statement;
 	}
-
-	public Condition getCondition()
+	
+	public void setStatement(Statement statement)
 	{
-		return condition;
+		this.statement = statement;
+		super.addChild(statement);
 	}
-
-	protected void setStatement(Statement aStatement)
+	
+	// for PHP, getContent() and setContent()
+	public CompoundStatement getContent()
 	{
-		statement = aStatement;
+		return (CompoundStatement)this.statement;
 	}
-
-	protected void setCondition(Condition expression)
+	
+	public void setContent(CompoundStatement content)
 	{
-		condition = expression;
+		this.statement = content;
+		super.addChild(content);
 	}
 
 	@Override
@@ -34,7 +49,8 @@ public class BlockStarter extends Statement
 			setCondition((Condition) node);
 		else if (node instanceof Statement)
 			setStatement((Statement) node);
-		super.addChild(node);
+		else
+			super.addChild(node);
 	}
 
 }

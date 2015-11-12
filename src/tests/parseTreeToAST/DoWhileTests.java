@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Condition;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -20,7 +21,7 @@ public class DoWhileTests
 				.parseAndWalk(input);
 		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
 
-		String condExprString = doItem.getCondition().getExpression()
+		String condExprString = ((Condition)doItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		assertTrue(condExprString.equals("bar"));
 
@@ -39,7 +40,7 @@ public class DoWhileTests
 		WhileStatement whileStatement = (WhileStatement) doCompound.getChild(0);
 		assertTrue(whileStatement.getCondition() != null);
 
-		String condExprString = doItem.getCondition().getExpression()
+		String condExprString = ((Condition)doItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		assertTrue(condExprString.equals("bar"));
 
@@ -53,7 +54,7 @@ public class DoWhileTests
 				.parseAndWalk(input);
 		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
 
-		String condExprString = doItem.getCondition().getExpression()
+		String condExprString = ((Condition)doItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		assertTrue(condExprString.equals("bar"));
 	}
@@ -69,7 +70,7 @@ public class DoWhileTests
 				.get(0);
 		DoStatement doItem = (DoStatement) ifStatement.getStatement();
 
-		String condExprString = doItem.getCondition().getExpression()
+		String condExprString = ((Condition)doItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		assertTrue(condExprString.equals("bar"));
 	}
@@ -82,7 +83,7 @@ public class DoWhileTests
 				.parseAndWalk(input);
 		DoStatement doItem = (DoStatement) contentItem.getStatements().get(0);
 
-		String condExprString = doItem.getCondition().getExpression()
+		String condExprString = ((Condition)doItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		assertTrue(condExprString.equals("bar"));
 	}

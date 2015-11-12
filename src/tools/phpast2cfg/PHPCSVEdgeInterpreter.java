@@ -2,6 +2,7 @@ package tools.phpast2cfg;
 
 import ast.ASTNode;
 import ast.expressions.Identifier;
+import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -12,6 +13,8 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
@@ -31,7 +34,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		ASTNode endNode = ast.getNodeById(endId);
 		
 		// TODO put childnum property into edges file instead of nodes file,
-		// then do not add the childnum property to ASTNodes in node interpreter any longer
+		// then do not add the childnum property to ASTNodes in node interpreter any longer,
+		// then introduce some NumberFormatException handling here.
 		//int childnum = Integer.parseInt(row.getFieldForKey(PHPCSVEdgeTypes.CHILDNUM));
 		int childnum = Integer.parseInt(endNode.getProperty(PHPCSVNodeTypes.CHILDNUM.getName()));
 
@@ -63,7 +67,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CLASS:
 				errno = handleClass((PHPClassDef)startNode, endNode, childnum);
 				break;
+
+			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_WHILE:
+				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
+				break;
 				
+			case PHPCSVNodeTypes.TYPE_DO_WHILE:
+				errno = handleDo((DoStatement)startNode, endNode, childnum);
+				break;
+
 			// nodes with exactly 3 children
 			case PHPCSVNodeTypes.TYPE_PARAM:
 				errno = handleParameter((PHPParameter)startNode, endNode, childnum);
@@ -78,6 +91,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE_USES:
 				errno = handleClosureUses((ClosureUses)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_NAME_LIST:
+				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
 				break;
 				
 			default:
@@ -244,8 +260,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // extends child: either Identifier or NULL node
 				startNode.setExtends(endNode);
 				break;
-			case 1: // implements child
-				startNode.addChild(endNode); // TODO introduce IdentifierList and setImplements
+			case 1: // implements child: either IdentifierList or NULL node
+				startNode.setImplements(endNode);
 				break;
 			case 2: // toplevel child
 				startNode.setTopLevelFunc((TopLevelFunctionDef)endNode);
@@ -259,6 +275,55 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 	
 	
+	/* nodes with exactly 2 children */
+
+	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // cond child
+				startNode.setCondition(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BlockStarter.condition to be an Expression instead
+				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				break;
+			case 1: // stmts child
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleDo( DoStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // stmts child
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+			case 1: // cond child
+				startNode.setCondition(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BlockStarter.condition to be an Expression instead
+				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+
+
 	/* nodes with exactly 3 children */
 	
 	private int handleParameter( PHPParameter startNode, ASTNode endNode, int childnum)
@@ -304,6 +369,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleClosureUses( ClosureUses startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addClosureVar((ClosureVar)endNode);
+
+		return 0;
+	}
+	
+	private int handleIdentifierList( IdentifierList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addIdentifier((Identifier)endNode);
 
 		return 0;
 	}

@@ -5,6 +5,7 @@ import ast.walking.ASTNodeVisitor;
 
 public class WhileStatement extends BlockStarter
 {
+	@Override
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);

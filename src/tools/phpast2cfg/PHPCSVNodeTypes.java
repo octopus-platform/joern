@@ -59,6 +59,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_IF = "AST_IF";
 	public static final String TYPE_PARAM_LIST = "AST_PARAM_LIST";
 	public static final String TYPE_CLOSURE_USES = "AST_CLOSURE_USES";
+	public static final String TYPE_NAME_LIST = "AST_NAME_LIST";
 
 	/* node flags */
 	// flags for toplevel nodes

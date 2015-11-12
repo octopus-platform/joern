@@ -11,6 +11,7 @@ import ast.expressions.Argument;
 import ast.expressions.ArgumentList;
 import ast.expressions.AssignmentExpr;
 import ast.expressions.CallExpression;
+import ast.logical.statements.Condition;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionStatement;
@@ -57,7 +58,7 @@ public class CodeNestingTest
 		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
-		AssignmentExpr condition = (AssignmentExpr) starter.getCondition()
+		AssignmentExpr condition = (AssignmentExpr) ((Condition)starter.getCondition())
 				.getExpression();
 		System.out.println(condition.getEscapedCodeStr());
 		assertTrue(condition.getEscapedCodeStr().equals("foo = bar"));
@@ -91,7 +92,7 @@ public class CodeNestingTest
 		ForStatement forItem = (ForStatement) contentItem.getStatements()
 				.get(0);
 
-		String condExprString = forItem.getCondition().getExpression()
+		String condExprString = ((Condition)forItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		System.out.println(condExprString);
 		assertTrue(condExprString.equals("i < 10"));
@@ -109,7 +110,7 @@ public class CodeNestingTest
 
 		System.out.println(forItem.getChildCount());
 
-		String condExprString = forItem.getCondition().getExpression()
+		String condExprString = ((Condition)forItem.getCondition()).getExpression()
 				.getEscapedCodeStr();
 		assertTrue(condExprString.equals("i < 10"));
 
