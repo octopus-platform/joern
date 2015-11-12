@@ -25,6 +25,7 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -420,6 +421,98 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getTopLevelFunc());
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
 		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
+	}
+	
+	
+	/* nodes with exactly 2 children */
+	
+	/**
+	 * AST_WHILE nodes are used to declare while loops.
+	 * 
+	 * Any AST_WHILE node has exactly two children:
+	 * 1) various possible types, representing the expression in the loop's guard,
+	 *    also known as "condition" or "predicate"
+	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
+	 * 2) AST_STMT_LIST, representing the statements executed in the loop's body
+	 * 
+	 * This test checks a few while loops' children in the following PHP code:
+	 * 
+	 * while($foo) {}
+	 * while(true) {}
+	 * while(somecall()) {}
+	 * while($var === 1) {}
+	 */
+	@Test
+	public void testWhileCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_WHILE,,4,,1,1,,,\n";
+		nodeStr += "8,AST_CONST,,4,,0,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"true\",0,1,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,AST_WHILE,,5,,2,1,,,\n";
+		nodeStr += "13,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "15,string,,5,\"somecall\",0,1,,,\n";
+		nodeStr += "16,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "17,AST_STMT_LIST,,5,,1,1,,,\n";
+		nodeStr += "18,AST_WHILE,,6,,3,1,,,\n";
+		nodeStr += "19,AST_BINARY_OP,BINARY_IS_IDENTICAL,6,,0,1,,,\n";
+		nodeStr += "20,AST_VAR,,6,,0,1,,,\n";
+		nodeStr += "21,string,,6,\"var\",0,1,,,\n";
+		nodeStr += "22,integer,,6,1,1,1,,,\n";
+		nodeStr += "23,AST_STMT_LIST,,6,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,11,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,17,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "19,22,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,23,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)12);
+		ASTNode node4 = ast.getNodeById((long)18);
+		
+		assertThat( node, instanceOf(WhileStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((WhileStatement)node).getCondition());
+		assertEquals( ast.getNodeById((long)6), ((WhileStatement)node).getContent());
+
+		assertThat( node2, instanceOf(WhileStatement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((WhileStatement)node2).getCondition());
+		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getContent());
+		
+		assertThat( node3, instanceOf(WhileStatement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((WhileStatement)node3).getCondition());
+		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getContent());
+		
+		assertThat( node4, instanceOf(WhileStatement.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)19), ((WhileStatement)node4).getCondition());
+		assertEquals( ast.getNodeById((long)23), ((WhileStatement)node4).getContent());
 	}
 
 

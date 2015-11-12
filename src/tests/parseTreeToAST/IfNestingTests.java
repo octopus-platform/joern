@@ -7,6 +7,7 @@ import org.junit.Test;
 import ast.expressions.Expression;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Condition;
 import ast.statements.blockstarters.ElseStatement;
 import ast.statements.blockstarters.IfStatement;
 
@@ -51,7 +52,7 @@ public class IfNestingTests
 		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
-		Expression condition = starter.getCondition().getExpression();
+		Expression condition = ((Condition)starter.getCondition()).getExpression();
 		assertTrue(condition.getEscapedCodeStr().equals("foo"));
 	}
 

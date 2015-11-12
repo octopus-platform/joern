@@ -21,6 +21,7 @@ import ast.expressions.RelationalExpression;
 import ast.expressions.ShiftExpression;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Condition;
 import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 
@@ -138,7 +139,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		BitAndExpression expr = (BitAndExpression) starter.getCondition()
+		BitAndExpression expr = (BitAndExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
@@ -151,7 +152,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		EqualityExpression expr = (EqualityExpression) starter.getCondition()
+		EqualityExpression expr = (EqualityExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
@@ -164,8 +165,8 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		RelationalExpression expr = (RelationalExpression) starter
-				.getCondition().getExpression();
+		RelationalExpression expr = (RelationalExpression) ((Condition)starter
+				.getCondition()).getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 
@@ -177,7 +178,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		ShiftExpression expr = (ShiftExpression) starter.getCondition()
+		ShiftExpression expr = (ShiftExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
@@ -190,7 +191,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		AdditiveExpression expr = (AdditiveExpression) starter.getCondition()
+		AdditiveExpression expr = (AdditiveExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
@@ -203,8 +204,8 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		MultiplicativeExpression expr = (MultiplicativeExpression) starter
-				.getCondition().getExpression();
+		MultiplicativeExpression expr = (MultiplicativeExpression) ((Condition)starter
+				.getCondition()).getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 	}
 
@@ -216,7 +217,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		CastExpression expr = (CastExpression) starter.getCondition()
+		CastExpression expr = (CastExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(
 				expr.getCastTarget().getEscapedCodeStr().equals("some_type"));
@@ -230,7 +231,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		CallExpression expr = (CallExpression) starter.getCondition()
+		CallExpression expr = (CallExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
 	}
