@@ -1,6 +1,7 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
+import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
@@ -84,6 +85,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 				
 			// nodes with an arbitrary number of children
+			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
+				errno = handleExpressionList((ExpressionList)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_STMT_LIST:
 				errno = handleCompound((CompoundStatement)startNode, endNode, childnum);
 				break;
@@ -363,9 +367,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with an arbitrary number of children */
 	
+	private int handleExpressionList( ExpressionList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addExpression(endNode); // TODO cast to Expression
+
+		return 0;
+	}
+	
 	private int handleCompound( CompoundStatement startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addChild(endNode);
+		startNode.addChild(endNode); // TODO introduce addStatement in CompoundStatement (and cast to Statement)
 
 		return 0;
 	}

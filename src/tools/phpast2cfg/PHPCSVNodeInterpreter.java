@@ -6,6 +6,7 @@ import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
+import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
@@ -78,6 +79,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with an arbitrary number of children
+			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
+				retval = handleExpressionList(row, ast);
+				break;
 			case PHPCSVNodeTypes.TYPE_STMT_LIST:
 				retval = handleCompound(row, ast);
 				break;
@@ -420,6 +424,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	
 	
 	/* nodes with an arbitrary number of children */
+
+	private long handleExpressionList(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		ExpressionList newNode = new ExpressionList();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
 
 	private long handleCompound(KeyedCSVRow row, ASTUnderConstruction ast)
 	{

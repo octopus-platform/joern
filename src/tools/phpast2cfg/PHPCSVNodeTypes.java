@@ -55,6 +55,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_FOR = "AST_FOR";
 
 	// nodes with an arbitrary number of children
+	public static final String TYPE_EXPR_LIST = "AST_EXPR_LIST";
 	public static final String TYPE_STMT_LIST = "AST_STMT_LIST";
 	public static final String TYPE_IF = "AST_IF";
 	public static final String TYPE_PARAM_LIST = "AST_PARAM_LIST";
