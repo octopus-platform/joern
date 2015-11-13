@@ -4,7 +4,7 @@ import ast.ASTNode;
 
 public class BlockStarter extends Statement
 {
-	protected ASTNode condition = null;
+	protected ASTNode condition = null; // TODO change type back to Expression (or Condition)
 	protected Statement statement = null;
 
 	public ASTNode getCondition()
@@ -18,7 +18,6 @@ public class BlockStarter extends Statement
 		super.addChild(expression);
 	}
 	
-	// for C, getStatement() and setStatement()
 	public Statement getStatement()
 	{
 		return this.statement;
@@ -28,18 +27,6 @@ public class BlockStarter extends Statement
 	{
 		this.statement = statement;
 		super.addChild(statement);
-	}
-	
-	// for PHP, getContent() and setContent()
-	public CompoundStatement getContent()
-	{
-		return (CompoundStatement)this.statement;
-	}
-	
-	public void setContent(CompoundStatement content)
-	{
-		this.statement = content;
-		super.addChild(content);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -237,8 +238,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 1: // NULL child
 				startNode.addChild(endNode);
 				break;
-			case 2: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 2: // stmts child: either CompoundStatement or NULL
+				startNode.setContent(endNode);
 				break;
 			case 3: // returnType child: either Identifier or NULL node
 				startNode.setReturnType(endNode);
@@ -289,8 +290,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// then, change BlockStarter.condition to be an Expression instead
 				// of a generic ASTNode, and getCondition() and setCondition() accordingly
 				break;
-			case 1: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 1: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
 				break;
 
 			default:
@@ -307,7 +313,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
 				break;
 			case 1: // cond child
 				startNode.setCondition(endNode);

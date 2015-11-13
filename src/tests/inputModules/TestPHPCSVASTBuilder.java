@@ -330,7 +330,7 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_METHOD node has exactly four children:
 	 * 1) AST_PARAM_LIST
 	 * 2) NULL, for structural compatibility with AST_CLOSURE
-	 * 3) AST_STMT_LIST
+	 * 3) AST_STMT_LIST or NULL (possible for abstract methods)
 	 * 4) AST_NAME or NULL, indicating the return type
 	 * 
 	 * This test checks a method's name and children in the following PHP code:
@@ -434,7 +434,8 @@ public class TestPHPCSVASTBuilder
 	 * 1) various possible types, representing the expression in the loop's guard,
 	 *    also known as "condition" or "predicate"
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
-	 * 2) AST_STMT_LIST, representing the statements executed in the loop's body
+	 * 2) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 * 
 	 * This test checks a few while loops' children in the following PHP code:
 	 * 
@@ -498,29 +499,30 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(WhileStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((WhileStatement)node).getCondition());
-		assertEquals( ast.getNodeById((long)6), ((WhileStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)6), ((WhileStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(WhileStatement.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((WhileStatement)node2).getCondition());
-		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getContent());
+		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getStatement());
 		
 		assertThat( node3, instanceOf(WhileStatement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((WhileStatement)node3).getCondition());
-		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getContent());
+		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getStatement());
 		
 		assertThat( node4, instanceOf(WhileStatement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((WhileStatement)node4).getCondition());
-		assertEquals( ast.getNodeById((long)23), ((WhileStatement)node4).getContent());
+		assertEquals( ast.getNodeById((long)23), ((WhileStatement)node4).getStatement());
 	}
 
 	/**
 	 * AST_DO_WHILE nodes are used to declare do-while loops.
 	 * 
 	 * Any AST_DO_WHILE node has exactly two children:
-	 * 1) AST_STMT_LIST, representing the statements executed in the loop's body
+	 * 1) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 * 2) various possible types, representing the expression in the loop's guard,
 	 *    also known as "condition" or "predicate"
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
@@ -586,22 +588,22 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(DoStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((DoStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)4), ((DoStatement)node).getStatement());
 		assertEquals( ast.getNodeById((long)5), ((DoStatement)node).getCondition());
 
 		assertThat( node2, instanceOf(DoStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((DoStatement)node2).getContent());
+		assertEquals( ast.getNodeById((long)8), ((DoStatement)node2).getStatement());
 		assertEquals( ast.getNodeById((long)9), ((DoStatement)node2).getCondition());
 		
 		assertThat( node3, instanceOf(DoStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((DoStatement)node3).getContent());
+		assertEquals( ast.getNodeById((long)13), ((DoStatement)node3).getStatement());
 		assertEquals( ast.getNodeById((long)14), ((DoStatement)node3).getCondition());
 		
 		assertThat( node4, instanceOf(DoStatement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((DoStatement)node4).getContent());
+		assertEquals( ast.getNodeById((long)19), ((DoStatement)node4).getStatement());
 		assertEquals( ast.getNodeById((long)20), ((DoStatement)node4).getCondition());
 	}
 
@@ -791,8 +793,10 @@ public class TestPHPCSVASTBuilder
 	 * AST_CLOSURE_USES nodes are used for holding a list of variables that
 	 * occur within the 'use' language construct of closure declarations.
 	 * 
-	 * Any AST_CLOSURE_USES node has between 0 and an arbitrarily large number
+	 * Any AST_CLOSURE_USES node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one closure variable in the list.
+	 * (It cannot have 0 children as the 'use' construct can only be used in
+	 * conjunction with at least 1 variable name.)
 	 * 
 	 * This test checks a closure 'uses' list's children in the following PHP code:
 	 * 
@@ -838,8 +842,11 @@ public class TestPHPCSVASTBuilder
 	 * AST_NAME_LIST nodes are used for holding a list of identifiers, e.g.,
 	 * a list of names referring to interfaces that a class extends.
 	 * 
-	 * Any AST_NAME_LIST node has between 0 and an arbitrarily large number
+	 * Any AST_NAME_LIST node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one identifier in the list.
+	 * TODO I am not sure at the moment whether there are situations where
+	 * an AST_NAME_LIST with 0 children can be generated; I do not think so,
+	 * but look into it more closely.
 	 * 
 	 * This test checks an identifier list's children in the following PHP code:
 	 * 

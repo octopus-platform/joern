@@ -2,7 +2,6 @@ package ast.functionDef;
 
 import ast.ASTNode;
 import ast.ASTNodeProperties;
-import ast.DummyIdentifierNode;
 import ast.expressions.Identifier;
 import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
@@ -10,10 +9,10 @@ import ast.walking.ASTNodeVisitor;
 public class FunctionDef extends ASTNode
 {
 
-	private Identifier identifier = new DummyIdentifierNode();
-	private ParameterList parameterList = new ParameterList();
-	private CompoundStatement content = new CompoundStatement();
-	private Identifier returnType = null;
+	protected Identifier identifier = null;
+	protected ParameterList parameterList = null;
+	protected CompoundStatement content = null;
+	protected Identifier returnType = null;
 
 	public void addChild(ASTNode node)
 	{
