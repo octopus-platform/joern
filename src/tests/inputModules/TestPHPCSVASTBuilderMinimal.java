@@ -21,6 +21,7 @@ import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -324,6 +325,44 @@ public class TestPHPCSVASTBuilderMinimal
 		// we allow arbitrary node types to designate the default value anyway,
 		// including the null node (more generally, all plain nodes are fine)
 		assertEquals( "NULL", ((PHPParameter)node).getDefault().getProperty("type"));
+	}
+
+	
+	/* nodes with exactly 4 children */
+
+	/**
+	 * for (;;);
+	 */
+	@Test
+	public void testMinimalForCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,1,1,,,\n";
+		nodeStr += "6,NULL,,3,,2,1,,,\n";
+		nodeStr += "7,NULL,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(ForStatement.class));
+		assertEquals( 4, node.getChildCount());
+		// TODO The three calls to obtain the for-loop's expression list's should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because ForStatement accepts arbitrary ASTNode's for them. Might need to
+		// create a new class PHPForLoop for that, but finish mapping first.
+		assertEquals( "NULL", ((ForStatement)node).getForInitExpression().getProperty("type"));
+		assertEquals( "NULL", ((ForStatement)node).getCondition().getProperty("type"));
+		assertEquals( "NULL", ((ForStatement)node).getForLoopExpression().getProperty("type"));
+		assertNull( ((ForStatement)node).getStatement());
 	}
 	
 	

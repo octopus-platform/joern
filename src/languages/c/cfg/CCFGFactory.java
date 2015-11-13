@@ -179,9 +179,9 @@ public class CCFGFactory extends CFGFactory
 		{
 			CCFG forBlock = new CCFG();
 
-			ASTNode initialization = forStatement.getForInitStatement();
+			ASTNode initialization = forStatement.getForInitExpression();
 			ASTNode condition = forStatement.getCondition();
-			ASTNode expression = forStatement.getExpression();
+			ASTNode expression = forStatement.getForLoopExpression();
 
 			CFG forBody = convert(forStatement.getStatement());
 			CFGNode conditionContainer;

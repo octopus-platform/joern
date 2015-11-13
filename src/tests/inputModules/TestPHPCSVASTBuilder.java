@@ -27,6 +27,7 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -676,6 +677,90 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((PHPParameter)node2).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node2).getDefault());
 		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
+	}
+
+	
+	/* nodes with exactly 4 children */
+
+	/**
+	 * AST_FOR nodes are used to declare for-loops.
+	 * 
+	 * Any AST_FOR node has exactly four children:
+	 * 1) AST_EXPR_LIST or NULL, representing the list of expressions
+	 *    used to initialize the loop
+	 * 2) AST_EXPR_LIST or NULL, representing the list of expressions
+	 *    in the loop's guard, used to check whether to continue iterating
+	 * 3) AST_EXPR_LIST or NULL, representing the list of expressions
+	 *    used to increment or otherwise modify variables in each step
+	 * 4) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
+	 * 
+	 * This test checks a for loop's children in the following PHP code:
+	 * 
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
+	@Test
+	public void testForCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
+		nodeStr += "4,AST_EXPR_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "8,integer,,3,0,1,1,,,\n";
+		nodeStr += "9,AST_ASSIGN,,3,,1,1,,,\n";
+		nodeStr += "10,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "11,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "12,integer,,3,1,1,1,,,\n";
+		nodeStr += "13,AST_EXPR_LIST,,3,,1,1,,,\n";
+		nodeStr += "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n";
+		nodeStr += "15,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "16,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "17,integer,,3,3,1,1,,,\n";
+		nodeStr += "18,AST_EXPR_LIST,,3,,2,1,,,\n";
+		nodeStr += "19,AST_POST_INC,,3,,0,1,,,\n";
+		nodeStr += "20,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "21,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "22,AST_POST_INC,,3,,1,1,,,\n";
+		nodeStr += "23,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "24,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "25,AST_STMT_LIST,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "4,9,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,17,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "18,22,PARENT_OF\n";
+		edgeStr += "3,18,PARENT_OF\n";
+		edgeStr += "3,25,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(ForStatement.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ForStatement)node).getForInitExpression());
+		assertEquals( ast.getNodeById((long)13), ((ForStatement)node).getCondition());
+		assertEquals( ast.getNodeById((long)18), ((ForStatement)node).getForLoopExpression());
+		assertEquals( ast.getNodeById((long)25), ((ForStatement)node).getStatement());
 	}
 	
 	

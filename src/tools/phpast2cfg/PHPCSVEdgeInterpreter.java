@@ -16,6 +16,7 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -82,6 +83,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// nodes with exactly 3 children
 			case PHPCSVNodeTypes.TYPE_PARAM:
 				errno = handleParameter((PHPParameter)startNode, endNode, childnum);
+				break;
+			
+			// nodes with exactly 4 children
+			case PHPCSVNodeTypes.TYPE_FOR:
+				errno = handleFor((ForStatement)startNode, endNode, childnum);
 				break;
 				
 			// nodes with an arbitrary number of children
@@ -316,7 +322,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // stmts child
+			case 0: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
 				if( endNode instanceof Statement)
 					startNode.setStatement((Statement)endNode);
 				else
@@ -365,6 +371,40 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 	
 
+	/* nodes with exactly 4 children */
+
+	private int handleFor( ForStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // init child: either Expression or NULL node
+				startNode.setForInitExpression(endNode);
+				break;
+			case 1: // cond child: either Expression or NULL node
+				// note that the cond child may be NULL, as opposed to while and do-while loops
+				startNode.setCondition(endNode);
+				break;
+			case 2: // loop child: either Expression or NULL node
+				startNode.setForLoopExpression(endNode);
+				break;
+			case 3: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	/* nodes with an arbitrary number of children */
 	
 	private int handleExpressionList( ExpressionList startNode, ASTNode endNode, int childnum)
