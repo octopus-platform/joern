@@ -50,6 +50,7 @@ public class PHPCSVNodeTypes
 	// nodes with exactly 2 children
 	public static final String TYPE_WHILE = "AST_WHILE";
 	public static final String TYPE_DO_WHILE = "AST_DO_WHILE";
+	public static final String TYPE_IF_ELEM = "AST_IF_ELEM";
 
 	// nodes with exactly 3 children
 	public static final String TYPE_PARAM = "AST_PARAM";

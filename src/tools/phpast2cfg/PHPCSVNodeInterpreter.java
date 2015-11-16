@@ -21,9 +21,10 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.PHPIfElement;
+import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.WhileStatement;
 
 public class PHPCSVNodeInterpreter implements CSVRowInterpreter
@@ -73,6 +74,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_DO_WHILE:
 				retval = handleDo(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_IF_ELEM:
+				retval = handleIfElement(row, ast);
 				break;
 
 			// nodes with exactly 3 children
@@ -406,6 +410,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
+	
+	private long handleIfElement(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPIfElement newNode = new PHPIfElement();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -528,7 +554,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleIf(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		IfStatement newNode = new IfStatement();
+		PHPIfStatement newNode = new PHPIfStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

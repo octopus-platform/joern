@@ -17,6 +17,8 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.PHPIfElement;
+import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -82,9 +84,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
 				break;
-				
 			case PHPCSVNodeTypes.TYPE_DO_WHILE:
 				errno = handleDo((DoStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_IF_ELEM:
+				errno = handleIfElement((PHPIfElement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 3 children
@@ -106,6 +110,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_STMT_LIST:
 				errno = handleCompound((CompoundStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_IF:
+				errno = handleIf((PHPIfStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PARAM_LIST:
 				errno = handleParameterList((ParameterList)startNode, endNode, childnum);
@@ -373,6 +380,34 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		return errno;
 	}
+	
+	private int handleIfElement( PHPIfElement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // cond child
+				startNode.setCondition(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BlockStarter.condition to be an Expression instead
+				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				break;
+			case 1: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -482,6 +517,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleCompound( CompoundStatement startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addChild(endNode); // TODO introduce addStatement in CompoundStatement (and cast to Statement)
+
+		return 0;
+	}
+	
+	private int handleIf( PHPIfStatement startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addIfElement((PHPIfElement)endNode);
 
 		return 0;
 	}

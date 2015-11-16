@@ -29,6 +29,8 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.PHPIfElement;
+import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -668,7 +670,98 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)20), ((DoStatement)node4).getCondition());
 	}
 
+	/**
+	 * AST_IF_ELEM nodes are used to denote the individual elements of an if-statement.
+	 * Similarly as while or do-while loops, they are composed of a condition and
+	 * a statement; see description of AST_IF for the bigger picture.
+	 * 
+	 * Any AST_IF_ELEM node has exactly two children:
+	 * 1) various possible types or NULL, representing the expression in the element's guard,
+	 *    also known as "condition" or "predicate"; NULL is used when there is no such
+	 *    expression, i.e., in "pure" unconditional else-branches.
+	 *    (e.g., could be NULL, AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
+	 * 2) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
+	 * 
+	 * This test checks a few if-elements' children in the following PHP code:
+	 * 
+	 * if($foo) {}
+	 * elseif($bar) {}
+	 * elseif($buz) {}
+	 * else {}
+	 */
+	@Test
+	public void testIfElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_IF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_IF_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "8,AST_IF_ELEM,,4,,1,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,AST_IF_ELEM,,5,,2,1,,,\n";
+		nodeStr += "13,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_STMT_LIST,,5,,1,1,,,\n";
+		nodeStr += "16,AST_IF_ELEM,,6,,3,1,,,\n";
+		nodeStr += "17,NULL,,6,,0,1,,,\n";
+		nodeStr += "18,AST_STMT_LIST,,6,,1,1,,,\n";
 
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,7,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "3,12,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,18,PARENT_OF\n";
+		edgeStr += "3,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)12);
+		ASTNode node4 = ast.getNodeById((long)16);
+		
+		assertThat( node, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((PHPIfElement)node).getCondition());
+		assertEquals( ast.getNodeById((long)7), ((PHPIfElement)node).getStatement());
+
+		assertThat( node2, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPIfElement)node2).getCondition());
+		assertEquals( ast.getNodeById((long)11), ((PHPIfElement)node2).getStatement());
+		
+		assertThat( node3, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((PHPIfElement)node3).getCondition());
+		assertEquals( ast.getNodeById((long)15), ((PHPIfElement)node3).getStatement());
+		
+		assertThat( node4, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node4.getChildCount());
+		// TODO ((PHPIfElement)node4).getCondition() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPIfElement accepts arbitrary ASTNode's for conditions,
+		// when we actually only want to accept Expression's. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPIfElement)node4).getCondition().getProperty("type"));
+		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node4).getStatement());
+	}
+
+	
 	/* nodes with exactly 3 children */
 	
 	/**
@@ -957,6 +1050,76 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 0, ((CompoundStatement)node2).getStatements().size());
 		for( ASTNode stmt : (CompoundStatement)node2)
 			assertTrue( ast.containsValue(stmt));
+	}
+	
+	/**
+	 * AST_IF nodes are used to denote if-statements.
+	 * 
+	 * Any AST_IF node has between 1 and an arbitrarily large number of children.
+	 * Each child corresponds to one if-element. Such if-elements are composed of an
+	 * expression and a statement (see description of AST_IF_ELEM). The PHP interpreter
+	 * simply goes through the list of if-elements in order and evaluates the if-elements'
+	 * expressions until the first such expression evaluates to true. Then, the
+	 * corresponding statement is executed. This allows to represent if-statements with
+	 * multiple 'elseif' constructs in a flat hierarchy, instead of an arbitrarily deep
+	 * nesting that would be obtained when using 'else if' instead.
+	 * 
+	 * This test checks an if-statement's children in the following PHP code:
+	 * 
+	 * if($foo) {}
+	 * elseif($bar) {}
+	 * elseif($buz) {}
+	 * else {}
+	 */
+	@Test
+	public void testIfStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_IF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_IF_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "8,AST_IF_ELEM,,4,,1,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,AST_IF_ELEM,,5,,2,1,,,\n";
+		nodeStr += "13,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_STMT_LIST,,5,,1,1,,,\n";
+		nodeStr += "16,AST_IF_ELEM,,6,,3,1,,,\n";
+		nodeStr += "17,NULL,,6,,0,1,,,\n";
+		nodeStr += "18,AST_STMT_LIST,,6,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,7,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "3,12,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,18,PARENT_OF\n";
+		edgeStr += "3,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PHPIfStatement.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( 4, ((PHPIfStatement)node).size());
+		assertEquals( ast.getNodeById((long)4), ((PHPIfStatement)node).getIfElement(0));
+		assertEquals( ast.getNodeById((long)8), ((PHPIfStatement)node).getIfElement(1));
+		assertEquals( ast.getNodeById((long)12), ((PHPIfStatement)node).getIfElement(2));
+		assertEquals( ast.getNodeById((long)16), ((PHPIfStatement)node).getIfElement(3));
 	}
 	
 	/**
