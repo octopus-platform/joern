@@ -20,6 +20,8 @@ import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
+import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.PHPIfElement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -287,6 +289,54 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 2, node2.getChildCount());
 		assertThat( ((DoStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 	}
+	
+	/**
+	 * if(true) ;
+	 * else ;
+	 */
+	@Test
+	public void testMinimalIfElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_IF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_IF_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CONST,,3,,0,1,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"true\",0,1,,,\n";
+		nodeStr += "8,NULL,,3,,1,1,,,\n";
+		nodeStr += "9,AST_IF_ELEM,,4,,1,1,,,\n";
+		nodeStr += "10,NULL,,4,,0,1,,,\n";
+		nodeStr += "11,NULL,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,8,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)9);
+		
+		assertThat( node, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertNull( ((PHPIfElement)node).getStatement());
+
+		assertThat( node2, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node2.getChildCount());
+		// TODO ((PHPIfElement)node2).getCondition() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPIfElement accepts arbitrary ASTNode's for conditions,
+		// when we actually only want to accept Expression's. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPIfElement)node2).getCondition().getProperty("type"));
+		assertNull( ((PHPIfElement)node2).getStatement());
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -365,7 +415,40 @@ public class TestPHPCSVASTBuilderMinimal
 		assertNull( ((ForStatement)node).getStatement());
 	}
 	
-	
+	/**
+	 * foreach ($somearray as $foo);
+	 */
+	@Test
+	public void testMinimalForEachCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"somearray\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "8,NULL,,3,,2,1,,,\n";
+		nodeStr += "9,NULL,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(ForEachStatement.class));
+		assertEquals( 4, node.getChildCount());
+		assertNull( ((ForEachStatement)node).getKeyVar());
+		assertNull( ((ForEachStatement)node).getStatement());
+	}
+
+
 	/* nodes with an arbitrary number of children */
 
 	/**
