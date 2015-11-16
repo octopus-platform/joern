@@ -1,11 +1,13 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
+import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -14,6 +16,7 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -81,8 +84,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_PARAM:
 				errno = handleParameter((PHPParameter)startNode, endNode, childnum);
 				break;
+			
+			// nodes with exactly 4 children
+			case PHPCSVNodeTypes.TYPE_FOR:
+				errno = handleFor((ForStatement)startNode, endNode, childnum);
+				break;
 				
 			// nodes with an arbitrary number of children
+			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
+				errno = handleExpressionList((ExpressionList)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_STMT_LIST:
 				errno = handleCompound((CompoundStatement)startNode, endNode, childnum);
 				break;
@@ -237,8 +248,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 1: // NULL child
 				startNode.addChild(endNode);
 				break;
-			case 2: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 2: // stmts child: either CompoundStatement or NULL
+				startNode.setContent(endNode);
 				break;
 			case 3: // returnType child: either Identifier or NULL node
 				startNode.setReturnType(endNode);
@@ -289,8 +300,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// then, change BlockStarter.condition to be an Expression instead
 				// of a generic ASTNode, and getCondition() and setCondition() accordingly
 				break;
-			case 1: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 1: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
 				break;
 
 			default:
@@ -306,8 +322,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 0: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
 				break;
 			case 1: // cond child
 				startNode.setCondition(endNode);
@@ -350,11 +371,52 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 	
 
+	/* nodes with exactly 4 children */
+
+	private int handleFor( ForStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // init child: either Expression or NULL node
+				startNode.setForInitExpression(endNode);
+				break;
+			case 1: // cond child: either Expression or NULL node
+				// note that the cond child may be NULL, as opposed to while and do-while loops
+				startNode.setCondition(endNode);
+				break;
+			case 2: // loop child: either Expression or NULL node
+				startNode.setForLoopExpression(endNode);
+				break;
+			case 3: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
+				if( endNode instanceof Statement)
+					startNode.setStatement((Statement)endNode);
+				else
+					startNode.addChild(endNode);
+				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
+				// unless it is a NULL node: test that!
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	/* nodes with an arbitrary number of children */
+	
+	private int handleExpressionList( ExpressionList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addExpression(endNode); // TODO cast to Expression
+
+		return 0;
+	}
 	
 	private int handleCompound( CompoundStatement startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addChild(endNode);
+		startNode.addChild(endNode); // TODO introduce addStatement in CompoundStatement (and cast to Statement)
 
 		return 0;
 	}

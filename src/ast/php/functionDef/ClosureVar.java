@@ -4,7 +4,7 @@ import ast.ASTNode;
 
 public class ClosureVar extends ASTNode
 {
-	private ASTNode name = new ASTNode();
+	private ASTNode name = null;
 	
 	public void setNameChild(ASTNode name) {
 		this.name = name;

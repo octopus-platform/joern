@@ -5,7 +5,7 @@ import ast.walking.ASTNodeVisitor;
 
 public class Identifier extends Expression
 {
-	private ASTNode name = new ASTNode();
+	private ASTNode name = null;
 	
 	public Identifier()
 	{

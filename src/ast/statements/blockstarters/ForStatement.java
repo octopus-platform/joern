@@ -10,27 +10,29 @@ import ast.walking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter
 {
-	private ASTNode forInitStatement = null;
-	private ASTNode expression = null;
+	private ASTNode forInitExpression = null; // TODO make this an ExpressionList sometime (might need to create a PHPForStatement)
+	private ASTNode forLoopExpression = null; // TODO make this an ExpressionList sometime (might need to create a PHPForStatement)
 
-	public ASTNode getForInitStatement()
+	public ASTNode getForInitExpression()
 	{
-		return forInitStatement;
+		return forInitExpression;
 	}
 
-	private void setForInitStatement(ASTNode forInitStatement)
+	public void setForInitExpression(ASTNode expression)
 	{
-		this.forInitStatement = forInitStatement;
+		this.forInitExpression = expression;
+		super.addChild(expression);
 	}
 
-	public ASTNode getExpression()
+	public ASTNode getForLoopExpression()
 	{
-		return expression;
+		return forLoopExpression;
 	}
 
-	private void setExpression(ASTNode expression)
+	public void setForLoopExpression(ASTNode expression)
 	{
-		this.expression = expression;
+		this.forLoopExpression = expression;
+		super.addChild(expression);
 	}
 
 	@Override
@@ -39,14 +41,16 @@ public class ForStatement extends BlockStarter
 		if (node instanceof Condition)
 			setCondition((Condition) node);
 		else if (node instanceof ForInit)
-			setForInitStatement(node);
+			setForInitExpression(node);
 		else if (node instanceof Expression)
-			setExpression(node);
+			setForLoopExpression(node);
 		else if (node instanceof Statement)
 			setStatement((Statement) node);
-		super.addChild(node);
+		else
+			super.addChild(node);
 	}
 
+	@Override
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);

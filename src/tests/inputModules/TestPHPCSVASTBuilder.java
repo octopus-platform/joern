@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.functionDef.FunctionDef;
@@ -26,6 +27,7 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -330,7 +332,7 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_METHOD node has exactly four children:
 	 * 1) AST_PARAM_LIST
 	 * 2) NULL, for structural compatibility with AST_CLOSURE
-	 * 3) AST_STMT_LIST
+	 * 3) AST_STMT_LIST or NULL (possible for abstract methods)
 	 * 4) AST_NAME or NULL, indicating the return type
 	 * 
 	 * This test checks a method's name and children in the following PHP code:
@@ -434,7 +436,8 @@ public class TestPHPCSVASTBuilder
 	 * 1) various possible types, representing the expression in the loop's guard,
 	 *    also known as "condition" or "predicate"
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
-	 * 2) AST_STMT_LIST, representing the statements executed in the loop's body
+	 * 2) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 * 
 	 * This test checks a few while loops' children in the following PHP code:
 	 * 
@@ -498,29 +501,30 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(WhileStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((WhileStatement)node).getCondition());
-		assertEquals( ast.getNodeById((long)6), ((WhileStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)6), ((WhileStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(WhileStatement.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((WhileStatement)node2).getCondition());
-		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getContent());
+		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getStatement());
 		
 		assertThat( node3, instanceOf(WhileStatement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((WhileStatement)node3).getCondition());
-		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getContent());
+		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getStatement());
 		
 		assertThat( node4, instanceOf(WhileStatement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((WhileStatement)node4).getCondition());
-		assertEquals( ast.getNodeById((long)23), ((WhileStatement)node4).getContent());
+		assertEquals( ast.getNodeById((long)23), ((WhileStatement)node4).getStatement());
 	}
 
 	/**
 	 * AST_DO_WHILE nodes are used to declare do-while loops.
 	 * 
 	 * Any AST_DO_WHILE node has exactly two children:
-	 * 1) AST_STMT_LIST, representing the statements executed in the loop's body
+	 * 1) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 * 2) various possible types, representing the expression in the loop's guard,
 	 *    also known as "condition" or "predicate"
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
@@ -586,22 +590,22 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(DoStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((DoStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)4), ((DoStatement)node).getStatement());
 		assertEquals( ast.getNodeById((long)5), ((DoStatement)node).getCondition());
 
 		assertThat( node2, instanceOf(DoStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((DoStatement)node2).getContent());
+		assertEquals( ast.getNodeById((long)8), ((DoStatement)node2).getStatement());
 		assertEquals( ast.getNodeById((long)9), ((DoStatement)node2).getCondition());
 		
 		assertThat( node3, instanceOf(DoStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((DoStatement)node3).getContent());
+		assertEquals( ast.getNodeById((long)13), ((DoStatement)node3).getStatement());
 		assertEquals( ast.getNodeById((long)14), ((DoStatement)node3).getCondition());
 		
 		assertThat( node4, instanceOf(DoStatement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((DoStatement)node4).getContent());
+		assertEquals( ast.getNodeById((long)19), ((DoStatement)node4).getStatement());
 		assertEquals( ast.getNodeById((long)20), ((DoStatement)node4).getCondition());
 	}
 
@@ -673,6 +677,90 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((PHPParameter)node2).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node2).getDefault());
 		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
+	}
+
+	
+	/* nodes with exactly 4 children */
+
+	/**
+	 * AST_FOR nodes are used to declare for-loops.
+	 * 
+	 * Any AST_FOR node has exactly four children:
+	 * 1) AST_EXPR_LIST or NULL, representing the list of expressions
+	 *    used to initialize the loop
+	 * 2) AST_EXPR_LIST or NULL, representing the list of expressions
+	 *    in the loop's guard, used to check whether to continue iterating
+	 * 3) AST_EXPR_LIST or NULL, representing the list of expressions
+	 *    used to increment or otherwise modify variables in each step
+	 * 4) statement types or NULL, representing the code in the loop's body
+	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
+	 * 
+	 * This test checks a for loop's children in the following PHP code:
+	 * 
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
+	@Test
+	public void testForCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
+		nodeStr += "4,AST_EXPR_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "8,integer,,3,0,1,1,,,\n";
+		nodeStr += "9,AST_ASSIGN,,3,,1,1,,,\n";
+		nodeStr += "10,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "11,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "12,integer,,3,1,1,1,,,\n";
+		nodeStr += "13,AST_EXPR_LIST,,3,,1,1,,,\n";
+		nodeStr += "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n";
+		nodeStr += "15,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "16,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "17,integer,,3,3,1,1,,,\n";
+		nodeStr += "18,AST_EXPR_LIST,,3,,2,1,,,\n";
+		nodeStr += "19,AST_POST_INC,,3,,0,1,,,\n";
+		nodeStr += "20,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "21,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "22,AST_POST_INC,,3,,1,1,,,\n";
+		nodeStr += "23,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "24,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "25,AST_STMT_LIST,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "4,9,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,17,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "18,22,PARENT_OF\n";
+		edgeStr += "3,18,PARENT_OF\n";
+		edgeStr += "3,25,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(ForStatement.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ForStatement)node).getForInitExpression());
+		assertEquals( ast.getNodeById((long)13), ((ForStatement)node).getCondition());
+		assertEquals( ast.getNodeById((long)18), ((ForStatement)node).getForLoopExpression());
+		assertEquals( ast.getNodeById((long)25), ((ForStatement)node).getStatement());
 	}
 	
 	
@@ -781,6 +869,7 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(ParameterList.class));
 		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ParameterList)node).size());
 		assertEquals( ast.getNodeById((long)5), ((ParameterList)node).getParameter(0));
 		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(1));
 		for( Parameter parameter : (ParameterList)node)
@@ -791,8 +880,10 @@ public class TestPHPCSVASTBuilder
 	 * AST_CLOSURE_USES nodes are used for holding a list of variables that
 	 * occur within the 'use' language construct of closure declarations.
 	 * 
-	 * Any AST_CLOSURE_USES node has between 0 and an arbitrarily large number
+	 * Any AST_CLOSURE_USES node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one closure variable in the list.
+	 * (It cannot have 0 children as the 'use' construct can only be used in
+	 * conjunction with at least 1 variable name.)
 	 * 
 	 * This test checks a closure 'uses' list's children in the following PHP code:
 	 * 
@@ -828,6 +919,7 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(ClosureUses.class));
 		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ClosureUses)node).size());
 		assertEquals( ast.getNodeById((long)6), ((ClosureUses)node).getClosureVar(0));
 		assertEquals( ast.getNodeById((long)8), ((ClosureUses)node).getClosureVar(1));
 		for( ClosureVar closurevar : (ClosureUses)node)
@@ -838,8 +930,11 @@ public class TestPHPCSVASTBuilder
 	 * AST_NAME_LIST nodes are used for holding a list of identifiers, e.g.,
 	 * a list of names referring to interfaces that a class extends.
 	 * 
-	 * Any AST_NAME_LIST node has between 0 and an arbitrarily large number
+	 * Any AST_NAME_LIST node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one identifier in the list.
+	 * TODO I am not sure at the moment whether there are situations where
+	 * an AST_NAME_LIST with 0 children can be generated; I do not think so,
+	 * but look into it more closely.
 	 * 
 	 * This test checks an identifier list's children in the following PHP code:
 	 * 
@@ -877,9 +972,106 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(IdentifierList.class));
 		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((IdentifierList)node).size());
 		assertEquals( ast.getNodeById((long)7), ((IdentifierList)node).getIdentifier(0));
 		assertEquals( ast.getNodeById((long)9), ((IdentifierList)node).getIdentifier(1));
 		for( Identifier identifier : (IdentifierList)node)
 			assertTrue( ast.containsValue(identifier));
+	}
+	
+	/**
+	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
+	 * a list of initializations in a for-loop.
+	 * 
+	 * Any AST_EXPR_LIST node has between 1 and an arbitrarily large number
+	 * of children. Each child corresponds to one expression in the list.
+	 * TODO I am not sure at the moment whether there are situations where
+	 * an AST_EXPR_LIST with 0 children can be generated; I do not think so,
+	 * but look into it more closely.
+	 * 
+	 * This test checks an expression list's children in the following PHP code:
+	 * 
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
+	@Test
+	public void testExpressionList() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
+		nodeStr += "4,AST_EXPR_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "8,integer,,3,0,1,1,,,\n";
+		nodeStr += "9,AST_ASSIGN,,3,,1,1,,,\n";
+		nodeStr += "10,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "11,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "12,integer,,3,1,1,1,,,\n";
+		nodeStr += "13,AST_EXPR_LIST,,3,,1,1,,,\n";
+		nodeStr += "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n";
+		nodeStr += "15,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "16,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "17,integer,,3,3,1,1,,,\n";
+		nodeStr += "18,AST_EXPR_LIST,,3,,2,1,,,\n";
+		nodeStr += "19,AST_POST_INC,,3,,0,1,,,\n";
+		nodeStr += "20,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "21,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "22,AST_POST_INC,,3,,1,1,,,\n";
+		nodeStr += "23,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "24,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "25,AST_STMT_LIST,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "4,9,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,17,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "18,22,PARENT_OF\n";
+		edgeStr += "3,18,PARENT_OF\n";
+		edgeStr += "3,25,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)13);
+		ASTNode node3 = ast.getNodeById((long)18);
+
+		assertThat( node, instanceOf(ExpressionList.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ExpressionList)node).size());
+		assertEquals( ast.getNodeById((long)5), ((ExpressionList)node).getExpression(0));
+		assertEquals( ast.getNodeById((long)9), ((ExpressionList)node).getExpression(1));
+		for( ASTNode expression : (ExpressionList)node) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(expression));
+		
+		assertThat( node2, instanceOf(ExpressionList.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( 1, ((ExpressionList)node2).size());
+		assertEquals( ast.getNodeById((long)14), ((ExpressionList)node2).getExpression(0));
+		for( ASTNode expression : (ExpressionList)node2) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(expression));
+		
+		assertThat( node3, instanceOf(ExpressionList.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( 2, ((ExpressionList)node3).size());
+		assertEquals( ast.getNodeById((long)19), ((ExpressionList)node3).getExpression(0));
+		assertEquals( ast.getNodeById((long)22), ((ExpressionList)node3).getExpression(1));
+		for( ASTNode expression : (ExpressionList)node3) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(expression));
 	}
 }
