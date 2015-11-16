@@ -44,6 +44,9 @@ public class PHPCSVNodeTypes
 
 	public static final String TYPE_CLASS = "AST_CLASS";
 
+	// nodes with exactly 1 child
+	public static final String TYPE_VAR = "AST_VAR";
+
 	// nodes with exactly 2 children
 	public static final String TYPE_WHILE = "AST_WHILE";
 	public static final String TYPE_DO_WHILE = "AST_DO_WHILE";
@@ -53,6 +56,7 @@ public class PHPCSVNodeTypes
 
 	// nodes with exactly 4 children
 	public static final String TYPE_FOR = "AST_FOR";
+	public static final String TYPE_FOREACH = "AST_FOREACH";
 
 	// nodes with an arbitrary number of children
 	public static final String TYPE_EXPR_LIST = "AST_EXPR_LIST";

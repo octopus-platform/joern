@@ -20,6 +20,7 @@ import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
+import ast.php.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -365,7 +366,40 @@ public class TestPHPCSVASTBuilderMinimal
 		assertNull( ((ForStatement)node).getStatement());
 	}
 	
-	
+	/**
+	 * foreach ($somearray as $foo);
+	 */
+	@Test
+	public void testForEachCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"somearray\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "8,NULL,,3,,2,1,,,\n";
+		nodeStr += "9,NULL,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(ForEachStatement.class));
+		assertEquals( 4, node.getChildCount());
+		assertNull( ((ForEachStatement)node).getKeyVar());
+		assertNull( ((ForEachStatement)node).getStatement());
+	}
+
+
 	/* nodes with an arbitrary number of children */
 
 	/**

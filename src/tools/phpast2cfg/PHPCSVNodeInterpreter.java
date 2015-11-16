@@ -9,6 +9,7 @@ import ast.CodeLocation;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -19,6 +20,7 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.php.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.IfStatement;
@@ -60,6 +62,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				retval = handleClass(row, ast);
 				break;
 
+			// nodes with exactly 1 child
+			case PHPCSVNodeTypes.TYPE_VAR:
+				retval = handleVariable(row, ast);
+				break;
+
 			// nodes with exactly 2 children
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				retval = handleWhile(row, ast);
@@ -76,6 +83,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			// nodes with exactly 4 children
 			case PHPCSVNodeTypes.TYPE_FOR:
 				retval = handleFor(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_FOREACH:
+				retval = handleForEach(row, ast);
 				break;
 
 			// nodes with an arbitrary number of children
@@ -326,6 +336,31 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	}
 	
 	
+	/* nodes with exactly 1 child */
+	
+	private long handleVariable(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Variable newNode = new Variable();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	
 	/* nodes with exactly 2 children */
 	
 	private long handleWhile(KeyedCSVRow row, ASTUnderConstruction ast)
@@ -403,6 +438,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleFor(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ForStatement newNode = new ForStatement();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleForEach(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		ForEachStatement newNode = new ForEachStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
