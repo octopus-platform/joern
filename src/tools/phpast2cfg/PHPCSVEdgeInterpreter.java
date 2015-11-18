@@ -8,6 +8,7 @@ import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
@@ -27,6 +28,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -88,6 +90,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_LABEL:
+				errno = handleLabel((Label)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_GOTO:
+				errno = handleGoto((GotoStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_BREAK:
 				errno = handleBreak((PHPBreakStatement)startNode, endNode, childnum);
@@ -355,6 +363,40 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // expr child
 				startNode.setReturnExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleLabel( Label startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child
+				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleGoto( GotoStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // label child
+				startNode.setTargetLabel(endNode);
 				break;
 				
 			default:

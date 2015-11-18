@@ -21,6 +21,7 @@ import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -39,6 +40,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -536,6 +538,72 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((ReturnStatement)node).getReturnExpression());
 		assertEquals( "42", ((ReturnStatement)node).getReturnExpression().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_LABEL nodes are nodes representing a label statement.
+	 * 
+	 * Any AST_LABEL node has exactly one child of type "string" holding the label's name.
+	 * 
+	 * This test checks a label statement's child in the following PHP code:
+	 * 
+	 * goto a;
+	 * a:
+	 */
+	@Test
+	public void testLabelStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GOTO,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "5,AST_LABEL,,4,,1,1,,,\n";
+		nodeStr += "6,string,,4,\"a\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(Label.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((Label)node).getNameChild());
+		assertEquals( "a", ((Label)node).getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_GOTO nodes are nodes representing a goto statement.
+	 * 
+	 * Any AST_GOTO node has exactly one child of type "string" holding the target label's name.
+	 * 
+	 * This test checks a goto statement's child in the following PHP code:
+	 * 
+	 * goto a;
+	 * a:
+	 */
+	@Test
+	public void testGotoStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GOTO,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "5,AST_LABEL,,4,,1,1,,,\n";
+		nodeStr += "6,string,,4,\"a\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(GotoStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((GotoStatement)node).getTargetLabel());
+		assertEquals( "a", ((GotoStatement)node).getTargetLabel().getEscapedCodeStr());
 	}
 	
 	/**

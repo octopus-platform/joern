@@ -13,6 +13,7 @@ import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -31,6 +32,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 
 public class PHPCSVNodeInterpreter implements CSVRowInterpreter
@@ -76,6 +78,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				retval = handleReturn(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_LABEL:
+				retval = handleLabel(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_GOTO:
+				retval = handleGoto(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_BREAK:
 				retval = handleBreak(row, ast);
@@ -392,6 +400,50 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleReturn(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ReturnStatement newNode = new ReturnStatement();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleLabel(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Label newNode = new Label();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleGoto(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		GotoStatement newNode = new GotoStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

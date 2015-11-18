@@ -452,7 +452,7 @@ public class CCFGFactory extends CFGFactory
 			gotoBlock.addEdge(gotoBlock.getEntryNode(), gotoContainer);
 			gotoBlock.addEdge(gotoContainer, gotoBlock.getExitNode());
 			gotoBlock.addGotoStatement(gotoContainer,
-					gotoStatement.getTarget());
+					gotoStatement.getTargetName());
 			return gotoBlock;
 		}
 		catch (Exception e)
