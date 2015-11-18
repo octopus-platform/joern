@@ -21,6 +21,7 @@ import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -31,9 +32,16 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
+import ast.php.statements.blockstarters.PHPSwitchCase;
+import ast.php.statements.blockstarters.PHPSwitchList;
+import ast.php.statements.blockstarters.PHPSwitchStatement;
+import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.GotoStatement;
+import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -437,7 +445,8 @@ public class TestPHPCSVASTBuilder
 	/**
 	 * AST_VAR nodes are nodes holding variables names.
 	 * 
-	 * Any AST_VAR node has exactly one child which is of type "string".
+	 * Any AST_VAR node has exactly one child which is of type "string", holding
+	 * the variable's name.
 	 * 
 	 * This test checks the names 'somearray', 'foo' and 'bar' in the following PHP code:
 	 * 
@@ -487,6 +496,230 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
 	}
 
+	/**
+	 * AST_RETURN nodes are nodes representing a return statement.
+	 * 
+	 * Any AST_RETURN node has exactly one child holding the expression to be
+	 * returned, or a null node if nothing is returned.
+	 * 
+	 * This test checks a return statement's child in the following PHP code:
+	 * 
+	 * function foo() : int {
+	 *   return 42;
+	 * }
+	 */
+	@Test
+	public void testReturnStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_RETURN,,4,,0,3,,,\n";
+		nodeStr += "8,integer,,4,42,0,3,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,3,,3,3,,,\n";
+		nodeStr += "10,string,,3,\"int\",0,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(ReturnStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ReturnStatement)node).getReturnExpression());
+		assertEquals( "42", ((ReturnStatement)node).getReturnExpression().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_LABEL nodes are nodes representing a label statement.
+	 * 
+	 * Any AST_LABEL node has exactly one child of type "string" holding the label's name.
+	 * 
+	 * This test checks a label statement's child in the following PHP code:
+	 * 
+	 * goto a;
+	 * a:
+	 */
+	@Test
+	public void testLabelStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GOTO,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "5,AST_LABEL,,4,,1,1,,,\n";
+		nodeStr += "6,string,,4,\"a\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(Label.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((Label)node).getNameChild());
+		assertEquals( "a", ((Label)node).getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_GOTO nodes are nodes representing a goto statement.
+	 * 
+	 * Any AST_GOTO node has exactly one child of type "string" holding the target label's name.
+	 * 
+	 * This test checks a goto statement's child in the following PHP code:
+	 * 
+	 * goto a;
+	 * a:
+	 */
+	@Test
+	public void testGotoStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GOTO,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "5,AST_LABEL,,4,,1,1,,,\n";
+		nodeStr += "6,string,,4,\"a\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(GotoStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((GotoStatement)node).getTargetLabel());
+		assertEquals( "a", ((GotoStatement)node).getTargetLabel().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_BREAK nodes are nodes representing a break statement.
+	 * 
+	 * Any AST_BREAK node has exactly one child which is of type "integer", holding
+	 * the number of enclosing structures to be broken out of.
+	 * 
+	 * This test checks a few break statements' children in the following PHP code:
+	 * 
+	 * while (1) {
+	 *   while (1) {
+	 *     break 2;
+	 *   }
+	 *   break 1;
+	 * }
+	 */
+	@Test
+	public void testBreakStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_WHILE,,4,,0,1,,,\n";
+		nodeStr += "7,integer,,4,1,0,1,,,\n";
+		nodeStr += "8,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "9,AST_BREAK,,5,,0,1,,,\n";
+		nodeStr += "10,integer,,5,2,0,1,,,\n";
+		nodeStr += "11,AST_BREAK,,7,,1,1,,,\n";
+		nodeStr += "12,integer,,7,1,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "5,11,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPBreakStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((PHPBreakStatement)node).getDepth());
+		assertEquals( "2", ((PHPBreakStatement)node).getDepth().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(PHPBreakStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPBreakStatement)node2).getDepth());
+		assertEquals( "1", ((PHPBreakStatement)node2).getDepth().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_CONTINUE nodes are nodes representing a continue statement.
+	 * 
+	 * Any AST_CONTINUE node has exactly one child which is of type "integer", holding
+	 * the number of enclosing loops to be skipped to the end of.
+	 * 
+	 * This test checks a few continue statements' children in the following PHP code:
+	 * 
+	 * while (1) {
+	 *   while (1) {
+	 *     continue 2;
+	 *   }
+	 *   continue 1;
+	 * }
+	 */
+	@Test
+	public void testContinueStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_WHILE,,4,,0,1,,,\n";
+		nodeStr += "7,integer,,4,1,0,1,,,\n";
+		nodeStr += "8,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "9,AST_CONTINUE,,5,,0,1,,,\n";
+		nodeStr += "10,integer,,5,2,0,1,,,\n";
+		nodeStr += "11,AST_CONTINUE,,7,,1,1,,,\n";
+		nodeStr += "12,integer,,7,1,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "5,11,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPContinueStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((PHPContinueStatement)node).getDepth());
+		assertEquals( "2", ((PHPContinueStatement)node).getDepth().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(PHPContinueStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPContinueStatement)node2).getDepth());
+		assertEquals( "1", ((PHPContinueStatement)node2).getDepth().getEscapedCodeStr());
+	}
+	
 
 	/* nodes with exactly 2 children */
 	
@@ -759,6 +992,210 @@ public class TestPHPCSVASTBuilder
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PHPIfElement)node4).getCondition().getProperty("type"));
 		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node4).getStatement());
+	}
+	
+	/**
+	 * AST_SWITCH nodes are used to denote switch-statements.
+	 * They are composed of an expression that evaluates to a value (matched against the different
+	 * switch-element's values) and a switch list composed of switch-elements.
+	 * 
+	 * Any AST_SWITCH node has exactly two children:
+	 * 1) various possible types, representing the expression in the switch statement's guard,
+	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
+	 * 2) AST_SWITCH_LIST, a list of switch-elements in the switch statement's body
+	 * 
+	 * This test checks a switch-statement's children in the following PHP code:
+	 * 
+	 * switch ($i) {
+	 *   case "foo":
+	 *     break;
+	 *   case 1.42:
+	 *   case 2:
+	 *     break;
+	 *   default:
+	 *     buz();
+	 * }
+	 */
+	@Test
+	public void testSwitchCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "6,AST_SWITCH_LIST,,4,,1,1,,,\n";
+		nodeStr += "7,AST_SWITCH_CASE,,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "9,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "10,AST_BREAK,,5,,0,1,,,\n";
+		nodeStr += "11,NULL,,5,,0,1,,,\n";
+		nodeStr += "12,AST_SWITCH_CASE,,6,,1,1,,,\n";
+		nodeStr += "13,double,,6,1.42,0,1,,,\n";
+		nodeStr += "14,AST_STMT_LIST,,6,,1,1,,,\n";
+		nodeStr += "15,AST_SWITCH_CASE,,7,,2,1,,,\n";
+		nodeStr += "16,integer,,7,2,0,1,,,\n";
+		nodeStr += "17,AST_STMT_LIST,,7,,1,1,,,\n";
+		nodeStr += "18,AST_BREAK,,8,,0,1,,,\n";
+		nodeStr += "19,NULL,,8,,0,1,,,\n";
+		nodeStr += "20,AST_SWITCH_CASE,,9,,3,1,,,\n";
+		nodeStr += "21,NULL,,9,,0,1,,,\n";
+		nodeStr += "22,AST_STMT_LIST,,9,,1,1,,,\n";
+		nodeStr += "23,AST_CALL,,10,,0,1,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n";
+		nodeStr += "25,string,,10,\"buz\",0,1,,,\n";
+		nodeStr += "26,AST_ARG_LIST,,10,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "6,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "6,15,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "20,22,PARENT_OF\n";
+		edgeStr += "6,20,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PHPSwitchStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPSwitchStatement)node).getExpression());
+		assertEquals( "i", ((Variable)((PHPSwitchStatement)node).getExpression()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((PHPSwitchStatement)node).getSwitchList());
+		assertEquals( 4, ((PHPSwitchStatement)node).getSwitchList().size());
+	}
+	
+	/**
+	 * AST_SWITCH_CASE nodes are used to denote the individual switch-elements of a switch list.
+	 * Similarly as if-elements, they are composed of a value (matched against a condition) and
+	 * a statement list; see description of AST_SWITCH_LIST and AST_SWITCH for the bigger picture.
+	 * 
+	 * Any AST_SWITCH_CASE node has exactly two children:
+	 * 1) a plain node or NULL, representing the value in the switch element's guard,
+	 *    NULL is used when there is no such value, i.e., in "default" switch-elements.
+	 * 2) AST_STMT_LIST, representing the code in the switch element's body
+	 * 
+	 * This test checks a few switch-elements' children in the following PHP code:
+	 * 
+	 * switch ($i) {
+	 *   case "foo":
+	 *     break;
+	 *   case 1.42:
+	 *   case 2:
+	 *     break;
+	 *   default:
+	 *     buz();
+	 * }
+	 */
+	@Test
+	public void testSwitchCaseCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "6,AST_SWITCH_LIST,,4,,1,1,,,\n";
+		nodeStr += "7,AST_SWITCH_CASE,,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "9,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "10,AST_BREAK,,5,,0,1,,,\n";
+		nodeStr += "11,NULL,,5,,0,1,,,\n";
+		nodeStr += "12,AST_SWITCH_CASE,,6,,1,1,,,\n";
+		nodeStr += "13,double,,6,1.42,0,1,,,\n";
+		nodeStr += "14,AST_STMT_LIST,,6,,1,1,,,\n";
+		nodeStr += "15,AST_SWITCH_CASE,,7,,2,1,,,\n";
+		nodeStr += "16,integer,,7,2,0,1,,,\n";
+		nodeStr += "17,AST_STMT_LIST,,7,,1,1,,,\n";
+		nodeStr += "18,AST_BREAK,,8,,0,1,,,\n";
+		nodeStr += "19,NULL,,8,,0,1,,,\n";
+		nodeStr += "20,AST_SWITCH_CASE,,9,,3,1,,,\n";
+		nodeStr += "21,NULL,,9,,0,1,,,\n";
+		nodeStr += "22,AST_STMT_LIST,,9,,1,1,,,\n";
+		nodeStr += "23,AST_CALL,,10,,0,1,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n";
+		nodeStr += "25,string,,10,\"buz\",0,1,,,\n";
+		nodeStr += "26,AST_ARG_LIST,,10,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "6,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "6,15,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "20,22,PARENT_OF\n";
+		edgeStr += "6,20,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)12);
+		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)20);
+		
+		assertThat( node, instanceOf(PHPSwitchCase.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPSwitchCase)node).getValue());
+		assertEquals( "string", ((PHPSwitchCase)node).getValue().getProperty("type"));
+		assertEquals( "foo", ((PHPSwitchCase)node).getValue().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((PHPSwitchCase)node).getStatement());
+		
+		assertThat( node2, instanceOf(PHPSwitchCase.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((PHPSwitchCase)node2).getValue());
+		assertEquals( "double", ((PHPSwitchCase)node2).getValue().getProperty("type"));
+		assertEquals( "1.42", ((PHPSwitchCase)node2).getValue().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((PHPSwitchCase)node2).getStatement());
+		
+		assertThat( node3, instanceOf(PHPSwitchCase.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PHPSwitchCase)node3).getValue());
+		assertEquals( "integer", ((PHPSwitchCase)node3).getValue().getProperty("type"));
+		assertEquals( "2", ((PHPSwitchCase)node3).getValue().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)17), ((PHPSwitchCase)node3).getStatement());
+		
+		assertThat( node4, instanceOf(PHPSwitchCase.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((PHPSwitchCase)node4).getValue());
+		// TODO ((PHPSwitchCase)node4).getValue() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPSwitchCase accepts arbitrary ASTNode's for values,
+		// when we actually only want to accept ints/strings/doubles. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPSwitchCase)node4).getValue().getProperty("type"));
+		assertEquals( ast.getNodeById((long)22), ((PHPSwitchCase)node4).getStatement());
 	}
 
 	
@@ -1120,6 +1557,98 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)8), ((PHPIfStatement)node).getIfElement(1));
 		assertEquals( ast.getNodeById((long)12), ((PHPIfStatement)node).getIfElement(2));
 		assertEquals( ast.getNodeById((long)16), ((PHPIfStatement)node).getIfElement(3));
+	}
+	
+	/**
+	 * AST_SWITCH_LIST nodes are used to denote a list of switch-elements.
+	 * 
+	 * Any AST_SWITCH_LIST node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one switch-case. Such switch-cases are composed of a
+	 * value and a statement list (see description of AST_SWITCH_CASE). AST_SWITCH_LIST nodes
+	 * are always a child of AST_SWITCH nodes, and always have exactly one sister which
+	 * represents an expression whose evaluated form is matched against the values of the
+	 * AST_SWITCH_CASE children (see description of AST_SWITCH).
+	 * 
+	 * This test checks a switch list's children in the following PHP code:
+	 * 
+	 * switch ($i) {
+	 *   case "foo":
+	 *     break;
+	 *   case 1.42:
+	 *   case 2:
+	 *     break;
+	 *   default:
+	 *     buz();
+	 * }
+	 */
+	@Test
+	public void testSwitchListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "6,AST_SWITCH_LIST,,4,,1,1,,,\n";
+		nodeStr += "7,AST_SWITCH_CASE,,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "9,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "10,AST_BREAK,,5,,0,1,,,\n";
+		nodeStr += "11,NULL,,5,,0,1,,,\n";
+		nodeStr += "12,AST_SWITCH_CASE,,6,,1,1,,,\n";
+		nodeStr += "13,double,,6,1.42,0,1,,,\n";
+		nodeStr += "14,AST_STMT_LIST,,6,,1,1,,,\n";
+		nodeStr += "15,AST_SWITCH_CASE,,7,,2,1,,,\n";
+		nodeStr += "16,integer,,7,2,0,1,,,\n";
+		nodeStr += "17,AST_STMT_LIST,,7,,1,1,,,\n";
+		nodeStr += "18,AST_BREAK,,8,,0,1,,,\n";
+		nodeStr += "19,NULL,,8,,0,1,,,\n";
+		nodeStr += "20,AST_SWITCH_CASE,,9,,3,1,,,\n";
+		nodeStr += "21,NULL,,9,,0,1,,,\n";
+		nodeStr += "22,AST_STMT_LIST,,9,,1,1,,,\n";
+		nodeStr += "23,AST_CALL,,10,,0,1,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n";
+		nodeStr += "25,string,,10,\"buz\",0,1,,,\n";
+		nodeStr += "26,AST_ARG_LIST,,10,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "6,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "6,15,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "20,22,PARENT_OF\n";
+		edgeStr += "6,20,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(PHPSwitchList.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( 4, ((PHPSwitchList)node).size());
+
+		assertEquals( ast.getNodeById((long)7), ((PHPSwitchList)node).getSwitchCase(0));
+		assertEquals( ast.getNodeById((long)12), ((PHPSwitchList)node).getSwitchCase(1));
+		assertEquals( ast.getNodeById((long)15), ((PHPSwitchList)node).getSwitchCase(2));
+		assertEquals( ast.getNodeById((long)20), ((PHPSwitchList)node).getSwitchCase(3));
+		for( PHPSwitchCase switchcase : (PHPSwitchList)node)
+			assertTrue( ast.containsValue(switchcase));
 	}
 	
 	/**

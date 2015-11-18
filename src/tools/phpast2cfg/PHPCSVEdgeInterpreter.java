@@ -8,6 +8,7 @@ import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
+import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.functionDef.Closure;
@@ -19,9 +20,16 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
+import ast.php.statements.blockstarters.PHPSwitchCase;
+import ast.php.statements.blockstarters.PHPSwitchList;
+import ast.php.statements.blockstarters.PHPSwitchStatement;
+import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.GotoStatement;
+import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
@@ -79,6 +87,22 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
 				break;
+				
+			case PHPCSVNodeTypes.TYPE_RETURN:
+				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_LABEL:
+				errno = handleLabel((Label)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_GOTO:
+				errno = handleGoto((GotoStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_BREAK:
+				errno = handleBreak((PHPBreakStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CONTINUE:
+				errno = handleContinue((PHPContinueStatement)startNode, endNode, childnum);
+				break;
 
 			// nodes with exactly 2 children
 			case PHPCSVNodeTypes.TYPE_WHILE:
@@ -89,6 +113,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_IF_ELEM:
 				errno = handleIfElement((PHPIfElement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_SWITCH:
+				errno = handleSwitch((PHPSwitchStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_SWITCH_CASE:
+				errno = handleSwitchCase((PHPSwitchCase)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 3 children
@@ -113,6 +143,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_IF:
 				errno = handleIf((PHPIfStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_SWITCH_LIST:
+				errno = handleSwitchList((PHPSwitchList)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PARAM_LIST:
 				errno = handleParameterList((ParameterList)startNode, endNode, childnum);
@@ -322,7 +355,92 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;		
 	}
 	
+	private int handleReturn( ReturnStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setReturnExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
 	
+	private int handleLabel( Label startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child
+				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleGoto( GotoStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // label child
+				startNode.setTargetLabel(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleBreak( PHPBreakStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // depth child
+				startNode.setDepth(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleContinue( PHPContinueStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // depth child
+				startNode.setDepth(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+
+
 	/* nodes with exactly 2 children */
 
 	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
@@ -400,6 +518,49 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 					startNode.addChild(endNode);
 				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
 				// unless it is a NULL node: test that!
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleSwitch( PHPSwitchStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PHPSwitchStatement.expression to be an Expression instead
+				// of a generic ASTNode, and getExpression() and setExpression() accordingly
+				startNode.setExpression(endNode);
+				break;
+			case 1: // list child: AST_SWITCH_LIST
+				startNode.setSwitchList((PHPSwitchList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleSwitchCase( PHPSwitchCase startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // value child: plain node or NULL
+				startNode.setValue(endNode);
+				break;
+			case 1: // stmts child: AST_STMT_LIST
+				startNode.setStatement((CompoundStatement)endNode);
 				break;
 
 			default:
@@ -524,6 +685,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleIf( PHPIfStatement startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addIfElement((PHPIfElement)endNode);
+
+		return 0;
+	}
+	
+	private int handleSwitchList( PHPSwitchList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addSwitchCase((PHPSwitchCase)endNode);
 
 		return 0;
 	}

@@ -22,9 +22,14 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
+import ast.php.statements.blockstarters.PHPSwitchCase;
+import ast.php.statements.blockstarters.PHPSwitchList;
+import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -198,6 +203,112 @@ public class TestPHPCSVASTBuilderMinimal
 	}
 	
 	
+	/* nodes with exactly 1 child */
+	
+	/**
+	 * function foo() {
+	 *   return;
+	 * }
+	 */
+	@Test
+	public void testMinimalReturnStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_RETURN,,4,,0,3,,,\n";
+		nodeStr += "8,NULL,,4,,0,3,,,\n";
+		nodeStr += "9,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(ReturnStatement.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((ReturnStatement)node).getReturnExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because ReturnStatement accepts arbitrary ASTNode's for return expressions,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((ReturnStatement)node).getReturnExpression().getProperty("type"));
+	}
+	
+	/**
+	 * while (1)
+	 *   break;
+	 */
+	@Test
+	public void testMinimalBreakStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_BREAK,,4,,1,1,,,\n";
+		nodeStr += "6,NULL,,4,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(PHPBreakStatement.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((PHPBreakStatement)node).getDepth() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPBreakStatement accepts arbitrary ASTNode's for depths,
+		// when we actually only want to accept plain nodes. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPBreakStatement)node).getDepth().getProperty("type"));
+	}
+	
+	/**
+	 * while (1)
+	 *   continue;
+	 */
+	@Test
+	public void testMinimalContinueStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_CONTINUE,,4,,1,1,,,\n";
+		nodeStr += "6,NULL,,4,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(PHPContinueStatement.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((PHPContinueStatement)node).getDepth() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPContinueStatement accepts arbitrary ASTNode's for depths,
+		// when we actually only want to accept plain nodes. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPContinueStatement)node).getDepth().getProperty("type"));
+	}
+
+
 	/* nodes with exactly 2 children */
 	
 	/**
@@ -337,6 +448,45 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( "NULL", ((PHPIfElement)node2).getCondition().getProperty("type"));
 		assertNull( ((PHPIfElement)node2).getStatement());
 	}
+	
+	/**
+	 * switch ($j) {
+	 *   default:
+	 * }
+	 */
+	@Test
+	public void testMinimalSwitchCaseCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "7,AST_SWITCH,,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"j\",0,1,,,\n";
+		nodeStr += "10,AST_SWITCH_LIST,,5,,1,1,,,\n";
+		nodeStr += "11,AST_SWITCH_CASE,,5,,0,1,,,\n";
+		nodeStr += "12,NULL,,5,,0,1,,,\n";
+		nodeStr += "13,AST_STMT_LIST,,5,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,13,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPSwitchCase.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPSwitchCase)node).getValue());
+		// TODO ((PHPSwitchCase)node).getValue() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPSwitchCase accepts arbitrary ASTNode's for values,
+		// when we actually only want to accept ints/strings/doubles. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPSwitchCase)node).getValue().getProperty("type"));
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -472,6 +622,32 @@ public class TestPHPCSVASTBuilderMinimal
 	}
 	
 	/**
+	 * switch ($i) {}
+	 */
+	@Test
+	public void testMinimalSwitchListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "6,AST_SWITCH_LIST,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(PHPSwitchList.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((PHPSwitchList)node).size());
+	}
+	
+	/**
 	 * function foo() {}
 	 */
 	@Test
@@ -488,5 +664,6 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(ParameterList.class));
 		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((ParameterList)node).size());
 	}
 }
