@@ -22,6 +22,7 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
+import ast.php.statements.jump.PHPBreakStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -198,6 +199,36 @@ public class TestPHPCSVASTBuilderMinimal
 	}
 	
 	
+	/* nodes with exactly 1 child */
+	
+	/**
+	 * break;
+	 */
+	@Test
+	public void testMinimalBreakStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_BREAK,,3,,0,1,,,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PHPBreakStatement.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((PHPBreakStatement)node).getDepth() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPBreakStatement accepts arbitrary ASTNode's for depths,
+		// when we actually only want to accept plain nodes. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPBreakStatement)node).getDepth().getProperty("type"));
+	}
+
+
 	/* nodes with exactly 2 children */
 	
 	/**

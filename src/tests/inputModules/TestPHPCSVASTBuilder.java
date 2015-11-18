@@ -31,6 +31,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
+import ast.php.statements.jump.PHPBreakStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -437,7 +438,8 @@ public class TestPHPCSVASTBuilder
 	/**
 	 * AST_VAR nodes are nodes holding variables names.
 	 * 
-	 * Any AST_VAR node has exactly one child which is of type "string".
+	 * Any AST_VAR node has exactly one child which is of type "string", holding
+	 * the variable's name.
 	 * 
 	 * This test checks the names 'somearray', 'foo' and 'bar' in the following PHP code:
 	 * 
@@ -487,6 +489,46 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
 	}
 
+	/**
+	 * AST_BREAK nodes are nodes representing a break statement.
+	 * 
+	 * Any AST_BREAK node has exactly one child which is of type "integer", holding
+	 * the number of enclosing structures to be broken out of.
+	 * 
+	 * This test checks a few break statements' children in the following PHP code:
+	 * 
+	 * break 1;
+	 * break 2;
+	 */
+	@Test
+	public void testBreakStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_BREAK,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_BREAK,,4,,1,1,,,\n";
+		nodeStr += "6,integer,,4,2,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(PHPBreakStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPBreakStatement)node).getDepth());
+		assertEquals( "1", ((PHPBreakStatement)node).getDepth().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(PHPBreakStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((PHPBreakStatement)node2).getDepth());
+		assertEquals( "2", ((PHPBreakStatement)node2).getDepth().getEscapedCodeStr());
+	}
+	
 
 	/* nodes with exactly 2 children */
 	

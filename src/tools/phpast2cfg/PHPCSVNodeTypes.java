@@ -46,6 +46,8 @@ public class PHPCSVNodeTypes
 
 	// nodes with exactly 1 child
 	public static final String TYPE_VAR = "AST_VAR";
+	
+	public static final String TYPE_BREAK = "AST_BREAK";
 
 	// nodes with exactly 2 children
 	public static final String TYPE_WHILE = "AST_WHILE";

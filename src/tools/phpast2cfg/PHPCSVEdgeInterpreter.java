@@ -19,6 +19,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
+import ast.php.statements.jump.PHPBreakStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -78,6 +79,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// nodes with exactly 1 child
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
+				break;
+				
+			case PHPCSVNodeTypes.TYPE_BREAK:
+				errno = handleBreak((PHPBreakStatement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 2 children
@@ -322,7 +327,24 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;		
 	}
 	
-	
+	private int handleBreak( PHPBreakStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // depth child
+				startNode.setDepth(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+
+
 	/* nodes with exactly 2 children */
 
 	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
