@@ -27,6 +27,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
@@ -85,6 +86,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleVariable((Variable)startNode, endNode, childnum);
 				break;
 				
+			case PHPCSVNodeTypes.TYPE_RETURN:
+				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_BREAK:
 				errno = handleBreak((PHPBreakStatement)startNode, endNode, childnum);
 				break;
@@ -341,6 +345,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		}
 		
 		return errno;		
+	}
+	
+	private int handleReturn( ReturnStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setReturnExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
 	}
 	
 	private int handleBreak( PHPBreakStatement startNode, ASTNode endNode, int childnum)

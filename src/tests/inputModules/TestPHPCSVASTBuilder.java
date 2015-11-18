@@ -39,6 +39,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -493,6 +494,50 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
 	}
 
+	/**
+	 * AST_RETURN nodes are nodes representing a return statement.
+	 * 
+	 * Any AST_RETURN node has exactly one child holding the expression to be
+	 * returned, or a null node if nothing is returned.
+	 * 
+	 * This test checks a return statement's child in the following PHP code:
+	 * 
+	 * function foo() : int {
+	 *   return 42;
+	 * }
+	 */
+	@Test
+	public void testReturnStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_RETURN,,4,,0,3,,,\n";
+		nodeStr += "8,integer,,4,42,0,3,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,3,,3,3,,,\n";
+		nodeStr += "10,string,,3,\"int\",0,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(ReturnStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ReturnStatement)node).getReturnExpression());
+		assertEquals( "42", ((ReturnStatement)node).getReturnExpression().getEscapedCodeStr());
+	}
+	
 	/**
 	 * AST_BREAK nodes are nodes representing a break statement.
 	 * 

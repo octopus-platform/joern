@@ -29,6 +29,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -203,6 +204,45 @@ public class TestPHPCSVASTBuilderMinimal
 	
 	
 	/* nodes with exactly 1 child */
+	
+	/**
+	 * function foo() {
+	 *   return;
+	 * }
+	 */
+	@Test
+	public void testMinimalReturnStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_RETURN,,4,,0,3,,,\n";
+		nodeStr += "8,NULL,,4,,0,3,,,\n";
+		nodeStr += "9,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(ReturnStatement.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((ReturnStatement)node).getReturnExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because ReturnStatement accepts arbitrary ASTNode's for return expressions,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((ReturnStatement)node).getReturnExpression().getProperty("type"));
+	}
 	
 	/**
 	 * while (1)
