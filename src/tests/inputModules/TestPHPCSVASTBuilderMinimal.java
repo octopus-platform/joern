@@ -22,6 +22,8 @@ import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
+import ast.php.statements.blockstarters.PHPSwitchCase;
+import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
@@ -368,6 +370,45 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( "NULL", ((PHPIfElement)node2).getCondition().getProperty("type"));
 		assertNull( ((PHPIfElement)node2).getStatement());
 	}
+	
+	/**
+	 * switch ($j) {
+	 *   default:
+	 * }
+	 */
+	@Test
+	public void testMinimalSwitchCaseCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "7,AST_SWITCH,,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"j\",0,1,,,\n";
+		nodeStr += "10,AST_SWITCH_LIST,,5,,1,1,,,\n";
+		nodeStr += "11,AST_SWITCH_CASE,,5,,0,1,,,\n";
+		nodeStr += "12,NULL,,5,,0,1,,,\n";
+		nodeStr += "13,AST_STMT_LIST,,5,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,13,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPSwitchCase.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPSwitchCase)node).getValue());
+		// TODO ((PHPSwitchCase)node).getValue() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPSwitchCase accepts arbitrary ASTNode's for values,
+		// when we actually only want to accept ints/strings/doubles. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPSwitchCase)node).getValue().getProperty("type"));
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -503,6 +544,32 @@ public class TestPHPCSVASTBuilderMinimal
 	}
 	
 	/**
+	 * switch ($i) {}
+	 */
+	@Test
+	public void testMinimalSwitchListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "6,AST_SWITCH_LIST,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(PHPSwitchList.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((PHPSwitchList)node).size());
+	}
+	
+	/**
 	 * function foo() {}
 	 */
 	@Test
@@ -519,5 +586,6 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(ParameterList.class));
 		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((ParameterList)node).size());
 	}
 }
