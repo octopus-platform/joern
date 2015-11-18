@@ -23,6 +23,7 @@ import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -86,6 +87,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				
 			case PHPCSVNodeTypes.TYPE_BREAK:
 				errno = handleBreak((PHPBreakStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CONTINUE:
+				errno = handleContinue((PHPContinueStatement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 2 children
@@ -340,6 +344,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 	
 	private int handleBreak( PHPBreakStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // depth child
+				startNode.setDepth(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleContinue( PHPContinueStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 

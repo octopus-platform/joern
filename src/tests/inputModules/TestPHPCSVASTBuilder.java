@@ -35,6 +35,7 @@ import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -500,36 +501,110 @@ public class TestPHPCSVASTBuilder
 	 * 
 	 * This test checks a few break statements' children in the following PHP code:
 	 * 
-	 * break 1;
-	 * break 2;
+	 * while (1) {
+	 *   while (1) {
+	 *     break 2;
+	 *   }
+	 *   break 1;
+	 * }
 	 */
 	@Test
 	public void testBreakStatementCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "3,AST_BREAK,,3,,0,1,,,\n";
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
 		nodeStr += "4,integer,,3,1,0,1,,,\n";
-		nodeStr += "5,AST_BREAK,,4,,1,1,,,\n";
-		nodeStr += "6,integer,,4,2,0,1,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_WHILE,,4,,0,1,,,\n";
+		nodeStr += "7,integer,,4,1,0,1,,,\n";
+		nodeStr += "8,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "9,AST_BREAK,,5,,0,1,,,\n";
+		nodeStr += "10,integer,,5,2,0,1,,,\n";
+		nodeStr += "11,AST_BREAK,,7,,1,1,,,\n";
+		nodeStr += "12,integer,,7,1,0,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
 		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "5,11,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)11);
 		
 		assertThat( node, instanceOf(PHPBreakStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPBreakStatement)node).getDepth());
-		assertEquals( "1", ((PHPBreakStatement)node).getDepth().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((PHPBreakStatement)node).getDepth());
+		assertEquals( "2", ((PHPBreakStatement)node).getDepth().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(PHPBreakStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)6), ((PHPBreakStatement)node2).getDepth());
-		assertEquals( "2", ((PHPBreakStatement)node2).getDepth().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((PHPBreakStatement)node2).getDepth());
+		assertEquals( "1", ((PHPBreakStatement)node2).getDepth().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_CONTINUE nodes are nodes representing a continue statement.
+	 * 
+	 * Any AST_CONTINUE node has exactly one child which is of type "integer", holding
+	 * the number of enclosing loops to be skipped to the end of.
+	 * 
+	 * This test checks a few continue statements' children in the following PHP code:
+	 * 
+	 * while (1) {
+	 *   while (1) {
+	 *     continue 2;
+	 *   }
+	 *   continue 1;
+	 * }
+	 */
+	@Test
+	public void testContinueStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_WHILE,,4,,0,1,,,\n";
+		nodeStr += "7,integer,,4,1,0,1,,,\n";
+		nodeStr += "8,AST_STMT_LIST,,4,,1,1,,,\n";
+		nodeStr += "9,AST_CONTINUE,,5,,0,1,,,\n";
+		nodeStr += "10,integer,,5,2,0,1,,,\n";
+		nodeStr += "11,AST_CONTINUE,,7,,1,1,,,\n";
+		nodeStr += "12,integer,,7,1,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "5,11,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPContinueStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((PHPContinueStatement)node).getDepth());
+		assertEquals( "2", ((PHPContinueStatement)node).getDepth().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(PHPContinueStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPContinueStatement)node2).getDepth());
+		assertEquals( "1", ((PHPContinueStatement)node2).getDepth().getEscapedCodeStr());
 	}
 	
 

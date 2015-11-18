@@ -25,6 +25,7 @@ import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -204,21 +205,26 @@ public class TestPHPCSVASTBuilderMinimal
 	/* nodes with exactly 1 child */
 	
 	/**
-	 * break;
+	 * while (1)
+	 *   break;
 	 */
 	@Test
 	public void testMinimalBreakStatementCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "3,AST_BREAK,,3,,0,1,,,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_BREAK,,4,,1,1,,,\n";
+		nodeStr += "6,NULL,,4,,0,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)5);
 		
 		assertThat( node, instanceOf(PHPBreakStatement.class));
 		assertEquals( 1, node.getChildCount());
@@ -228,6 +234,38 @@ public class TestPHPCSVASTBuilderMinimal
 		// when we actually only want to accept plain nodes. Once the mapping is
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PHPBreakStatement)node).getDepth().getProperty("type"));
+	}
+	
+	/**
+	 * while (1)
+	 *   continue;
+	 */
+	@Test
+	public void testMinimalContinueStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,1,0,1,,,\n";
+		nodeStr += "5,AST_CONTINUE,,4,,1,1,,,\n";
+		nodeStr += "6,NULL,,4,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(PHPContinueStatement.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((PHPContinueStatement)node).getDepth() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPContinueStatement accepts arbitrary ASTNode's for depths,
+		// when we actually only want to accept plain nodes. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPContinueStatement)node).getDepth().getProperty("type"));
 	}
 
 

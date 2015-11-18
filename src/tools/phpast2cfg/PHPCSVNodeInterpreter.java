@@ -27,6 +27,7 @@ import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.php.statements.jump.PHPBreakStatement;
+import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -74,6 +75,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			
 			case PHPCSVNodeTypes.TYPE_BREAK:
 				retval = handleBreak(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_CONTINUE:
+				retval = handleContinue(row, ast);
 				break;
 
 			// nodes with exactly 2 children
@@ -384,6 +388,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleBreak(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPBreakStatement newNode = new PHPBreakStatement();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleContinue(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPContinueStatement newNode = new PHPContinueStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
