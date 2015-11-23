@@ -42,6 +42,7 @@ import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
+import ast.statements.jump.ThrowStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -500,7 +501,8 @@ public class TestPHPCSVASTBuilder
 	 * AST_RETURN nodes are nodes representing a return statement.
 	 * 
 	 * Any AST_RETURN node has exactly one child holding the expression to be
-	 * returned, or a null node if nothing is returned.
+	 * returned or a null node if nothing is returned
+	 * (e.g., could be NULL, AST_NEW, AST_CONST, AST_VAR, AST_CALL, etc.).
 	 * 
 	 * This test checks a return statement's child in the following PHP code:
 	 * 
@@ -571,6 +573,43 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)6), ((Label)node).getNameChild());
 		assertEquals( "a", ((Label)node).getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_THROW nodes are nodes representing a throw statement.
+	 * 
+	 * Any AST_THROW node has exactly one child holding the expression to
+	 * be thrown (e.g., could be AST_NEW, AST_CONST, AST_VAR, AST_CALL, etc.)
+	 * 
+	 * This test checks a throw statement's child in the following PHP code:
+	 * 
+	 * throw new Exception("foo");
+	 */
+	@Test
+	public void testThrowStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_THROW,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NEW,,3,,0,1,,,\n";
+		nodeStr += "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"Exception\",0,1,,,\n";
+		nodeStr += "7,AST_ARG_LIST,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"foo\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "4,7,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(ThrowStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ThrowStatement)node).getThrowExpression());
 	}
 	
 	/**

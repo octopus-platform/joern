@@ -30,6 +30,7 @@ import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
+import ast.statements.jump.ThrowStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
@@ -93,6 +94,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_LABEL:
 				errno = handleLabel((Label)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_THROW:
+				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_GOTO:
 				errno = handleGoto((GotoStatement)startNode, endNode, childnum);
@@ -380,6 +384,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // name child
 				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleThrow( ThrowStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setThrowExpression(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ThrowStatement.throwExpression to be an Expression instead
+				// of a generic ASTNode, and getThrowExpression() and setThrowExpression() accordingly
 				break;
 				
 			default:
