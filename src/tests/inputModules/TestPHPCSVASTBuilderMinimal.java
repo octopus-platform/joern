@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.ConditionalExpression;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -493,6 +494,41 @@ public class TestPHPCSVASTBuilderMinimal
 
 	/* nodes with exactly 3 children */
 	
+	/**
+	 * true ?: "bar";
+	 */
+	@Test
+	public void testMinimalConditionalCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CONDITIONAL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_CONST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"true\",0,1,,,\n";
+		nodeStr += "7,NULL,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(ConditionalExpression.class));
+		assertEquals( 3, node.getChildCount());
+		// TODO ((ConditionalExpression)node).getTrueExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because ConditionalExpression accepts arbitrary ASTNode's for true expressions,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((ConditionalExpression)node).getTrueExpression().getProperty("type"));
+	}
+
 	/**
 	 * try {}
 	 * catch(Exception $e) {}

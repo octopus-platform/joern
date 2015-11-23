@@ -1,6 +1,7 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
+import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
@@ -129,6 +130,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_CONDITIONAL:
+				errno = handleConditional((ConditionalExpression)startNode, endNode, childnum);
+				break;
+				
 			case PHPCSVNodeTypes.TYPE_TRY:
 				errno = handleTry((TryStatement)startNode, endNode, childnum);
 				break;
@@ -608,6 +613,39 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 
 	/* nodes with exactly 3 children */
+	
+	private int handleConditional( ConditionalExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // cond child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ConditionalExpression.condition to be an Expression instead
+				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				startNode.setCondition(endNode);
+				break;
+			case 1: // trueExpr child: Expression node or NULL
+				// TODO in time, we should be able to cast endNode to Expression, unless it is NULL;
+				// then, use an appropriate case distinction here,
+				// and change ConditionalExpression.trueExpression to be an Expression instead
+				// of a generic ASTNode, and getTrueExpression() and getTrueExpression() accordingly
+				startNode.setTrueExpression(endNode);
+				break;
+			case 2: // falseExpr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ConditionalExpression.falseExpression to be an Expression instead
+				// of a generic ASTNode, and getFalseExpression() and getFalseExpression() accordingly
+				startNode.setFalseExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
 	
 	private int handleTry( TryStatement startNode, ASTNode endNode, int childnum)
 	{

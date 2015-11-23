@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
@@ -1242,6 +1243,48 @@ public class TestPHPCSVASTBuilder
 
 	
 	/* nodes with exactly 3 children */
+	
+	/**
+	 * AST_CONDITIONAL nodes are used to represent conditional expressions using the ?: operator,
+	 * also known as the ternary conditional operator.
+	 * 
+	 * Any AST_CONDITIONAL node has exactly three children:
+	 * 1) an expression representing the conditional
+	 * 2) an expression representing the true branch, or NULL
+	 * 3) an expression representing the false branch
+	 * 
+	 * This test checks a conditional expression's children in the following PHP code:
+	 * 
+	 * true ? "foo" : "bar";
+	 */
+	@Test
+	public void testConditionalCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CONDITIONAL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_CONST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"true\",0,1,,,\n";
+		nodeStr += "7,string,,3,\"foo\",1,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(ConditionalExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ConditionalExpression)node).getCondition());
+		assertEquals( ast.getNodeById((long)7), ((ConditionalExpression)node).getTrueExpression());
+		assertEquals( ast.getNodeById((long)8), ((ConditionalExpression)node).getFalseExpression());
+	}
 	
 	/**
 	 * AST_TRY nodes are used for try statements.
