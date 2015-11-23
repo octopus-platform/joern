@@ -24,6 +24,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -765,6 +766,42 @@ public class TestPHPCSVASTBuilder
 	
 
 	/* nodes with exactly 2 children */
+	
+	/**
+	 * AST_COALESCE nodes are used to represent coalesce expressions, i.e., expressions
+	 * using the ?? operator.
+	 * 
+	 * Any AST_COALESCE node has exactly two children:
+	 * 1) various possible types (including plain nodes), representing
+	 *    the expression on the left side
+	 * 2) various possible types (including plain nodes), representing
+	 *    the expression on the right side
+	 * 
+	 * This test checks a coalesce expression's children in the following PHP code:
+	 * 
+	 * "foo" ?? "bar";
+	 */
+	@Test
+	public void testCoalesceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_COALESCE,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "5,string,,3,\"bar\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PHPCoalesceExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPCoalesceExpression)node).getLeftExpression());
+		assertEquals( ast.getNodeById((long)5), ((PHPCoalesceExpression)node).getRightExpression());
+	}
 	
 	/**
 	 * AST_WHILE nodes are used to declare while loops.

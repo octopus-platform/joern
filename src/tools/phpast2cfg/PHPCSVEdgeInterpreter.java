@@ -12,6 +12,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -113,6 +114,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_COALESCE:
+				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
+				break;
+
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
 				break;
@@ -484,6 +489,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 2 children */
 
+	private int handleCoalesce( PHPCoalesceExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression or plain node
+				startNode.setLeftExpression(endNode);
+				break;
+			case 1: // right child: Expression or plain node
+				startNode.setRightExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
