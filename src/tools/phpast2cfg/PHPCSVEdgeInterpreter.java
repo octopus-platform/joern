@@ -29,6 +29,7 @@ import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
@@ -128,6 +129,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_TRY:
+				errno = handleTry((TryStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CATCH:
 				errno = handleCatch((CatchStatement)startNode, endNode, childnum);
 				break;
@@ -604,6 +608,32 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 
 	/* nodes with exactly 3 children */
+	
+	private int handleTry( TryStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // tryStmts child: CompoundStatement node
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+			case 1: // catches child: CatchList node
+				startNode.setCatchList((CatchList)endNode);
+				break;
+			case 2: // finallyStmts child: CompoundStatement or NULL node
+				if( endNode instanceof CompoundStatement)
+					startNode.setFinallyContent((CompoundStatement)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
 	
 	private int handleCatch( CatchStatement startNode, ASTNode endNode, int childnum)
 	{

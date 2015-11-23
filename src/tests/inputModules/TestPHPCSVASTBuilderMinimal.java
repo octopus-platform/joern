@@ -29,6 +29,7 @@ import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
@@ -491,6 +492,43 @@ public class TestPHPCSVASTBuilderMinimal
 
 
 	/* nodes with exactly 3 children */
+	
+	/**
+	 * try {}
+	 * catch(Exception $e) {}
+	 */
+	@Test
+	public void testMinimalTryCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_CATCH,,4,,0,1,,,\n";
+		nodeStr += "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"Exception\",0,1,,,\n";
+		nodeStr += "9,string,,4,\"e\",1,1,,,\n";
+		nodeStr += "10,AST_STMT_LIST,,4,,2,1,,,\n";
+		nodeStr += "11,NULL,,3,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "6,10,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(TryStatement.class));
+		assertEquals( 3, node.getChildCount());
+		assertNull( ((TryStatement)node).getFinallyContent());
+	}
 	
 	/**
 	 * function foo($bar) {}

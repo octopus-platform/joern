@@ -41,6 +41,7 @@ import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
@@ -1241,6 +1242,67 @@ public class TestPHPCSVASTBuilder
 
 	
 	/* nodes with exactly 3 children */
+	
+	/**
+	 * AST_TRY nodes are used for try statements.
+	 * 
+	 * Any AST_TRY node has exactly three children:
+	 * 1) AST_STMT_LIST, representing the code to be "tried"
+	 * 2) AST_CATCH_LIST, representing the list of catch statements, i.e.,
+	 *    the list of caught exceptions.
+	 * 3) AST_STMT_LIST or NULL, representing a finally statement, if it exists.
+	 * 
+	 * This test checks a few catch statements' children in the following PHP code:
+	 * 
+	 * try {}
+	 * catch(FooException $f) {}
+	 * catch(BarException $b) {}
+	 * finally {}
+	 */
+	@Test
+	public void testTryCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_CATCH,,4,,0,1,,,\n";
+		nodeStr += "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"FooException\",0,1,,,\n";
+		nodeStr += "9,string,,4,\"f\",1,1,,,\n";
+		nodeStr += "10,AST_STMT_LIST,,4,,2,1,,,\n";
+		nodeStr += "11,AST_CATCH,,5,,1,1,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "13,string,,5,\"BarException\",0,1,,,\n";
+		nodeStr += "14,string,,5,\"b\",1,1,,,\n";
+		nodeStr += "15,AST_STMT_LIST,,5,,2,1,,,\n";
+		nodeStr += "16,AST_STMT_LIST,,6,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "6,10,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,14,PARENT_OF\n";
+		edgeStr += "11,15,PARENT_OF\n";
+		edgeStr += "5,11,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(TryStatement.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((TryStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)5), ((TryStatement)node).getCatchList());
+		assertEquals( ast.getNodeById((long)16), ((TryStatement)node).getFinallyContent());
+	}
 	
 	/**
 	 * AST_CATCH nodes are used for catch statements.
