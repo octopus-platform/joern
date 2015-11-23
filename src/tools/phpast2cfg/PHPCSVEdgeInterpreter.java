@@ -25,6 +25,8 @@ import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.blockstarters.CatchList;
+import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -126,6 +128,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_CATCH:
+				errno = handleCatch((CatchStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_PARAM:
 				errno = handleParameter((PHPParameter)startNode, endNode, childnum);
 				break;
@@ -150,6 +155,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_SWITCH_LIST:
 				errno = handleSwitchList((PHPSwitchList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CATCH_LIST:
+				errno = handleCatchList((CatchList)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PARAM_LIST:
 				errno = handleParameterList((ParameterList)startNode, endNode, childnum);
@@ -597,6 +605,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 3 children */
 	
+	private int handleCatch( CatchStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // exception child: Identifier node
+				startNode.setExceptionIdentifier((Identifier)endNode);
+				break;
+			case 1: // varName child: plain node
+				startNode.setVariableName(endNode);
+				break;
+			case 2: // stmts child: CompoundStatement node
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	private int handleParameter( PHPParameter startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -716,6 +747,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleSwitchList( PHPSwitchList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addSwitchCase((PHPSwitchCase)endNode);
+
+		return 0;
+	}
+	
+	private int handleCatchList( CatchList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addCatchStatement((CatchStatement)endNode);
 
 		return 0;
 	}

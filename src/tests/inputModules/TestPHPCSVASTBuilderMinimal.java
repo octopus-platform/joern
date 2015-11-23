@@ -26,6 +26,7 @@ import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -645,6 +646,33 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(PHPSwitchList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((PHPSwitchList)node).size());
+	}
+	
+	/**
+	 * try {}
+	 * finally {}
+	 */
+	@Test
+	public void testMinimalCatchListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,4,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(CatchList.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((CatchList)node).size());
 	}
 	
 	/**
