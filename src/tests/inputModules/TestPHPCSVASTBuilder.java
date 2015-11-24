@@ -26,6 +26,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -775,7 +776,7 @@ public class TestPHPCSVASTBuilder
 	 * 
 	 * Any AST_CALL node has exactly 2 children:
 	 * 1) an expression, representing the target
-	 *    (e.g., could be AST_NAME, AST_VAR, ...)
+	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, ...)
 	 * 2) AST_ARG_LIST, representing the argument list
 	 * 
 	 * This test checks a few call expressions' children in the following PHP code:
@@ -819,15 +820,15 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(CallExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((CallExpression)node).getTarget());
-		assertEquals( "foo", ((Identifier)((CallExpression)node).getTarget()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)4), ((CallExpression)node).getTargetFunc());
+		assertEquals( "foo", ((Identifier)((CallExpression)node).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((CallExpression)node).getArgumentList());
 		assertEquals( 2, ((CallExpression)node).getArgumentList().size());
 		
 		assertThat( node2, instanceOf(CallExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((CallExpression)node2).getTarget());
-		assertEquals( "buz", ((Variable)((CallExpression)node2).getTarget()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)11), ((CallExpression)node2).getTargetFunc());
+		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
 		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
 	}
@@ -1347,12 +1348,96 @@ public class TestPHPCSVASTBuilder
 	/* nodes with exactly 3 children */
 	
 	/**
+	 * AST_METHOD_CALL nodes are used to denote method call expressions.
+	 * 
+	 * Any AST_METHOD_CALL node has exactly 3 children:
+	 * 1) an expression node, representing the expression whose evaluation yields the
+	 *    object that the target method belongs to
+	 *    (e.g., could be AST_VAR, AST_CALL, AST_PROP, ...)
+	 * 2) an expression node, representing the expression whose evaluation yields the
+	 *    target method's name
+	 *    (e.g., could be AST_VAR, "string", AST_BINARY_OP, ...)
+	 * 3) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a few method call expressions' children in the following PHP code:
+	 * 
+	 * $buz->foo($bar, "yabadabadoo");
+	 * buz()->$foo($bar, "yabadabadoo");
+	 */
+	@Test
+	public void testMethodCallCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_METHOD_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",1,1,,,\n";
+		nodeStr += "7,AST_ARG_LIST,,3,,2,1,,,\n";
+		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "9,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,3,\"yabadabadoo\",1,1,,,\n";
+		nodeStr += "11,AST_METHOD_CALL,,4,,1,1,,,\n";
+		nodeStr += "12,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "14,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "16,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "17,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "18,AST_ARG_LIST,,4,,2,1,,,\n";
+		nodeStr += "19,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "20,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "21,string,,4,\"yabadabadoo\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "11,16,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,21,PARENT_OF\n";
+		edgeStr += "11,18,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(MethodCallExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((MethodCallExpression)node).getTargetObject());
+		assertEquals( "buz", ((Variable)((MethodCallExpression)node).getTargetObject()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((MethodCallExpression)node).getTargetFunc());
+		assertEquals( "foo", ((MethodCallExpression)node).getTargetFunc().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((MethodCallExpression)node).getArgumentList());
+		assertEquals( 2, ((MethodCallExpression)node).getArgumentList().size());
+		
+		assertThat( node2, instanceOf(MethodCallExpression.class));
+		assertEquals( 3, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((MethodCallExpression)node2).getTargetObject());
+		assertEquals( "buz", ((Identifier)((CallExpression)((MethodCallExpression)node2).getTargetObject()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((MethodCallExpression)node2).getTargetFunc());
+		assertEquals( "foo", ((Variable)((MethodCallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)18), ((MethodCallExpression)node2).getArgumentList());
+		assertEquals( 2, ((MethodCallExpression)node2).getArgumentList().size());
+	}
+	
+	/**
 	 * AST_STATIC_CALL nodes are used to denote static call expressions.
 	 * 
 	 * Any AST_STATIC_CALL node has exactly 3 children:
 	 * 1) AST_NAME, representing the class name that the static target method belongs to
-	 * 1) a "string" node, representing the static method's name within the class
-	 * 2) AST_ARG_LIST, representing the argument list
+	 * 2) a "string" node, representing the static method's name within the class
+	 * 3) AST_ARG_LIST, representing the argument list
 	 * 
 	 * This test checks a static call expression's children in the following PHP code:
 	 * 
@@ -1388,8 +1473,8 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((StaticCallExpression)node).getTargetClass());
 		assertEquals( "Buz", ((StaticCallExpression)node).getTargetClass().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTarget());
-		assertEquals( "foo", ((StaticCallExpression)node).getTarget().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTargetFunc());
+		assertEquals( "foo", ((StaticCallExpression)node).getTargetFunc().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getArgumentList());
 		assertEquals( 2, ((StaticCallExpression)node).getArgumentList().size());
 	}

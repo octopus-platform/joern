@@ -181,7 +181,7 @@ public class CodeNestingTest
 		ExpressionStatement stmt = (ExpressionStatement) contentItem
 				.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
-		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
+		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 		ArgumentList argList = (ArgumentList) expr.getChild(1);
 		Argument arg = (Argument) argList.getChild(0);
 	}
@@ -195,7 +195,7 @@ public class CodeNestingTest
 		ExpressionStatement stmt = (ExpressionStatement) contentItem
 				.getStatements().get(0);
 		CallExpression expr = (CallExpression) stmt.getChild(0);
-		assertTrue(expr.getTarget().getEscapedCodeStr().equals("foo"));
+		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 	}
 
 }

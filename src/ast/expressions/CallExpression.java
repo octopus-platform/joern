@@ -4,18 +4,18 @@ import ast.ASTNode;
 
 public class CallExpression extends PostfixExpression
 {
-	private ASTNode target = null; // TODO change type to Expression once the mapping is finished
+	private ASTNode targetFunc = null; // TODO change type to Expression once the mapping is finished
 	private ArgumentList argumentList = null;
 	
-	public ASTNode getTarget() // TODO change type to Expression
+	public ASTNode getTargetFunc() // TODO change type to Expression
 	{
-		return this.target;
+		return this.targetFunc;
 	}
 	
-	public void setTarget(ASTNode target) // TODO change type to Expression
+	public void setTargetFunc(ASTNode targetFunc) // TODO change type to Expression
 	{
-		this.target = target;
-		super.addChild(target);
+		this.targetFunc = targetFunc;
+		super.addChild(targetFunc);
 	}
 	
 	public ArgumentList getArgumentList()
@@ -39,14 +39,14 @@ public class CallExpression extends PostfixExpression
 			// 2. move addChild method to CCallExpression
 			// 3. remove ugly this.getClass().equals(CallExpression.class) condition above
 			// -> The only reason why we have to use that condition above is that we only want to call
-			// setTarget((Identifier)node) here to set the target method name of CallExpressions in C world,
-			// but not in PHP world (PHP world calls setTarget(ASTNode) directly).
+			// setTargetFunc((Identifier)node) here to set the target function name of CallExpressions in C world,
+			// but not in PHP world (PHP world calls setTargetFunc(ASTNode) directly).
 			// That is, the addChild(ASTNode) override is unnecessary in PHP world, and in particular
 			// its presence even *hurts* for PHP's StaticCallExpression, since there, without the ugly
 			// condition above to make sure we are not in a subclass, it would have the
-			// effect of calling the setTarget() method with the *class* name of the called method;
+			// effect of calling the setTargetFunc() method with the *class* name of the called method;
 			// see StaticCallExpression.setTargetClass(Identifier)
-			setTarget((Identifier)node);
+			setTargetFunc((Identifier)node);
 		else if (node instanceof ArgumentList)
 			setArgumentList((ArgumentList)node);
 		else
