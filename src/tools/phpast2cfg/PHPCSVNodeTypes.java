@@ -65,6 +65,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_SWITCH_CASE = "AST_SWITCH_CASE";
 
 	// nodes with exactly 3 children
+	public static final String TYPE_STATIC_CALL = "AST_STATIC_CALL";
 	public static final String TYPE_CONDITIONAL = "AST_CONDITIONAL";
 
 	public static final String TYPE_TRY = "AST_TRY";

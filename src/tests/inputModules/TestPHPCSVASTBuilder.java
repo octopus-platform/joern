@@ -27,6 +27,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -1344,6 +1345,54 @@ public class TestPHPCSVASTBuilder
 
 	
 	/* nodes with exactly 3 children */
+	
+	/**
+	 * AST_STATIC_CALL nodes are used to denote static call expressions.
+	 * 
+	 * Any AST_STATIC_CALL node has exactly 3 children:
+	 * 1) AST_NAME, representing the class name that the static target method belongs to
+	 * 1) a "string" node, representing the static method's name within the class
+	 * 2) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a static call expression's children in the following PHP code:
+	 * 
+	 * Buz::foo($bar, "yabadabadoo");
+	 */
+	@Test
+	public void testStaticCallCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_STATIC_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Buz\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",1,1,,,\n";
+		nodeStr += "7,AST_ARG_LIST,,3,,2,1,,,\n";
+		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "9,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,3,\"yabadabadoo\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(StaticCallExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((StaticCallExpression)node).getTargetClass());
+		assertEquals( "Buz", ((StaticCallExpression)node).getTargetClass().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTarget());
+		assertEquals( "foo", ((StaticCallExpression)node).getTarget().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getArgumentList());
+		assertEquals( 2, ((StaticCallExpression)node).getArgumentList().size());
+	}
 	
 	/**
 	 * AST_CONDITIONAL nodes are used to represent conditional expressions using the ?: operator,

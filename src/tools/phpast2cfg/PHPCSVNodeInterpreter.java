@@ -19,6 +19,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -128,6 +129,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_STATIC_CALL:
+				retval = handleStaticCall(row, ast);
+				break;
 			case PHPCSVNodeTypes.TYPE_CONDITIONAL:
 				retval = handleConditional(row, ast);
 				break;
@@ -723,6 +727,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 3 children */
 
+	private long handleStaticCall(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		StaticCallExpression newNode = new StaticCallExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
 	private long handleConditional(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ConditionalExpression newNode = new ConditionalExpression();

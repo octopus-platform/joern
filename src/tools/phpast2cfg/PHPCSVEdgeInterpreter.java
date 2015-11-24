@@ -15,6 +15,7 @@ import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -140,6 +141,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_STATIC_CALL:
+				errno = handleStaticCall((StaticCallExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CONDITIONAL:
 				errno = handleConditional((ConditionalExpression)startNode, endNode, childnum);
 				break;
@@ -669,6 +673,31 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 
 	/* nodes with exactly 3 children */
+	
+	private int handleStaticCall( StaticCallExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Identifier node
+				startNode.setTargetClass((Identifier)endNode);
+				break;
+			case 1: // method child: "string" node
+				// TODO in time, we should be able to cast endNode to a plain
+				// node type that extends Expression.
+				startNode.setTarget(endNode);
+				break;
+			case 2: // args child: ArgumentList node
+				startNode.setArgumentList((ArgumentList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
 	
 	private int handleConditional( ConditionalExpression startNode, ASTNode endNode, int childnum)
 	{
