@@ -2,6 +2,7 @@ package tools.phpast2cfg;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
+import ast.expressions.CallExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
@@ -115,6 +116,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_CALL:
+				errno = handleCall((CallExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
 				break;
@@ -493,6 +497,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 2 children */
 
+	private int handleCall( CallExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change CallExpression.target to be an Expression instead
+				// of a generic ASTNode, and getTarget() and setTarget() accordingly
+				startNode.setTarget(endNode);
+				break;
+			case 1: // args child: ArgumentList node
+				startNode.setArgumentList((ArgumentList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handleCoalesce( PHPCoalesceExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;

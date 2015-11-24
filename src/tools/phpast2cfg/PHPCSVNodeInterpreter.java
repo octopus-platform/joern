@@ -7,6 +7,7 @@ import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.ArgumentList;
+import ast.expressions.CallExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
@@ -103,6 +104,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_CALL:
+				retval = handleCall(row, ast);
+				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
 				retval = handleCoalesce(row, ast);
 				break;
@@ -561,6 +565,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	
 	
 	/* nodes with exactly 2 children */
+	
+	private long handleCall(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		CallExpression newNode = new CallExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
 	
 	private long handleCoalesce(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
