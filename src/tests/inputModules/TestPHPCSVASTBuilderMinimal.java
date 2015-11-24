@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.ArgumentList;
+import ast.expressions.ConditionalExpression;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -26,8 +28,10 @@ import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
@@ -492,6 +496,78 @@ public class TestPHPCSVASTBuilderMinimal
 	/* nodes with exactly 3 children */
 	
 	/**
+	 * true ?: "bar";
+	 */
+	@Test
+	public void testMinimalConditionalCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CONDITIONAL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_CONST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"true\",0,1,,,\n";
+		nodeStr += "7,NULL,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(ConditionalExpression.class));
+		assertEquals( 3, node.getChildCount());
+		// TODO ((ConditionalExpression)node).getTrueExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because ConditionalExpression accepts arbitrary ASTNode's for true expressions,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((ConditionalExpression)node).getTrueExpression().getProperty("type"));
+	}
+
+	/**
+	 * try {}
+	 * catch(Exception $e) {}
+	 */
+	@Test
+	public void testMinimalTryCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_CATCH,,4,,0,1,,,\n";
+		nodeStr += "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"Exception\",0,1,,,\n";
+		nodeStr += "9,string,,4,\"e\",1,1,,,\n";
+		nodeStr += "10,AST_STMT_LIST,,4,,2,1,,,\n";
+		nodeStr += "11,NULL,,3,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "6,10,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(TryStatement.class));
+		assertEquals( 3, node.getChildCount());
+		assertNull( ((TryStatement)node).getFinallyContent());
+	}
+	
+	/**
 	 * function foo($bar) {}
 	 */
 	@Test
@@ -602,6 +678,32 @@ public class TestPHPCSVASTBuilderMinimal
 	/* nodes with an arbitrary number of children */
 
 	/**
+	 * foo();
+	 */
+	@Test
+	public void testMinimalArgumentListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(ArgumentList.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((ArgumentList)node).size());
+	}
+	
+	/**
 	 * <empty file>
 	 */
 	@Test
@@ -645,6 +747,33 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(PHPSwitchList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((PHPSwitchList)node).size());
+	}
+	
+	/**
+	 * try {}
+	 * finally {}
+	 */
+	@Test
+	public void testMinimalCatchListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,4,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)5);
+		
+		assertThat( node, instanceOf(CatchList.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((CatchList)node).size());
 	}
 	
 	/**

@@ -1,55 +1,51 @@
 package ast.statements.blockstarters;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import ast.ASTNode;
 import ast.logical.statements.BlockStarter;
+import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
 
 public class TryStatement extends BlockStarter
 {
-
-	private List<CatchStatement> catchNodes = new LinkedList<CatchStatement>();
-
-	public void addCatchNode(CatchStatement catchNode)
+	private CompoundStatement content = null;
+	private CatchList catchList = new CatchList();
+	private CompoundStatement finallyContent = null;
+	
+	public CompoundStatement getContent()
 	{
-		getCatchNodes().add(catchNode);
+		return this.content;
 	}
-
-	public List<CatchStatement> getCatchNodes()
+	
+	public void setContent(CompoundStatement content)
 	{
-		return this.catchNodes;
+		this.content = content;
+		super.addChild(content);
 	}
-
-	public CatchStatement getCatchNode(int index)
+	
+	public CatchList getCatchList()
 	{
-		return getCatchNodes().get(index);
+		return this.catchList;
 	}
-
+	
+	public void setCatchList(CatchList catchList)
+	{
+		this.catchList = catchList;
+		super.addChild(catchList);
+	}
+	
+	public CompoundStatement getFinallyContent()
+	{
+		return this.finallyContent;
+	}
+	
+	public void setFinallyContent(CompoundStatement finallyContent)
+	{
+		this.finallyContent = finallyContent;
+		super.addChild(finallyContent);
+	}
+	
+	@Override
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
 	}
-
-	public int getChildCount()
-	{
-		return super.getChildCount() + getCatchNodes().size();
-	}
-
-	public ASTNode getChild(int i)
-	{
-		if (i == 0)
-			return getStatement();
-		else
-			try
-			{
-				return getCatchNode(i - 1);
-			} catch (IndexOutOfBoundsException e)
-			{
-				throw new RuntimeException(
-						"Invalid child number for try statement");
-			}
-	}
-
 }

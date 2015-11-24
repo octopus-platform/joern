@@ -132,8 +132,8 @@ public class NestingReconstructor
 					TryStatement tryStatement = (TryStatement) stack.getTry();
 					if (tryStatement != null)
 					{
-						tryStatement
-								.addCatchNode((CatchStatement) curBlockStarter);
+						tryStatement.getCatchList()
+								.addCatchStatement((CatchStatement) curBlockStarter);
 					} else
 						throw new RuntimeException(
 								"Warning: cannot find try for catch");

@@ -314,14 +314,14 @@ public class CCFGFactory extends CFGFactory
 				}
 			}
 
-			if (tryStatement.getCatchNodes() == null)
+			if (tryStatement.getCatchList().size() == 0)
 			{
 				System.err.println("warning: cannot find catch for try");
 				return tryCFG;
 			}
 
 			// Mount exception handlers
-			for (CatchStatement catchStatement : tryStatement.getCatchNodes())
+			for (CatchStatement catchStatement : tryStatement.getCatchList())
 			{
 				CCFG catchBlock = convert(catchStatement.getStatement());
 				tryCFG.mountCFG(tryCFG.getExceptionNode(), tryCFG.getExitNode(),

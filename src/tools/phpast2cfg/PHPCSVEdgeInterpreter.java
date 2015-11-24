@@ -1,6 +1,8 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
+import ast.expressions.ArgumentList;
+import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
@@ -11,6 +13,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -25,11 +28,15 @@ import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.blockstarters.CatchList;
+import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
+import ast.statements.jump.ThrowStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
@@ -94,6 +101,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_LABEL:
 				errno = handleLabel((Label)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_THROW:
+				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_GOTO:
 				errno = handleGoto((GotoStatement)startNode, endNode, childnum);
 				break;
@@ -105,6 +115,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_COALESCE:
+				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
+				break;
+
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
 				break;
@@ -122,6 +136,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			case PHPCSVNodeTypes.TYPE_CONDITIONAL:
+				errno = handleConditional((ConditionalExpression)startNode, endNode, childnum);
+				break;
+				
+			case PHPCSVNodeTypes.TYPE_TRY:
+				errno = handleTry((TryStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CATCH:
+				errno = handleCatch((CatchStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_PARAM:
 				errno = handleParameter((PHPParameter)startNode, endNode, childnum);
 				break;
@@ -135,6 +159,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 				
 			// nodes with an arbitrary number of children
+			case PHPCSVNodeTypes.TYPE_ARG_LIST:
+				errno = handleArgumentList((ArgumentList)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
 				errno = handleExpressionList((ExpressionList)startNode, endNode, childnum);
 				break;
@@ -146,6 +173,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_SWITCH_LIST:
 				errno = handleSwitchList((PHPSwitchList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CATCH_LIST:
+				errno = handleCatchList((CatchList)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PARAM_LIST:
 				errno = handleParameterList((ParameterList)startNode, endNode, childnum);
@@ -389,6 +419,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 	
+	private int handleThrow( ThrowStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setThrowExpression(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ThrowStatement.throwExpression to be an Expression instead
+				// of a generic ASTNode, and getThrowExpression() and setThrowExpression() accordingly
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
 	private int handleGoto( GotoStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -443,6 +493,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 2 children */
 
+	private int handleCoalesce( PHPCoalesceExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression or plain node
+				startNode.setLeftExpression(endNode);
+				break;
+			case 1: // right child: Expression or plain node
+				startNode.setRightExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -573,6 +643,88 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 3 children */
 	
+	private int handleConditional( ConditionalExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // cond child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ConditionalExpression.condition to be an Expression instead
+				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				startNode.setCondition(endNode);
+				break;
+			case 1: // trueExpr child: Expression node or NULL
+				// TODO in time, we should be able to cast endNode to Expression, unless it is NULL;
+				// then, use an appropriate case distinction here,
+				// and change ConditionalExpression.trueExpression to be an Expression instead
+				// of a generic ASTNode, and getTrueExpression() and getTrueExpression() accordingly
+				startNode.setTrueExpression(endNode);
+				break;
+			case 2: // falseExpr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ConditionalExpression.falseExpression to be an Expression instead
+				// of a generic ASTNode, and getFalseExpression() and getFalseExpression() accordingly
+				startNode.setFalseExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleTry( TryStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // tryStmts child: CompoundStatement node
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+			case 1: // catches child: CatchList node
+				startNode.setCatchList((CatchList)endNode);
+				break;
+			case 2: // finallyStmts child: CompoundStatement or NULL node
+				if( endNode instanceof CompoundStatement)
+					startNode.setFinallyContent((CompoundStatement)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleCatch( CatchStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // exception child: Identifier node
+				startNode.setExceptionIdentifier((Identifier)endNode);
+				break;
+			case 1: // varName child: plain node
+				startNode.setVariableName(endNode);
+				break;
+			case 2: // stmts child: CompoundStatement node
+				startNode.setContent((CompoundStatement)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	private int handleParameter( PHPParameter startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -668,6 +820,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	
 	/* nodes with an arbitrary number of children */
 	
+	private int handleArgumentList( ArgumentList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addArgument(endNode); // TODO cast to Expression
+
+		return 0;
+	}
+	
 	private int handleExpressionList( ExpressionList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addExpression(endNode); // TODO cast to Expression
@@ -692,6 +851,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleSwitchList( PHPSwitchList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addSwitchCase((PHPSwitchCase)endNode);
+
+		return 0;
+	}
+	
+	private int handleCatchList( CatchList startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addCatchStatement((CatchStatement)endNode);
 
 		return 0;
 	}
