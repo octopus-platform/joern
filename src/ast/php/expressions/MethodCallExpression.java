@@ -2,7 +2,6 @@ package ast.php.expressions;
 
 import ast.ASTNode;
 import ast.expressions.CallExpression;
-import ast.expressions.Identifier;
 
 public class MethodCallExpression extends CallExpression
 {
