@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.ArgumentList;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
@@ -1687,6 +1688,145 @@ public class TestPHPCSVASTBuilder
 	/* nodes with an arbitrary number of children */
 
 	/**
+	 * AST_ARG_LIST nodes are used to denote a list of arguments in a function call.
+	 * 
+	 * Any AST_ARG_LIST node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one argument in the list.
+	 * 
+	 * This test checks an argument list's children in the following PHP code:
+	 * 
+	 * foo($bar, "yabadabadoo");
+	 */
+	@Test
+	public void testArgumentListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "9,string,,3,\"yabadabadoo\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(ArgumentList.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ArgumentList)node).size());
+		assertEquals( ast.getNodeById((long)7), ((ArgumentList)node).getArgument(0));
+		assertEquals( ast.getNodeById((long)9), ((ArgumentList)node).getArgument(1));
+		for( ASTNode argument : (ArgumentList)node)
+			assertTrue( ast.containsValue(argument));
+	}
+	
+	/**
+	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
+	 * a list of initializations in a for-loop.
+	 * 
+	 * Any AST_EXPR_LIST node has between 1 and an arbitrarily large number
+	 * of children. Each child corresponds to one expression in the list.
+	 * TODO I am not sure at the moment whether there are situations where
+	 * an AST_EXPR_LIST with 0 children can be generated; I do not think so,
+	 * but look into it more closely.
+	 * 
+	 * This test checks an expression list's children in the following PHP code:
+	 * 
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
+	@Test
+	public void testExpressionList() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
+		nodeStr += "4,AST_EXPR_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "8,integer,,3,0,1,1,,,\n";
+		nodeStr += "9,AST_ASSIGN,,3,,1,1,,,\n";
+		nodeStr += "10,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "11,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "12,integer,,3,1,1,1,,,\n";
+		nodeStr += "13,AST_EXPR_LIST,,3,,1,1,,,\n";
+		nodeStr += "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n";
+		nodeStr += "15,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "16,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "17,integer,,3,3,1,1,,,\n";
+		nodeStr += "18,AST_EXPR_LIST,,3,,2,1,,,\n";
+		nodeStr += "19,AST_POST_INC,,3,,0,1,,,\n";
+		nodeStr += "20,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "21,string,,3,\"i\",0,1,,,\n";
+		nodeStr += "22,AST_POST_INC,,3,,1,1,,,\n";
+		nodeStr += "23,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "24,string,,3,\"j\",0,1,,,\n";
+		nodeStr += "25,AST_STMT_LIST,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,8,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "4,9,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,17,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "18,22,PARENT_OF\n";
+		edgeStr += "3,18,PARENT_OF\n";
+		edgeStr += "3,25,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)13);
+		ASTNode node3 = ast.getNodeById((long)18);
+
+		assertThat( node, instanceOf(ExpressionList.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ExpressionList)node).size());
+		assertEquals( ast.getNodeById((long)5), ((ExpressionList)node).getExpression(0));
+		assertEquals( ast.getNodeById((long)9), ((ExpressionList)node).getExpression(1));
+		for( ASTNode expression : (ExpressionList)node) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(expression));
+		
+		assertThat( node2, instanceOf(ExpressionList.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( 1, ((ExpressionList)node2).size());
+		assertEquals( ast.getNodeById((long)14), ((ExpressionList)node2).getExpression(0));
+		for( ASTNode expression : (ExpressionList)node2) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(expression));
+		
+		assertThat( node3, instanceOf(ExpressionList.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( 2, ((ExpressionList)node3).size());
+		assertEquals( ast.getNodeById((long)19), ((ExpressionList)node3).getExpression(0));
+		assertEquals( ast.getNodeById((long)22), ((ExpressionList)node3).getExpression(1));
+		for( ASTNode expression : (ExpressionList)node3) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(expression));
+	}
+	
+	/**
 	 * AST_STMT_LIST nodes are used to declare lists (or "blocks") of statements.
 	 * 
 	 * Any AST_STMT_LIST node has between 0 and an arbitrarily large number of children.
@@ -1969,7 +2109,7 @@ public class TestPHPCSVASTBuilder
 	}
 
 	/**
-	 * AST_PARAM_LIST nodes are used to dentoe a list of function parameters.
+	 * AST_PARAM_LIST nodes are used to denote a list of function parameters.
 	 * 
 	 * Any AST_PARAM_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one parameter in the list.
@@ -2120,101 +2260,5 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((IdentifierList)node).getIdentifier(1));
 		for( Identifier identifier : (IdentifierList)node)
 			assertTrue( ast.containsValue(identifier));
-	}
-	
-	/**
-	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
-	 * a list of initializations in a for-loop.
-	 * 
-	 * Any AST_EXPR_LIST node has between 1 and an arbitrarily large number
-	 * of children. Each child corresponds to one expression in the list.
-	 * TODO I am not sure at the moment whether there are situations where
-	 * an AST_EXPR_LIST with 0 children can be generated; I do not think so,
-	 * but look into it more closely.
-	 * 
-	 * This test checks an expression list's children in the following PHP code:
-	 * 
-	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
-	 */
-	@Test
-	public void testExpressionList() throws IOException, InvalidCSVFile
-	{
-		String nodeStr = nodeHeader;
-		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
-		nodeStr += "4,AST_EXPR_LIST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_ASSIGN,,3,,0,1,,,\n";
-		nodeStr += "6,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "7,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "8,integer,,3,0,1,1,,,\n";
-		nodeStr += "9,AST_ASSIGN,,3,,1,1,,,\n";
-		nodeStr += "10,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "11,string,,3,\"j\",0,1,,,\n";
-		nodeStr += "12,integer,,3,1,1,1,,,\n";
-		nodeStr += "13,AST_EXPR_LIST,,3,,1,1,,,\n";
-		nodeStr += "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n";
-		nodeStr += "15,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "16,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "17,integer,,3,3,1,1,,,\n";
-		nodeStr += "18,AST_EXPR_LIST,,3,,2,1,,,\n";
-		nodeStr += "19,AST_POST_INC,,3,,0,1,,,\n";
-		nodeStr += "20,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "21,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "22,AST_POST_INC,,3,,1,1,,,\n";
-		nodeStr += "23,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "24,string,,3,\"j\",0,1,,,\n";
-		nodeStr += "25,AST_STMT_LIST,,3,,3,1,,,\n";
-
-		String edgeStr = edgeHeader;
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "5,8,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "4,9,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "14,17,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "3,13,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "18,22,PARENT_OF\n";
-		edgeStr += "3,18,PARENT_OF\n";
-		edgeStr += "3,25,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)13);
-		ASTNode node3 = ast.getNodeById((long)18);
-
-		assertThat( node, instanceOf(ExpressionList.class));
-		assertEquals( 2, node.getChildCount());
-		assertEquals( 2, ((ExpressionList)node).size());
-		assertEquals( ast.getNodeById((long)5), ((ExpressionList)node).getExpression(0));
-		assertEquals( ast.getNodeById((long)9), ((ExpressionList)node).getExpression(1));
-		for( ASTNode expression : (ExpressionList)node) // TODO iterate over Expression's
-			assertTrue( ast.containsValue(expression));
-		
-		assertThat( node2, instanceOf(ExpressionList.class));
-		assertEquals( 1, node2.getChildCount());
-		assertEquals( 1, ((ExpressionList)node2).size());
-		assertEquals( ast.getNodeById((long)14), ((ExpressionList)node2).getExpression(0));
-		for( ASTNode expression : (ExpressionList)node2) // TODO iterate over Expression's
-			assertTrue( ast.containsValue(expression));
-		
-		assertThat( node3, instanceOf(ExpressionList.class));
-		assertEquals( 2, node3.getChildCount());
-		assertEquals( 2, ((ExpressionList)node3).size());
-		assertEquals( ast.getNodeById((long)19), ((ExpressionList)node3).getExpression(0));
-		assertEquals( ast.getNodeById((long)22), ((ExpressionList)node3).getExpression(1));
-		for( ASTNode expression : (ExpressionList)node3) // TODO iterate over Expression's
-			assertTrue( ast.containsValue(expression));
 	}
 }

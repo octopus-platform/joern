@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.ArgumentList;
 import ast.expressions.ConditionalExpression;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -676,6 +677,32 @@ public class TestPHPCSVASTBuilderMinimal
 
 	/* nodes with an arbitrary number of children */
 
+	/**
+	 * foo();
+	 */
+	@Test
+	public void testMinimalArgumentListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(ArgumentList.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((ArgumentList)node).size());
+	}
+	
 	/**
 	 * <empty file>
 	 */
