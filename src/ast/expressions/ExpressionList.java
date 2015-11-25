@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import ast.ASTNode;
 
-public class ExpressionList extends ASTNode implements Iterable<ASTNode>
+public class ExpressionList extends ASTNode implements Iterable<ASTNode> // TODO make this an Iterable<Expression> once the mapping is finished
 {
 	private LinkedList<ASTNode> expressions = new LinkedList<ASTNode>();
 	// TODO eventually, of course, this has to be a LinkedList<Expression>

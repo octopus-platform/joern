@@ -18,6 +18,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -178,6 +179,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// nodes with an arbitrary number of children
 			case PHPCSVNodeTypes.TYPE_ARG_LIST:
 				errno = handleArgumentList((ArgumentList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_LIST:
+				errno = handleList((PHPListExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY:
 				errno = handleArray((PHPArrayExpression)startNode, endNode, childnum);
@@ -945,6 +949,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleArgumentList( ArgumentList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addArgument(endNode); // TODO cast to Expression
+
+		return 0;
+	}
+	
+	private int handleList( PHPListExpression startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addElement(endNode); // TODO cast to Expression
 
 		return 0;
 	}

@@ -80,6 +80,7 @@ public class PHPCSVNodeTypes
 
 	// nodes with an arbitrary number of children
 	public static final String TYPE_ARG_LIST = "AST_ARG_LIST";
+	public static final String TYPE_LIST = "AST_LIST";
 	public static final String TYPE_ARRAY = "AST_ARRAY";
 	public static final String TYPE_EXPR_LIST = "AST_EXPR_LIST";
 	public static final String TYPE_STMT_LIST = "AST_STMT_LIST";

@@ -20,6 +20,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.PHPArrayExpression;
+import ast.php.expressions.PHPListExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
@@ -702,6 +703,42 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(ArgumentList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((ArgumentList)node).size());
+	}
+	
+	/**
+	 * Fun note: The following code was perfectly valid prior to PHP 7.
+	 * Starting with PHP 7, it will throw a runtime exception.
+	 * However, it will *parse* fine in all cases.
+	 * 
+	 * list() = array();
+	 */
+	@Test
+	public void testMinimalListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,0,1,,,\n";
+		nodeStr += "6,AST_ARRAY,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+
+		assertThat( node, instanceOf(PHPListExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( 1, ((PHPListExpression)node).size());
+		// TODO ((PHPListExpression)node).getElement(0) should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPListExpression accepts arbitrary ASTNode's as elements,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPListExpression)node).getElement(0).getProperty("type"));
 	}
 	
 	/**

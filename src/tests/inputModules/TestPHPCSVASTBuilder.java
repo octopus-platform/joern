@@ -30,6 +30,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -2039,6 +2040,99 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)14), ((ArgumentList)node2).getArgument(0));
 		for( ASTNode argument : (ArgumentList)node)
 			assertTrue( ast.containsValue(argument));
+	}
+	
+	/**
+	 * AST_LIST nodes are used to denote PHP list expressions.
+	 * 
+	 * Any AST_LIST node has between 1 and an arbitrarily large number of children.
+	 * (Note: an empty list will generate an implicit NULL node child,
+	 * see TestPHPCSVASTBuilderMinimal.testMinimalListCreation()).
+	 * Each child corresponds to one element in the list.
+	 * 
+	 * This test checks a few PHP list expressions' children in the following PHP code:
+	 * 
+	 * list($a, , list($c, $d)) = array("foo", "bar", array("buz", "qux"));
+	 */
+	@Test
+	public void testListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "7,NULL,,3,,1,1,,,\n";
+		nodeStr += "8,AST_LIST,,3,,2,1,,,\n";
+		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "10,string,,3,\"c\",0,1,,,\n";
+		nodeStr += "11,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "12,string,,3,\"d\",0,1,,,\n";
+		nodeStr += "13,AST_ARRAY,,3,,1,1,,,\n";
+		nodeStr += "14,AST_ARRAY_ELEM,,3,,0,1,,,\n";
+		nodeStr += "15,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "16,NULL,,3,,1,1,,,\n";
+		nodeStr += "17,AST_ARRAY_ELEM,,3,,1,1,,,\n";
+		nodeStr += "18,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "19,NULL,,3,,1,1,,,\n";
+		nodeStr += "20,AST_ARRAY_ELEM,,3,,2,1,,,\n";
+		nodeStr += "21,AST_ARRAY,,3,,0,1,,,\n";
+		nodeStr += "22,AST_ARRAY_ELEM,,3,,0,1,,,\n";
+		nodeStr += "23,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "24,NULL,,3,,1,1,,,\n";
+		nodeStr += "25,AST_ARRAY_ELEM,,3,,1,1,,,\n";
+		nodeStr += "26,string,,3,\"qux\",0,1,,,\n";
+		nodeStr += "27,NULL,,3,,1,1,,,\n";
+		nodeStr += "28,NULL,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "4,8,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,16,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,19,PARENT_OF\n";
+		edgeStr += "13,17,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,24,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "25,26,PARENT_OF\n";
+		edgeStr += "25,27,PARENT_OF\n";
+		edgeStr += "21,25,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "20,28,PARENT_OF\n";
+		edgeStr += "13,20,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)8);
+
+		assertThat( node, instanceOf(PHPListExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( 3, ((PHPListExpression)node).size());
+		assertEquals( ast.getNodeById((long)5), ((PHPListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)7), ((PHPListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(2));
+		for( ASTNode element : (PHPListExpression)node) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(element));
+		
+		assertThat( node2, instanceOf(PHPListExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( 2, ((PHPListExpression)node2).size());
+		assertEquals( ast.getNodeById((long)9), ((PHPListExpression)node2).getElement(0));
+		assertEquals( ast.getNodeById((long)11), ((PHPListExpression)node2).getElement(1));
+		for( ASTNode element : (PHPListExpression)node2) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(element));
 	}
 	
 	/**
