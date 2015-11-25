@@ -15,6 +15,8 @@ import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.MethodCallExpression;
+import ast.php.expressions.PHPArrayElement;
+import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -121,6 +123,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CALL:
 				errno = handleCall((CallExpression)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
+				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
 				break;
@@ -173,6 +178,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// nodes with an arbitrary number of children
 			case PHPCSVNodeTypes.TYPE_ARG_LIST:
 				errno = handleArgumentList((ArgumentList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ARRAY:
+				errno = handleArray((PHPArrayExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
 				errno = handleExpressionList((ExpressionList)startNode, endNode, childnum);
@@ -519,6 +527,31 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleArrayElement( PHPArrayElement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // value child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PHPArrayElement.value to be an Expression instead
+				// of a generic ASTNode, and getValue() and setValue() accordingly
+				startNode.setValue(endNode);
+				break;
+			case 1: // key child: Expression or NULL node
+				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
+				// unless it is a NULL node: test that!
+				startNode.setKey(endNode);
 				break;
 
 			default:
@@ -912,6 +945,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleArgumentList( ArgumentList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addArgument(endNode); // TODO cast to Expression
+
+		return 0;
+	}
+	
+	private int handleArray( PHPArrayExpression startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addArrayElement((PHPArrayElement)endNode);
 
 		return 0;
 	}

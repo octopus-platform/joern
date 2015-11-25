@@ -19,6 +19,7 @@ import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.PHPArrayExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
@@ -701,6 +702,26 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(ArgumentList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((ArgumentList)node).size());
+	}
+	
+	/**
+	 * array();
+	 */
+	@Test
+	public void testMinimalArrayCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ARRAY,,3,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPArrayExpression.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( 0, ((PHPArrayExpression)node).size());
 	}
 	
 	/**

@@ -56,6 +56,7 @@ public class PHPCSVNodeTypes
 
 	// nodes with exactly 2 children
 	public static final String TYPE_CALL = "AST_CALL";
+	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";
 	
 	public static final String TYPE_WHILE = "AST_WHILE";
@@ -79,6 +80,7 @@ public class PHPCSVNodeTypes
 
 	// nodes with an arbitrary number of children
 	public static final String TYPE_ARG_LIST = "AST_ARG_LIST";
+	public static final String TYPE_ARRAY = "AST_ARRAY";
 	public static final String TYPE_EXPR_LIST = "AST_EXPR_LIST";
 	public static final String TYPE_STMT_LIST = "AST_STMT_LIST";
 	public static final String TYPE_IF = "AST_IF";
