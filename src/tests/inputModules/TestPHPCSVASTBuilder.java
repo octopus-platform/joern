@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
+import ast.expressions.CallExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
@@ -25,7 +26,12 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.MethodCallExpression;
+import ast.php.expressions.PHPArrayElement;
+import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
@@ -769,6 +775,162 @@ public class TestPHPCSVASTBuilder
 	/* nodes with exactly 2 children */
 	
 	/**
+	 * AST_CALL nodes are used to denote call expressions.
+	 * 
+	 * Any AST_CALL node has exactly 2 children:
+	 * 1) an expression, representing the target
+	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, ...)
+	 * 2) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a few call expressions' children in the following PHP code:
+	 * 
+	 * foo($bar, "yabadabadoo");
+	 * $buz(1);
+	 */
+	@Test
+	public void testCallCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "9,string,,3,\"yabadabadoo\",1,1,,,\n";
+		nodeStr += "10,AST_CALL,,4,,1,1,,,\n";
+		nodeStr += "11,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "12,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "13,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "14,integer,,4,1,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,9,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)10);
+		
+		assertThat( node, instanceOf(CallExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((CallExpression)node).getTargetFunc());
+		assertEquals( "foo", ((Identifier)((CallExpression)node).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((CallExpression)node).getArgumentList());
+		assertEquals( 2, ((CallExpression)node).getArgumentList().size());
+		
+		assertThat( node2, instanceOf(CallExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((CallExpression)node2).getTargetFunc());
+		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
+		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
+	}
+	
+	/**
+	 * AST_ARRAY_ELEM nodes are used to denote the individual elements of an array expression.
+	 * They are the children of an AST_ARRAY node; see description of AST_ARRAY.
+	 * 
+	 * Any AST_ARRAY_ELEM node has exactly two children:
+	 * 1) an expression, representing the array element's value
+	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 2) an expression or NULL, representing the array element's key
+	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 
+	 * This test checks a few array elements' children in the following PHP code:
+	 * 
+	 * array("key1" => 42,
+	 *       2 => "foo",
+	 *       aconst => $bar,
+	 *       buz());
+	 */
+	@Test
+	public void testArrayElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ARRAY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_ARRAY_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,integer,,3,42,0,1,,,\n";
+		nodeStr += "6,string,,3,\"key1\",1,1,,,\n";
+		nodeStr += "7,AST_ARRAY_ELEM,,4,,1,1,,,\n";
+		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "9,integer,,4,2,1,1,,,\n";
+		nodeStr += "10,AST_ARRAY_ELEM,,5,,2,1,,,\n";
+		nodeStr += "11,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "12,string,,5,\"bar\",0,1,,,\n";
+		nodeStr += "13,AST_CONST,,5,,1,1,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "15,string,,5,\"aconst\",0,1,,,\n";
+		nodeStr += "16,AST_ARRAY_ELEM,,6,,3,1,,,\n";
+		nodeStr += "17,AST_CALL,,6,,0,1,,,\n";
+		nodeStr += "18,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "19,string,,6,\"buz\",0,1,,,\n";
+		nodeStr += "20,AST_ARG_LIST,,6,,1,1,,,\n";
+		nodeStr += "21,NULL,,6,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "3,10,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,20,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,21,PARENT_OF\n";
+		edgeStr += "3,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)10);
+		ASTNode node4 = ast.getNodeById((long)16);
+		
+		assertThat( node, instanceOf(PHPArrayElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((PHPArrayElement)node).getValue());
+		assertEquals( ast.getNodeById((long)6), ((PHPArrayElement)node).getKey());
+
+		assertThat( node2, instanceOf(PHPArrayElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPArrayElement)node2).getValue());
+		assertEquals( ast.getNodeById((long)9), ((PHPArrayElement)node2).getKey());
+		
+		assertThat( node3, instanceOf(PHPArrayElement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((PHPArrayElement)node3).getValue());
+		assertEquals( ast.getNodeById((long)13), ((PHPArrayElement)node3).getKey());
+		
+		assertThat( node4, instanceOf(PHPArrayElement.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)17), ((PHPArrayElement)node4).getValue());
+		// TODO ((PHPArrayElement)node4).getKey() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPArrayElement accepts arbitrary ASTNode's for keys,
+		// when we actually only want to accept Expression's. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPArrayElement)node4).getKey().getProperty("type"));
+	}
+	
+	/**
 	 * AST_COALESCE nodes are used to represent coalesce expressions, i.e., expressions
 	 * using the ?? operator.
 	 * 
@@ -1283,6 +1445,138 @@ public class TestPHPCSVASTBuilder
 	/* nodes with exactly 3 children */
 	
 	/**
+	 * AST_METHOD_CALL nodes are used to denote method call expressions.
+	 * 
+	 * Any AST_METHOD_CALL node has exactly 3 children:
+	 * 1) an expression node, representing the expression whose evaluation yields the
+	 *    object that the target method belongs to
+	 *    (e.g., could be AST_VAR, AST_CALL, AST_PROP, ...)
+	 * 2) an expression node, representing the expression whose evaluation yields the
+	 *    target method's name
+	 *    (e.g., could be AST_VAR, "string", AST_BINARY_OP, ...)
+	 * 3) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a few method call expressions' children in the following PHP code:
+	 * 
+	 * $buz->foo($bar, "yabadabadoo");
+	 * buz()->$foo($bar, "yabadabadoo");
+	 */
+	@Test
+	public void testMethodCallCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_METHOD_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",1,1,,,\n";
+		nodeStr += "7,AST_ARG_LIST,,3,,2,1,,,\n";
+		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "9,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,3,\"yabadabadoo\",1,1,,,\n";
+		nodeStr += "11,AST_METHOD_CALL,,4,,1,1,,,\n";
+		nodeStr += "12,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "14,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "16,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "17,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "18,AST_ARG_LIST,,4,,2,1,,,\n";
+		nodeStr += "19,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "20,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "21,string,,4,\"yabadabadoo\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "11,16,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,21,PARENT_OF\n";
+		edgeStr += "11,18,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(MethodCallExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((MethodCallExpression)node).getTargetObject());
+		assertEquals( "buz", ((Variable)((MethodCallExpression)node).getTargetObject()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((MethodCallExpression)node).getTargetFunc());
+		assertEquals( "foo", ((MethodCallExpression)node).getTargetFunc().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((MethodCallExpression)node).getArgumentList());
+		assertEquals( 2, ((MethodCallExpression)node).getArgumentList().size());
+		
+		assertThat( node2, instanceOf(MethodCallExpression.class));
+		assertEquals( 3, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((MethodCallExpression)node2).getTargetObject());
+		assertEquals( "buz", ((Identifier)((CallExpression)((MethodCallExpression)node2).getTargetObject()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((MethodCallExpression)node2).getTargetFunc());
+		assertEquals( "foo", ((Variable)((MethodCallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)18), ((MethodCallExpression)node2).getArgumentList());
+		assertEquals( 2, ((MethodCallExpression)node2).getArgumentList().size());
+	}
+	
+	/**
+	 * AST_STATIC_CALL nodes are used to denote static call expressions.
+	 * 
+	 * Any AST_STATIC_CALL node has exactly 3 children:
+	 * 1) AST_NAME, representing the class name that the static target method belongs to
+	 * 2) a "string" node, representing the static method's name within the class
+	 * 3) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a static call expression's children in the following PHP code:
+	 * 
+	 * Buz::foo($bar, "yabadabadoo");
+	 */
+	@Test
+	public void testStaticCallCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_STATIC_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Buz\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",1,1,,,\n";
+		nodeStr += "7,AST_ARG_LIST,,3,,2,1,,,\n";
+		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "9,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,3,\"yabadabadoo\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(StaticCallExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((StaticCallExpression)node).getTargetClass());
+		assertEquals( "Buz", ((StaticCallExpression)node).getTargetClass().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTargetFunc());
+		assertEquals( "foo", ((StaticCallExpression)node).getTargetFunc().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getArgumentList());
+		assertEquals( 2, ((StaticCallExpression)node).getArgumentList().size());
+	}
+	
+	/**
 	 * AST_CONDITIONAL nodes are used to represent conditional expressions using the ?: operator,
 	 * also known as the ternary conditional operator.
 	 * 
@@ -1693,9 +1987,10 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_ARG_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one argument in the list.
 	 * 
-	 * This test checks an argument list's children in the following PHP code:
+	 * This test checks a few argument lists' children in the following PHP code:
 	 * 
 	 * foo($bar, "yabadabadoo");
+	 * $buz(1);
 	 */
 	@Test
 	public void testArgumentListCreation() throws IOException, InvalidCSVFile
@@ -1708,6 +2003,11 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
 		nodeStr += "8,string,,3,\"bar\",0,1,,,\n";
 		nodeStr += "9,string,,3,\"yabadabadoo\",1,1,,,\n";
+		nodeStr += "10,AST_CALL,,4,,1,1,,,\n";
+		nodeStr += "11,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "12,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "13,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "14,integer,,4,1,0,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
@@ -1716,10 +2016,15 @@ public class TestPHPCSVASTBuilder
 		edgeStr += "6,7,PARENT_OF\n";
 		edgeStr += "6,9,PARENT_OF\n";
 		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)13);
 		
 		assertThat( node, instanceOf(ArgumentList.class));
 		assertEquals( 2, node.getChildCount());
@@ -1728,8 +2033,180 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((ArgumentList)node).getArgument(1));
 		for( ASTNode argument : (ArgumentList)node)
 			assertTrue( ast.containsValue(argument));
+		
+		assertThat( node2, instanceOf(ArgumentList.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( 1, ((ArgumentList)node2).size());
+		assertEquals( ast.getNodeById((long)14), ((ArgumentList)node2).getArgument(0));
+		for( ASTNode argument : (ArgumentList)node)
+			assertTrue( ast.containsValue(argument));
 	}
 	
+	/**
+	 * AST_LIST nodes are used to denote PHP list expressions.
+	 * 
+	 * Any AST_LIST node has between 1 and an arbitrarily large number of children.
+	 * (Note: an empty list will generate an implicit NULL node child,
+	 * see TestPHPCSVASTBuilderMinimal.testMinimalListCreation()).
+	 * Each child corresponds to one element in the list.
+	 * 
+	 * This test checks a few PHP list expressions' children in the following PHP code:
+	 * 
+	 * list($a, , list($c, $d)) = array("foo", "bar", array("buz", "qux"));
+	 */
+	@Test
+	public void testListCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_LIST,,3,,0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "7,NULL,,3,,1,1,,,\n";
+		nodeStr += "8,AST_LIST,,3,,2,1,,,\n";
+		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "10,string,,3,\"c\",0,1,,,\n";
+		nodeStr += "11,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "12,string,,3,\"d\",0,1,,,\n";
+		nodeStr += "13,AST_ARRAY,,3,,1,1,,,\n";
+		nodeStr += "14,AST_ARRAY_ELEM,,3,,0,1,,,\n";
+		nodeStr += "15,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "16,NULL,,3,,1,1,,,\n";
+		nodeStr += "17,AST_ARRAY_ELEM,,3,,1,1,,,\n";
+		nodeStr += "18,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "19,NULL,,3,,1,1,,,\n";
+		nodeStr += "20,AST_ARRAY_ELEM,,3,,2,1,,,\n";
+		nodeStr += "21,AST_ARRAY,,3,,0,1,,,\n";
+		nodeStr += "22,AST_ARRAY_ELEM,,3,,0,1,,,\n";
+		nodeStr += "23,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "24,NULL,,3,,1,1,,,\n";
+		nodeStr += "25,AST_ARRAY_ELEM,,3,,1,1,,,\n";
+		nodeStr += "26,string,,3,\"qux\",0,1,,,\n";
+		nodeStr += "27,NULL,,3,,1,1,,,\n";
+		nodeStr += "28,NULL,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "4,8,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,16,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,19,PARENT_OF\n";
+		edgeStr += "13,17,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,24,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "25,26,PARENT_OF\n";
+		edgeStr += "25,27,PARENT_OF\n";
+		edgeStr += "21,25,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "20,28,PARENT_OF\n";
+		edgeStr += "13,20,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)8);
+
+		assertThat( node, instanceOf(PHPListExpression.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( 3, ((PHPListExpression)node).size());
+		assertEquals( ast.getNodeById((long)5), ((PHPListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)7), ((PHPListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(2));
+		for( ASTNode element : (PHPListExpression)node) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(element));
+		
+		assertThat( node2, instanceOf(PHPListExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( 2, ((PHPListExpression)node2).size());
+		assertEquals( ast.getNodeById((long)9), ((PHPListExpression)node2).getElement(0));
+		assertEquals( ast.getNodeById((long)11), ((PHPListExpression)node2).getElement(1));
+		for( ASTNode element : (PHPListExpression)node2) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(element));
+	}
+	
+	/**
+	 * AST_ARRAY nodes are used to denote array declaration expressions.
+	 * 
+	 * Any AST_ARRAY node has between 0 and an arbitrarily large number of children.
+	 * Each child corresponds to one element in the array.
+	 * 
+	 * This test checks an array expression's children in the following PHP code:
+	 * 
+	 * array("key1" => 42,
+	 *       2 => "foo",
+	 *       aconst => $bar,
+	 *       buz());
+	 */
+	@Test
+	public void testArrayCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ARRAY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_ARRAY_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,integer,,3,42,0,1,,,\n";
+		nodeStr += "6,string,,3,\"key1\",1,1,,,\n";
+		nodeStr += "7,AST_ARRAY_ELEM,,4,,1,1,,,\n";
+		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "9,integer,,4,2,1,1,,,\n";
+		nodeStr += "10,AST_ARRAY_ELEM,,5,,2,1,,,\n";
+		nodeStr += "11,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "12,string,,5,\"bar\",0,1,,,\n";
+		nodeStr += "13,AST_CONST,,5,,1,1,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "15,string,,5,\"aconst\",0,1,,,\n";
+		nodeStr += "16,AST_ARRAY_ELEM,,6,,3,1,,,\n";
+		nodeStr += "17,AST_CALL,,6,,0,1,,,\n";
+		nodeStr += "18,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "19,string,,6,\"buz\",0,1,,,\n";
+		nodeStr += "20,AST_ARG_LIST,,6,,1,1,,,\n";
+		nodeStr += "21,NULL,,6,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "3,10,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,20,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,21,PARENT_OF\n";
+		edgeStr += "3,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPArrayExpression.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( 4, ((PHPArrayExpression)node).size());
+		assertEquals( ast.getNodeById((long)4), ((PHPArrayExpression)node).getArrayElement(0));
+		assertEquals( ast.getNodeById((long)7), ((PHPArrayExpression)node).getArrayElement(1));
+		assertEquals( ast.getNodeById((long)10), ((PHPArrayExpression)node).getArrayElement(2));
+		assertEquals( ast.getNodeById((long)16), ((PHPArrayExpression)node).getArrayElement(3));
+		for( PHPArrayElement element : (PHPArrayExpression)node)
+			assertTrue( ast.containsValue(element));
+	}
+
 	/**
 	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
 	 * a list of initializations in a for-loop.
