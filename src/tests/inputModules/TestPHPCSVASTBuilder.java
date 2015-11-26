@@ -39,6 +39,8 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.php.statements.PropertyDeclaration;
+import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
@@ -1441,6 +1443,109 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "NULL", ((PHPSwitchCase)node4).getValue().getProperty("type"));
 		assertEquals( ast.getNodeById((long)22), ((PHPSwitchCase)node4).getStatement());
 	}
+	
+	/**
+	 * AST_PROP_ELEM nodes are used to denote the individual elements of a property declaration
+	 * statement in the top-level scope of a class.
+	 * They are the children of an AST_PROP_DECL node; see description of AST_PROP_DECL.
+	 * 
+	 * Any AST_PROP_ELEM node has exactly two children:
+	 * 1) string, indicating the parameter's name
+	 * 2) various possible child types, representing the default value
+	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
+	 *    
+	 * This test checks a few property elements' children in the following PHP code:
+	 * 
+	 * class Foo {
+	 *   public $foo, $bar = 3, $buz = "bonjour", $qux = SOMECONSTANT;
+	 * }
+	 */
+	@Test
+	public void testPropertyElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,2,,0,1,4,Foo,\n";
+		nodeStr += "4,NULL,,2,,0,1,,,\n";
+		nodeStr += "5,NULL,,2,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,1,4,\"Foo\",\n";
+		nodeStr += "7,AST_STMT_LIST,,2,,0,6,,,\n";
+		nodeStr += "8,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,6,,,\n";
+		nodeStr += "9,AST_PROP_ELEM,,3,,0,6,,,\n";
+		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
+		nodeStr += "11,NULL,,3,,1,6,,,\n";
+		nodeStr += "12,AST_PROP_ELEM,,3,,1,6,,,\n";
+		nodeStr += "13,string,,3,\"bar\",0,6,,,\n";
+		nodeStr += "14,integer,,3,3,1,6,,,\n";
+		nodeStr += "15,AST_PROP_ELEM,,3,,2,6,,,\n";
+		nodeStr += "16,string,,3,\"buz\",0,6,,,\n";
+		nodeStr += "17,string,,3,\"bonjour\",1,6,,,\n";
+		nodeStr += "18,AST_PROP_ELEM,,3,,3,6,,,\n";
+		nodeStr += "19,string,,3,\"qux\",0,6,,,\n";
+		nodeStr += "20,AST_CONST,,3,,1,6,,,\n";
+		nodeStr += "21,AST_NAME,NAME_NOT_FQ,3,,0,6,,,\n";
+		nodeStr += "22,string,,3,\"SOMECONSTANT\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "8,15,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "8,18,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)12);
+		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)18);
+		
+		assertThat( node, instanceOf(PropertyElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((PropertyElement)node).getNameChild());
+		assertEquals( "foo", ((PropertyElement)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)11), ((PropertyElement)node).getDefault());
+		// TODO ((PropertyElement)node).getDefault() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PropertyElement accepts arbitrary ASTNode's for keys,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PropertyElement)node).getDefault().getProperty("type"));
+
+		assertThat( node2, instanceOf(PropertyElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((PropertyElement)node2).getNameChild());
+		assertEquals( "bar", ((PropertyElement)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((PropertyElement)node2).getDefault());
+		assertEquals( "3", ((PropertyElement)node2).getDefault().getEscapedCodeStr());
+		
+		assertThat( node3, instanceOf(PropertyElement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PropertyElement)node3).getNameChild());
+		assertEquals( "buz", ((PropertyElement)node3).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)17), ((PropertyElement)node3).getDefault());
+		assertEquals( "bonjour", ((PropertyElement)node3).getDefault().getEscapedCodeStr());
+		
+		assertThat( node4, instanceOf(PropertyElement.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)19), ((PropertyElement)node4).getNameChild());
+		assertEquals( "qux", ((PropertyElement)node4).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)20), ((PropertyElement)node4).getDefault());
+		// TODO once we added support for constants, check value here
+	}
 
 	
 	/* nodes with exactly 3 children */
@@ -2752,6 +2857,80 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)8), ((ClosureUses)node).getClosureVar(1));
 		for( ClosureVar closurevar : (ClosureUses)node)
 			assertTrue( ast.containsValue(closurevar));
+	}
+	
+	/**
+	 * AST_PROP_DECL nodes are used to denote property declaration statements
+	 * in the top-level scope of a class.
+	 * 
+	 * Any AST_PROP_DECL node has between 1 and an arbitrarily large number of children.
+	 * Each child corresponds to one element in the property declaration expression.
+	 * 
+	 * This test checks a property declaration expression's children in the following PHP code:
+	 * 
+	 * class Foo {
+	 *   public $foo, $bar = 3, $buz = "bonjour", $qux = SOMECONSTANT;
+	 * }
+	 */
+	@Test
+	public void testPropertyDeclarationCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,2,,0,1,4,Foo,\n";
+		nodeStr += "4,NULL,,2,,0,1,,,\n";
+		nodeStr += "5,NULL,,2,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,1,4,\"Foo\",\n";
+		nodeStr += "7,AST_STMT_LIST,,2,,0,6,,,\n";
+		nodeStr += "8,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,6,,,\n";
+		nodeStr += "9,AST_PROP_ELEM,,3,,0,6,,,\n";
+		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
+		nodeStr += "11,NULL,,3,,1,6,,,\n";
+		nodeStr += "12,AST_PROP_ELEM,,3,,1,6,,,\n";
+		nodeStr += "13,string,,3,\"bar\",0,6,,,\n";
+		nodeStr += "14,integer,,3,3,1,6,,,\n";
+		nodeStr += "15,AST_PROP_ELEM,,3,,2,6,,,\n";
+		nodeStr += "16,string,,3,\"buz\",0,6,,,\n";
+		nodeStr += "17,string,,3,\"bonjour\",1,6,,,\n";
+		nodeStr += "18,AST_PROP_ELEM,,3,,3,6,,,\n";
+		nodeStr += "19,string,,3,\"qux\",0,6,,,\n";
+		nodeStr += "20,AST_CONST,,3,,1,6,,,\n";
+		nodeStr += "21,AST_NAME,NAME_NOT_FQ,3,,0,6,,,\n";
+		nodeStr += "22,string,,3,\"SOMECONSTANT\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "8,15,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "8,18,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+
+		assertThat( node, instanceOf(PropertyDeclaration.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( 4, ((PropertyDeclaration)node).size());
+		assertEquals( ast.getNodeById((long)9), ((PropertyDeclaration)node).getPropertyElement(0));
+		assertEquals( ast.getNodeById((long)12), ((PropertyDeclaration)node).getPropertyElement(1));
+		assertEquals( ast.getNodeById((long)15), ((PropertyDeclaration)node).getPropertyElement(2));
+		assertEquals( ast.getNodeById((long)18), ((PropertyDeclaration)node).getPropertyElement(3));
+		for( PropertyElement element : (PropertyDeclaration)node)
+			assertTrue( ast.containsValue(element));
 	}
 	
 	/**

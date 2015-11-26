@@ -27,6 +27,8 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.php.statements.PropertyDeclaration;
+import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
@@ -147,6 +149,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_SWITCH_CASE:
 				errno = handleSwitchCase((PHPSwitchCase)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_PROP_ELEM:
+				errno = handlePropertyElement((PropertyElement)startNode, endNode, childnum);
+				break;
 
 			// nodes with exactly 3 children
 			case PHPCSVNodeTypes.TYPE_METHOD_CALL:
@@ -210,6 +215,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE_USES:
 				errno = handleClosureUses((ClosureUses)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_PROP_DECL:
+				errno = handlePropertyDeclaration((PropertyDeclaration)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_NAME_LIST:
 				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
@@ -715,6 +723,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		return errno;
 	}
+	
+	private int handlePropertyElement( PropertyElement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: plain node
+				startNode.setNameChild(endNode);
+				break;
+			case 1: // default child: either plain or NULL node
+				startNode.setDefault(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -1023,6 +1051,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleClosureUses( ClosureUses startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addClosureVar((ClosureVar)endNode);
+
+		return 0;
+	}
+	
+	private int handlePropertyDeclaration( PropertyDeclaration startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addPropertyElement((PropertyElement)endNode);
 
 		return 0;
 	}
