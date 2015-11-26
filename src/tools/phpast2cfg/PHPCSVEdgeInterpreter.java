@@ -18,6 +18,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -185,6 +186,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY:
 				errno = handleArray((PHPArrayExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ENCAPS_LIST:
+				errno = handleEncapsList((PHPEncapsListExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
 				errno = handleExpressionList((ExpressionList)startNode, endNode, childnum);
@@ -963,6 +967,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleArray( PHPArrayExpression startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addArrayElement((PHPArrayElement)endNode);
+
+		return 0;
+	}
+	
+	private int handleEncapsList( PHPEncapsListExpression startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addElement(endNode); // TODO cast to Expression
 
 		return 0;
 	}

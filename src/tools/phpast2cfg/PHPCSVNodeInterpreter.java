@@ -22,6 +22,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -173,6 +174,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY:
 				retval = handleArray(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_ENCAPS_LIST:
+				retval = handleEncapsList(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
 				retval = handleExpressionList(row, ast);
@@ -994,6 +998,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleArray(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPArrayExpression newNode = new PHPArrayExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleEncapsList(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPEncapsListExpression newNode = new PHPEncapsListExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

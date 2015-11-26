@@ -82,6 +82,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_ARG_LIST = "AST_ARG_LIST";
 	public static final String TYPE_LIST = "AST_LIST";
 	public static final String TYPE_ARRAY = "AST_ARRAY";
+	public static final String TYPE_ENCAPS_LIST = "AST_ENCAPS_LIST";
 	public static final String TYPE_EXPR_LIST = "AST_EXPR_LIST";
 	public static final String TYPE_STMT_LIST = "AST_STMT_LIST";
 	public static final String TYPE_IF = "AST_IF";

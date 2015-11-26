@@ -30,6 +30,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -2207,6 +2208,73 @@ public class TestPHPCSVASTBuilder
 			assertTrue( ast.containsValue(element));
 	}
 
+	/**
+	 * AST_ENCAPS_LIST nodes are used for holding strings with variables,
+	 * i.e., non-constant strings wherein variable expansion occurs.
+	 * See http://php.net/manual/en/language.types.string.php#language.types.string.parsing
+	 * 
+	 * Any AST_ENCAPS_LIST node has between 1 and an arbitrarily large number
+	 * of children. Each child is either (a) a "string" node; or (b) an AST_VAR node;
+	 * or (c) an AST_DIM node; or (d) an AST_PROP node.
+	 * 
+	 * This test checks an encapsulated list's children in the following PHP code:
+	 * 
+	 * "Hello {$foo}, {$bar['somekey']} and {$buz->qux}!";
+	 */
+	@Test
+	public void testEncapsulatedList() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ENCAPS_LIST,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"Hello \",0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "7,string,,3,\", \",2,1,,,\n";
+		nodeStr += "8,AST_DIM,,3,,3,1,,,\n";
+		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "10,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "11,string,,3,\"somekey\",1,1,,,\n";
+		nodeStr += "12,string,,3,\" and \",4,1,,,\n";
+		nodeStr += "13,AST_PROP,,3,,5,1,,,\n";
+		nodeStr += "14,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "15,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "16,string,,3,\"qux\",1,1,,,\n";
+		nodeStr += "17,string,,3,\"!\",6,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "3,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+		edgeStr += "3,17,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPEncapsListExpression.class));
+		assertEquals( 7, node.getChildCount());
+		assertEquals( 7, ((PHPEncapsListExpression)node).size());
+		assertEquals( ast.getNodeById((long)4), ((PHPEncapsListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)5), ((PHPEncapsListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)7), ((PHPEncapsListExpression)node).getElement(2));
+		assertEquals( ast.getNodeById((long)8), ((PHPEncapsListExpression)node).getElement(3));
+		assertEquals( ast.getNodeById((long)12), ((PHPEncapsListExpression)node).getElement(4));
+		assertEquals( ast.getNodeById((long)13), ((PHPEncapsListExpression)node).getElement(5));
+		assertEquals( ast.getNodeById((long)17), ((PHPEncapsListExpression)node).getElement(6));
+		for( ASTNode element : (PHPEncapsListExpression)node) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(element));
+	}
+	
 	/**
 	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
 	 * a list of initializations in a for-loop.
