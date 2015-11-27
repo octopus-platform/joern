@@ -27,6 +27,9 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.php.statements.ClassConstantDeclaration;
+import ast.php.statements.ConstantDeclaration;
+import ast.php.statements.ConstantElement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
@@ -152,6 +155,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_PROP_ELEM:
 				errno = handlePropertyElement((PropertyElement)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_CONST_ELEM:
+				errno = handleConstantElement((ConstantElement)startNode, endNode, childnum);
+				break;
 
 			// nodes with exactly 3 children
 			case PHPCSVNodeTypes.TYPE_METHOD_CALL:
@@ -218,6 +224,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_PROP_DECL:
 				errno = handlePropertyDeclaration((PropertyDeclaration)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CONST_DECL:
+				errno = handleConstantDeclaration((ConstantDeclaration)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CLASS_CONST_DECL:
+				errno = handleClassConstantDeclaration((ClassConstantDeclaration)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_NAME_LIST:
 				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
@@ -733,7 +745,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // name child: plain node
 				startNode.setNameChild(endNode);
 				break;
-			case 1: // default child: either plain or NULL node
+			case 1: // default child: either Expression or NULL node
 				startNode.setDefault(endNode);
 				break;
 				
@@ -742,6 +754,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		}
 		
 		return errno;		
+	}
+	
+	private int handleConstantElement( ConstantElement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: plain node
+				startNode.setNameChild(endNode);
+				break;
+			case 1: // default child: Expression node
+				startNode.setValue(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
 	}
 
 
@@ -1058,6 +1090,20 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handlePropertyDeclaration( PropertyDeclaration startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addPropertyElement((PropertyElement)endNode);
+
+		return 0;
+	}
+	
+	private int handleConstantDeclaration( ConstantDeclaration startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addConstantElement((ConstantElement)endNode);
+
+		return 0;
+	}
+	
+	private int handleClassConstantDeclaration( ClassConstantDeclaration startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addConstantElement((ConstantElement)endNode);
 
 		return 0;
 	}

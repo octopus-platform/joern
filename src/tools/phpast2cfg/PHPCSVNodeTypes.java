@@ -65,6 +65,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_SWITCH = "AST_SWITCH";
 	public static final String TYPE_SWITCH_CASE = "AST_SWITCH_CASE";
 	public static final String TYPE_PROP_ELEM = "AST_PROP_ELEM";
+	public static final String TYPE_CONST_ELEM = "AST_CONST_ELEM";
 
 	// nodes with exactly 3 children
 	public static final String TYPE_METHOD_CALL = "AST_METHOD_CALL";
@@ -92,6 +93,8 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_PARAM_LIST = "AST_PARAM_LIST";
 	public static final String TYPE_CLOSURE_USES = "AST_CLOSURE_USES";
 	public static final String TYPE_PROP_DECL = "AST_PROP_DECL";
+	public static final String TYPE_CONST_DECL = "AST_CONST_DECL";
+	public static final String TYPE_CLASS_CONST_DECL = "AST_CLASS_CONST_DECL";
 	public static final String TYPE_NAME_LIST = "AST_NAME_LIST";
 
 	/* node flags */
