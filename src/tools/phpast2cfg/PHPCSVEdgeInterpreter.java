@@ -33,11 +33,17 @@ import ast.php.statements.ConstantElement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.MethodReference;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
+import ast.php.statements.blockstarters.PHPTraitAdaptationElement;
+import ast.php.statements.blockstarters.PHPTraitAdaptations;
+import ast.php.statements.blockstarters.PHPTraitAlias;
+import ast.php.statements.blockstarters.PHPTraitPrecedence;
+import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.blockstarters.CatchList;
@@ -158,6 +164,18 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CONST_ELEM:
 				errno = handleConstantElement((ConstantElement)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_USE_TRAIT:
+				errno = handleUseTrait((PHPUseTrait)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_TRAIT_PRECEDENCE:
+				errno = handleTraitPrecedence((PHPTraitPrecedence)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
+				errno = handleMethodReference((MethodReference)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
+				errno = handleTraitAlias((PHPTraitAlias)startNode, endNode, childnum);
+				break;
 
 			// nodes with exactly 3 children
 			case PHPCSVNodeTypes.TYPE_METHOD_CALL:
@@ -233,6 +251,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_NAME_LIST:
 				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_TRAIT_ADAPTATIONS:
+				errno = handleTraitAdaptations((PHPTraitAdaptations)startNode, endNode, childnum);
 				break;
 				
 			default:
@@ -775,6 +796,96 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		
 		return errno;
 	}
+	
+	private int handleUseTrait( PHPUseTrait startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // traits child: IdentifierList node
+				startNode.setTraits((IdentifierList)endNode);
+				break;
+			case 1: // adaptations child: PHPTraitAdaptations or NULL node
+				if( endNode instanceof PHPTraitAdaptations)
+					startNode.setTraitAdaptations((PHPTraitAdaptations)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+	
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleTraitPrecedence( PHPTraitPrecedence startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // method child: MethodReference node
+				startNode.setMethod((MethodReference)endNode);
+				break;
+			case 1: // insteadof child: IdentifierList node
+				startNode.setInsteadOf((IdentifierList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleMethodReference( MethodReference startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Identifier or NULL node
+				if( endNode instanceof Identifier)
+					startNode.setClassIdentifier((Identifier)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+			case 1: // method child: string node
+				startNode.setMethodName(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleTraitAlias( PHPTraitAlias startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // method child: MethodReference node
+				startNode.setMethod((MethodReference)endNode);
+				break;
+			case 1: // alias child: string or NULL node
+				// TODO in time, we should be able to cast endNode to a plain
+				// node type that extends Expression, unless endNode is a null
+				// node; then, adapt PHPTraitAlias to use a string node and
+				// make a case distinction here to use setAlias() or addChild()
+				startNode.setAlias(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
 
 
 	/* nodes with exactly 3 children */
@@ -1111,6 +1222,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleIdentifierList( IdentifierList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addIdentifier((Identifier)endNode);
+
+		return 0;
+	}
+	
+	private int handleTraitAdaptations( PHPTraitAdaptations startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addTraitAdaptationElement((PHPTraitAdaptationElement)endNode);
 
 		return 0;
 	}

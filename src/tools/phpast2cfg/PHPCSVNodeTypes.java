@@ -66,6 +66,10 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_SWITCH_CASE = "AST_SWITCH_CASE";
 	public static final String TYPE_PROP_ELEM = "AST_PROP_ELEM";
 	public static final String TYPE_CONST_ELEM = "AST_CONST_ELEM";
+	public static final String TYPE_USE_TRAIT = "AST_USE_TRAIT";
+	public static final String TYPE_TRAIT_PRECEDENCE = "AST_TRAIT_PRECEDENCE";
+	public static final String TYPE_METHOD_REFERENCE = "AST_METHOD_REFERENCE";
+	public static final String TYPE_TRAIT_ALIAS = "AST_TRAIT_ALIAS";
 
 	// nodes with exactly 3 children
 	public static final String TYPE_METHOD_CALL = "AST_METHOD_CALL";
@@ -96,6 +100,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_CONST_DECL = "AST_CONST_DECL";
 	public static final String TYPE_CLASS_CONST_DECL = "AST_CLASS_CONST_DECL";
 	public static final String TYPE_NAME_LIST = "AST_NAME_LIST";
+	public static final String TYPE_TRAIT_ADAPTATIONS = "AST_TRAIT_ADAPTATIONS";
 
 	/* node flags */
 	// flags for toplevel nodes
