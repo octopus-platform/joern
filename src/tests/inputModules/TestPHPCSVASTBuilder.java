@@ -30,6 +30,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -38,6 +39,11 @@ import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
+import ast.php.statements.ClassConstantDeclaration;
+import ast.php.statements.ConstantDeclaration;
+import ast.php.statements.ConstantElement;
+import ast.php.statements.PropertyDeclaration;
+import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
@@ -1440,6 +1446,164 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "NULL", ((PHPSwitchCase)node4).getValue().getProperty("type"));
 		assertEquals( ast.getNodeById((long)22), ((PHPSwitchCase)node4).getStatement());
 	}
+	
+	/**
+	 * AST_PROP_ELEM nodes are used to denote the individual elements of a property declaration
+	 * statement in the top-level scope of a class.
+	 * They are the children of an AST_PROP_DECL node; see description of AST_PROP_DECL.
+	 * 
+	 * Any AST_PROP_ELEM node has exactly two children:
+	 * 1) string, indicating the parameter's name
+	 * 2) various possible child types, representing the default value
+	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
+	 *    
+	 * This test checks a few property elements' children in the following PHP code:
+	 * 
+	 * class Foo {
+	 *   public $foo, $bar = 3, $buz = "bonjour", $qux = SOMECONSTANT;
+	 * }
+	 */
+	@Test
+	public void testPropertyElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,2,,0,1,4,Foo,\n";
+		nodeStr += "4,NULL,,2,,0,1,,,\n";
+		nodeStr += "5,NULL,,2,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,1,4,\"Foo\",\n";
+		nodeStr += "7,AST_STMT_LIST,,2,,0,6,,,\n";
+		nodeStr += "8,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,6,,,\n";
+		nodeStr += "9,AST_PROP_ELEM,,3,,0,6,,,\n";
+		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
+		nodeStr += "11,NULL,,3,,1,6,,,\n";
+		nodeStr += "12,AST_PROP_ELEM,,3,,1,6,,,\n";
+		nodeStr += "13,string,,3,\"bar\",0,6,,,\n";
+		nodeStr += "14,integer,,3,3,1,6,,,\n";
+		nodeStr += "15,AST_PROP_ELEM,,3,,2,6,,,\n";
+		nodeStr += "16,string,,3,\"buz\",0,6,,,\n";
+		nodeStr += "17,string,,3,\"bonjour\",1,6,,,\n";
+		nodeStr += "18,AST_PROP_ELEM,,3,,3,6,,,\n";
+		nodeStr += "19,string,,3,\"qux\",0,6,,,\n";
+		nodeStr += "20,AST_CONST,,3,,1,6,,,\n";
+		nodeStr += "21,AST_NAME,NAME_NOT_FQ,3,,0,6,,,\n";
+		nodeStr += "22,string,,3,\"SOMECONSTANT\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "8,15,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "8,18,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)12);
+		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)18);
+		
+		assertThat( node, instanceOf(PropertyElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((PropertyElement)node).getNameChild());
+		assertEquals( "foo", ((PropertyElement)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)11), ((PropertyElement)node).getDefault());
+		// TODO ((PropertyElement)node).getDefault() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PropertyElement accepts arbitrary ASTNode's for keys,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PropertyElement)node).getDefault().getProperty("type"));
+
+		assertThat( node2, instanceOf(PropertyElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((PropertyElement)node2).getNameChild());
+		assertEquals( "bar", ((PropertyElement)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((PropertyElement)node2).getDefault());
+		assertEquals( "3", ((PropertyElement)node2).getDefault().getEscapedCodeStr());
+		
+		assertThat( node3, instanceOf(PropertyElement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PropertyElement)node3).getNameChild());
+		assertEquals( "buz", ((PropertyElement)node3).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)17), ((PropertyElement)node3).getDefault());
+		assertEquals( "bonjour", ((PropertyElement)node3).getDefault().getEscapedCodeStr());
+		
+		assertThat( node4, instanceOf(PropertyElement.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)19), ((PropertyElement)node4).getNameChild());
+		assertEquals( "qux", ((PropertyElement)node4).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)20), ((PropertyElement)node4).getDefault());
+		// TODO once we added support for constants, check value here
+	}
+	
+	/**
+	 * AST_CONST_ELEM nodes are used to denote the individual elements of a constant declaration
+	 * statement, either on top level or within the scope of a class.
+	 * They are the children of AST_CONST_DECL and AST_CLASS_CONST_DECL nodes;
+	 * see descriptions of these.
+	 * 
+	 * Any AST_CONST_ELEM node has exactly two children:
+	 * 1) string, indicating the constant's name
+	 * 2) various possible child types, representing the value
+	 *    (e.g., node type could be "string", "integer", but also AST_CONST, etc.)
+	 *    
+	 * This test checks a few constant elements' children in the following PHP code:
+	 * 
+	 * const QUESTION = "any", ANSWER = 42;
+	 */
+	@Test
+	public void testConstantElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CONST_DECL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_CONST_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"QUESTION\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"any\",1,1,,,\n";
+		nodeStr += "7,AST_CONST_ELEM,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"ANSWER\",0,1,,,\n";
+		nodeStr += "9,integer,,3,42,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(ConstantElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((ConstantElement)node).getNameChild());
+		assertEquals( "QUESTION", ((ConstantElement)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((ConstantElement)node).getValue());
+		assertEquals( "any", ((ConstantElement)node).getValue().getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(ConstantElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ConstantElement)node2).getNameChild());
+		assertEquals( "ANSWER", ((ConstantElement)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((ConstantElement)node2).getValue());
+		assertEquals( "42", ((ConstantElement)node2).getValue().getEscapedCodeStr());
+	}
 
 	
 	/* nodes with exactly 3 children */
@@ -2208,6 +2372,73 @@ public class TestPHPCSVASTBuilder
 	}
 
 	/**
+	 * AST_ENCAPS_LIST nodes are used for holding strings with variables,
+	 * i.e., non-constant strings wherein variable expansion occurs.
+	 * See http://php.net/manual/en/language.types.string.php#language.types.string.parsing
+	 * 
+	 * Any AST_ENCAPS_LIST node has between 1 and an arbitrarily large number
+	 * of children. Each child is either (a) a "string" node; or (b) an AST_VAR node;
+	 * or (c) an AST_DIM node; or (d) an AST_PROP node.
+	 * 
+	 * This test checks an encapsulated list's children in the following PHP code:
+	 * 
+	 * "Hello {$foo}, {$bar['somekey']} and {$buz->qux}!";
+	 */
+	@Test
+	public void testEncapsulatedList() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ENCAPS_LIST,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"Hello \",0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "7,string,,3,\", \",2,1,,,\n";
+		nodeStr += "8,AST_DIM,,3,,3,1,,,\n";
+		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "10,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "11,string,,3,\"somekey\",1,1,,,\n";
+		nodeStr += "12,string,,3,\" and \",4,1,,,\n";
+		nodeStr += "13,AST_PROP,,3,,5,1,,,\n";
+		nodeStr += "14,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "15,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "16,string,,3,\"qux\",1,1,,,\n";
+		nodeStr += "17,string,,3,\"!\",6,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "3,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "3,13,PARENT_OF\n";
+		edgeStr += "3,17,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPEncapsListExpression.class));
+		assertEquals( 7, node.getChildCount());
+		assertEquals( 7, ((PHPEncapsListExpression)node).size());
+		assertEquals( ast.getNodeById((long)4), ((PHPEncapsListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)5), ((PHPEncapsListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)7), ((PHPEncapsListExpression)node).getElement(2));
+		assertEquals( ast.getNodeById((long)8), ((PHPEncapsListExpression)node).getElement(3));
+		assertEquals( ast.getNodeById((long)12), ((PHPEncapsListExpression)node).getElement(4));
+		assertEquals( ast.getNodeById((long)13), ((PHPEncapsListExpression)node).getElement(5));
+		assertEquals( ast.getNodeById((long)17), ((PHPEncapsListExpression)node).getElement(6));
+		for( ASTNode element : (PHPEncapsListExpression)node) // TODO iterate over Expression's
+			assertTrue( ast.containsValue(element));
+	}
+	
+	/**
 	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
 	 * a list of initializations in a for-loop.
 	 * 
@@ -2686,6 +2917,170 @@ public class TestPHPCSVASTBuilder
 			assertTrue( ast.containsValue(closurevar));
 	}
 	
+	/**
+	 * AST_PROP_DECL nodes are used to denote property declaration statements
+	 * in the top-level scope of a class.
+	 * 
+	 * Any AST_PROP_DECL node has between 1 and an arbitrarily large number of children.
+	 * Each child corresponds to one element in the property declaration statement.
+	 * 
+	 * This test checks a property declaration statement's children in the following PHP code:
+	 * 
+	 * class Foo {
+	 *   public $foo, $bar = 3, $buz = "bonjour", $qux = SOMECONSTANT;
+	 * }
+	 */
+	@Test
+	public void testPropertyDeclarationCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,2,,0,1,4,Foo,\n";
+		nodeStr += "4,NULL,,2,,0,1,,,\n";
+		nodeStr += "5,NULL,,2,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,1,4,\"Foo\",\n";
+		nodeStr += "7,AST_STMT_LIST,,2,,0,6,,,\n";
+		nodeStr += "8,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,6,,,\n";
+		nodeStr += "9,AST_PROP_ELEM,,3,,0,6,,,\n";
+		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
+		nodeStr += "11,NULL,,3,,1,6,,,\n";
+		nodeStr += "12,AST_PROP_ELEM,,3,,1,6,,,\n";
+		nodeStr += "13,string,,3,\"bar\",0,6,,,\n";
+		nodeStr += "14,integer,,3,3,1,6,,,\n";
+		nodeStr += "15,AST_PROP_ELEM,,3,,2,6,,,\n";
+		nodeStr += "16,string,,3,\"buz\",0,6,,,\n";
+		nodeStr += "17,string,,3,\"bonjour\",1,6,,,\n";
+		nodeStr += "18,AST_PROP_ELEM,,3,,3,6,,,\n";
+		nodeStr += "19,string,,3,\"qux\",0,6,,,\n";
+		nodeStr += "20,AST_CONST,,3,,1,6,,,\n";
+		nodeStr += "21,AST_NAME,NAME_NOT_FQ,3,,0,6,,,\n";
+		nodeStr += "22,string,,3,\"SOMECONSTANT\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "8,15,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "8,18,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+
+		assertThat( node, instanceOf(PropertyDeclaration.class));
+		assertEquals( 4, node.getChildCount());
+		assertEquals( 4, ((PropertyDeclaration)node).size());
+		assertEquals( ast.getNodeById((long)9), ((PropertyDeclaration)node).getPropertyElement(0));
+		assertEquals( ast.getNodeById((long)12), ((PropertyDeclaration)node).getPropertyElement(1));
+		assertEquals( ast.getNodeById((long)15), ((PropertyDeclaration)node).getPropertyElement(2));
+		assertEquals( ast.getNodeById((long)18), ((PropertyDeclaration)node).getPropertyElement(3));
+		for( PropertyElement element : (PropertyDeclaration)node)
+			assertTrue( ast.containsValue(element));
+	}
+	
+	/**
+	 * AST_CONST_DECL nodes are used to denote constant declaration statements
+	 * in top-level code.
+	 * 
+	 * Any AST_CONST_DECL node has between 1 and an arbitrarily large number of children.
+	 * Each child corresponds to one element in the constant declaration statement.
+	 * 
+	 * This test checks a constant declaration statement's children in the following PHP code:
+	 * 
+	 * const QUESTION = "any", ANSWER = 42;
+	 */
+	@Test
+	public void testConstantDeclarationCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CONST_DECL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_CONST_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"QUESTION\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"any\",1,1,,,\n";
+		nodeStr += "7,AST_CONST_ELEM,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"ANSWER\",0,1,,,\n";
+		nodeStr += "9,integer,,3,42,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(ConstantDeclaration.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ConstantDeclaration)node).size());
+		assertEquals( ast.getNodeById((long)4), ((ConstantDeclaration)node).getConstantElement(0));
+		assertEquals( ast.getNodeById((long)7), ((ConstantDeclaration)node).getConstantElement(1));
+		for( ConstantElement element : (ConstantDeclaration)node)
+			assertTrue( ast.containsValue(element));
+	}
+	
+	/**
+	 * AST_CLASS_CONST_DECL nodes are used to denote class constant declaration statements
+	 * in the top-level scope of a class.
+	 * 
+	 * Any AST_CLASS_CONST_DECL node has between 1 and an arbitrarily large number of children.
+	 * Each child corresponds to one element in the class constant declaration statement.
+	 * 
+	 * This test checks a class constant declaration statement's children in the following PHP code:
+	 * 
+	 * class Foo {
+	 *   const QUESTION = "any", ANSWER = 42;
+	 * }
+	 */
+	@Test
+	public void testClassConstantDeclarationCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "8,AST_CLASS_CONST_DECL,,4,,0,6,,,\n";
+		nodeStr += "9,AST_CONST_ELEM,,4,,0,6,,,\n";
+		nodeStr += "10,string,,4,\"QUESTION\",0,6,,,\n";
+		nodeStr += "11,string,,4,\"any\",1,6,,,\n";
+		nodeStr += "12,AST_CONST_ELEM,,4,,1,6,,,\n";
+		nodeStr += "13,string,,4,\"ANSWER\",0,6,,,\n";
+		nodeStr += "14,integer,,4,42,1,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+
+		assertThat( node, instanceOf(ClassConstantDeclaration.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((ClassConstantDeclaration)node).size());
+		assertEquals( ast.getNodeById((long)9), ((ClassConstantDeclaration)node).getConstantElement(0));
+		assertEquals( ast.getNodeById((long)12), ((ClassConstantDeclaration)node).getConstantElement(1));
+		for( ConstantElement element : (ClassConstantDeclaration)node)
+			assertTrue( ast.containsValue(element));
+	}
+
 	/**
 	 * AST_NAME_LIST nodes are used for holding a list of identifiers, e.g.,
 	 * a list of names referring to interfaces that a class extends.
