@@ -58,6 +58,8 @@ import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.UseElement;
+import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
@@ -1955,6 +1957,58 @@ public class TestPHPCSVASTBuilder
 	}
 
 	/**
+	 * AST_USE_ELEM nodes are used to denote individual use statement elements within a
+	 * use statement. They are the children of AST_USE nodes.
+	 * 
+	 * Any AST_USE_ELEM node has exactly two children:
+	 * 1) string, representing the imported namespace
+	 * 2) string or NULL, indicating the optional alias for the namespace
+	 *    
+	 * This test checks a few use statement elements' children in the following PHP code:
+	 * 
+	 * use Foo\Bar as Buz, Qux as Norf;
+	 */
+	@Test
+	public void testUseElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"Buz\",1,1,,,\n";
+		nodeStr += "7,AST_USE_ELEM,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"Qux\",0,1,,,\n";
+		nodeStr += "9,string,,3,\"Norf\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)7);
+
+		assertThat( node, instanceOf(UseElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((UseElement)node).getNamespace());
+		assertEquals( "Foo\\Bar", ((UseElement)node).getNamespace().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((UseElement)node).getAlias());
+		assertEquals( "Buz", ((UseElement)node).getAlias().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(UseElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((UseElement)node2).getNamespace());
+		assertEquals( "Qux", ((UseElement)node2).getNamespace().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((UseElement)node2).getAlias());
+		assertEquals( "Norf", ((UseElement)node2).getAlias().getEscapedCodeStr());
+	}
+	
+	/**
 	 * AST_TRAIT_ALIAS nodes are used to denote trait alias statements within a
 	 * trait use statement. Such statements are used to declare aliases for
 	 * trait methods, or to change the visibility of trait methods.
@@ -2072,6 +2126,7 @@ public class TestPHPCSVASTBuilder
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PHPTraitAlias)node2).getAlias().getProperty("type"));
 	}
+	
 
 	/* nodes with exactly 3 children */
 	
@@ -3707,5 +3762,48 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)28), ((PHPTraitAdaptations)node).getTraitAdaptationElement(2));
 		for( PHPTraitAdaptationElement traitAdaptation : (PHPTraitAdaptations)node)
 			assertTrue( ast.containsValue(traitAdaptation));
+	}
+	
+	/**
+	 * AST_USE nodes are used to denote use statements.
+	 * 
+	 * Any AST_USE node has between 1 and an arbitrarily large number
+	 * of use statement elements. Each child corresponds to one use element in the list.
+	 *    
+	 * This test checks a use statement's children in the following PHP code:
+	 * 
+	 * use Foo\Bar as Buz, Qux as Norf;
+	 */
+	@Test
+	public void testUseStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"Buz\",1,1,,,\n";
+		nodeStr += "7,AST_USE_ELEM,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"Qux\",0,1,,,\n";
+		nodeStr += "9,string,,3,\"Norf\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(UseStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((UseStatement)node).size());
+		assertEquals( ast.getNodeById((long)4), ((UseStatement)node).getUseElement(0));
+		assertEquals( ast.getNodeById((long)7), ((UseStatement)node).getUseElement(1));
+		for( UseElement useElement : (UseStatement)node)
+			assertTrue( ast.containsValue(useElement));
 	}
 }

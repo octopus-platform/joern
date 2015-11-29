@@ -46,6 +46,8 @@ import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.UseElement;
+import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
@@ -173,6 +175,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
 				errno = handleMethodReference((MethodReference)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_USE_ELEM:
+				errno = handleUseElement((UseElement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
 				errno = handleTraitAlias((PHPTraitAlias)startNode, endNode, childnum);
 				break;
@@ -254,6 +259,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ADAPTATIONS:
 				errno = handleTraitAdaptations((PHPTraitAdaptations)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_USE:
+				errno = handleUseStatement((UseStatement)startNode, endNode, childnum);
 				break;
 				
 			default:
@@ -863,6 +871,30 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 	
+	private int handleUseElement( UseElement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: string node
+				startNode.setNamespace(endNode);
+				break;
+			case 1: // alias child: string or NULL node
+				// TODO in time, we should be able to cast endNode to a plain
+				// node type that extends Expression, unless endNode is a null
+				// node; then, adapt UseElement to use a string node and
+				// make a case distinction here to use setAlias() or addChild()
+				startNode.setAlias(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
 	private int handleTraitAlias( PHPTraitAlias startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -1229,6 +1261,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleTraitAdaptations( PHPTraitAdaptations startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addTraitAdaptationElement((PHPTraitAdaptationElement)endNode);
+
+		return 0;
+	}
+	
+	private int handleUseStatement( UseStatement startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addUseElement((UseElement)endNode);
 
 		return 0;
 	}

@@ -49,6 +49,8 @@ import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.UseElement;
+import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
@@ -160,6 +162,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
 				retval = handleMethodReference(row, ast);
 				break;
+			case PHPCSVNodeTypes.TYPE_USE_ELEM:
+				retval = handleUseElement(row, ast);
+				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
 				retval = handleTraitAlias(row, ast);
 				break;
@@ -241,6 +246,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ADAPTATIONS:
 				retval = handleTraitAdaptations(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_USE:
+				retval = handleUseStatement(row, ast);
 				break;
 
 			default:
@@ -916,6 +924,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		return id;
 	}
 	
+	private long handleUseElement(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		UseElement newNode = new UseElement();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
 	private long handleTraitAlias(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTraitAlias newNode = new PHPTraitAlias();
@@ -1456,6 +1486,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleTraitAdaptations(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTraitAdaptations newNode = new PHPTraitAdaptations();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleUseStatement(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		UseStatement newNode = new UseStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

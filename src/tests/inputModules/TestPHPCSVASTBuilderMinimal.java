@@ -31,6 +31,7 @@ import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.UseElement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
@@ -533,6 +534,37 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(PHPUseTrait.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((PHPUseTrait)node).getTraitAdaptations());
+	}
+	
+	/**
+	 * use Foo\Bar;
+	 */
+	@Test
+	public void testUseElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
+		nodeStr += "6,NULL,,3,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+
+		assertThat( node, instanceOf(UseElement.class));
+		assertEquals( 2, node.getChildCount());
+		// TODO ((UseElement)node).getAlias() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because UseElement accepts arbitrary ASTNode's for aliases,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((UseElement)node).getAlias().getProperty("type"));
 	}
 
 
