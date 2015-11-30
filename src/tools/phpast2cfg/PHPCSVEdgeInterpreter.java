@@ -4,10 +4,13 @@ import ast.ASTNode;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.CallExpression;
+import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.PropertyExpression;
+import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -143,8 +146,17 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_DIM:
 				errno = handleArrayIndexing((ArrayIndexing)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_PROP:
+				errno = handleProperty((PropertyExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_STATIC_PROP:
+				errno = handleStaticProperty((StaticPropertyExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CALL:
 				errno = handleCall((CallExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CLASS_CONST:
+				errno = handleClassConstant((ClassConstantExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
@@ -617,6 +629,52 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 	
+	private int handleProperty( PropertyExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PropertyExpression.objectExpression to be an Expression instead
+				// of a generic ASTNode, and getObjectExpression() and setObjectExpression() accordingly
+				startNode.setObjectExpression(endNode);
+				break;
+			case 1: // prop child: string node
+				startNode.setPropertyName(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleStaticProperty( StaticPropertyExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change StaticPropertyExpression.classExpression to be an Expression instead
+				// of a generic ASTNode, and getClassExpression() and setClassExpression() accordingly
+				startNode.setClassExpression(endNode);
+				break;
+			case 1: // prop child: string node
+				startNode.setPropertyName(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handleCall( CallExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -631,6 +689,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleClassConstant( ClassConstantExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ClassConstantExpression.classExpression to be an Expression instead
+				// of a generic ASTNode, and getClassExpression() and setClassExpression() accordingly
+				startNode.setClassExpression(endNode);
+				break;
+			case 1: // const child: string node
+				startNode.setConstantName(endNode);
 				break;
 
 			default:

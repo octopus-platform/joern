@@ -16,10 +16,13 @@ import ast.ASTNode;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.CallExpression;
+import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.PropertyExpression;
+import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
@@ -890,6 +893,128 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	/**
+	 * AST_PROP nodes are used to denote property access expressions.
+	 * 
+	 * Any AST_PROP node has exactly two children:
+	 * 1) an expression, whose evaluation returns the object to be accessed
+	 *    (e.g., could be AST_VAR, AST_CALL, etc...)
+	 * 2) a string, representing the property name
+	 * 
+	 * This test checks a few property access expressions' children in the following PHP code:
+	 * 
+	 * $foo->bar;
+	 * buz()->qux;
+	 */
+	@Test
+	public void testPropertyCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PROP,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
+		nodeStr += "7,AST_PROP,,4,,1,1,,,\n";
+		nodeStr += "8,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,string,,4,\"qux\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,12,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(PropertyExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PropertyExpression)node).getObjectExpression());
+		assertEquals( ast.getNodeById((long)6), ((PropertyExpression)node).getPropertyName());
+
+		assertThat( node2, instanceOf(PropertyExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PropertyExpression)node2).getObjectExpression());
+		assertEquals( ast.getNodeById((long)12), ((PropertyExpression)node2).getPropertyName());
+	}
+	
+	/**
+	 * AST_STATIC_PROP nodes are used to denote static property access expressions.
+	 * 
+	 * Any AST_STATIC_PROP node has exactly two children:
+	 * 1) an expression, whose evaluation returns the class to be accessed
+	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
+	 * 2) a string, representing the property name
+	 * 
+	 * This test checks a few static property access expressions' children in the following PHP code:
+	 * 
+	 * Foo::$bar;
+	 * $foo::$bar;
+	 * buz()::$qux;
+	 */
+	@Test
+	public void testStaticPropertyCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_STATIC_PROP,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
+		nodeStr += "7,AST_STATIC_PROP,,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",1,1,,,\n";
+		nodeStr += "11,AST_STATIC_PROP,,5,,2,1,,,\n";
+		nodeStr += "12,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "16,string,,5,\"qux\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(StaticPropertyExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((StaticPropertyExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)6), ((StaticPropertyExpression)node).getPropertyName());
+
+		assertThat( node2, instanceOf(StaticPropertyExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((StaticPropertyExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyName());
+		
+		assertThat( node3, instanceOf(StaticPropertyExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
+		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyName());
+	}
+	
+	/**
 	 * AST_CALL nodes are used to denote call expressions.
 	 * 
 	 * Any AST_CALL node has exactly 2 children:
@@ -949,6 +1074,74 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
 		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
+	}
+	
+	/**
+	 * AST_CLASS_CONST nodes are used to denote class constant access expressions.
+	 * 
+	 * Any AST_CLASS_CONST node has exactly two children:
+	 * 1) an expression, whose evaluation returns the class to be accessed
+	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
+	 * 2) a string, representing the constant name
+	 * 
+	 * This test checks a few class constant expressions' children in the following PHP code:
+	 * 
+	 * Foo::BAR;
+	 * $foo::BAR;
+	 * buz()::QUX;
+	 */
+	@Test
+	public void testClassConstantCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS_CONST,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"BAR\",1,1,,,\n";
+		nodeStr += "7,AST_CLASS_CONST,,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"BAR\",1,1,,,\n";
+		nodeStr += "11,AST_CLASS_CONST,,5,,2,1,,,\n";
+		nodeStr += "12,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "16,string,,5,\"QUX\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(ClassConstantExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ClassConstantExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)6), ((ClassConstantExpression)node).getConstantName());
+
+		assertThat( node2, instanceOf(ClassConstantExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ClassConstantExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)10), ((ClassConstantExpression)node2).getConstantName());
+		
+		assertThat( node3, instanceOf(ClassConstantExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((ClassConstantExpression)node3).getClassExpression());
+		assertEquals( ast.getNodeById((long)16), ((ClassConstantExpression)node3).getConstantName());
 	}
 	
 	/**

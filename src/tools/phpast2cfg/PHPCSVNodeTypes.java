@@ -45,8 +45,10 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_CLASS = "AST_CLASS";
 
 	// nodes with exactly 1 child
+	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
 	
+	// statements
 	public static final String TYPE_RETURN = "AST_RETURN";
 	public static final String TYPE_LABEL = "AST_LABEL";
 	public static final String TYPE_THROW = "AST_THROW";
@@ -55,11 +57,16 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_CONTINUE = "AST_CONTINUE";
 
 	// nodes with exactly 2 children
+	// expressions
 	public static final String TYPE_DIM = "AST_DIM";
+	public static final String TYPE_PROP = "AST_PROP";
+	public static final String TYPE_STATIC_PROP = "AST_STATIC_PROP";
 	public static final String TYPE_CALL = "AST_CALL";
+	public static final String TYPE_CLASS_CONST = "AST_CLASS_CONST";
 	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";
 	
+	// statements
 	public static final String TYPE_STATIC = "AST_STATIC";
 	public static final String TYPE_WHILE = "AST_WHILE";
 	public static final String TYPE_DO_WHILE = "AST_DO_WHILE";
@@ -78,15 +85,18 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_GROUP_USE = "AST_GROUP_USE";
 
 	// nodes with exactly 3 children
+	// expressions
 	public static final String TYPE_METHOD_CALL = "AST_METHOD_CALL";
 	public static final String TYPE_STATIC_CALL = "AST_STATIC_CALL";
 	public static final String TYPE_CONDITIONAL = "AST_CONDITIONAL";
 
+	// statements
 	public static final String TYPE_TRY = "AST_TRY";
 	public static final String TYPE_CATCH = "AST_CATCH";
 	public static final String TYPE_PARAM = "AST_PARAM";
 
 	// nodes with exactly 4 children
+	// statements
 	public static final String TYPE_FOR = "AST_FOR";
 	public static final String TYPE_FOREACH = "AST_FOREACH";
 
