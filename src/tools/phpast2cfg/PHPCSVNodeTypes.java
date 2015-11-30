@@ -59,6 +59,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";
 	
+	public static final String TYPE_STATIC = "AST_STATIC";
 	public static final String TYPE_WHILE = "AST_WHILE";
 	public static final String TYPE_DO_WHILE = "AST_DO_WHILE";
 	public static final String TYPE_IF_ELEM = "AST_IF_ELEM";

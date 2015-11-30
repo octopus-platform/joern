@@ -37,6 +37,7 @@ import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
+import ast.php.statements.StaticVariableDeclaration;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.MethodReference;
 import ast.php.statements.blockstarters.PHPIfElement;
@@ -134,6 +135,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				retval = handleCoalesce(row, ast);
 				break;
 
+			case PHPCSVNodeTypes.TYPE_STATIC:
+				retval = handleStaticVariable(row, ast);
+				break;
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				retval = handleWhile(row, ast);
 				break;
@@ -693,6 +697,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleCoalesce(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPCoalesceExpression newNode = new PHPCoalesceExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleStaticVariable(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		StaticVariableDeclaration newNode = new StaticVariableDeclaration();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

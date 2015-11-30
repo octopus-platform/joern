@@ -33,6 +33,7 @@ import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
+import ast.php.statements.StaticVariableDeclaration;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.MethodReference;
 import ast.php.statements.blockstarters.PHPIfElement;
@@ -147,6 +148,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
 				break;
 
+			case PHPCSVNodeTypes.TYPE_STATIC:
+				errno = handleStaticVariable((StaticVariableDeclaration)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
 				break;
@@ -646,6 +650,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 	
+	private int handleStaticVariable( StaticVariableDeclaration startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: plain node
+				startNode.setNameChild(endNode);
+				break;
+			case 1: // default child: either Expression or NULL node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change StaticVariableDeclaration.defaultvalue to be an Expression instead
+				// of a generic ASTNode, and getDefault() and setDefault() accordingly
+				startNode.setDefault(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -783,6 +810,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setNameChild(endNode);
 				break;
 			case 1: // default child: either Expression or NULL node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PropertyElement.defaultvalue to be an Expression instead
+				// of a generic ASTNode, and getDefault() and setDefault() accordingly
 				startNode.setDefault(endNode);
 				break;
 				

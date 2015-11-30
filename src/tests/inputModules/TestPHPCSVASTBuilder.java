@@ -45,6 +45,7 @@ import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
+import ast.php.statements.StaticVariableDeclaration;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.MethodReference;
 import ast.php.statements.blockstarters.PHPIfElement;
@@ -983,6 +984,96 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	/**
+	 * AST_STATIC nodes are used to denote static variable declarations.
+	 * See http://php.net/manual/en/language.variables.scope.php#language.variables.scope.static
+	 * 
+	 * Any AST_STATIC node has exactly two children:
+	 * 1) string, indicating the static variable's name
+	 * 2) various possible child types, representing the default value
+	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
+	 *    
+	 * This test checks a few static variable declarations' children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   static $bar, $buz = 42, $qux = norf();
+	 * }
+	 */
+	@Test
+	public void testStaticVariableCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_STMT_LIST,,4,,0,3,,,\n";
+		nodeStr += "8,AST_STATIC,,4,,0,3,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,3,,,\n";
+		nodeStr += "10,NULL,,4,,1,3,,,\n";
+		nodeStr += "11,AST_STATIC,,4,,1,3,,,\n";
+		nodeStr += "12,string,,4,\"buz\",0,3,,,\n";
+		nodeStr += "13,integer,,4,42,1,3,,,\n";
+		nodeStr += "14,AST_STATIC,,4,,2,3,,,\n";
+		nodeStr += "15,string,,4,\"qux\",0,3,,,\n";
+		nodeStr += "16,AST_CALL,,4,,1,3,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,4,,0,3,,,\n";
+		nodeStr += "18,string,,4,\"norf\",0,3,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,4,,1,3,,,\n";
+		nodeStr += "20,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,10,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,13,PARENT_OF\n";
+		edgeStr += "7,11,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "14,16,PARENT_OF\n";
+		edgeStr += "7,14,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,20,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)14);
+		
+		assertThat( node, instanceOf(StaticVariableDeclaration.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((StaticVariableDeclaration)node).getNameChild());
+		assertEquals( "bar", ((StaticVariableDeclaration)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((StaticVariableDeclaration)node).getDefault());
+		// TODO ((StaticVariableDeclaration)node).getDefault() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because StaticVariableDeclaration accepts arbitrary ASTNode's for default values,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((StaticVariableDeclaration)node).getDefault().getProperty("type"));
+
+		assertThat( node2, instanceOf(StaticVariableDeclaration.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((StaticVariableDeclaration)node2).getNameChild());
+		assertEquals( "buz", ((StaticVariableDeclaration)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((StaticVariableDeclaration)node2).getDefault());
+		assertEquals( "42", ((StaticVariableDeclaration)node2).getDefault().getEscapedCodeStr());
+		
+		assertThat( node3, instanceOf(StaticVariableDeclaration.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)15), ((StaticVariableDeclaration)node3).getNameChild());
+		assertEquals( "qux", ((StaticVariableDeclaration)node3).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((StaticVariableDeclaration)node3).getDefault());
+		assertEquals( "norf", ((Identifier)((CallExpression)((StaticVariableDeclaration)node3).getDefault()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
 	 * AST_WHILE nodes are used to declare while loops.
 	 * 
 	 * Any AST_WHILE node has exactly two children:
@@ -1463,7 +1554,7 @@ public class TestPHPCSVASTBuilder
 	 * They are the children of an AST_PROP_DECL node; see description of AST_PROP_DECL.
 	 * 
 	 * Any AST_PROP_ELEM node has exactly two children:
-	 * 1) string, indicating the parameter's name
+	 * 1) string, indicating the property's name
 	 * 2) various possible child types, representing the default value
 	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
 	 *    
@@ -1533,7 +1624,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)11), ((PropertyElement)node).getDefault());
 		// TODO ((PropertyElement)node).getDefault() should
 		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PropertyElement accepts arbitrary ASTNode's for keys,
+		// as expected because PropertyElement accepts arbitrary ASTNode's for default values,
 		// when we actually only want to accept strings. Once the mapping is
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PropertyElement)node).getDefault().getProperty("type"));
