@@ -2,11 +2,15 @@ package tools.phpast2cfg;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
+import ast.expressions.ArrayIndexing;
 import ast.expressions.CallExpression;
+import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.PropertyExpression;
+import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -30,20 +34,32 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
+import ast.php.statements.StaticVariableDeclaration;
 import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.MethodReference;
+import ast.php.statements.blockstarters.PHPDeclareStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
+import ast.php.statements.blockstarters.PHPTraitAdaptationElement;
+import ast.php.statements.blockstarters.PHPTraitAdaptations;
+import ast.php.statements.blockstarters.PHPTraitAlias;
+import ast.php.statements.blockstarters.PHPTraitPrecedence;
+import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.UseElement;
+import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
@@ -127,8 +143,20 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_DIM:
+				errno = handleArrayIndexing((ArrayIndexing)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_PROP:
+				errno = handleProperty((PropertyExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_STATIC_PROP:
+				errno = handleStaticProperty((StaticPropertyExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CALL:
 				errno = handleCall((CallExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CLASS_CONST:
+				errno = handleClassConstant((ClassConstantExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
@@ -137,6 +165,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
 				break;
 
+			case PHPCSVNodeTypes.TYPE_STATIC:
+				errno = handleStaticVariable((StaticVariableDeclaration)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_WHILE:
 				errno = handleWhile((WhileStatement)startNode, endNode, childnum);
 				break;
@@ -155,8 +186,32 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_PROP_ELEM:
 				errno = handlePropertyElement((PropertyElement)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_DECLARE:
+				errno = handleDeclare((PHPDeclareStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CONST_ELEM:
 				errno = handleConstantElement((ConstantElement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_USE_TRAIT:
+				errno = handleUseTrait((PHPUseTrait)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_TRAIT_PRECEDENCE:
+				errno = handleTraitPrecedence((PHPTraitPrecedence)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
+				errno = handleMethodReference((MethodReference)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_NAMESPACE:
+				errno = handleNamespace((NamespaceStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_USE_ELEM:
+				errno = handleUseElement((UseElement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
+				errno = handleTraitAlias((PHPTraitAlias)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_GROUP_USE:
+				errno = handleGroupUse((PHPGroupUseStatement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 3 children
@@ -233,6 +288,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_NAME_LIST:
 				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_TRAIT_ADAPTATIONS:
+				errno = handleTraitAdaptations((PHPTraitAdaptations)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_USE:
+				errno = handleUseStatement((UseStatement)startNode, endNode, childnum);
 				break;
 				
 			default:
@@ -541,6 +602,79 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 2 children */
 
+	private int handleArrayIndexing( ArrayIndexing startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ArrayIndexing.arrayExpression to be an Expression instead
+				// of a generic ASTNode, and getArrayExpression() and setArrayExpression() accordingly
+				startNode.setArrayExpression(endNode);
+				break;
+			case 1: // dim child: Expression or NULL node
+				// TODO in time, we should be able to cast endNode to Expression,
+				// unless it's a null node; then, use case distinction here,
+				// change ArrayIndexing.indexExpression to be an Expression instead
+				// of a generic ASTNode, and getIndexExpression() and setIndexExpression() accordingly
+				startNode.setIndexExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleProperty( PropertyExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PropertyExpression.objectExpression to be an Expression instead
+				// of a generic ASTNode, and getObjectExpression() and setObjectExpression() accordingly
+				startNode.setObjectExpression(endNode);
+				break;
+			case 1: // prop child: string node
+				startNode.setPropertyName(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleStaticProperty( StaticPropertyExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change StaticPropertyExpression.classExpression to be an Expression instead
+				// of a generic ASTNode, and getClassExpression() and setClassExpression() accordingly
+				startNode.setClassExpression(endNode);
+				break;
+			case 1: // prop child: string node
+				startNode.setPropertyName(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handleCall( CallExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -555,6 +689,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleClassConstant( ClassConstantExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ClassConstantExpression.classExpression to be an Expression instead
+				// of a generic ASTNode, and getClassExpression() and setClassExpression() accordingly
+				startNode.setClassExpression(endNode);
+				break;
+			case 1: // const child: string node
+				startNode.setConstantName(endNode);
 				break;
 
 			default:
@@ -607,6 +764,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		}
 
 		return errno;
+	}
+	
+	private int handleStaticVariable( StaticVariableDeclaration startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: plain node
+				startNode.setNameChild(endNode);
+				break;
+			case 1: // default child: either Expression or NULL node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change StaticVariableDeclaration.defaultvalue to be an Expression instead
+				// of a generic ASTNode, and getDefault() and setDefault() accordingly
+				startNode.setDefault(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
 	}
 	
 	private int handleWhile( WhileStatement startNode, ASTNode endNode, int childnum)
@@ -736,6 +916,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 	
+	private int handleDeclare( PHPDeclareStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // declares child: AST_CONST_DECL node
+				startNode.setDeclares((ConstantDeclaration)endNode);
+				break;
+			case 1: // stmts child: AST_STMT_LIST or NULL node
+				if( endNode instanceof CompoundStatement)
+					startNode.setContent((CompoundStatement)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handlePropertyElement( PropertyElement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -746,6 +949,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setNameChild(endNode);
 				break;
 			case 1: // default child: either Expression or NULL node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PropertyElement.defaultvalue to be an Expression instead
+				// of a generic ASTNode, and getDefault() and setDefault() accordingly
 				startNode.setDefault(endNode);
 				break;
 				
@@ -769,6 +975,163 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setValue(endNode);
 				break;
 				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleUseTrait( PHPUseTrait startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // traits child: IdentifierList node
+				startNode.setTraits((IdentifierList)endNode);
+				break;
+			case 1: // adaptations child: PHPTraitAdaptations or NULL node
+				if( endNode instanceof PHPTraitAdaptations)
+					startNode.setTraitAdaptations((PHPTraitAdaptations)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+	
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleTraitPrecedence( PHPTraitPrecedence startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // method child: MethodReference node
+				startNode.setMethod((MethodReference)endNode);
+				break;
+			case 1: // insteadof child: IdentifierList node
+				startNode.setInsteadOf((IdentifierList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleMethodReference( MethodReference startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Identifier or NULL node
+				if( endNode instanceof Identifier)
+					startNode.setClassIdentifier((Identifier)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+			case 1: // method child: string node
+				startNode.setMethodName(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleNamespace( NamespaceStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: string or NULL node
+				startNode.setName(endNode);
+				break;
+			case 1: // stmts child: AST_STMT_LIST or NULL node
+				if( endNode instanceof CompoundStatement)
+					startNode.setContent((CompoundStatement)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleUseElement( UseElement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: string node
+				startNode.setNamespace(endNode);
+				break;
+			case 1: // alias child: string or NULL node
+				// TODO in time, we should be able to cast endNode to a plain
+				// node type that extends Expression, unless endNode is a null
+				// node; then, adapt UseElement to use a string node and
+				// make a case distinction here to use setAlias() or addChild()
+				startNode.setAlias(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleTraitAlias( PHPTraitAlias startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // method child: MethodReference node
+				startNode.setMethod((MethodReference)endNode);
+				break;
+			case 1: // alias child: string or NULL node
+				// TODO in time, we should be able to cast endNode to a plain
+				// node type that extends Expression, unless endNode is a null
+				// node; then, adapt PHPTraitAlias to use a string node and
+				// make a case distinction here to use setAlias() or addChild()
+				startNode.setAlias(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleGroupUse( PHPGroupUseStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // prefix child: string node
+				startNode.setPrefix(endNode);
+				break;
+			case 1: // uses child: AST_USE node
+				startNode.setUses((UseStatement)endNode);
+				break;
+
 			default:
 				errno = 1;
 		}
@@ -1111,6 +1474,20 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	private int handleIdentifierList( IdentifierList startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addIdentifier((Identifier)endNode);
+
+		return 0;
+	}
+	
+	private int handleTraitAdaptations( PHPTraitAdaptations startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addTraitAdaptationElement((PHPTraitAdaptationElement)endNode);
+
+		return 0;
+	}
+	
+	private int handleUseStatement( UseStatement startNode, ASTNode endNode, int childnum)
+	{
+		startNode.addUseElement((UseElement)endNode);
 
 		return 0;
 	}

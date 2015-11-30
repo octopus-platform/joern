@@ -14,11 +14,15 @@ import org.junit.Test;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
+import ast.expressions.ArrayIndexing;
 import ast.expressions.CallExpression;
+import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.PropertyExpression;
+import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
@@ -42,20 +46,32 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
+import ast.php.statements.StaticVariableDeclaration;
 import ast.php.statements.blockstarters.ForEachStatement;
+import ast.php.statements.blockstarters.MethodReference;
+import ast.php.statements.blockstarters.PHPDeclareStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
+import ast.php.statements.blockstarters.PHPTraitAdaptationElement;
+import ast.php.statements.blockstarters.PHPTraitAdaptations;
+import ast.php.statements.blockstarters.PHPTraitAlias;
+import ast.php.statements.blockstarters.PHPTraitPrecedence;
+import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.UseElement;
+import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
@@ -781,6 +797,224 @@ public class TestPHPCSVASTBuilder
 	/* nodes with exactly 2 children */
 	
 	/**
+	 * AST_DIM nodes are used to denote array indexing expressions.
+	 * 
+	 * Any AST_DIM node has exactly two children:
+	 * 1) an expression, whose evaluation returns the array to be accessed
+	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 2) an expression or NULL, representing the key by which to access the array
+	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 
+	 * This test checks a few array indexing expressions' children in the following PHP code:
+	 * 
+	 * $foo[42];
+	 * bar()['key'];
+	 * $buz[qux()];
+	 * SOMECONSTANT[];
+	 */
+	@Test
+	public void testArrayIndexingCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_DIM,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,integer,,3,42,1,1,,,\n";
+		nodeStr += "7,AST_DIM,,4,,1,1,,,\n";
+		nodeStr += "8,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,string,,4,\"key\",1,1,,,\n";
+		nodeStr += "13,AST_DIM,,5,,2,1,,,\n";
+		nodeStr += "14,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "15,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "16,AST_CALL,,5,,1,1,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "18,string,,5,\"qux\",0,1,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "20,AST_DIM,,6,,3,1,,,\n";
+		nodeStr += "21,AST_CONST,,6,,0,1,,,\n";
+		nodeStr += "22,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "23,string,,6,\"SOMECONSTANT\",0,1,,,\n";
+		nodeStr += "24,NULL,,6,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "20,24,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)20);
+		
+		assertThat( node, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ArrayIndexing)node).getArrayExpression());
+		assertEquals( ast.getNodeById((long)6), ((ArrayIndexing)node).getIndexExpression());
+
+		assertThat( node2, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ArrayIndexing)node2).getArrayExpression());
+		assertEquals( ast.getNodeById((long)12), ((ArrayIndexing)node2).getIndexExpression());
+		
+		assertThat( node3, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((ArrayIndexing)node3).getArrayExpression());
+		assertEquals( ast.getNodeById((long)16), ((ArrayIndexing)node3).getIndexExpression());
+		
+		assertThat( node4, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((ArrayIndexing)node4).getArrayExpression());
+		// TODO ((ArrayIndexing)node4).getIndexExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPArrayElement accepts arbitrary ASTNode's for indices,
+		// when we actually only want to accept Expression's. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((ArrayIndexing)node4).getIndexExpression().getProperty("type"));
+	}
+	
+	/**
+	 * AST_PROP nodes are used to denote property access expressions.
+	 * 
+	 * Any AST_PROP node has exactly two children:
+	 * 1) an expression, whose evaluation returns the object to be accessed
+	 *    (e.g., could be AST_VAR, AST_CALL, etc...)
+	 * 2) a string, representing the property name
+	 * 
+	 * This test checks a few property access expressions' children in the following PHP code:
+	 * 
+	 * $foo->bar;
+	 * buz()->qux;
+	 */
+	@Test
+	public void testPropertyCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PROP,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
+		nodeStr += "7,AST_PROP,,4,,1,1,,,\n";
+		nodeStr += "8,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,string,,4,\"qux\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,12,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(PropertyExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PropertyExpression)node).getObjectExpression());
+		assertEquals( ast.getNodeById((long)6), ((PropertyExpression)node).getPropertyName());
+
+		assertThat( node2, instanceOf(PropertyExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PropertyExpression)node2).getObjectExpression());
+		assertEquals( ast.getNodeById((long)12), ((PropertyExpression)node2).getPropertyName());
+	}
+	
+	/**
+	 * AST_STATIC_PROP nodes are used to denote static property access expressions.
+	 * 
+	 * Any AST_STATIC_PROP node has exactly two children:
+	 * 1) an expression, whose evaluation returns the class to be accessed
+	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
+	 * 2) a string, representing the property name
+	 * 
+	 * This test checks a few static property access expressions' children in the following PHP code:
+	 * 
+	 * Foo::$bar;
+	 * $foo::$bar;
+	 * buz()::$qux;
+	 */
+	@Test
+	public void testStaticPropertyCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_STATIC_PROP,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
+		nodeStr += "7,AST_STATIC_PROP,,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",1,1,,,\n";
+		nodeStr += "11,AST_STATIC_PROP,,5,,2,1,,,\n";
+		nodeStr += "12,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "16,string,,5,\"qux\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(StaticPropertyExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((StaticPropertyExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)6), ((StaticPropertyExpression)node).getPropertyName());
+
+		assertThat( node2, instanceOf(StaticPropertyExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((StaticPropertyExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyName());
+		
+		assertThat( node3, instanceOf(StaticPropertyExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
+		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyName());
+	}
+	
+	/**
 	 * AST_CALL nodes are used to denote call expressions.
 	 * 
 	 * Any AST_CALL node has exactly 2 children:
@@ -840,6 +1074,74 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
 		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
+	}
+	
+	/**
+	 * AST_CLASS_CONST nodes are used to denote class constant access expressions.
+	 * 
+	 * Any AST_CLASS_CONST node has exactly two children:
+	 * 1) an expression, whose evaluation returns the class to be accessed
+	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
+	 * 2) a string, representing the constant name
+	 * 
+	 * This test checks a few class constant expressions' children in the following PHP code:
+	 * 
+	 * Foo::BAR;
+	 * $foo::BAR;
+	 * buz()::QUX;
+	 */
+	@Test
+	public void testClassConstantCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS_CONST,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"BAR\",1,1,,,\n";
+		nodeStr += "7,AST_CLASS_CONST,,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"BAR\",1,1,,,\n";
+		nodeStr += "11,AST_CLASS_CONST,,5,,2,1,,,\n";
+		nodeStr += "12,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "16,string,,5,\"QUX\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,16,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(ClassConstantExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ClassConstantExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)6), ((ClassConstantExpression)node).getConstantName());
+
+		assertThat( node2, instanceOf(ClassConstantExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ClassConstantExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)10), ((ClassConstantExpression)node2).getConstantName());
+		
+		assertThat( node3, instanceOf(ClassConstantExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((ClassConstantExpression)node3).getClassExpression());
+		assertEquals( ast.getNodeById((long)16), ((ClassConstantExpression)node3).getConstantName());
 	}
 	
 	/**
@@ -970,6 +1272,96 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPCoalesceExpression)node).getLeftExpression());
 		assertEquals( ast.getNodeById((long)5), ((PHPCoalesceExpression)node).getRightExpression());
+	}
+	
+	/**
+	 * AST_STATIC nodes are used to denote static variable declarations.
+	 * See http://php.net/manual/en/language.variables.scope.php#language.variables.scope.static
+	 * 
+	 * Any AST_STATIC node has exactly two children:
+	 * 1) string, indicating the static variable's name
+	 * 2) various possible child types, representing the default value
+	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
+	 *    
+	 * This test checks a few static variable declarations' children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   static $bar, $buz = 42, $qux = norf();
+	 * }
+	 */
+	@Test
+	public void testStaticVariableCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_STMT_LIST,,4,,0,3,,,\n";
+		nodeStr += "8,AST_STATIC,,4,,0,3,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,3,,,\n";
+		nodeStr += "10,NULL,,4,,1,3,,,\n";
+		nodeStr += "11,AST_STATIC,,4,,1,3,,,\n";
+		nodeStr += "12,string,,4,\"buz\",0,3,,,\n";
+		nodeStr += "13,integer,,4,42,1,3,,,\n";
+		nodeStr += "14,AST_STATIC,,4,,2,3,,,\n";
+		nodeStr += "15,string,,4,\"qux\",0,3,,,\n";
+		nodeStr += "16,AST_CALL,,4,,1,3,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,4,,0,3,,,\n";
+		nodeStr += "18,string,,4,\"norf\",0,3,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,4,,1,3,,,\n";
+		nodeStr += "20,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,10,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,13,PARENT_OF\n";
+		edgeStr += "7,11,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "14,16,PARENT_OF\n";
+		edgeStr += "7,14,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,20,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)14);
+		
+		assertThat( node, instanceOf(StaticVariableDeclaration.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((StaticVariableDeclaration)node).getNameChild());
+		assertEquals( "bar", ((StaticVariableDeclaration)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((StaticVariableDeclaration)node).getDefault());
+		// TODO ((StaticVariableDeclaration)node).getDefault() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because StaticVariableDeclaration accepts arbitrary ASTNode's for default values,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((StaticVariableDeclaration)node).getDefault().getProperty("type"));
+
+		assertThat( node2, instanceOf(StaticVariableDeclaration.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((StaticVariableDeclaration)node2).getNameChild());
+		assertEquals( "buz", ((StaticVariableDeclaration)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((StaticVariableDeclaration)node2).getDefault());
+		assertEquals( "42", ((StaticVariableDeclaration)node2).getDefault().getEscapedCodeStr());
+		
+		assertThat( node3, instanceOf(StaticVariableDeclaration.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)15), ((StaticVariableDeclaration)node3).getNameChild());
+		assertEquals( "qux", ((StaticVariableDeclaration)node3).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((StaticVariableDeclaration)node3).getDefault());
+		assertEquals( "norf", ((Identifier)((CallExpression)((StaticVariableDeclaration)node3).getDefault()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -1448,12 +1840,72 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	/**
+	 * AST_DECLARE nodes are used to denote declare statements.
+	 * See http://php.net/manual/en/control-structures.declare.php
+	 * 
+	 * Any AST_DECLARE node has exactly two children:
+	 * 1) AST_CONST_DECL, holding the set directive(s)
+	 * 2) AST_STMT_LIST or NULL, holding the code to be executed under the given directives
+	 *    (If no curly brackets are used, then this child is NULL and the directives affect
+	 *    all code following the declare statement.)
+	 *    
+	 * This test checks a few declare statement's children in the following PHP code:
+	 * 
+	 * declare(ticks=1) {}
+	 * declare(encoding='ISO-8859-1');
+	 */
+	@Test
+	public void testDeclareCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_DECLARE,,3,,0,1,,,\n";
+		nodeStr += "4,AST_CONST_DECL,,3,,0,1,,,\n";
+		nodeStr += "5,AST_CONST_ELEM,,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"ticks\",0,1,,,\n";
+		nodeStr += "7,integer,,3,1,1,1,,,\n";
+		nodeStr += "8,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "9,AST_DECLARE,,4,,1,1,,,\n";
+		nodeStr += "10,AST_CONST_DECL,,4,,0,1,,,\n";
+		nodeStr += "11,AST_CONST_ELEM,,4,,0,1,,,\n";
+		nodeStr += "12,string,,4,\"encoding\",0,1,,,\n";
+		nodeStr += "13,string,,4,\"ISO-8859-1\",1,1,,,\n";
+		nodeStr += "14,NULL,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "5,7,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,8,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,13,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,14,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)9);
+		
+		assertThat( node, instanceOf(PHPDeclareStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPDeclareStatement)node).getDeclares());
+		assertEquals( ast.getNodeById((long)8), ((PHPDeclareStatement)node).getContent());
+
+		assertThat( node2, instanceOf(PHPDeclareStatement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((PHPDeclareStatement)node2).getDeclares());
+		assertNull( ((PHPDeclareStatement)node2).getContent());
+	}
+	
+	/**
 	 * AST_PROP_ELEM nodes are used to denote the individual elements of a property declaration
 	 * statement in the top-level scope of a class.
 	 * They are the children of an AST_PROP_DECL node; see description of AST_PROP_DECL.
 	 * 
 	 * Any AST_PROP_ELEM node has exactly two children:
-	 * 1) string, indicating the parameter's name
+	 * 1) string, indicating the property's name
 	 * 2) various possible child types, representing the default value
 	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
 	 *    
@@ -1523,7 +1975,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)11), ((PropertyElement)node).getDefault());
 		// TODO ((PropertyElement)node).getDefault() should
 		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PropertyElement accepts arbitrary ASTNode's for keys,
+		// as expected because PropertyElement accepts arbitrary ASTNode's for default values,
 		// when we actually only want to accept strings. Once the mapping is
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PropertyElement)node).getDefault().getProperty("type"));
@@ -1604,8 +2056,645 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((ConstantElement)node2).getValue());
 		assertEquals( "42", ((ConstantElement)node2).getValue().getEscapedCodeStr());
 	}
-
 	
+	/**
+	 * AST_USE_TRAIT nodes are used to denote trait use statements. They can optionally
+	 * contain trait adaptations.
+	 * See http://php.net/manual/en/language.oop5.traits.php
+	 * 
+	 * Any AST_USE_TRAIT node has exactly two children:
+	 * 1) AST_NAME_LIST, holding a list of traits to be used
+	 * 2) AST_TRAIT_ADAPTATIONS or NULL, representing the optional trait adaptations
+	 *    for the used traits
+	 *    
+	 * This test checks a use trait statement's children in the following PHP code:
+	 * 
+	 * class SomeClass {
+	 *   use Foo, Bar, Buz {
+	 *     qux as protected _qux;
+	 *     Bar::norf as private;
+	 *     Foo::nicknack insteadof Bar, Buz;
+	 *   }
+	 * }
+	 */
+	@Test
+	public void testUseTraitCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
+		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
+		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
+		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
+		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
+		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
+		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
+		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
+		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
+		nodeStr += "19,NULL,,5,,0,6,,,\n";
+		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
+		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
+		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
+		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
+		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
+		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
+		nodeStr += "27,NULL,,6,,1,6,,,\n";
+		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
+		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
+		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
+		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
+		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
+		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
+		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
+		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "9,14,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,21,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,27,PARENT_OF\n";
+		edgeStr += "16,22,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "29,32,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "36,37,PARENT_OF\n";
+		edgeStr += "33,36,PARENT_OF\n";
+		edgeStr += "28,33,PARENT_OF\n";
+		edgeStr += "16,28,PARENT_OF\n";
+		edgeStr += "8,16,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+		
+		assertThat( node, instanceOf(PHPUseTrait.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPUseTrait)node).getTraits());
+		assertEquals( "Foo", ((PHPUseTrait)node).getTraits().getIdentifier(0).getNameChild().getEscapedCodeStr());
+		assertEquals( "Bar", ((PHPUseTrait)node).getTraits().getIdentifier(1).getNameChild().getEscapedCodeStr());
+		assertEquals( "Buz", ((PHPUseTrait)node).getTraits().getIdentifier(2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((PHPUseTrait)node).getTraitAdaptations());
+	}
+	
+	/**
+	 * AST_TRAIT_PRECEDENCE nodes are used to denote trait precedence statements within a
+	 * trait use statement. Such statements are used to resolve conflicts when using
+	 * several traits that declare the same method name and indicate which of these
+	 * methods is to be used.
+	 * See http://php.net/manual/en/language.oop5.traits.php
+	 * 
+	 * Any AST_TRAIT_PRECEDENCE node has exactly two children:
+	 * 1) AST_METHOD_REFERENCE, representing the trait method to be used
+	 * 2) AST_NAME_LIST, holding a list of trait names that declare the same
+	 *    method name but whose method is not to be used
+	 *    
+	 * This test checks a trait precedence statement's children in the following PHP code:
+	 * 
+	 * class SomeClass {
+	 *   use Foo, Bar, Buz {
+	 *     qux as protected _qux;
+	 *     Bar::norf as private;
+	 *     Foo::nicknack insteadof Bar, Buz;
+	 *   }
+	 * }
+	 */
+	@Test
+	public void testTraitPrecedenceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
+		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
+		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
+		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
+		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
+		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
+		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
+		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
+		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
+		nodeStr += "19,NULL,,5,,0,6,,,\n";
+		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
+		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
+		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
+		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
+		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
+		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
+		nodeStr += "27,NULL,,6,,1,6,,,\n";
+		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
+		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
+		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
+		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
+		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
+		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
+		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
+		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "9,14,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,21,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,27,PARENT_OF\n";
+		edgeStr += "16,22,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "29,32,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "36,37,PARENT_OF\n";
+		edgeStr += "33,36,PARENT_OF\n";
+		edgeStr += "28,33,PARENT_OF\n";
+		edgeStr += "16,28,PARENT_OF\n";
+		edgeStr += "8,16,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)28);
+		
+		assertThat( node, instanceOf(PHPTraitPrecedence.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)29), ((PHPTraitPrecedence)node).getMethod());
+		assertEquals( ast.getNodeById((long)33), ((PHPTraitPrecedence)node).getInsteadOf());
+		assertEquals( "Bar", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(0).getNameChild().getEscapedCodeStr());
+		assertEquals( "Buz", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(1).getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_METHOD_REFERENCE nodes are used to denote references to methods.
+	 * They are composed of a reference to the class that declares the referenced method,
+	 * and the method name. They appear as children of trait adaptation elements;
+	 * see AST_TRAIT_ALIAS and AST_TRAIT_PRECEDENCE.
+	 * (TODO check if they can appear in other contexts)
+	 * 
+	 * Any AST_METHOD_REFERENCE node has exactly two children:
+	 * 1) AST_NAME, representing the class that the referenced method is declared in
+	 * 2) string, indicating the method's name
+	 *    
+	 * This test checks a few method references' children in the following PHP code:
+	 * 
+	 * class SomeClass {
+	 *   use Foo, Bar, Buz {
+	 *     qux as protected _qux;
+	 *     Bar::norf as private;
+	 *     Foo::nicknack insteadof Bar, Buz;
+	 *   }
+	 * }
+	 */
+	@Test
+	public void testMethodReferenceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
+		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
+		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
+		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
+		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
+		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
+		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
+		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
+		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
+		nodeStr += "19,NULL,,5,,0,6,,,\n";
+		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
+		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
+		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
+		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
+		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
+		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
+		nodeStr += "27,NULL,,6,,1,6,,,\n";
+		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
+		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
+		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
+		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
+		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
+		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
+		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
+		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "9,14,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,21,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,27,PARENT_OF\n";
+		edgeStr += "16,22,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "29,32,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "36,37,PARENT_OF\n";
+		edgeStr += "33,36,PARENT_OF\n";
+		edgeStr += "28,33,PARENT_OF\n";
+		edgeStr += "16,28,PARENT_OF\n";
+		edgeStr += "8,16,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)18);
+		ASTNode node2 = ast.getNodeById((long)23);
+		ASTNode node3 = ast.getNodeById((long)29);
+		
+		assertThat( node, instanceOf(MethodReference.class));
+		assertEquals( 2, node.getChildCount());
+		assertNull( ((MethodReference)node).getClassIdentifier());
+		assertEquals( ast.getNodeById((long)20), ((MethodReference)node).getMethodName());
+		assertEquals( "qux", ((MethodReference)node).getMethodName().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(MethodReference.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)24), ((MethodReference)node2).getClassIdentifier());
+		assertEquals( "Bar", ((MethodReference)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)26), ((MethodReference)node2).getMethodName());
+		assertEquals( "norf", ((MethodReference)node2).getMethodName().getEscapedCodeStr());
+		
+		assertThat( node3, instanceOf(MethodReference.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)30), ((MethodReference)node3).getClassIdentifier());
+		assertEquals( "Foo", ((MethodReference)node3).getClassIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)32), ((MethodReference)node3).getMethodName());
+		assertEquals( "nicknack", ((MethodReference)node3).getMethodName().getEscapedCodeStr());
+	}
+
+	/**
+	 * AST_NAMESPACE nodes are used to denote namespace statements. They are composed
+	 * of a name and a compound statement. Either of these, but not both, may be null
+	 * (a namespace  without a compound statement declares a namespace for the code
+	 * following until the next namespace statement; a namespace without a name opens
+	 * a "non-namespaced" scope)
+	 * See  http://php.net/manual/en/language.namespaces.definitionmultiple.php
+	 * 
+	 * Any AST_NAMESPACE node has exactly two children:
+	 * 1) string or NULL, representing the namespace name
+	 * 2) AST_STMT_LIST or NULL, holding the namespaced code
+	 *    
+	 * This test checks a few use namespace statements' children in the following PHP code:
+	 * 
+	 * namespace Foo {}
+	 * namespace Bar;
+	 * namespace {}
+	 */
+	@Test
+	public void testNamespaceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_NAMESPACE,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_NAMESPACE,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"Bar\",0,1,,,\n";
+		nodeStr += "8,NULL,,4,,1,1,,,\n";
+		nodeStr += "9,AST_NAMESPACE,,5,,2,1,,,\n";
+		nodeStr += "10,NULL,,5,,0,1,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,5,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node3 = ast.getNodeById((long)9);
+
+		assertThat( node, instanceOf(NamespaceStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((NamespaceStatement)node).getName());
+		assertEquals( "Foo", ((NamespaceStatement)node).getName().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)5), ((NamespaceStatement)node).getContent());
+		
+		assertThat( node2, instanceOf(NamespaceStatement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((NamespaceStatement)node2).getName());
+		assertEquals( "Bar", ((NamespaceStatement)node2).getName().getEscapedCodeStr());
+		assertNull( ((NamespaceStatement)node2).getContent());
+		
+		assertThat( node3, instanceOf(NamespaceStatement.class));
+		assertEquals( 2, node3.getChildCount());
+		// TODO ((NamespaceStatement)node3).getName() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because NamespaceStatement accepts arbitrary ASTNode's for names,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((NamespaceStatement)node3).getName().getProperty("type"));
+		assertEquals( ast.getNodeById((long)11), ((NamespaceStatement)node3).getContent());
+	}
+	
+	/**
+	 * AST_USE_ELEM nodes are used to denote individual use statement elements within a
+	 * use statement. They are the children of AST_USE nodes.
+	 * 
+	 * Any AST_USE_ELEM node has exactly two children:
+	 * 1) string, representing the imported namespace
+	 * 2) string or NULL, indicating the optional alias for the namespace
+	 *    
+	 * This test checks a few use statement elements' children in the following PHP code:
+	 * 
+	 * use Foo\Bar as Buz, Qux as Norf;
+	 */
+	@Test
+	public void testUseElementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"Buz\",1,1,,,\n";
+		nodeStr += "7,AST_USE_ELEM,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"Qux\",0,1,,,\n";
+		nodeStr += "9,string,,3,\"Norf\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)7);
+
+		assertThat( node, instanceOf(UseElement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((UseElement)node).getNamespace());
+		assertEquals( "Foo\\Bar", ((UseElement)node).getNamespace().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((UseElement)node).getAlias());
+		assertEquals( "Buz", ((UseElement)node).getAlias().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(UseElement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((UseElement)node2).getNamespace());
+		assertEquals( "Qux", ((UseElement)node2).getNamespace().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((UseElement)node2).getAlias());
+		assertEquals( "Norf", ((UseElement)node2).getAlias().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_TRAIT_ALIAS nodes are used to denote trait alias statements within a
+	 * trait use statement. Such statements are used to declare aliases for
+	 * trait methods, or to change the visibility of trait methods.
+	 * See http://php.net/manual/en/language.oop5.traits.php
+	 * 
+	 * Any AST_TRAIT_ALIAS node has exactly two children:
+	 * 1) AST_METHOD_REFERENCE, representing the trait method being referenced
+	 * 2) string or NULL, indicating: if it's a string, the alias name; or if it's NULL,
+	 *    we are only changing a trait method's visibility without declaring an alias
+	 *    
+	 * This test checks a few trait alias statements' children in the following PHP code:
+	 * 
+	 * class SomeClass {
+	 *   use Foo, Bar, Buz {
+	 *     qux as protected _qux;
+	 *     Bar::norf as private;
+	 *     Foo::nicknack insteadof Bar, Buz;
+	 *   }
+	 * }
+	 */
+	@Test
+	public void testTraitAliasCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
+		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
+		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
+		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
+		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
+		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
+		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
+		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
+		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
+		nodeStr += "19,NULL,,5,,0,6,,,\n";
+		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
+		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
+		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
+		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
+		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
+		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
+		nodeStr += "27,NULL,,6,,1,6,,,\n";
+		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
+		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
+		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
+		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
+		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
+		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
+		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
+		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "9,14,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,21,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,27,PARENT_OF\n";
+		edgeStr += "16,22,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "29,32,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "36,37,PARENT_OF\n";
+		edgeStr += "33,36,PARENT_OF\n";
+		edgeStr += "28,33,PARENT_OF\n";
+		edgeStr += "16,28,PARENT_OF\n";
+		edgeStr += "8,16,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)17);
+		ASTNode node2 = ast.getNodeById((long)22);
+		
+		assertThat( node, instanceOf(PHPTraitAlias.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)18), ((PHPTraitAlias)node).getMethod());
+		assertEquals( ast.getNodeById((long)21), ((PHPTraitAlias)node).getAlias());
+		assertEquals( "_qux", ((PHPTraitAlias)node).getAlias().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(PHPTraitAlias.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)23), ((PHPTraitAlias)node2).getMethod());
+		// TODO ((PHPTraitAlias)node).getAlias() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPTraitAlias accepts arbitrary ASTNode's for aliases,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPTraitAlias)node2).getAlias().getProperty("type"));
+	}
+	
+	/**
+	 * AST_GROUP_USE nodes are used to denote group use statements.
+	 * This is a new feature in PHP 7, see
+	 * http://php.net/manual/en/language.namespaces.importing.php#language.namespaces.importing.group
+	 * 
+	 * Any AST_GROUP_USE node has exactly two children:
+	 * 1) string, representing the prefix of the namespaces to be used
+	 * 2) AST_USE, holding the used namespaces
+	 *    
+	 * This test checks a group use statement's children in the following PHP code:
+	 * 
+	 * use Foo\{Bar as B, Buz, Qux as Q};
+	 */
+	@Test
+	public void testGroupUseCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GROUP_USE,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "5,AST_USE,,3,,1,1,,,\n";
+		nodeStr += "6,AST_USE_ELEM,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"Bar\",0,1,,,\n";
+		nodeStr += "8,string,,3,\"B\",1,1,,,\n";
+		nodeStr += "9,AST_USE_ELEM,T_CLASS,3,,1,1,,,\n";
+		nodeStr += "10,string,,3,\"Buz\",0,1,,,\n";
+		nodeStr += "11,NULL,,3,,1,1,,,\n";
+		nodeStr += "12,AST_USE_ELEM,T_CLASS,3,,2,1,,,\n";
+		nodeStr += "13,string,,3,\"Qux\",0,1,,,\n";
+		nodeStr += "14,string,,3,\"Q\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "5,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "5,12,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPGroupUseStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPGroupUseStatement)node).getPrefix());
+		assertEquals( "Foo", ((PHPGroupUseStatement)node).getPrefix().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)5), ((PHPGroupUseStatement)node).getUses());
+	}
+	
+
 	/* nodes with exactly 3 children */
 	
 	/**
@@ -3132,5 +4221,156 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((IdentifierList)node).getIdentifier(1));
 		for( Identifier identifier : (IdentifierList)node)
 			assertTrue( ast.containsValue(identifier));
+	}
+	
+	/**
+	 * AST_TRAIT_ADAPTATIONS nodes are used for holding a list of trait adaptations, i.e.,
+	 * a list of AST_TRAIT_ALIAS and AST_TRAIT_PRECEDENCE nodes.
+	 * See http://php.net/manual/en/language.oop5.traits.php
+	 * 
+	 * Any AST_TRAIT_ADAPTATIONS node has between 1 and an arbitrarily large number
+	 * of trait adaptations. Each child corresponds to one trait adaptation in the list.
+	 *    
+	 * This test checks a trait adaptations statement's children in the following PHP code:
+	 * 
+	 * class SomeClass {
+	 *   use Foo, Bar, Buz {
+	 *     qux as protected _qux;
+	 *     Bar::norf as private;
+	 *     Foo::nicknack insteadof Bar, Buz;
+	 *   }
+	 * }
+	 */
+	@Test
+	public void testTraitAdaptations() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+		nodeStr += "5,NULL,,3,,1,1,,,\n";
+		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
+		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
+		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
+		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
+		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
+		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
+		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
+		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
+		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
+		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
+		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
+		nodeStr += "19,NULL,,5,,0,6,,,\n";
+		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
+		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
+		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
+		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
+		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
+		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
+		nodeStr += "27,NULL,,6,,1,6,,,\n";
+		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
+		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
+		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
+		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
+		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
+		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
+		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
+		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
+		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "9,14,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,20,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,21,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,27,PARENT_OF\n";
+		edgeStr += "16,22,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "29,32,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "36,37,PARENT_OF\n";
+		edgeStr += "33,36,PARENT_OF\n";
+		edgeStr += "28,33,PARENT_OF\n";
+		edgeStr += "16,28,PARENT_OF\n";
+		edgeStr += "8,16,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)16);
+		
+		assertThat( node, instanceOf(PHPTraitAdaptations.class));
+		assertEquals( 3, node.getChildCount());
+		assertEquals( 3, ((PHPTraitAdaptations)node).size());
+		assertEquals( ast.getNodeById((long)17), ((PHPTraitAdaptations)node).getTraitAdaptationElement(0));
+		assertEquals( ast.getNodeById((long)22), ((PHPTraitAdaptations)node).getTraitAdaptationElement(1));
+		assertEquals( ast.getNodeById((long)28), ((PHPTraitAdaptations)node).getTraitAdaptationElement(2));
+		for( PHPTraitAdaptationElement traitAdaptation : (PHPTraitAdaptations)node)
+			assertTrue( ast.containsValue(traitAdaptation));
+	}
+	
+	/**
+	 * AST_USE nodes are used to denote use statements.
+	 * 
+	 * Any AST_USE node has between 1 and an arbitrarily large number
+	 * of use statement elements. Each child corresponds to one use element in the list.
+	 *    
+	 * This test checks a use statement's children in the following PHP code:
+	 * 
+	 * use Foo\Bar as Buz, Qux as Norf;
+	 */
+	@Test
+	public void testUseStatementCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"Buz\",1,1,,,\n";
+		nodeStr += "7,AST_USE_ELEM,,3,,1,1,,,\n";
+		nodeStr += "8,string,,3,\"Qux\",0,1,,,\n";
+		nodeStr += "9,string,,3,\"Norf\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,6,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(UseStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( 2, ((UseStatement)node).size());
+		assertEquals( ast.getNodeById((long)4), ((UseStatement)node).getUseElement(0));
+		assertEquals( ast.getNodeById((long)7), ((UseStatement)node).getUseElement(1));
+		for( UseElement useElement : (UseStatement)node)
+			assertTrue( ast.containsValue(useElement));
 	}
 }
