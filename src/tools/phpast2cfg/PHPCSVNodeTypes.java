@@ -65,6 +65,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_IF_ELEM = "AST_IF_ELEM";
 	public static final String TYPE_SWITCH = "AST_SWITCH";
 	public static final String TYPE_SWITCH_CASE = "AST_SWITCH_CASE";
+	public static final String TYPE_DECLARE = "AST_DECLARE";
 	public static final String TYPE_PROP_ELEM = "AST_PROP_ELEM";
 	public static final String TYPE_CONST_ELEM = "AST_CONST_ELEM";
 	public static final String TYPE_USE_TRAIT = "AST_USE_TRAIT";

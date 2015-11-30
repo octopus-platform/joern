@@ -36,6 +36,7 @@ import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.MethodReference;
+import ast.php.statements.blockstarters.PHPDeclareStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
@@ -168,6 +169,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_PROP_ELEM:
 				errno = handlePropertyElement((PropertyElement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_DECLARE:
+				errno = handleDeclare((PHPDeclareStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CONST_ELEM:
 				errno = handleConstantElement((ConstantElement)startNode, endNode, childnum);
@@ -791,6 +795,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // stmts child: AST_STMT_LIST
 				startNode.setStatement((CompoundStatement)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleDeclare( PHPDeclareStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // declares child: AST_CONST_DECL node
+				startNode.setDeclares((ConstantDeclaration)endNode);
+				break;
+			case 1: // stmts child: AST_STMT_LIST or NULL node
+				if( endNode instanceof CompoundStatement)
+					startNode.setContent((CompoundStatement)endNode);
+				else
+					startNode.addChild(endNode);
 				break;
 
 			default:
