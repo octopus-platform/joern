@@ -34,6 +34,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
@@ -172,7 +173,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
 				retval = handleTraitAlias(row, ast);
 				break;
-
+			case PHPCSVNodeTypes.TYPE_GROUP_USE:
+				retval = handleGroupUse(row, ast);
+				break;
+				
 			// nodes with exactly 3 children
 			case PHPCSVNodeTypes.TYPE_METHOD_CALL:
 				retval = handleMethodCall(row, ast);
@@ -975,6 +979,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleTraitAlias(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTraitAlias newNode = new PHPTraitAlias();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleGroupUse(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPGroupUseStatement newNode = new PHPGroupUseStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

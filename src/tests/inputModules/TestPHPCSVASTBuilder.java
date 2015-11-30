@@ -42,6 +42,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
@@ -2195,6 +2196,60 @@ public class TestPHPCSVASTBuilder
 		// when we actually only want to accept strings. Once the mapping is
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PHPTraitAlias)node2).getAlias().getProperty("type"));
+	}
+	
+	/**
+	 * AST_GROUP_USE nodes are used to denote group use statements.
+	 * This is a new feature in PHP 7, see
+	 * http://php.net/manual/en/language.namespaces.importing.php#language.namespaces.importing.group
+	 * 
+	 * Any AST_GROUP_USE node has exactly two children:
+	 * 1) string, representing the prefix of the namespaces to be used
+	 * 2) AST_USE, holding the used namespaces
+	 *    
+	 * This test checks a group use statement's children in the following PHP code:
+	 * 
+	 * use Foo\{Bar as B, Buz, Qux as Q};
+	 */
+	@Test
+	public void testGroupUseCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GROUP_USE,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "5,AST_USE,,3,,1,1,,,\n";
+		nodeStr += "6,AST_USE_ELEM,T_CLASS,3,,0,1,,,\n";
+		nodeStr += "7,string,,3,\"Bar\",0,1,,,\n";
+		nodeStr += "8,string,,3,\"B\",1,1,,,\n";
+		nodeStr += "9,AST_USE_ELEM,T_CLASS,3,,1,1,,,\n";
+		nodeStr += "10,string,,3,\"Buz\",0,1,,,\n";
+		nodeStr += "11,NULL,,3,,1,1,,,\n";
+		nodeStr += "12,AST_USE_ELEM,T_CLASS,3,,2,1,,,\n";
+		nodeStr += "13,string,,3,\"Qux\",0,1,,,\n";
+		nodeStr += "14,string,,3,\"Q\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "5,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "5,12,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPGroupUseStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPGroupUseStatement)node).getPrefix());
+		assertEquals( "Foo", ((PHPGroupUseStatement)node).getPrefix().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)5), ((PHPGroupUseStatement)node).getUses());
 	}
 	
 

@@ -72,6 +72,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_NAMESPACE = "AST_NAMESPACE";
 	public static final String TYPE_USE_ELEM = "AST_USE_ELEM";
 	public static final String TYPE_TRAIT_ALIAS = "AST_TRAIT_ALIAS";
+	public static final String TYPE_GROUP_USE = "AST_GROUP_USE";
 
 	// nodes with exactly 3 children
 	public static final String TYPE_METHOD_CALL = "AST_METHOD_CALL";

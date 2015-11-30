@@ -30,6 +30,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.blockstarters.ForEachStatement;
@@ -184,6 +185,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
 				errno = handleTraitAlias((PHPTraitAlias)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_GROUP_USE:
+				errno = handleGroupUse((PHPGroupUseStatement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 3 children
@@ -937,6 +941,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// node; then, adapt PHPTraitAlias to use a string node and
 				// make a case distinction here to use setAlias() or addChild()
 				startNode.setAlias(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleGroupUse( PHPGroupUseStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // prefix child: string node
+				startNode.setPrefix(endNode);
+				break;
+			case 1: // uses child: AST_USE node
+				startNode.setUses((UseStatement)endNode);
 				break;
 
 			default:
