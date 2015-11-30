@@ -52,6 +52,7 @@ import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
@@ -174,6 +175,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
 				errno = handleMethodReference((MethodReference)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_NAMESPACE:
+				errno = handleNamespace((NamespaceStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_USE_ELEM:
 				errno = handleUseElement((UseElement)startNode, endNode, childnum);
@@ -864,6 +868,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setMethodName(endNode);
 				break;
 				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleNamespace( NamespaceStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child: string or NULL node
+				startNode.setName(endNode);
+				break;
+			case 1: // stmts child: AST_STMT_LIST or NULL node
+				if( endNode instanceof CompoundStatement)
+					startNode.setContent((CompoundStatement)endNode);
+				else
+					startNode.addChild(endNode);
+				break;
+
 			default:
 				errno = 1;
 		}

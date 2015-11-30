@@ -69,6 +69,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_USE_TRAIT = "AST_USE_TRAIT";
 	public static final String TYPE_TRAIT_PRECEDENCE = "AST_TRAIT_PRECEDENCE";
 	public static final String TYPE_METHOD_REFERENCE = "AST_METHOD_REFERENCE";
+	public static final String TYPE_NAMESPACE = "AST_NAMESPACE";
 	public static final String TYPE_USE_ELEM = "AST_USE_ELEM";
 	public static final String TYPE_TRAIT_ALIAS = "AST_TRAIT_ALIAS";
 

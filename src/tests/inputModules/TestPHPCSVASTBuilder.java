@@ -64,6 +64,7 @@ import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
@@ -1956,6 +1957,75 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "nicknack", ((MethodReference)node3).getMethodName().getEscapedCodeStr());
 	}
 
+	/**
+	 * AST_NAMESPACE nodes are used to denote namespace statements. They are composed
+	 * of a name and a compound statement. Either of these, but not both, may be null
+	 * (a namespace  without a compound statement declares a namespace for the code
+	 * following until the next namespace statement; a namespace without a name opens
+	 * a "non-namespaced" scope)
+	 * See  http://php.net/manual/en/language.namespaces.definitionmultiple.php
+	 * 
+	 * Any AST_NAMESPACE node has exactly two children:
+	 * 1) string or NULL, representing the namespace name
+	 * 2) AST_STMT_LIST or NULL, holding the namespaced code
+	 *    
+	 * This test checks a few use namespace statements' children in the following PHP code:
+	 * 
+	 * namespace Foo {}
+	 * namespace Bar;
+	 * namespace {}
+	 */
+	@Test
+	public void testNamespaceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_NAMESPACE,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
+		nodeStr += "6,AST_NAMESPACE,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"Bar\",0,1,,,\n";
+		nodeStr += "8,NULL,,4,,1,1,,,\n";
+		nodeStr += "9,AST_NAMESPACE,,5,,2,1,,,\n";
+		nodeStr += "10,NULL,,5,,0,1,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,5,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node3 = ast.getNodeById((long)9);
+
+		assertThat( node, instanceOf(NamespaceStatement.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((NamespaceStatement)node).getName());
+		assertEquals( "Foo", ((NamespaceStatement)node).getName().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)5), ((NamespaceStatement)node).getContent());
+		
+		assertThat( node2, instanceOf(NamespaceStatement.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((NamespaceStatement)node2).getName());
+		assertEquals( "Bar", ((NamespaceStatement)node2).getName().getEscapedCodeStr());
+		assertNull( ((NamespaceStatement)node2).getContent());
+		
+		assertThat( node3, instanceOf(NamespaceStatement.class));
+		assertEquals( 2, node3.getChildCount());
+		// TODO ((NamespaceStatement)node3).getName() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because NamespaceStatement accepts arbitrary ASTNode's for names,
+		// when we actually only want to accept strings. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((NamespaceStatement)node3).getName().getProperty("type"));
+		assertEquals( ast.getNodeById((long)11), ((NamespaceStatement)node3).getContent());
+	}
+	
 	/**
 	 * AST_USE_ELEM nodes are used to denote individual use statement elements within a
 	 * use statement. They are the children of AST_USE nodes.

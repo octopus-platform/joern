@@ -55,6 +55,7 @@ import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import ast.statements.jump.GotoStatement;
@@ -161,6 +162,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
 				retval = handleMethodReference(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_NAMESPACE:
+				retval = handleNamespace(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_USE_ELEM:
 				retval = handleUseElement(row, ast);
@@ -905,6 +909,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleMethodReference(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		MethodReference newNode = new MethodReference();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleNamespace(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		NamespaceStatement newNode = new NamespaceStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
