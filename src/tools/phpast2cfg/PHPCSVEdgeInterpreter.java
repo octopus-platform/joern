@@ -2,6 +2,7 @@ package tools.phpast2cfg;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
+import ast.expressions.ArrayIndexing;
 import ast.expressions.CallExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
@@ -139,6 +140,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			case PHPCSVNodeTypes.TYPE_DIM:
+				errno = handleArrayIndexing((ArrayIndexing)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CALL:
 				errno = handleCall((CallExpression)startNode, endNode, childnum);
 				break;
@@ -586,6 +590,33 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	/* nodes with exactly 2 children */
 
+	private int handleArrayIndexing( ArrayIndexing startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change ArrayIndexing.arrayExpression to be an Expression instead
+				// of a generic ASTNode, and getArrayExpression() and setArrayExpression() accordingly
+				startNode.setArrayExpression(endNode);
+				break;
+			case 1: // dim child: Expression or NULL node
+				// TODO in time, we should be able to cast endNode to Expression,
+				// unless it's a null node; then, use case distinction here,
+				// change ArrayIndexing.indexExpression to be an Expression instead
+				// of a generic ASTNode, and getIndexExpression() and setIndexExpression() accordingly
+				startNode.setIndexExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
 	private int handleCall( CallExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;

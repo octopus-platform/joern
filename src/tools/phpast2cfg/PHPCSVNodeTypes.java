@@ -55,6 +55,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_CONTINUE = "AST_CONTINUE";
 
 	// nodes with exactly 2 children
+	public static final String TYPE_DIM = "AST_DIM";
 	public static final String TYPE_CALL = "AST_CALL";
 	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";

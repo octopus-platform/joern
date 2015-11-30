@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
+import ast.expressions.ArrayIndexing;
 import ast.expressions.CallExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
@@ -791,6 +792,102 @@ public class TestPHPCSVASTBuilder
 	
 
 	/* nodes with exactly 2 children */
+	
+	/**
+	 * AST_DIM nodes are used to denote array indexing expressions.
+	 * 
+	 * Any AST_DIM node has exactly two children:
+	 * 1) an expression, whose evaluation returns the array to be accessed
+	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 2) an expression or NULL, representing the key by which to access the array
+	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 
+	 * This test checks a few array indexing expressions' children in the following PHP code:
+	 * 
+	 * $foo[42];
+	 * bar()['key'];
+	 * $buz[qux()];
+	 * SOMECONSTANT[];
+	 */
+	@Test
+	public void testArrayIndexingCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_DIM,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,integer,,3,42,1,1,,,\n";
+		nodeStr += "7,AST_DIM,,4,,1,1,,,\n";
+		nodeStr += "8,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "12,string,,4,\"key\",1,1,,,\n";
+		nodeStr += "13,AST_DIM,,5,,2,1,,,\n";
+		nodeStr += "14,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "15,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "16,AST_CALL,,5,,1,1,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "18,string,,5,\"qux\",0,1,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "20,AST_DIM,,6,,3,1,,,\n";
+		nodeStr += "21,AST_CONST,,6,,0,1,,,\n";
+		nodeStr += "22,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "23,string,,6,\"SOMECONSTANT\",0,1,,,\n";
+		nodeStr += "24,NULL,,6,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "20,24,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)20);
+		
+		assertThat( node, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((ArrayIndexing)node).getArrayExpression());
+		assertEquals( ast.getNodeById((long)6), ((ArrayIndexing)node).getIndexExpression());
+
+		assertThat( node2, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((ArrayIndexing)node2).getArrayExpression());
+		assertEquals( ast.getNodeById((long)12), ((ArrayIndexing)node2).getIndexExpression());
+		
+		assertThat( node3, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((ArrayIndexing)node3).getArrayExpression());
+		assertEquals( ast.getNodeById((long)16), ((ArrayIndexing)node3).getIndexExpression());
+		
+		assertThat( node4, instanceOf(ArrayIndexing.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((ArrayIndexing)node4).getArrayExpression());
+		// TODO ((ArrayIndexing)node4).getIndexExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPArrayElement accepts arbitrary ASTNode's for indices,
+		// when we actually only want to accept Expression's. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((ArrayIndexing)node4).getIndexExpression().getProperty("type"));
+	}
 	
 	/**
 	 * AST_CALL nodes are used to denote call expressions.
