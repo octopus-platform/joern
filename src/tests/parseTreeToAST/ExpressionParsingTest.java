@@ -7,7 +7,7 @@ import org.junit.Test;
 import ast.declarations.IdentifierDecl;
 import ast.expressions.AdditiveExpression;
 import ast.expressions.AndExpression;
-import ast.expressions.AssignmentExpr;
+import ast.expressions.AssignmentExpression;
 import ast.expressions.BitAndExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.CastExpression;
@@ -36,7 +36,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
+		AssignmentExpression expr = (AssignmentExpression) statementItem.getExpression();
 
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 		assertTrue(expr.getRight().getEscapedCodeStr().equals("y"));
@@ -50,7 +50,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
+		AssignmentExpression expr = (AssignmentExpression) statementItem.getExpression();
 		assertTrue(expr.getLeft().getEscapedCodeStr().equals("x"));
 		assertTrue(expr.getRight().getEscapedCodeStr().equals("y = z"));
 	}
@@ -76,7 +76,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		ExpressionStatement statementItem = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		AssignmentExpr expr = (AssignmentExpr) statementItem.getExpression();
+		AssignmentExpression expr = (AssignmentExpression) statementItem.getExpression();
 		ConditionalExpression right = (ConditionalExpression) expr.getRight();
 		assertTrue(right.getChild(0).getEscapedCodeStr().equals("cond"));
 	}

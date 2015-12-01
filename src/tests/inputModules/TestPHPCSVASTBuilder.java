@@ -15,6 +15,7 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
+import ast.expressions.AssignmentExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
@@ -1009,7 +1010,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyName());
 		
 		assertThat( node3, instanceOf(StaticPropertyExpression.class));
-		assertEquals( 2, node2.getChildCount());
+		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
 		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyName());
 	}
@@ -1139,9 +1140,132 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((ClassConstantExpression)node2).getConstantName());
 		
 		assertThat( node3, instanceOf(ClassConstantExpression.class));
-		assertEquals( 2, node2.getChildCount());
+		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((ClassConstantExpression)node3).getClassExpression());
 		assertEquals( ast.getNodeById((long)16), ((ClassConstantExpression)node3).getConstantName());
+	}
+	
+	/**
+	 * AST_ASSIGN nodes are used to denote assignment expressions.
+	 * 
+	 * Any AST_ASSIGN node has exactly two children:
+	 * 1) an expression, representing the variable being assigned to
+	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, AST_LIST, etc...)
+	 * 2) an expression, representing the expression to be evaluated and assigned to a variable
+	 *    (e.g., could be int, string, AST_CONST, AST_CALL, AST_ARRAY, etc...)
+	 * 
+	 * This test checks a few assignment expressions' children in the following PHP code:
+	 * 
+	 * $foo = 42;
+	 * $bar[3] = "bonjour";
+	 * $buz->qux = SOMECONST;
+	 * Buz::$qux = somecall();
+	 * list($a) = [3];
+	 */
+	@Test
+	public void testAssignCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,integer,,3,42,1,1,,,\n";
+		nodeStr += "7,AST_ASSIGN,,4,,1,1,,,\n";
+		nodeStr += "8,AST_DIM,,4,,0,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "11,integer,,4,3,1,1,,,\n";
+		nodeStr += "12,string,,4,\"bonjour\",1,1,,,\n";
+		nodeStr += "13,AST_ASSIGN,,5,,2,1,,,\n";
+		nodeStr += "14,AST_PROP,,5,,0,1,,,\n";
+		nodeStr += "15,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "16,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "17,string,,5,\"qux\",1,1,,,\n";
+		nodeStr += "18,AST_CONST,,5,,1,1,,,\n";
+		nodeStr += "19,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "20,string,,5,\"SOMECONST\",0,1,,,\n";
+		nodeStr += "21,AST_ASSIGN,,6,,3,1,,,\n";
+		nodeStr += "22,AST_STATIC_PROP,,6,,0,1,,,\n";
+		nodeStr += "23,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "24,string,,6,\"Buz\",0,1,,,\n";
+		nodeStr += "25,string,,6,\"qux\",1,1,,,\n";
+		nodeStr += "26,AST_CALL,,6,,1,1,,,\n";
+		nodeStr += "27,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "28,string,,6,\"somecall\",0,1,,,\n";
+		nodeStr += "29,AST_ARG_LIST,,6,,1,1,,,\n";
+		nodeStr += "30,AST_ASSIGN,,7,,4,1,,,\n";
+		nodeStr += "31,AST_LIST,,7,,0,1,,,\n";
+		nodeStr += "32,AST_VAR,,7,,0,1,,,\n";
+		nodeStr += "33,string,,7,\"a\",0,1,,,\n";
+		nodeStr += "34,AST_ARRAY,,7,,1,1,,,\n";
+		nodeStr += "35,AST_ARRAY_ELEM,,7,,0,1,,,\n";
+		nodeStr += "36,integer,,7,3,0,1,,,\n";
+		nodeStr += "37,NULL,,7,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,17,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "13,18,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,25,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "27,28,PARENT_OF\n";
+		edgeStr += "26,27,PARENT_OF\n";
+		edgeStr += "26,29,PARENT_OF\n";
+		edgeStr += "21,26,PARENT_OF\n";
+		edgeStr += "32,33,PARENT_OF\n";
+		edgeStr += "31,32,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "35,36,PARENT_OF\n";
+		edgeStr += "35,37,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "30,34,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)21);
+		ASTNode node5 = ast.getNodeById((long)30);
+		
+		assertThat( node, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((AssignmentExpression)node).getVariable());
+		assertEquals( ast.getNodeById((long)6), ((AssignmentExpression)node).getAssignExpression());
+
+		assertThat( node2, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((AssignmentExpression)node2).getVariable());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentExpression)node2).getAssignExpression());
+		
+		assertThat( node3, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((AssignmentExpression)node3).getVariable());
+		assertEquals( ast.getNodeById((long)18), ((AssignmentExpression)node3).getAssignExpression());
+		
+		assertThat( node4, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)22), ((AssignmentExpression)node4).getVariable());
+		assertEquals( ast.getNodeById((long)26), ((AssignmentExpression)node4).getAssignExpression());
+		
+		assertThat( node5, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getVariable());
+		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getAssignExpression());
 	}
 	
 	/**

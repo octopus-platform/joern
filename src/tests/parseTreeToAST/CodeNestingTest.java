@@ -9,7 +9,7 @@ import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.expressions.Argument;
 import ast.expressions.ArgumentList;
-import ast.expressions.AssignmentExpr;
+import ast.expressions.AssignmentExpression;
 import ast.expressions.CallExpression;
 import ast.logical.statements.Condition;
 import ast.logical.statements.BlockStarter;
@@ -58,7 +58,7 @@ public class CodeNestingTest
 		CompoundStatement item = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) item.getStatements().get(0);
-		AssignmentExpr condition = (AssignmentExpr) ((Condition)starter.getCondition())
+		AssignmentExpression condition = (AssignmentExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		System.out.println(condition.getEscapedCodeStr());
 		assertTrue(condition.getEscapedCodeStr().equals("foo = bar"));
@@ -151,7 +151,7 @@ public class CodeNestingTest
 				.getStatements().get(0);
 		IdentifierDecl decl = (IdentifierDecl) declStatement.getChild(0);
 
-		AssignmentExpr assign = (AssignmentExpr) decl
+		AssignmentExpression assign = (AssignmentExpression) decl
 				.getChild(decl.getChildCount() - 1);
 		assertTrue(assign.getLeft().getEscapedCodeStr().equals("m"));
 		assertTrue(assign.getRight().getEscapedCodeStr()

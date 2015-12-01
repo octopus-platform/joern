@@ -3,7 +3,7 @@ package languages.c.parsing;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
-import ast.expressions.AssignmentExpr;
+import ast.expressions.AssignmentExpression;
 import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
 import ast.expressions.Identifier;
@@ -51,9 +51,9 @@ public class ASTNodeFactory
 		return retval;
 	}
 
-	public static AssignmentExpr create(InitDeclWithAssignContext ctx)
+	public static AssignmentExpression create(InitDeclWithAssignContext ctx)
 	{
-		AssignmentExpr assign = new AssignmentExpr();
+		AssignmentExpression assign = new AssignmentExpression();
 		initializeFromContext(assign, ctx);
 		if (ctx.getChildCount() == 3)
 			assign.setOperator(ctx.getChild(1).getText());
