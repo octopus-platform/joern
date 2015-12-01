@@ -67,6 +67,10 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_ASSIGN_REF = "AST_ASSIGN_REF";
 	public static final String TYPE_ASSIGN_OP = "AST_ASSIGN_OP";
 	public static final String TYPE_BINARY_OP = "AST_BINARY_OP";
+	public static final String TYPE_GREATER = "AST_GREATER";
+	public static final String TYPE_GREATER_EQUAL = "AST_GREATER_EQUAL";
+	public static final String TYPE_AND = "AST_AND";
+	public static final String TYPE_OR = "AST_OR";
 	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";
 	

@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
@@ -22,8 +23,11 @@ import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
+import ast.expressions.GreaterExpression;
+import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
@@ -1821,6 +1825,170 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node20.getChildCount());
 		assertEquals( ast.getNodeById((long)99), ((BinaryOperationExpression)node20).getLeft());
 		assertEquals( ast.getNodeById((long)101), ((BinaryOperationExpression)node20).getRight());
+	}
+	
+	/**
+	 * AST_GREATER nodes are used to denote binary operation "greater than" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_GREATER node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "greater than" expression's children in the following PHP code:
+	 * 
+	 * // comparison operators
+	 * $x > $y;
+	 */
+	@Test
+	public void testGreaterCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GREATER,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(GreaterExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((GreaterExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((GreaterExpression)node).getRight());
+	}
+	
+	/**
+	 * AST_GREATER_EQUAL nodes are used to denote binary operation "greater or equal than" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_GREATER_EQUAL node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "greater or equal than" expression's children in the following PHP code:
+	 * 
+	 * // comparison operators
+	 * $x >= $y;
+	 */
+	@Test
+	public void testGreaterOrEqualCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GREATER_EQUAL,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(GreaterOrEqualExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((GreaterOrEqualExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((GreaterOrEqualExpression)node).getRight());
+	}
+	
+	/**
+	 * AST_AND nodes are used to denote binary operation "boolean and" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_AND node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "boolean and" expression's children in the following PHP code:
+	 * 
+	 * // boolean operators
+	 * $x && $y;
+	 */
+	@Test
+	public void testAndCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_AND,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(AndExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((AndExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((AndExpression)node).getRight());
+	}
+	
+	/**
+	 * AST_OR nodes are used to denote binary operation "boolean or" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_OR node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "boolean or" expression's children in the following PHP code:
+	 * 
+	 * // boolean operators
+	 * $x || $y;
+	 */
+	@Test
+	public void testOrCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_OR,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(OrExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((OrExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((OrExpression)node).getRight());
 	}
 	
 	/**
