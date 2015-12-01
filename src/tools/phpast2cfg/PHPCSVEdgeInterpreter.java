@@ -22,6 +22,7 @@ import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
+import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
@@ -164,6 +165,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ASSIGN:
 				errno = handleAssign((AssignmentExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ASSIGN_REF:
+				errno = handleAssignByRef((PHPAssignmentByRefExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
@@ -733,6 +737,32 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 	
 	private int handleAssign( AssignmentExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getVariable() and setVariable() accordingly
+				startNode.setVariable(endNode);
+				break;
+			case 1: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
+				startNode.setAssignExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleAssignByRef( PHPAssignmentByRefExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 

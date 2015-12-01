@@ -34,6 +34,7 @@ import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
+import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
@@ -1266,6 +1267,123 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node5.getChildCount());
 		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getVariable());
 		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getAssignExpression());
+	}
+	
+	/**
+	 * AST_ASSIGN_REF nodes are used to denote assignment by reference expressions.
+	 * See
+	 * http://php.net/manual/en/language.operators.assignment.php#language.operators.assignment.reference
+	 * 
+	 * Any AST_ASSIGN_REF node has exactly two children:
+	 * 1) an expression, representing the variable being assigned to
+	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, etc...)
+	 * 2) an expression, representing the expression to be evaluated to a reference and assigned to a variable
+	 *    (e.g., AST_VAR, AST_DIM, AST_CALL, AST_METHOD_CALL, AST_STATIC_CALL, etc...)
+	 * 
+	 * This test checks a few assignment by reference expressions' children in the following PHP code:
+	 * 
+	 * $foo =& $someref;
+	 * $bar[3] =& $someref[4];
+	 * $buz->qux =& $buz->somecall();
+	 * Buz::$qux =& Buz::somestaticcall();
+	 */
+	@Test
+	public void testAssignByRefCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN_REF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"someref\",0,1,,,\n";
+		nodeStr += "8,AST_ASSIGN_REF,,4,,1,1,,,\n";
+		nodeStr += "9,AST_DIM,,4,,0,1,,,\n";
+		nodeStr += "10,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "11,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "12,integer,,4,3,1,1,,,\n";
+		nodeStr += "13,AST_DIM,,4,,1,1,,,\n";
+		nodeStr += "14,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "15,string,,4,\"someref\",0,1,,,\n";
+		nodeStr += "16,integer,,4,4,1,1,,,\n";
+		nodeStr += "17,AST_ASSIGN_REF,,5,,2,1,,,\n";
+		nodeStr += "18,AST_PROP,,5,,0,1,,,\n";
+		nodeStr += "19,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "20,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "21,string,,5,\"qux\",1,1,,,\n";
+		nodeStr += "22,AST_METHOD_CALL,,5,,1,1,,,\n";
+		nodeStr += "23,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "24,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "25,string,,5,\"somecall\",1,1,,,\n";
+		nodeStr += "26,AST_ARG_LIST,,5,,2,1,,,\n";
+		nodeStr += "27,AST_ASSIGN_REF,,6,,3,1,,,\n";
+		nodeStr += "28,AST_STATIC_PROP,,6,,0,1,,,\n";
+		nodeStr += "29,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "30,string,,6,\"Buz\",0,1,,,\n";
+		nodeStr += "31,string,,6,\"qux\",1,1,,,\n";
+		nodeStr += "32,AST_STATIC_CALL,,6,,1,1,,,\n";
+		nodeStr += "33,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "34,string,,6,\"Buz\",0,1,,,\n";
+		nodeStr += "35,string,,6,\"somestaticcall\",1,1,,,\n";
+		nodeStr += "36,AST_ARG_LIST,,6,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "8,13,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,21,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,25,PARENT_OF\n";
+		edgeStr += "22,26,PARENT_OF\n";
+		edgeStr += "17,22,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "28,31,PARENT_OF\n";
+		edgeStr += "27,28,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "32,33,PARENT_OF\n";
+		edgeStr += "32,35,PARENT_OF\n";
+		edgeStr += "32,36,PARENT_OF\n";
+		edgeStr += "27,32,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)17);
+		ASTNode node4 = ast.getNodeById((long)27);
+		
+		assertThat( node, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPAssignmentByRefExpression)node).getVariable());
+		assertEquals( ast.getNodeById((long)6), ((PHPAssignmentByRefExpression)node).getAssignExpression());
+
+		assertThat( node2, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node2).getVariable());
+		assertEquals( ast.getNodeById((long)13), ((PHPAssignmentByRefExpression)node2).getAssignExpression());
+		
+		assertThat( node3, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)18), ((PHPAssignmentByRefExpression)node3).getVariable());
+		assertEquals( ast.getNodeById((long)22), ((PHPAssignmentByRefExpression)node3).getAssignExpression());
+		
+		assertThat( node4, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getVariable());
+		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getAssignExpression());
 	}
 	
 	/**
