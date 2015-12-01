@@ -65,6 +65,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_CLASS_CONST = "AST_CLASS_CONST";
 	public static final String TYPE_ASSIGN = "AST_ASSIGN";
 	public static final String TYPE_ASSIGN_REF = "AST_ASSIGN_REF";
+	public static final String TYPE_ASSIGN_OP = "AST_ASSIGN_OP";
 	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";
 	

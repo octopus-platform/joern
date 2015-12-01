@@ -16,6 +16,7 @@ import ast.ASTNode;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
+import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
@@ -1384,6 +1385,74 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getVariable());
 		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getAssignExpression());
+	}
+	
+	/**
+	 * AST_ASSIGN_OP nodes are used to denote assignment expressions with operations.
+	 * 
+	 * Any AST_ASSIGN_OP node has exactly two children:
+	 * 1) an expression, representing the variable being assigned to
+	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, etc...)
+	 * 2) an expression, representing the expression to be evaluated, combined with the
+	 *    variable being assigned to using a given operator, and assigned to that variable
+	 *    (e.g., could be int, string, AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 
+	 * This test checks a few assignment with operation expressions' children in the following PHP code:
+	 * 
+	 * $foo += 42;
+	 * $bar .= "bonjour";
+	 * $buz ^= $onetimepad;
+	 */
+	@Test
+	public void testAssignWithOpCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN_OP,ASSIGN_ADD,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,integer,,3,42,1,1,,,\n";
+		nodeStr += "7,AST_ASSIGN_OP,ASSIGN_CONCAT,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"bonjour\",1,1,,,\n";
+		nodeStr += "11,AST_ASSIGN_OP,ASSIGN_BITWISE_XOR,5,,2,1,,,\n";
+		nodeStr += "12,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "13,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "14,AST_VAR,,5,,1,1,,,\n";
+		nodeStr += "15,string,,5,\"onetimepad\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "11,14,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(AssignmentWithOpExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((AssignmentWithOpExpression)node).getVariable());
+		assertEquals( ast.getNodeById((long)6), ((AssignmentWithOpExpression)node).getAssignExpression());
+
+		assertThat( node2, instanceOf(AssignmentWithOpExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((AssignmentWithOpExpression)node2).getVariable());
+		assertEquals( ast.getNodeById((long)10), ((AssignmentWithOpExpression)node2).getAssignExpression());
+		
+		assertThat( node3, instanceOf(AssignmentWithOpExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentWithOpExpression)node3).getVariable());
+		assertEquals( ast.getNodeById((long)14), ((AssignmentWithOpExpression)node3).getAssignExpression());
 	}
 	
 	/**
