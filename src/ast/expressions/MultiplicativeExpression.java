@@ -1,5 +1,5 @@
 package ast.expressions;
 
-public class MultiplicativeExpression extends BinaryExpression
+public class MultiplicativeExpression extends BinaryOperationExpression
 {
 }

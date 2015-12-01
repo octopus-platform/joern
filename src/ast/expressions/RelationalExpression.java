@@ -1,5 +1,5 @@
 package ast.expressions;
 
-public class RelationalExpression extends BinaryExpression
+public class RelationalExpression extends BinaryOperationExpression
 {
 }

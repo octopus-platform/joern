@@ -1,5 +1,5 @@
 package ast.expressions;
 
-public class ShiftExpression extends BinaryExpression
+public class ShiftExpression extends BinaryOperationExpression
 {
 }

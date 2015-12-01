@@ -5,6 +5,7 @@ import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
+import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
@@ -172,6 +173,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ASSIGN_OP:
 				errno = handleAssignWithOp((AssignmentWithOpExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_BINARY_OP:
+				errno = handleBinaryOperation((BinaryOperationExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
@@ -809,6 +813,32 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// then, change BinaryExpression.right to be an Expression instead
 				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
 				startNode.setAssignExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleBinaryOperation( BinaryOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getLeft() and setLeft() accordingly
+				startNode.setLeft(endNode);
+				break;
+			case 1: // right child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getRight() and setRight() accordingly
+				startNode.setRight(endNode);
 				break;
 
 			default:
