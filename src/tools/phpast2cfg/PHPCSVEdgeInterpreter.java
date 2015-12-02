@@ -34,6 +34,7 @@ import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -203,6 +204,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_INSTANCEOF:
 				errno = handleInstanceof((InstanceofExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_YIELD:
+				errno = handleYield((PHPYieldExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
@@ -1038,6 +1042,30 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // class child: Identifier node
 				startNode.setClassIdentifier((Identifier)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleYield( PHPYieldExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // value child: Expression or plain or NULL node
+				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
+				// unless it is a NULL node: test that!
+				startNode.setValue(endNode);
+				break;
+			case 1: // key child: Expression or plain or NULL node
+				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
+				// unless it is a NULL node: test that!
+				startNode.setKey(endNode);
 				break;
 
 			default:

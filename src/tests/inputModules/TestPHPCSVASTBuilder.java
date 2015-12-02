@@ -46,6 +46,7 @@ import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -2208,6 +2209,81 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((Identifier)((CallExpression)((InstanceofExpression)node2).getInstanceExpression()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassIdentifier());
 		assertEquals( "Bar\\Buz", ((InstanceofExpression)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_YIELD nodes are used to denote yield expressions used in generators.
+	 * See http://php.net/manual/en/language.generators.syntax.php
+	 * 
+	 * Any AST_YIELD node has exactly 2 children:
+	 * 1) an expression, whose evaluation holds the value to be yielded
+	 * 2) an expression or NULL, specifying an optional key to be yielded
+	 * 
+	 * This test checks a few yield expressions' children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   yield 42;
+	 *   yield $somekey => bar();
+	 * }
+	 */
+	@Test
+	public void testYieldCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,6,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_YIELD,,4,,0,3,,,\n";
+		nodeStr += "8,integer,,4,42,0,3,,,\n";
+		nodeStr += "9,NULL,,4,,1,3,,,\n";
+		nodeStr += "10,AST_YIELD,,5,,1,3,,,\n";
+		nodeStr += "11,AST_CALL,,5,,0,3,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,3,,,\n";
+		nodeStr += "13,string,,5,\"bar\",0,3,,,\n";
+		nodeStr += "14,AST_ARG_LIST,,5,,1,3,,,\n";
+		nodeStr += "15,AST_VAR,,5,,1,3,,,\n";
+		nodeStr += "16,string,,5,\"somekey\",0,3,,,\n";
+		nodeStr += "17,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,14,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "10,15,PARENT_OF\n";
+		edgeStr += "6,10,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,17,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
+		
+		assertThat( node, instanceOf(PHPYieldExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPYieldExpression)node).getValue());
+		assertEquals( "42", ((PHPYieldExpression)node).getValue().getEscapedCodeStr());
+		// TODO ((PHPYieldExpression)node).getKey() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for keys,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPYieldExpression)node).getKey().getProperty("type"));
+		
+		assertThat( node2, instanceOf(PHPYieldExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((PHPYieldExpression)node2).getValue());
+		assertEquals( "bar", ((Identifier)((CallExpression)((PHPYieldExpression)node2).getValue()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)15), ((PHPYieldExpression)node2).getKey());
+		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
