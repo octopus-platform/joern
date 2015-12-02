@@ -15,6 +15,7 @@ import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
@@ -195,6 +196,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_NEW:
+				errno = handleNew((NewExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
@@ -722,7 +726,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // expr child: Expression node
 				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change CallExpression.target to be an Expression instead
+				// then, change CallExpression.targetFunc to be an Expression instead
 				// of a generic ASTNode, and getTargetFunc() and setTargetFunc() accordingly
 				startNode.setTargetFunc(endNode);
 				break;
@@ -984,6 +988,29 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
 				// unless it is a NULL node: test that!
 				startNode.setKey(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleNew( NewExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change NewExpression.targetClass to be an Expression instead
+				// of a generic ASTNode, and getTargetClass() and setTargetClass() accordingly
+				startNode.setTargetClass(endNode);
+				break;
+			case 1: // args child: ArgumentList node
+				startNode.setArgumentList((ArgumentList)endNode);
 				break;
 
 			default:
@@ -1403,7 +1430,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // method child: "string" node
 				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change CallExpression.target to be an Expression instead
+				// then, change CallExpression.targetFunc to be an Expression instead
 				// of a generic ASTNode, and getTargetFunc() and setTargetFunc() accordingly
 				startNode.setTargetFunc(endNode);
 				break;

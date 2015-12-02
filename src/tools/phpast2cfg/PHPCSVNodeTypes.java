@@ -71,6 +71,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_GREATER_EQUAL = "AST_GREATER_EQUAL";
 	public static final String TYPE_AND = "AST_AND";
 	public static final String TYPE_OR = "AST_OR";
+	public static final String TYPE_NEW = "AST_NEW";
 	public static final String TYPE_ARRAY_ELEM = "AST_ARRAY_ELEM";
 	public static final String TYPE_COALESCE = "AST_COALESCE";
 	

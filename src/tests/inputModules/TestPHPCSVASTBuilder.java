@@ -27,6 +27,7 @@ import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
@@ -2083,6 +2084,65 @@ public class TestPHPCSVASTBuilder
 		// when we actually only want to accept Expression's. Once the mapping is
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PHPArrayElement)node4).getKey().getProperty("type"));
+	}
+	
+	/**
+	 * AST_NEW nodes are used to denote 'new' expressions used to create a new instance
+	 * of a class.
+	 * 
+	 * Any AST_NEW node has exactly 2 children:
+	 * 1) an expression, whose evaluation holds the name of the class to be instantiated
+	 *    (e.g., could be AST_NAME, AST_VAR, ...)
+	 * 2) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a few new expressions' children in the following PHP code:
+	 * 
+	 * new Foo($bar);
+	 * new $buz();
+	 */
+	@Test
+	public void testNewCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_NEW,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "9,AST_NEW,,4,,1,1,,,\n";
+		nodeStr += "10,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "11,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "12,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)9);
+		
+		assertThat( node, instanceOf(NewExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((NewExpression)node).getTargetClass());
+		assertEquals( "Foo", ((Identifier)((NewExpression)node).getTargetClass()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((NewExpression)node).getArgumentList());
+		assertEquals( 1, ((NewExpression)node).getArgumentList().size());
+		
+		assertThat( node2, instanceOf(NewExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((NewExpression)node2).getTargetClass());
+		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
+		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
 	}
 	
 	/**
