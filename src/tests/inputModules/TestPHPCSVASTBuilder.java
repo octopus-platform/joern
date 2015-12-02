@@ -47,6 +47,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPYieldExpression;
+import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -542,6 +543,106 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
 	}
 
+	/**
+	 * AST_YIELD_FROM nodes are used to denote 'yield from' expressions used in generators.
+	 * See http://php.net/manual/en/language.generators.syntax.php
+	 * 
+	 * Any AST_YIELD_FROM node has exactly one child, which is an expression that evaluates
+	 * to another generator call, traversable object or array to be yielded from.
+	 * 
+	 * This test checks a few yield from expressions' children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   yield from [4, 2];
+	 *   yield from new ArrayIterator(["hello", "world"]);
+	 *   yield from bar();
+	 * }
+	 */
+	@Test
+	public void testYieldFromCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,7,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_YIELD_FROM,,4,,0,3,,,\n";
+		nodeStr += "8,AST_ARRAY,,4,,0,3,,,\n";
+		nodeStr += "9,AST_ARRAY_ELEM,,4,,0,3,,,\n";
+		nodeStr += "10,integer,,4,4,0,3,,,\n";
+		nodeStr += "11,NULL,,4,,1,3,,,\n";
+		nodeStr += "12,AST_ARRAY_ELEM,,4,,1,3,,,\n";
+		nodeStr += "13,integer,,4,2,0,3,,,\n";
+		nodeStr += "14,NULL,,4,,1,3,,,\n";
+		nodeStr += "15,AST_YIELD_FROM,,5,,1,3,,,\n";
+		nodeStr += "16,AST_NEW,,5,,0,3,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,5,,0,3,,,\n";
+		nodeStr += "18,string,,5,\"ArrayIterator\",0,3,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,5,,1,3,,,\n";
+		nodeStr += "20,AST_ARRAY,,5,,0,3,,,\n";
+		nodeStr += "21,AST_ARRAY_ELEM,,5,,0,3,,,\n";
+		nodeStr += "22,string,,5,\"hello\",0,3,,,\n";
+		nodeStr += "23,NULL,,5,,1,3,,,\n";
+		nodeStr += "24,AST_ARRAY_ELEM,,5,,1,3,,,\n";
+		nodeStr += "25,string,,5,\"world\",0,3,,,\n";
+		nodeStr += "26,NULL,,5,,1,3,,,\n";
+		nodeStr += "27,AST_YIELD_FROM,,6,,2,3,,,\n";
+		nodeStr += "28,AST_CALL,,6,,0,3,,,\n";
+		nodeStr += "29,AST_NAME,NAME_NOT_FQ,6,,0,3,,,\n";
+		nodeStr += "30,string,,6,\"bar\",0,3,,,\n";
+		nodeStr += "31,AST_ARG_LIST,,6,,1,3,,,\n";
+		nodeStr += "32,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "21,23,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "24,26,PARENT_OF\n";
+		edgeStr += "20,24,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "6,15,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "28,31,PARENT_OF\n";
+		edgeStr += "27,28,PARENT_OF\n";
+		edgeStr += "6,27,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,32,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)15);
+		ASTNode node3 = ast.getNodeById((long)27);
+		
+		assertThat( node, instanceOf(PHPYieldFromExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPYieldFromExpression)node).getFromExpression());
+		
+		assertThat( node2, instanceOf(PHPYieldFromExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PHPYieldFromExpression)node2).getFromExpression());
+		
+		assertThat( node3, instanceOf(PHPYieldFromExpression.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)28), ((PHPYieldFromExpression)node3).getFromExpression());
+	}
+	
 	/**
 	 * AST_RETURN nodes are nodes representing a return statement.
 	 * 

@@ -47,6 +47,7 @@ public class PHPCSVNodeTypes
 	// nodes with exactly 1 child
 	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
+	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";
 	
 	// statements
 	public static final String TYPE_RETURN = "AST_RETURN";

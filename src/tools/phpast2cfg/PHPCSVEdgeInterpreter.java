@@ -35,6 +35,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPYieldExpression;
+import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -133,6 +134,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// expressions
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
+				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
 				break;
 			
 			// statements
@@ -536,6 +540,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // name child
 				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleYieldFrom( PHPYieldFromExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setFromExpression(endNode);
 				break;
 				
 			default:
