@@ -2,7 +2,7 @@ package ast.expressions;
 
 import ast.ASTNode;
 
-public class ClassConstantExpression extends Expression
+public class ClassConstantExpression extends MemberAccess
 {
 	private ASTNode classExpression = null; // TODO make this an Expression
 	private ASTNode constantName = null;
