@@ -21,6 +21,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPYieldExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPParameter;
@@ -318,6 +319,53 @@ public class TestPHPCSVASTBuilderMinimal
 
 
 	/* nodes with exactly 2 children */
+	
+	/**
+	 * function foo() {
+	 *   yield;
+	 * }
+	 */
+	@Test
+	public void testMinimalYieldCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_YIELD,,4,,0,3,,,\n";
+		nodeStr += "8,NULL,,4,,0,3,,,\n";
+		nodeStr += "9,NULL,,4,,1,3,,,\n";
+		nodeStr += "10,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,10,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		
+		assertThat( node, instanceOf(PHPYieldExpression.class));
+		assertEquals( 2, node.getChildCount());
+		// TODO ((PHPYieldExpression)node).getValue() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for values,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPYieldExpression)node).getValue().getProperty("type"));
+		// TODO ((PHPYieldExpression)node).getKey() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for keys,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPYieldExpression)node).getKey().getProperty("type"));
+	}
 	
 	/**
 	 * while($foo);

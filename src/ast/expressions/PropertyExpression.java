@@ -2,7 +2,7 @@ package ast.expressions;
 
 import ast.ASTNode;
 
-public class PropertyExpression extends Expression
+public class PropertyExpression extends MemberAccess
 {
 	private ASTNode objectExpression = null; // TODO make this an Expression
 	private ASTNode propertyName = null;

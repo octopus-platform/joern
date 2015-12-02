@@ -15,6 +15,8 @@ import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.InstanceofExpression;
+import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
@@ -32,6 +34,8 @@ import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPYieldExpression;
+import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -131,6 +135,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
+				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
+				break;
 			
 			// statements
 			case PHPCSVNodeTypes.TYPE_RETURN:
@@ -195,6 +202,15 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_NEW:
+				errno = handleNew((NewExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_INSTANCEOF:
+				errno = handleInstanceof((InstanceofExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_YIELD:
+				errno = handleYield((PHPYieldExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
@@ -533,6 +549,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;		
 	}
 	
+	private int handleYieldFrom( PHPYieldFromExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setFromExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	private int handleReturn( ReturnStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -722,7 +755,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // expr child: Expression node
 				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change CallExpression.target to be an Expression instead
+				// then, change CallExpression.targetFunc to be an Expression instead
 				// of a generic ASTNode, and getTargetFunc() and setTargetFunc() accordingly
 				startNode.setTargetFunc(endNode);
 				break;
@@ -981,6 +1014,76 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setValue(endNode);
 				break;
 			case 1: // key child: Expression or NULL node
+				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
+				// unless it is a NULL node: test that!
+				startNode.setKey(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleNew( NewExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // class child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change NewExpression.targetClass to be an Expression instead
+				// of a generic ASTNode, and getTargetClass() and setTargetClass() accordingly
+				startNode.setTargetClass(endNode);
+				break;
+			case 1: // args child: ArgumentList node
+				startNode.setArgumentList((ArgumentList)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleInstanceof( InstanceofExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change InstanceofExpression.instanceExpression to be an Expression instead
+				// of a generic ASTNode, and getInstanceExpression() and setInstanceExpression() accordingly
+				startNode.setInstanceExpression(endNode);
+				break;
+			case 1: // class child: Identifier node
+				startNode.setClassIdentifier((Identifier)endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleYield( PHPYieldExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // value child: Expression or plain or NULL node
+				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
+				// unless it is a NULL node: test that!
+				startNode.setValue(endNode);
+				break;
+			case 1: // key child: Expression or plain or NULL node
 				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
 				// unless it is a NULL node: test that!
 				startNode.setKey(endNode);
@@ -1403,7 +1506,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // method child: "string" node
 				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change CallExpression.target to be an Expression instead
+				// then, change CallExpression.targetFunc to be an Expression instead
 				// of a generic ASTNode, and getTargetFunc() and setTargetFunc() accordingly
 				startNode.setTargetFunc(endNode);
 				break;

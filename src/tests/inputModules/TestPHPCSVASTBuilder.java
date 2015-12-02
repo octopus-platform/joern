@@ -27,6 +27,8 @@ import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.InstanceofExpression;
+import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
@@ -44,6 +46,8 @@ import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPYieldExpression;
+import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
@@ -539,6 +543,106 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
 	}
 
+	/**
+	 * AST_YIELD_FROM nodes are used to denote 'yield from' expressions used in generators.
+	 * See http://php.net/manual/en/language.generators.syntax.php
+	 * 
+	 * Any AST_YIELD_FROM node has exactly one child, which is an expression that evaluates
+	 * to another generator call, traversable object or array to be yielded from.
+	 * 
+	 * This test checks a few yield from expressions' children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   yield from [4, 2];
+	 *   yield from new ArrayIterator(["hello", "world"]);
+	 *   yield from bar();
+	 * }
+	 */
+	@Test
+	public void testYieldFromCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,7,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_YIELD_FROM,,4,,0,3,,,\n";
+		nodeStr += "8,AST_ARRAY,,4,,0,3,,,\n";
+		nodeStr += "9,AST_ARRAY_ELEM,,4,,0,3,,,\n";
+		nodeStr += "10,integer,,4,4,0,3,,,\n";
+		nodeStr += "11,NULL,,4,,1,3,,,\n";
+		nodeStr += "12,AST_ARRAY_ELEM,,4,,1,3,,,\n";
+		nodeStr += "13,integer,,4,2,0,3,,,\n";
+		nodeStr += "14,NULL,,4,,1,3,,,\n";
+		nodeStr += "15,AST_YIELD_FROM,,5,,1,3,,,\n";
+		nodeStr += "16,AST_NEW,,5,,0,3,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,5,,0,3,,,\n";
+		nodeStr += "18,string,,5,\"ArrayIterator\",0,3,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,5,,1,3,,,\n";
+		nodeStr += "20,AST_ARRAY,,5,,0,3,,,\n";
+		nodeStr += "21,AST_ARRAY_ELEM,,5,,0,3,,,\n";
+		nodeStr += "22,string,,5,\"hello\",0,3,,,\n";
+		nodeStr += "23,NULL,,5,,1,3,,,\n";
+		nodeStr += "24,AST_ARRAY_ELEM,,5,,1,3,,,\n";
+		nodeStr += "25,string,,5,\"world\",0,3,,,\n";
+		nodeStr += "26,NULL,,5,,1,3,,,\n";
+		nodeStr += "27,AST_YIELD_FROM,,6,,2,3,,,\n";
+		nodeStr += "28,AST_CALL,,6,,0,3,,,\n";
+		nodeStr += "29,AST_NAME,NAME_NOT_FQ,6,,0,3,,,\n";
+		nodeStr += "30,string,,6,\"bar\",0,3,,,\n";
+		nodeStr += "31,AST_ARG_LIST,,6,,1,3,,,\n";
+		nodeStr += "32,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,11,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,14,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "21,23,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "24,26,PARENT_OF\n";
+		edgeStr += "20,24,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "6,15,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "28,31,PARENT_OF\n";
+		edgeStr += "27,28,PARENT_OF\n";
+		edgeStr += "6,27,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,32,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)15);
+		ASTNode node3 = ast.getNodeById((long)27);
+		
+		assertThat( node, instanceOf(PHPYieldFromExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPYieldFromExpression)node).getFromExpression());
+		
+		assertThat( node2, instanceOf(PHPYieldFromExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PHPYieldFromExpression)node2).getFromExpression());
+		
+		assertThat( node3, instanceOf(PHPYieldFromExpression.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)28), ((PHPYieldFromExpression)node3).getFromExpression());
+	}
+	
 	/**
 	 * AST_RETURN nodes are nodes representing a return statement.
 	 * 
@@ -2083,6 +2187,204 @@ public class TestPHPCSVASTBuilder
 		// when we actually only want to accept Expression's. Once the mapping is
 		// finished, we can fix that.
 		assertEquals( "NULL", ((PHPArrayElement)node4).getKey().getProperty("type"));
+	}
+	
+	/**
+	 * AST_NEW nodes are used to denote 'new' expressions used to create a new instance
+	 * of a class.
+	 * 
+	 * Any AST_NEW node has exactly 2 children:
+	 * 1) an expression, whose evaluation holds the name of the class to be instantiated
+	 *    (e.g., could be AST_NAME, AST_VAR, ...)
+	 * 2) AST_ARG_LIST, representing the argument list
+	 * 
+	 * This test checks a few new expressions' children in the following PHP code:
+	 * 
+	 * new Foo($bar);
+	 * new $buz();
+	 */
+	@Test
+	public void testNewCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_NEW,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "9,AST_NEW,,4,,1,1,,,\n";
+		nodeStr += "10,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "11,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "12,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)9);
+		
+		assertThat( node, instanceOf(NewExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((NewExpression)node).getTargetClass());
+		assertEquals( "Foo", ((Identifier)((NewExpression)node).getTargetClass()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((NewExpression)node).getArgumentList());
+		assertEquals( 1, ((NewExpression)node).getArgumentList().size());
+		
+		assertThat( node2, instanceOf(NewExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)10), ((NewExpression)node2).getTargetClass());
+		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
+		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
+	}
+	
+	/**
+	 * AST_INSTANCEOF nodes are used to denote 'instanceof' expressions used to check whether
+	 * a given expression evaluates to an instance of a given class.
+	 * 
+	 * Any AST_INSTANCEOF node has exactly 2 children:
+	 * 1) an expression, whose evaluation holds the object to be checked
+	 *    (e.g., could be AST_VAR, AST_CALL, ...)
+	 * 2) AST_NAME, representing the name of the class that the object
+	 *    may or may not be an instance of.
+	 * 
+	 * This test checks a few instanceof expressions' children in the following PHP code:
+	 * 
+	 * $foo instanceof Foo;
+	 * buz() instanceof Bar\Buz;
+	 */
+	@Test
+	public void testInstanceofCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_INSTANCEOF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "8,AST_INSTANCEOF,,4,,1,1,,,\n";
+		nodeStr += "9,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "11,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "12,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,4,,1,1,,,\n";
+		nodeStr += "14,string,,4,\"Bar\\Buz\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "8,13,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
+		
+		assertThat( node, instanceOf(InstanceofExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((InstanceofExpression)node).getInstanceExpression());
+		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassIdentifier());
+		assertEquals( "Foo", ((InstanceofExpression)node).getClassIdentifier().getNameChild().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(InstanceofExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((InstanceofExpression)node2).getInstanceExpression());
+		assertEquals( "buz", ((Identifier)((CallExpression)((InstanceofExpression)node2).getInstanceExpression()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassIdentifier());
+		assertEquals( "Bar\\Buz", ((InstanceofExpression)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_YIELD nodes are used to denote yield expressions used in generators.
+	 * See http://php.net/manual/en/language.generators.syntax.php
+	 * 
+	 * Any AST_YIELD node has exactly 2 children:
+	 * 1) an expression, whose evaluation holds the value to be yielded
+	 * 2) an expression or NULL, specifying an optional key to be yielded
+	 * 
+	 * This test checks a few yield expressions' children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   yield 42;
+	 *   yield $somekey => bar();
+	 * }
+	 */
+	@Test
+	public void testYieldCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,6,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_YIELD,,4,,0,3,,,\n";
+		nodeStr += "8,integer,,4,42,0,3,,,\n";
+		nodeStr += "9,NULL,,4,,1,3,,,\n";
+		nodeStr += "10,AST_YIELD,,5,,1,3,,,\n";
+		nodeStr += "11,AST_CALL,,5,,0,3,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,3,,,\n";
+		nodeStr += "13,string,,5,\"bar\",0,3,,,\n";
+		nodeStr += "14,AST_ARG_LIST,,5,,1,3,,,\n";
+		nodeStr += "15,AST_VAR,,5,,1,3,,,\n";
+		nodeStr += "16,string,,5,\"somekey\",0,3,,,\n";
+		nodeStr += "17,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,9,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "11,14,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "10,15,PARENT_OF\n";
+		edgeStr += "6,10,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,17,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
+		
+		assertThat( node, instanceOf(PHPYieldExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPYieldExpression)node).getValue());
+		assertEquals( "42", ((PHPYieldExpression)node).getValue().getEscapedCodeStr());
+		// TODO ((PHPYieldExpression)node).getKey() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for keys,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPYieldExpression)node).getKey().getProperty("type"));
+		
+		assertThat( node2, instanceOf(PHPYieldExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((PHPYieldExpression)node2).getValue());
+		assertEquals( "bar", ((Identifier)((CallExpression)((PHPYieldExpression)node2).getValue()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)15), ((PHPYieldExpression)node2).getKey());
+		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
