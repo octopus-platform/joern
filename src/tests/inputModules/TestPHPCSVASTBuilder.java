@@ -27,6 +27,7 @@ import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.InstanceofExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
@@ -2143,6 +2144,70 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
 		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
+	}
+	
+	/**
+	 * AST_INSTANCEOF nodes are used to denote 'instanceof' expressions used to check whether
+	 * a given expression evaluates to an instance of a given class.
+	 * 
+	 * Any AST_INSTANCEOF node has exactly 2 children:
+	 * 1) an expression, whose evaluation holds the object to be checked
+	 *    (e.g., could be AST_VAR, AST_CALL, ...)
+	 * 2) AST_NAME, representing the name of the class that the object
+	 *    may or may not be an instance of.
+	 * 
+	 * This test checks a few instanceof expressions' children in the following PHP code:
+	 * 
+	 * $foo instanceof Foo;
+	 * buz() instanceof Bar\Buz;
+	 */
+	@Test
+	public void testInstanceofCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_INSTANCEOF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "8,AST_INSTANCEOF,,4,,1,1,,,\n";
+		nodeStr += "9,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "11,string,,4,\"buz\",0,1,,,\n";
+		nodeStr += "12,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,4,,1,1,,,\n";
+		nodeStr += "14,string,,4,\"Bar\\Buz\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "8,13,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
+		
+		assertThat( node, instanceOf(InstanceofExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((InstanceofExpression)node).getInstanceExpression());
+		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassIdentifier());
+		assertEquals( "Foo", ((InstanceofExpression)node).getClassIdentifier().getNameChild().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(InstanceofExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((InstanceofExpression)node2).getInstanceExpression());
+		assertEquals( "buz", ((Identifier)((CallExpression)((InstanceofExpression)node2).getInstanceExpression()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassIdentifier());
+		assertEquals( "Bar\\Buz", ((InstanceofExpression)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
