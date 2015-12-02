@@ -103,7 +103,7 @@ public class ASTDefUseAnalyzer
 
 		switch (nodeType)
 		{
-		case "AssignmentExpr":
+		case "AssignmentExpression":
 			return new AssignmentEnvironment();
 		case "IncDecOp":
 			return new IncDecEnvironment();

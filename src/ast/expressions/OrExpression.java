@@ -1,5 +1,5 @@
 package ast.expressions;
 
-public class OrExpression extends BinaryExpression
+public class OrExpression extends BinaryOperationExpression
 {
 }

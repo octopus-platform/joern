@@ -4,58 +4,42 @@ import ast.ASTNode;
 
 public class BinaryExpression extends Expression
 {
-	Expression subExpressions[] = new Expression[2];
-
-	public Expression getLeft()
+	ASTNode leftExpression = null; // TODO make this an Expression again, once PHP mapping is finished
+	ASTNode rightExpression = null; // TODO make this an Expression again, once PHP mapping is finished
+	
+	public ASTNode getLeft() // TODO return Expression
 	{
-		return subExpressions[0];
+		return this.leftExpression;
 	}
 
-	public Expression getRight()
+	protected void setLeft(ASTNode leftExpression) // TODO take Expression
 	{
-		return subExpressions[1];
+		this.leftExpression = leftExpression;
+		super.addChild(leftExpression);
+	}
+	
+	public ASTNode getRight() // TODO return Expression
+	{
+		return this.rightExpression;
 	}
 
-	private void setLeft(Expression aLeft)
+	protected void setRight(ASTNode rightExpression) // TODO take Expression
 	{
-		subExpressions[0] = aLeft;
-	}
-
-	private void setRight(Expression aRight)
-	{
-		subExpressions[1] = aRight;
+		this.rightExpression = rightExpression;
+		super.addChild(rightExpression);
 	}
 
 	@Override
 	public void addChild(ASTNode item)
 	{
-		Expression expression = (Expression) item;
+		// TODO cast this to an Expression again
+		//Expression expression = (Expression) item;
 		if (getLeft() == null)
-			setLeft(expression);
+			setLeft(item);
 		else if (getRight() == null)
-			setRight(expression);
+			setRight(item);
 		else
 			throw new RuntimeException(
 					"Error: attempting to add third child to binary expression");
-
-		super.addChild(item);
 	}
-
-	@Override
-	public int getChildCount()
-	{
-		int childCount = 0;
-		if (getLeft() != null)
-			childCount++;
-		if (getRight() != null)
-			childCount++;
-		return childCount;
-	}
-
-	@Override
-	public ASTNode getChild(int i)
-	{
-		return subExpressions[i];
-	}
-
 }

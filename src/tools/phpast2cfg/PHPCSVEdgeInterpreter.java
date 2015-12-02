@@ -1,14 +1,21 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
+import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
+import ast.expressions.AssignmentExpression;
+import ast.expressions.AssignmentWithOpExpression;
+import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
+import ast.expressions.GreaterExpression;
+import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
@@ -21,6 +28,7 @@ import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
+import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
@@ -119,10 +127,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 1 child
+			// expressions
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
 				break;
-				
+			
+			// statements
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
 				break;
@@ -143,6 +153,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 2 children
+			// expressions
 			case PHPCSVNodeTypes.TYPE_DIM:
 				errno = handleArrayIndexing((ArrayIndexing)startNode, endNode, childnum);
 				break;
@@ -158,6 +169,30 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CLASS_CONST:
 				errno = handleClassConstant((ClassConstantExpression)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_ASSIGN:
+				errno = handleAssign((AssignmentExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ASSIGN_REF:
+				errno = handleAssignByRef((PHPAssignmentByRefExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ASSIGN_OP:
+				errno = handleAssignWithOp((AssignmentWithOpExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_BINARY_OP:
+				errno = handleBinaryOperation((BinaryOperationExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_GREATER:
+				errno = handleGreater((GreaterExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_GREATER_EQUAL:
+				errno = handleGreaterOrEqual((GreaterOrEqualExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_AND:
+				errno = handleAnd((AndExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_OR:
+				errno = handleOr((OrExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
 				break;
@@ -165,6 +200,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
 				break;
 
+			// statements
 			case PHPCSVNodeTypes.TYPE_STATIC:
 				errno = handleStaticVariable((StaticVariableDeclaration)startNode, endNode, childnum);
 				break;
@@ -215,6 +251,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 
 			// nodes with exactly 3 children
+			// expressions
 			case PHPCSVNodeTypes.TYPE_METHOD_CALL:
 				errno = handleMethodCall((MethodCallExpression)startNode, endNode, childnum);
 				break;
@@ -224,7 +261,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CONDITIONAL:
 				errno = handleConditional((ConditionalExpression)startNode, endNode, childnum);
 				break;
-				
+			
+			// statements
 			case PHPCSVNodeTypes.TYPE_TRY:
 				errno = handleTry((TryStatement)startNode, endNode, childnum);
 				break;
@@ -236,6 +274,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			
 			// nodes with exactly 4 children
+			// statements
 			case PHPCSVNodeTypes.TYPE_FOR:
 				errno = handleFor((ForStatement)startNode, endNode, childnum);
 				break;
@@ -712,6 +751,214 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case 1: // const child: string node
 				startNode.setConstantName(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleAssign( AssignmentExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getVariable() and setVariable() accordingly
+				startNode.setVariable(endNode);
+				break;
+			case 1: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
+				startNode.setAssignExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleAssignByRef( PHPAssignmentByRefExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getVariable() and setVariable() accordingly
+				startNode.setVariable(endNode);
+				break;
+			case 1: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
+				startNode.setAssignExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleAssignWithOp( AssignmentWithOpExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getVariable() and setVariable() accordingly
+				startNode.setVariable(endNode);
+				break;
+			case 1: // expr child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
+				startNode.setAssignExpression(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleBinaryOperation( BinaryOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getLeft() and setLeft() accordingly
+				startNode.setLeft(endNode);
+				break;
+			case 1: // right child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getRight() and setRight() accordingly
+				startNode.setRight(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleGreater( GreaterExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getLeft() and setLeft() accordingly
+				startNode.setLeft(endNode);
+				break;
+			case 1: // right child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getRight() and setRight() accordingly
+				startNode.setRight(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleGreaterOrEqual( GreaterOrEqualExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getLeft() and setLeft() accordingly
+				startNode.setLeft(endNode);
+				break;
+			case 1: // right child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getRight() and setRight() accordingly
+				startNode.setRight(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleAnd( AndExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getLeft() and setLeft() accordingly
+				startNode.setLeft(endNode);
+				break;
+			case 1: // right child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getRight() and setRight() accordingly
+				startNode.setRight(endNode);
+				break;
+
+			default:
+				errno = 1;
+		}
+
+		return errno;
+	}
+	
+	private int handleOr( OrExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // left child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.left to be an Expression instead
+				// of a generic ASTNode, and getLeft() and setLeft() accordingly
+				startNode.setLeft(endNode);
+				break;
+			case 1: // right child: Expression node
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change BinaryExpression.right to be an Expression instead
+				// of a generic ASTNode, and getRight() and setRight() accordingly
+				startNode.setRight(endNode);
 				break;
 
 			default:

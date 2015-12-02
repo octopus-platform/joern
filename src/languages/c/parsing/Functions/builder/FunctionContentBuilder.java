@@ -15,7 +15,7 @@ import ast.expressions.AndExpression;
 import ast.expressions.Argument;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
-import ast.expressions.AssignmentExpr;
+import ast.expressions.AssignmentExpression;
 import ast.expressions.BitAndExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.Callee;
@@ -261,7 +261,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterAssignment(Assign_exprContext ctx)
 	{
-		AssignmentExpr expr = new AssignmentExpr();
+		AssignmentExpression expr = new AssignmentExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
@@ -560,7 +560,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 		IdentifierDecl identifierDecl = (IdentifierDecl) stack.pop();
 
 		Expression lastChild = (Expression) identifierDecl.popLastChild();
-		AssignmentExpr assign = ASTNodeFactory.create(ctx);
+		AssignmentExpression assign = ASTNodeFactory.create(ctx);
 
 		// This is a bit of a hack. As we go up,
 		// we introduce an artificial assignment-node.

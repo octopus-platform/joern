@@ -13,14 +13,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
+import ast.expressions.AssignmentExpression;
+import ast.expressions.AssignmentWithOpExpression;
+import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.ExpressionList;
+import ast.expressions.GreaterExpression;
+import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
+import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.Variable;
@@ -33,6 +40,7 @@ import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
+import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
@@ -1009,7 +1017,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyName());
 		
 		assertThat( node3, instanceOf(StaticPropertyExpression.class));
-		assertEquals( 2, node2.getChildCount());
+		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
 		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyName());
 	}
@@ -1139,9 +1147,848 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((ClassConstantExpression)node2).getConstantName());
 		
 		assertThat( node3, instanceOf(ClassConstantExpression.class));
-		assertEquals( 2, node2.getChildCount());
+		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((ClassConstantExpression)node3).getClassExpression());
 		assertEquals( ast.getNodeById((long)16), ((ClassConstantExpression)node3).getConstantName());
+	}
+	
+	/**
+	 * AST_ASSIGN nodes are used to denote assignment expressions.
+	 * 
+	 * Any AST_ASSIGN node has exactly two children:
+	 * 1) an expression, representing the variable being assigned to
+	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, AST_LIST, etc...)
+	 * 2) an expression, representing the expression to be evaluated and assigned to a variable
+	 *    (e.g., could be int, string, AST_CONST, AST_CALL, AST_ARRAY, etc...)
+	 * 
+	 * This test checks a few assignment expressions' children in the following PHP code:
+	 * 
+	 * $foo = 42;
+	 * $bar[3] = "bonjour";
+	 * $buz->qux = SOMECONST;
+	 * Buz::$qux = somecall();
+	 * list($a) = [3];
+	 */
+	@Test
+	public void testAssignCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,integer,,3,42,1,1,,,\n";
+		nodeStr += "7,AST_ASSIGN,,4,,1,1,,,\n";
+		nodeStr += "8,AST_DIM,,4,,0,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "11,integer,,4,3,1,1,,,\n";
+		nodeStr += "12,string,,4,\"bonjour\",1,1,,,\n";
+		nodeStr += "13,AST_ASSIGN,,5,,2,1,,,\n";
+		nodeStr += "14,AST_PROP,,5,,0,1,,,\n";
+		nodeStr += "15,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "16,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "17,string,,5,\"qux\",1,1,,,\n";
+		nodeStr += "18,AST_CONST,,5,,1,1,,,\n";
+		nodeStr += "19,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "20,string,,5,\"SOMECONST\",0,1,,,\n";
+		nodeStr += "21,AST_ASSIGN,,6,,3,1,,,\n";
+		nodeStr += "22,AST_STATIC_PROP,,6,,0,1,,,\n";
+		nodeStr += "23,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "24,string,,6,\"Buz\",0,1,,,\n";
+		nodeStr += "25,string,,6,\"qux\",1,1,,,\n";
+		nodeStr += "26,AST_CALL,,6,,1,1,,,\n";
+		nodeStr += "27,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "28,string,,6,\"somecall\",0,1,,,\n";
+		nodeStr += "29,AST_ARG_LIST,,6,,1,1,,,\n";
+		nodeStr += "30,AST_ASSIGN,,7,,4,1,,,\n";
+		nodeStr += "31,AST_LIST,,7,,0,1,,,\n";
+		nodeStr += "32,AST_VAR,,7,,0,1,,,\n";
+		nodeStr += "33,string,,7,\"a\",0,1,,,\n";
+		nodeStr += "34,AST_ARRAY,,7,,1,1,,,\n";
+		nodeStr += "35,AST_ARRAY_ELEM,,7,,0,1,,,\n";
+		nodeStr += "36,integer,,7,3,0,1,,,\n";
+		nodeStr += "37,NULL,,7,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,12,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,17,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "13,18,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,25,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "27,28,PARENT_OF\n";
+		edgeStr += "26,27,PARENT_OF\n";
+		edgeStr += "26,29,PARENT_OF\n";
+		edgeStr += "21,26,PARENT_OF\n";
+		edgeStr += "32,33,PARENT_OF\n";
+		edgeStr += "31,32,PARENT_OF\n";
+		edgeStr += "30,31,PARENT_OF\n";
+		edgeStr += "35,36,PARENT_OF\n";
+		edgeStr += "35,37,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "30,34,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)21);
+		ASTNode node5 = ast.getNodeById((long)30);
+		
+		assertThat( node, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((AssignmentExpression)node).getVariable());
+		assertEquals( ast.getNodeById((long)6), ((AssignmentExpression)node).getAssignExpression());
+
+		assertThat( node2, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((AssignmentExpression)node2).getVariable());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentExpression)node2).getAssignExpression());
+		
+		assertThat( node3, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((AssignmentExpression)node3).getVariable());
+		assertEquals( ast.getNodeById((long)18), ((AssignmentExpression)node3).getAssignExpression());
+		
+		assertThat( node4, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)22), ((AssignmentExpression)node4).getVariable());
+		assertEquals( ast.getNodeById((long)26), ((AssignmentExpression)node4).getAssignExpression());
+		
+		assertThat( node5, instanceOf(AssignmentExpression.class));
+		assertEquals( 2, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getVariable());
+		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getAssignExpression());
+	}
+	
+	/**
+	 * AST_ASSIGN_REF nodes are used to denote assignment by reference expressions.
+	 * See
+	 * http://php.net/manual/en/language.operators.assignment.php#language.operators.assignment.reference
+	 * 
+	 * Any AST_ASSIGN_REF node has exactly two children:
+	 * 1) an expression, representing the variable being assigned to
+	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, etc...)
+	 * 2) an expression, representing the expression to be evaluated to a reference and assigned to a variable
+	 *    (e.g., AST_VAR, AST_DIM, AST_CALL, AST_METHOD_CALL, AST_STATIC_CALL, etc...)
+	 * 
+	 * This test checks a few assignment by reference expressions' children in the following PHP code:
+	 * 
+	 * $foo =& $someref;
+	 * $bar[3] =& $someref[4];
+	 * $buz->qux =& $buz->somecall();
+	 * Buz::$qux =& Buz::somestaticcall();
+	 */
+	@Test
+	public void testAssignByRefCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN_REF,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"someref\",0,1,,,\n";
+		nodeStr += "8,AST_ASSIGN_REF,,4,,1,1,,,\n";
+		nodeStr += "9,AST_DIM,,4,,0,1,,,\n";
+		nodeStr += "10,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "11,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "12,integer,,4,3,1,1,,,\n";
+		nodeStr += "13,AST_DIM,,4,,1,1,,,\n";
+		nodeStr += "14,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "15,string,,4,\"someref\",0,1,,,\n";
+		nodeStr += "16,integer,,4,4,1,1,,,\n";
+		nodeStr += "17,AST_ASSIGN_REF,,5,,2,1,,,\n";
+		nodeStr += "18,AST_PROP,,5,,0,1,,,\n";
+		nodeStr += "19,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "20,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "21,string,,5,\"qux\",1,1,,,\n";
+		nodeStr += "22,AST_METHOD_CALL,,5,,1,1,,,\n";
+		nodeStr += "23,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "24,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "25,string,,5,\"somecall\",1,1,,,\n";
+		nodeStr += "26,AST_ARG_LIST,,5,,2,1,,,\n";
+		nodeStr += "27,AST_ASSIGN_REF,,6,,3,1,,,\n";
+		nodeStr += "28,AST_STATIC_PROP,,6,,0,1,,,\n";
+		nodeStr += "29,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "30,string,,6,\"Buz\",0,1,,,\n";
+		nodeStr += "31,string,,6,\"qux\",1,1,,,\n";
+		nodeStr += "32,AST_STATIC_CALL,,6,,1,1,,,\n";
+		nodeStr += "33,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "34,string,,6,\"Buz\",0,1,,,\n";
+		nodeStr += "35,string,,6,\"somestaticcall\",1,1,,,\n";
+		nodeStr += "36,AST_ARG_LIST,,6,,2,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "8,13,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "18,21,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "22,25,PARENT_OF\n";
+		edgeStr += "22,26,PARENT_OF\n";
+		edgeStr += "17,22,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "28,31,PARENT_OF\n";
+		edgeStr += "27,28,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "32,33,PARENT_OF\n";
+		edgeStr += "32,35,PARENT_OF\n";
+		edgeStr += "32,36,PARENT_OF\n";
+		edgeStr += "27,32,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)17);
+		ASTNode node4 = ast.getNodeById((long)27);
+		
+		assertThat( node, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPAssignmentByRefExpression)node).getVariable());
+		assertEquals( ast.getNodeById((long)6), ((PHPAssignmentByRefExpression)node).getAssignExpression());
+
+		assertThat( node2, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node2).getVariable());
+		assertEquals( ast.getNodeById((long)13), ((PHPAssignmentByRefExpression)node2).getAssignExpression());
+		
+		assertThat( node3, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)18), ((PHPAssignmentByRefExpression)node3).getVariable());
+		assertEquals( ast.getNodeById((long)22), ((PHPAssignmentByRefExpression)node3).getAssignExpression());
+		
+		assertThat( node4, instanceOf(PHPAssignmentByRefExpression.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getVariable());
+		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getAssignExpression());
+	}
+	
+	/**
+	 * AST_ASSIGN_OP nodes are used to denote assignment expressions with operations.
+	 * 
+	 * Any AST_ASSIGN_OP node has exactly two children:
+	 * 1) an expression, representing the variable being assigned to
+	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, etc...)
+	 * 2) an expression, representing the expression to be evaluated, combined with the
+	 *    variable being assigned to using a given operator, and assigned to that variable
+	 *    (e.g., could be int, string, AST_VAR, AST_CONST, AST_CALL, etc...)
+	 * 
+	 * This test checks a few assignment with operation expressions' children in the following PHP code:
+	 * 
+	 * $foo += 42;
+	 * $bar .= "bonjour";
+	 * $buz ^= $onetimepad;
+	 */
+	@Test
+	public void testAssignWithOpCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN_OP,ASSIGN_ADD,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,integer,,3,42,1,1,,,\n";
+		nodeStr += "7,AST_ASSIGN_OP,ASSIGN_CONCAT,4,,1,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"bonjour\",1,1,,,\n";
+		nodeStr += "11,AST_ASSIGN_OP,ASSIGN_BITWISE_XOR,5,,2,1,,,\n";
+		nodeStr += "12,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "13,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "14,AST_VAR,,5,,1,1,,,\n";
+		nodeStr += "15,string,,5,\"onetimepad\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "11,14,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(AssignmentWithOpExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((AssignmentWithOpExpression)node).getVariable());
+		assertEquals( ast.getNodeById((long)6), ((AssignmentWithOpExpression)node).getAssignExpression());
+
+		assertThat( node2, instanceOf(AssignmentWithOpExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((AssignmentWithOpExpression)node2).getVariable());
+		assertEquals( ast.getNodeById((long)10), ((AssignmentWithOpExpression)node2).getAssignExpression());
+		
+		assertThat( node3, instanceOf(AssignmentWithOpExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentWithOpExpression)node3).getVariable());
+		assertEquals( ast.getNodeById((long)14), ((AssignmentWithOpExpression)node3).getAssignExpression());
+	}
+	
+	/**
+	 * AST_BINARY_OP nodes are used to denote binary operation expressions.
+	 * 
+	 * Any AST_BINARY_OP node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a plethora of binary operation expressions' children in the following PHP code:
+	 * 
+	 * // bit operators
+	 * $or1 | $or2;
+	 * $and1 & $and2;
+	 * $msg ^ $otp;
+	 * $x << $y;
+	 * $x >> $y;
+	 * // string operators
+	 * $str1 . $str2;
+	 * // arithmetic operators
+	 * $x + $y;
+	 * $x - $y;
+	 * $x * $y;
+	 * $x / $y;
+	 * $x % $y;
+	 * $x ** $y;
+	 * // boolean operators
+	 * $x xor $y;
+	 * // comparison operators
+	 * $x === $y;
+	 * $x !== $y;
+	 * $x == $y;
+	 * $x != $y;
+	 * $x < $y;
+	 * $x <= $y;
+	 * $x <=> $y;
+	 */
+	@Test
+	public void testBinaryOperationCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_BINARY_OP,BINARY_BITWISE_OR,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"or1\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"or2\",0,1,,,\n";
+		nodeStr += "8,AST_BINARY_OP,BINARY_BITWISE_AND,4,,1,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"and1\",0,1,,,\n";
+		nodeStr += "11,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "12,string,,4,\"and2\",0,1,,,\n";
+		nodeStr += "13,AST_BINARY_OP,BINARY_BITWISE_XOR,5,,2,1,,,\n";
+		nodeStr += "14,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "15,string,,5,\"msg\",0,1,,,\n";
+		nodeStr += "16,AST_VAR,,5,,1,1,,,\n";
+		nodeStr += "17,string,,5,\"otp\",0,1,,,\n";
+		nodeStr += "18,AST_BINARY_OP,BINARY_CONCAT,7,,3,1,,,\n";
+		nodeStr += "19,AST_VAR,,7,,0,1,,,\n";
+		nodeStr += "20,string,,7,\"str1\",0,1,,,\n";
+		nodeStr += "21,AST_VAR,,7,,1,1,,,\n";
+		nodeStr += "22,string,,7,\"str2\",0,1,,,\n";
+		nodeStr += "23,AST_BINARY_OP,BINARY_ADD,9,,4,1,,,\n";
+		nodeStr += "24,AST_VAR,,9,,0,1,,,\n";
+		nodeStr += "25,string,,9,\"x\",0,1,,,\n";
+		nodeStr += "26,AST_VAR,,9,,1,1,,,\n";
+		nodeStr += "27,string,,9,\"y\",0,1,,,\n";
+		nodeStr += "28,AST_BINARY_OP,BINARY_SUB,10,,5,1,,,\n";
+		nodeStr += "29,AST_VAR,,10,,0,1,,,\n";
+		nodeStr += "30,string,,10,\"x\",0,1,,,\n";
+		nodeStr += "31,AST_VAR,,10,,1,1,,,\n";
+		nodeStr += "32,string,,10,\"y\",0,1,,,\n";
+		nodeStr += "33,AST_BINARY_OP,BINARY_MUL,11,,6,1,,,\n";
+		nodeStr += "34,AST_VAR,,11,,0,1,,,\n";
+		nodeStr += "35,string,,11,\"x\",0,1,,,\n";
+		nodeStr += "36,AST_VAR,,11,,1,1,,,\n";
+		nodeStr += "37,string,,11,\"y\",0,1,,,\n";
+		nodeStr += "38,AST_BINARY_OP,BINARY_DIV,12,,7,1,,,\n";
+		nodeStr += "39,AST_VAR,,12,,0,1,,,\n";
+		nodeStr += "40,string,,12,\"x\",0,1,,,\n";
+		nodeStr += "41,AST_VAR,,12,,1,1,,,\n";
+		nodeStr += "42,string,,12,\"y\",0,1,,,\n";
+		nodeStr += "43,AST_BINARY_OP,BINARY_MOD,13,,8,1,,,\n";
+		nodeStr += "44,AST_VAR,,13,,0,1,,,\n";
+		nodeStr += "45,string,,13,\"x\",0,1,,,\n";
+		nodeStr += "46,AST_VAR,,13,,1,1,,,\n";
+		nodeStr += "47,string,,13,\"y\",0,1,,,\n";
+		nodeStr += "48,AST_BINARY_OP,BINARY_POW,14,,9,1,,,\n";
+		nodeStr += "49,AST_VAR,,14,,0,1,,,\n";
+		nodeStr += "50,string,,14,\"x\",0,1,,,\n";
+		nodeStr += "51,AST_VAR,,14,,1,1,,,\n";
+		nodeStr += "52,string,,14,\"y\",0,1,,,\n";
+		nodeStr += "53,AST_BINARY_OP,BINARY_SHIFT_LEFT,15,,10,1,,,\n";
+		nodeStr += "54,AST_VAR,,15,,0,1,,,\n";
+		nodeStr += "55,string,,15,\"x\",0,1,,,\n";
+		nodeStr += "56,AST_VAR,,15,,1,1,,,\n";
+		nodeStr += "57,string,,15,\"y\",0,1,,,\n";
+		nodeStr += "58,AST_BINARY_OP,BINARY_SHIFT_RIGHT,16,,11,1,,,\n";
+		nodeStr += "59,AST_VAR,,16,,0,1,,,\n";
+		nodeStr += "60,string,,16,\"x\",0,1,,,\n";
+		nodeStr += "61,AST_VAR,,16,,1,1,,,\n";
+		nodeStr += "62,string,,16,\"y\",0,1,,,\n";
+		nodeStr += "63,AST_BINARY_OP,BINARY_BOOL_XOR,18,,12,1,,,\n";
+		nodeStr += "64,AST_VAR,,18,,0,1,,,\n";
+		nodeStr += "65,string,,18,\"x\",0,1,,,\n";
+		nodeStr += "66,AST_VAR,,18,,1,1,,,\n";
+		nodeStr += "67,string,,18,\"y\",0,1,,,\n";
+		nodeStr += "68,AST_BINARY_OP,BINARY_IS_IDENTICAL,20,,13,1,,,\n";
+		nodeStr += "69,AST_VAR,,20,,0,1,,,\n";
+		nodeStr += "70,string,,20,\"x\",0,1,,,\n";
+		nodeStr += "71,AST_VAR,,20,,1,1,,,\n";
+		nodeStr += "72,string,,20,\"y\",0,1,,,\n";
+		nodeStr += "73,AST_BINARY_OP,BINARY_IS_NOT_IDENTICAL,21,,14,1,,,\n";
+		nodeStr += "74,AST_VAR,,21,,0,1,,,\n";
+		nodeStr += "75,string,,21,\"x\",0,1,,,\n";
+		nodeStr += "76,AST_VAR,,21,,1,1,,,\n";
+		nodeStr += "77,string,,21,\"y\",0,1,,,\n";
+		nodeStr += "78,AST_BINARY_OP,BINARY_IS_EQUAL,22,,15,1,,,\n";
+		nodeStr += "79,AST_VAR,,22,,0,1,,,\n";
+		nodeStr += "80,string,,22,\"x\",0,1,,,\n";
+		nodeStr += "81,AST_VAR,,22,,1,1,,,\n";
+		nodeStr += "82,string,,22,\"y\",0,1,,,\n";
+		nodeStr += "83,AST_BINARY_OP,BINARY_IS_NOT_EQUAL,23,,16,1,,,\n";
+		nodeStr += "84,AST_VAR,,23,,0,1,,,\n";
+		nodeStr += "85,string,,23,\"x\",0,1,,,\n";
+		nodeStr += "86,AST_VAR,,23,,1,1,,,\n";
+		nodeStr += "87,string,,23,\"y\",0,1,,,\n";
+		nodeStr += "88,AST_BINARY_OP,BINARY_IS_SMALLER,24,,17,1,,,\n";
+		nodeStr += "89,AST_VAR,,24,,0,1,,,\n";
+		nodeStr += "90,string,,24,\"x\",0,1,,,\n";
+		nodeStr += "91,AST_VAR,,24,,1,1,,,\n";
+		nodeStr += "92,string,,24,\"y\",0,1,,,\n";
+		nodeStr += "93,AST_BINARY_OP,BINARY_IS_SMALLER_OR_EQUAL,25,,18,1,,,\n";
+		nodeStr += "94,AST_VAR,,25,,0,1,,,\n";
+		nodeStr += "95,string,,25,\"x\",0,1,,,\n";
+		nodeStr += "96,AST_VAR,,25,,1,1,,,\n";
+		nodeStr += "97,string,,25,\"y\",0,1,,,\n";
+		nodeStr += "98,AST_BINARY_OP,BINARY_SPACESHIP,26,,19,1,,,\n";
+		nodeStr += "99,AST_VAR,,26,,0,1,,,\n";
+		nodeStr += "100,string,,26,\"x\",0,1,,,\n";
+		nodeStr += "101,AST_VAR,,26,,1,1,,,\n";
+		nodeStr += "102,string,,26,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "2,13,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "18,21,PARENT_OF\n";
+		edgeStr += "2,18,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "26,27,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "2,23,PARENT_OF\n";
+		edgeStr += "29,30,PARENT_OF\n";
+		edgeStr += "28,29,PARENT_OF\n";
+		edgeStr += "31,32,PARENT_OF\n";
+		edgeStr += "28,31,PARENT_OF\n";
+		edgeStr += "2,28,PARENT_OF\n";
+		edgeStr += "34,35,PARENT_OF\n";
+		edgeStr += "33,34,PARENT_OF\n";
+		edgeStr += "36,37,PARENT_OF\n";
+		edgeStr += "33,36,PARENT_OF\n";
+		edgeStr += "2,33,PARENT_OF\n";
+		edgeStr += "39,40,PARENT_OF\n";
+		edgeStr += "38,39,PARENT_OF\n";
+		edgeStr += "41,42,PARENT_OF\n";
+		edgeStr += "38,41,PARENT_OF\n";
+		edgeStr += "2,38,PARENT_OF\n";
+		edgeStr += "44,45,PARENT_OF\n";
+		edgeStr += "43,44,PARENT_OF\n";
+		edgeStr += "46,47,PARENT_OF\n";
+		edgeStr += "43,46,PARENT_OF\n";
+		edgeStr += "2,43,PARENT_OF\n";
+		edgeStr += "49,50,PARENT_OF\n";
+		edgeStr += "48,49,PARENT_OF\n";
+		edgeStr += "51,52,PARENT_OF\n";
+		edgeStr += "48,51,PARENT_OF\n";
+		edgeStr += "2,48,PARENT_OF\n";
+		edgeStr += "54,55,PARENT_OF\n";
+		edgeStr += "53,54,PARENT_OF\n";
+		edgeStr += "56,57,PARENT_OF\n";
+		edgeStr += "53,56,PARENT_OF\n";
+		edgeStr += "2,53,PARENT_OF\n";
+		edgeStr += "59,60,PARENT_OF\n";
+		edgeStr += "58,59,PARENT_OF\n";
+		edgeStr += "61,62,PARENT_OF\n";
+		edgeStr += "58,61,PARENT_OF\n";
+		edgeStr += "2,58,PARENT_OF\n";
+		edgeStr += "64,65,PARENT_OF\n";
+		edgeStr += "63,64,PARENT_OF\n";
+		edgeStr += "66,67,PARENT_OF\n";
+		edgeStr += "63,66,PARENT_OF\n";
+		edgeStr += "2,63,PARENT_OF\n";
+		edgeStr += "69,70,PARENT_OF\n";
+		edgeStr += "68,69,PARENT_OF\n";
+		edgeStr += "71,72,PARENT_OF\n";
+		edgeStr += "68,71,PARENT_OF\n";
+		edgeStr += "2,68,PARENT_OF\n";
+		edgeStr += "74,75,PARENT_OF\n";
+		edgeStr += "73,74,PARENT_OF\n";
+		edgeStr += "76,77,PARENT_OF\n";
+		edgeStr += "73,76,PARENT_OF\n";
+		edgeStr += "2,73,PARENT_OF\n";
+		edgeStr += "79,80,PARENT_OF\n";
+		edgeStr += "78,79,PARENT_OF\n";
+		edgeStr += "81,82,PARENT_OF\n";
+		edgeStr += "78,81,PARENT_OF\n";
+		edgeStr += "2,78,PARENT_OF\n";
+		edgeStr += "84,85,PARENT_OF\n";
+		edgeStr += "83,84,PARENT_OF\n";
+		edgeStr += "86,87,PARENT_OF\n";
+		edgeStr += "83,86,PARENT_OF\n";
+		edgeStr += "2,83,PARENT_OF\n";
+		edgeStr += "89,90,PARENT_OF\n";
+		edgeStr += "88,89,PARENT_OF\n";
+		edgeStr += "91,92,PARENT_OF\n";
+		edgeStr += "88,91,PARENT_OF\n";
+		edgeStr += "2,88,PARENT_OF\n";
+		edgeStr += "94,95,PARENT_OF\n";
+		edgeStr += "93,94,PARENT_OF\n";
+		edgeStr += "96,97,PARENT_OF\n";
+		edgeStr += "93,96,PARENT_OF\n";
+		edgeStr += "2,93,PARENT_OF\n";
+		edgeStr += "99,100,PARENT_OF\n";
+		edgeStr += "98,99,PARENT_OF\n";
+		edgeStr += "101,102,PARENT_OF\n";
+		edgeStr += "98,101,PARENT_OF\n";
+		edgeStr += "2,98,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)18);
+		ASTNode node5 = ast.getNodeById((long)23);
+		ASTNode node6 = ast.getNodeById((long)28);
+		ASTNode node7 = ast.getNodeById((long)33);
+		ASTNode node8 = ast.getNodeById((long)38);
+		ASTNode node9 = ast.getNodeById((long)43);
+		ASTNode node10 = ast.getNodeById((long)48);
+		ASTNode node11 = ast.getNodeById((long)53);
+		ASTNode node12 = ast.getNodeById((long)58);
+		ASTNode node13 = ast.getNodeById((long)63);
+		ASTNode node14 = ast.getNodeById((long)68);
+		ASTNode node15 = ast.getNodeById((long)73);
+		ASTNode node16 = ast.getNodeById((long)78);
+		ASTNode node17 = ast.getNodeById((long)83);
+		ASTNode node18 = ast.getNodeById((long)88);
+		ASTNode node19 = ast.getNodeById((long)93);
+		ASTNode node20 = ast.getNodeById((long)98);
+		
+		assertThat( node, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((BinaryOperationExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((BinaryOperationExpression)node).getRight());
+		
+		assertThat( node2, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((BinaryOperationExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)11), ((BinaryOperationExpression)node2).getRight());
+		
+		assertThat( node3, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((BinaryOperationExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)16), ((BinaryOperationExpression)node3).getRight());
+		
+		assertThat( node4, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)19), ((BinaryOperationExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)21), ((BinaryOperationExpression)node4).getRight());
+		
+		assertThat( node5, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)24), ((BinaryOperationExpression)node5).getLeft());
+		assertEquals( ast.getNodeById((long)26), ((BinaryOperationExpression)node5).getRight());
+		
+		assertThat( node6, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node6.getChildCount());
+		assertEquals( ast.getNodeById((long)29), ((BinaryOperationExpression)node6).getLeft());
+		assertEquals( ast.getNodeById((long)31), ((BinaryOperationExpression)node6).getRight());
+		
+		assertThat( node7, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node7.getChildCount());
+		assertEquals( ast.getNodeById((long)34), ((BinaryOperationExpression)node7).getLeft());
+		assertEquals( ast.getNodeById((long)36), ((BinaryOperationExpression)node7).getRight());
+		
+		assertThat( node8, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node8.getChildCount());
+		assertEquals( ast.getNodeById((long)39), ((BinaryOperationExpression)node8).getLeft());
+		assertEquals( ast.getNodeById((long)41), ((BinaryOperationExpression)node8).getRight());
+		
+		assertThat( node9, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node9.getChildCount());
+		assertEquals( ast.getNodeById((long)44), ((BinaryOperationExpression)node9).getLeft());
+		assertEquals( ast.getNodeById((long)46), ((BinaryOperationExpression)node9).getRight());
+		
+		assertThat( node10, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node10.getChildCount());
+		assertEquals( ast.getNodeById((long)49), ((BinaryOperationExpression)node10).getLeft());
+		assertEquals( ast.getNodeById((long)51), ((BinaryOperationExpression)node10).getRight());
+		
+		assertThat( node11, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node11.getChildCount());
+		assertEquals( ast.getNodeById((long)54), ((BinaryOperationExpression)node11).getLeft());
+		assertEquals( ast.getNodeById((long)56), ((BinaryOperationExpression)node11).getRight());
+		
+		assertThat( node12, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node12.getChildCount());
+		assertEquals( ast.getNodeById((long)59), ((BinaryOperationExpression)node12).getLeft());
+		assertEquals( ast.getNodeById((long)61), ((BinaryOperationExpression)node12).getRight());
+		
+		assertThat( node13, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node13.getChildCount());
+		assertEquals( ast.getNodeById((long)64), ((BinaryOperationExpression)node13).getLeft());
+		assertEquals( ast.getNodeById((long)66), ((BinaryOperationExpression)node13).getRight());
+		
+		assertThat( node14, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node14.getChildCount());
+		assertEquals( ast.getNodeById((long)69), ((BinaryOperationExpression)node14).getLeft());
+		assertEquals( ast.getNodeById((long)71), ((BinaryOperationExpression)node14).getRight());
+		
+		assertThat( node15, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node15.getChildCount());
+		assertEquals( ast.getNodeById((long)74), ((BinaryOperationExpression)node15).getLeft());
+		assertEquals( ast.getNodeById((long)76), ((BinaryOperationExpression)node15).getRight());
+		
+		assertThat( node16, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node16.getChildCount());
+		assertEquals( ast.getNodeById((long)79), ((BinaryOperationExpression)node16).getLeft());
+		assertEquals( ast.getNodeById((long)81), ((BinaryOperationExpression)node16).getRight());
+		
+		assertThat( node17, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node17.getChildCount());
+		assertEquals( ast.getNodeById((long)84), ((BinaryOperationExpression)node17).getLeft());
+		assertEquals( ast.getNodeById((long)86), ((BinaryOperationExpression)node17).getRight());
+		
+		assertThat( node18, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node18.getChildCount());
+		assertEquals( ast.getNodeById((long)89), ((BinaryOperationExpression)node18).getLeft());
+		assertEquals( ast.getNodeById((long)91), ((BinaryOperationExpression)node18).getRight());
+		
+		assertThat( node19, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node19.getChildCount());
+		assertEquals( ast.getNodeById((long)94), ((BinaryOperationExpression)node19).getLeft());
+		assertEquals( ast.getNodeById((long)96), ((BinaryOperationExpression)node19).getRight());
+		
+		assertThat( node20, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node20.getChildCount());
+		assertEquals( ast.getNodeById((long)99), ((BinaryOperationExpression)node20).getLeft());
+		assertEquals( ast.getNodeById((long)101), ((BinaryOperationExpression)node20).getRight());
+	}
+	
+	/**
+	 * AST_GREATER nodes are used to denote binary operation "greater than" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_GREATER node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "greater than" expression's children in the following PHP code:
+	 * 
+	 * // comparison operators
+	 * $x > $y;
+	 */
+	@Test
+	public void testGreaterCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GREATER,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(GreaterExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((GreaterExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((GreaterExpression)node).getRight());
+	}
+	
+	/**
+	 * AST_GREATER_EQUAL nodes are used to denote binary operation "greater or equal than" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_GREATER_EQUAL node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "greater or equal than" expression's children in the following PHP code:
+	 * 
+	 * // comparison operators
+	 * $x >= $y;
+	 */
+	@Test
+	public void testGreaterOrEqualCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_GREATER_EQUAL,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(GreaterOrEqualExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((GreaterOrEqualExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((GreaterOrEqualExpression)node).getRight());
+	}
+	
+	/**
+	 * AST_AND nodes are used to denote binary operation "boolean and" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_AND node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "boolean and" expression's children in the following PHP code:
+	 * 
+	 * // boolean operators
+	 * $x && $y;
+	 */
+	@Test
+	public void testAndCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_AND,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(AndExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((AndExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((AndExpression)node).getRight());
+	}
+	
+	/**
+	 * AST_OR nodes are used to denote binary operation "boolean or" expressions.
+	 * 
+	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
+	 * this a normal AST_BINARY_OP node.
+	 * 
+	 * Any AST_OR node has exactly two children:
+	 * 1) an expression on the left-hand side
+	 * 2) an expression on the right-hand side
+	 * 
+	 * This test checks a "boolean or" expression's children in the following PHP code:
+	 * 
+	 * // boolean operators
+	 * $x || $y;
+	 */
+	@Test
+	public void testOrCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_OR,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(OrExpression.class));
+		assertEquals( 2, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((OrExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((OrExpression)node).getRight());
 	}
 	
 	/**

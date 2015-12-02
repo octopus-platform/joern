@@ -5,7 +5,7 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Argument;
-import ast.expressions.AssignmentExpr;
+import ast.expressions.AssignmentExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.Identifier;
 import ast.expressions.MemberAccess;
@@ -88,7 +88,7 @@ public abstract class ASTNodeVisitor
 		defaultHandler(expression);
 	}
 
-	public void visit(AssignmentExpr expression)
+	public void visit(AssignmentExpression expression)
 	{
 		defaultHandler(expression);
 	}
