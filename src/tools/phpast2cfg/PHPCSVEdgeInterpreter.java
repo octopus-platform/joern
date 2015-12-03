@@ -22,7 +22,9 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
+import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -38,6 +40,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
@@ -149,6 +152,15 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNPACK:
 				errno = handleUnpack((PHPUnpackExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_PLUS:
+				errno = handleUnaryPlus((UnaryPlusExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
+				errno = handleUnaryMinus((UnaryMinusExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_SILENCE:
+				errno = handleSilence((PHPSilenceExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
@@ -611,6 +623,63 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// PHPUnpackExpression.unpackExpression and getters and setters accordingly
 				startNode.setUnpackExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnaryPlus( UnaryPlusExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnaryMinus( UnaryMinusExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleSilence( PHPSilenceExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
 				break;
 				
 			default:

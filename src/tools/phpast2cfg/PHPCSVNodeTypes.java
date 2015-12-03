@@ -49,6 +49,9 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_VAR = "AST_VAR";
 	public static final String TYPE_CONST = "AST_CONST";
 	public static final String TYPE_UNPACK = "AST_UNPACK";
+	public static final String TYPE_UNARY_PLUS = "AST_UNARY_PLUS";
+	public static final String TYPE_UNARY_MINUS = "AST_UNARY_MINUS";
+	public static final String TYPE_SILENCE = "AST_SILENCE";
 	public static final String TYPE_UNARY_OP = "AST_UNARY_OP";
 	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";
 	

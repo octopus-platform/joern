@@ -26,7 +26,9 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
+import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -41,6 +43,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
@@ -135,6 +138,15 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNPACK:
 				retval = handleUnpack(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_PLUS:
+				retval = handleUnaryPlus(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
+				retval = handleUnaryMinus(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_SILENCE:
+				retval = handleSilence(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				retval = handleUnaryOperation(row, ast);
@@ -647,6 +659,72 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleUnpack(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPUnpackExpression newNode = new PHPUnpackExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleUnaryPlus(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		UnaryPlusExpression newNode = new UnaryPlusExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleUnaryMinus(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		UnaryMinusExpression newNode = new UnaryMinusExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleSilence(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPSilenceExpression newNode = new PHPSilenceExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

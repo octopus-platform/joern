@@ -33,7 +33,9 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
+import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
@@ -49,6 +51,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
@@ -667,6 +670,122 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getUnpackExpression());
 	}
 
+	/**
+	 * AST_UNARY_PLUS nodes are used to denote 'unary plus' operation expressions.
+	 * 
+	 * Any AST_UNARY_PLUS node has exactly exactly one child, representing the expression for which
+	 * the operation is to be performed.
+	 * 
+	 * This test checks a unary plus operation expression's children in the following PHP code:
+	 * 
+	 * // arithmetic operators
+	 * +$x;
+	 */
+	@Test
+	public void testUnaryPlusCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_UNARY_PLUS,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(UnaryPlusExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((UnaryPlusExpression)node).getExpression());
+	}
+	
+	/**
+	 * AST_UNARY_MINUS nodes are used to denote 'unary minus' operation expressions.
+	 * 
+	 * Any AST_UNARY_MINUS node has exactly exactly one child, representing the expression for which
+	 * the operation is to be performed.
+	 * 
+	 * This test checks a unary minus operation expression's children in the following PHP code:
+	 * 
+	 * // arithmetic operators
+	 * -$x;
+	 */
+	@Test
+	public void testUnaryMinusCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_UNARY_MINUS,,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(UnaryMinusExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((UnaryMinusExpression)node).getExpression());
+	}
+	
+	/**
+	 * AST_SILENCE nodes are used to denote 'silence' operation expressions.
+	 * 
+	 * Any AST_SILENCE node has exactly exactly one child, representing the expression for which
+	 * error messages should be ignored.
+	 * See http://php.net/manual/en/language.operators.errorcontrol.php
+	 * 
+	 * This test checks a few silence operation expressions' children in the following PHP code:
+	 * 
+	 * // error control operators
+	 * @foo();
+	 * @$bar[42];
+	 */
+	@Test
+	public void testSilenceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_SILENCE,,4,,0,1,,,\n";
+		nodeStr += "4,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "5,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "6,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "7,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "8,AST_SILENCE,,5,,1,1,,,\n";
+		nodeStr += "9,AST_DIM,,5,,0,1,,,\n";
+		nodeStr += "10,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "11,string,,5,\"bar\",0,1,,,\n";
+		nodeStr += "12,integer,,5,42,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "4,7,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
+		
+		assertThat( node, instanceOf(PHPSilenceExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPSilenceExpression)node).getExpression());
+		
+		assertThat( node2, instanceOf(PHPSilenceExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPSilenceExpression)node2).getExpression());
+	}
+	
 	/**
 	 * AST_UNARY_OP nodes are used to denote unary operation expressions.
 	 * 
