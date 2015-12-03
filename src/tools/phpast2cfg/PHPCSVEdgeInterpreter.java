@@ -46,6 +46,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
@@ -140,6 +141,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			
 			// statements
+			case PHPCSVNodeTypes.TYPE_GLOBAL:
+				errno = handleGlobal((PHPGlobalStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
 				break;
@@ -564,6 +568,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		}
 		
 		return errno;		
+	}
+	
+	private int handleGlobal( PHPGlobalStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child
+				startNode.setVariable((Variable)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
 	}
 	
 	private int handleReturn( ReturnStatement startNode, ASTNode endNode, int childnum)

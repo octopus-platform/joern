@@ -58,6 +58,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
@@ -641,6 +642,65 @@ public class TestPHPCSVASTBuilder
 		assertThat( node3, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)28), ((PHPYieldFromExpression)node3).getFromExpression());
+	}
+	
+	/**
+	 * AST_GLOBAL nodes are used to denote 'global' expressions used to make variables from
+	 * the global scope available in a local function scope.
+	 * 
+	 * Any AST_GLOBAL node has exactly one child, which is a variable that is being made
+	 * available in a local scope.
+	 * 
+	 * This test checks a global expression's children in the following PHP code:
+	 * 
+	 * function foo() {
+	 *   global $bar, $buz;
+	 * }
+	 */
+	@Test
+	public void testGlobalCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,NULL,,3,,1,3,,,\n";
+		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "7,AST_STMT_LIST,,4,,0,3,,,\n";
+		nodeStr += "8,AST_GLOBAL,,4,,0,3,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,3,,,\n";
+		nodeStr += "10,string,,4,\"bar\",0,3,,,\n";
+		nodeStr += "11,AST_GLOBAL,,4,,1,3,,,\n";
+		nodeStr += "12,AST_VAR,,4,,0,3,,,\n";
+		nodeStr += "13,string,,4,\"buz\",0,3,,,\n";
+		nodeStr += "14,NULL,,3,,3,3,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "3,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "7,11,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "3,14,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)11);
+
+		assertThat( node, instanceOf(PHPGlobalStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPGlobalStatement)node).getVariable());
+		assertEquals( "bar", ((PHPGlobalStatement)node).getVariable().getNameChild().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(PHPGlobalStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPGlobalStatement)node2).getVariable());
+		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**

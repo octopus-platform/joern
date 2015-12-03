@@ -50,6 +50,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";
 	
 	// statements
+	public static final String TYPE_GLOBAL = "AST_GLOBAL";
 	public static final String TYPE_RETURN = "AST_RETURN";
 	public static final String TYPE_LABEL = "AST_LABEL";
 	public static final String TYPE_THROW = "AST_THROW";
