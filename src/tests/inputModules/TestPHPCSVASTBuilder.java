@@ -59,6 +59,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPEchoStatement;
 import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PHPHaltCompilerStatement;
@@ -928,6 +929,60 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPHaltCompilerStatement)node).getOffset());
 		assertEquals( "25", ((PHPHaltCompilerStatement)node).getOffset().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_ECHO nodes are used to denote echo statements.
+	 * 
+	 * Any AST_ECHO node has exactly one child, which holds the expression to be
+	 * evaluated and whose result is to be output.
+	 * Note that an echo statement can take an arbitrary number of arguments (but not 0),
+	 * in which case an AST_ECHO node is generated for each argument.
+	 * TODO What's really weird though, is that an echo statement may not only generate
+	 * an arbitrary number of AST_ECHO nodes (which is fine), but also generates a common
+	 * AST_STMT_LIST mother node for them. I'm not sure why this should be necessary.
+	 * Either find out the reason, or file a bug report.
+	 * 
+	 * This test checks a few echo statement's children in the following PHP code:
+	 * 
+	 * echo "Hello World!", PHP_EOL;
+	 */
+	@Test
+	public void testEchoCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "4,AST_ECHO,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"Hello World!\",0,1,,,\n";
+		nodeStr += "6,AST_ECHO,,3,,1,1,,,\n";
+		nodeStr += "7,AST_CONST,,3,,0,1,,,\n";
+		nodeStr += "8,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "9,string,,3,\"PHP_EOL\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPEchoStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((PHPEchoStatement)node).getEchoExpression());
+		assertEquals( "Hello World!", ((PHPEchoStatement)node).getEchoExpression().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(PHPEchoStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPEchoStatement)node2).getEchoExpression());
+		// TODO once we added support for constants, check value here
 	}
 	
 	/**

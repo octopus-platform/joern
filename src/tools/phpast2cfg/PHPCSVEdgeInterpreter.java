@@ -48,6 +48,7 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPEchoStatement;
 import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
 import ast.php.statements.PHPHaltCompilerStatement;
@@ -162,6 +163,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_HALT_COMPILER:
 				errno = handleHaltCompiler((PHPHaltCompilerStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ECHO:
+				errno = handleEcho((PHPEchoStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_THROW:
 				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
@@ -679,6 +683,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO in time, we should be able to cast endNode to PrimaryExpression (or IntegerExpression);
 				// then, change PHPHaltCompilerStatement.offset to be a PrimaryExpression instead
 				// of a generic ASTNode, and getOffset() and setOffset() accordingly
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleEcho( PHPEchoStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setEchoExpression(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PHPEchoStatement.echoExpression to be an Expression instead
+				// of a generic ASTNode, and getEchoExpression() and setEchoExpression() accordingly
 				break;
 				
 			default:
