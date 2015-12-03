@@ -56,6 +56,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_SILENCE = "AST_SILENCE";
 	public static final String TYPE_CLONE = "AST_CLONE";
 	public static final String TYPE_EXIT = "AST_EXIT";
+	public static final String TYPE_PRINT = "AST_PRINT";
 	public static final String TYPE_UNARY_OP = "AST_UNARY_OP";
 	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";
 	

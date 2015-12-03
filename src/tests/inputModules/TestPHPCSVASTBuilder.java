@@ -54,6 +54,7 @@ import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
@@ -974,6 +975,53 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPExitExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPExitExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_PRINT nodes are used to denote 'print' expressions.
+	 * 
+	 * Any AST_PRINT node has exactly exactly one child, representing the expression whose
+	 * evaluation yields a string to be printed.
+	 * See http://php.net/manual/en/function.print.php
+	 * 
+	 * This test checks a few 'print' expressions' children in the following PHP code:
+	 * 
+	 * print($foo);
+	 * print(bar());
+	 */
+	@Test
+	public void testPrintCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PRINT,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_PRINT,,4,,1,1,,,\n";
+		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPPrintExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPPrintExpression)node).getExpression());
+		
+		assertThat( node2, instanceOf(PHPPrintExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node2).getExpression());
 	}
 	
 	/**

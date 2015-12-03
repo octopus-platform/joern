@@ -43,6 +43,7 @@ import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
@@ -177,6 +178,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_EXIT:
 				errno = handleExit((PHPExitExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_PRINT:
+				errno = handlePrint((PHPPrintExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
@@ -763,6 +767,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 	
 	private int handleExit( PHPExitExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handlePrint( PHPPrintExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
