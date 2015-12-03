@@ -22,6 +22,7 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryOperationExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -148,6 +149,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNPACK:
 				errno = handleUnpack((PHPUnpackExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_OP:
+				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
@@ -607,6 +611,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// PHPUnpackExpression.unpackExpression and getters and setters accordingly
 				startNode.setUnpackExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnaryOperation( UnaryOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
 				break;
 				
 			default:

@@ -26,6 +26,7 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryOperationExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -134,6 +135,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNPACK:
 				retval = handleUnpack(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_OP:
+				retval = handleUnaryOperation(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				retval = handleYieldFrom(row, ast);
@@ -643,6 +647,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleUnpack(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPUnpackExpression newNode = new PHPUnpackExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleUnaryOperation(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		UnaryOperationExpression newNode = new UnaryOperationExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

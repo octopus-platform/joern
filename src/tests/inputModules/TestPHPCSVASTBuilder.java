@@ -33,6 +33,7 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryOperationExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
@@ -666,6 +667,50 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getUnpackExpression());
 	}
 
+	/**
+	 * AST_UNARY_OP nodes are used to denote unary operation expressions.
+	 * 
+	 * Any AST_UNARY_OP node has exactly exactly one child, representing the expression for which
+	 * the operation is to be performed.
+	 * 
+	 * This test checks a few of unary operation expressions' children in the following PHP code:
+	 * 
+	 * // bit operators
+	 * ~$foo;
+	 * // boolean operators
+	 * !$foo;
+	 */
+	@Test
+	public void testUnaryOperationCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_UNARY_OP,UNARY_BITWISE_NOT,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_UNARY_OP,UNARY_BOOL_NOT,6,,1,1,,,\n";
+		nodeStr += "7,AST_VAR,,6,,0,1,,,\n";
+		nodeStr += "8,string,,6,\"foo\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+		
+		assertThat( node, instanceOf(UnaryOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((UnaryOperationExpression)node).getExpression());
+		
+		assertThat( node2, instanceOf(UnaryOperationExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node2).getExpression());
+	}
+	
 	/**
 	 * AST_YIELD_FROM nodes are used to denote 'yield from' expressions used in generators.
 	 * See http://php.net/manual/en/language.generators.syntax.php

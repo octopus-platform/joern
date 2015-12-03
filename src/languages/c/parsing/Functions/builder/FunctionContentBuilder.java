@@ -42,7 +42,7 @@ import ast.expressions.Sizeof;
 import ast.expressions.SizeofExpr;
 import ast.expressions.SizeofOperand;
 import ast.expressions.UnaryExpression;
-import ast.expressions.UnaryOp;
+import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryOperator;
 import ast.logical.statements.BlockCloser;
 import ast.logical.statements.BlockStarter;
@@ -869,7 +869,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterUnaryOpAndCastExpr(Unary_op_and_cast_exprContext ctx)
 	{
-		UnaryOp expr = new UnaryOp();
+		UnaryOperationExpression expr = new UnaryOperationExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
