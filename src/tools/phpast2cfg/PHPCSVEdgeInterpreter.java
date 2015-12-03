@@ -10,6 +10,7 @@ import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
+import ast.expressions.Expression;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
@@ -48,6 +49,7 @@ import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
+import ast.php.statements.PHPUnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
@@ -143,6 +145,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// statements
 			case PHPCSVNodeTypes.TYPE_GLOBAL:
 				errno = handleGlobal((PHPGlobalStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNSET:
+				errno = handleUnset((PHPUnsetStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
@@ -578,6 +583,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // var child
 				startNode.setVariable((Variable)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleUnset( PHPUnsetStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child
+				startNode.setVariableExpression((Expression)endNode);
 				break;
 				
 			default:

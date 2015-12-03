@@ -60,6 +60,7 @@ import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
+import ast.php.statements.PHPUnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
@@ -645,13 +646,13 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	/**
-	 * AST_GLOBAL nodes are used to denote 'global' expressions used to make variables from
+	 * AST_GLOBAL nodes are used to denote 'global' statements used to make variables from
 	 * the global scope available in a local function scope.
 	 * 
 	 * Any AST_GLOBAL node has exactly one child, which is a variable that is being made
 	 * available in a local scope.
 	 * 
-	 * This test checks a global expression's children in the following PHP code:
+	 * This test checks a few global statements' children in the following PHP code:
 	 * 
 	 * function foo() {
 	 *   global $bar, $buz;
@@ -701,6 +702,69 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((PHPGlobalStatement)node2).getVariable());
 		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_UNSET nodes are used to denote unset statements used to destroy variables.
+	 * 
+	 * Any AST_UNSET node has exactly one child, which is a reference to variable that
+	 * is to be destroyed (e.g., AST_VAR, AST_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a few unset statement's children in the following PHP code:
+	 * 
+	 * unset($foo,$bar->buz,$qux[42]);
+	 */
+	@Test
+	public void testUnsetCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_STMT_LIST,,3,,0,1,,,\n";
+		nodeStr += "4,AST_UNSET,,3,,0,1,,,\n";
+		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "7,AST_UNSET,,3,,1,1,,,\n";
+		nodeStr += "8,AST_PROP,,3,,0,1,,,\n";
+		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "10,string,,3,\"bar\",0,1,,,\n";
+		nodeStr += "11,string,,3,\"buz\",1,1,,,\n";
+		nodeStr += "12,AST_UNSET,,3,,2,1,,,\n";
+		nodeStr += "13,AST_DIM,,3,,0,1,,,\n";
+		nodeStr += "14,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "15,string,,3,\"qux\",0,1,,,\n";
+		nodeStr += "16,integer,,3,42,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "3,12,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)12);
+
+		assertThat( node, instanceOf(PHPUnsetStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)5), ((PHPUnsetStatement)node).getVariableExpression());
+		
+		assertThat( node2, instanceOf(PHPUnsetStatement.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPUnsetStatement)node2).getVariableExpression());
+		
+		assertThat( node3, instanceOf(PHPUnsetStatement.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((PHPUnsetStatement)node3).getVariableExpression());
 	}
 	
 	/**

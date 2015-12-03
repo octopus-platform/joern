@@ -51,6 +51,7 @@ public class PHPCSVNodeTypes
 	
 	// statements
 	public static final String TYPE_GLOBAL = "AST_GLOBAL";
+	public static final String TYPE_UNSET = "AST_UNSET";
 	public static final String TYPE_RETURN = "AST_RETURN";
 	public static final String TYPE_LABEL = "AST_LABEL";
 	public static final String TYPE_THROW = "AST_THROW";
