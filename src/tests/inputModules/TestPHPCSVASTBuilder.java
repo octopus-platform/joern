@@ -61,6 +61,7 @@ import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
+import ast.php.statements.PHPHaltCompilerStatement;
 import ast.php.statements.PHPUnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
@@ -892,6 +893,41 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariable());
 		assertEquals( "someval", ((PHPReferenceExpression)node).getVariable().getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_HALT_COMPILER nodes are used to denote halt compiler statements which halt
+	 * the PHP compiler.
+	 * See http://php.net/manual/en/function.halt-compiler.php
+	 * 
+	 * Any AST_HALT_COMPILER node has exactly one child, which holds the offset (in bytes)
+	 * in the file after which the compiler is to be halted; this offset is determined during parsing.
+	 * TODO What does the offset look like if we throw an eval() on some user input, and
+	 * the user input happens to be "__halt_compiler();"? ;-) Can be determined at runtime
+	 * using the magic constant __COMPILER_HALT_OFFSET__, look into this.
+	 * 
+	 * This test checks a halt compiler statement's children in the following PHP code:
+	 * 
+	 * __halt_compiler();
+	 */
+	@Test
+	public void testHaltCompilerCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_HALT_COMPILER,,3,,0,1,,,\n";
+		nodeStr += "4,integer,,3,25,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPHaltCompilerStatement.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPHaltCompilerStatement)node).getOffset());
+		assertEquals( "25", ((PHPHaltCompilerStatement)node).getOffset().getEscapedCodeStr());
 	}
 	
 	/**

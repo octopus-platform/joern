@@ -55,6 +55,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_RETURN = "AST_RETURN";
 	public static final String TYPE_LABEL = "AST_LABEL";
 	public static final String TYPE_REF = "AST_REF";
+	public static final String TYPE_HALT_COMPILER = "AST_HALT_COMPILER";
 	public static final String TYPE_THROW = "AST_THROW";
 	public static final String TYPE_GOTO = "AST_GOTO";
 	public static final String TYPE_BREAK = "AST_BREAK";

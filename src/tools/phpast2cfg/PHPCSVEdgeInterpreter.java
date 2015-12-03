@@ -50,6 +50,7 @@ import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
 import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
+import ast.php.statements.PHPHaltCompilerStatement;
 import ast.php.statements.PHPUnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
@@ -158,6 +159,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_REF:
 				errno = handleReference((PHPReferenceExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_HALT_COMPILER:
+				errno = handleHaltCompiler((PHPHaltCompilerStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_THROW:
 				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
@@ -655,6 +659,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // var child
 				startNode.setVariable((Variable)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleHaltCompiler( PHPHaltCompilerStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // offset child
+				startNode.setOffset(endNode);
+				// TODO in time, we should be able to cast endNode to PrimaryExpression (or IntegerExpression);
+				// then, change PHPHaltCompilerStatement.offset to be a PrimaryExpression instead
+				// of a generic ASTNode, and getOffset() and setOffset() accordingly
 				break;
 				
 			default:
