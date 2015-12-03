@@ -10,6 +10,7 @@ import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
+import ast.expressions.Constant;
 import ast.expressions.Expression;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
@@ -140,6 +141,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// expressions
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CONST:
+				errno = handleConstant((Constant)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
@@ -560,7 +564,26 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
+				// TODO cast to PrimaryType once mapping is finished, and change
+				// Variable.name and getters and setters accordingly
 				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleConstant( Constant startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child
+				startNode.setIdentifier((Identifier)endNode);
 				break;
 				
 			default:

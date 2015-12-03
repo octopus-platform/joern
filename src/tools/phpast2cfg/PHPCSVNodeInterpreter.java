@@ -15,6 +15,7 @@ import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
+import ast.expressions.Constant;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
@@ -126,6 +127,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			// expressions
 			case PHPCSVNodeTypes.TYPE_VAR:
 				retval = handleVariable(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_CONST:
+				retval = handleConstant(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				retval = handleYieldFrom(row, ast);
@@ -591,6 +595,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleVariable(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Variable newNode = new Variable();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleConstant(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		Constant newNode = new Constant();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

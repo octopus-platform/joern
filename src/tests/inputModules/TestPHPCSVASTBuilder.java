@@ -22,6 +22,7 @@ import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
+import ast.expressions.Constant;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
@@ -547,6 +548,51 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((Variable)node3).getNameChild());
 		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
 	}
+	
+	/**
+	 * AST_CONST nodes are nodes holding constant names.
+	 * 
+	 * Any AST_CONST node has exactly one child which is of type Identifier, holding
+	 * the constant's name (note that, as opposed to a Variable, a Constant may be
+	 * namespaced.)
+	 * 
+	 * This test checks a few constant expressions' children in the following PHP code:
+	 * 
+	 * FOO;
+	 * \BAR\BUZ;
+	 */
+	@Test
+	public void testConstantCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CONST,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"FOO\",0,1,,,\n";
+		nodeStr += "6,AST_CONST,,4,,1,1,,,\n";
+		nodeStr += "7,AST_NAME,NAME_FQ,4,,0,1,,,\n";
+		nodeStr += "8,string,,4,\"BAR\\BUZ\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(Constant.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((Constant)node).getIdentifier());
+		assertEquals( "FOO", ((Constant)node).getIdentifier().getNameChild().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(Constant.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((Constant)node2).getIdentifier());
+		assertEquals( "BAR\\BUZ", ((Constant)node2).getIdentifier().getNameChild().getEscapedCodeStr());
+	}
 
 	/**
 	 * AST_YIELD_FROM nodes are used to denote 'yield from' expressions used in generators.
@@ -982,7 +1028,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPEchoStatement.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPEchoStatement)node2).getEchoExpression());
-		// TODO once we added support for constants, check value here
+		assertEquals( "PHP_EOL", ((Constant)((PHPEchoStatement)node2).getEchoExpression()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -3413,7 +3459,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)19), ((PropertyElement)node4).getNameChild());
 		assertEquals( "qux", ((PropertyElement)node4).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)20), ((PropertyElement)node4).getDefault());
-		// TODO once we added support for constants, check value here
+		assertEquals( "SOMECONSTANT", ((Constant)((PropertyElement)node4).getDefault()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
