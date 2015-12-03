@@ -47,6 +47,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPAssignmentByRefExpression;
+import ast.php.expressions.PHPCloneExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
@@ -878,6 +879,52 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPSilenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPSilenceExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_CLONE nodes are used to denote 'clone' operation expressions.
+	 * 
+	 * Any AST_CLONE node has exactly exactly one child, representing the expression whose
+	 * evaluation yields the object to be cloned.
+	 * 
+	 * This test checks a few 'clone' operation expressions' children in the following PHP code:
+	 * 
+	 * clone($foo);
+	 * clone(bar());
+	 */
+	@Test
+	public void testCloneCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CLONE,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_CLONE,,4,,1,1,,,\n";
+		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPCloneExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPCloneExpression)node).getExpression());
+		
+		assertThat( node2, instanceOf(PHPCloneExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPCloneExpression)node2).getExpression());
 	}
 	
 	/**
