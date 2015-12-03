@@ -51,6 +51,7 @@ import ast.php.expressions.PHPCloneExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
+import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
@@ -882,12 +883,12 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	/**
-	 * AST_CLONE nodes are used to denote 'clone' operation expressions.
+	 * AST_CLONE nodes are used to denote 'clone' expressions.
 	 * 
 	 * Any AST_CLONE node has exactly exactly one child, representing the expression whose
 	 * evaluation yields the object to be cloned.
 	 * 
-	 * This test checks a few 'clone' operation expressions' children in the following PHP code:
+	 * This test checks a few 'clone' expressions' children in the following PHP code:
 	 * 
 	 * clone($foo);
 	 * clone(bar());
@@ -925,6 +926,54 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPCloneExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPCloneExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_EXIT nodes are used to denote 'exit' expressions.
+	 * 
+	 * Any AST_EXIT node has exactly exactly one child, representing the expression whose
+	 * evaluation yields either a string to be printed before exiting or an integer which
+	 * will be used as an exit status.
+	 * See http://php.net/manual/en/function.exit.php
+	 * 
+	 * This test checks a few 'exit' expressions' children in the following PHP code:
+	 * 
+	 * exit($foo);
+	 * exit(bar());
+	 */
+	@Test
+	public void testExitCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_EXIT,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_EXIT,,4,,1,1,,,\n";
+		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPExitExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPExitExpression)node).getExpression());
+		
+		assertThat( node2, instanceOf(PHPExitExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPExitExpression)node2).getExpression());
 	}
 	
 	/**
