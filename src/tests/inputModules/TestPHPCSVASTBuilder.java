@@ -48,6 +48,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
@@ -592,6 +593,77 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((Constant)node2).getIdentifier());
 		assertEquals( "BAR\\BUZ", ((Constant)node2).getIdentifier().getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_UNPACK nodes are used to represent "unpack" operations which unpack traversable
+	 * objects or arrays into argument lists, also known as the "splat" operator (mostly useful
+	 * in combination with variadic functions).
+	 * See https://wiki.php.net/rfc/argument_unpacking
+	 * 
+	 * Any AST_UNPACK node has exactly one child which is an expression whose evaluation yields
+	 * a traversable object or array to be unpacked.
+	 * 
+	 * This test checks a few unpack expressions' children in the following PHP code:
+	 * 
+	 * foo( ...$traversable);
+	 * foo( ...[4,2]);
+	 */
+	@Test
+	public void testUnpackCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
+		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
+		nodeStr += "7,AST_UNPACK,,3,,0,1,,,\n";
+		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "9,string,,3,\"traversable\",0,1,,,\n";
+		nodeStr += "10,AST_CALL,,4,,1,1,,,\n";
+		nodeStr += "11,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "12,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "13,AST_ARG_LIST,,4,,1,1,,,\n";
+		nodeStr += "14,AST_UNPACK,,4,,0,1,,,\n";
+		nodeStr += "15,AST_ARRAY,,4,,0,1,,,\n";
+		nodeStr += "16,AST_ARRAY_ELEM,,4,,0,1,,,\n";
+		nodeStr += "17,integer,,4,4,0,1,,,\n";
+		nodeStr += "18,NULL,,4,,1,1,,,\n";
+		nodeStr += "19,AST_ARRAY_ELEM,,4,,1,1,,,\n";
+		nodeStr += "20,integer,,4,2,0,1,,,\n";
+		nodeStr += "21,NULL,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,18,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "19,20,PARENT_OF\n";
+		edgeStr += "19,21,PARENT_OF\n";
+		edgeStr += "15,19,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)14);
+
+		assertThat( node, instanceOf(PHPUnpackExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)8), ((PHPUnpackExpression)node).getUnpackExpression());
+		
+		assertThat( node2, instanceOf(PHPUnpackExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getUnpackExpression());
 	}
 
 	/**

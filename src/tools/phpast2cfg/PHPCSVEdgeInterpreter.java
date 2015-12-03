@@ -37,6 +37,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
@@ -144,6 +145,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CONST:
 				errno = handleConstant((Constant)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNPACK:
+				errno = handleUnpack((PHPUnpackExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
@@ -593,6 +597,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;		
 	}
 	
+	private int handleUnpack( PHPUnpackExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// PHPUnpackExpression.unpackExpression and getters and setters accordingly
+				startNode.setUnpackExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	private int handleYieldFrom( PHPYieldFromExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -600,6 +623,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// PHPYieldFromExpression.fromExpression and getters and setters accordingly
 				startNode.setFromExpression(endNode);
 				break;
 				

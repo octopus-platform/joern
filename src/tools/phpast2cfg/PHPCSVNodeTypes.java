@@ -48,6 +48,7 @@ public class PHPCSVNodeTypes
 	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
 	public static final String TYPE_CONST = "AST_CONST";
+	public static final String TYPE_UNPACK = "AST_UNPACK";
 	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";
 	
 	// statements
