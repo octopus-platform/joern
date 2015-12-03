@@ -48,7 +48,9 @@ import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
+import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPSilenceExpression;
@@ -663,11 +665,11 @@ public class TestPHPCSVASTBuilder
 
 		assertThat( node, instanceOf(PHPUnpackExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPUnpackExpression)node).getUnpackExpression());
+		assertEquals( ast.getNodeById((long)8), ((PHPUnpackExpression)node).getExpression());
 		
 		assertThat( node2, instanceOf(PHPUnpackExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getUnpackExpression());
+		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getExpression());
 	}
 
 	/**
@@ -732,6 +734,98 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(UnaryMinusExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((UnaryMinusExpression)node).getExpression());
+	}
+	
+	/**
+	 * AST_EMPTY nodes are used to denote 'empty' operation expressions.
+	 * 
+	 * Any AST_EMPTY node has exactly exactly one child, representing the expression for which
+	 * the operation is to be performed.
+	 * 
+	 * This test checks a few 'empty' operation expressions' children in the following PHP code:
+	 * 
+	 * empty($foo);
+	 * empty(bar());
+	 */
+	@Test
+	public void testEmptyCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_EMPTY,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_EMPTY,,4,,1,1,,,\n";
+		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
+		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPEmptyExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPEmptyExpression)node).getExpression());
+		
+		assertThat( node2, instanceOf(PHPEmptyExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPEmptyExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_ISSET nodes are used to denote 'isset' operation expressions.
+	 * 
+	 * Any AST_ISSET node has exactly exactly one child, representing the variable for which
+	 * the operation is to be performed.
+	 * 
+	 * This test checks a few 'isset' operation expressions' children in the following PHP code:
+	 * 
+	 * isset($foo);
+	 * isset($bar->buz);
+	 */
+	@Test
+	public void testIssetCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ISSET,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "6,AST_ISSET,,4,,1,1,,,\n";
+		nodeStr += "7,AST_PROP,,4,,0,1,,,\n";
+		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "10,string,,4,\"buz\",1,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPIssetExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPIssetExpression)node).getVariableExpression());
+		
+		assertThat( node2, instanceOf(PHPIssetExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPIssetExpression)node2).getVariableExpression());
 	}
 	
 	/**

@@ -37,7 +37,9 @@ import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
+import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPSilenceExpression;
@@ -158,6 +160,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
 				errno = handleUnaryMinus((UnaryMinusExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_EMPTY:
+				errno = handleEmpty((PHPEmptyExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ISSET:
+				errno = handleIsset((PHPIssetExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_SILENCE:
 				errno = handleSilence((PHPSilenceExpression)startNode, endNode, childnum);
@@ -622,7 +630,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // expr child
 				// TODO cast to Exression once mapping is finished, and change
 				// PHPUnpackExpression.unpackExpression and getters and setters accordingly
-				startNode.setUnpackExpression(endNode);
+				startNode.setExpression(endNode);
 				break;
 				
 			default:
@@ -661,6 +669,44 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// UnaryOperationExpression.expression and getters and setters accordingly
 				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleEmpty( PHPEmptyExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleIsset( PHPIssetExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setVariableExpression(endNode);
 				break;
 				
 			default:
