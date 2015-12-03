@@ -793,7 +793,7 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
-		assertNull( ((ForEachStatement)node).getKeyVar());
+		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertNull( ((ForEachStatement)node).getStatement());
 	}
 

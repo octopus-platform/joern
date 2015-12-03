@@ -35,6 +35,7 @@ import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
@@ -154,6 +155,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_LABEL:
 				errno = handleLabel((Label)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_REF:
+				errno = handleReference((PHPReferenceExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_THROW:
 				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
@@ -634,6 +638,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // name child
 				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleReference( PHPReferenceExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child
+				startNode.setVariable((Variable)endNode);
 				break;
 				
 			default:
@@ -1741,11 +1762,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// of a generic ASTNode, and getIteratedObject() and setIteratedObject() accordingly
 				startNode.setIteratedObject(endNode);
 				break;
-			case 1: // value child: Variable node
-				startNode.setValueVar((Variable)endNode);
+			case 1: // value child: Variable or PHPReferenceExpression node
+				startNode.setValueExpression((Expression)endNode);
 				break;
 			case 2: // key child: either Variable or NULL node
-				startNode.setKeyVar(endNode);
+				if( endNode instanceof Variable)
+					startNode.setKeyVariable((Variable)endNode);
+				else
+					startNode.addChild(endNode);
 				break;
 			case 3: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
 				if( endNode instanceof Statement)

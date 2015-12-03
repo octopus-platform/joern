@@ -46,6 +46,7 @@ import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
@@ -843,6 +844,54 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)6), ((Label)node).getNameChild());
 		assertEquals( "a", ((Label)node).getNameChild().getEscapedCodeStr());
+	}
+	
+	/**
+	 * AST_REF nodes are used to denote references to variables.
+	 * TODO As far as I currently understand, this is a node useful *only* in the
+	 * context of a foreach statement; for AST_ARRAY_ELEM nodes that designate a reference,
+	 * functions that return references, and function parameters taken as references,
+	 * a simple flag is used; for assignments, there is a special kind of node AST_ASSIGN_REF.
+	 * But look into this more closely.
+	 * 
+	 * Any AST_REF node has exactly one child, which is a variable being referenced.
+	 * 
+	 * This test checks a reference expression's children in the following PHP code:
+	 * 
+	 * foreach( $iterable as $somekey => &$someval) {}
+	 */
+	@Test
+	public void testReferenceCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"iterable\",0,1,,,\n";
+		nodeStr += "6,AST_REF,,3,,1,1,,,\n";
+		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "8,string,,3,\"someval\",0,1,,,\n";
+		nodeStr += "9,AST_VAR,,3,,2,1,,,\n";
+		nodeStr += "10,string,,3,\"somekey\",0,1,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,3,,3,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "3,9,PARENT_OF\n";
+		edgeStr += "3,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+
+		assertThat( node, instanceOf(PHPReferenceExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariable());
+		assertEquals( "someval", ((PHPReferenceExpression)node).getVariable().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
@@ -2441,7 +2490,8 @@ public class TestPHPCSVASTBuilder
 	 * See http://php.net/manual/en/language.generators.syntax.php
 	 * 
 	 * Any AST_YIELD node has exactly 2 children:
-	 * 1) an expression, whose evaluation holds the value to be yielded
+	 * 1) an expression or NULL, whose evaluation holds the value to be yielded
+	 *    (if it is NULL, then the function interrupts execution, but returns nothing)
 	 * 2) an expression or NULL, specifying an optional key to be yielded
 	 * 
 	 * This test checks a few yield expressions' children in the following PHP code:
@@ -4492,15 +4542,15 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((ForEachStatement)node).getIteratedObject());
-		assertEquals( ast.getNodeById((long)6), ((ForEachStatement)node).getValueVar());
-		assertNull( ((ForEachStatement)node).getKeyVar());
+		assertEquals( ast.getNodeById((long)6), ((ForEachStatement)node).getValueExpression());
+		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertEquals( ast.getNodeById((long)9), ((ForEachStatement)node).getStatement());
 		
 		assertThat( node2, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((ForEachStatement)node2).getIteratedObject());
-		assertEquals( ast.getNodeById((long)15), ((ForEachStatement)node2).getValueVar());
-		assertEquals( ast.getNodeById((long)17), ((ForEachStatement)node2).getKeyVar());
+		assertEquals( ast.getNodeById((long)15), ((ForEachStatement)node2).getValueExpression());
+		assertEquals( ast.getNodeById((long)17), ((ForEachStatement)node2).getKeyVariable());
 		assertEquals( ast.getNodeById((long)19), ((ForEachStatement)node2).getStatement());
 	}
 
