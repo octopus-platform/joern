@@ -6,42 +6,36 @@ public class CastExpression extends Expression
 {
 
 	Expression castTarget = null;
-	Expression castExpression = null;
+	ASTNode castExpression = null; // TODO make this an expression
 
 	@Override
 	public void addChild(ASTNode expression)
 	{
 		if (castTarget == null)
-		{
-			castTarget = (Expression) expression;
-		} else
-		{
-			castExpression = (Expression) expression;
-		}
+			setCastTarget( (Expression)expression);
+		else
+			setCastExpression( (Expression)expression);
 	}
-
-	@Override
-	public int getChildCount()
+	
+	public Expression getCastTarget()
 	{
-		int childCount = 0;
-		if (castTarget != null)
-			childCount++;
-		if (castExpression != null)
-			childCount++;
-		return childCount;
+		return this.castTarget;
 	}
-
-	@Override
-	public ASTNode getChild(int i)
+	
+	public void setCastTarget(Expression castTarget)
 	{
-		if (i == 0)
-			return castTarget;
-		return castExpression;
+		this.castTarget = castTarget;
+		super.addChild(castTarget);
 	}
-
-	public ASTNode getCastTarget()
+	
+	public ASTNode getCastExpression()  // TODO return an expression
 	{
-		return castTarget;
+		return this.castExpression;
 	}
 
+	public void setCastExpression(ASTNode castExpression) // TODO take an expression
+	{
+		this.castExpression = castExpression;
+		super.addChild(castExpression);
+	}
 }

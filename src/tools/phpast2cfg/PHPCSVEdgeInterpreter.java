@@ -8,6 +8,7 @@ import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
+import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
@@ -163,6 +164,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
 				errno = handleUnaryMinus((UnaryMinusExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CAST:
+				errno = handleCast((CastExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_EMPTY:
 				errno = handleEmpty((PHPEmptyExpression)startNode, endNode, childnum);
@@ -681,6 +685,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// UnaryOperationExpression.expression and getters and setters accordingly
 				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleCast( CastExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// CastExpression.castExpression and getters and setters accordingly
+				startNode.setCastExpression(endNode);
 				break;
 				
 			default:

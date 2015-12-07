@@ -13,6 +13,7 @@ import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
+import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
@@ -149,6 +150,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
 				retval = handleUnaryMinus(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_CAST:
+				retval = handleCast(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_EMPTY:
 				retval = handleEmpty(row, ast);
@@ -723,6 +727,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleUnaryMinus(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		UnaryMinusExpression newNode = new UnaryMinusExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleCast(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		CastExpression newNode = new CastExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
