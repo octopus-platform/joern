@@ -59,6 +59,8 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_EXIT = "AST_EXIT";
 	public static final String TYPE_PRINT = "AST_PRINT";
 	public static final String TYPE_UNARY_OP = "AST_UNARY_OP";
+	public static final String TYPE_PRE_INC = "AST_PRE_INC";
+	public static final String TYPE_PRE_DEC = "AST_PRE_DEC";
 	public static final String TYPE_POST_INC = "AST_POST_INC";
 	public static final String TYPE_POST_DEC = "AST_POST_DEC";
 	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";

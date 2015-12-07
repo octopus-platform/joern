@@ -34,6 +34,8 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PostDecOperationExpression;
 import ast.expressions.PostIncOperationExpression;
+import ast.expressions.PreDecOperationExpression;
+import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.UnaryMinusExpression;
@@ -1236,6 +1238,68 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node2).getExpression());
+	}
+
+	/**
+	 * AST_PRE_INC nodes are used to denote pre-increment operation expressions.
+	 * 
+	 * Any AST_PRE_INC node has exactly exactly one child, representing the variable that
+	 * is to be incremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a pre-increment operation expression's child in the following PHP code:
+	 * 
+	 * ++$i;
+	 */
+	@Test
+	public void testPreIncCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PRE_INC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PreIncOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PreIncOperationExpression)node).getVariableExpression());
+	}
+	
+	/**
+	 * AST_PRE_DEC nodes are used to denote pre-decrement operation expressions.
+	 * 
+	 * Any AST_PRE_DEC node has exactly exactly one child, representing the variable that
+	 * is to be decremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a pre-decrement operation expression's child in the following PHP code:
+	 * 
+	 * --$i;
+	 */
+	@Test
+	public void testPreDecCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PRE_DEC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PreDecOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PreDecOperationExpression)node).getVariableExpression());
 	}
 	
 	/**
