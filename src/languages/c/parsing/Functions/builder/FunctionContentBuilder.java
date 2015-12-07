@@ -28,7 +28,7 @@ import ast.expressions.Expression;
 import ast.expressions.ForInit;
 import ast.expressions.Identifier;
 import ast.expressions.IncDec;
-import ast.expressions.IncDecOp;
+import ast.expressions.PostIncDecOperationExpression;
 import ast.expressions.InclusiveOrExpression;
 import ast.expressions.InitializerList;
 import ast.expressions.MemberAccess;
@@ -656,7 +656,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterIncDecOp(IncDecOpContext ctx)
 	{
-		IncDecOp expr = new IncDecOp();
+		PostIncDecOperationExpression expr = new PostIncDecOperationExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}

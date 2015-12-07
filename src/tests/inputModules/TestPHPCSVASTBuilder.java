@@ -32,6 +32,8 @@ import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
+import ast.expressions.PostDecOperationExpression;
+import ast.expressions.PostIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.UnaryMinusExpression;
@@ -1198,7 +1200,7 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_UNARY_OP node has exactly exactly one child, representing the expression for which
 	 * the operation is to be performed.
 	 * 
-	 * This test checks a few of unary operation expressions' children in the following PHP code:
+	 * This test checks a few unary operation expressions' children in the following PHP code:
 	 * 
 	 * // bit operators
 	 * ~$foo;
@@ -1234,6 +1236,68 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_POST_INC nodes are used to denote post-increment operation expressions.
+	 * 
+	 * Any AST_POST_INC node has exactly exactly one child, representing the variable that
+	 * is to be incremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a post-increment operation expression's child in the following PHP code:
+	 * 
+	 * $i++;
+	 */
+	@Test
+	public void testPostIncCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_POST_INC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PostIncOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PostIncOperationExpression)node).getVariableExpression());
+	}
+	
+	/**
+	 * AST_POST_DEC nodes are used to denote post-decrement operation expressions.
+	 * 
+	 * Any AST_POST_DEC node has exactly exactly one child, representing the variable that
+	 * is to be decremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a post-decrement operation expression's child in the following PHP code:
+	 * 
+	 * $i--;
+	 */
+	@Test
+	public void testPostDecCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_POST_DEC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PostDecOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PostDecOperationExpression)node).getVariableExpression());
 	}
 	
 	/**
