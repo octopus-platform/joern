@@ -10,6 +10,8 @@ import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
+import ast.expressions.Constant;
+import ast.expressions.Expression;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
@@ -20,6 +22,9 @@ import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.UnaryMinusExpression;
+import ast.expressions.UnaryOperationExpression;
+import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -31,9 +36,17 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPAssignmentByRefExpression;
+import ast.php.expressions.PHPCloneExpression;
 import ast.php.expressions.PHPCoalesceExpression;
+import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
+import ast.php.expressions.PHPExitExpression;
+import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPPrintExpression;
+import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPSilenceExpression;
+import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
@@ -46,7 +59,11 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
+import ast.php.statements.PHPEchoStatement;
+import ast.php.statements.PHPGlobalStatement;
 import ast.php.statements.PHPGroupUseStatement;
+import ast.php.statements.PHPHaltCompilerStatement;
+import ast.php.statements.PHPUnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
@@ -135,16 +152,64 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_VAR:
 				errno = handleVariable((Variable)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_CONST:
+				errno = handleConstant((Constant)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNPACK:
+				errno = handleUnpack((PHPUnpackExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_PLUS:
+				errno = handleUnaryPlus((UnaryPlusExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
+				errno = handleUnaryMinus((UnaryMinusExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_EMPTY:
+				errno = handleEmpty((PHPEmptyExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ISSET:
+				errno = handleIsset((PHPIssetExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_SILENCE:
+				errno = handleSilence((PHPSilenceExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_CLONE:
+				errno = handleClone((PHPCloneExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_EXIT:
+				errno = handleExit((PHPExitExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_PRINT:
+				errno = handlePrint((PHPPrintExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNARY_OP:
+				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
 				break;
 			
 			// statements
+			case PHPCSVNodeTypes.TYPE_GLOBAL:
+				errno = handleGlobal((PHPGlobalStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_UNSET:
+				errno = handleUnset((PHPUnsetStatement)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_LABEL:
 				errno = handleLabel((Label)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_REF:
+				errno = handleReference((PHPReferenceExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_HALT_COMPILER:
+				errno = handleHaltCompiler((PHPHaltCompilerStatement)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_ECHO:
+				errno = handleEcho((PHPEchoStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_THROW:
 				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
@@ -539,7 +604,216 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
+				// TODO cast to PrimaryType once mapping is finished, and change
+				// Variable.name and getters and setters accordingly
 				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleConstant( Constant startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // name child
+				startNode.setIdentifier((Identifier)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnpack( PHPUnpackExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// PHPUnpackExpression.unpackExpression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnaryPlus( UnaryPlusExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnaryMinus( UnaryMinusExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleEmpty( PHPEmptyExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleIsset( PHPIssetExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setVariableExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleSilence( PHPSilenceExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleClone( PHPCloneExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleExit( PHPExitExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handlePrint( PHPPrintExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleUnaryOperation( UnaryOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryOperationExpression.expression and getters and setters accordingly
+				startNode.setExpression(endNode);
 				break;
 				
 			default:
@@ -556,6 +830,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// PHPYieldFromExpression.fromExpression and getters and setters accordingly
 				startNode.setFromExpression(endNode);
 				break;
 				
@@ -564,6 +840,40 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		}
 		
 		return errno;		
+	}
+	
+	private int handleGlobal( PHPGlobalStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child
+				startNode.setVariable((Variable)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleUnset( PHPUnsetStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child
+				startNode.setVariableExpression((Expression)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
 	}
 	
 	private int handleReturn( ReturnStatement startNode, ASTNode endNode, int childnum)
@@ -591,6 +901,63 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		{
 			case 0: // name child
 				startNode.setNameChild(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleReference( PHPReferenceExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // var child
+				startNode.setVariable((Variable)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleHaltCompiler( PHPHaltCompilerStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // offset child
+				startNode.setOffset(endNode);
+				// TODO in time, we should be able to cast endNode to PrimaryExpression (or IntegerExpression);
+				// then, change PHPHaltCompilerStatement.offset to be a PrimaryExpression instead
+				// of a generic ASTNode, and getOffset() and setOffset() accordingly
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;
+	}
+	
+	private int handleEcho( PHPEchoStatement startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setEchoExpression(endNode);
+				// TODO in time, we should be able to cast endNode to Expression;
+				// then, change PHPEchoStatement.echoExpression to be an Expression instead
+				// of a generic ASTNode, and getEchoExpression() and setEchoExpression() accordingly
 				break;
 				
 			default:
@@ -1698,11 +2065,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// of a generic ASTNode, and getIteratedObject() and setIteratedObject() accordingly
 				startNode.setIteratedObject(endNode);
 				break;
-			case 1: // value child: Variable node
-				startNode.setValueVar((Variable)endNode);
+			case 1: // value child: Variable or PHPReferenceExpression node
+				startNode.setValueExpression((Expression)endNode);
 				break;
 			case 2: // key child: either Variable or NULL node
-				startNode.setKeyVar(endNode);
+				if( endNode instanceof Variable)
+					startNode.setKeyVariable((Variable)endNode);
+				else
+					startNode.addChild(endNode);
 				break;
 			case 3: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
 				if( endNode instanceof Statement)

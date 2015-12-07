@@ -1,6 +1,7 @@
 package ast.php.statements.blockstarters;
 
 import ast.ASTNode;
+import ast.expressions.Expression;
 import ast.expressions.Variable;
 import ast.logical.statements.BlockStarter;
 
@@ -8,7 +9,7 @@ public class ForEachStatement extends BlockStarter
 {
 	private ASTNode iteratedObject = null; // TODO make this an Expression sometime
 	private Variable key = null;
-	private Variable value = null;
+	private Expression value = null;
 
 	@Override
 	public ASTNode getCondition()
@@ -32,26 +33,25 @@ public class ForEachStatement extends BlockStarter
 		super.addChild(expression);
 	}
 
-	public ASTNode getValueVar()
+	public Expression getValueExpression()
 	{
 		return this.value;
 	}
 
-	public void setValueVar(Variable value)
+	public void setValueExpression(Expression value)
 	{
 		this.value = value;
 		super.addChild(value);
 	}
 	
-	public ASTNode getKeyVar()
+	public Variable getKeyVariable()
 	{
 		return this.key;
 	}
 
-	public void setKeyVar(ASTNode key)
+	public void setKeyVariable(Variable key)
 	{
-		if (key instanceof Variable)
-			this.key = (Variable)key;
+		this.key = key;
 		super.addChild(key);
 	}
 }

@@ -130,7 +130,7 @@ public class ASTDefUseAnalyzer
 		case "ArrayIndexing":
 			return new ArrayIndexingEnvironment();
 
-		case "UnaryOp":
+		case "UnaryOperationExpression":
 			return new UnaryOpEnvironment();
 
 		case "Identifier":

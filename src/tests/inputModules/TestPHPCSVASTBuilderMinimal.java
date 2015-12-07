@@ -20,6 +20,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
 import ast.php.expressions.PHPArrayExpression;
+import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.functionDef.Closure;
@@ -213,6 +214,33 @@ public class TestPHPCSVASTBuilderMinimal
 	
 	
 	/* nodes with exactly 1 child */
+	
+	/**
+	 * exit;
+	 */
+	@Test
+	public void testMinimalExitCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_EXIT,,3,,0,1,,,\n";
+		nodeStr += "4,NULL,,3,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+
+		assertThat( node, instanceOf(PHPExitExpression.class));
+		assertEquals( 1, node.getChildCount());
+		// TODO ((PHPExitExpression)node).getExpression() should
+		// actually return null, not a null node. This currently does not work exactly
+		// as expected because PHPExitExpression accepts arbitrary ASTNode's for exit expressions,
+		// when we actually only want to accept expressions. Once the mapping is
+		// finished, we can fix that.
+		assertEquals( "NULL", ((PHPExitExpression)node).getExpression().getProperty("type"));
+	}
 	
 	/**
 	 * function foo() {
@@ -793,7 +821,7 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
-		assertNull( ((ForEachStatement)node).getKeyVar());
+		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertNull( ((ForEachStatement)node).getStatement());
 	}
 

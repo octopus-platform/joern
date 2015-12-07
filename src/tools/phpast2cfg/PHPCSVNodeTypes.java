@@ -47,11 +47,27 @@ public class PHPCSVNodeTypes
 	// nodes with exactly 1 child
 	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
+	public static final String TYPE_CONST = "AST_CONST";
+	public static final String TYPE_UNPACK = "AST_UNPACK";
+	public static final String TYPE_UNARY_PLUS = "AST_UNARY_PLUS";
+	public static final String TYPE_UNARY_MINUS = "AST_UNARY_MINUS";
+	public static final String TYPE_EMPTY = "AST_EMPTY";
+	public static final String TYPE_ISSET = "AST_ISSET";
+	public static final String TYPE_SILENCE = "AST_SILENCE";
+	public static final String TYPE_CLONE = "AST_CLONE";
+	public static final String TYPE_EXIT = "AST_EXIT";
+	public static final String TYPE_PRINT = "AST_PRINT";
+	public static final String TYPE_UNARY_OP = "AST_UNARY_OP";
 	public static final String TYPE_YIELD_FROM = "AST_YIELD_FROM";
 	
 	// statements
+	public static final String TYPE_GLOBAL = "AST_GLOBAL";
+	public static final String TYPE_UNSET = "AST_UNSET";
 	public static final String TYPE_RETURN = "AST_RETURN";
 	public static final String TYPE_LABEL = "AST_LABEL";
+	public static final String TYPE_REF = "AST_REF";
+	public static final String TYPE_HALT_COMPILER = "AST_HALT_COMPILER";
+	public static final String TYPE_ECHO = "AST_ECHO";
 	public static final String TYPE_THROW = "AST_THROW";
 	public static final String TYPE_GOTO = "AST_GOTO";
 	public static final String TYPE_BREAK = "AST_BREAK";
