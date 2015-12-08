@@ -157,9 +157,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			// nodes without children (leafs)
 			// expressions
 			case PHPCSVNodeTypes.TYPE_MAGIC_CONST:
+			case PHPCSVNodeTypes.TYPE_TYPE:
 				errno = 2;
 				break;
-
 
 			// nodes with exactly 1 child
 			// expressions

@@ -65,6 +65,7 @@ import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPShellExecExpression;
 import ast.php.expressions.PHPSilenceExpression;
+import ast.php.expressions.PHPTypeHint;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
@@ -598,6 +599,62 @@ public class TestPHPCSVASTBuilder
 		assertThat( node8, instanceOf(PHPMagicConstant.class));
 		assertEquals( 0, node8.getChildCount());
 		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_TRAIT, ((PHPMagicConstant)node8).getFlags());
+	}
+	
+	/**
+	 * AST_TYPE nodes are nodes holding the PHP type hints 'array' and 'callable'.
+	 * 
+	 * AST_TYPE nodes have no children. They do however have a flag to distinguish
+	 * which type hint is used.
+	 * The following flags exist:
+	 * - TYPE_ARRAY
+	 * - TYPE_CALLABLE
+	 * TODO it is not yet completely clear to me why 'array' and 'callable' produce
+	 * a special AST_TYPE node, while other types, such as 'int', 'bool', 'double' or 'string'
+	 * produce a normal AST_NAME node. Should these built-in types not all consistently map
+	 * to a AST_TYPE node? AST_NAME is mostly useful for "self-defined" types (i.e., class names)
+	 * 
+	 * This test checks a few type hint expressions in the following PHP code:
+	 * 
+	 * function foo( array $bar, callable $buz) : callable {}
+	 */
+	@Test
+	public void testTypeHintCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
+		nodeStr += "6,AST_TYPE,TYPE_ARRAY,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"bar\",1,3,,,\n";
+		nodeStr += "8,NULL,,3,,2,3,,,\n";
+		nodeStr += "9,AST_PARAM,,3,,1,3,,,\n";
+		nodeStr += "10,AST_TYPE,TYPE_CALLABLE,3,,0,3,,,\n";
+		nodeStr += "11,string,,3,\"buz\",1,3,,,\n";
+		nodeStr += "12,NULL,,3,,2,3,,,\n";
+		nodeStr += "13,NULL,,3,,1,3,,,\n";
+		nodeStr += "14,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "15,AST_TYPE,TYPE_CALLABLE,3,,3,3,,,\n";
+		
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)15);
+
+		assertThat( node, instanceOf(PHPTypeHint.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((PHPTypeHint)node).getFlags());
+
+		assertThat( node2, instanceOf(PHPTypeHint.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((PHPTypeHint)node2).getFlags());
+
+		assertThat( node3, instanceOf(PHPTypeHint.class));
+		assertEquals( 0, node3.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((PHPTypeHint)node3).getFlags());
 	}
 
 

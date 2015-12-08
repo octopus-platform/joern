@@ -47,7 +47,8 @@ public class PHPCSVNodeTypes
 	// nodes without children (leafs)
 	// expressions
 	public static final String TYPE_MAGIC_CONST = "AST_MAGIC_CONST";
-	
+	public static final String TYPE_TYPE = "AST_TYPE";
+
 	// nodes with exactly 1 child
 	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
@@ -163,13 +164,17 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_TOPLEVEL_FILE = "TOPLEVEL_FILE"; // artificial
 	public static final String FLAG_TOPLEVEL_CLASS = "TOPLEVEL_CLASS"; // artificial
 	
+	// flags for TYPE_TYPE nodes (exclusive)
+	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
+	public static final String FLAG_TYPE_CALLABLE = "TYPE_CALLABLE";
+
 	// flags for TYPE_CAST nodes (exclusive)
 	public static final String FLAG_TYPE_NULL = "TYPE_NULL";
 	public static final String FLAG_TYPE_BOOL = "TYPE_BOOL";
 	public static final String FLAG_TYPE_LONG = "TYPE_LONG";
 	public static final String FLAG_TYPE_DOUBLE = "TYPE_DOUBLE";
 	public static final String FLAG_TYPE_STRING = "TYPE_STRING";
-	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
+	//public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY"; // *also* used (and thus already defined) by TYPE_TYPE
 	public static final String FLAG_TYPE_OBJECT = "TYPE_OBJECT";
 	
 	// flags for TYPE_MAGIC_CONST nodes (exclusive)
