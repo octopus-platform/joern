@@ -24,12 +24,14 @@ import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
+import ast.expressions.DoubleExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
+import ast.expressions.IntegerExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PostDecOperationExpression;
@@ -38,6 +40,7 @@ import ast.expressions.PreDecOperationExpression;
 import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.StringExpression;
 import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryPlusExpression;
@@ -158,6 +161,50 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	
+	// primary expressions (leafs)
+	
+	/**
+	 * "integer", "double" or "string" nodes are nodes holding primary expressions such
+	 * as an integer, a floating point number or a string enclosed in single or double quotes.
+	 * 
+	 * These nodes have no children. Their concrete value is specified as the 'code' property.
+	 * 
+	 * This test checks a few primary expressions in the following PHP code:
+	 * 
+	 * 42;
+	 * 3.14;
+	 * "Hello World!";
+	 */
+	@Test
+	public void testPrimaryExpressionCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,integer,,1,42,0,1,,,\n";
+		nodeStr += "4,double,,1,3.14,1,1,,,\n";
+		nodeStr += "5,string,,1,\"Hello World!\",2,1,,,\n";
+		
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)4);
+		ASTNode node3 = ast.getNodeById((long)5);
+
+		assertThat( node, instanceOf(IntegerExpression.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( "42", ((IntegerExpression)node).getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(DoubleExpression.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( "3.14", ((DoubleExpression)node2).getEscapedCodeStr());
+
+		assertThat( node3, instanceOf(StringExpression.class));
+		assertEquals( 0, node3.getChildCount());
+		assertEquals( "Hello World!", ((StringExpression)node3).getEscapedCodeStr());
+	}
+
+
 	/* special nodes */	
 	
 	/**

@@ -29,6 +29,11 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_FILE = "File";
 	public static final String TYPE_DIRECTORY = "Directory";
 
+	// primary expressions (leafs)
+	public static final String TYPE_INTEGER = "integer";
+	public static final String TYPE_DOUBLE = "double";
+	public static final String TYPE_STRING = "string";
+
 	// special nodes
 	public static final String TYPE_NAME = "AST_NAME";
 	public static final String TYPE_CLOSURE_VAR = "AST_CLOSURE_VAR";
