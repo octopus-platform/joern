@@ -44,6 +44,10 @@ public class PHPCSVNodeTypes
 
 	public static final String TYPE_CLASS = "AST_CLASS";
 
+	// nodes without children (leafs)
+	// expressions
+	public static final String TYPE_MAGIC_CONST = "AST_MAGIC_CONST";
+	
 	// nodes with exactly 1 child
 	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
@@ -168,6 +172,16 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
 	public static final String FLAG_TYPE_OBJECT = "TYPE_OBJECT";
 	
+	// flags for TYPE_MAGIC_CONST nodes (exclusive)
+	public static final String FLAG_MAGIC_LINE = "T_LINE";
+	public static final String FLAG_MAGIC_FILE = "T_FILE";
+	public static final String FLAG_MAGIC_DIR = "T_DIR";
+	public static final String FLAG_MAGIC_NAMESPACE = "T_NS_C";
+	public static final String FLAG_MAGIC_FUNCTION = "T_FUNC_C";
+	public static final String FLAG_MAGIC_METHOD = "T_METHOD_C";
+	public static final String FLAG_MAGIC_CLASS = "T_CLASS_C";
+	public static final String FLAG_MAGIC_TRAIT = "T_TRAIT_C";
+
 	// flags for TYPE_INCLUDE_OR_EVAL nodes (exclusive)
 	public static final String FLAG_EXEC_EVAL = "EXEC_EVAL";
 	public static final String FLAG_EXEC_INCLUDE = "EXEC_INCLUDE";

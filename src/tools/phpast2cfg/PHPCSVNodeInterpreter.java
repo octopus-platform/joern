@@ -52,6 +52,7 @@ import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPMagicConstant;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPShellExecExpression;
@@ -138,6 +139,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CLASS:
 				retval = handleClass(row, ast);
+				break;
+
+			// nodes without children (leafs)
+			// expressions
+			case PHPCSVNodeTypes.TYPE_MAGIC_CONST:
+				retval = handleMagicConst(row, ast);
 				break;
 
 			// nodes with exactly 1 child
@@ -650,6 +657,31 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
 		newNode.setName(name);
 		newNode.setDocComment(doccomment);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	
+	/* nodes without children (leafs) */
+	
+	private long handleMagicConst(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPMagicConstant newNode = new PHPMagicConstant();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);

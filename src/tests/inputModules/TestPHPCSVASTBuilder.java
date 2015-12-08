@@ -60,6 +60,7 @@ import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPMagicConstant;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
 import ast.php.expressions.PHPShellExecExpression;
@@ -509,8 +510,97 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
 		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
+
 	
+	/* nodes without children (leafs) */
 	
+	/**
+	 * AST_MAGIC_CONST nodes are nodes holding magic constant names.
+	 * 
+	 * AST_MAGIC_CONST nodes have no children. They do however have a flag to distinguish
+	 * which magic constant is used.
+	 * The following flags exist:
+	 * - FLAG_MAGIC_LINE
+	 * - FLAG_MAGIC_FILE
+	 * - FLAG_MAGIC_DIR
+	 * - FLAG_MAGIC_NAMESPACE
+	 * - FLAG_MAGIC_FUNCTION
+	 * - FLAG_MAGIC_METHOD
+	 * - FLAG_MAGIC_CLASS
+	 * - FLAG_MAGIC_TRAIT
+	 * See http://php.net/manual/en/language.constants.predefined.php
+	 * 
+	 * This test checks a few magic constant expressions in the following PHP code:
+	 * 
+	 * __LINE__;
+	 * __FILE__;
+	 * __DIR__;
+	 * __NAMESPACE__;
+	 * __FUNCTION__;
+	 * __METHOD__;
+	 * __CLASS__;
+	 * __TRAIT__;
+	 */
+	@Test
+	public void testMagicConstantCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_MAGIC_CONST,T_LINE,3,,0,1,,,\n";
+		nodeStr += "4,AST_MAGIC_CONST,T_FILE,4,,1,1,,,\n";
+		nodeStr += "5,AST_MAGIC_CONST,T_DIR,5,,2,1,,,\n";
+		nodeStr += "6,AST_MAGIC_CONST,T_NS_C,6,,3,1,,,\n";
+		nodeStr += "7,AST_MAGIC_CONST,T_FUNC_C,7,,4,1,,,\n";
+		nodeStr += "8,AST_MAGIC_CONST,T_METHOD_C,8,,5,1,,,\n";
+		nodeStr += "9,AST_MAGIC_CONST,T_CLASS_C,9,,6,1,,,\n";
+		nodeStr += "10,AST_MAGIC_CONST,T_TRAIT_C,10,,7,1,,,\n";
+		
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)4);
+		ASTNode node3 = ast.getNodeById((long)5);
+		ASTNode node4 = ast.getNodeById((long)6);
+		ASTNode node5 = ast.getNodeById((long)7);
+		ASTNode node6 = ast.getNodeById((long)8);
+		ASTNode node7 = ast.getNodeById((long)9);
+		ASTNode node8 = ast.getNodeById((long)10);
+
+		assertThat( node, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_LINE, ((PHPMagicConstant)node).getFlags());
+
+		assertThat( node2, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FILE, ((PHPMagicConstant)node2).getFlags());
+
+		assertThat( node3, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node3.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_DIR, ((PHPMagicConstant)node3).getFlags());
+
+		assertThat( node4, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node4.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_NAMESPACE, ((PHPMagicConstant)node4).getFlags());
+
+		assertThat( node5, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node5.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FUNCTION, ((PHPMagicConstant)node5).getFlags());
+
+		assertThat( node6, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node6.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_METHOD, ((PHPMagicConstant)node6).getFlags());
+
+		assertThat( node7, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node7.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_CLASS, ((PHPMagicConstant)node7).getFlags());
+
+		assertThat( node8, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node8.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_TRAIT, ((PHPMagicConstant)node8).getFlags());
+	}
+
+
 	/* nodes with exactly 1 child */
 	
 	/**
@@ -754,13 +844,13 @@ public class TestPHPCSVASTBuilder
 	 * is going to be cast to a given type.
 	 * Note that there is no distinguished child for the type that the expression is being cast to.
 	 * Rather, the type of cast is determined by a flag. The following flags exist:
-	 * - TYPE_NULL
-	 * - TYPE_BOOL
-	 * - TYPE_LONG
-	 * - TYPE_DOUBLE
-	 * - TYPE_STRING
-	 * - TYPE_ARRAY
-	 * - TYPE_OBJECT
+	 * - FLAG_TYPE_NULL
+	 * - FLAG_TYPE_BOOL
+	 * - FLAG_TYPE_LONG
+	 * - FLAG_TYPE_DOUBLE
+	 * - FLAG_TYPE_STRING
+	 * - FLAG_TYPE_ARRAY
+	 * - FLAG_TYPE_OBJECT
 	 * Also see http://php.net/manual/en/language.types.type-juggling.php#language.types.typecasting
 	 * for the different type casts that exist in PHP.
 	 * 

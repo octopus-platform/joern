@@ -154,6 +154,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleClass((PHPClassDef)startNode, endNode, childnum);
 				break;
 
+			// nodes without children (leafs)
+			// expressions
+			case PHPCSVNodeTypes.TYPE_MAGIC_CONST:
+				errno = 2;
+				break;
+
+
 			// nodes with exactly 1 child
 			// expressions
 			case PHPCSVNodeTypes.TYPE_VAR:
@@ -452,8 +459,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			throw new InvalidCSVFile("While trying to handle row "
 					+ row.toString() + ": Invalid childnum " + childnum
 					+ " for start node type " + type + ".");
-		
-		
+		else if( 2 == errno)
+			throw new InvalidCSVFile("While trying to handle row "
+					+ row.toString() + ": Cannot add child to leaf node "
+					+ type + ".");
+
 		return startId;
 	}
 	
