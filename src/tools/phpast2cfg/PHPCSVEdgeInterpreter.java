@@ -50,6 +50,7 @@ import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPShellExecExpression;
 import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
@@ -180,6 +181,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_SILENCE:
 				errno = handleSilence((PHPSilenceExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_SHELL_EXEC:
+				errno = handleShellExec((PHPShellExecExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLONE:
 				errno = handleClone((PHPCloneExpression)startNode, endNode, childnum);
@@ -777,6 +781,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// UnaryOperationExpression.expression and getters and setters accordingly
 				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+
+	private int handleShellExec( PHPShellExecExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setShellCommand(endNode);
 				break;
 				
 			default:

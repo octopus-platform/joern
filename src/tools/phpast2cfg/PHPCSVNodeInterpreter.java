@@ -53,6 +53,7 @@ import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPShellExecExpression;
 import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
@@ -166,6 +167,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_SILENCE:
 				retval = handleSilence(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_SHELL_EXEC:
+				retval = handleShellExec(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLONE:
 				retval = handleClone(row, ast);
@@ -831,6 +835,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleSilence(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPSilenceExpression newNode = new PHPSilenceExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleShellExec(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPShellExecExpression newNode = new PHPShellExecExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

@@ -61,6 +61,7 @@ import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPShellExecExpression;
 import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
@@ -1053,6 +1054,62 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPSilenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPSilenceExpression)node2).getExpression());
+	}
+
+	/**
+	 * AST_SHELL_EXEC nodes are used to denote shell command execution expressions.
+	 * 
+	 * Any AST_SHELL_EXEC node has exactly exactly one child, representing the command that is
+	 * going to be be executed by the shell. This is typically a string, but could be an AST_ENCAPS_LIST
+	 * to include variables, for example.
+	 * See http://php.net/manual/en/language.operators.execution.php
+	 * 
+	 * This test checks a shell command execution expression's children in the following PHP code:
+	 * 
+	 * $output = `cat /var/www/html/.htpasswd`;
+	 * $output2 = `$attackerinput`;
+	 */
+	@Test
+	public void testShellExecCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"output\",0,1,,,\n";
+		nodeStr += "6,AST_SHELL_EXEC,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"cat /var/www/html/.htpasswd\",0,1,,,\n";
+		nodeStr += "8,AST_ASSIGN,,4,,1,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"output2\",0,1,,,\n";
+		nodeStr += "11,AST_SHELL_EXEC,,4,,1,1,,,\n";
+		nodeStr += "12,AST_ENCAPS_LIST,,4,,0,1,,,\n";
+		nodeStr += "13,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "14,string,,4,\"attackerinput\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPShellExecExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPShellExecExpression)node).getShellCommand());
+		
+		assertThat( node2, instanceOf(PHPShellExecExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPShellExecExpression)node2).getShellCommand());
 	}
 	
 	/**
