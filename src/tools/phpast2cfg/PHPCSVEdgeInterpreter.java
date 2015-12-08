@@ -8,6 +8,7 @@ import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
+import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
@@ -20,6 +21,10 @@ import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
+import ast.expressions.PostDecOperationExpression;
+import ast.expressions.PostIncOperationExpression;
+import ast.expressions.PreDecOperationExpression;
+import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.UnaryMinusExpression;
@@ -164,6 +169,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
 				errno = handleUnaryMinus((UnaryMinusExpression)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_CAST:
+				errno = handleCast((CastExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_EMPTY:
 				errno = handleEmpty((PHPEmptyExpression)startNode, endNode, childnum);
 				break;
@@ -184,6 +192,18 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_PRE_INC:
+				errno = handlePreInc((PreIncOperationExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_PRE_DEC:
+				errno = handlePreDec((PreDecOperationExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_POST_INC:
+				errno = handlePostInc((PostIncOperationExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_POST_DEC:
+				errno = handlePostDec((PostDecOperationExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
@@ -690,6 +710,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;		
 	}
 	
+	private int handleCast( CastExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// CastExpression.castExpression and getters and setters accordingly
+				startNode.setCastExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
 	private int handleEmpty( PHPEmptyExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
@@ -814,6 +853,74 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// UnaryOperationExpression.expression and getters and setters accordingly
 				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handlePreInc( PreIncOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setVariableExpression((Expression)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+
+	private int handlePreDec( PreDecOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setVariableExpression((Expression)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handlePostInc( PostIncOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setVariableExpression((Expression)endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+
+	private int handlePostDec( PostDecOperationExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				startNode.setVariableExpression((Expression)endNode);
 				break;
 				
 			default:

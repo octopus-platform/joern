@@ -20,6 +20,7 @@ import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.BinaryOperationExpression;
 import ast.expressions.CallExpression;
+import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
@@ -31,6 +32,10 @@ import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
+import ast.expressions.PostDecOperationExpression;
+import ast.expressions.PostIncOperationExpression;
+import ast.expressions.PreDecOperationExpression;
+import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.UnaryMinusExpression;
@@ -111,6 +116,7 @@ import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
 import tools.phpast2cfg.PHPCSVEdgeInterpreter;
 import tools.phpast2cfg.PHPCSVNodeInterpreter;
+import tools.phpast2cfg.PHPCSVNodeTypes;
 
 public class TestPHPCSVASTBuilder
 {
@@ -740,6 +746,172 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	/**
+	 * AST_CAST nodes are used to denote cast expressions.
+	 * 
+	 * Any AST_CAST node has exactly exactly one child, representing the expression whose evaluation
+	 * is going to be cast to a given type.
+	 * Note that there is no distinguished child for the type that the expression is being cast to.
+	 * Rather, the type of cast is determined by a flag. The following flags exist:
+	 * - TYPE_NULL
+	 * - TYPE_BOOL
+	 * - TYPE_LONG
+	 * - TYPE_DOUBLE
+	 * - TYPE_STRING
+	 * - TYPE_ARRAY
+	 * - TYPE_OBJECT
+	 * Also see http://php.net/manual/en/language.types.type-juggling.php#language.types.typecasting
+	 * for the different type casts that exist in PHP.
+	 * 
+	 * This test checks a few cast expressions' children in the following PHP code:
+	 * 
+	 * // NULL
+	 * (unset)$n;
+	 * // bool
+	 * (bool)0;
+	 * (boolean)1;
+	 * // long
+	 * (int)2;
+	 * (integer)3;
+	 * // double
+	 * (float)3.14;
+	 * (double)4.2;
+	 * (real)6.6;
+	 * // string
+	 * (string)"hello";
+	 * // array
+	 * (array)$a;
+	 * // object
+	 * (object)$o;
+	 */
+	@Test
+	public void testCastCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_CAST,TYPE_NULL,4,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "5,string,,4,\"n\",0,1,,,\n";
+		nodeStr += "6,AST_CAST,TYPE_BOOL,6,,1,1,,,\n";
+		nodeStr += "7,integer,,6,0,0,1,,,\n";
+		nodeStr += "8,AST_CAST,TYPE_BOOL,7,,2,1,,,\n";
+		nodeStr += "9,integer,,7,1,0,1,,,\n";
+		nodeStr += "10,AST_CAST,TYPE_LONG,9,,3,1,,,\n";
+		nodeStr += "11,integer,,9,2,0,1,,,\n";
+		nodeStr += "12,AST_CAST,TYPE_LONG,10,,4,1,,,\n";
+		nodeStr += "13,integer,,10,3,0,1,,,\n";
+		nodeStr += "14,AST_CAST,TYPE_DOUBLE,12,,5,1,,,\n";
+		nodeStr += "15,double,,12,3.14,0,1,,,\n";
+		nodeStr += "16,AST_CAST,TYPE_DOUBLE,13,,6,1,,,\n";
+		nodeStr += "17,double,,13,4.2,0,1,,,\n";
+		nodeStr += "18,AST_CAST,TYPE_DOUBLE,14,,7,1,,,\n";
+		nodeStr += "19,double,,14,6.6,0,1,,,\n";
+		nodeStr += "20,AST_CAST,TYPE_STRING,16,,8,1,,,\n";
+		nodeStr += "21,string,,16,\"hello\",0,1,,,\n";
+		nodeStr += "22,AST_CAST,TYPE_ARRAY,18,,9,1,,,\n";
+		nodeStr += "23,AST_VAR,,18,,0,1,,,\n";
+		nodeStr += "24,string,,18,\"a\",0,1,,,\n";
+		nodeStr += "25,AST_CAST,TYPE_OBJECT,20,,10,1,,,\n";
+		nodeStr += "26,AST_VAR,,20,,0,1,,,\n";
+		nodeStr += "27,string,,20,\"o\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "2,6,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "2,10,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "2,12,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "2,14,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "2,16,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "2,18,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "2,20,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "2,22,PARENT_OF\n";
+		edgeStr += "26,27,PARENT_OF\n";
+		edgeStr += "25,26,PARENT_OF\n";
+		edgeStr += "2,25,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node3 = ast.getNodeById((long)8);
+		ASTNode node4 = ast.getNodeById((long)10);
+		ASTNode node5 = ast.getNodeById((long)12);
+		ASTNode node6 = ast.getNodeById((long)14);
+		ASTNode node7 = ast.getNodeById((long)16);
+		ASTNode node8 = ast.getNodeById((long)18);
+		ASTNode node9 = ast.getNodeById((long)20);
+		ASTNode node10 = ast.getNodeById((long)22);
+		ASTNode node11 = ast.getNodeById((long)25);
+
+		assertThat( node, instanceOf(CastExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((CastExpression)node).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_NULL, ((CastExpression)node).getFlags());
+		
+		assertThat( node2, instanceOf(CastExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((CastExpression)node2).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_BOOL, ((CastExpression)node2).getFlags());
+
+		assertThat( node3, instanceOf(CastExpression.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((CastExpression)node3).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_BOOL, ((CastExpression)node3).getFlags());
+		
+		assertThat( node4, instanceOf(CastExpression.class));
+		assertEquals( 1, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((CastExpression)node4).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_LONG, ((CastExpression)node4).getFlags());
+		
+		assertThat( node5, instanceOf(CastExpression.class));
+		assertEquals( 1, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((CastExpression)node5).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_LONG, ((CastExpression)node5).getFlags());
+		
+		assertThat( node6, instanceOf(CastExpression.class));
+		assertEquals( 1, node6.getChildCount());
+		assertEquals( ast.getNodeById((long)15), ((CastExpression)node6).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node6).getFlags());
+		
+		assertThat( node7, instanceOf(CastExpression.class));
+		assertEquals( 1, node7.getChildCount());
+		assertEquals( ast.getNodeById((long)17), ((CastExpression)node7).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node7).getFlags());
+		
+		assertThat( node8, instanceOf(CastExpression.class));
+		assertEquals( 1, node8.getChildCount());
+		assertEquals( ast.getNodeById((long)19), ((CastExpression)node8).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node8).getFlags());
+		
+		assertThat( node9, instanceOf(CastExpression.class));
+		assertEquals( 1, node9.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((CastExpression)node9).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_STRING, ((CastExpression)node9).getFlags());
+		
+		assertThat( node10, instanceOf(CastExpression.class));
+		assertEquals( 1, node10.getChildCount());
+		assertEquals( ast.getNodeById((long)23), ((CastExpression)node10).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((CastExpression)node10).getFlags());
+		
+		assertThat( node11, instanceOf(CastExpression.class));
+		assertEquals( 1, node11.getChildCount());
+		assertEquals( ast.getNodeById((long)26), ((CastExpression)node11).getCastExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_OBJECT, ((CastExpression)node11).getFlags());
+	}
+	
+	/**
 	 * AST_EMPTY nodes are used to denote 'empty' operation expressions.
 	 * 
 	 * Any AST_EMPTY node has exactly exactly one child, representing the expression for which
@@ -1030,7 +1202,7 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_UNARY_OP node has exactly exactly one child, representing the expression for which
 	 * the operation is to be performed.
 	 * 
-	 * This test checks a few of unary operation expressions' children in the following PHP code:
+	 * This test checks a few unary operation expressions' children in the following PHP code:
 	 * 
 	 * // bit operators
 	 * ~$foo;
@@ -1066,6 +1238,130 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node2).getExpression());
+	}
+
+	/**
+	 * AST_PRE_INC nodes are used to denote pre-increment operation expressions.
+	 * 
+	 * Any AST_PRE_INC node has exactly exactly one child, representing the variable that
+	 * is to be incremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a pre-increment operation expression's child in the following PHP code:
+	 * 
+	 * ++$i;
+	 */
+	@Test
+	public void testPreIncCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PRE_INC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PreIncOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PreIncOperationExpression)node).getVariableExpression());
+	}
+	
+	/**
+	 * AST_PRE_DEC nodes are used to denote pre-decrement operation expressions.
+	 * 
+	 * Any AST_PRE_DEC node has exactly exactly one child, representing the variable that
+	 * is to be decremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a pre-decrement operation expression's child in the following PHP code:
+	 * 
+	 * --$i;
+	 */
+	@Test
+	public void testPreDecCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_PRE_DEC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PreDecOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PreDecOperationExpression)node).getVariableExpression());
+	}
+	
+	/**
+	 * AST_POST_INC nodes are used to denote post-increment operation expressions.
+	 * 
+	 * Any AST_POST_INC node has exactly exactly one child, representing the variable that
+	 * is to be incremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a post-increment operation expression's child in the following PHP code:
+	 * 
+	 * $i++;
+	 */
+	@Test
+	public void testPostIncCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_POST_INC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PostIncOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PostIncOperationExpression)node).getVariableExpression());
+	}
+	
+	/**
+	 * AST_POST_DEC nodes are used to denote post-decrement operation expressions.
+	 * 
+	 * Any AST_POST_DEC node has exactly exactly one child, representing the variable that
+	 * is to be decremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
+	 * 
+	 * This test checks a post-decrement operation expression's child in the following PHP code:
+	 * 
+	 * $i--;
+	 */
+	@Test
+	public void testPostDecCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_POST_DEC,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		
+		assertThat( node, instanceOf(PostDecOperationExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PostDecOperationExpression)node).getVariableExpression());
 	}
 	
 	/**

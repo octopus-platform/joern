@@ -105,7 +105,7 @@ public class ASTDefUseAnalyzer
 		{
 		case "AssignmentExpression":
 			return new AssignmentEnvironment();
-		case "IncDecOp":
+		case "PostIncDecOperationExpression":
 			return new IncDecEnvironment();
 		case "IdentifierDecl":
 		case "Parameter":
