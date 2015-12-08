@@ -59,6 +59,7 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_CLONE = "AST_CLONE";
 	public static final String TYPE_EXIT = "AST_EXIT";
 	public static final String TYPE_PRINT = "AST_PRINT";
+	public static final String TYPE_INCLUDE_OR_EVAL = "AST_INCLUDE_OR_EVAL";
 	public static final String TYPE_UNARY_OP = "AST_UNARY_OP";
 	public static final String TYPE_PRE_INC = "AST_PRE_INC";
 	public static final String TYPE_PRE_DEC = "AST_PRE_DEC";
@@ -154,11 +155,11 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_USE = "AST_USE";
 
 	/* node flags */
-	// flags for toplevel nodes
+	// flags for TYPE_TOPLEVEL nodes (exclusive)
 	public static final String FLAG_TOPLEVEL_FILE = "TOPLEVEL_FILE"; // artificial
 	public static final String FLAG_TOPLEVEL_CLASS = "TOPLEVEL_CLASS"; // artificial
 	
-	// flags for cast operations
+	// flags for TYPE_CAST nodes (exclusive)
 	public static final String FLAG_TYPE_NULL = "TYPE_NULL";
 	public static final String FLAG_TYPE_BOOL = "TYPE_BOOL";
 	public static final String FLAG_TYPE_LONG = "TYPE_LONG";
@@ -166,4 +167,11 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_TYPE_STRING = "TYPE_STRING";
 	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
 	public static final String FLAG_TYPE_OBJECT = "TYPE_OBJECT";
+	
+	// flags for TYPE_INCLUDE_OR_EVAL nodes (exclusive)
+	public static final String FLAG_EXEC_EVAL = "EXEC_EVAL";
+	public static final String FLAG_EXEC_INCLUDE = "EXEC_INCLUDE";
+	public static final String FLAG_EXEC_INCLUDE_ONCE = "EXEC_INCLUDE_ONCE";
+	public static final String FLAG_EXEC_REQUIRE = "EXEC_REQUIRE";
+	public static final String FLAG_EXEC_REQUIRE_ONCE = "EXEC_REQUIRE_ONCE";
 }

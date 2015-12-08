@@ -57,6 +57,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
+import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
@@ -1064,7 +1065,7 @@ public class TestPHPCSVASTBuilder
 	 * to include variables, for example.
 	 * See http://php.net/manual/en/language.operators.execution.php
 	 * 
-	 * This test checks a shell command execution expression's children in the following PHP code:
+	 * This test checks a few shell command execution expressions' children in the following PHP code:
 	 * 
 	 * $output = `cat /var/www/html/.htpasswd`;
 	 * $output2 = `$attackerinput`;
@@ -1251,6 +1252,112 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPPrintExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_INCLUDE_OR_EVAL nodes are used to denote include/require/eval expressions.
+	 * 
+	 * Any AST_INCLUDE_OR_EVAL node has exactly exactly one child, representing the expression that is
+	 * going to be be included as a file or executed by the PHP interpreter in the current program scope.
+	 * This is typically a string, but could be an AST_ENCAPS_LIST
+	 * to include variables, for example.
+	 * See:
+	 * - http://php.net/manual/en/function.include.php
+	 * - http://php.net/manual/en/function.include-once.php
+	 * - http://php.net/manual/en/function.require.php
+	 * - http://php.net/manual/en/function.require-once.php
+	 * - http://php.net/manual/en/function.eval.php
+	 * 
+	 * This test checks a few include/require/eval expressions' children in the following PHP code:
+	 * 
+	 * include 'foo.php';
+	 * include_once $userinput;
+	 * require getuserinput();
+	 * require_once "http://".$userinput."bar.php";
+	 * eval("{$evilinput}");
+	 */
+	@Test
+	public void testIncludeOrEvalCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"foo.php\",0,1,,,\n";
+		nodeStr += "5,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE_ONCE,4,,1,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "7,string,,4,\"userinput\",0,1,,,\n";
+		nodeStr += "8,AST_INCLUDE_OR_EVAL,EXEC_REQUIRE,5,,2,1,,,\n";
+		nodeStr += "9,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "11,string,,5,\"getuserinput\",0,1,,,\n";
+		nodeStr += "12,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "13,AST_INCLUDE_OR_EVAL,EXEC_REQUIRE_ONCE,6,,3,1,,,\n";
+		nodeStr += "14,AST_BINARY_OP,BINARY_CONCAT,6,,0,1,,,\n";
+		nodeStr += "15,AST_BINARY_OP,BINARY_CONCAT,6,,0,1,,,\n";
+		nodeStr += "16,string,,6,\"http://\",0,1,,,\n";
+		nodeStr += "17,AST_VAR,,6,,1,1,,,\n";
+		nodeStr += "18,string,,6,\"userinput\",0,1,,,\n";
+		nodeStr += "19,string,,6,\"bar.php\",1,1,,,\n";
+		nodeStr += "20,AST_INCLUDE_OR_EVAL,EXEC_EVAL,7,,4,1,,,\n";
+		nodeStr += "21,AST_ENCAPS_LIST,,7,,0,1,,,\n";
+		nodeStr += "22,AST_VAR,,7,,0,1,,,\n";
+		nodeStr += "23,string,,7,\"evilinput\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "2,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,19,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "2,13,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "2,20,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)5);
+		ASTNode node3 = ast.getNodeById((long)8);
+		ASTNode node4 = ast.getNodeById((long)13);
+		ASTNode node5 = ast.getNodeById((long)20);
+		
+		assertThat( node, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPIncludeOrEvalExpression)node).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE, ((PHPIncludeOrEvalExpression)node).getFlags());
+
+		assertThat( node2, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((PHPIncludeOrEvalExpression)node2).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE_ONCE, ((PHPIncludeOrEvalExpression)node2).getFlags());
+
+		assertThat( node3, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPIncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE, ((PHPIncludeOrEvalExpression)node3).getFlags());
+		
+		assertThat( node4, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((PHPIncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE_ONCE, ((PHPIncludeOrEvalExpression)node4).getFlags());
+		
+		assertThat( node5, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((PHPIncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_EVAL, ((PHPIncludeOrEvalExpression)node5).getFlags());
 	}
 	
 	/**

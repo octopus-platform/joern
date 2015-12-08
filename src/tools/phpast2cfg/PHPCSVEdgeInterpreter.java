@@ -46,6 +46,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
+import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
@@ -193,6 +194,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_PRINT:
 				errno = handlePrint((PHPPrintExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_INCLUDE_OR_EVAL:
+				errno = handleIncludeOrEval((PHPIncludeOrEvalExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
@@ -857,6 +861,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// UnaryExpression.expression and getters and setters accordingly
 				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleIncludeOrEval( PHPIncludeOrEvalExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setIncludeOrEvalExpression(endNode);
 				break;
 				
 			default:

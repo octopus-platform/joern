@@ -49,6 +49,7 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
+import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
@@ -179,6 +180,9 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_PRINT:
 				retval = handlePrint(row, ast);
+				break;
+			case PHPCSVNodeTypes.TYPE_INCLUDE_OR_EVAL:
+				retval = handleIncludeOrEval(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				retval = handleUnaryOperation(row, ast);
@@ -923,6 +927,28 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handlePrint(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPPrintExpression newNode = new PHPPrintExpression();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		newNode.setFlags(flags);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	private long handleIncludeOrEval(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		PHPIncludeOrEvalExpression newNode = new PHPIncludeOrEvalExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
