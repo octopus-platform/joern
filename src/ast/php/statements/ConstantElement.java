@@ -1,30 +1,31 @@
 package ast.php.statements;
 
-import ast.ASTNode;
+import ast.expressions.Expression;
+import ast.expressions.StringExpression;
 import ast.logical.statements.Statement;
 
 public class ConstantElement extends Statement
 {
-	private ASTNode name = null;
-	private ASTNode value = null;
+	private StringExpression name = null;
+	private Expression value = null;
 
-	public ASTNode getNameChild()
+	public StringExpression getNameChild()
 	{
 		return this.name;
 	}
 	
-	public void setNameChild(ASTNode name)
+	public void setNameChild(StringExpression name)
 	{
 		this.name = name;
 		super.addChild(name);
 	}
 	
-	public ASTNode getValue()
+	public Expression getValue()
 	{
 		return this.value;
 	}
 	
-	public void setValue(ASTNode value)
+	public void setValue(Expression value)
 	{
 		this.value = value;
 		super.addChild(value);

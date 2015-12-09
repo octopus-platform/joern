@@ -1,20 +1,20 @@
 package ast.php.statements;
 
-import ast.ASTNode;
+import ast.expressions.StringExpression;
 import ast.logical.statements.Statement;
 import ast.statements.UseStatement;
 
 public class PHPGroupUseStatement extends Statement
 {
-	private ASTNode prefix = null;
+	private StringExpression prefix = null;
 	private UseStatement uses = null;
 	
-	public ASTNode getPrefix()
+	public StringExpression getPrefix()
 	{
 		return this.prefix;
 	}
 
-	public void setPrefix(ASTNode prefix)
+	public void setPrefix(StringExpression prefix)
 	{
 		this.prefix = prefix;
 		super.addChild(prefix);

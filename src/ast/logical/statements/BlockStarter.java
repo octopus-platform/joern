@@ -1,18 +1,19 @@
 package ast.logical.statements;
 
 import ast.ASTNode;
+import ast.expressions.Expression;
 
 public class BlockStarter extends Statement
 {
-	protected ASTNode condition = null; // TODO change type back to Expression (or Condition)
+	protected Expression condition = null;
 	protected Statement statement = null;
 
-	public ASTNode getCondition()
+	public Expression getCondition()
 	{
 		return this.condition;
 	}
 
-	public void setCondition(ASTNode expression)
+	public void setCondition(Expression expression)
 	{
 		this.condition = expression;
 		super.addChild(expression);

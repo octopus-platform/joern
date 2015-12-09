@@ -1,18 +1,18 @@
 package ast.php.expressions;
 
-import ast.ASTNode;
 import ast.expressions.CallExpression;
+import ast.expressions.Expression;
 
 public class MethodCallExpression extends CallExpression
 {
-	private ASTNode targetObject = null; // TODO make this an Expression once mapping is finished
+	private Expression targetObject = null;
 	
-	public ASTNode getTargetObject() // TODO return Expression
+	public Expression getTargetObject()
 	{
 		return this.targetObject;
 	}
 	
-	public void setTargetObject(ASTNode targetObject) // TODO take Expression
+	public void setTargetObject(Expression targetObject)
 	{
 		this.targetObject = targetObject;
 		super.addChild(targetObject);

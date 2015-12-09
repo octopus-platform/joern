@@ -1,29 +1,27 @@
 package ast.expressions;
 
-import ast.ASTNode;
-
 public class ClassConstantExpression extends MemberAccess
 {
-	private ASTNode classExpression = null; // TODO make this an Expression
-	private ASTNode constantName = null;
+	private Expression classExpression = null;
+	private StringExpression constantName = null;
 
-	public ASTNode getClassExpression() // TODO return an Expression
+	public Expression getClassExpression()
 	{
 		return this.classExpression;
 	}
 
-	public void setClassExpression(ASTNode classExpression) // TODO take an Expression
+	public void setClassExpression(Expression classExpression)
 	{
 		this.classExpression = classExpression;
 		super.addChild(classExpression);
 	}
 	
-	public ASTNode getConstantName()
+	public StringExpression getConstantName()
 	{
 		return this.constantName;
 	}
 
-	public void setConstantName(ASTNode constantName)
+	public void setConstantName(StringExpression constantName)
 	{
 		this.constantName = constantName;
 		super.addChild(constantName);

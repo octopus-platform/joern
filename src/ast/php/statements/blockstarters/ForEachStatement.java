@@ -1,33 +1,33 @@
 package ast.php.statements.blockstarters;
 
-import ast.ASTNode;
 import ast.expressions.Expression;
 import ast.expressions.Variable;
 import ast.logical.statements.BlockStarter;
 
 public class ForEachStatement extends BlockStarter
 {
-	private ASTNode iteratedObject = null; // TODO make this an Expression sometime
+	private Expression iteratedObject = null;
 	private Variable key = null;
 	private Expression value = null;
 
 	@Override
-	public ASTNode getCondition()
+	public Expression getCondition()
 	{
-		return null;
+		throw new RuntimeException("A condition does not exist for a ForEachStatement!");
 	}
 
 	@Override
-	public void setCondition(ASTNode expression)
+	public void setCondition(Expression expression)
 	{
+		throw new RuntimeException("A condition does not exist for a ForEachStatement!");
 	}
 	
-	public ASTNode getIteratedObject()
+	public Expression getIteratedObject()
 	{
 		return this.iteratedObject;
 	}
 
-	public void setIteratedObject(ASTNode expression)
+	public void setIteratedObject(Expression expression)
 	{
 		this.iteratedObject = expression;
 		super.addChild(expression);

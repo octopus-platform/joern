@@ -1,15 +1,15 @@
 package ast.php.expressions;
 
-import ast.ASTNode;
+import ast.expressions.Expression;
 import ast.expressions.UnaryExpression;
 
 public class PHPIncludeOrEvalExpression extends UnaryExpression
 {
-	public ASTNode getIncludeOrEvalExpression() { // TODO return an expression
+	public Expression getIncludeOrEvalExpression() {
 		return super.getExpression();
 	}
 	
-	public void setIncludeOrEvalExpression(ASTNode variable) { // TODO take an expression
+	public void setIncludeOrEvalExpression(Expression variable) {
 		super.setExpression(variable);
 	}
 }

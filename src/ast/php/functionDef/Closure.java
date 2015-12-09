@@ -1,6 +1,5 @@
 package ast.php.functionDef;
 
-import ast.ASTNode;
 import ast.functionDef.FunctionDef;
 
 public class Closure extends FunctionDef
@@ -12,10 +11,9 @@ public class Closure extends FunctionDef
 		return this.closureUses;
 	}
 
-	public void setClosureUses(ASTNode closureUses)
+	public void setClosureUses(ClosureUses closureUses)
 	{
-		if( closureUses instanceof ClosureUses)
-			this.closureUses = (ClosureUses)closureUses;
+		this.closureUses = closureUses;
 		super.addChild(closureUses);
 	}
 }

@@ -10,26 +10,26 @@ import ast.walking.ASTNodeVisitor;
 
 public class ForStatement extends BlockStarter
 {
-	private ASTNode forInitExpression = null; // TODO make this an ExpressionList sometime (might need to create a PHPForStatement)
-	private ASTNode forLoopExpression = null; // TODO make this an ExpressionList sometime (might need to create a PHPForStatement)
+	private Expression forInitExpression = null; // TODO make this an ExpressionList sometime (might need to create a PHPForStatement)
+	private Expression forLoopExpression = null; // TODO make this an ExpressionList sometime (might need to create a PHPForStatement)
 
-	public ASTNode getForInitExpression()
+	public Expression getForInitExpression()
 	{
 		return forInitExpression;
 	}
 
-	public void setForInitExpression(ASTNode expression)
+	public void setForInitExpression(Expression expression)
 	{
 		this.forInitExpression = expression;
 		super.addChild(expression);
 	}
 
-	public ASTNode getForLoopExpression()
+	public Expression getForLoopExpression()
 	{
 		return forLoopExpression;
 	}
 
-	public void setForLoopExpression(ASTNode expression)
+	public void setForLoopExpression(Expression expression)
 	{
 		this.forLoopExpression = expression;
 		super.addChild(expression);
@@ -41,9 +41,9 @@ public class ForStatement extends BlockStarter
 		if (node instanceof Condition)
 			setCondition((Condition) node);
 		else if (node instanceof ForInit)
-			setForInitExpression(node);
+			setForInitExpression((Expression)node);
 		else if (node instanceof Expression)
-			setForLoopExpression(node);
+			setForLoopExpression((Expression)node);
 		else if (node instanceof Statement)
 			setStatement((Statement) node);
 		else

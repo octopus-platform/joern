@@ -1,19 +1,19 @@
 package ast.statements.jump;
 
-import ast.ASTNode;
+import ast.expressions.StringExpression;
 import ast.logical.statements.JumpStatement;
 import ast.walking.ASTNodeVisitor;
 
 public class GotoStatement extends JumpStatement
 {
-	private ASTNode label = null;
+	private StringExpression label = null;
 
-	public void setTargetLabel(ASTNode label) {
+	public void setTargetLabel(StringExpression label) {
 		this.label = label;
 		super.addChild(label);
 	}
 	
-	public ASTNode getTargetLabel() {
+	public StringExpression getTargetLabel() {
 		return this.label;
 	}
 	

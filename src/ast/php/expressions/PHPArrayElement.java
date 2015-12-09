@@ -1,30 +1,29 @@
 package ast.php.expressions;
 
-import ast.ASTNode;
 import ast.expressions.Expression;
 
 public class PHPArrayElement extends Expression
 {
-	private ASTNode value = null; // TODO change type to Expression once mapping is finished
-	private ASTNode key = null; // TODO change type to Expression once mapping is finished
+	private Expression value = null;
+	private Expression key = null;
 
-	public ASTNode getValue()
+	public Expression getValue()
 	{
 		return this.value;
 	}
 
-	public void setValue(ASTNode value)
+	public void setValue(Expression value)
 	{
 		this.value = value;
 		super.addChild(value);
 	}
 	
-	public ASTNode getKey()
+	public Expression getKey()
 	{
 		return this.key;
 	}
 	
-	public void setKey(ASTNode key)
+	public void setKey(Expression key)
 	{
 		this.key = key;
 		super.addChild(key);

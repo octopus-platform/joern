@@ -1,18 +1,16 @@
 package ast.expressions;
 
-import ast.ASTNode;
-
 public class InstanceofExpression extends Expression
 {
-	ASTNode instanceExpression = null; // TODO make this an Expression once PHP mapping is finished
+	Expression instanceExpression = null;
 	Identifier classIdentifier = null;
 
-	public ASTNode getInstanceExpression() // TODO return Expression
+	public Expression getInstanceExpression()
 	{
 		return this.instanceExpression;
 	}
 
-	public void setInstanceExpression(ASTNode instanceExpression) // TODO take Expression
+	public void setInstanceExpression(Expression instanceExpression)
 	{
 		this.instanceExpression = instanceExpression;
 		super.addChild(instanceExpression);

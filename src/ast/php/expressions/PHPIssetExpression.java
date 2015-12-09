@@ -1,15 +1,15 @@
 package ast.php.expressions;
 
-import ast.ASTNode;
+import ast.expressions.Expression;
 import ast.expressions.UnaryExpression;
 
 public class PHPIssetExpression extends UnaryExpression
 {
-	public ASTNode getVariableExpression() { // TODO return an expression
+	public Expression getVariableExpression() {
 		return super.getExpression();
 	}
 	
-	public void setVariableExpression(ASTNode variable) { // TODO take an expression
+	public void setVariableExpression(Expression variable) {
 		super.setExpression(variable);
 	}
 }

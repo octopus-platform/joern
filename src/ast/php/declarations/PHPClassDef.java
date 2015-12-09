@@ -1,6 +1,5 @@
 package ast.php.declarations;
 
-import ast.ASTNode;
 import ast.ASTNodeProperties;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Identifier;
@@ -35,10 +34,9 @@ public class PHPClassDef extends ClassDefStatement
 		return this.parent;
 	}
 	
-	public void setExtends(ASTNode parent)
+	public void setExtends(Identifier parent)
 	{
-		if( parent instanceof Identifier)
-			this.parent = (Identifier)parent;
+		this.parent = parent;
 		super.addChild(parent);
 	}
 	
@@ -47,10 +45,9 @@ public class PHPClassDef extends ClassDefStatement
 		return this.interfaces;
 	}
 	
-	public void setImplements(ASTNode interfaces)
+	public void setImplements(IdentifierList interfaces)
 	{
-		if( interfaces instanceof IdentifierList)
-			this.interfaces = (IdentifierList)interfaces;
+		this.interfaces = interfaces;
 		super.addChild(interfaces);
 	}
 	

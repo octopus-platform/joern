@@ -1,30 +1,30 @@
 package ast.statements;
 
-import ast.ASTNode;
+import ast.expressions.StringExpression;
 import ast.logical.statements.Statement;
 
 public class UseElement extends Statement
 {
-	private ASTNode namespace = null;
-	private ASTNode alias = null;
+	private StringExpression namespace = null;
+	private StringExpression alias = null;
 	
-	public ASTNode getNamespace()
+	public StringExpression getNamespace()
 	{
 		return this.namespace;
 	}
 
-	public void setNamespace(ASTNode namespace)
+	public void setNamespace(StringExpression namespace)
 	{
 		this.namespace = namespace;
 		super.addChild(namespace);
 	}
 	
-	public ASTNode getAlias()
+	public StringExpression getAlias()
 	{
 		return this.alias;
 	}
 
-	public void setAlias(ASTNode alias)
+	public void setAlias(StringExpression alias)
 	{
 		this.alias = alias;
 		super.addChild(alias);

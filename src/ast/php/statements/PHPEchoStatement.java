@@ -1,18 +1,18 @@
 package ast.php.statements;
 
-import ast.ASTNode;
+import ast.expressions.Expression;
 import ast.logical.statements.Statement;
 
 public class PHPEchoStatement extends Statement
 {
-	private ASTNode echoExpression = null; // TODO make into Expression once mapping is finished
+	private Expression echoExpression = null;
 
-	public ASTNode getEchoExpression() // TODO return Expression
+	public Expression getEchoExpression()
 	{
 		return this.echoExpression;
 	}
 
-	public void setEchoExpression(ASTNode echoExpression) // TODO take Expression
+	public void setEchoExpression(Expression echoExpression)
 	{
 		this.echoExpression = echoExpression;
 		super.addChild(echoExpression);

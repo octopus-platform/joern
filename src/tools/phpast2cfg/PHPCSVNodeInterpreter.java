@@ -6,6 +6,7 @@ import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
+import ast.NullNode;
 import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
@@ -120,6 +121,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		switch (type)
 		{
+			// null nodes (leafs)
+			case PHPCSVNodeTypes.TYPE_NULL:
+				retval = handleNull(row, ast);
+				break;
+
 			// primary expressions (leafs)
 			case PHPCSVNodeTypes.TYPE_INTEGER:
 				retval = handleInteger(row, ast);
@@ -487,6 +493,29 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	}
 
 	
+	/* null nodes (leafs) */
+
+	private long handleNull(KeyedCSVRow row, ASTUnderConstruction ast)
+	{
+		NullNode newNode = new NullNode();
+
+		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
+		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+
+		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
+		CodeLocation codeloc = new CodeLocation();
+		codeloc.startLine = Integer.parseInt(lineno);
+		newNode.setLocation(codeloc);
+		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+
+		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
+		ast.addNodeWithId(newNode, id);
+
+		return id;
+	}
+	
+	
 	/* primary expressions (leafs) */
 
 	private long handleInteger(KeyedCSVRow row, ASTUnderConstruction ast)
@@ -494,13 +523,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		IntegerExpression newNode = new IntegerExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String code = row.getFieldForKey(PHPCSVNodeTypes.CODE);
 		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
 
 		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
-		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
 		newNode.setLocation(codeloc);
@@ -518,13 +545,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		DoubleExpression newNode = new DoubleExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String code = row.getFieldForKey(PHPCSVNodeTypes.CODE);
 		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
 
 		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
-		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
 		newNode.setLocation(codeloc);
@@ -542,13 +567,11 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		StringExpression newNode = new StringExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String code = row.getFieldForKey(PHPCSVNodeTypes.CODE);
 		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
 
 		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
-		newNode.setFlags(flags);
 		CodeLocation codeloc = new CodeLocation();
 		codeloc.startLine = Integer.parseInt(lineno);
 		newNode.setLocation(codeloc);

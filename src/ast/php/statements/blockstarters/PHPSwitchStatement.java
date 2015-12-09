@@ -1,19 +1,19 @@
 package ast.php.statements.blockstarters;
 
-import ast.ASTNode;
+import ast.expressions.Expression;
 import ast.statements.blockstarters.SwitchStatement;
 
 public class PHPSwitchStatement extends SwitchStatement
 {
-	private ASTNode expression = null; // TODO change type to Expression
+	private Expression expression = null;
 	protected PHPSwitchList switchList = null;
 
-	public ASTNode getExpression()
+	public Expression getExpression()
 	{
 		return this.expression;
 	}
 
-	public void setExpression(ASTNode expression)
+	public void setExpression(Expression expression)
 	{
 		this.expression = expression;
 		super.addChild(expression);

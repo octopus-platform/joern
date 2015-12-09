@@ -1,6 +1,5 @@
 package ast.php.functionDef;
 
-import ast.ASTNode;
 import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
@@ -25,7 +24,7 @@ public class TopLevelFunctionDef extends FunctionDef
 	}
 	
 	@Override
-	public void setReturnType(ASTNode returnType)
+	public void setReturnType(Identifier returnType)
 	{
 	}
 }

@@ -1,18 +1,17 @@
 package ast.php.expressions;
 
-import ast.ASTNode;
 import ast.expressions.Expression;
 
 public class PHPYieldFromExpression extends Expression
 {
-	private ASTNode fromExpression = null; // TODO change type to Expression once mapping is finished
+	private Expression fromExpression = null;
 
-	public ASTNode getFromExpression()
+	public Expression getFromExpression()
 	{
 		return this.fromExpression;
 	}
 
-	public void setFromExpression(ASTNode fromExpression)
+	public void setFromExpression(Expression fromExpression)
 	{
 		this.fromExpression = fromExpression;
 		super.addChild(fromExpression);

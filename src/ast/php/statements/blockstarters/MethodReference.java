@@ -2,11 +2,12 @@ package ast.php.statements.blockstarters;
 
 import ast.ASTNode;
 import ast.expressions.Identifier;
+import ast.expressions.StringExpression;
 
 public class MethodReference extends ASTNode
 {
 	private Identifier classIdentifier = null;
-	private ASTNode methodName = null;
+	private StringExpression methodName = null;
 	
 	public Identifier getClassIdentifier()
 	{
@@ -19,12 +20,12 @@ public class MethodReference extends ASTNode
 		super.addChild(classIdentifier);
 	}
 	
-	public ASTNode getMethodName()
+	public StringExpression getMethodName()
 	{
 		return this.methodName;
 	}
 
-	public void setMethodName(ASTNode methodName)
+	public void setMethodName(StringExpression methodName)
 	{
 		this.methodName = methodName;
 		super.addChild(methodName);

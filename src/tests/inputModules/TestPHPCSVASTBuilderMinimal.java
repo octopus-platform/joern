@@ -234,12 +234,7 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node, instanceOf(PHPExitExpression.class));
 		assertEquals( 1, node.getChildCount());
-		// TODO ((PHPExitExpression)node).getExpression() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPExitExpression accepts arbitrary ASTNode's for exit expressions,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPExitExpression)node).getExpression().getProperty("type"));
+		assertNull( ((PHPExitExpression)node).getExpression());
 	}
 	
 	/**
@@ -273,12 +268,7 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(ReturnStatement.class));
 		assertEquals( 1, node.getChildCount());
-		// TODO ((ReturnStatement)node).getReturnExpression() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because ReturnStatement accepts arbitrary ASTNode's for return expressions,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((ReturnStatement)node).getReturnExpression().getProperty("type"));
+		assertNull( ((ReturnStatement)node).getReturnExpression());
 	}
 	
 	/**
@@ -305,12 +295,7 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(PHPBreakStatement.class));
 		assertEquals( 1, node.getChildCount());
-		// TODO ((PHPBreakStatement)node).getDepth() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPBreakStatement accepts arbitrary ASTNode's for depths,
-		// when we actually only want to accept plain nodes. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPBreakStatement)node).getDepth().getProperty("type"));
+		assertNull( ((PHPBreakStatement)node).getDepth());
 	}
 	
 	/**
@@ -337,12 +322,7 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(PHPContinueStatement.class));
 		assertEquals( 1, node.getChildCount());
-		// TODO ((PHPContinueStatement)node).getDepth() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPContinueStatement accepts arbitrary ASTNode's for depths,
-		// when we actually only want to accept plain nodes. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPContinueStatement)node).getDepth().getProperty("type"));
+		assertNull( ((PHPContinueStatement)node).getDepth());
 	}
 
 
@@ -381,18 +361,8 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node.getChildCount());
-		// TODO ((PHPYieldExpression)node).getValue() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for values,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPYieldExpression)node).getValue().getProperty("type"));
-		// TODO ((PHPYieldExpression)node).getKey() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for keys,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPYieldExpression)node).getKey().getProperty("type"));
+		assertNull( ((PHPYieldExpression)node).getValue());
+		assertNull( ((PHPYieldExpression)node).getKey());
 	}
 	
 	/**
@@ -437,6 +407,11 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node2, instanceOf(WhileStatement.class));
 		assertEquals( 2, node2.getChildCount());
+		assertNull( ((WhileStatement)node2).getStatement());
+		// TODO find a way to consolidate setStatement(Statement) with an Expression
+		// the problem is that when a single statement is used in the body, this
+		// may very well be an expression statement, say, a CallExpression; but
+		// this cannot be cast to a Statement!
 		assertThat( ((WhileStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 	}
 
@@ -482,6 +457,11 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node2, instanceOf(DoStatement.class));
 		assertEquals( 2, node2.getChildCount());
+		assertNull( ((DoStatement)node2).getStatement());
+		// TODO find a way to consolidate setStatement(Statement) with an Expression
+		// The problem is that when a single statement is used in the body, this
+		// may very well be an expression statement, say, a CallExpression; but
+		// this cannot be cast to a Statement!
 		assertThat( ((DoStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 	}
 	
@@ -524,13 +504,13 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node2, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node2.getChildCount());
-		// TODO ((PHPIfElement)node2).getCondition() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPIfElement accepts arbitrary ASTNode's for conditions,
-		// when we actually only want to accept Expression's. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPIfElement)node2).getCondition().getProperty("type"));
+		assertNull( ((PHPIfElement)node2).getCondition());
 		assertNull( ((PHPIfElement)node2).getStatement());
+		// TODO find a way to consolidate setStatement(Statement) with an Expression
+		// The problem is that when a single statement is used in the body, this
+		// may very well be an expression statement, say, a CallExpression; but
+		// this cannot be cast to a Statement!
+		assertThat( ((PHPIfElement)node).getStatement(), not(instanceOf(CompoundStatement.class)));
 	}
 	
 	/**
@@ -563,13 +543,7 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPSwitchCase)node).getValue());
-		// TODO ((PHPSwitchCase)node).getValue() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPSwitchCase accepts arbitrary ASTNode's for values,
-		// when we actually only want to accept ints/strings/doubles. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPSwitchCase)node).getValue().getProperty("type"));
+		assertNull( ((PHPSwitchCase)node).getValue());
 	}
 	
 	/**
@@ -616,7 +590,7 @@ public class TestPHPCSVASTBuilderMinimal
 	 * use Foo\Bar;
 	 */
 	@Test
-	public void testUseElementCreation() throws IOException, InvalidCSVFile
+	public void testMinimalUseElementCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
@@ -635,12 +609,7 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node, instanceOf(UseElement.class));
 		assertEquals( 2, node.getChildCount());
-		// TODO ((UseElement)node).getAlias() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because UseElement accepts arbitrary ASTNode's for aliases,
-		// when we actually only want to accept strings. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((UseElement)node).getAlias().getProperty("type"));
+		assertNull( ((UseElement)node).getAlias());
 	}
 
 
@@ -673,12 +642,7 @@ public class TestPHPCSVASTBuilderMinimal
 		
 		assertThat( node, instanceOf(ConditionalExpression.class));
 		assertEquals( 3, node.getChildCount());
-		// TODO ((ConditionalExpression)node).getTrueExpression() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because ConditionalExpression accepts arbitrary ASTNode's for true expressions,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((ConditionalExpression)node).getTrueExpression().getProperty("type"));
+		assertNull( ((ConditionalExpression)node).getTrueExpression());
 	}
 
 	/**
@@ -747,11 +711,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(PHPParameter.class));
 		assertEquals( 3, node.getChildCount());
 		assertNull( ((PHPParameter)node).getType());
-		// Note that ((PHPParameter)node).getDefault() is always non-null,
-		// even when there is no default type. Technically, this is because
-		// we allow arbitrary node types to designate the default value anyway,
-		// including the null node (more generally, all plain nodes are fine)
-		assertEquals( "NULL", ((PHPParameter)node).getDefault().getProperty("type"));
+		assertNull( ((PHPParameter)node).getDefault());
 	}
 
 	
@@ -782,14 +742,15 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node, instanceOf(ForStatement.class));
 		assertEquals( 4, node.getChildCount());
-		// TODO The three calls to obtain the for-loop's expression list's should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because ForStatement accepts arbitrary ASTNode's for them. Might need to
-		// create a new class PHPForLoop for that, but finish mapping first.
-		assertEquals( "NULL", ((ForStatement)node).getForInitExpression().getProperty("type"));
-		assertEquals( "NULL", ((ForStatement)node).getCondition().getProperty("type"));
-		assertEquals( "NULL", ((ForStatement)node).getForLoopExpression().getProperty("type"));
+		assertNull( ((ForStatement)node).getForInitExpression());
+		assertNull( ((ForStatement)node).getCondition());
+		assertNull( ((ForStatement)node).getForLoopExpression());
 		assertNull( ((ForStatement)node).getStatement());
+		// TODO find a way to consolidate setStatement(Statement) with an Expression
+		// The problem is that when a single statement is used in the body, this
+		// may very well be an expression statement, say, a CallExpression; but
+		// this cannot be cast to a Statement!
+		assertThat( ((ForStatement)node).getStatement(), not(instanceOf(CompoundStatement.class)));
 	}
 	
 	/**
@@ -823,6 +784,11 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 4, node.getChildCount());
 		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertNull( ((ForEachStatement)node).getStatement());
+		// TODO find a way to consolidate setStatement(Statement) with an Expression
+		// The problem is that when a single statement is used in the body, this
+		// may very well be an expression statement, say, a CallExpression; but
+		// this cannot be cast to a Statement!
+		assertThat( ((ForEachStatement)node).getStatement(), not(instanceOf(CompoundStatement.class)));
 	}
 
 
@@ -882,12 +848,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( node, instanceOf(PHPListExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( 1, ((PHPListExpression)node).size());
-		// TODO ((PHPListExpression)node).getElement(0) should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPListExpression accepts arbitrary ASTNode's as elements,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPListExpression)node).getElement(0).getProperty("type"));
+		assertNull( ((PHPListExpression)node).getElement(0));
 	}
 	
 	/**

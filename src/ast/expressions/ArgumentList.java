@@ -3,31 +3,30 @@ package ast.expressions;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import ast.ASTNode;
 import ast.statements.ExpressionHolder;
 
-public class ArgumentList extends ExpressionHolder implements Iterable<ASTNode> // TODO make this an Iterable<Expression> once the mapping is finished
+public class ArgumentList extends ExpressionHolder implements Iterable<Expression>
 {
 	
-	private LinkedList<ASTNode> arguments = new LinkedList<ASTNode>(); // TODO LinkedList<Expression>
+	private LinkedList<Expression> arguments = new LinkedList<Expression>();
 
 	public int size()
 	{
 		return this.arguments.size();
 	}
 	
-	public ASTNode getArgument(int i) { // TODO return type: Expression
+	public Expression getArgument(int i) {
 		return this.arguments.get(i);
 	}
 
-	public void addArgument(ASTNode argument) // TODO take an Expression
+	public void addArgument(Expression argument)
 	{
 		this.arguments.add(argument);
 		super.addChild(argument);
 	}
 	
 	@Override
-	public Iterator<ASTNode> iterator() {
+	public Iterator<Expression> iterator() {
 		return this.arguments.iterator();
 	}
 }

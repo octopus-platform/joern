@@ -1,17 +1,17 @@
 package ast.php.statements.blockstarters;
 
-import ast.ASTNode;
+import ast.expressions.StringExpression;
 
 public class PHPTraitAlias extends PHPTraitAdaptationElement
 {
-	private ASTNode alias = null;
+	private StringExpression alias = null;
 	
-	public ASTNode getAlias()
+	public StringExpression getAlias()
 	{
 		return this.alias;
 	}
 
-	public void setAlias(ASTNode alias)
+	public void setAlias(StringExpression alias)
 	{
 		this.alias = alias;
 		super.addChild(alias);

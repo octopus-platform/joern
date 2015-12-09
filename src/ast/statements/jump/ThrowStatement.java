@@ -1,19 +1,19 @@
 package ast.statements.jump;
 
-import ast.ASTNode;
+import ast.expressions.Expression;
 import ast.logical.statements.JumpStatement;
 import ast.walking.ASTNodeVisitor;
 
 public class ThrowStatement extends JumpStatement
 {
-	private ASTNode throwExpression = null;
+	private Expression throwExpression = null;
 	
-	public ASTNode getThrowExpression()
+	public Expression getThrowExpression()
 	{
 		return this.throwExpression;
 	}
 
-	public void setThrowExpression(ASTNode expression)
+	public void setThrowExpression(Expression expression)
 	{
 		this.throwExpression = expression;
 		super.addChild(expression);
