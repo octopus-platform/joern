@@ -24,12 +24,14 @@ import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
+import ast.expressions.DoubleExpression;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
+import ast.expressions.IntegerExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PostDecOperationExpression;
@@ -38,6 +40,7 @@ import ast.expressions.PreDecOperationExpression;
 import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.StringExpression;
 import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryPlusExpression;
@@ -57,11 +60,15 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
+import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
+import ast.php.expressions.PHPMagicConstant;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPShellExecExpression;
 import ast.php.expressions.PHPSilenceExpression;
+import ast.php.expressions.PHPTypeHint;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.expressions.PHPYieldFromExpression;
@@ -154,6 +161,50 @@ public class TestPHPCSVASTBuilder
 	}
 	
 	
+	// primary expressions (leafs)
+	
+	/**
+	 * "integer", "double" or "string" nodes are nodes holding primary expressions such
+	 * as an integer, a floating point number or a string enclosed in single or double quotes.
+	 * 
+	 * These nodes have no children. Their concrete value is specified as the 'code' property.
+	 * 
+	 * This test checks a few primary expressions in the following PHP code:
+	 * 
+	 * 42;
+	 * 3.14;
+	 * "Hello World!";
+	 */
+	@Test
+	public void testPrimaryExpressionCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,integer,,1,42,0,1,,,\n";
+		nodeStr += "4,double,,1,3.14,1,1,,,\n";
+		nodeStr += "5,string,,1,\"Hello World!\",2,1,,,\n";
+		
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)4);
+		ASTNode node3 = ast.getNodeById((long)5);
+
+		assertThat( node, instanceOf(IntegerExpression.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( "42", ((IntegerExpression)node).getEscapedCodeStr());
+
+		assertThat( node2, instanceOf(DoubleExpression.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( "3.14", ((DoubleExpression)node2).getEscapedCodeStr());
+
+		assertThat( node3, instanceOf(StringExpression.class));
+		assertEquals( 0, node3.getChildCount());
+		assertEquals( "Hello World!", ((StringExpression)node3).getEscapedCodeStr());
+	}
+
+
 	/* special nodes */	
 	
 	/**
@@ -507,8 +558,153 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
 		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
+
 	
+	/* nodes without children (leafs) */
 	
+	/**
+	 * AST_MAGIC_CONST nodes are nodes holding magic constant names.
+	 * 
+	 * AST_MAGIC_CONST nodes have no children. They do however have a flag to distinguish
+	 * which magic constant is used.
+	 * The following flags exist:
+	 * - FLAG_MAGIC_LINE
+	 * - FLAG_MAGIC_FILE
+	 * - FLAG_MAGIC_DIR
+	 * - FLAG_MAGIC_NAMESPACE
+	 * - FLAG_MAGIC_FUNCTION
+	 * - FLAG_MAGIC_METHOD
+	 * - FLAG_MAGIC_CLASS
+	 * - FLAG_MAGIC_TRAIT
+	 * See http://php.net/manual/en/language.constants.predefined.php
+	 * 
+	 * This test checks a few magic constant expressions in the following PHP code:
+	 * 
+	 * __LINE__;
+	 * __FILE__;
+	 * __DIR__;
+	 * __NAMESPACE__;
+	 * __FUNCTION__;
+	 * __METHOD__;
+	 * __CLASS__;
+	 * __TRAIT__;
+	 */
+	@Test
+	public void testMagicConstantCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_MAGIC_CONST,T_LINE,3,,0,1,,,\n";
+		nodeStr += "4,AST_MAGIC_CONST,T_FILE,4,,1,1,,,\n";
+		nodeStr += "5,AST_MAGIC_CONST,T_DIR,5,,2,1,,,\n";
+		nodeStr += "6,AST_MAGIC_CONST,T_NS_C,6,,3,1,,,\n";
+		nodeStr += "7,AST_MAGIC_CONST,T_FUNC_C,7,,4,1,,,\n";
+		nodeStr += "8,AST_MAGIC_CONST,T_METHOD_C,8,,5,1,,,\n";
+		nodeStr += "9,AST_MAGIC_CONST,T_CLASS_C,9,,6,1,,,\n";
+		nodeStr += "10,AST_MAGIC_CONST,T_TRAIT_C,10,,7,1,,,\n";
+		
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)4);
+		ASTNode node3 = ast.getNodeById((long)5);
+		ASTNode node4 = ast.getNodeById((long)6);
+		ASTNode node5 = ast.getNodeById((long)7);
+		ASTNode node6 = ast.getNodeById((long)8);
+		ASTNode node7 = ast.getNodeById((long)9);
+		ASTNode node8 = ast.getNodeById((long)10);
+
+		assertThat( node, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_LINE, ((PHPMagicConstant)node).getFlags());
+
+		assertThat( node2, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FILE, ((PHPMagicConstant)node2).getFlags());
+
+		assertThat( node3, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node3.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_DIR, ((PHPMagicConstant)node3).getFlags());
+
+		assertThat( node4, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node4.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_NAMESPACE, ((PHPMagicConstant)node4).getFlags());
+
+		assertThat( node5, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node5.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FUNCTION, ((PHPMagicConstant)node5).getFlags());
+
+		assertThat( node6, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node6.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_METHOD, ((PHPMagicConstant)node6).getFlags());
+
+		assertThat( node7, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node7.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_CLASS, ((PHPMagicConstant)node7).getFlags());
+
+		assertThat( node8, instanceOf(PHPMagicConstant.class));
+		assertEquals( 0, node8.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_TRAIT, ((PHPMagicConstant)node8).getFlags());
+	}
+	
+	/**
+	 * AST_TYPE nodes are nodes holding the PHP type hints 'array' and 'callable'.
+	 * 
+	 * AST_TYPE nodes have no children. They do however have a flag to distinguish
+	 * which type hint is used.
+	 * The following flags exist:
+	 * - TYPE_ARRAY
+	 * - TYPE_CALLABLE
+	 * TODO it is not yet completely clear to me why 'array' and 'callable' produce
+	 * a special AST_TYPE node, while other types, such as 'int', 'bool', 'double' or 'string'
+	 * produce a normal AST_NAME node. Should these built-in types not all consistently map
+	 * to a AST_TYPE node? AST_NAME is mostly useful for "self-defined" types (i.e., class names)
+	 * 
+	 * This test checks a few type hint expressions in the following PHP code:
+	 * 
+	 * function foo( array $bar, callable $buz) : callable {}
+	 */
+	@Test
+	public void testTypeHintCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
+		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
+		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
+		nodeStr += "6,AST_TYPE,TYPE_ARRAY,3,,0,3,,,\n";
+		nodeStr += "7,string,,3,\"bar\",1,3,,,\n";
+		nodeStr += "8,NULL,,3,,2,3,,,\n";
+		nodeStr += "9,AST_PARAM,,3,,1,3,,,\n";
+		nodeStr += "10,AST_TYPE,TYPE_CALLABLE,3,,0,3,,,\n";
+		nodeStr += "11,string,,3,\"buz\",1,3,,,\n";
+		nodeStr += "12,NULL,,3,,2,3,,,\n";
+		nodeStr += "13,NULL,,3,,1,3,,,\n";
+		nodeStr += "14,AST_STMT_LIST,,3,,2,3,,,\n";
+		nodeStr += "15,AST_TYPE,TYPE_CALLABLE,3,,3,3,,,\n";
+		
+		String edgeStr = edgeHeader;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)15);
+
+		assertThat( node, instanceOf(PHPTypeHint.class));
+		assertEquals( 0, node.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((PHPTypeHint)node).getFlags());
+
+		assertThat( node2, instanceOf(PHPTypeHint.class));
+		assertEquals( 0, node2.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((PHPTypeHint)node2).getFlags());
+
+		assertThat( node3, instanceOf(PHPTypeHint.class));
+		assertEquals( 0, node3.getChildCount());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((PHPTypeHint)node3).getFlags());
+	}
+
+
 	/* nodes with exactly 1 child */
 	
 	/**
@@ -752,13 +948,13 @@ public class TestPHPCSVASTBuilder
 	 * is going to be cast to a given type.
 	 * Note that there is no distinguished child for the type that the expression is being cast to.
 	 * Rather, the type of cast is determined by a flag. The following flags exist:
-	 * - TYPE_NULL
-	 * - TYPE_BOOL
-	 * - TYPE_LONG
-	 * - TYPE_DOUBLE
-	 * - TYPE_STRING
-	 * - TYPE_ARRAY
-	 * - TYPE_OBJECT
+	 * - FLAG_TYPE_NULL
+	 * - FLAG_TYPE_BOOL
+	 * - FLAG_TYPE_LONG
+	 * - FLAG_TYPE_DOUBLE
+	 * - FLAG_TYPE_STRING
+	 * - FLAG_TYPE_ARRAY
+	 * - FLAG_TYPE_OBJECT
 	 * Also see http://php.net/manual/en/language.types.type-juggling.php#language.types.typecasting
 	 * for the different type casts that exist in PHP.
 	 * 
@@ -1054,6 +1250,62 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPSilenceExpression)node2).getExpression());
 	}
+
+	/**
+	 * AST_SHELL_EXEC nodes are used to denote shell command execution expressions.
+	 * 
+	 * Any AST_SHELL_EXEC node has exactly exactly one child, representing the command that is
+	 * going to be be executed by the shell. This is typically a string, but could be an AST_ENCAPS_LIST
+	 * to include variables, for example.
+	 * See http://php.net/manual/en/language.operators.execution.php
+	 * 
+	 * This test checks a few shell command execution expressions' children in the following PHP code:
+	 * 
+	 * $output = `cat /var/www/html/.htpasswd`;
+	 * $output2 = `$attackerinput`;
+	 */
+	@Test
+	public void testShellExecCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"output\",0,1,,,\n";
+		nodeStr += "6,AST_SHELL_EXEC,,3,,1,1,,,\n";
+		nodeStr += "7,string,,3,\"cat /var/www/html/.htpasswd\",0,1,,,\n";
+		nodeStr += "8,AST_ASSIGN,,4,,1,1,,,\n";
+		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "10,string,,4,\"output2\",0,1,,,\n";
+		nodeStr += "11,AST_SHELL_EXEC,,4,,1,1,,,\n";
+		nodeStr += "12,AST_ENCAPS_LIST,,4,,0,1,,,\n";
+		nodeStr += "13,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "14,string,,4,\"attackerinput\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)11);
+		
+		assertThat( node, instanceOf(PHPShellExecExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)7), ((PHPShellExecExpression)node).getShellCommand());
+		
+		assertThat( node2, instanceOf(PHPShellExecExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)12), ((PHPShellExecExpression)node2).getShellCommand());
+	}
 	
 	/**
 	 * AST_CLONE nodes are used to denote 'clone' expressions.
@@ -1194,6 +1446,112 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPPrintExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node2).getExpression());
+	}
+	
+	/**
+	 * AST_INCLUDE_OR_EVAL nodes are used to denote include/require/eval expressions.
+	 * 
+	 * Any AST_INCLUDE_OR_EVAL node has exactly exactly one child, representing the expression that is
+	 * going to be be included as a file or executed by the PHP interpreter in the current program scope.
+	 * This is typically a string, but could be an AST_ENCAPS_LIST
+	 * to include variables, for example.
+	 * See:
+	 * - http://php.net/manual/en/function.include.php
+	 * - http://php.net/manual/en/function.include-once.php
+	 * - http://php.net/manual/en/function.require.php
+	 * - http://php.net/manual/en/function.require-once.php
+	 * - http://php.net/manual/en/function.eval.php
+	 * 
+	 * This test checks a few include/require/eval expressions' children in the following PHP code:
+	 * 
+	 * include 'foo.php';
+	 * include_once $userinput;
+	 * require getuserinput();
+	 * require_once "http://".$userinput."bar.php";
+	 * eval("{$evilinput}");
+	 */
+	@Test
+	public void testIncludeOrEvalCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"foo.php\",0,1,,,\n";
+		nodeStr += "5,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE_ONCE,4,,1,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "7,string,,4,\"userinput\",0,1,,,\n";
+		nodeStr += "8,AST_INCLUDE_OR_EVAL,EXEC_REQUIRE,5,,2,1,,,\n";
+		nodeStr += "9,AST_CALL,,5,,0,1,,,\n";
+		nodeStr += "10,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "11,string,,5,\"getuserinput\",0,1,,,\n";
+		nodeStr += "12,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "13,AST_INCLUDE_OR_EVAL,EXEC_REQUIRE_ONCE,6,,3,1,,,\n";
+		nodeStr += "14,AST_BINARY_OP,BINARY_CONCAT,6,,0,1,,,\n";
+		nodeStr += "15,AST_BINARY_OP,BINARY_CONCAT,6,,0,1,,,\n";
+		nodeStr += "16,string,,6,\"http://\",0,1,,,\n";
+		nodeStr += "17,AST_VAR,,6,,1,1,,,\n";
+		nodeStr += "18,string,,6,\"userinput\",0,1,,,\n";
+		nodeStr += "19,string,,6,\"bar.php\",1,1,,,\n";
+		nodeStr += "20,AST_INCLUDE_OR_EVAL,EXEC_EVAL,7,,4,1,,,\n";
+		nodeStr += "21,AST_ENCAPS_LIST,,7,,0,1,,,\n";
+		nodeStr += "22,AST_VAR,,7,,0,1,,,\n";
+		nodeStr += "23,string,,7,\"evilinput\",0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "6,7,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "2,5,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
+		edgeStr += "9,12,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "15,17,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "14,19,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "2,13,PARENT_OF\n";
+		edgeStr += "22,23,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "20,21,PARENT_OF\n";
+		edgeStr += "2,20,PARENT_OF\n";
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)5);
+		ASTNode node3 = ast.getNodeById((long)8);
+		ASTNode node4 = ast.getNodeById((long)13);
+		ASTNode node5 = ast.getNodeById((long)20);
+		
+		assertThat( node, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node.getChildCount());
+		assertEquals( ast.getNodeById((long)4), ((PHPIncludeOrEvalExpression)node).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE, ((PHPIncludeOrEvalExpression)node).getFlags());
+
+		assertThat( node2, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)6), ((PHPIncludeOrEvalExpression)node2).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE_ONCE, ((PHPIncludeOrEvalExpression)node2).getFlags());
+
+		assertThat( node3, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)9), ((PHPIncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE, ((PHPIncludeOrEvalExpression)node3).getFlags());
+		
+		assertThat( node4, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)14), ((PHPIncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE_ONCE, ((PHPIncludeOrEvalExpression)node4).getFlags());
+		
+		assertThat( node5, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertEquals( 1, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((PHPIncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_EVAL, ((PHPIncludeOrEvalExpression)node5).getFlags());
 	}
 	
 	/**

@@ -29,6 +29,11 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_FILE = "File";
 	public static final String TYPE_DIRECTORY = "Directory";
 
+	// primary expressions (leafs)
+	public static final String TYPE_INTEGER = "integer";
+	public static final String TYPE_DOUBLE = "double";
+	public static final String TYPE_STRING = "string";
+
 	// special nodes
 	public static final String TYPE_NAME = "AST_NAME";
 	public static final String TYPE_CLOSURE_VAR = "AST_CLOSURE_VAR";
@@ -44,6 +49,11 @@ public class PHPCSVNodeTypes
 
 	public static final String TYPE_CLASS = "AST_CLASS";
 
+	// nodes without children (leafs)
+	// expressions
+	public static final String TYPE_MAGIC_CONST = "AST_MAGIC_CONST";
+	public static final String TYPE_TYPE = "AST_TYPE";
+
 	// nodes with exactly 1 child
 	// expressions
 	public static final String TYPE_VAR = "AST_VAR";
@@ -55,9 +65,11 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_EMPTY = "AST_EMPTY";
 	public static final String TYPE_ISSET = "AST_ISSET";
 	public static final String TYPE_SILENCE = "AST_SILENCE";
+	public static final String TYPE_SHELL_EXEC = "AST_SHELL_EXEC";
 	public static final String TYPE_CLONE = "AST_CLONE";
 	public static final String TYPE_EXIT = "AST_EXIT";
 	public static final String TYPE_PRINT = "AST_PRINT";
+	public static final String TYPE_INCLUDE_OR_EVAL = "AST_INCLUDE_OR_EVAL";
 	public static final String TYPE_UNARY_OP = "AST_UNARY_OP";
 	public static final String TYPE_PRE_INC = "AST_PRE_INC";
 	public static final String TYPE_PRE_DEC = "AST_PRE_DEC";
@@ -153,16 +165,37 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_USE = "AST_USE";
 
 	/* node flags */
-	// flags for toplevel nodes
+	// flags for TYPE_TOPLEVEL nodes (exclusive)
 	public static final String FLAG_TOPLEVEL_FILE = "TOPLEVEL_FILE"; // artificial
 	public static final String FLAG_TOPLEVEL_CLASS = "TOPLEVEL_CLASS"; // artificial
 	
-	// flags for cast operations
+	// flags for TYPE_TYPE nodes (exclusive)
+	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
+	public static final String FLAG_TYPE_CALLABLE = "TYPE_CALLABLE";
+
+	// flags for TYPE_CAST nodes (exclusive)
 	public static final String FLAG_TYPE_NULL = "TYPE_NULL";
 	public static final String FLAG_TYPE_BOOL = "TYPE_BOOL";
 	public static final String FLAG_TYPE_LONG = "TYPE_LONG";
 	public static final String FLAG_TYPE_DOUBLE = "TYPE_DOUBLE";
 	public static final String FLAG_TYPE_STRING = "TYPE_STRING";
-	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
+	//public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY"; // *also* used (and thus already defined) by TYPE_TYPE
 	public static final String FLAG_TYPE_OBJECT = "TYPE_OBJECT";
+	
+	// flags for TYPE_MAGIC_CONST nodes (exclusive)
+	public static final String FLAG_MAGIC_LINE = "T_LINE";
+	public static final String FLAG_MAGIC_FILE = "T_FILE";
+	public static final String FLAG_MAGIC_DIR = "T_DIR";
+	public static final String FLAG_MAGIC_NAMESPACE = "T_NS_C";
+	public static final String FLAG_MAGIC_FUNCTION = "T_FUNC_C";
+	public static final String FLAG_MAGIC_METHOD = "T_METHOD_C";
+	public static final String FLAG_MAGIC_CLASS = "T_CLASS_C";
+	public static final String FLAG_MAGIC_TRAIT = "T_TRAIT_C";
+
+	// flags for TYPE_INCLUDE_OR_EVAL nodes (exclusive)
+	public static final String FLAG_EXEC_EVAL = "EXEC_EVAL";
+	public static final String FLAG_EXEC_INCLUDE = "EXEC_INCLUDE";
+	public static final String FLAG_EXEC_INCLUDE_ONCE = "EXEC_INCLUDE_ONCE";
+	public static final String FLAG_EXEC_REQUIRE = "EXEC_REQUIRE";
+	public static final String FLAG_EXEC_REQUIRE_ONCE = "EXEC_REQUIRE_ONCE";
 }

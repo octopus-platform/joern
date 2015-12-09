@@ -46,10 +46,12 @@ import ast.php.expressions.PHPCoalesceExpression;
 import ast.php.expressions.PHPEmptyExpression;
 import ast.php.expressions.PHPEncapsListExpression;
 import ast.php.expressions.PHPExitExpression;
+import ast.php.expressions.PHPIncludeOrEvalExpression;
 import ast.php.expressions.PHPIssetExpression;
 import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPPrintExpression;
 import ast.php.expressions.PHPReferenceExpression;
+import ast.php.expressions.PHPShellExecExpression;
 import ast.php.expressions.PHPSilenceExpression;
 import ast.php.expressions.PHPUnpackExpression;
 import ast.php.expressions.PHPYieldExpression;
@@ -127,6 +129,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		String type = startNode.getProperty(PHPCSVNodeTypes.TYPE.getName());
 		switch (type)
 		{
+			// primary expressions (leafs)
+			case PHPCSVNodeTypes.TYPE_INTEGER:
+			case PHPCSVNodeTypes.TYPE_DOUBLE:
+			case PHPCSVNodeTypes.TYPE_STRING:
+				errno = 2;
+				break;
+			
 			// special nodes
 			case PHPCSVNodeTypes.TYPE_NAME:
 				errno = handleName((Identifier)startNode, endNode, childnum);
@@ -150,6 +159,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_CLASS:
 				errno = handleClass((PHPClassDef)startNode, endNode, childnum);
+				break;
+
+			// nodes without children (leafs)
+			// expressions
+			case PHPCSVNodeTypes.TYPE_MAGIC_CONST:
+			case PHPCSVNodeTypes.TYPE_TYPE:
+				errno = 2;
 				break;
 
 			// nodes with exactly 1 child
@@ -181,6 +197,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_SILENCE:
 				errno = handleSilence((PHPSilenceExpression)startNode, endNode, childnum);
 				break;
+			case PHPCSVNodeTypes.TYPE_SHELL_EXEC:
+				errno = handleShellExec((PHPShellExecExpression)startNode, endNode, childnum);
+				break;
 			case PHPCSVNodeTypes.TYPE_CLONE:
 				errno = handleClone((PHPCloneExpression)startNode, endNode, childnum);
 				break;
@@ -189,6 +208,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_PRINT:
 				errno = handlePrint((PHPPrintExpression)startNode, endNode, childnum);
+				break;
+			case PHPCSVNodeTypes.TYPE_INCLUDE_OR_EVAL:
+				errno = handleIncludeOrEval((PHPIncludeOrEvalExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
@@ -444,8 +466,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			throw new InvalidCSVFile("While trying to handle row "
 					+ row.toString() + ": Invalid childnum " + childnum
 					+ " for start node type " + type + ".");
-		
-		
+		else if( 2 == errno)
+			throw new InvalidCSVFile("While trying to handle row "
+					+ row.toString() + ": Cannot add child to leaf node "
+					+ type + ".");
+
 		return startId;
 	}
 	
@@ -785,6 +810,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		
 		return errno;		
 	}
+
+	private int handleShellExec( PHPShellExecExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setShellCommand(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
 	
 	private int handleClone( PHPCloneExpression startNode, ASTNode endNode, int childnum)
 	{
@@ -834,6 +878,25 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				// TODO cast to Exression once mapping is finished, and change
 				// UnaryExpression.expression and getters and setters accordingly
 				startNode.setExpression(endNode);
+				break;
+				
+			default:
+				errno = 1;
+		}
+		
+		return errno;		
+	}
+	
+	private int handleIncludeOrEval( PHPIncludeOrEvalExpression startNode, ASTNode endNode, int childnum)
+	{
+		int errno = 0;
+
+		switch (childnum)
+		{
+			case 0: // expr child
+				// TODO cast to Exression once mapping is finished, and change
+				// UnaryExpression.expression and getters and setters accordingly
+				startNode.setIncludeOrEvalExpression(endNode);
 				break;
 				
 			default:
