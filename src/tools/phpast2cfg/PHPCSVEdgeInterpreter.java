@@ -1615,15 +1615,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // cond child
 				startNode.setCondition((Expression)endNode);
 				break;
-			case 1: // stmts child: Statement or null node
+			case 1: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
-				// TODO find a way to consolidate setStatement(Statement) with an Expression
-				// The problem is that when a single statement is used in the body, this
-				// may very well be an expression statement, say, a CallExpression; but
-				// this cannot be cast to a Statement!
-				else if( endNode instanceof Expression)
-					startNode.addChild(endNode); // TODO do something more sensible
+				else if( endNode instanceof Expression) // the child is an expression used as a statement
+					startNode.setStatement((Expression)endNode);
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -1641,15 +1637,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // stmts child: Statement or null node
+			case 0: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
-				// TODO find a way to consolidate setStatement(Statement) with an Expression
-				// The problem is that when a single statement is used in the body, this
-				// may very well be an expression statement, say, a CallExpression; but
-				// this cannot be cast to a Statement!
-				else if( endNode instanceof Expression)
-					startNode.addChild(endNode); // TODO do something more sensible
+				else if( endNode instanceof Expression) // the child is an expression used as a statement
+					startNode.setStatement((Expression)endNode);
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -1676,15 +1668,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				else
 					startNode.setCondition((Expression)endNode);
 				break;
-			case 1: // stmts child: Statement or null node
+			case 1: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
-				// TODO find a way to consolidate setStatement(Statement) with an Expression
-				// The problem is that when a single statement is used in the body, this
-				// may very well be an expression statement, say, a CallExpression; but
-				// this cannot be cast to a Statement!
-				else if( endNode instanceof Expression)
-					startNode.addChild(endNode); // TODO do something more sensible
+				else if( endNode instanceof Expression) // the child is an expression used as a statement
+					startNode.setStatement((Expression)endNode);
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -2149,15 +2137,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 					// because in C world, an Expression node is used instead
 					startNode.setForLoopExpression((Expression)endNode);
 				break;
-			case 3: // stmts child: Statement or null node
+			case 3: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
-				// TODO find a way to consolidate setStatement(Statement) with an Expression
-				// The problem is that when a single statement is used in the body, this
-				// may very well be an expression statement, say, a CallExpression; but
-				// this cannot be cast to a Statement!
-				else if( endNode instanceof Expression)
-					startNode.addChild(endNode); // TODO do something more sensible
+				else if( endNode instanceof Expression) // the child is an expression used as a statement
+					startNode.setStatement((Expression)endNode);
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -2187,15 +2171,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				else
 					startNode.setKeyVariable((Variable)endNode);
 				break;
-			case 3: // stmts child: Statement or null node
+			case 3: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
-				// TODO find a way to consolidate setStatement(Statement) with an Expression
-				// The problem is that when a single statement is used in the body, this
-				// may very well be an expression statement, say, a CallExpression; but
-				// this cannot be cast to a Statement!
-				else if( endNode instanceof Expression)
-					startNode.addChild(endNode); // TODO do something more sensible
+				else if( endNode instanceof Expression) // the child is an expression used as a statement
+					startNode.setStatement((Expression)endNode);
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -2250,8 +2230,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	
 	private int handleCompound( CompoundStatement startNode, ASTNode endNode, int childnum)
 	{
-		// TODO cast to Statement once CompoundStatement implements Iterable<Statement>
-		// and takes only Statements.
+		// Note: These may be all kinds of AST nodes: instances of Statement, but also
+		// instances of Expression, PHPFunctionDef, or even null nodes.
 		startNode.addStatement(endNode);
 
 		return 0;

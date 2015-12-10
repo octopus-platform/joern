@@ -7,7 +7,7 @@ import java.util.List;
 import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
-public class CompoundStatement extends Statement implements Iterable<ASTNode> // TODO make this an Iterable<Statement>
+public class CompoundStatement extends Statement implements Iterable<ASTNode>
 {
 	protected static final List<ASTNode> emptyList = new LinkedList<ASTNode>();
 
@@ -26,6 +26,8 @@ public class CompoundStatement extends Statement implements Iterable<ASTNode> //
 		return getStatements().get(i);
 	}
 
+	// Note: These may be all kinds of AST nodes: instances of Statement, but also
+	// instances of Expression, FunctionDef, or even null nodes.
 	public void addStatement(ASTNode statement)
 	{
 		super.addChild(statement);
