@@ -6,7 +6,7 @@ public class CastExpression extends Expression
 {
 
 	Expression castTarget = null;
-	ASTNode castExpression = null; // TODO make this an expression
+	Expression castExpression = null;
 
 	@Override
 	public void addChild(ASTNode expression)
@@ -28,12 +28,12 @@ public class CastExpression extends Expression
 		super.addChild(castTarget);
 	}
 	
-	public ASTNode getCastExpression()  // TODO return an expression
+	public Expression getCastExpression()
 	{
 		return this.castExpression;
 	}
 
-	public void setCastExpression(ASTNode castExpression) // TODO take an expression
+	public void setCastExpression(Expression castExpression)
 	{
 		this.castExpression = castExpression;
 		super.addChild(castExpression);

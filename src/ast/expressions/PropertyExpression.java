@@ -1,29 +1,27 @@
 package ast.expressions;
 
-import ast.ASTNode;
-
 public class PropertyExpression extends MemberAccess
 {
-	private ASTNode objectExpression = null; // TODO make this an Expression
-	private ASTNode propertyName = null;
+	private Expression objectExpression = null;
+	private StringExpression propertyName = null;
 
-	public ASTNode getObjectExpression() // TODO return an Expression
+	public Expression getObjectExpression()
 	{
 		return this.objectExpression;
 	}
 
-	public void setObjectExpression(ASTNode objectExpression) // TODO take an Expression
+	public void setObjectExpression(Expression objectExpression)
 	{
 		this.objectExpression = objectExpression;
 		super.addChild(objectExpression);
 	}
 	
-	public ASTNode getPropertyName()
+	public StringExpression getPropertyName()
 	{
 		return this.propertyName;
 	}
 
-	public void setPropertyName(ASTNode propertyName)
+	public void setPropertyName(StringExpression propertyName)
 	{
 		this.propertyName = propertyName;
 		super.addChild(propertyName);

@@ -1,18 +1,17 @@
 package ast.expressions;
 
-import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
 public class UnaryExpression extends Expression
 {
-	ASTNode expression = null; // TODO make this an Expression once PHP mapping is finished
+	Expression expression = null;
 	
-	public ASTNode getExpression() // TODO return Expression
+	public Expression getExpression()
 	{
 		return this.expression;
 	}
 
-	public void setExpression(ASTNode expression) // TODO take Expression
+	public void setExpression(Expression expression)
 	{
 		this.expression = expression;
 		super.addChild(expression);

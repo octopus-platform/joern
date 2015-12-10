@@ -4,26 +4,26 @@ import ast.ASTNode;
 
 public class BinaryExpression extends Expression
 {
-	ASTNode leftExpression = null; // TODO make this an Expression again, once PHP mapping is finished
-	ASTNode rightExpression = null; // TODO make this an Expression again, once PHP mapping is finished
+	Expression leftExpression = null;
+	Expression rightExpression = null;
 	
-	public ASTNode getLeft() // TODO return Expression
+	public Expression getLeft()
 	{
 		return this.leftExpression;
 	}
 
-	protected void setLeft(ASTNode leftExpression) // TODO take Expression
+	public void setLeft(Expression leftExpression)
 	{
 		this.leftExpression = leftExpression;
 		super.addChild(leftExpression);
 	}
 	
-	public ASTNode getRight() // TODO return Expression
+	public Expression getRight()
 	{
 		return this.rightExpression;
 	}
 
-	protected void setRight(ASTNode rightExpression) // TODO take Expression
+	public void setRight(Expression rightExpression)
 	{
 		this.rightExpression = rightExpression;
 		super.addChild(rightExpression);
@@ -32,12 +32,10 @@ public class BinaryExpression extends Expression
 	@Override
 	public void addChild(ASTNode item)
 	{
-		// TODO cast this to an Expression again
-		//Expression expression = (Expression) item;
 		if (getLeft() == null)
-			setLeft(item);
+			setLeft((Expression)item);
 		else if (getRight() == null)
-			setRight(item);
+			setRight((Expression)item);
 		else
 			throw new RuntimeException(
 					"Error: attempting to add third child to binary expression");

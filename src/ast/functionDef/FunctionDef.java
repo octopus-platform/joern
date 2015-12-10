@@ -58,10 +58,9 @@ public class FunctionDef extends ASTNode
 		return this.returnType;
 	}
 	
-	public void setReturnType(ASTNode returnType)
+	public void setReturnType(Identifier returnType)
 	{
-		if( returnType instanceof Identifier)
-			this.returnType = (Identifier)returnType;
+		this.returnType = returnType;
 		super.addChild(returnType);
 	}
 

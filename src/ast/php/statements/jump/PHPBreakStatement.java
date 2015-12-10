@@ -1,18 +1,18 @@
 package ast.php.statements.jump;
 
-import ast.ASTNode;
+import ast.expressions.IntegerExpression;
 import ast.statements.jump.BreakStatement;
 
 public class PHPBreakStatement extends BreakStatement
 {
-	private ASTNode depth = null;
+	private IntegerExpression depth = null;
 	
-	public void setDepth(ASTNode depth) {
+	public void setDepth(IntegerExpression depth) {
 		this.depth = depth;
 		super.addChild(depth);
 	}
 	
-	public ASTNode getDepth() {
+	public IntegerExpression getDepth() {
 		return this.depth;
 	}
 }

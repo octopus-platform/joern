@@ -1,18 +1,18 @@
 package ast.php.statements;
 
-import ast.ASTNode;
+import ast.expressions.IntegerExpression;
 import ast.logical.statements.Statement;
 
 public class PHPHaltCompilerStatement extends Statement
 {
-	private ASTNode offset = null; // TODO make into PrimaryExpression (or maybe even more specific: IntegerExpression) once mapping is finished
+	private IntegerExpression offset = null;
 
-	public ASTNode getOffset() // TODO return PrimaryExpression
+	public IntegerExpression getOffset()
 	{
 		return this.offset;
 	}
 
-	public void setOffset(ASTNode offset) // TODO take PrimaryExpression
+	public void setOffset(IntegerExpression offset)
 	{
 		this.offset = offset;
 		super.addChild(offset);

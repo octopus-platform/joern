@@ -7,7 +7,7 @@ import java.util.List;
 import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
-public class CompoundStatement extends Statement implements Iterable<ASTNode>
+public class CompoundStatement extends Statement implements Iterable<ASTNode> // TODO make this an Iterable<Statement>
 {
 	protected static final List<ASTNode> emptyList = new LinkedList<ASTNode>();
 
@@ -17,6 +17,21 @@ public class CompoundStatement extends Statement implements Iterable<ASTNode>
 		return null == children ? emptyList : children;
 	}
 
+	public int size()
+	{
+		return getStatements().size();
+	}
+	
+	public ASTNode getStatement(int i) {
+		return getStatements().get(i);
+	}
+
+	public void addStatement(ASTNode statement)
+	{
+		super.addChild(statement);
+	}
+	
+	
 	public String getEscapedCodeStr()
 	{
 		return "";

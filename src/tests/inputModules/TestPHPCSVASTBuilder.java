@@ -25,6 +25,7 @@ import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
 import ast.expressions.DoubleExpression;
+import ast.expressions.Expression;
 import ast.expressions.ExpressionList;
 import ast.expressions.GreaterExpression;
 import ast.expressions.GreaterOrEqualExpression;
@@ -1358,7 +1359,8 @@ public class TestPHPCSVASTBuilder
 	 * 
 	 * Any AST_EXIT node has exactly exactly one child, representing the expression whose
 	 * evaluation yields either a string to be printed before exiting or an integer which
-	 * will be used as an exit status.
+	 * will be used as an exit status. The child may also be a NULL node, if no exit status
+	 * is passed as argument.
 	 * See http://php.net/manual/en/function.exit.php
 	 * 
 	 * This test checks a few 'exit' expressions' children in the following PHP code:
@@ -2233,7 +2235,8 @@ public class TestPHPCSVASTBuilder
 	 * AST_BREAK nodes are nodes representing a break statement.
 	 * 
 	 * Any AST_BREAK node has exactly one child which is of type "integer", holding
-	 * the number of enclosing structures to be broken out of.
+	 * the number of enclosing structures to be broken out of. It may also be a null
+	 * child, in which case no depth was specified, which is equivalent to depth 1.
 	 * 
 	 * This test checks a few break statements' children in the following PHP code:
 	 * 
@@ -2290,7 +2293,8 @@ public class TestPHPCSVASTBuilder
 	 * AST_CONTINUE nodes are nodes representing a continue statement.
 	 * 
 	 * Any AST_CONTINUE node has exactly one child which is of type "integer", holding
-	 * the number of enclosing loops to be skipped to the end of.
+	 * the number of enclosing loops to be skipped to the end of. It may also be a null
+	 * child, in which case no depth was specified, which is equivalent to depth 1.
 	 * 
 	 * This test checks a few continue statements' children in the following PHP code:
 	 * 
@@ -2434,12 +2438,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node4, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)21), ((ArrayIndexing)node4).getArrayExpression());
-		// TODO ((ArrayIndexing)node4).getIndexExpression() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPArrayElement accepts arbitrary ASTNode's for indices,
-		// when we actually only want to accept Expression's. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((ArrayIndexing)node4).getIndexExpression().getProperty("type"));
+		assertNull( ((ArrayIndexing)node4).getIndexExpression());
 	}
 	
 	/**
@@ -2793,28 +2792,28 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((AssignmentExpression)node).getVariable());
-		assertEquals( ast.getNodeById((long)6), ((AssignmentExpression)node).getAssignExpression());
+		assertEquals( ast.getNodeById((long)4), ((AssignmentExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((AssignmentExpression)node).getRight());
 
 		assertThat( node2, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((AssignmentExpression)node2).getVariable());
-		assertEquals( ast.getNodeById((long)12), ((AssignmentExpression)node2).getAssignExpression());
+		assertEquals( ast.getNodeById((long)8), ((AssignmentExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentExpression)node2).getRight());
 		
 		assertThat( node3, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((AssignmentExpression)node3).getVariable());
-		assertEquals( ast.getNodeById((long)18), ((AssignmentExpression)node3).getAssignExpression());
+		assertEquals( ast.getNodeById((long)14), ((AssignmentExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)18), ((AssignmentExpression)node3).getRight());
 		
 		assertThat( node4, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)22), ((AssignmentExpression)node4).getVariable());
-		assertEquals( ast.getNodeById((long)26), ((AssignmentExpression)node4).getAssignExpression());
+		assertEquals( ast.getNodeById((long)22), ((AssignmentExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)26), ((AssignmentExpression)node4).getRight());
 		
 		assertThat( node5, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node5.getChildCount());
-		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getVariable());
-		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getAssignExpression());
+		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getLeft());
+		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getRight());
 	}
 	
 	/**
@@ -2915,23 +2914,23 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPAssignmentByRefExpression)node).getVariable());
-		assertEquals( ast.getNodeById((long)6), ((PHPAssignmentByRefExpression)node).getAssignExpression());
+		assertEquals( ast.getNodeById((long)4), ((PHPAssignmentByRefExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((PHPAssignmentByRefExpression)node).getRight());
 
 		assertThat( node2, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node2).getVariable());
-		assertEquals( ast.getNodeById((long)13), ((PHPAssignmentByRefExpression)node2).getAssignExpression());
+		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)13), ((PHPAssignmentByRefExpression)node2).getRight());
 		
 		assertThat( node3, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)18), ((PHPAssignmentByRefExpression)node3).getVariable());
-		assertEquals( ast.getNodeById((long)22), ((PHPAssignmentByRefExpression)node3).getAssignExpression());
+		assertEquals( ast.getNodeById((long)18), ((PHPAssignmentByRefExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)22), ((PHPAssignmentByRefExpression)node3).getRight());
 		
 		assertThat( node4, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getVariable());
-		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getAssignExpression());
+		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getRight());
 	}
 	
 	/**
@@ -2988,18 +2987,18 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((AssignmentWithOpExpression)node).getVariable());
-		assertEquals( ast.getNodeById((long)6), ((AssignmentWithOpExpression)node).getAssignExpression());
+		assertEquals( ast.getNodeById((long)4), ((AssignmentWithOpExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)6), ((AssignmentWithOpExpression)node).getRight());
 
 		assertThat( node2, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((AssignmentWithOpExpression)node2).getVariable());
-		assertEquals( ast.getNodeById((long)10), ((AssignmentWithOpExpression)node2).getAssignExpression());
+		assertEquals( ast.getNodeById((long)8), ((AssignmentWithOpExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)10), ((AssignmentWithOpExpression)node2).getRight());
 		
 		assertThat( node3, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((AssignmentWithOpExpression)node3).getVariable());
-		assertEquals( ast.getNodeById((long)14), ((AssignmentWithOpExpression)node3).getAssignExpression());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentWithOpExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)14), ((AssignmentWithOpExpression)node3).getRight());
 	}
 	
 	/**
@@ -3619,12 +3618,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node4, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)17), ((PHPArrayElement)node4).getValue());
-		// TODO ((PHPArrayElement)node4).getKey() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPArrayElement accepts arbitrary ASTNode's for keys,
-		// when we actually only want to accept Expression's. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPArrayElement)node4).getKey().getProperty("type"));
+		assertNull( ((PHPArrayElement)node4).getKey());
 	}
 	
 	/**
@@ -3811,12 +3805,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPYieldExpression)node).getValue());
 		assertEquals( "42", ((PHPYieldExpression)node).getValue().getEscapedCodeStr());
-		// TODO ((PHPYieldExpression)node).getKey() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPYieldExpression accepts arbitrary ASTNode's for keys,
-		// when we actually only want to accept expressions. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPYieldExpression)node).getKey().getProperty("type"));
+		assertNull( ((PHPYieldExpression)node).getKey());
 		
 		assertThat( node2, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node2.getChildCount());
@@ -3858,8 +3847,8 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(PHPCoalesceExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPCoalesceExpression)node).getLeftExpression());
-		assertEquals( ast.getNodeById((long)5), ((PHPCoalesceExpression)node).getRightExpression());
+		assertEquals( ast.getNodeById((long)4), ((PHPCoalesceExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)5), ((PHPCoalesceExpression)node).getRight());
 	}
 	
 	/**
@@ -3929,13 +3918,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((StaticVariableDeclaration)node).getNameChild());
 		assertEquals( "bar", ((StaticVariableDeclaration)node).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)10), ((StaticVariableDeclaration)node).getDefault());
-		// TODO ((StaticVariableDeclaration)node).getDefault() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because StaticVariableDeclaration accepts arbitrary ASTNode's for default values,
-		// when we actually only want to accept strings. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((StaticVariableDeclaration)node).getDefault().getProperty("type"));
+		assertNull( ((StaticVariableDeclaration)node).getDefault());
 
 		assertThat( node2, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node2.getChildCount());
@@ -4214,12 +4197,7 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node4, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node4.getChildCount());
-		// TODO ((PHPIfElement)node4).getCondition() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPIfElement accepts arbitrary ASTNode's for conditions,
-		// when we actually only want to accept Expression's. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPIfElement)node4).getCondition().getProperty("type"));
+		assertNull( ((PHPIfElement)node4).getCondition());
 		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node4).getStatement());
 	}
 	
@@ -4417,13 +4395,7 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node4, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((PHPSwitchCase)node4).getValue());
-		// TODO ((PHPSwitchCase)node4).getValue() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPSwitchCase accepts arbitrary ASTNode's for values,
-		// when we actually only want to accept ints/strings/doubles. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPSwitchCase)node4).getValue().getProperty("type"));
+		assertNull( ((PHPSwitchCase)node4).getValue());
 		assertEquals( ast.getNodeById((long)22), ((PHPSwitchCase)node4).getStatement());
 	}
 	
@@ -4560,13 +4532,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((PropertyElement)node).getNameChild());
 		assertEquals( "foo", ((PropertyElement)node).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)11), ((PropertyElement)node).getDefault());
-		// TODO ((PropertyElement)node).getDefault() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PropertyElement accepts arbitrary ASTNode's for default values,
-		// when we actually only want to accept strings. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PropertyElement)node).getDefault().getProperty("type"));
+		assertNull( ((PropertyElement)node).getDefault());
 
 		assertThat( node2, instanceOf(PropertyElement.class));
 		assertEquals( 2, node2.getChildCount());
@@ -4872,7 +4838,8 @@ public class TestPHPCSVASTBuilder
 	 * (TODO check if they can appear in other contexts)
 	 * 
 	 * Any AST_METHOD_REFERENCE node has exactly two children:
-	 * 1) AST_NAME, representing the class that the referenced method is declared in
+	 * 1) AST_NAME or NULL, representing the class that the referenced method is declared in
+	 *    (or null if no class name is given)
 	 * 2) string, indicating the method's name
 	 *    
 	 * This test checks a few method references' children in the following PHP code:
@@ -5048,12 +5015,7 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node3, instanceOf(NamespaceStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		// TODO ((NamespaceStatement)node3).getName() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because NamespaceStatement accepts arbitrary ASTNode's for names,
-		// when we actually only want to accept strings. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((NamespaceStatement)node3).getName().getProperty("type"));
+		assertNull( ((NamespaceStatement)node3).getName());
 		assertEquals( ast.getNodeById((long)11), ((NamespaceStatement)node3).getContent());
 	}
 	
@@ -5220,12 +5182,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(PHPTraitAlias.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)23), ((PHPTraitAlias)node2).getMethod());
-		// TODO ((PHPTraitAlias)node).getAlias() should
-		// actually return null, not a null node. This currently does not work exactly
-		// as expected because PHPTraitAlias accepts arbitrary ASTNode's for aliases,
-		// when we actually only want to accept strings. Once the mapping is
-		// finished, we can fix that.
-		assertEquals( "NULL", ((PHPTraitAlias)node2).getAlias().getProperty("type"));
+		assertNull( ((PHPTraitAlias)node2).getAlias());
 	}
 	
 	/**
@@ -5673,7 +5630,7 @@ public class TestPHPCSVASTBuilder
 	 *    in the loop's guard, used to check whether to continue iterating
 	 * 3) AST_EXPR_LIST or NULL, representing the list of expressions
 	 *    used to increment or otherwise modify variables in each step
-	 * 4) statement types or NULL, representing the code in the loop's body
+	 * 4) statement node or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 * 
 	 * This test checks a for loop's children in the following PHP code:
@@ -5750,7 +5707,7 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_FOREACH node has exactly four children:
 	 * 1) various possible types, representing the array or object to be iterated over
 	 *    (e.g., could be AST_VAR, AST_CALL, AST_CONST, etc...)
-	 * 2) AST_VAR, representing the value of the current element
+	 * 2) AST_VAR or AST_REF, representing the value of the current element
 	 * 3) AST_VAR or NULL, representing the key of the current element
 	 * 4) statement types or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
@@ -5962,10 +5919,10 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 3, node.getChildCount());
 		assertEquals( 3, ((PHPListExpression)node).size());
 		assertEquals( ast.getNodeById((long)5), ((PHPListExpression)node).getElement(0));
-		assertEquals( ast.getNodeById((long)7), ((PHPListExpression)node).getElement(1));
+		assertNull( ((PHPListExpression)node).getElement(1));
 		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(2));
 		for( ASTNode element : (PHPListExpression)node) // TODO iterate over Expression's
-			assertTrue( ast.containsValue(element));
+			assertTrue( null == element || ast.containsValue(element));
 		
 		assertThat( node2, instanceOf(PHPListExpression.class));
 		assertEquals( 2, node2.getChildCount());
@@ -6111,7 +6068,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((PHPEncapsListExpression)node).getElement(4));
 		assertEquals( ast.getNodeById((long)13), ((PHPEncapsListExpression)node).getElement(5));
 		assertEquals( ast.getNodeById((long)17), ((PHPEncapsListExpression)node).getElement(6));
-		for( ASTNode element : (PHPEncapsListExpression)node) // TODO iterate over Expression's
+		for( Expression element : (PHPEncapsListExpression)node)
 			assertTrue( ast.containsValue(element));
 	}
 	
@@ -6192,14 +6149,14 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, ((ExpressionList)node).size());
 		assertEquals( ast.getNodeById((long)5), ((ExpressionList)node).getExpression(0));
 		assertEquals( ast.getNodeById((long)9), ((ExpressionList)node).getExpression(1));
-		for( ASTNode expression : (ExpressionList)node) // TODO iterate over Expression's
+		for( Expression expression : (ExpressionList)node)
 			assertTrue( ast.containsValue(expression));
 		
 		assertThat( node2, instanceOf(ExpressionList.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( 1, ((ExpressionList)node2).size());
 		assertEquals( ast.getNodeById((long)14), ((ExpressionList)node2).getExpression(0));
-		for( ASTNode expression : (ExpressionList)node2) // TODO iterate over Expression's
+		for( Expression expression : (ExpressionList)node2)
 			assertTrue( ast.containsValue(expression));
 		
 		assertThat( node3, instanceOf(ExpressionList.class));
@@ -6207,7 +6164,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, ((ExpressionList)node3).size());
 		assertEquals( ast.getNodeById((long)19), ((ExpressionList)node3).getExpression(0));
 		assertEquals( ast.getNodeById((long)22), ((ExpressionList)node3).getExpression(1));
-		for( ASTNode expression : (ExpressionList)node3) // TODO iterate over Expression's
+		for( Expression expression : (ExpressionList)node3)
 			assertTrue( ast.containsValue(expression));
 	}
 	
@@ -6257,15 +6214,15 @@ public class TestPHPCSVASTBuilder
 		
 		assertThat( node, instanceOf(CompoundStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( 2, ((CompoundStatement)node).getStatements().size());
+		assertEquals( 2, ((CompoundStatement)node).size());
+		assertEquals( ast.getNodeById((long)3), ((CompoundStatement)node).getStatement(0));
+		assertEquals( ast.getNodeById((long)8), ((CompoundStatement)node).getStatement(1));
 		for( ASTNode stmt : (CompoundStatement)node)
 			assertTrue( ast.containsValue(stmt));
-		assertEquals( ast.getNodeById((long)3), node.getChild(0));
-		assertEquals( ast.getNodeById((long)8), node.getChild(1));
 
 		assertThat( node2, instanceOf(CompoundStatement.class));
 		assertEquals( 0, node2.getChildCount());
-		assertEquals( 0, ((CompoundStatement)node2).getStatements().size());
+		assertEquals( 0, ((CompoundStatement)node2).size());
 		for( ASTNode stmt : (CompoundStatement)node2)
 			assertTrue( ast.containsValue(stmt));
 	}

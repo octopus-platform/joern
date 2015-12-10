@@ -1,17 +1,15 @@
 package ast.expressions;
 
-import ast.ASTNode;
-
 public class NewExpression extends CallExpression
 {
-	private ASTNode targetClass = null; // TODO change type to Expression once the mapping is finished
+	private Expression targetClass = null;
 	
-	public ASTNode getTargetClass() // TODO change type to Expression
+	public Expression getTargetClass()
 	{
 		return this.targetClass;
 	}
 	
-	public void setTargetClass(ASTNode targetClass) // TODO change type to Expression
+	public void setTargetClass(Expression targetClass)
 	{
 		this.targetClass = targetClass;
 		super.addChild(targetClass);

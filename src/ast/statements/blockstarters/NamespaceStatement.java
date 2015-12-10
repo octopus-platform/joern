@@ -1,20 +1,20 @@
 package ast.statements.blockstarters;
 
-import ast.ASTNode;
+import ast.expressions.StringExpression;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
 
 public class NamespaceStatement extends BlockStarter
 {
-	private ASTNode name = null;
+	private StringExpression name = null;
 	private CompoundStatement content = null;
 
-	public ASTNode getName()
+	public StringExpression getName()
 	{
 		return this.name;
 	}
 	
-	public void setName(ASTNode name)
+	public void setName(StringExpression name)
 	{
 		this.name = name;
 		super.addChild(name);

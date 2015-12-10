@@ -1,18 +1,18 @@
 package ast.logical.statements;
 
-import ast.ASTNode;
+import ast.expressions.StringExpression;
 import ast.walking.ASTNodeVisitor;
 
 public class Label extends Statement
 {
-	private ASTNode name = null;
+	private StringExpression name = null;
 
-	public void setNameChild(ASTNode name) {
+	public void setNameChild(StringExpression name) {
 		this.name = name;
 		super.addChild(name);
 	}
 	
-	public ASTNode getNameChild() {
+	public StringExpression getNameChild() {
 		return this.name;
 	}
 	

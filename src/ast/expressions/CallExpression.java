@@ -4,15 +4,15 @@ import ast.ASTNode;
 
 public class CallExpression extends PostfixExpression
 {
-	private ASTNode targetFunc = null; // TODO change type to Expression once the mapping is finished
+	private Expression targetFunc = null;
 	private ArgumentList argumentList = null;
 	
-	public ASTNode getTargetFunc() // TODO change type to Expression
+	public Expression getTargetFunc()
 	{
 		return this.targetFunc;
 	}
 	
-	public void setTargetFunc(ASTNode targetFunc) // TODO change type to Expression
+	public void setTargetFunc(Expression targetFunc)
 	{
 		this.targetFunc = targetFunc;
 		super.addChild(targetFunc);

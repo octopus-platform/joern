@@ -1,6 +1,7 @@
 package tools.phpast2cfg;
 
 import ast.ASTNode;
+import ast.NullNode;
 import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
@@ -19,14 +20,17 @@ import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
+import ast.expressions.IntegerExpression;
 import ast.expressions.NewExpression;
 import ast.expressions.OrExpression;
 import ast.expressions.PostDecOperationExpression;
 import ast.expressions.PostIncOperationExpression;
 import ast.expressions.PreDecOperationExpression;
 import ast.expressions.PreIncOperationExpression;
+import ast.expressions.PrimaryExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
+import ast.expressions.StringExpression;
 import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryPlusExpression;
@@ -129,7 +133,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		String type = startNode.getProperty(PHPCSVNodeTypes.TYPE.getName());
 		switch (type)
 		{
-			// primary expressions (leafs)
+			// - null nodes (leafs)
+			// - primary expressions (leafs)
+			case PHPCSVNodeTypes.TYPE_NULL:
 			case PHPCSVNodeTypes.TYPE_INTEGER:
 			case PHPCSVNodeTypes.TYPE_DOUBLE:
 			case PHPCSVNodeTypes.TYPE_STRING:
@@ -491,7 +497,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
-				startNode.setNameChild(endNode);
+				startNode.setNameChild((StringExpression)endNode);
 				break;
 				
 			default:
@@ -508,7 +514,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
-				startNode.setNameChild(endNode);
+				startNode.setNameChild((StringExpression)endNode);
 				break;
 				
 			default:
@@ -548,13 +554,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setParameterList((ParameterList)endNode);
 				break;
 			case 1: // NULL child
-				startNode.addChild(endNode);
+				startNode.addChild((NullNode)endNode);
 				break;
 			case 2: // stmts child
 				startNode.setContent((CompoundStatement)endNode);
 				break;
 			case 3: // returnType child: either Identifier or NULL node
-				startNode.setReturnType(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setReturnType((Identifier)endNode);
 				break;
 				
 			default:
@@ -574,13 +583,19 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setParameterList((ParameterList)endNode);
 				break;
 			case 1: // uses child: either ClosureUses or NULL node
-				startNode.setClosureUses(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setClosureUses((ClosureUses)endNode);
 				break;
 			case 2: // stmts child
 				startNode.setContent((CompoundStatement)endNode);
 				break;
 			case 3: // returnType child: either Identifier or NULL node
-				startNode.setReturnType(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setReturnType((Identifier)endNode);
 				break;
 				
 			default:
@@ -600,13 +615,19 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setParameterList((ParameterList)endNode);
 				break;
 			case 1: // NULL child
-				startNode.addChild(endNode);
+				startNode.addChild((NullNode)endNode);
 				break;
 			case 2: // stmts child: either CompoundStatement or NULL
-				startNode.setContent(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setContent((CompoundStatement)endNode);
 				break;
 			case 3: // returnType child: either Identifier or NULL node
-				startNode.setReturnType(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setReturnType((Identifier)endNode);
 				break;
 				
 			default:
@@ -623,10 +644,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // extends child: either Identifier or NULL node
-				startNode.setExtends(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setExtends((Identifier)endNode);
 				break;
 			case 1: // implements child: either IdentifierList or NULL node
-				startNode.setImplements(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setImplements((IdentifierList)endNode);
 				break;
 			case 2: // toplevel child
 				startNode.setTopLevelFunc((TopLevelFunctionDef)endNode);
@@ -649,9 +676,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
-				// TODO cast to PrimaryType once mapping is finished, and change
-				// Variable.name and getters and setters accordingly
-				startNode.setNameChild(endNode);
+				startNode.setNameChild((StringExpression)endNode);
 				break;
 				
 			default:
@@ -685,9 +710,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// PHPUnpackExpression.unpackExpression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -704,9 +727,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryOperationExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -723,9 +744,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryOperationExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -742,9 +761,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// CastExpression.castExpression and getters and setters accordingly
-				startNode.setCastExpression(endNode);
+				startNode.setCastExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -761,9 +778,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -779,10 +794,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setVariableExpression(endNode);
+			case 0: // var child
+				startNode.setVariableExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -799,9 +812,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryOperationExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -818,9 +829,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setShellCommand(endNode);
+				startNode.setShellCommand((Expression)endNode);
 				break;
 				
 			default:
@@ -837,9 +846,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -855,10 +862,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+			case 0: // expr child: Expression or NULL node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -875,9 +883,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -894,9 +900,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryExpression.expression and getters and setters accordingly
-				startNode.setIncludeOrEvalExpression(endNode);
+				startNode.setIncludeOrEvalExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -913,9 +917,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// UnaryOperationExpression.expression and getters and setters accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -1000,9 +1002,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				// TODO cast to Exression once mapping is finished, and change
-				// PHPYieldFromExpression.fromExpression and getters and setters accordingly
-				startNode.setFromExpression(endNode);
+				startNode.setFromExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -1052,8 +1052,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // expr child
-				startNode.setReturnExpression(endNode);
+			case 0: // expr child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setReturnExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -1070,7 +1073,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
-				startNode.setNameChild(endNode);
+				startNode.setNameChild((StringExpression)endNode);
 				break;
 				
 			default:
@@ -1104,10 +1107,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // offset child
-				startNode.setOffset(endNode);
-				// TODO in time, we should be able to cast endNode to PrimaryExpression (or IntegerExpression);
-				// then, change PHPHaltCompilerStatement.offset to be a PrimaryExpression instead
-				// of a generic ASTNode, and getOffset() and setOffset() accordingly
+				startNode.setOffset((IntegerExpression)endNode);
 				break;
 				
 			default:
@@ -1124,10 +1124,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				startNode.setEchoExpression(endNode);
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change PHPEchoStatement.echoExpression to be an Expression instead
-				// of a generic ASTNode, and getEchoExpression() and setEchoExpression() accordingly
+				startNode.setEchoExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -1144,10 +1141,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child
-				startNode.setThrowExpression(endNode);
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change ThrowStatement.throwExpression to be an Expression instead
-				// of a generic ASTNode, and getThrowExpression() and setThrowExpression() accordingly
+				startNode.setThrowExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -1164,7 +1158,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // label child
-				startNode.setTargetLabel(endNode);
+				startNode.setTargetLabel((StringExpression)endNode);
 				break;
 				
 			default:
@@ -1180,8 +1174,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // depth child
-				startNode.setDepth(endNode);
+			case 0: // depth child: IntegerExpression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setDepth((IntegerExpression)endNode);
 				break;
 				
 			default:
@@ -1197,8 +1194,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // depth child
-				startNode.setDepth(endNode);
+			case 0: // depth child: IntegerExpression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setDepth((IntegerExpression)endNode);
 				break;
 				
 			default:
@@ -1218,17 +1218,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change ArrayIndexing.arrayExpression to be an Expression instead
-				// of a generic ASTNode, and getArrayExpression() and setArrayExpression() accordingly
-				startNode.setArrayExpression(endNode);
+				startNode.setArrayExpression((Expression)endNode);
 				break;
 			case 1: // dim child: Expression or NULL node
-				// TODO in time, we should be able to cast endNode to Expression,
-				// unless it's a null node; then, use case distinction here,
-				// change ArrayIndexing.indexExpression to be an Expression instead
-				// of a generic ASTNode, and getIndexExpression() and setIndexExpression() accordingly
-				startNode.setIndexExpression(endNode);
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setIndexExpression((Expression)endNode);
 				break;
 
 			default:
@@ -1245,13 +1241,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change PropertyExpression.objectExpression to be an Expression instead
-				// of a generic ASTNode, and getObjectExpression() and setObjectExpression() accordingly
-				startNode.setObjectExpression(endNode);
+				startNode.setObjectExpression((Expression)endNode);
 				break;
-			case 1: // prop child: string node
-				startNode.setPropertyName(endNode);
+			case 1: // prop child: StringExpression node
+				startNode.setPropertyName((StringExpression)endNode);
 				break;
 
 			default:
@@ -1268,13 +1261,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // class child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change StaticPropertyExpression.classExpression to be an Expression instead
-				// of a generic ASTNode, and getClassExpression() and setClassExpression() accordingly
-				startNode.setClassExpression(endNode);
+				startNode.setClassExpression((Expression)endNode);
 				break;
-			case 1: // prop child: string node
-				startNode.setPropertyName(endNode);
+			case 1: // prop child: StringExpression node
+				startNode.setPropertyName((StringExpression)endNode);
 				break;
 
 			default:
@@ -1291,10 +1281,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change CallExpression.targetFunc to be an Expression instead
-				// of a generic ASTNode, and getTargetFunc() and setTargetFunc() accordingly
-				startNode.setTargetFunc(endNode);
+				startNode.setTargetFunc((Expression)endNode);
 				break;
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
@@ -1314,13 +1301,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // class child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change ClassConstantExpression.classExpression to be an Expression instead
-				// of a generic ASTNode, and getClassExpression() and setClassExpression() accordingly
-				startNode.setClassExpression(endNode);
+				startNode.setClassExpression((Expression)endNode);
 				break;
-			case 1: // const child: string node
-				startNode.setConstantName(endNode);
+			case 1: // const child: StringExpression node
+				startNode.setConstantName((StringExpression)endNode);
 				break;
 
 			default:
@@ -1337,16 +1321,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // var child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getVariable() and setVariable() accordingly
-				startNode.setVariable(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
-				startNode.setAssignExpression(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1363,16 +1341,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // var child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getVariable() and setVariable() accordingly
-				startNode.setVariable(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
-				startNode.setAssignExpression(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1389,16 +1361,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // var child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getVariable() and setVariable() accordingly
-				startNode.setVariable(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getAssignExpression() and setAssignExpression() accordingly
-				startNode.setAssignExpression(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1415,16 +1381,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // left child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getLeft() and setLeft() accordingly
-				startNode.setLeft(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // right child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getRight() and setRight() accordingly
-				startNode.setRight(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1441,16 +1401,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // left child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getLeft() and setLeft() accordingly
-				startNode.setLeft(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // right child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getRight() and setRight() accordingly
-				startNode.setRight(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1467,16 +1421,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // left child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getLeft() and setLeft() accordingly
-				startNode.setLeft(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // right child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getRight() and setRight() accordingly
-				startNode.setRight(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1493,16 +1441,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // left child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getLeft() and setLeft() accordingly
-				startNode.setLeft(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // right child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getRight() and setRight() accordingly
-				startNode.setRight(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1519,16 +1461,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // left child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.left to be an Expression instead
-				// of a generic ASTNode, and getLeft() and setLeft() accordingly
-				startNode.setLeft(endNode);
+				startNode.setLeft((Expression)endNode);
 				break;
 			case 1: // right child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BinaryExpression.right to be an Expression instead
-				// of a generic ASTNode, and getRight() and setRight() accordingly
-				startNode.setRight(endNode);
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1545,15 +1481,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // value child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change PHPArrayElement.value to be an Expression instead
-				// of a generic ASTNode, and getValue() and setValue() accordingly
-				startNode.setValue(endNode);
+				startNode.setValue((Expression)endNode);
 				break;
-			case 1: // key child: Expression or NULL node
-				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
-				// unless it is a NULL node: test that!
-				startNode.setKey(endNode);
+			case 1: // key child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setKey((Expression)endNode);
 				break;
 
 			default:
@@ -1570,10 +1504,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // class child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change NewExpression.targetClass to be an Expression instead
-				// of a generic ASTNode, and getTargetClass() and setTargetClass() accordingly
-				startNode.setTargetClass(endNode);
+				startNode.setTargetClass((Expression)endNode);
 				break;
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
@@ -1593,10 +1524,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change InstanceofExpression.instanceExpression to be an Expression instead
-				// of a generic ASTNode, and getInstanceExpression() and setInstanceExpression() accordingly
-				startNode.setInstanceExpression(endNode);
+				startNode.setInstanceExpression((Expression)endNode);
 				break;
 			case 1: // class child: Identifier node
 				startNode.setClassIdentifier((Identifier)endNode);
@@ -1615,15 +1543,17 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // value child: Expression or plain or NULL node
-				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
-				// unless it is a NULL node: test that!
-				startNode.setValue(endNode);
+			case 0: // value child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setValue((Expression)endNode);
 				break;
-			case 1: // key child: Expression or plain or NULL node
-				// TODO in time, we should be able to ALWAYS cast endNode to Expression,
-				// unless it is a NULL node: test that!
-				startNode.setKey(endNode);
+			case 1: // key child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setKey((Expression)endNode);
 				break;
 
 			default:
@@ -1639,11 +1569,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // left child: Expression or plain node
-				startNode.setLeftExpression(endNode);
+			case 0: // left child: Expression node
+				startNode.setLeft((Expression)endNode);
 				break;
-			case 1: // right child: Expression or plain node
-				startNode.setRightExpression(endNode);
+			case 1: // right child: Expression node
+				startNode.setRight((Expression)endNode);
 				break;
 
 			default:
@@ -1659,14 +1589,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // name child: plain node
-				startNode.setNameChild(endNode);
+			case 0: // name child: StringExpression node
+				startNode.setNameChild((StringExpression)endNode);
 				break;
-			case 1: // default child: either Expression or NULL node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change StaticVariableDeclaration.defaultvalue to be an Expression instead
-				// of a generic ASTNode, and getDefault() and setDefault() accordingly
-				startNode.setDefault(endNode);
+			case 1: // default child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setDefault((Expression)endNode);
 				break;
 				
 			default:
@@ -1683,18 +1613,19 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // cond child
-				startNode.setCondition(endNode);
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BlockStarter.condition to be an Expression instead
-				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				startNode.setCondition((Expression)endNode);
 				break;
-			case 1: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
-				if( endNode instanceof Statement)
-					startNode.setStatement((Statement)endNode);
+			case 1: // stmts child: Statement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				// TODO find a way to consolidate setStatement(Statement) with an Expression
+				// The problem is that when a single statement is used in the body, this
+				// may very well be an expression statement, say, a CallExpression; but
+				// this cannot be cast to a Statement!
+				else if( endNode instanceof Expression)
+					startNode.addChild(endNode); // TODO do something more sensible
 				else
-					startNode.addChild(endNode);
-				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
-				// unless it is a NULL node: test that!
+					startNode.setStatement((Statement)endNode);
 				break;
 
 			default:
@@ -1710,19 +1641,20 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
-				if( endNode instanceof Statement)
-					startNode.setStatement((Statement)endNode);
+			case 0: // stmts child: Statement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				// TODO find a way to consolidate setStatement(Statement) with an Expression
+				// The problem is that when a single statement is used in the body, this
+				// may very well be an expression statement, say, a CallExpression; but
+				// this cannot be cast to a Statement!
+				else if( endNode instanceof Expression)
+					startNode.addChild(endNode); // TODO do something more sensible
 				else
-					startNode.addChild(endNode);
-				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
-				// unless it is a NULL node: test that!
+					startNode.setStatement((Statement)endNode);
 				break;
 			case 1: // cond child
-				startNode.setCondition(endNode);
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BlockStarter.condition to be an Expression instead
-				// of a generic ASTNode, and getCondition() and setCondition() accordingly
+				startNode.setCondition((Expression)endNode);
 				break;
 
 			default:
@@ -1738,19 +1670,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // cond child
-				startNode.setCondition(endNode);
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change BlockStarter.condition to be an Expression instead
-				// of a generic ASTNode, and getCondition() and setCondition() accordingly
-				break;
-			case 1: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
-				if( endNode instanceof Statement)
-					startNode.setStatement((Statement)endNode);
+			case 0: // cond child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
-				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
-				// unless it is a NULL node: test that!
+					startNode.setCondition((Expression)endNode);
+				break;
+			case 1: // stmts child: Statement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				// TODO find a way to consolidate setStatement(Statement) with an Expression
+				// The problem is that when a single statement is used in the body, this
+				// may very well be an expression statement, say, a CallExpression; but
+				// this cannot be cast to a Statement!
+				else if( endNode instanceof Expression)
+					startNode.addChild(endNode); // TODO do something more sensible
+				else
+					startNode.setStatement((Statement)endNode);
 				break;
 
 			default:
@@ -1767,12 +1703,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change PHPSwitchStatement.expression to be an Expression instead
-				// of a generic ASTNode, and getExpression() and setExpression() accordingly
-				startNode.setExpression(endNode);
+				startNode.setExpression((Expression)endNode);
 				break;
-			case 1: // list child: AST_SWITCH_LIST
+			case 1: // list child: PHPSwitchList node
 				startNode.setSwitchList((PHPSwitchList)endNode);
 				break;
 
@@ -1789,10 +1722,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // value child: plain node or NULL
-				startNode.setValue(endNode);
+			case 0: // value child: PrimaryExpression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setValue((PrimaryExpression)endNode);
 				break;
-			case 1: // stmts child: AST_STMT_LIST
+			case 1: // stmts child: CompoundStatement node
 				startNode.setStatement((CompoundStatement)endNode);
 				break;
 
@@ -1809,14 +1745,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // declares child: AST_CONST_DECL node
+			case 0: // declares child: ConstantDeclaration node
 				startNode.setDeclares((ConstantDeclaration)endNode);
 				break;
-			case 1: // stmts child: AST_STMT_LIST or NULL node
-				if( endNode instanceof CompoundStatement)
-					startNode.setContent((CompoundStatement)endNode);
+			case 1: // stmts child: CompoundStatement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
+					startNode.setContent((CompoundStatement)endNode);
 				break;
 
 			default:
@@ -1832,14 +1768,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // name child: plain node
-				startNode.setNameChild(endNode);
+			case 0: // name child: StringExpression node
+				startNode.setNameChild((StringExpression)endNode);
 				break;
-			case 1: // default child: either Expression or NULL node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change PropertyElement.defaultvalue to be an Expression instead
-				// of a generic ASTNode, and getDefault() and setDefault() accordingly
-				startNode.setDefault(endNode);
+			case 1: // default child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setDefault((Expression)endNode);
 				break;
 				
 			default:
@@ -1855,11 +1791,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // name child: plain node
-				startNode.setNameChild(endNode);
+			case 0: // name child: StringExpression node
+				startNode.setNameChild((StringExpression)endNode);
 				break;
-			case 1: // default child: Expression node
-				startNode.setValue(endNode);
+			case 1: // value child: Expression node
+				startNode.setValue((Expression)endNode);
 				break;
 				
 			default:
@@ -1878,11 +1814,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // traits child: IdentifierList node
 				startNode.setTraits((IdentifierList)endNode);
 				break;
-			case 1: // adaptations child: PHPTraitAdaptations or NULL node
-				if( endNode instanceof PHPTraitAdaptations)
-					startNode.setTraitAdaptations((PHPTraitAdaptations)endNode);
+			case 1: // adaptations child: PHPTraitAdaptations or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
+					startNode.setTraitAdaptations((PHPTraitAdaptations)endNode);
 				break;
 	
 			default:
@@ -1918,14 +1854,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // class child: Identifier or NULL node
-				if( endNode instanceof Identifier)
-					startNode.setClassIdentifier((Identifier)endNode);
+			case 0: // class child: Identifier or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
+					startNode.setClassIdentifier((Identifier)endNode);
 				break;
-			case 1: // method child: string node
-				startNode.setMethodName(endNode);
+			case 1: // method child: StringExpression node
+				startNode.setMethodName((StringExpression)endNode);
 				break;
 				
 			default:
@@ -1941,14 +1877,17 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // name child: string or NULL node
-				startNode.setName(endNode);
-				break;
-			case 1: // stmts child: AST_STMT_LIST or NULL node
-				if( endNode instanceof CompoundStatement)
-					startNode.setContent((CompoundStatement)endNode);
+			case 0: // name child: StringExpression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
+					startNode.setName((StringExpression)endNode);
+				break;
+			case 1: // stmts child: CompoundStatement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setContent((CompoundStatement)endNode);
 				break;
 
 			default:
@@ -1964,15 +1903,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // name child: string node
-				startNode.setNamespace(endNode);
+			case 0: // name child: StringExpression node
+				startNode.setNamespace((StringExpression)endNode);
 				break;
-			case 1: // alias child: string or NULL node
-				// TODO in time, we should be able to cast endNode to a plain
-				// node type that extends Expression, unless endNode is a null
-				// node; then, adapt UseElement to use a string node and
-				// make a case distinction here to use setAlias() or addChild()
-				startNode.setAlias(endNode);
+			case 1: // alias child: StringExpression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setAlias((StringExpression)endNode);
 				break;
 
 			default:
@@ -1991,12 +1929,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // method child: MethodReference node
 				startNode.setMethod((MethodReference)endNode);
 				break;
-			case 1: // alias child: string or NULL node
-				// TODO in time, we should be able to cast endNode to a plain
-				// node type that extends Expression, unless endNode is a null
-				// node; then, adapt PHPTraitAlias to use a string node and
-				// make a case distinction here to use setAlias() or addChild()
-				startNode.setAlias(endNode);
+			case 1: // alias child: StringExpression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setAlias((StringExpression)endNode);
 				break;
 
 			default:
@@ -2012,10 +1949,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // prefix child: string node
-				startNode.setPrefix(endNode);
+			case 0: // prefix child: StringExpression node
+				startNode.setPrefix((StringExpression)endNode);
 				break;
-			case 1: // uses child: AST_USE node
+			case 1: // uses child: UseStatement node
 				startNode.setUses((UseStatement)endNode);
 				break;
 
@@ -2036,16 +1973,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change MethodCallExpression.targetObject to be an Expression instead
-				// of a generic ASTNode, and getTargetObject() and setTargetObject() accordingly
-				startNode.setTargetObject(endNode);
+				startNode.setTargetObject((Expression)endNode);
 				break;
-			case 1: // method child: "string" node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change CallExpression.targetFunc to be an Expression instead
-				// of a generic ASTNode, and getTargetFunc() and setTargetFunc() accordingly
-				startNode.setTargetFunc(endNode);
+			case 1: // method child: Expression node
+				startNode.setTargetFunc((Expression)endNode);
 				break;
 			case 2: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
@@ -2067,10 +1998,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // class child: Identifier node
 				startNode.setTargetClass((Identifier)endNode);
 				break;
-			case 1: // method child: "string" node
-				// TODO in time, we should be able to cast endNode to a plain
-				// node type that extends Expression.
-				startNode.setTargetFunc(endNode);
+			case 1: // method child: StringExpression node
+				startNode.setTargetFunc((StringExpression)endNode);
 				break;
 			case 2: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
@@ -2090,23 +2019,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // cond child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change ConditionalExpression.condition to be an Expression instead
-				// of a generic ASTNode, and getCondition() and setCondition() accordingly
-				startNode.setCondition(endNode);
+				startNode.setCondition((Expression)endNode);
 				break;
-			case 1: // trueExpr child: Expression node or NULL
-				// TODO in time, we should be able to cast endNode to Expression, unless it is NULL;
-				// then, use an appropriate case distinction here,
-				// and change ConditionalExpression.trueExpression to be an Expression instead
-				// of a generic ASTNode, and getTrueExpression() and getTrueExpression() accordingly
-				startNode.setTrueExpression(endNode);
+			case 1: // trueExpr child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setTrueExpression((Expression)endNode);
 				break;
 			case 2: // falseExpr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change ConditionalExpression.falseExpression to be an Expression instead
-				// of a generic ASTNode, and getFalseExpression() and getFalseExpression() accordingly
-				startNode.setFalseExpression(endNode);
+				startNode.setFalseExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -2128,11 +2050,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 1: // catches child: CatchList node
 				startNode.setCatchList((CatchList)endNode);
 				break;
-			case 2: // finallyStmts child: CompoundStatement or NULL node
-				if( endNode instanceof CompoundStatement)
-					startNode.setFinallyContent((CompoundStatement)endNode);
+			case 2: // finallyStmts child: CompoundStatement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
+					startNode.setFinallyContent((CompoundStatement)endNode);
 				break;
 				
 			default:
@@ -2151,8 +2073,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // exception child: Identifier node
 				startNode.setExceptionIdentifier((Identifier)endNode);
 				break;
-			case 1: // varName child: plain node
-				startNode.setVariableName(endNode);
+			case 1: // varName child: StringExpression node
+				startNode.setVariableName((StringExpression)endNode);
 				break;
 			case 2: // stmts child: CompoundStatement node
 				startNode.setContent((CompoundStatement)endNode);
@@ -2171,14 +2093,20 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // type child: either Identifier or NULL node
-				startNode.setType(endNode);
+			case 0: // type child: Identifier or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setType((Identifier)endNode);
 				break;
-			case 1: // name child: plain node
-				startNode.setNameChild(endNode);
+			case 1: // name child: StringExpression node
+				startNode.setNameChild((StringExpression)endNode);
 				break;
-			case 2: // default child: either plain or NULL node
-				startNode.setDefault(endNode);
+			case 2: // default child: Expression or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setDefault((Expression)endNode);
 				break;
 				
 			default:
@@ -2197,23 +2125,41 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // init child: either Expression or NULL node
-				startNode.setForInitExpression(endNode);
-				break;
-			case 1: // cond child: either Expression or NULL node
-				// note that the cond child may be NULL, as opposed to while and do-while loops
-				startNode.setCondition(endNode);
-				break;
-			case 2: // loop child: either Expression or NULL node
-				startNode.setForLoopExpression(endNode);
-				break;
-			case 3: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
-				if( endNode instanceof Statement)
-					startNode.setStatement((Statement)endNode);
+			case 0: // init child: ExpressionList or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
 				else
-					startNode.addChild(endNode);
-				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
-				// unless it is a NULL node: test that!
+					// Note: can only cast to Expression instead of the more specific ExpressionList
+					// because in C world, a ForInit node is used instead (also an Expression)
+					startNode.setForInitExpression((Expression)endNode);
+				break;
+			case 1: // cond child: ExpressionList or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					// Note: can only cast to Expression instead of the more specific ExpressionList
+					// because in C world, a Condition node is used instead (also an Expression)
+					startNode.setCondition((Expression)endNode);
+				break;
+			case 2: // loop child: ExpressionList or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					// Note: can only cast to Expression instead of the more specific ExpressionList
+					// because in C world, an Expression node is used instead
+					startNode.setForLoopExpression((Expression)endNode);
+				break;
+			case 3: // stmts child: Statement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				// TODO find a way to consolidate setStatement(Statement) with an Expression
+				// The problem is that when a single statement is used in the body, this
+				// may very well be an expression statement, say, a CallExpression; but
+				// this cannot be cast to a Statement!
+				else if( endNode instanceof Expression)
+					startNode.addChild(endNode); // TODO do something more sensible
+				else
+					startNode.setStatement((Statement)endNode);
 				break;
 
 			default:
@@ -2230,27 +2176,28 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // expr child: Expression node
-				// TODO in time, we should be able to cast endNode to Expression;
-				// then, change ForEach.iteratedObject to be an Expression instead
-				// of a generic ASTNode, and getIteratedObject() and setIteratedObject() accordingly
-				startNode.setIteratedObject(endNode);
+				startNode.setIteratedObject((Expression)endNode);
 				break;
 			case 1: // value child: Variable or PHPReferenceExpression node
 				startNode.setValueExpression((Expression)endNode);
 				break;
-			case 2: // key child: either Variable or NULL node
-				if( endNode instanceof Variable)
+			case 2: // key child: Variable or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
 					startNode.setKeyVariable((Variable)endNode);
-				else
-					startNode.addChild(endNode);
 				break;
-			case 3: // stmts child: statement node (e.g., AST_STMT_LIST) or NULL node
-				if( endNode instanceof Statement)
-					startNode.setStatement((Statement)endNode);
+			case 3: // stmts child: Statement or null node
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				// TODO find a way to consolidate setStatement(Statement) with an Expression
+				// The problem is that when a single statement is used in the body, this
+				// may very well be an expression statement, say, a CallExpression; but
+				// this cannot be cast to a Statement!
+				else if( endNode instanceof Expression)
+					startNode.addChild(endNode); // TODO do something more sensible
 				else
-					startNode.addChild(endNode);
-				// TODO in time, we should be able to ALWAYS cast endNode to Statement,
-				// unless it is a NULL node: test that!
+					startNode.setStatement((Statement)endNode);
 				break;
 
 			default:
@@ -2265,14 +2212,17 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	
 	private int handleArgumentList( ArgumentList startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addArgument(endNode); // TODO cast to Expression
+		startNode.addArgument((Expression)endNode);
 
 		return 0;
 	}
 	
 	private int handleList( PHPListExpression startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addElement(endNode); // TODO cast to Expression
+		// This should be either a null node or an Expression:
+		// There is no closer ancestor than ASTNode itself, so we do not cast endNode
+		// to anything more specific here.
+		startNode.addElement(endNode);
 
 		return 0;
 	}
@@ -2286,21 +2236,23 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	
 	private int handleEncapsList( PHPEncapsListExpression startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addElement(endNode); // TODO cast to Expression
+		startNode.addElement((Expression)endNode);
 
 		return 0;
 	}
 	
 	private int handleExpressionList( ExpressionList startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addExpression(endNode); // TODO cast to Expression
+		startNode.addExpression((Expression)endNode);
 
 		return 0;
 	}
 	
 	private int handleCompound( CompoundStatement startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addChild(endNode); // TODO introduce addStatement in CompoundStatement (and cast to Statement)
+		// TODO cast to Statement once CompoundStatement implements Iterable<Statement>
+		// and takes only Statements.
+		startNode.addStatement(endNode);
 
 		return 0;
 	}

@@ -1,41 +1,39 @@
 package ast.expressions;
 
-import ast.ASTNode;
-
 public class ConditionalExpression extends Expression
 {
-	protected ASTNode condition = null; // TODO change type to Expression once mapping is finished
-	protected ASTNode trueExpression = null; // TODO change type to Expression once mapping is finished
-	protected ASTNode falseExpression = null; // TODO change type to Expression once mapping is finished
+	protected Expression condition = null;
+	protected Expression trueExpression = null;
+	protected Expression falseExpression = null;
 
-	public ASTNode getCondition()
+	public Expression getCondition()
 	{
 		return this.condition;
 	}
 
-	public void setCondition(ASTNode expression)
+	public void setCondition(Expression expression)
 	{
 		this.condition = expression;
 		super.addChild(expression);
 	}
 	
-	public ASTNode getTrueExpression()
+	public Expression getTrueExpression()
 	{
 		return this.trueExpression;
 	}
 
-	public void setTrueExpression(ASTNode trueExpression)
+	public void setTrueExpression(Expression trueExpression)
 	{
 		this.trueExpression = trueExpression;
 		super.addChild(trueExpression);
 	}
 	
-	public ASTNode getFalseExpression()
+	public Expression getFalseExpression()
 	{
 		return this.falseExpression;
 	}
 
-	public void setFalseExpression(ASTNode falseExpression)
+	public void setFalseExpression(Expression falseExpression)
 	{
 		this.falseExpression = falseExpression;
 		super.addChild(falseExpression);

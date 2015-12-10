@@ -1,18 +1,18 @@
 package ast.php.statements.blockstarters;
 
-import ast.ASTNode;
+import ast.expressions.PrimaryExpression;
 import ast.logical.statements.BlockStarter;
 
 public class PHPSwitchCase extends BlockStarter
 {
-	private ASTNode value = null;
+	private PrimaryExpression value = null;
 	
-	public ASTNode getValue()
+	public PrimaryExpression getValue()
 	{
 		return this.value;
 	}
 
-	public void setValue(ASTNode value)
+	public void setValue(PrimaryExpression value)
 	{
 		this.value = value;
 		super.addChild(value);

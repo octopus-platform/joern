@@ -1,17 +1,15 @@
 package ast.expressions;
 
-import ast.ASTNode;
-
 public class Variable extends Expression
 {
-	private ASTNode name = null;
+	private StringExpression name = null;
 	
-	public void setNameChild(ASTNode name) {
+	public void setNameChild(StringExpression name) {
 		this.name = name;
 		super.addChild(name);
 	}
 	
-	public ASTNode getNameChild() {
+	public StringExpression getNameChild() {
 		return this.name;
 	}
 }

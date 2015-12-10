@@ -3,31 +3,30 @@ package ast.php.expressions;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import ast.ASTNode;
 import ast.expressions.Expression;
 
-public class PHPEncapsListExpression extends Expression implements Iterable<ASTNode> // TODO make this an Iterable<Expression> once the mapping is finished
+public class PHPEncapsListExpression extends Expression implements Iterable<Expression>
 {
 
-	private LinkedList<ASTNode> elements = new LinkedList<ASTNode>(); // TODO LinkedList<Expression>
+	private LinkedList<Expression> elements = new LinkedList<Expression>();
 
 	public int size()
 	{
 		return this.elements.size();
 	}
 	
-	public ASTNode getElement(int i) { // TODO return type: Expression
+	public Expression getElement(int i) {
 		return this.elements.get(i);
 	}
 
-	public void addElement(ASTNode element) // TODO take an Expression
+	public void addElement(Expression element)
 	{
 		this.elements.add(element);
 		super.addChild(element);
 	}
 	
 	@Override
-	public Iterator<ASTNode> iterator() {
+	public Iterator<Expression> iterator() {
 		return this.elements.iterator();
 	}
 }
