@@ -8,6 +8,7 @@ import inputModules.csv.KeyedCSV.CSVKey;
 public class PHPCSVNodeTypes
 {
 	/* node row keys */
+	
 	public static final CSVKey NODE_ID = new CSVKey("id","ID");
 	// node properties shared by all nodes (cf. ast\Node specification
 	// in {@link https://github.com/nikic/php-ast})
@@ -24,7 +25,9 @@ public class PHPCSVNodeTypes
 	public static final CSVKey CHILDNUM = new CSVKey("childnum","int");
 	public static final CSVKey FUNCID = new CSVKey("funcid","int");
 
+	
 	/* node types */
+	
 	// directory/file types
 	public static final String TYPE_FILE = "File";
 	public static final String TYPE_DIRECTORY = "Directory";
@@ -172,11 +175,46 @@ public class PHPCSVNodeTypes
 	public static final String TYPE_TRAIT_ADAPTATIONS = "AST_TRAIT_ADAPTATIONS";
 	public static final String TYPE_USE = "AST_USE";
 
+	
 	/* node flags */
+	
+	// flags for TYPE_ARRAY_ELEM and TYPE_CLOSURE_VAR (exclusive)
+	public static final String FLAG_BY_REFERENCE = "BY_REFERENCE"; // custom, see phpjoern commit 95cdc6b6de1c4b973775a97b90e8bf41c90f629b
+
+	// flags for TYPE_NAME nodes (exclusive)
+	public static final String FLAG_NAME_FQ = "NAME_FQ";
+	public static final String FLAG_NAME_NOT_FQ = "NAME_NOT_FQ";
+	public static final String FLAG_NAME_RELATIVE = "NAME_RELATIVE";
+
 	// flags for TYPE_TOPLEVEL nodes (exclusive)
 	public static final String FLAG_TOPLEVEL_FILE = "TOPLEVEL_FILE"; // artificial
 	public static final String FLAG_TOPLEVEL_CLASS = "TOPLEVEL_CLASS"; // artificial
 	
+	// flags for TYPE_METHOD, TYPE_PROP_DECL and TYPE_TRAIT_ALIAS nodes (combinable)
+	public static final String FLAG_MODIFIER_PUBLIC = "MODIFIER_PUBLIC";
+	public static final String FLAG_MODIFIER_PROTECTED = "MODIFIER_PROTECTED";
+	public static final String FLAG_MODIFIER_PRIVATE = "MODIFIER_PRIVATE";
+	public static final String FLAG_MODIFIER_STATIC = "MODIFIER_STATIC";
+	public static final String FLAG_MODIFIER_ABSTRACT = "MODIFIER_ABSTRACT";
+	public static final String FLAG_MODIFIER_FINAL = "MODIFIER_FINAL";
+	
+	// flags for TYPE_CLOSURE nodes (combinable)
+	//public static final String FLAG_MODIFIER_STATIC = "MODIFIER_STATIC"; // already defined above
+
+	// flags for TYPE_FUNC_DECL, TYPE_METHOD, TYPE_CLOSURE nodes (combinable)
+	public static final String FLAG_RETURNS_REF = "RETURNS_REF";
+	
+	// flags for TYPE_CLASS nodes (exclusive)
+	public static final String FLAG_CLASS_ABSTRACT = "CLASS_ABSTRACT";
+	public static final String FLAG_CLASS_FINAL = "CLASS_FINAL";
+	public static final String FLAG_CLASS_TRAIT = "CLASS_TRAIT";
+	public static final String FLAG_CLASS_INTERFACE = "CLASS_INTERFACE";
+	public static final String FLAG_CLASS_ANONYMOUS = "CLASS_ANONYMOUS";
+	
+	// flags for TYPE_PARAM nodes (exclusive)
+	public static final String FLAG_PARAM_REF = "PARAM_REF";
+	public static final String FLAG_PARAM_VARIADIC = "PARAM_VARIADIC";
+
 	// flags for TYPE_TYPE nodes (exclusive)
 	public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY";
 	public static final String FLAG_TYPE_CALLABLE = "TYPE_CALLABLE";
@@ -187,8 +225,57 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_TYPE_LONG = "TYPE_LONG";
 	public static final String FLAG_TYPE_DOUBLE = "TYPE_DOUBLE";
 	public static final String FLAG_TYPE_STRING = "TYPE_STRING";
-	//public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY"; // *also* used (and thus already defined) by TYPE_TYPE
+	//public static final String FLAG_TYPE_ARRAY = "TYPE_ARRAY"; // already defined above
 	public static final String FLAG_TYPE_OBJECT = "TYPE_OBJECT";
+	
+	// flags for TYPE_UNARY_OP nodes (exclusive)
+	public static final String FLAG_UNARY_BOOL_NOT = "UNARY_BOOL_NOT";
+	public static final String FLAG_UNARY_BITWISE_NOT = "UNARY_BITWISE_NOT";
+	public static final String FLAG_UNARY_MINUS = "UNARY_MINUS"; // since version 20 of php-ast
+	public static final String FLAG_UNARY_PLUS = "UNARY_PLUS"; // since version 20 of php-ast
+	public static final String FLAG_UNARY_SILENCE = "UNARY_SILENCE"; // since version 20 of php-ast
+	
+	// flags for TYPE_BINARY_OP and TYPE_ASSIGN_OP nodes in version >= 20 of php-ast (exclusive)
+	public static final String FLAG_BINARY_BITWISE_OR = "BINARY_BITWISE_OR";
+	public static final String FLAG_BINARY_BITWISE_AND = "BINARY_BITWISE_AND";
+	public static final String FLAG_BINARY_BITWISE_XOR = "BINARY_BITWISE_XOR";
+	public static final String FLAG_BINARY_CONCAT = "BINARY_CONCAT";
+	public static final String FLAG_BINARY_ADD = "BINARY_ADD";
+	public static final String FLAG_BINARY_SUB = "BINARY_SUB";
+	public static final String FLAG_BINARY_MUL = "BINARY_MUL";
+	public static final String FLAG_BINARY_DIV = "BINARY_DIV";
+	public static final String FLAG_BINARY_MOD = "BINARY_MOD";
+	public static final String FLAG_BINARY_POW = "BINARY_POW";
+	public static final String FLAG_BINARY_SHIFT_LEFT = "BINARY_SHIFT_LEFT";
+	public static final String FLAG_BINARY_SHIFT_RIGHT = "BINARY_SHIFT_RIGHT";
+
+	// flags for TYPE_BINARY_OP (exclusive)
+	public static final String FLAG_BINARY_BOOL_AND = "BINARY_BOOL_AND"; // since version 20 of php-ast
+	public static final String FLAG_BINARY_BOOL_OR = "BINARY_BOOL_OR"; // since version 20 of php-ast
+	public static final String FLAG_BINARY_BOOL_XOR = "BINARY_BOOL_XOR";
+	public static final String FLAG_BINARY_IS_IDENTICAL = "BINARY_IS_IDENTICAL";
+	public static final String FLAG_BINARY_IS_NOT_IDENTICAL = "BINARY_IS_NOT_IDENTICAL";
+	public static final String FLAG_BINARY_IS_EQUAL = "BINARY_IS_EQUAL";
+	public static final String FLAG_BINARY_IS_NOT_EQUAL = "BINARY_IS_NOT_EQUAL";
+	public static final String FLAG_BINARY_IS_SMALLER = "BINARY_IS_SMALLER";
+	public static final String FLAG_BINARY_IS_SMALLER_OR_EQUAL = "BINARY_IS_SMALLER_OR_EQUAL";
+	public static final String FLAG_BINARY_IS_GREATER = "BINARY_IS_GREATER"; // since version 20 of php-ast
+	public static final String FLAG_BINARY_IS_GREATER_OR_EQUAL = "BINARY_IS_GREATER_OR_EQUAL"; // since version 20 of php-ast
+	public static final String FLAG_BINARY_SPACESHIP = "BINARY_SPACESHIP";
+
+	// flags for TYPE_ASSIGN_OP in versions before 20 (exclusive)
+	public static final String FLAG_ASSIGN_BITWISE_OR = "ASSIGN_BITWISE_OR";
+	public static final String FLAG_ASSIGN_BITWISE_AND = "ASSIGN_BITWISE_AND";
+	public static final String FLAG_ASSIGN_BITWISE_XOR = "ASSIGN_BITWISE_XOR";
+	public static final String FLAG_ASSIGN_CONCAT = "ASSIGN_CONCAT";
+	public static final String FLAG_ASSIGN_ADD = "ASSIGN_ADD";
+	public static final String FLAG_ASSIGN_SUB = "ASSIGN_SUB";
+	public static final String FLAG_ASSIGN_MUL = "ASSIGN_MUL";
+	public static final String FLAG_ASSIGN_DIV = "ASSIGN_DIV";
+	public static final String FLAG_ASSIGN_MOD = "ASSIGN_MOD";
+	public static final String FLAG_ASSIGN_POW = "ASSIGN_POW";
+	public static final String FLAG_ASSIGN_SHIFT_LEFT = "ASSIGN_SHIFT_LEFT";
+	public static final String FLAG_ASSIGN_SHIFT_RIGHT = "ASSIGN_SHIFT_RIGHT";
 	
 	// flags for TYPE_MAGIC_CONST nodes (exclusive)
 	public static final String FLAG_MAGIC_LINE = "T_LINE";
@@ -199,6 +286,11 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_MAGIC_METHOD = "T_METHOD_C";
 	public static final String FLAG_MAGIC_CLASS = "T_CLASS_C";
 	public static final String FLAG_MAGIC_TRAIT = "T_TRAIT_C";
+
+	// flags for TYPE_USE, TYPE_GROUP_USE and TYPE_USE_ELEM nodes (exclusive)
+	public static final String FLAG_USE_NORMAL = "T_CLASS";
+	public static final String FLAG_USE_FUNCTION = "T_FUNCTION";
+	public static final String FLAG_USE_CONST = "T_CONST";
 
 	// flags for TYPE_INCLUDE_OR_EVAL nodes (exclusive)
 	public static final String FLAG_EXEC_EVAL = "EXEC_EVAL";
