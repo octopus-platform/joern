@@ -35,7 +35,6 @@ import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
@@ -65,6 +64,7 @@ import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
@@ -155,7 +155,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleTopLevelFunction((TopLevelFunctionDef)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_FUNC_DECL:
-				errno = handleFunction((FunctionDef)startNode, endNode, childnum);
+				errno = handleFunction((PHPFunctionDef)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE:
 				errno = handleClosure((Closure)startNode, endNode, childnum);
@@ -544,7 +544,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;		
 	}
 
-	private int handleFunction( FunctionDef startNode, ASTNode endNode, int childnum)
+	private int handleFunction( PHPFunctionDef startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 

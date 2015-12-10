@@ -1,6 +1,7 @@
 package tests.inputModules;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -8,7 +9,7 @@ import java.io.StringReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import ast.functionDef.FunctionDef;
+import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 
@@ -40,9 +41,9 @@ public class TestCSVFunctionExtractor
 	public void testHeaderOnly() throws IOException, InvalidCSVFile
 	{
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
 
-		assertEquals(null, function);
+		assertNull(function);
 	}
 
 	
@@ -71,13 +72,13 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("foo", function.getName());
 		assertEquals("<foo.php>", function2.getName());
-		assertEquals(null, function3);
+		assertNull(function3);
 	}
 
 	/**
@@ -103,13 +104,13 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
 		
 		assertEquals("foo", function.getName());
 		assertEquals("<foo.php>", function2.getName());
-		assertEquals(null, function3);
+		assertNull(function3);
 	}
 
 	/**
@@ -139,13 +140,13 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("foo", function.getName());
 		assertEquals("<foo.php>", function2.getName());
-		assertEquals(null, function3);
+		assertNull(function3);
 	}
 
 	/**
@@ -173,15 +174,15 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("foo", function.getName());
 		assertEquals("bar", function2.getName());
 		assertEquals("<foo.php>", function3.getName());
-		assertEquals(null, function4);
+		assertNull(function4);
 	}
 	
 	/**
@@ -210,15 +211,15 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("bar", function.getName());
 		assertEquals("foo", function2.getName());
 		assertEquals("<foo.php>", function3.getName());
-		assertEquals(null, function4);
+		assertNull(function4);
 	}
 	
 	/**
@@ -253,17 +254,17 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
-		FunctionDef function5 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function5 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("bar", function.getName());
 		assertEquals("foo", function2.getName());
 		assertEquals("buz", function3.getName());
 		assertEquals("<foo.php>", function4.getName());
-		assertEquals(null, function5);
+		assertNull(function5);
 	}
 
 	/**
@@ -292,15 +293,15 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("{closure}", function.getName());
 		assertEquals("foo", function2.getName());
 		assertEquals("<foo.php>", function3.getName());
-		assertEquals(null, function4);
+		assertNull(function4);
 	}
 
 	/**
@@ -337,17 +338,17 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
-		FunctionDef function5 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function5 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("foo", function.getName());
 		assertEquals("<foobar/foo.php>", function2.getName());
 		assertEquals("bar", function3.getName());
 		assertEquals("<foobar/bar.php>", function4.getName());
-		assertEquals(null, function5);
+		assertNull(function5);
 	}
 	
 	/**
@@ -369,13 +370,13 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("[foo]", function.getName());
 		assertEquals("<foo.php>", function2.getName());
-		assertEquals(null, function3);
+		assertNull(function3);
 	}
 	
 	/**
@@ -416,19 +417,19 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
-		FunctionDef function5 = extractor.getNextFunction();
-		FunctionDef function6 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function5 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function6 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("foo", function.getName());
 		assertEquals("bar", function2.getName());
 		assertEquals("[foo]", function3.getName());
 		assertEquals("[buz]", function4.getName());
 		assertEquals("<foo.php>", function5.getName());
-		assertEquals(null, function6);
+		assertNull(function6);
 	}
 	
 	/**
@@ -479,12 +480,12 @@ public class TestCSVFunctionExtractor
 		nodeReader = new StringReader(nodeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
-		FunctionDef function5 = extractor.getNextFunction();
-		FunctionDef function6 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function5 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function6 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals("foo", function.getName());
 		assertEquals("[foo]", function2.getName());
@@ -602,8 +603,8 @@ public class TestCSVFunctionExtractor
 		edgeReader = new StringReader(edgeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals(4, function.getChildCount());
 		assertEquals(1, function2.getChildCount());
@@ -663,10 +664,10 @@ public class TestCSVFunctionExtractor
 		edgeReader = new StringReader(edgeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		FunctionDef function = extractor.getNextFunction();
-		FunctionDef function2 = extractor.getNextFunction();
-		FunctionDef function3 = extractor.getNextFunction();
-		FunctionDef function4 = extractor.getNextFunction();
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
 
 		assertEquals(4, function.getChildCount());
 		assertEquals(1, function2.getChildCount());

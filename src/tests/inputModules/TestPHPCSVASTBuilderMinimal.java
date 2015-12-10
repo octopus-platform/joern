@@ -15,7 +15,6 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
 import ast.expressions.ConditionalExpression;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
@@ -25,6 +24,7 @@ import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.PHPParameter;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
@@ -117,9 +117,9 @@ public class TestPHPCSVASTBuilderMinimal
 
 		ASTNode node = ast.getNodeById((long)3);
 		
-		assertThat( node, instanceOf(FunctionDef.class));
+		assertThat( node, instanceOf(PHPFunctionDef.class));
 		assertEquals( 4, node.getChildCount());
-		assertNull( ((FunctionDef)node).getReturnType());
+		assertNull( ((PHPFunctionDef)node).getReturnType());
 	}
 
 	/**

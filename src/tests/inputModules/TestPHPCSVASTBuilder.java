@@ -46,7 +46,6 @@ import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -78,6 +77,7 @@ import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
@@ -398,14 +398,14 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		
-		assertThat( node, instanceOf(FunctionDef.class));
-		assertEquals( "foo", ((FunctionDef)node).getName());
+		assertThat( node, instanceOf(PHPFunctionDef.class));
+		assertEquals( "foo", ((PHPFunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((FunctionDef)node).getParameterList());
-		assertEquals( ast.getNodeById((long)6), ((FunctionDef)node).getContent());
-		assertEquals( ast.getNodeById((long)7), ((FunctionDef)node).getReturnType());
-		assertEquals( ast.getNodeById((long)8), ((FunctionDef)node).getReturnType().getNameChild());
-		assertEquals( "int", ((FunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)4), ((PHPFunctionDef)node).getParameterList());
+		assertEquals( ast.getNodeById((long)6), ((PHPFunctionDef)node).getContent());
+		assertEquals( ast.getNodeById((long)7), ((PHPFunctionDef)node).getReturnType());
+		assertEquals( ast.getNodeById((long)8), ((PHPFunctionDef)node).getReturnType().getNameChild());
+		assertEquals( "int", ((PHPFunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 	
 	/**
