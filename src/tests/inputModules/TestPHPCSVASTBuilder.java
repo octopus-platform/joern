@@ -2465,12 +2465,13 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_PROP node has exactly two children:
 	 * 1) an expression, whose evaluation returns the object to be accessed
 	 *    (e.g., could be AST_VAR, AST_CALL, etc...)
-	 * 2) a string, representing the property name
+	 * 2) an expression, whose evaluation holds the property name
+	 *    (e.g., could be string, AST_VAR, etc...)
 	 * 
 	 * This test checks a few property access expressions' children in the following PHP code:
 	 * 
 	 * $foo->bar;
-	 * buz()->qux;
+	 * buz()->$qux;
 	 */
 	@Test
 	public void testPropertyCreation() throws IOException, InvalidCSVFile
@@ -2485,7 +2486,8 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
 		nodeStr += "10,string,,4,\"buz\",0,1,,,\n";
 		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "12,string,,4,\"qux\",1,1,,,\n";
+		nodeStr += "12,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "13,string,,4,\"qux\",0,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
@@ -2495,6 +2497,7 @@ public class TestPHPCSVASTBuilder
 		edgeStr += "8,9,PARENT_OF\n";
 		edgeStr += "8,11,PARENT_OF\n";
 		edgeStr += "7,8,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
 		edgeStr += "7,12,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);

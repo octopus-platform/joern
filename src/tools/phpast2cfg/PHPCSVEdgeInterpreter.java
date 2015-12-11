@@ -1253,8 +1253,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // expr child: Expression node
 				startNode.setObjectExpression((Expression)endNode);
 				break;
-			case 1: // prop child: StringExpression node
-				startNode.setPropertyName((StringExpression)endNode);
+			case 1: // prop child: Expression node
+				startNode.setPropertyName((Expression)endNode);
 				break;
 
 			default:
