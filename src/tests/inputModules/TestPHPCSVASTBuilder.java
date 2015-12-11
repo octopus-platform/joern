@@ -729,55 +729,59 @@ public class TestPHPCSVASTBuilder
 	/**
 	 * AST_VAR nodes are nodes holding variables names.
 	 * 
-	 * Any AST_VAR node has exactly one child which is of type "string", holding
-	 * the variable's name.
+	 * Any AST_VAR node has exactly one child which is an expression, whose evaluation holds
+	 * the variable's name (typically it is a string, but it may be another AST_VAR, for instance.)
 	 * 
-	 * This test checks the names 'somearray', 'foo' and 'bar' in the following PHP code:
+	 * This test checks the names 'foo' and 'bar' in the following PHP code:
 	 * 
-	 * foreach ($somearray as $bar => $foo) {}
+	 * $foo;
+	 * $$bar;
 	 */
 	@Test
 	public void testVariableCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"somearray\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "8,AST_VAR,,3,,2,1,,,\n";
-		nodeStr += "9,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "10,AST_STMT_LIST,,3,,3,1,,,\n";
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "4,string,,3,\"foo\",0,1,,,\n";
+		nodeStr += "5,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "6,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "7,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "8,AST_CALL,,5,,2,1,,,\n";
+		nodeStr += "9,AST_VAR,,5,,0,1,,,\n";
+		nodeStr += "10,string,,5,\"buz\",0,1,,,\n";
+		nodeStr += "11,AST_ARG_LIST,,5,,1,1,,,\n";
 
 		String edgeStr = edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
 		edgeStr += "3,4,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
 		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "5,6,PARENT_OF\n";
+		edgeStr += "2,5,PARENT_OF\n";
+		edgeStr += "9,10,PARENT_OF\n";
 		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
-		edgeStr += "3,10,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)6);
-		ASTNode node3 = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)5);
+		ASTNode node3 = ast.getNodeById((long)6);
 		
 		assertThat( node, instanceOf(Variable.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((Variable)node).getNameChild());
-		assertEquals( "somearray", ((Variable)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)4), ((Variable)node).getNameExpression());
+		assertEquals( "foo", ((Variable)node).getNameExpression().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(Variable.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((Variable)node2).getNameChild());
-		assertEquals( "foo", ((Variable)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((Variable)node2).getNameExpression());
 		
 		assertThat( node3, instanceOf(Variable.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((Variable)node3).getNameChild());
-		assertEquals( "bar", ((Variable)node3).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((Variable)node3).getNameExpression());
+		assertEquals( "bar", ((Variable)node3).getNameExpression().getEscapedCodeStr());
 	}
 	
 	/**
@@ -1893,12 +1897,12 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPGlobalStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPGlobalStatement)node).getVariable());
-		assertEquals( "bar", ((PHPGlobalStatement)node).getVariable().getNameChild().getEscapedCodeStr());
+		assertEquals( "bar", ((PHPGlobalStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
 		
 		assertThat( node2, instanceOf(PHPGlobalStatement.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((PHPGlobalStatement)node2).getVariable());
-		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameChild().getEscapedCodeStr());
+		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
 	}
 	
 	/**
@@ -2087,7 +2091,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPReferenceExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariable());
-		assertEquals( "someval", ((PHPReferenceExpression)node).getVariable().getNameChild().getEscapedCodeStr());
+		assertEquals( "someval", ((PHPReferenceExpression)node).getVariable().getNameExpression().getEscapedCodeStr());
 	}
 	
 	/**
@@ -2641,7 +2645,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(CallExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((CallExpression)node2).getTargetFunc());
-		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
 		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
 	}
@@ -3696,7 +3700,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(NewExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((NewExpression)node2).getTargetClass());
-		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameChild().getEscapedCodeStr());
+		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
 		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
 	}
@@ -3753,7 +3757,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(InstanceofExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((InstanceofExpression)node).getInstanceExpression());
-		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameChild().getEscapedCodeStr());
+		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassIdentifier());
 		assertEquals( "Foo", ((InstanceofExpression)node).getClassIdentifier().getNameChild().getEscapedCodeStr());
 		
@@ -3833,7 +3837,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)11), ((PHPYieldExpression)node2).getValue());
 		assertEquals( "bar", ((Identifier)((CallExpression)((PHPYieldExpression)node2).getValue()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)15), ((PHPYieldExpression)node2).getKey());
-		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameChild().getEscapedCodeStr());
+		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameExpression().getEscapedCodeStr());
 	}
 	
 	/**
@@ -4305,7 +4309,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPSwitchStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPSwitchStatement)node).getExpression());
-		assertEquals( "i", ((Variable)((PHPSwitchStatement)node).getExpression()).getNameChild().getEscapedCodeStr());
+		assertEquals( "i", ((Variable)((PHPSwitchStatement)node).getExpression()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((PHPSwitchStatement)node).getSwitchList());
 		assertEquals( 4, ((PHPSwitchStatement)node).getSwitchList().size());
 	}
@@ -5332,7 +5336,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(MethodCallExpression.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((MethodCallExpression)node).getTargetObject());
-		assertEquals( "buz", ((Variable)((MethodCallExpression)node).getTargetObject()).getNameChild().getEscapedCodeStr());
+		assertEquals( "buz", ((Variable)((MethodCallExpression)node).getTargetObject()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((MethodCallExpression)node).getTargetFunc());
 		assertEquals( "foo", ((MethodCallExpression)node).getTargetFunc().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)7), ((MethodCallExpression)node).getArgumentList());
@@ -5343,7 +5347,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((MethodCallExpression)node2).getTargetObject());
 		assertEquals( "buz", ((Identifier)((CallExpression)((MethodCallExpression)node2).getTargetObject()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)16), ((MethodCallExpression)node2).getTargetFunc());
-		assertEquals( "foo", ((Variable)((MethodCallExpression)node2).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( "foo", ((Variable)((MethodCallExpression)node2).getTargetFunc()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)18), ((MethodCallExpression)node2).getArgumentList());
 		assertEquals( 2, ((MethodCallExpression)node2).getArgumentList().size());
 	}
