@@ -1,8 +1,6 @@
 package ast.php.functionDef;
 
-import ast.functionDef.FunctionDef;
-
-public class Closure extends FunctionDef
+public class Closure extends PHPFunctionDef
 {
 	private ClosureUses closureUses = null;
 

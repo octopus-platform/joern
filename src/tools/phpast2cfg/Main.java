@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import ast.functionDef.FunctionDef;
+import ast.php.functionDef.PHPFunctionDef;
 import cfg.CFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
@@ -35,8 +35,8 @@ public class Main
 		extractor.setLanguage("PHP");
 		extractor.initialize(nodeFileReader, edgeFileReader);
 
-		FunctionDef funcAST;
-		while ((funcAST = extractor.getNextFunction()) != null)
+		PHPFunctionDef funcAST;
+		while ((funcAST = (PHPFunctionDef)extractor.getNextFunction()) != null)
 		{
 			CFG cfg = cfgFactory.newInstance(funcAST);
 		}

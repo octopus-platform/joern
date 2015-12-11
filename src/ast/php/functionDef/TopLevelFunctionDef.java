@@ -1,10 +1,9 @@
 package ast.php.functionDef;
 
 import ast.expressions.Identifier;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 
-public class TopLevelFunctionDef extends FunctionDef
+public class TopLevelFunctionDef extends PHPFunctionDef
 {
 	@Override
 	public ParameterList getParameterList()

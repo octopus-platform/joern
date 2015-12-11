@@ -8,8 +8,8 @@ import java.io.StringReader;
 
 import org.junit.Test;
 
-import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
+import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
 
@@ -20,14 +20,14 @@ public class TestCSV2AST
 	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
 	String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
 
-	private FunctionDef createASTFromStrings(String nodeStr, String edgeStr)
+	private PHPFunctionDef createASTFromStrings(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile
 	{
 		CSV2AST csv2AST = new CSV2AST();
 		StringReader nodeReader = new StringReader(nodeStr);
 		StringReader edgeReader = new StringReader(edgeStr);
 		csv2AST.setLanguage("PHP");
-		return csv2AST.convert(nodeReader, edgeReader);
+		return (PHPFunctionDef)csv2AST.convert(nodeReader, edgeReader);
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertTrue(func != null);
 	}
@@ -45,7 +45,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertEquals("foo", func.getName());
 	}
@@ -55,7 +55,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,,\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertEquals("", func.getName());
 	}
@@ -65,7 +65,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,6,bar,\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertEquals("bar", func.getName());
 		assertEquals("MODIFIER_PUBLIC", func.getFlags());
@@ -76,7 +76,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,36,bar,\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertEquals("bar", func.getName());
 		assertEquals(6, func.getLocation().startLine);
@@ -88,7 +88,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "3,AST_FUNC_DECL,,4,,0,1,4,foo,\"/** This is a doccomment */\"\n";
-		FunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
 		
 		assertEquals("foo", func.getName());
 		assertEquals("/** This is a doccomment */", func.getDocComment());
@@ -123,7 +123,7 @@ public class TestCSV2AST
 		edgeStr += "2,5,PARENT_OF\n";
 		edgeStr += "2,10,PARENT_OF\n";
 
-		FunctionDef func = createASTFromStrings(nodeStr, edgeStr);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeStr);
 		CompoundStatement content = func.getContent();
 
 		// TODO: well this is gonna look a lot nicer once we mapped all PHP AST constructs
@@ -161,7 +161,7 @@ public class TestCSV2AST
 		edgeStr += "2,5,PARENT_OF\n";
 		edgeStr += "2,10,PARENT_OF\n";
 
-		FunctionDef func = createASTFromStrings(nodeStr, edgeStr);
+		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeStr);
 		CompoundStatement content = func.getContent();
 
 		assertEquals(1, content.getChildCount());

@@ -39,7 +39,6 @@ import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
 import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
@@ -70,6 +69,7 @@ import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.PHPParameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
@@ -670,7 +670,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private static long handleFunction(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		FunctionDef newNode = new FunctionDef();
+		PHPFunctionDef newNode = new PHPFunctionDef();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

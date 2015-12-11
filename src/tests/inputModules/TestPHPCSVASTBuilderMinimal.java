@@ -15,7 +15,6 @@ import org.junit.Test;
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
 import ast.expressions.ConditionalExpression;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.PHPClassDef;
@@ -25,6 +24,7 @@ import ast.php.expressions.PHPListExpression;
 import ast.php.expressions.PHPYieldExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
+import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.PHPParameter;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
@@ -33,6 +33,7 @@ import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPUseTrait;
 import ast.php.statements.jump.PHPBreakStatement;
 import ast.php.statements.jump.PHPContinueStatement;
+import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.DoStatement;
@@ -117,9 +118,9 @@ public class TestPHPCSVASTBuilderMinimal
 
 		ASTNode node = ast.getNodeById((long)3);
 		
-		assertThat( node, instanceOf(FunctionDef.class));
+		assertThat( node, instanceOf(PHPFunctionDef.class));
 		assertEquals( 4, node.getChildCount());
-		assertNull( ((FunctionDef)node).getReturnType());
+		assertNull( ((PHPFunctionDef)node).getReturnType());
 	}
 
 	/**
@@ -407,12 +408,9 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node2, instanceOf(WhileStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertNull( ((WhileStatement)node2).getStatement());
-		// TODO find a way to consolidate setStatement(Statement) with an Expression
-		// the problem is that when a single statement is used in the body, this
-		// may very well be an expression statement, say, a CallExpression; but
-		// this cannot be cast to a Statement!
 		assertThat( ((WhileStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((WhileStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)10), ((ExpressionStatement)((WhileStatement)node2).getStatement()).getExpression());
 	}
 
 	/**
@@ -457,22 +455,22 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node2, instanceOf(DoStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertNull( ((DoStatement)node2).getStatement());
-		// TODO find a way to consolidate setStatement(Statement) with an Expression
-		// The problem is that when a single statement is used in the body, this
-		// may very well be an expression statement, say, a CallExpression; but
-		// this cannot be cast to a Statement!
 		assertThat( ((DoStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((DoStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)8), ((ExpressionStatement)((DoStatement)node2).getStatement()).getExpression());
 	}
 	
 	/**
 	 * if(true) ;
 	 * else ;
+	 * if(true) foo();
+	 * else bar();
 	 */
 	@Test
 	public void testMinimalIfElementCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_IF,,3,,0,1,,,\n";
 		nodeStr += "4,AST_IF_ELEM,,3,,0,1,,,\n";
 		nodeStr += "5,AST_CONST,,3,,0,1,,,\n";
@@ -482,6 +480,21 @@ public class TestPHPCSVASTBuilderMinimal
 		nodeStr += "9,AST_IF_ELEM,,4,,1,1,,,\n";
 		nodeStr += "10,NULL,,4,,0,1,,,\n";
 		nodeStr += "11,NULL,,4,,1,1,,,\n";
+		nodeStr += "12,AST_IF,,5,,1,1,,,\n";
+		nodeStr += "13,AST_IF_ELEM,,5,,0,1,,,\n";
+		nodeStr += "14,AST_CONST,,5,,0,1,,,\n";
+		nodeStr += "15,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "16,string,,5,\"true\",0,1,,,\n";
+		nodeStr += "17,AST_CALL,,5,,1,1,,,\n";
+		nodeStr += "18,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
+		nodeStr += "19,string,,5,\"foo\",0,1,,,\n";
+		nodeStr += "20,AST_ARG_LIST,,5,,1,1,,,\n";
+		nodeStr += "21,AST_IF_ELEM,,6,,1,1,,,\n";
+		nodeStr += "22,NULL,,6,,0,1,,,\n";
+		nodeStr += "23,AST_CALL,,6,,1,1,,,\n";
+		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
+		nodeStr += "25,string,,6,\"bar\",0,1,,,\n";
+		nodeStr += "26,AST_ARG_LIST,,6,,1,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "6,7,PARENT_OF\n";
@@ -492,11 +505,29 @@ public class TestPHPCSVASTBuilderMinimal
 		edgeStr += "9,10,PARENT_OF\n";
 		edgeStr += "9,11,PARENT_OF\n";
 		edgeStr += "3,9,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "15,16,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "18,19,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "17,20,PARENT_OF\n";
+		edgeStr += "13,17,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "21,22,PARENT_OF\n";
+		edgeStr += "24,25,PARENT_OF\n";
+		edgeStr += "23,24,PARENT_OF\n";
+		edgeStr += "23,26,PARENT_OF\n";
+		edgeStr += "21,23,PARENT_OF\n";
+		edgeStr += "12,21,PARENT_OF\n";
+		edgeStr += "2,12,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)4);
 		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)21);
 		
 		assertThat( node, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node.getChildCount());
@@ -506,11 +537,19 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 2, node2.getChildCount());
 		assertNull( ((PHPIfElement)node2).getCondition());
 		assertNull( ((PHPIfElement)node2).getStatement());
-		// TODO find a way to consolidate setStatement(Statement) with an Expression
-		// The problem is that when a single statement is used in the body, this
-		// may very well be an expression statement, say, a CallExpression; but
-		// this cannot be cast to a Statement!
-		assertThat( ((PHPIfElement)node).getStatement(), not(instanceOf(CompoundStatement.class)));
+		
+		assertThat( node3, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertThat( ((PHPIfElement)node3).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((PHPIfElement)node3).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)17), ((ExpressionStatement)((PHPIfElement)node3).getStatement()).getExpression());
+		
+		assertThat( node4, instanceOf(PHPIfElement.class));
+		assertEquals( 2, node4.getChildCount());
+		assertNull( ((PHPIfElement)node4).getCondition());
+		assertThat( ((PHPIfElement)node4).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((PHPIfElement)node4).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)23), ((ExpressionStatement)((PHPIfElement)node4).getStatement()).getExpression());
 	}
 	
 	/**
@@ -719,26 +758,46 @@ public class TestPHPCSVASTBuilderMinimal
 
 	/**
 	 * for (;;);
+	 * for (;;) foo();
 	 */
 	@Test
 	public void testMinimalForCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
 		nodeStr += "4,NULL,,3,,0,1,,,\n";
 		nodeStr += "5,NULL,,3,,1,1,,,\n";
 		nodeStr += "6,NULL,,3,,2,1,,,\n";
 		nodeStr += "7,NULL,,3,,3,1,,,\n";
+		nodeStr += "8,AST_FOR,,4,,1,1,,,\n";
+		nodeStr += "9,NULL,,4,,0,1,,,\n";
+		nodeStr += "10,NULL,,4,,1,1,,,\n";
+		nodeStr += "11,NULL,,4,,2,1,,,\n";
+		nodeStr += "12,AST_CALL,,4,,3,1,,,\n";
+		nodeStr += "13,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "14,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "15,AST_ARG_LIST,,4,,1,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "3,5,PARENT_OF\n";
 		edgeStr += "3,6,PARENT_OF\n";
 		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "8,10,PARENT_OF\n";
+		edgeStr += "8,11,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "12,15,PARENT_OF\n";
+		edgeStr += "8,12,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)8);
 
 		assertThat( node, instanceOf(ForStatement.class));
 		assertEquals( 4, node.getChildCount());
@@ -746,20 +805,26 @@ public class TestPHPCSVASTBuilderMinimal
 		assertNull( ((ForStatement)node).getCondition());
 		assertNull( ((ForStatement)node).getForLoopExpression());
 		assertNull( ((ForStatement)node).getStatement());
-		// TODO find a way to consolidate setStatement(Statement) with an Expression
-		// The problem is that when a single statement is used in the body, this
-		// may very well be an expression statement, say, a CallExpression; but
-		// this cannot be cast to a Statement!
-		assertThat( ((ForStatement)node).getStatement(), not(instanceOf(CompoundStatement.class)));
+
+		assertThat( node2, instanceOf(ForStatement.class));
+		assertEquals( 4, node2.getChildCount());
+		assertNull( ((ForStatement)node2).getForInitExpression());
+		assertNull( ((ForStatement)node2).getCondition());
+		assertNull( ((ForStatement)node2).getForLoopExpression());
+		assertThat( ((ForStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((ForStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)12), ((ExpressionStatement)((ForStatement)node2).getStatement()).getExpression());
 	}
 	
 	/**
 	 * foreach ($somearray as $foo);
+	 * foreach ($somearray as $foo) bar();
 	 */
 	@Test
 	public void testMinimalForEachCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
 		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
 		nodeStr += "5,string,,3,\"somearray\",0,1,,,\n";
@@ -767,6 +832,16 @@ public class TestPHPCSVASTBuilderMinimal
 		nodeStr += "7,string,,3,\"foo\",0,1,,,\n";
 		nodeStr += "8,NULL,,3,,2,1,,,\n";
 		nodeStr += "9,NULL,,3,,3,1,,,\n";
+		nodeStr += "10,AST_FOREACH,,4,,1,1,,,\n";
+		nodeStr += "11,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "12,string,,4,\"somearray\",0,1,,,\n";
+		nodeStr += "13,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "14,string,,4,\"foo\",0,1,,,\n";
+		nodeStr += "15,NULL,,4,,2,1,,,\n";
+		nodeStr += "16,AST_CALL,,4,,3,1,,,\n";
+		nodeStr += "17,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
+		nodeStr += "18,string,,4,\"bar\",0,1,,,\n";
+		nodeStr += "19,AST_ARG_LIST,,4,,1,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
@@ -775,20 +850,34 @@ public class TestPHPCSVASTBuilderMinimal
 		edgeStr += "3,6,PARENT_OF\n";
 		edgeStr += "3,8,PARENT_OF\n";
 		edgeStr += "3,9,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "10,15,PARENT_OF\n";
+		edgeStr += "17,18,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
+		edgeStr += "16,19,PARENT_OF\n";
+		edgeStr += "10,16,PARENT_OF\n";
+		edgeStr += "2,10,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)10);
 
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
 		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertNull( ((ForEachStatement)node).getStatement());
-		// TODO find a way to consolidate setStatement(Statement) with an Expression
-		// The problem is that when a single statement is used in the body, this
-		// may very well be an expression statement, say, a CallExpression; but
-		// this cannot be cast to a Statement!
-		assertThat( ((ForEachStatement)node).getStatement(), not(instanceOf(CompoundStatement.class)));
+		
+		assertThat( node2, instanceOf(ForEachStatement.class));
+		assertEquals( 4, node2.getChildCount());
+		assertNull( ((ForEachStatement)node2).getKeyVariable());
+		assertThat( ((ForEachStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((ForEachStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)16), ((ExpressionStatement)((ForEachStatement)node2).getStatement()).getExpression());
 	}
 
 
