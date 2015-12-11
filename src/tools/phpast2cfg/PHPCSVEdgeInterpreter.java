@@ -1999,8 +1999,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // class child: Expression node
 				startNode.setTargetClass((Expression)endNode);
 				break;
-			case 1: // method child: StringExpression node
-				startNode.setTargetFunc((StringExpression)endNode);
+			case 1: // method child: Expression node
+				startNode.setTargetFunc((Expression)endNode);
 				break;
 			case 2: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);

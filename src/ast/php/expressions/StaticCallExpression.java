@@ -2,7 +2,6 @@ package ast.php.expressions;
 
 import ast.expressions.CallExpression;
 import ast.expressions.Expression;
-import ast.expressions.StringExpression;
 
 public class StaticCallExpression extends CallExpression
 {
@@ -17,11 +16,5 @@ public class StaticCallExpression extends CallExpression
 	{
 		this.targetClass = targetClass;
 		super.addChild(targetClass);
-	}
-	
-	@Override
-	public StringExpression getTargetFunc()
-	{
-		return (StringExpression)super.getTargetFunc();
 	}
 }

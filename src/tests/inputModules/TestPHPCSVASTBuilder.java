@@ -5375,7 +5375,7 @@ public class TestPHPCSVASTBuilder
 	 * This test checks a few static call expressions' children in the following PHP code:
 	 * 
 	 * Foo::bar($buz);
-	 * $qux::norf();
+	 * $qux::{norf[42]}();
 	 */
 	@Test
 	public void testStaticCallCreation() throws IOException, InvalidCSVFile
@@ -5392,8 +5392,11 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "10,AST_STATIC_CALL,,4,,1,1,,,\n";
 		nodeStr += "11,AST_VAR,,4,,0,1,,,\n";
 		nodeStr += "12,string,,4,\"qux\",0,1,,,\n";
-		nodeStr += "13,string,,4,\"norf\",1,1,,,\n";
-		nodeStr += "14,AST_ARG_LIST,,4,,2,1,,,\n";
+		nodeStr += "13,AST_DIM,,4,,1,1,,,\n";
+		nodeStr += "14,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "15,string,,4,\"norf\",0,1,,,\n";
+		nodeStr += "16,integer,,4,42,1,1,,,\n";
+		nodeStr += "17,AST_ARG_LIST,,4,,2,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
@@ -5405,8 +5408,11 @@ public class TestPHPCSVASTBuilder
 		edgeStr += "2,3,PARENT_OF\n";
 		edgeStr += "11,12,PARENT_OF\n";
 		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "14,15,PARENT_OF\n";
+		edgeStr += "13,14,PARENT_OF\n";
+		edgeStr += "13,16,PARENT_OF\n";
 		edgeStr += "10,13,PARENT_OF\n";
-		edgeStr += "10,14,PARENT_OF\n";
+		edgeStr += "10,17,PARENT_OF\n";
 		edgeStr += "2,10,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
@@ -5427,8 +5433,8 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)11), ((StaticCallExpression)node2).getTargetClass());
 		assertEquals( "qux", ((StringExpression)((Variable)((StaticCallExpression)node2).getTargetClass()).getNameExpression()).getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((StaticCallExpression)node2).getTargetFunc());
-		assertEquals( "norf", ((StaticCallExpression)node2).getTargetFunc().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)14), ((StaticCallExpression)node2).getArgumentList());
+		assertEquals( "norf", ((Variable)((ArrayIndexing)((StaticCallExpression)node2).getTargetFunc()).getArrayExpression()).getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)17), ((StaticCallExpression)node2).getArgumentList());
 	}
 	
 	/**
