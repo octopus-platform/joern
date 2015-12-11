@@ -208,7 +208,7 @@ public class CSVFunctionExtractor
 			for( CSVAST csvAST : csvNodeIds.keySet()) {
 				Set<String> nodeSet = csvNodeIds.get(csvAST);
 				if( nodeSet.contains(startId) && nodeSet.contains(endId))
-					csvAST.addEdgeRow(currEdgeRow.toString());
+					csvAST.addEdgeRow(currEdgeRow);
 			}
 		}
 		
@@ -248,8 +248,6 @@ public class CSVFunctionExtractor
 	private void initCSVAST(String functionNodeId)
 	{
 		CSVAST csvAST = new CSVAST();
-		csvAST.addNodeRow(nodeReader.getKeyRow());
-		csvAST.addEdgeRow(edgeReader.getKeyRow());
 		csvStack.push(csvAST);
 		funcIdStack.push(functionNodeId);
 	}
@@ -265,7 +263,7 @@ public class CSVFunctionExtractor
 
 		// add row to CSVAST on top of stack
 		CSVAST csvAST = csvStack.peek();
-		csvAST.addNodeRow( currNodeRow.toString());
+		csvAST.addNodeRow( currNodeRow);
 
 		// add id to list of ids of the CSVAST on top of stack
 		String currId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);

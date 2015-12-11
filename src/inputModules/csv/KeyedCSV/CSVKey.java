@@ -51,4 +51,9 @@ public class CSVKey
 	public int hashCode() {
 		return Objects.hash(this.name, this.type);
 	}
+	
+	@Override
+	public String toString() {
+		return this.name + ":" + this.type;
+	}
 }
