@@ -543,8 +543,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 0: // stmts child: either CompoundStatement or NULL
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setContent((CompoundStatement)endNode);
 				break;
 				
 			default:

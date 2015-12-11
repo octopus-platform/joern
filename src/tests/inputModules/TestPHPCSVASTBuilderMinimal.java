@@ -26,6 +26,7 @@ import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.PHPParameter;
+import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
@@ -95,6 +96,28 @@ public class TestPHPCSVASTBuilderMinimal
 
 	/* declaration nodes */	
 
+	/**
+	 * <empty file>
+	 */
+	@Test
+	public void testMinimalTopLevelFunctionDefCreation() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = nodeHeader;
+		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,0,\"foo.php\",\n";
+		nodeStr += "2,NULL,,0,,0,1,,,\n";
+
+		String edgeStr = edgeHeader;
+		edgeStr += "1,2,PARENT_OF\n";
+		
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)1);
+		
+		assertThat( node, instanceOf(TopLevelFunctionDef.class));
+		assertEquals( 1, node.getChildCount());
+		assertNull( ((TopLevelFunctionDef)node).getContent());
+	}
+	
 	/**
 	 * function foo() {}
 	 */
@@ -961,7 +984,7 @@ public class TestPHPCSVASTBuilderMinimal
 	}
 	
 	/**
-	 * <empty file>
+	 * <?php
 	 */
 	@Test
 	public void testMinimalCompoundStatementCreation() throws IOException, InvalidCSVFile
