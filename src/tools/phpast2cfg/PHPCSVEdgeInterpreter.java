@@ -40,6 +40,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
@@ -129,6 +130,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		//int childnum = Integer.parseInt(row.getFieldForKey(PHPCSVEdgeTypes.CHILDNUM));
 		int childnum = Integer.parseInt(endNode.getProperty(PHPCSVNodeTypes.CHILDNUM.getName()));
 
+		// Special treatment for closures: they are expressions, so we create a ClosureExpression to hold them
+		// We cannot do this in the PHPCSVNodeInterpreter, since CSV2AST expects an instance of PHPFunctionDef
+		// for the first row of the CSVAST that it converts. (Closure is an instance of PHPFunctionDef and thus
+		// cannot be an instance of Expression.)
+		if( endNode instanceof Closure) {
+			ClosureExpression closureExpression = new ClosureExpression();
+			closureExpression.setClosure((Closure)endNode);
+			endNode = closureExpression;
+		}
+		
 		int errno = 0;
 		String type = startNode.getProperty(PHPCSVNodeTypes.TYPE.getName());
 		switch (type)

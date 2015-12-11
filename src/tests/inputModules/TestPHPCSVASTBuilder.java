@@ -51,6 +51,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
@@ -420,43 +421,60 @@ public class TestPHPCSVASTBuilder
 	 * 
 	 * This test checks a closure's pseudo-name and children in the following PHP code:
 	 * 
-	 * function() use ($foo) : int {};
+	 * $a = function() use ($foo) : int {};
+	 * 
+	 * It also checks that a ClosureExpression holding the Closure is created.
 	 */
 	@Test
 	public void testClosureCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;	
-		nodeStr += "3,AST_CLOSURE,,3,,0,1,3,{closure},\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,AST_CLOSURE_USES,,3,,1,3,,,\n";
-		nodeStr += "6,AST_CLOSURE_VAR,,3,,0,3,,,\n";
-		nodeStr += "7,string,,3,\"foo\",0,3,,,\n";
-		nodeStr += "8,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,3,,3,3,,,\n";
-		nodeStr += "10,string,,3,\"int\",0,3,,,\n";
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
+		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
+		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
+		nodeStr += "5,string,,3,\"a\",0,1,,,\n";
+		nodeStr += "6,AST_CLOSURE,,3,,1,1,3,{closure},\n";
+		nodeStr += "7,AST_PARAM_LIST,,3,,0,6,,,\n";
+		nodeStr += "8,AST_CLOSURE_USES,,3,,1,6,,,\n";
+		nodeStr += "9,AST_CLOSURE_VAR,,3,,0,6,,,\n";
+		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
+		nodeStr += "11,AST_STMT_LIST,,3,,2,6,,,\n";
+		nodeStr += "12,AST_NAME,NAME_NOT_FQ,3,,3,6,,,\n";
+		nodeStr += "13,string,,3,\"int\",0,6,,,\n";
 
 		String edgeStr = edgeHeader;
+		edgeStr += "4,5,PARENT_OF\n";
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
 		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "3,9,PARENT_OF\n";
+		edgeStr += "8,9,PARENT_OF\n";
+		edgeStr += "6,8,PARENT_OF\n";
+		edgeStr += "6,11,PARENT_OF\n";
+		edgeStr += "12,13,PARENT_OF\n";
+		edgeStr += "6,12,PARENT_OF\n";
+		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((Closure)node).getParameterList());
-		assertEquals( ast.getNodeById((long)5), ((Closure)node).getClosureUses());
-		assertEquals( ast.getNodeById((long)8), ((Closure)node).getContent());
-		assertEquals( ast.getNodeById((long)9), ((Closure)node).getReturnType());
-		assertEquals( ast.getNodeById((long)10), ((Closure)node).getReturnType().getNameChild());
+		assertEquals( ast.getNodeById((long)7), ((Closure)node).getParameterList());
+		assertEquals( ast.getNodeById((long)8), ((Closure)node).getClosureUses());
+		assertEquals( ast.getNodeById((long)11), ((Closure)node).getContent());
+		assertEquals( ast.getNodeById((long)12), ((Closure)node).getReturnType());
+		assertEquals( ast.getNodeById((long)13), ((Closure)node).getReturnType().getNameChild());
 		assertEquals( "int", ((Closure)node).getReturnType().getNameChild().getEscapedCodeStr());
+		
+		// special test for the artificial ClosureExpression node:
+		ASTNode node2 = ast.getNodeById((long)3);
+		assertThat( node2, instanceOf(AssignmentExpression.class));
+		ASTNode node3 = ((AssignmentExpression)node2).getRight();
+		assertThat( node3, instanceOf(ClosureExpression.class));
+		assertEquals( node, ((ClosureExpression)node3).getClosure());
 	}
 	
 	/**
