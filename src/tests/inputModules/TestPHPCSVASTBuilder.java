@@ -5356,26 +5356,33 @@ public class TestPHPCSVASTBuilder
 	 * AST_STATIC_CALL nodes are used to denote static call expressions.
 	 * 
 	 * Any AST_STATIC_CALL node has exactly 3 children:
-	 * 1) AST_NAME, representing the class name that the static target method belongs to
+	 * 1) an expression, whose evaluation holds the class name that the static target method belongs to
+	 *    (e.g., could be AST_NAME, AST_VAR, etc...)
 	 * 2) a "string" node, representing the static method's name within the class
 	 * 3) AST_ARG_LIST, representing the argument list
 	 * 
-	 * This test checks a static call expression's children in the following PHP code:
+	 * This test checks a few static call expressions' children in the following PHP code:
 	 * 
-	 * Buz::foo($bar, "yabadabadoo");
+	 * Foo::bar($buz);
+	 * $qux::norf();
 	 */
 	@Test
 	public void testStaticCallCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_STATIC_CALL,,3,,0,1,,,\n";
 		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"Buz\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"foo\",1,1,,,\n";
+		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
 		nodeStr += "7,AST_ARG_LIST,,3,,2,1,,,\n";
 		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "9,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "10,string,,3,\"yabadabadoo\",1,1,,,\n";
+		nodeStr += "9,string,,3,\"buz\",0,1,,,\n";
+		nodeStr += "10,AST_STATIC_CALL,,4,,1,1,,,\n";
+		nodeStr += "11,AST_VAR,,4,,0,1,,,\n";
+		nodeStr += "12,string,,4,\"qux\",0,1,,,\n";
+		nodeStr += "13,string,,4,\"norf\",1,1,,,\n";
+		nodeStr += "14,AST_ARG_LIST,,4,,2,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
@@ -5383,21 +5390,34 @@ public class TestPHPCSVASTBuilder
 		edgeStr += "3,6,PARENT_OF\n";
 		edgeStr += "8,9,PARENT_OF\n";
 		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
 		edgeStr += "3,7,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
+		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "10,11,PARENT_OF\n";
+		edgeStr += "10,13,PARENT_OF\n";
+		edgeStr += "10,14,PARENT_OF\n";
+		edgeStr += "2,10,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-		
+		ASTNode node2 = ast.getNodeById((long)10);
+
 		assertThat( node, instanceOf(StaticCallExpression.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((StaticCallExpression)node).getTargetClass());
-		assertEquals( "Buz", ((StaticCallExpression)node).getTargetClass().getNameChild().getEscapedCodeStr());
+		assertEquals( "Foo", ((Identifier)((StaticCallExpression)node).getTargetClass()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTargetFunc());
-		assertEquals( "foo", ((StaticCallExpression)node).getTargetFunc().getEscapedCodeStr());
+		assertEquals( "bar", ((StaticCallExpression)node).getTargetFunc().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getArgumentList());
-		assertEquals( 2, ((StaticCallExpression)node).getArgumentList().size());
+		
+		assertThat( node2, instanceOf(StaticCallExpression.class));
+		assertEquals( 3, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)11), ((StaticCallExpression)node2).getTargetClass());
+		assertEquals( "qux", ((StringExpression)((Variable)((StaticCallExpression)node2).getTargetClass()).getNameExpression()).getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((StaticCallExpression)node2).getTargetFunc());
+		assertEquals( "norf", ((StaticCallExpression)node2).getTargetFunc().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((StaticCallExpression)node2).getArgumentList());
 	}
 	
 	/**
