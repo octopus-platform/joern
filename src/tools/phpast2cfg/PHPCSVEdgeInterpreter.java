@@ -27,7 +27,6 @@ import ast.expressions.PostDecOperationExpression;
 import ast.expressions.PostIncOperationExpression;
 import ast.expressions.PreDecOperationExpression;
 import ast.expressions.PreIncOperationExpression;
-import ast.expressions.PrimaryExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.StringExpression;
@@ -1721,11 +1720,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // value child: PrimaryExpression or null node
+			case 0: // value child: Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
 				else
-					startNode.setValue((PrimaryExpression)endNode);
+					startNode.setValue((Expression)endNode);
 				break;
 			case 1: // stmts child: CompoundStatement node
 				startNode.setStatement((CompoundStatement)endNode);

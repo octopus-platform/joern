@@ -4313,8 +4313,9 @@ public class TestPHPCSVASTBuilder
 	 * a statement list; see description of AST_SWITCH_LIST and AST_SWITCH for the bigger picture.
 	 * 
 	 * Any AST_SWITCH_CASE node has exactly two children:
-	 * 1) a plain node or NULL, representing the value in the switch element's guard,
+	 * 1) an Expression or NULL, representing the value in the switch element's guard,
 	 *    NULL is used when there is no such value, i.e., in "default" switch-elements.
+	 *    (e.g., could be integer, double, string, AST_CONST, AST_CLASS_CONST, ...)
 	 * 2) AST_STMT_LIST, representing the code in the switch element's body
 	 * 
 	 * This test checks a few switch-elements' children in the following PHP code:
