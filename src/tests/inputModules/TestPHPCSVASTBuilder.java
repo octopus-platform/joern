@@ -3712,42 +3712,46 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_INSTANCEOF node has exactly 2 children:
 	 * 1) an expression, whose evaluation holds the object to be checked
 	 *    (e.g., could be AST_VAR, AST_CALL, ...)
-	 * 2) AST_NAME, representing the name of the class that the object
-	 *    may or may not be an instance of.
+	 * 2) an expression, whose evaluation holds the name of the class that the object
+	 *    may or may not be an instance of
+	 *    (e.g., could be AST_NAME, AST_VAR, ...)
 	 * 
 	 * This test checks a few instanceof expressions' children in the following PHP code:
 	 * 
-	 * $foo instanceof Foo;
-	 * buz() instanceof Bar\Buz;
+	 * $foo instanceof Bar;
+	 * buz() instanceof $qux;
 	 */
 	@Test
 	public void testInstanceofCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_INSTANCEOF,,3,,0,1,,,\n";
 		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
 		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
 		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"Foo\",0,1,,,\n";
+		nodeStr += "7,string,,3,\"Bar\",0,1,,,\n";
 		nodeStr += "8,AST_INSTANCEOF,,4,,1,1,,,\n";
 		nodeStr += "9,AST_CALL,,4,,0,1,,,\n";
 		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
 		nodeStr += "11,string,,4,\"buz\",0,1,,,\n";
 		nodeStr += "12,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "13,AST_NAME,NAME_NOT_FQ,4,,1,1,,,\n";
-		nodeStr += "14,string,,4,\"Bar\\Buz\",0,1,,,\n";
+		nodeStr += "13,AST_VAR,,4,,1,1,,,\n";
+		nodeStr += "14,string,,4,\"qux\",0,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "6,7,PARENT_OF\n";
 		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
 		edgeStr += "10,11,PARENT_OF\n";
 		edgeStr += "9,10,PARENT_OF\n";
 		edgeStr += "9,12,PARENT_OF\n";
 		edgeStr += "8,9,PARENT_OF\n";
 		edgeStr += "13,14,PARENT_OF\n";
 		edgeStr += "8,13,PARENT_OF\n";
+		edgeStr += "2,8,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
@@ -3758,15 +3762,15 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((InstanceofExpression)node).getInstanceExpression());
 		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassIdentifier());
-		assertEquals( "Foo", ((InstanceofExpression)node).getClassIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassExpression());
+		assertEquals( "Bar", ((Identifier)((InstanceofExpression)node).getClassExpression()).getNameChild().getEscapedCodeStr());
 		
 		assertThat( node2, instanceOf(InstanceofExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((InstanceofExpression)node2).getInstanceExpression());
 		assertEquals( "buz", ((Identifier)((CallExpression)((InstanceofExpression)node2).getInstanceExpression()).getTargetFunc()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassIdentifier());
-		assertEquals( "Bar\\Buz", ((InstanceofExpression)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassExpression());
+		assertEquals( "qux", ((Variable)((InstanceofExpression)node2).getClassExpression()).getNameExpression().getEscapedCodeStr());
 	}
 	
 	/**
