@@ -3,7 +3,7 @@ package ast.expressions;
 public class PropertyExpression extends MemberAccess
 {
 	private Expression objectExpression = null;
-	private Expression propertyName = null;
+	private Expression propertyExpression = null;
 
 	public Expression getObjectExpression()
 	{
@@ -16,14 +16,14 @@ public class PropertyExpression extends MemberAccess
 		super.addChild(objectExpression);
 	}
 	
-	public Expression getPropertyName()
+	public Expression getPropertyExpression()
 	{
-		return this.propertyName;
+		return this.propertyExpression;
 	}
 
-	public void setPropertyName(Expression propertyName)
+	public void setPropertyExpression(Expression propertyExpression)
 	{
-		this.propertyName = propertyName;
-		super.addChild(propertyName);
+		this.propertyExpression = propertyExpression;
+		super.addChild(propertyExpression);
 	}
 }

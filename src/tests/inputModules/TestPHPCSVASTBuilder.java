@@ -2512,12 +2512,12 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PropertyExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PropertyExpression)node).getObjectExpression());
-		assertEquals( ast.getNodeById((long)6), ((PropertyExpression)node).getPropertyName());
+		assertEquals( ast.getNodeById((long)6), ((PropertyExpression)node).getPropertyExpression());
 
 		assertThat( node2, instanceOf(PropertyExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PropertyExpression)node2).getObjectExpression());
-		assertEquals( ast.getNodeById((long)12), ((PropertyExpression)node2).getPropertyName());
+		assertEquals( ast.getNodeById((long)12), ((PropertyExpression)node2).getPropertyExpression());
 	}
 	
 	/**
@@ -2526,18 +2526,20 @@ public class TestPHPCSVASTBuilder
 	 * Any AST_STATIC_PROP node has exactly two children:
 	 * 1) an expression, whose evaluation returns the class to be accessed
 	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
-	 * 2) a string, representing the property name
+	 * 2) an expression, whose evaluation holds the property name
+	 * 	  (e.g., could be AST_NAME, AST_VAR, etc...)
 	 * 
 	 * This test checks a few static property access expressions' children in the following PHP code:
 	 * 
 	 * Foo::$bar;
 	 * $foo::$bar;
-	 * buz()::$qux;
+	 * buz()::$$qux;
 	 */
 	@Test
 	public void testStaticPropertyCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
+		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_STATIC_PROP,,3,,0,1,,,\n";
 		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
 		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
@@ -2551,20 +2553,25 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
 		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
 		nodeStr += "15,AST_ARG_LIST,,5,,1,1,,,\n";
-		nodeStr += "16,string,,5,\"qux\",1,1,,,\n";
+		nodeStr += "16,AST_VAR,,5,,1,1,,,\n";
+		nodeStr += "17,string,,5,\"qux\",0,1,,,\n";
 
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "3,6,PARENT_OF\n";
+		edgeStr += "2,3,PARENT_OF\n";
 		edgeStr += "8,9,PARENT_OF\n";
 		edgeStr += "7,8,PARENT_OF\n";
 		edgeStr += "7,10,PARENT_OF\n";
+		edgeStr += "2,7,PARENT_OF\n";
 		edgeStr += "13,14,PARENT_OF\n";
 		edgeStr += "12,13,PARENT_OF\n";
 		edgeStr += "12,15,PARENT_OF\n";
 		edgeStr += "11,12,PARENT_OF\n";
+		edgeStr += "16,17,PARENT_OF\n";
 		edgeStr += "11,16,PARENT_OF\n";
+		edgeStr += "2,11,PARENT_OF\n";
 
 		handle(nodeStr, edgeStr);
 
@@ -2575,17 +2582,17 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((StaticPropertyExpression)node).getClassExpression());
-		assertEquals( ast.getNodeById((long)6), ((StaticPropertyExpression)node).getPropertyName());
+		assertEquals( ast.getNodeById((long)6), ((StaticPropertyExpression)node).getPropertyExpression());
 
 		assertThat( node2, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((StaticPropertyExpression)node2).getClassExpression());
-		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyName());
+		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyExpression());
 		
 		assertThat( node3, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
-		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyName());
+		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyExpression());
 	}
 	
 	/**
