@@ -1,27 +1,20 @@
 package ast.php.expressions;
 
 import ast.expressions.CallExpression;
-import ast.expressions.Identifier;
-import ast.expressions.StringExpression;
+import ast.expressions.Expression;
 
 public class StaticCallExpression extends CallExpression
 {
-	private Identifier targetClass = null;
+	private Expression targetClass = null;
 	
-	public Identifier getTargetClass()
+	public Expression getTargetClass()
 	{
 		return this.targetClass;
 	}
 	
-	public void setTargetClass(Identifier targetClass)
+	public void setTargetClass(Expression targetClass)
 	{
 		this.targetClass = targetClass;
 		super.addChild(targetClass);
-	}
-	
-	@Override
-	public StringExpression getTargetFunc()
-	{
-		return (StringExpression)super.getTargetFunc();
 	}
 }

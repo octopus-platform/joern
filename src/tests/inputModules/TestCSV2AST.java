@@ -168,6 +168,15 @@ public class TestCSV2AST
 	}
 
 	/**
+	 * An invalid CSV file that is empty.
+	 */
+	@Test(expected=InvalidCSVFile.class)
+	public void testInvalidCSVEmpty() throws IOException, InvalidCSVFile
+	{
+		createASTFromStrings(nodeHeader, edgeHeader);
+	}
+	
+	/**
 	 * An invalid CSV file that does not start with a function declaration.
 	 */
 	@Test(expected=InvalidCSVFile.class)

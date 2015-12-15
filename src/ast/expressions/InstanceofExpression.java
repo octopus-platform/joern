@@ -3,7 +3,7 @@ package ast.expressions;
 public class InstanceofExpression extends Expression
 {
 	Expression instanceExpression = null;
-	Identifier classIdentifier = null;
+	Expression classExpression = null;
 
 	public Expression getInstanceExpression()
 	{
@@ -16,14 +16,14 @@ public class InstanceofExpression extends Expression
 		super.addChild(instanceExpression);
 	}
 	
-	public Identifier getClassIdentifier()
+	public Expression getClassExpression()
 	{
-		return this.classIdentifier;
+		return this.classExpression;
 	}
 
-	public void setClassIdentifier(Identifier classIdentifier)
+	public void setClassExpression(Expression classExpression)
 	{
-		this.classIdentifier = classIdentifier;
-		super.addChild(classIdentifier);
+		this.classExpression = classExpression;
+		super.addChild(classExpression);
 	}
 }

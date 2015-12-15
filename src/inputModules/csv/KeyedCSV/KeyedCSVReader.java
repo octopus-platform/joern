@@ -15,7 +15,6 @@ public class KeyedCSVReader
 	private CSVParser parser;
 	private Iterator<CSVRecord> iterator;
 	private int currentLineNumber;
-	private String keyRow;
 
 	public void init(Reader reader) throws IOException
 	{
@@ -29,18 +28,13 @@ public class KeyedCSVReader
 		iterator = parser.iterator();
 		CSVRecord header = iterator.next();
 
-		keyRow = "";
 		keys = new CSVKey[header.size()];
 
 		for (int i = 0; i < header.size(); i++)
 		{
 			String field = header.get(i);
 			keys[i] = createKeyFromFields(field);
-			keyRow += field;
-			if( i < header.size() - 1)
-				keyRow += ",";
 		}
-
 	}
 
 	private CSVKey createKeyFromFields(String field)
@@ -64,7 +58,7 @@ public class KeyedCSVReader
 		{
 			return null;
 		}
-
+		
 		currentLineNumber++;
 		KeyedCSVRow keyedRow = new KeyedCSVRow(keys);
 		keyedRow.initFromCSVRecord(record);
@@ -91,10 +85,4 @@ public class KeyedCSVReader
 	{
 		return keys;
 	}
-
-	public String getKeyRow()
-	{
-		return keyRow;
-	}
-
 }

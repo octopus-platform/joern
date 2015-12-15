@@ -27,7 +27,6 @@ import ast.expressions.PostDecOperationExpression;
 import ast.expressions.PostIncOperationExpression;
 import ast.expressions.PreDecOperationExpression;
 import ast.expressions.PreIncOperationExpression;
-import ast.expressions.PrimaryExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.StringExpression;
@@ -40,6 +39,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
 import ast.php.expressions.PHPArrayExpression;
@@ -129,6 +129,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		//int childnum = Integer.parseInt(row.getFieldForKey(PHPCSVEdgeTypes.CHILDNUM));
 		int childnum = Integer.parseInt(endNode.getProperty(PHPCSVNodeTypes.CHILDNUM.getName()));
 
+		// Special treatment for closures: they are expressions, so we create a ClosureExpression to hold them
+		// We cannot do this in the PHPCSVNodeInterpreter, since CSV2AST expects an instance of PHPFunctionDef
+		// for the first row of the CSVAST that it converts. (Closure is an instance of PHPFunctionDef and thus
+		// cannot be an instance of Expression.)
+		if( endNode instanceof Closure) {
+			ClosureExpression closureExpression = new ClosureExpression();
+			closureExpression.setClosure((Closure)endNode);
+			endNode = closureExpression;
+		}
+		
 		int errno = 0;
 		String type = startNode.getProperty(PHPCSVNodeTypes.TYPE.getName());
 		switch (type)
@@ -533,8 +543,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // stmts child
-				startNode.setContent((CompoundStatement)endNode);
+			case 0: // stmts child: either CompoundStatement or NULL
+				if( endNode instanceof NullNode)
+					startNode.addChild((NullNode)endNode);
+				else
+					startNode.setContent((CompoundStatement)endNode);
 				break;
 				
 			default:
@@ -676,7 +689,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child
-				startNode.setNameChild((StringExpression)endNode);
+				startNode.setNameExpression((Expression)endNode);
 				break;
 				
 			default:
@@ -1243,8 +1256,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // expr child: Expression node
 				startNode.setObjectExpression((Expression)endNode);
 				break;
-			case 1: // prop child: StringExpression node
-				startNode.setPropertyName((StringExpression)endNode);
+			case 1: // prop child: Expression node
+				startNode.setPropertyExpression((Expression)endNode);
 				break;
 
 			default:
@@ -1263,8 +1276,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // class child: Expression node
 				startNode.setClassExpression((Expression)endNode);
 				break;
-			case 1: // prop child: StringExpression node
-				startNode.setPropertyName((StringExpression)endNode);
+			case 1: // prop child: Expression node
+				startNode.setPropertyExpression((Expression)endNode);
 				break;
 
 			default:
@@ -1526,8 +1539,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // expr child: Expression node
 				startNode.setInstanceExpression((Expression)endNode);
 				break;
-			case 1: // class child: Identifier node
-				startNode.setClassIdentifier((Identifier)endNode);
+			case 1: // class child: Expression node
+				startNode.setClassExpression((Expression)endNode);
 				break;
 
 			default:
@@ -1710,11 +1723,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // value child: PrimaryExpression or null node
+			case 0: // value child: Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild((NullNode)endNode);
 				else
-					startNode.setValue((PrimaryExpression)endNode);
+					startNode.setValue((Expression)endNode);
 				break;
 			case 1: // stmts child: CompoundStatement node
 				startNode.setStatement((CompoundStatement)endNode);
@@ -1983,11 +1996,11 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // class child: Identifier node
-				startNode.setTargetClass((Identifier)endNode);
+			case 0: // class child: Expression node
+				startNode.setTargetClass((Expression)endNode);
 				break;
-			case 1: // method child: StringExpression node
-				startNode.setTargetFunc((StringExpression)endNode);
+			case 1: // method child: Expression node
+				startNode.setTargetFunc((Expression)endNode);
 				break;
 			case 2: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);

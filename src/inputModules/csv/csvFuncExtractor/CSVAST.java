@@ -1,39 +1,43 @@
 package inputModules.csv.csvFuncExtractor;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import inputModules.csv.KeyedCSV.KeyedCSVRow;
 
 public class CSVAST
 {
 
-	List<String> nodeRows = new LinkedList<String>();
-	List<String> edgeRows = new LinkedList<String>();
+	List<KeyedCSVRow> nodeRows = new LinkedList<KeyedCSVRow>();
+	List<KeyedCSVRow> edgeRows = new LinkedList<KeyedCSVRow>();
 
-	public void addNodeRow(String str)
+	public void addNodeRow(KeyedCSVRow row)
 	{
-		nodeRows.add(str);
+		this.nodeRows.add(row);
 	}
 
-	public void addEdgeRow(String str)
+	public void addEdgeRow(KeyedCSVRow row)
 	{
-		edgeRows.add(str);
+		this.edgeRows.add(row);
 	}
-
-	public String getNodesAsString()
-	{
-		return StringUtils.join(nodeRows, "\n");
+	
+	public Iterator<KeyedCSVRow> nodeIterator() {
+		return this.nodeRows.iterator();
 	}
-
-	public String getEdgesAsString()
-	{
-		return StringUtils.join(edgeRows, "\n");
+	
+	public Iterator<KeyedCSVRow> edgeIterator() {
+		return this.edgeRows.iterator();
 	}
 
 	public int getNumberOfNodes()
 	{
-		return nodeRows.size() - 1;
+		return this.nodeRows.size();
+	}
+	
+	public int getNumberOfEdges()
+	{
+		return this.edgeRows.size();
 	}
 
 }
