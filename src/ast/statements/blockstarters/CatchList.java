@@ -10,6 +10,11 @@ public class CatchList extends ASTNode implements Iterable<CatchStatement>
 	
 	private LinkedList<CatchStatement> catchStatements = new LinkedList<CatchStatement>();
 
+	public String getEscapedCodeStr()
+	{
+		return "";
+	}
+
 	public int size()
 	{
 		return this.catchStatements.size();

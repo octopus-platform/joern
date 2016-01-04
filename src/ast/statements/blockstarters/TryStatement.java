@@ -7,7 +7,7 @@ import ast.walking.ASTNodeVisitor;
 public class TryStatement extends BlockStarter
 {
 	private CompoundStatement content = null;
-	private CatchList catchList = new CatchList();
+	private CatchList catchList;
 	private CompoundStatement finallyContent = null;
 	
 	public CompoundStatement getContent()

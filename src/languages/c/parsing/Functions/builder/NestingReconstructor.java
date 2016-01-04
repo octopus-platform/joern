@@ -7,6 +7,7 @@ import ast.expressions.Expression;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionHolder;
+import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ElseStatement;
@@ -132,6 +133,8 @@ public class NestingReconstructor
 					TryStatement tryStatement = (TryStatement) stack.getTry();
 					if (tryStatement != null)
 					{
+						CatchList catchList = tryStatement.getCatchList();
+						if(catchList == null) tryStatement.setCatchList(new CatchList());
 						tryStatement.getCatchList()
 								.addCatchStatement((CatchStatement) curBlockStarter);
 					} else
