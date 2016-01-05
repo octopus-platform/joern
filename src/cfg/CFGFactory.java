@@ -32,7 +32,7 @@ import cfg.nodes.InfiniteForNode;
 
 public class CFGFactory
 {
-	protected static StructuredFlowVisitor structuredFlowVisitor;
+	private static StructuredFlowVisitor structuredFlowVisitior = new StructuredFlowVisitor();
 
 	public CFG newInstance(FunctionDef functionDefinition)
 	{
@@ -110,8 +110,8 @@ public class CFGFactory
 		if (node == null)
 			return newInstance();
 
-		node.accept(structuredFlowVisitor);
-		return structuredFlowVisitor.getCFG();
+		node.accept(structuredFlowVisitior);
+		return structuredFlowVisitior.getCFG();
 	}
 
 	public static void fixBreakStatements(CFG thisCFG, CFGNode target)
@@ -459,7 +459,6 @@ public class CFGFactory
 		try
 		{
 			CFG compoundBlock = newInstance();
-
 			for (ASTNode statement : content.getStatements())
 			{
 				compoundBlock.appendCFG(convert(statement));
