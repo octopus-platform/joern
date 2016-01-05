@@ -1,14 +1,29 @@
 package languages.php.cfg;
 
-import ast.functionDef.FunctionDef;
+import ast.statements.blockstarters.IfStatement;
 import cfg.CFG;
 import cfg.CFGFactory;
 
 public class PHPCFGFactory extends CFGFactory
 {
-	@Override
-	public CFG newInstance(FunctionDef functionDefinition)
-	{
-		return null;
+	static{
+		structuredFlowVisitior = new PHPStructuredFlowVisitor();
 	}
+
+	public static CFG newInstance(IfStatement ifStatement)
+	{
+		try
+		{
+			CFG block = new CFG();
+			
+
+			return block;
+		}
+		catch (Exception e)
+		{
+			// e.printStackTrace();
+			return newErrorInstance();
+		}
+	}
+
 }

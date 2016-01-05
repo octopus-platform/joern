@@ -1,9 +1,8 @@
 package languages.c.cfg;
 
-import ast.ASTNode;
+
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
-import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
@@ -38,16 +37,6 @@ public class CStructuredFlowVisitor extends StructuredFlowVisitor {
 			returnCFG.registerParameter(node);
 		}
 
-	}
-
-	public void visit(CompoundStatement content)
-	{
-		returnCFG = CCFGFactory.newInstance(content);
-	}
-
-	public void visit(ASTNode expression)
-	{
-		returnCFG = CCFGFactory.newInstance(expression);
 	}
 
 	public void visit(ReturnStatement expression)
