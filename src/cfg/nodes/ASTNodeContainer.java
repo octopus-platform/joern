@@ -45,7 +45,7 @@ public class ASTNodeContainer extends AbstractCFGNode
 	@Override
 	public String toString()
 	{
-		return "[" + astNode.getEscapedCodeStr() + "]";
+		return "[" + astNode.getEscapedCodeStr() + "," + astNode.getTypeAsString() +"]";
 	}
 
 }
