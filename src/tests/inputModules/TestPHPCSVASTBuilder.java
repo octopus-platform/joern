@@ -2,6 +2,7 @@ package tests.inputModules;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -6352,6 +6353,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)3);
 
 		assertThat( node, instanceOf(PHPIfStatement.class));
+		assertNotNull( ((PHPIfStatement) node).getCondition());
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PHPIfStatement)node).size());
 		assertEquals( ast.getNodeById((long)4), ((PHPIfStatement)node).getIfElement(0));
