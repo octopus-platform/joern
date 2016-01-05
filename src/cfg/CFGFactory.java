@@ -62,6 +62,7 @@ public class CFGFactory
 						function.getExitNode(), CFGEdge.UNHANDLED_EXCEPT_LABEL);
 			}
 
+			System.out.println(function);
 			return function;
 		}
 		catch (Exception e)
