@@ -2,7 +2,6 @@ package tests.inputModules;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -132,11 +131,11 @@ public class TestPHPCSVASTBuilder
 {
 	PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
 	PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
-
+	
 	ASTUnderConstruction ast;
 	KeyedCSVReader nodeReader;
 	KeyedCSVReader edgeReader;
-
+	
 	// See {@link http://neo4j.com/docs/stable/import-tool-header-format.html} for detailed
 	// information about the header file format
 	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
@@ -145,35 +144,35 @@ public class TestPHPCSVASTBuilder
 	@Before
 	public void init()
 	{
-		ast = new ASTUnderConstruction();
+		ast = new ASTUnderConstruction();	
 		nodeReader = new KeyedCSVReader();
 		edgeReader = new KeyedCSVReader();
 	}
-
+	
 	private void handle(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile
 	{
 		nodeReader.init(new StringReader(nodeStr));
 		edgeReader.init(new StringReader(edgeStr));
-
+		
 		KeyedCSVRow keyedRow;
 		while ((keyedRow = nodeReader.getNextRow()) != null)
 			nodeInterpreter.handle(keyedRow, ast);
 		while ((keyedRow = edgeReader.getNextRow()) != null)
 			edgeInterpreter.handle(keyedRow, ast);
 	}
-
-
+	
+	
 	// primary expressions (leafs)
-
+	
 	/**
 	 * "integer", "double" or "string" nodes are nodes holding primary expressions such
 	 * as an integer, a floating point number or a string enclosed in single or double quotes.
-	 *
+	 * 
 	 * These nodes have no children. Their concrete value is specified as the 'code' property.
-	 *
+	 * 
 	 * This test checks a few primary expressions in the following PHP code:
-	 *
+	 * 
 	 * 42;
 	 * 3.14;
 	 * "Hello World!";
@@ -185,7 +184,7 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "3,integer,,1,42,0,1,,,\n";
 		nodeStr += "4,double,,1,3.14,1,1,,,\n";
 		nodeStr += "5,string,,1,\"Hello World!\",2,1,,,\n";
-
+		
 		String edgeStr = edgeHeader;
 
 		handle(nodeStr, edgeStr);
@@ -208,8 +207,8 @@ public class TestPHPCSVASTBuilder
 	}
 
 
-	/* special nodes */
-
+	/* special nodes */	
+	
 	/**
 	 * AST_NAME nodes are used to identify certain names in PHP code,
 	 * such as for example the name of a class that a class declaration extends,
@@ -217,17 +216,17 @@ public class TestPHPCSVASTBuilder
 	 * or the name of a type returned by a function.
 	 * Other examples include names of called functions/methods, class
 	 * names associated with 'new' or 'instanceof' operators, etc.
-	 *
+	 * 
 	 * Any AST_NAME node has exactly one child which is of type "string".
-	 *
+	 * 
 	 * This test checks the names 'bar' and 'buz' in the following PHP code:
-	 *
+	 * 
 	 * class foo extends bar implements buz {}
 	 */
 	@Test
 	public void testNameCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;
+		String nodeStr = nodeHeader;	
 		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
 		nodeStr += "5,string,,3,\"bar\",0,1,,,\n";
@@ -236,7 +235,7 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "8,string,,3,\"buz\",0,1,,,\n";
 		nodeStr += "9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
 		nodeStr += "10,AST_STMT_LIST,,3,,0,9,,,\n";
-
+		
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
 		edgeStr += "3,4,PARENT_OF\n";
@@ -250,26 +249,26 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)4);
 		ASTNode node2 = ast.getNodeById((long)7);
-
+		
 		assertThat( node, instanceOf(Identifier.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((Identifier)node).getNameChild());
 		assertEquals( "bar", ((Identifier)node).getNameChild().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(Identifier.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((Identifier)node2).getNameChild());
 		assertEquals( "buz", ((Identifier)node2).getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_CLOSURE_VAR nodes are special nodes holding variables that
 	 * occur within the 'use' language construct of closure declarations.
-	 *
+	 * 
 	 * Any AST_CLOSURE_VAR node has exactly one child which is of type "string".
-	 *
+	 * 
 	 * This test checks the names 'foo' and 'bar' in the following PHP code:
-	 *
+	 * 
 	 * function() use ($foo,$bar) {};
 	 */
 	@Test
@@ -300,31 +299,31 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)8);
-
+		
 		assertThat( node, instanceOf(ClosureVar.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((ClosureVar)node).getNameChild());
 		assertEquals( "foo", ((ClosureVar)node).getNameChild().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(ClosureVar.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((ClosureVar)node2).getNameChild());
 		assertEquals( "bar", ((ClosureVar)node2).getNameChild().getEscapedCodeStr());
 	}
-
-
-	/* declaration nodes */
-
+	
+	
+	/* declaration nodes */	
+	
 	/**
 	 * AST_TOPLEVEL nodes are artificial function-declaring nodes for
 	 * the top-level context of files and classes. We give such nodes the
-	 * name "<path/to/file>" under file nodes, and "[classname]" under class nodes.
-	 *
+	 * name "<path/to/file>" under file nodes, and "[classname]" under class nodes. 
+	 * 
 	 * Any AST_TOPLEVEL node has exactly one child which is of type AST_STMT_LIST.
-	 *
+	 * 
 	 * This test checks the name '<foo.php>' of the toplevel node of a file foo.php
 	 * and the name '[bar]' of a class bar in the following PHP code:
-	 *
+	 * 
 	 * class bar {}
 	 */
 	@Test
@@ -351,37 +350,37 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)1);
 		ASTNode node2 = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( "<foo.php>", ((TopLevelFunctionDef)node).getName());
 		assertEquals( ast.getNodeById((long)2), ((TopLevelFunctionDef)node).getContent());
-
+		
 		assertThat( node2, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( "[bar]", ((TopLevelFunctionDef)node2).getName());
 		assertEquals( ast.getNodeById((long)7), ((TopLevelFunctionDef)node2).getContent());
 	}
-
+	
 	/**
 	 * AST_FUNC_DECL nodes are function-declaring nodes for top-level functions
-	 * (as opposed to methods declared within a class scope.)
-	 *
+	 * (as opposed to methods declared within a class scope.) 
+	 * 
 	 * Any AST_FUNC_DECL node has exactly four children:
 	 * 1) AST_PARAM_LIST
 	 * 2) NULL, for structural compatibility with AST_CLOSURE
 	 * 3) AST_STMT_LIST
 	 * 4) AST_NAME or NULL, indicating the return type
-	 *
+	 * 
 	 * This test checks a function's name and children in the following PHP code:
-	 *
+	 * 
 	 * function foo() : int {}
 	 */
 	@Test
 	public void testFunctionDefCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-
+		
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
 		nodeStr += "5,NULL,,3,,1,3,,,\n";
@@ -395,11 +394,11 @@ public class TestPHPCSVASTBuilder
 		edgeStr += "3,6,PARENT_OF\n";
 		edgeStr += "7,8,PARENT_OF\n";
 		edgeStr += "3,7,PARENT_OF\n";
-
+		
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PHPFunctionDef.class));
 		assertEquals( "foo", ((PHPFunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
@@ -409,27 +408,27 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)8), ((PHPFunctionDef)node).getReturnType().getNameChild());
 		assertEquals( "int", ((PHPFunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_CLOSURE nodes are function-declaring nodes for closures (anonymous functions).
 	 * We always give them the artificial name "{closure}".
-	 *
+	 * 
 	 * Any AST_CLOSURE node has exactly four children:
 	 * 1) AST_PARAM_LIST
 	 * 2) AST_CLOSURE_USES or NULL
 	 * 3) AST_STMT_LIST
 	 * 4) AST_NAME or NULL, indicating the return type
-	 *
+	 * 
 	 * This test checks a closure's pseudo-name and children in the following PHP code:
-	 *
+	 * 
 	 * $a = function() use ($foo) : int {};
-	 *
+	 * 
 	 * It also checks that a ClosureExpression holding the Closure is created.
 	 */
 	@Test
 	public void testClosureCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;
+		String nodeStr = nodeHeader;	
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
 		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
@@ -459,7 +458,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
 		assertEquals( 4, node.getChildCount());
@@ -469,7 +468,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((Closure)node).getReturnType());
 		assertEquals( ast.getNodeById((long)13), ((Closure)node).getReturnType().getNameChild());
 		assertEquals( "int", ((Closure)node).getReturnType().getNameChild().getEscapedCodeStr());
-
+		
 		// special test for the artificial ClosureExpression node:
 		ASTNode node2 = ast.getNodeById((long)3);
 		assertThat( node2, instanceOf(AssignmentExpression.class));
@@ -477,19 +476,19 @@ public class TestPHPCSVASTBuilder
 		assertThat( node3, instanceOf(ClosureExpression.class));
 		assertEquals( node, ((ClosureExpression)node3).getClosure());
 	}
-
+	
 	/**
 	 * AST_METHOD nodes are function-declaring nodes for class-level functions
-	 * (as opposed to functions declared within a top-level scope.)
-	 *
+	 * (as opposed to functions declared within a top-level scope.) 
+	 * 
 	 * Any AST_METHOD node has exactly four children:
 	 * 1) AST_PARAM_LIST
 	 * 2) NULL, for structural compatibility with AST_CLOSURE
 	 * 3) AST_STMT_LIST or NULL (possible for abstract methods)
 	 * 4) AST_NAME or NULL, indicating the return type
-	 *
+	 * 
 	 * This test checks a method's name and children in the following PHP code:
-	 *
+	 * 
 	 * class bar {
 	 *   function foo() : int {}
 	 * }
@@ -515,7 +514,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)8);
-
+		
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
 		assertEquals( 4, node.getChildCount());
@@ -525,23 +524,23 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnType().getNameChild());
 		assertEquals( "int", ((Method)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_CLASS nodes are used to declare classes.
-	 *
+	 * 
 	 * Any AST_CLASS node has exactly three children:
 	 * 1) AST_NAME or NULL, indicating the parent class
 	 * 2) AST_NAME_LIST or NULL, indicating the implemented interfaces
 	 * 3) AST_TOPLEVEL, this class's top-level method
-	 *
+	 * 
 	 * This test checks a class's name and its children in the following PHP code:
-	 *
+	 * 
 	 * class foo extends bar implements buz {}
 	 */
 	@Test
 	public void testClassCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;
+		String nodeStr = nodeHeader;	
 		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
 		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
 		nodeStr += "5,string,,3,\"bar\",0,1,,,\n";
@@ -550,7 +549,7 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "8,string,,3,\"buz\",0,1,,,\n";
 		nodeStr += "9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
 		nodeStr += "10,AST_STMT_LIST,,3,,0,9,,,\n";
-
+		
 		String edgeStr = edgeHeader;
 		edgeStr += "4,5,PARENT_OF\n";
 		edgeStr += "3,4,PARENT_OF\n";
@@ -563,7 +562,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( "foo", ((PHPClassDef)node).getName());
 		assertEquals( 3, node.getChildCount());
@@ -579,12 +578,12 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
 
-
+	
 	/* nodes without children (leafs) */
-
+	
 	/**
 	 * AST_MAGIC_CONST nodes are nodes holding magic constant names.
-	 *
+	 * 
 	 * AST_MAGIC_CONST nodes have no children. They do however have a flag to distinguish
 	 * which magic constant is used.
 	 * The following flags exist:
@@ -597,9 +596,9 @@ public class TestPHPCSVASTBuilder
 	 * - FLAG_MAGIC_CLASS
 	 * - FLAG_MAGIC_TRAIT
 	 * See http://php.net/manual/en/language.constants.predefined.php
-	 *
+	 * 
 	 * This test checks a few magic constant expressions in the following PHP code:
-	 *
+	 * 
 	 * __LINE__;
 	 * __FILE__;
 	 * __DIR__;
@@ -621,7 +620,7 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "8,AST_MAGIC_CONST,T_METHOD_C,8,,5,1,,,\n";
 		nodeStr += "9,AST_MAGIC_CONST,T_CLASS_C,9,,6,1,,,\n";
 		nodeStr += "10,AST_MAGIC_CONST,T_TRAIT_C,10,,7,1,,,\n";
-
+		
 		String edgeStr = edgeHeader;
 
 		handle(nodeStr, edgeStr);
@@ -667,10 +666,10 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 0, node8.getChildCount());
 		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_TRAIT, ((PHPMagicConstant)node8).getFlags());
 	}
-
+	
 	/**
 	 * AST_TYPE nodes are nodes holding the PHP type hints 'array' and 'callable'.
-	 *
+	 * 
 	 * AST_TYPE nodes have no children. They do however have a flag to distinguish
 	 * which type hint is used.
 	 * The following flags exist:
@@ -680,9 +679,9 @@ public class TestPHPCSVASTBuilder
 	 * a special AST_TYPE node, while other types, such as 'int', 'bool', 'double' or 'string'
 	 * produce a normal AST_NAME node. Should these built-in types not all consistently map
 	 * to a AST_TYPE node? AST_NAME is mostly useful for "self-defined" types (i.e., class names)
-	 *
+	 * 
 	 * This test checks a few type hint expressions in the following PHP code:
-	 *
+	 * 
 	 * function foo( array $bar, callable $buz) : callable {}
 	 */
 	@Test
@@ -702,7 +701,7 @@ public class TestPHPCSVASTBuilder
 		nodeStr += "13,NULL,,3,,1,3,,,\n";
 		nodeStr += "14,AST_STMT_LIST,,3,,2,3,,,\n";
 		nodeStr += "15,AST_TYPE,TYPE_CALLABLE,3,,3,3,,,\n";
-
+		
 		String edgeStr = edgeHeader;
 
 		handle(nodeStr, edgeStr);
@@ -726,15 +725,15 @@ public class TestPHPCSVASTBuilder
 
 
 	/* nodes with exactly 1 child */
-
+	
 	/**
 	 * AST_VAR nodes are nodes holding variables names.
-	 *
+	 * 
 	 * Any AST_VAR node has exactly one child which is an expression, whose evaluation holds
 	 * the variable's name (typically it is a string, but it may be another AST_VAR, for instance.)
-	 *
+	 * 
 	 * This test checks the names 'foo' and 'bar' in the following PHP code:
-	 *
+	 * 
 	 * $foo;
 	 * $$bar;
 	 */
@@ -769,7 +768,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)5);
 		ASTNode node3 = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(Variable.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((Variable)node).getNameExpression());
@@ -778,22 +777,22 @@ public class TestPHPCSVASTBuilder
 		assertThat( node2, instanceOf(Variable.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)6), ((Variable)node2).getNameExpression());
-
+		
 		assertThat( node3, instanceOf(Variable.class));
 		assertEquals( 1, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((Variable)node3).getNameExpression());
 		assertEquals( "bar", ((Variable)node3).getNameExpression().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_CONST nodes are nodes holding constant names.
-	 *
+	 * 
 	 * Any AST_CONST node has exactly one child which is of type Identifier, holding
 	 * the constant's name (note that, as opposed to a Variable, a Constant may be
 	 * namespaced.)
-	 *
+	 * 
 	 * This test checks a few constant expressions' children in the following PHP code:
-	 *
+	 * 
 	 * FOO;
 	 * \BAR\BUZ;
 	 */
@@ -823,24 +822,24 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((Constant)node).getIdentifier());
 		assertEquals( "FOO", ((Constant)node).getIdentifier().getNameChild().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(Constant.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((Constant)node2).getIdentifier());
 		assertEquals( "BAR\\BUZ", ((Constant)node2).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_UNPACK nodes are used to represent "unpack" operations which unpack traversable
 	 * objects or arrays into argument lists, also known as the "splat" operator (mostly useful
 	 * in combination with variadic functions).
 	 * See https://wiki.php.net/rfc/argument_unpacking
-	 *
+	 * 
 	 * Any AST_UNPACK node has exactly one child which is an expression whose evaluation yields
 	 * a traversable object or array to be unpacked.
-	 *
+	 * 
 	 * This test checks a few unpack expressions' children in the following PHP code:
-	 *
+	 * 
 	 * foo( ...$traversable);
 	 * foo( ...[4,2]);
 	 */
@@ -895,7 +894,7 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPUnpackExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPUnpackExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(PHPUnpackExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getExpression());
@@ -903,12 +902,12 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_UNARY_PLUS nodes are used to denote 'unary plus' operation expressions.
-	 *
+	 * 
 	 * Any AST_UNARY_PLUS node has exactly exactly one child, representing the expression for which
 	 * the operation is to be performed.
-	 *
+	 * 
 	 * This test checks a unary plus operation expression's children in the following PHP code:
-	 *
+	 * 
 	 * // arithmetic operators
 	 * +$x;
 	 */
@@ -927,20 +926,20 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(UnaryPlusExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((UnaryPlusExpression)node).getExpression());
 	}
-
+	
 	/**
 	 * AST_UNARY_MINUS nodes are used to denote 'unary minus' operation expressions.
-	 *
+	 * 
 	 * Any AST_UNARY_MINUS node has exactly exactly one child, representing the expression for which
 	 * the operation is to be performed.
-	 *
+	 * 
 	 * This test checks a unary minus operation expression's children in the following PHP code:
-	 *
+	 * 
 	 * // arithmetic operators
 	 * -$x;
 	 */
@@ -959,15 +958,15 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(UnaryMinusExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((UnaryMinusExpression)node).getExpression());
 	}
-
+	
 	/**
 	 * AST_CAST nodes are used to denote cast expressions.
-	 *
+	 * 
 	 * Any AST_CAST node has exactly exactly one child, representing the expression whose evaluation
 	 * is going to be cast to a given type.
 	 * Note that there is no distinguished child for the type that the expression is being cast to.
@@ -981,9 +980,9 @@ public class TestPHPCSVASTBuilder
 	 * - FLAG_TYPE_OBJECT
 	 * Also see http://php.net/manual/en/language.types.type-juggling.php#language.types.typecasting
 	 * for the different type casts that exist in PHP.
-	 *
+	 * 
 	 * This test checks a few cast expressions' children in the following PHP code:
-	 *
+	 * 
 	 * // NULL
 	 * (unset)$n;
 	 * // bool
@@ -1079,7 +1078,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((CastExpression)node).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_NULL, ((CastExpression)node).getFlags());
-
+		
 		assertThat( node2, instanceOf(CastExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((CastExpression)node2).getCastExpression());
@@ -1089,56 +1088,56 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((CastExpression)node3).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_BOOL, ((CastExpression)node3).getFlags());
-
+		
 		assertThat( node4, instanceOf(CastExpression.class));
 		assertEquals( 1, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((CastExpression)node4).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_LONG, ((CastExpression)node4).getFlags());
-
+		
 		assertThat( node5, instanceOf(CastExpression.class));
 		assertEquals( 1, node5.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((CastExpression)node5).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_LONG, ((CastExpression)node5).getFlags());
-
+		
 		assertThat( node6, instanceOf(CastExpression.class));
 		assertEquals( 1, node6.getChildCount());
 		assertEquals( ast.getNodeById((long)15), ((CastExpression)node6).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node6).getFlags());
-
+		
 		assertThat( node7, instanceOf(CastExpression.class));
 		assertEquals( 1, node7.getChildCount());
 		assertEquals( ast.getNodeById((long)17), ((CastExpression)node7).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node7).getFlags());
-
+		
 		assertThat( node8, instanceOf(CastExpression.class));
 		assertEquals( 1, node8.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((CastExpression)node8).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node8).getFlags());
-
+		
 		assertThat( node9, instanceOf(CastExpression.class));
 		assertEquals( 1, node9.getChildCount());
 		assertEquals( ast.getNodeById((long)21), ((CastExpression)node9).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_STRING, ((CastExpression)node9).getFlags());
-
+		
 		assertThat( node10, instanceOf(CastExpression.class));
 		assertEquals( 1, node10.getChildCount());
 		assertEquals( ast.getNodeById((long)23), ((CastExpression)node10).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((CastExpression)node10).getFlags());
-
+		
 		assertThat( node11, instanceOf(CastExpression.class));
 		assertEquals( 1, node11.getChildCount());
 		assertEquals( ast.getNodeById((long)26), ((CastExpression)node11).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_OBJECT, ((CastExpression)node11).getFlags());
 	}
-
+	
 	/**
 	 * AST_EMPTY nodes are used to denote 'empty' operation expressions.
-	 *
+	 * 
 	 * Any AST_EMPTY node has exactly exactly one child, representing the expression for which
 	 * the operation is to be performed.
-	 *
+	 * 
 	 * This test checks a few 'empty' operation expressions' children in the following PHP code:
-	 *
+	 * 
 	 * empty($foo);
 	 * empty(bar());
 	 */
@@ -1171,20 +1170,20 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPEmptyExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPEmptyExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(PHPEmptyExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPEmptyExpression)node2).getExpression());
 	}
-
+	
 	/**
 	 * AST_ISSET nodes are used to denote 'isset' operation expressions.
-	 *
+	 * 
 	 * Any AST_ISSET node has exactly exactly one child, representing the variable for which
 	 * the operation is to be performed.
-	 *
+	 * 
 	 * This test checks a few 'isset' operation expressions' children in the following PHP code:
-	 *
+	 * 
 	 * isset($foo);
 	 * isset($bar->buz);
 	 */
@@ -1217,21 +1216,21 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPIssetExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPIssetExpression)node).getVariableExpression());
-
+		
 		assertThat( node2, instanceOf(PHPIssetExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPIssetExpression)node2).getVariableExpression());
 	}
-
+	
 	/**
 	 * AST_SILENCE nodes are used to denote 'silence' operation expressions.
-	 *
+	 * 
 	 * Any AST_SILENCE node has exactly exactly one child, representing the expression for which
 	 * error messages should be ignored.
 	 * See http://php.net/manual/en/language.operators.errorcontrol.php
-	 *
+	 * 
 	 * This test checks a few silence operation expressions' children in the following PHP code:
-	 *
+	 * 
 	 * // error control operators
 	 * @foo();
 	 * @$bar[42];
@@ -1265,11 +1264,11 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)8);
-
+		
 		assertThat( node, instanceOf(PHPSilenceExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPSilenceExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(PHPSilenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPSilenceExpression)node2).getExpression());
@@ -1277,14 +1276,14 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_SHELL_EXEC nodes are used to denote shell command execution expressions.
-	 *
+	 * 
 	 * Any AST_SHELL_EXEC node has exactly exactly one child, representing the command that is
 	 * going to be be executed by the shell. This is typically a string, but could be an AST_ENCAPS_LIST
 	 * to include variables, for example.
 	 * See http://php.net/manual/en/language.operators.execution.php
-	 *
+	 * 
 	 * This test checks a few shell command execution expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $output = `cat /var/www/html/.htpasswd`;
 	 * $output2 = `$attackerinput`;
 	 */
@@ -1321,24 +1320,24 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(PHPShellExecExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPShellExecExpression)node).getShellCommand());
-
+		
 		assertThat( node2, instanceOf(PHPShellExecExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((PHPShellExecExpression)node2).getShellCommand());
 	}
-
+	
 	/**
 	 * AST_CLONE nodes are used to denote 'clone' expressions.
-	 *
+	 * 
 	 * Any AST_CLONE node has exactly exactly one child, representing the expression whose
 	 * evaluation yields the object to be cloned.
-	 *
+	 * 
 	 * This test checks a few 'clone' expressions' children in the following PHP code:
-	 *
+	 * 
 	 * clone($foo);
 	 * clone(bar());
 	 */
@@ -1371,23 +1370,23 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPCloneExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPCloneExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(PHPCloneExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPCloneExpression)node2).getExpression());
 	}
-
+	
 	/**
 	 * AST_EXIT nodes are used to denote 'exit' expressions.
-	 *
+	 * 
 	 * Any AST_EXIT node has exactly exactly one child, representing the expression whose
 	 * evaluation yields either a string to be printed before exiting or an integer which
 	 * will be used as an exit status. The child may also be a NULL node, if no exit status
 	 * is passed as argument.
 	 * See http://php.net/manual/en/function.exit.php
-	 *
+	 * 
 	 * This test checks a few 'exit' expressions' children in the following PHP code:
-	 *
+	 * 
 	 * exit($foo);
 	 * exit(bar());
 	 */
@@ -1420,21 +1419,21 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPExitExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPExitExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(PHPExitExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPExitExpression)node2).getExpression());
 	}
-
+	
 	/**
 	 * AST_PRINT nodes are used to denote 'print' expressions.
-	 *
+	 * 
 	 * Any AST_PRINT node has exactly exactly one child, representing the expression whose
 	 * evaluation yields a string to be printed.
 	 * See http://php.net/manual/en/function.print.php
-	 *
+	 * 
 	 * This test checks a few 'print' expressions' children in the following PHP code:
-	 *
+	 * 
 	 * print($foo);
 	 * print(bar());
 	 */
@@ -1467,15 +1466,15 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPPrintExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPPrintExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(PHPPrintExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node2).getExpression());
 	}
-
+	
 	/**
 	 * AST_INCLUDE_OR_EVAL nodes are used to denote include/require/eval expressions.
-	 *
+	 * 
 	 * Any AST_INCLUDE_OR_EVAL node has exactly exactly one child, representing the expression that is
 	 * going to be be included as a file or executed by the PHP interpreter in the current program scope.
 	 * This is typically a string, but could be an AST_ENCAPS_LIST
@@ -1486,9 +1485,9 @@ public class TestPHPCSVASTBuilder
 	 * - http://php.net/manual/en/function.require.php
 	 * - http://php.net/manual/en/function.require-once.php
 	 * - http://php.net/manual/en/function.eval.php
-	 *
+	 * 
 	 * This test checks a few include/require/eval expressions' children in the following PHP code:
-	 *
+	 * 
 	 * include 'foo.php';
 	 * include_once $userinput;
 	 * require getuserinput();
@@ -1552,7 +1551,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node3 = ast.getNodeById((long)8);
 		ASTNode node4 = ast.getNodeById((long)13);
 		ASTNode node5 = ast.getNodeById((long)20);
-
+		
 		assertThat( node, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPIncludeOrEvalExpression)node).getIncludeOrEvalExpression());
@@ -1567,26 +1566,26 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPIncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE, ((PHPIncludeOrEvalExpression)node3).getFlags());
-
+		
 		assertThat( node4, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)14), ((PHPIncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE_ONCE, ((PHPIncludeOrEvalExpression)node4).getFlags());
-
+		
 		assertThat( node5, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node5.getChildCount());
 		assertEquals( ast.getNodeById((long)21), ((PHPIncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_EVAL, ((PHPIncludeOrEvalExpression)node5).getFlags());
 	}
-
+	
 	/**
 	 * AST_UNARY_OP nodes are used to denote unary operation expressions.
-	 *
+	 * 
 	 * Any AST_UNARY_OP node has exactly exactly one child, representing the expression for which
 	 * the operation is to be performed.
-	 *
+	 * 
 	 * This test checks a few unary operation expressions' children in the following PHP code:
-	 *
+	 * 
 	 * // bit operators
 	 * ~$foo;
 	 * // boolean operators
@@ -1613,11 +1612,11 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((UnaryOperationExpression)node).getExpression());
-
+		
 		assertThat( node2, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node2).getExpression());
@@ -1625,12 +1624,12 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_PRE_INC nodes are used to denote pre-increment operation expressions.
-	 *
+	 * 
 	 * Any AST_PRE_INC node has exactly exactly one child, representing the variable that
 	 * is to be incremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
-	 *
+	 * 
 	 * This test checks a pre-increment operation expression's child in the following PHP code:
-	 *
+	 * 
 	 * ++$i;
 	 */
 	@Test
@@ -1648,20 +1647,20 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PreIncOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PreIncOperationExpression)node).getVariableExpression());
 	}
-
+	
 	/**
 	 * AST_PRE_DEC nodes are used to denote pre-decrement operation expressions.
-	 *
+	 * 
 	 * Any AST_PRE_DEC node has exactly exactly one child, representing the variable that
 	 * is to be decremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
-	 *
+	 * 
 	 * This test checks a pre-decrement operation expression's child in the following PHP code:
-	 *
+	 * 
 	 * --$i;
 	 */
 	@Test
@@ -1679,20 +1678,20 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PreDecOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PreDecOperationExpression)node).getVariableExpression());
 	}
-
+	
 	/**
 	 * AST_POST_INC nodes are used to denote post-increment operation expressions.
-	 *
+	 * 
 	 * Any AST_POST_INC node has exactly exactly one child, representing the variable that
 	 * is to be incremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
-	 *
+	 * 
 	 * This test checks a post-increment operation expression's child in the following PHP code:
-	 *
+	 * 
 	 * $i++;
 	 */
 	@Test
@@ -1710,20 +1709,20 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PostIncOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PostIncOperationExpression)node).getVariableExpression());
 	}
-
+	
 	/**
 	 * AST_POST_DEC nodes are used to denote post-decrement operation expressions.
-	 *
+	 * 
 	 * Any AST_POST_DEC node has exactly exactly one child, representing the variable that
 	 * is to be decremented (e.g., could be AST_VAR, AST_PROP, AST_STATIC_PROP, AST_DIM, ...)
-	 *
+	 * 
 	 * This test checks a post-decrement operation expression's child in the following PHP code:
-	 *
+	 * 
 	 * $i--;
 	 */
 	@Test
@@ -1741,21 +1740,21 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PostDecOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PostDecOperationExpression)node).getVariableExpression());
 	}
-
+	
 	/**
 	 * AST_YIELD_FROM nodes are used to denote 'yield from' expressions used in generators.
 	 * See http://php.net/manual/en/language.generators.syntax.php
-	 *
+	 * 
 	 * Any AST_YIELD_FROM node has exactly one child, which is an expression that evaluates
 	 * to another generator call, traversable object or array to be yielded from.
-	 *
+	 * 
 	 * This test checks a few yield from expressions' children in the following PHP code:
-	 *
+	 * 
 	 * function foo() {
 	 *   yield from [4, 2];
 	 *   yield from new ArrayIterator(["hello", "world"]);
@@ -1833,29 +1832,29 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)7);
 		ASTNode node2 = ast.getNodeById((long)15);
 		ASTNode node3 = ast.getNodeById((long)27);
-
+		
 		assertThat( node, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPYieldFromExpression)node).getFromExpression());
-
+		
 		assertThat( node2, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)16), ((PHPYieldFromExpression)node2).getFromExpression());
-
+		
 		assertThat( node3, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)28), ((PHPYieldFromExpression)node3).getFromExpression());
 	}
-
+	
 	/**
 	 * AST_GLOBAL nodes are used to denote 'global' statements used to make variables from
 	 * the global scope available in a local function scope.
-	 *
+	 * 
 	 * Any AST_GLOBAL node has exactly one child, which is a variable that is being made
 	 * available in a local scope.
-	 *
+	 * 
 	 * This test checks a few global statements' children in the following PHP code:
-	 *
+	 * 
 	 * function foo() {
 	 *   global $bar, $buz;
 	 * }
@@ -1899,21 +1898,21 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPGlobalStatement)node).getVariable());
 		assertEquals( "bar", ((PHPGlobalStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(PHPGlobalStatement.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((PHPGlobalStatement)node2).getVariable());
 		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_UNSET nodes are used to denote unset statements used to destroy variables.
-	 *
+	 * 
 	 * Any AST_UNSET node has exactly one child, which is a reference to variable that
 	 * is to be destroyed (e.g., AST_VAR, AST_PROP, AST_DIM, ...)
-	 *
+	 * 
 	 * This test checks a few unset statement's children in the following PHP code:
-	 *
+	 * 
 	 * unset($foo,$bar->buz,$qux[42]);
 	 */
 	@Test
@@ -1959,25 +1958,25 @@ public class TestPHPCSVASTBuilder
 		assertThat( node, instanceOf(PHPUnsetStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((PHPUnsetStatement)node).getVariableExpression());
-
+		
 		assertThat( node2, instanceOf(PHPUnsetStatement.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPUnsetStatement)node2).getVariableExpression());
-
+		
 		assertThat( node3, instanceOf(PHPUnsetStatement.class));
 		assertEquals( 1, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((PHPUnsetStatement)node3).getVariableExpression());
 	}
-
+	
 	/**
 	 * AST_RETURN nodes are nodes representing a return statement.
-	 *
+	 * 
 	 * Any AST_RETURN node has exactly one child holding the expression to be
 	 * returned or a null node if nothing is returned
 	 * (e.g., could be NULL, AST_NEW, AST_CONST, AST_VAR, AST_CALL, etc.).
-	 *
+	 * 
 	 * This test checks a return statement's child in the following PHP code:
-	 *
+	 * 
 	 * function foo() : int {
 	 *   return 42;
 	 * }
@@ -2007,20 +2006,20 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)7);
-
+		
 		assertThat( node, instanceOf(ReturnStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((ReturnStatement)node).getReturnExpression());
 		assertEquals( "42", ((ReturnStatement)node).getReturnExpression().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_LABEL nodes are nodes representing a label statement.
-	 *
+	 * 
 	 * Any AST_LABEL node has exactly one child of type "string" holding the label's name.
-	 *
+	 * 
 	 * This test checks a label statement's child in the following PHP code:
-	 *
+	 * 
 	 * goto a;
 	 * a:
 	 */
@@ -2040,13 +2039,13 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-
+		
 		assertThat( node, instanceOf(Label.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)6), ((Label)node).getNameChild());
 		assertEquals( "a", ((Label)node).getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_REF nodes are used to denote references to variables.
 	 * TODO As far as I currently understand, this is a node useful *only* in the
@@ -2054,11 +2053,11 @@ public class TestPHPCSVASTBuilder
 	 * functions that return references, and function parameters taken as references,
 	 * a simple flag is used; for assignments, there is a special kind of node AST_ASSIGN_REF.
 	 * But look into this more closely.
-	 *
+	 * 
 	 * Any AST_REF node has exactly one child, which is a variable being referenced.
-	 *
+	 * 
 	 * This test checks a reference expression's children in the following PHP code:
-	 *
+	 * 
 	 * foreach( $iterable as $somekey => &$someval) {}
 	 */
 	@Test
@@ -2094,20 +2093,20 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariable());
 		assertEquals( "someval", ((PHPReferenceExpression)node).getVariable().getNameExpression().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_HALT_COMPILER nodes are used to denote halt compiler statements which halt
 	 * the PHP compiler.
 	 * See http://php.net/manual/en/function.halt-compiler.php
-	 *
+	 * 
 	 * Any AST_HALT_COMPILER node has exactly one child, which holds the offset (in bytes)
 	 * in the file after which the compiler is to be halted; this offset is determined during parsing.
 	 * TODO What does the offset look like if we throw an eval() on some user input, and
 	 * the user input happens to be "__halt_compiler();"? ;-) Can be determined at runtime
 	 * using the magic constant __COMPILER_HALT_OFFSET__, look into this.
-	 *
+	 * 
 	 * This test checks a halt compiler statement's children in the following PHP code:
-	 *
+	 * 
 	 * __halt_compiler();
 	 */
 	@Test
@@ -2129,10 +2128,10 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)4), ((PHPHaltCompilerStatement)node).getOffset());
 		assertEquals( "25", ((PHPHaltCompilerStatement)node).getOffset().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_ECHO nodes are used to denote echo statements.
-	 *
+	 * 
 	 * Any AST_ECHO node has exactly one child, which holds the expression to be
 	 * evaluated and whose result is to be output.
 	 * Note that an echo statement can take an arbitrary number of arguments (but not 0),
@@ -2141,9 +2140,9 @@ public class TestPHPCSVASTBuilder
 	 * an arbitrary number of AST_ECHO nodes (which is fine), but also generates a common
 	 * AST_STMT_LIST mother node for them. I'm not sure why this should be necessary.
 	 * Either find out the reason, or file a bug report.
-	 *
+	 * 
 	 * This test checks a few echo statement's children in the following PHP code:
-	 *
+	 * 
 	 * echo "Hello World!", PHP_EOL;
 	 */
 	@Test
@@ -2177,21 +2176,21 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((PHPEchoStatement)node).getEchoExpression());
 		assertEquals( "Hello World!", ((PHPEchoStatement)node).getEchoExpression().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(PHPEchoStatement.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((PHPEchoStatement)node2).getEchoExpression());
 		assertEquals( "PHP_EOL", ((Constant)((PHPEchoStatement)node2).getEchoExpression()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_THROW nodes are nodes representing a throw statement.
-	 *
+	 * 
 	 * Any AST_THROW node has exactly one child holding the expression to
 	 * be thrown (e.g., could be AST_NEW, AST_CONST, AST_VAR, AST_CALL, etc.)
-	 *
+	 * 
 	 * This test checks a throw statement's child in the following PHP code:
-	 *
+	 * 
 	 * throw new Exception("foo");
 	 */
 	@Test
@@ -2215,19 +2214,19 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(ThrowStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((ThrowStatement)node).getThrowExpression());
 	}
-
+	
 	/**
 	 * AST_GOTO nodes are nodes representing a goto statement.
-	 *
+	 * 
 	 * Any AST_GOTO node has exactly one child of type "string" holding the target label's name.
-	 *
+	 * 
 	 * This test checks a goto statement's child in the following PHP code:
-	 *
+	 * 
 	 * goto a;
 	 * a:
 	 */
@@ -2247,22 +2246,22 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(GotoStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((GotoStatement)node).getTargetLabel());
 		assertEquals( "a", ((GotoStatement)node).getTargetLabel().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_BREAK nodes are nodes representing a break statement.
-	 *
+	 * 
 	 * Any AST_BREAK node has exactly one child which is of type "integer", holding
 	 * the number of enclosing structures to be broken out of. It may also be a null
 	 * child, in which case no depth was specified, which is equivalent to depth 1.
-	 *
+	 * 
 	 * This test checks a few break statements' children in the following PHP code:
-	 *
+	 * 
 	 * while (1) {
 	 *   while (1) {
 	 *     break 2;
@@ -2300,7 +2299,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)9);
 		ASTNode node2 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(PHPBreakStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((PHPBreakStatement)node).getDepth());
@@ -2311,16 +2310,16 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((PHPBreakStatement)node2).getDepth());
 		assertEquals( "1", ((PHPBreakStatement)node2).getDepth().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_CONTINUE nodes are nodes representing a continue statement.
-	 *
+	 * 
 	 * Any AST_CONTINUE node has exactly one child which is of type "integer", holding
 	 * the number of enclosing loops to be skipped to the end of. It may also be a null
 	 * child, in which case no depth was specified, which is equivalent to depth 1.
-	 *
+	 * 
 	 * This test checks a few continue statements' children in the following PHP code:
-	 *
+	 * 
 	 * while (1) {
 	 *   while (1) {
 	 *     continue 2;
@@ -2358,7 +2357,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)9);
 		ASTNode node2 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(PHPContinueStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((PHPContinueStatement)node).getDepth());
@@ -2369,21 +2368,21 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((PHPContinueStatement)node2).getDepth());
 		assertEquals( "1", ((PHPContinueStatement)node2).getDepth().getEscapedCodeStr());
 	}
-
+	
 
 	/* nodes with exactly 2 children */
-
+	
 	/**
 	 * AST_DIM nodes are used to denote array indexing expressions.
-	 *
+	 * 
 	 * Any AST_DIM node has exactly two children:
 	 * 1) an expression, whose evaluation returns the array to be accessed
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, etc...)
 	 * 2) an expression or NULL, representing the key by which to access the array
 	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a few array indexing expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $foo[42];
 	 * bar()['key'];
 	 * $buz[qux()];
@@ -2442,7 +2441,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)13);
 		ASTNode node4 = ast.getNodeById((long)20);
-
+		
 		assertThat( node, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((ArrayIndexing)node).getArrayExpression());
@@ -2452,29 +2451,29 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((ArrayIndexing)node2).getArrayExpression());
 		assertEquals( ast.getNodeById((long)12), ((ArrayIndexing)node2).getIndexExpression());
-
+		
 		assertThat( node3, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)14), ((ArrayIndexing)node3).getArrayExpression());
 		assertEquals( ast.getNodeById((long)16), ((ArrayIndexing)node3).getIndexExpression());
-
+		
 		assertThat( node4, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)21), ((ArrayIndexing)node4).getArrayExpression());
 		assertNull( ((ArrayIndexing)node4).getIndexExpression());
 	}
-
+	
 	/**
 	 * AST_PROP nodes are used to denote property access expressions.
-	 *
+	 * 
 	 * Any AST_PROP node has exactly two children:
 	 * 1) an expression, whose evaluation returns the object to be accessed
 	 *    (e.g., could be AST_VAR, AST_CALL, etc...)
 	 * 2) an expression, whose evaluation holds the property name
 	 *    (e.g., could be string, AST_VAR, etc...)
-	 *
+	 * 
 	 * This test checks a few property access expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $foo->bar;
 	 * buz()->$qux;
 	 */
@@ -2509,7 +2508,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)7);
-
+		
 		assertThat( node, instanceOf(PropertyExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PropertyExpression)node).getObjectExpression());
@@ -2520,18 +2519,18 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)8), ((PropertyExpression)node2).getObjectExpression());
 		assertEquals( ast.getNodeById((long)12), ((PropertyExpression)node2).getPropertyExpression());
 	}
-
+	
 	/**
 	 * AST_STATIC_PROP nodes are used to denote static property access expressions.
-	 *
+	 * 
 	 * Any AST_STATIC_PROP node has exactly two children:
 	 * 1) an expression, whose evaluation returns the class to be accessed
 	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
 	 * 2) an expression, whose evaluation holds the property name
 	 * 	  (e.g., could be AST_NAME, AST_VAR, etc...)
-	 *
+	 * 
 	 * This test checks a few static property access expressions' children in the following PHP code:
-	 *
+	 * 
 	 * Foo::$bar;
 	 * $foo::$bar;
 	 * buz()::$$qux;
@@ -2579,7 +2578,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((StaticPropertyExpression)node).getClassExpression());
@@ -2589,23 +2588,23 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((StaticPropertyExpression)node2).getClassExpression());
 		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyExpression());
-
+		
 		assertThat( node3, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
 		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyExpression());
 	}
-
+	
 	/**
 	 * AST_CALL nodes are used to denote call expressions.
-	 *
+	 * 
 	 * Any AST_CALL node has exactly 2 children:
 	 * 1) an expression, representing the target
 	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, ...)
 	 * 2) AST_ARG_LIST, representing the argument list
-	 *
+	 * 
 	 * This test checks a few call expressions' children in the following PHP code:
-	 *
+	 * 
 	 * foo($bar, "yabadabadoo");
 	 * $buz(1);
 	 */
@@ -2642,14 +2641,14 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)10);
-
+		
 		assertThat( node, instanceOf(CallExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((CallExpression)node).getTargetFunc());
 		assertEquals( "foo", ((Identifier)((CallExpression)node).getTargetFunc()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((CallExpression)node).getArgumentList());
 		assertEquals( 2, ((CallExpression)node).getArgumentList().size());
-
+		
 		assertThat( node2, instanceOf(CallExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((CallExpression)node2).getTargetFunc());
@@ -2657,17 +2656,17 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
 		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
 	}
-
+	
 	/**
 	 * AST_CLASS_CONST nodes are used to denote class constant access expressions.
-	 *
+	 * 
 	 * Any AST_CLASS_CONST node has exactly two children:
 	 * 1) an expression, whose evaluation returns the class to be accessed
 	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
 	 * 2) a string, representing the constant name
-	 *
+	 * 
 	 * This test checks a few class constant expressions' children in the following PHP code:
-	 *
+	 * 
 	 * Foo::BAR;
 	 * $foo::BAR;
 	 * buz()::QUX;
@@ -2709,7 +2708,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(ClassConstantExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((ClassConstantExpression)node).getClassExpression());
@@ -2719,24 +2718,24 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((ClassConstantExpression)node2).getClassExpression());
 		assertEquals( ast.getNodeById((long)10), ((ClassConstantExpression)node2).getConstantName());
-
+		
 		assertThat( node3, instanceOf(ClassConstantExpression.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((ClassConstantExpression)node3).getClassExpression());
 		assertEquals( ast.getNodeById((long)16), ((ClassConstantExpression)node3).getConstantName());
 	}
-
+	
 	/**
 	 * AST_ASSIGN nodes are used to denote assignment expressions.
-	 *
+	 * 
 	 * Any AST_ASSIGN node has exactly two children:
 	 * 1) an expression, representing the variable being assigned to
 	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, AST_LIST, etc...)
 	 * 2) an expression, representing the expression to be evaluated and assigned to a variable
 	 *    (e.g., could be int, string, AST_CONST, AST_CALL, AST_ARRAY, etc...)
-	 *
+	 * 
 	 * This test checks a few assignment expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $foo = 42;
 	 * $bar[3] = "bonjour";
 	 * $buz->qux = SOMECONST;
@@ -2822,7 +2821,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node3 = ast.getNodeById((long)13);
 		ASTNode node4 = ast.getNodeById((long)21);
 		ASTNode node5 = ast.getNodeById((long)30);
-
+		
 		assertThat( node, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((AssignmentExpression)node).getLeft());
@@ -2832,36 +2831,36 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((AssignmentExpression)node2).getLeft());
 		assertEquals( ast.getNodeById((long)12), ((AssignmentExpression)node2).getRight());
-
+		
 		assertThat( node3, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)14), ((AssignmentExpression)node3).getLeft());
 		assertEquals( ast.getNodeById((long)18), ((AssignmentExpression)node3).getRight());
-
+		
 		assertThat( node4, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)22), ((AssignmentExpression)node4).getLeft());
 		assertEquals( ast.getNodeById((long)26), ((AssignmentExpression)node4).getRight());
-
+		
 		assertThat( node5, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node5.getChildCount());
 		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getLeft());
 		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getRight());
 	}
-
+	
 	/**
 	 * AST_ASSIGN_REF nodes are used to denote assignment by reference expressions.
 	 * See
 	 * http://php.net/manual/en/language.operators.assignment.php#language.operators.assignment.reference
-	 *
+	 * 
 	 * Any AST_ASSIGN_REF node has exactly two children:
 	 * 1) an expression, representing the variable being assigned to
 	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, etc...)
 	 * 2) an expression, representing the expression to be evaluated to a reference and assigned to a variable
 	 *    (e.g., AST_VAR, AST_DIM, AST_CALL, AST_METHOD_CALL, AST_STATIC_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a few assignment by reference expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $foo =& $someref;
 	 * $bar[3] =& $someref[4];
 	 * $buz->qux =& $buz->somecall();
@@ -2944,7 +2943,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)8);
 		ASTNode node3 = ast.getNodeById((long)17);
 		ASTNode node4 = ast.getNodeById((long)27);
-
+		
 		assertThat( node, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPAssignmentByRefExpression)node).getLeft());
@@ -2954,30 +2953,30 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node2).getLeft());
 		assertEquals( ast.getNodeById((long)13), ((PHPAssignmentByRefExpression)node2).getRight());
-
+		
 		assertThat( node3, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)18), ((PHPAssignmentByRefExpression)node3).getLeft());
 		assertEquals( ast.getNodeById((long)22), ((PHPAssignmentByRefExpression)node3).getRight());
-
+		
 		assertThat( node4, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getLeft());
 		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getRight());
 	}
-
+	
 	/**
 	 * AST_ASSIGN_OP nodes are used to denote assignment expressions with operations.
-	 *
+	 * 
 	 * Any AST_ASSIGN_OP node has exactly two children:
 	 * 1) an expression, representing the variable being assigned to
 	 *    (e.g., could be AST_VAR, AST_DIM, AST_PROP, AST_STATIC_PROP, etc...)
 	 * 2) an expression, representing the expression to be evaluated, combined with the
 	 *    variable being assigned to using a given operator, and assigned to that variable
 	 *    (e.g., could be int, string, AST_VAR, AST_CONST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a few assignment with operation expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $foo += 42;
 	 * $bar .= "bonjour";
 	 * $buz ^= $onetimepad;
@@ -3017,7 +3016,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((AssignmentWithOpExpression)node).getLeft());
@@ -3027,22 +3026,22 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((AssignmentWithOpExpression)node2).getLeft());
 		assertEquals( ast.getNodeById((long)10), ((AssignmentWithOpExpression)node2).getRight());
-
+		
 		assertThat( node3, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((AssignmentWithOpExpression)node3).getLeft());
 		assertEquals( ast.getNodeById((long)14), ((AssignmentWithOpExpression)node3).getRight());
 	}
-
+	
 	/**
 	 * AST_BINARY_OP nodes are used to denote binary operation expressions.
-	 *
+	 * 
 	 * Any AST_BINARY_OP node has exactly two children:
 	 * 1) an expression on the left-hand side
 	 * 2) an expression on the right-hand side
-	 *
+	 * 
 	 * This test checks a plethora of binary operation expressions' children in the following PHP code:
-	 *
+	 * 
 	 * // bit operators
 	 * $or1 | $or2;
 	 * $and1 & $and2;
@@ -3299,120 +3298,120 @@ public class TestPHPCSVASTBuilder
 		ASTNode node18 = ast.getNodeById((long)88);
 		ASTNode node19 = ast.getNodeById((long)93);
 		ASTNode node20 = ast.getNodeById((long)98);
-
+		
 		assertThat( node, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((BinaryOperationExpression)node).getLeft());
 		assertEquals( ast.getNodeById((long)6), ((BinaryOperationExpression)node).getRight());
-
+		
 		assertThat( node2, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((BinaryOperationExpression)node2).getLeft());
 		assertEquals( ast.getNodeById((long)11), ((BinaryOperationExpression)node2).getRight());
-
+		
 		assertThat( node3, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)14), ((BinaryOperationExpression)node3).getLeft());
 		assertEquals( ast.getNodeById((long)16), ((BinaryOperationExpression)node3).getRight());
-
+		
 		assertThat( node4, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((BinaryOperationExpression)node4).getLeft());
 		assertEquals( ast.getNodeById((long)21), ((BinaryOperationExpression)node4).getRight());
-
+		
 		assertThat( node5, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node5.getChildCount());
 		assertEquals( ast.getNodeById((long)24), ((BinaryOperationExpression)node5).getLeft());
 		assertEquals( ast.getNodeById((long)26), ((BinaryOperationExpression)node5).getRight());
-
+		
 		assertThat( node6, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node6.getChildCount());
 		assertEquals( ast.getNodeById((long)29), ((BinaryOperationExpression)node6).getLeft());
 		assertEquals( ast.getNodeById((long)31), ((BinaryOperationExpression)node6).getRight());
-
+		
 		assertThat( node7, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node7.getChildCount());
 		assertEquals( ast.getNodeById((long)34), ((BinaryOperationExpression)node7).getLeft());
 		assertEquals( ast.getNodeById((long)36), ((BinaryOperationExpression)node7).getRight());
-
+		
 		assertThat( node8, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node8.getChildCount());
 		assertEquals( ast.getNodeById((long)39), ((BinaryOperationExpression)node8).getLeft());
 		assertEquals( ast.getNodeById((long)41), ((BinaryOperationExpression)node8).getRight());
-
+		
 		assertThat( node9, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node9.getChildCount());
 		assertEquals( ast.getNodeById((long)44), ((BinaryOperationExpression)node9).getLeft());
 		assertEquals( ast.getNodeById((long)46), ((BinaryOperationExpression)node9).getRight());
-
+		
 		assertThat( node10, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node10.getChildCount());
 		assertEquals( ast.getNodeById((long)49), ((BinaryOperationExpression)node10).getLeft());
 		assertEquals( ast.getNodeById((long)51), ((BinaryOperationExpression)node10).getRight());
-
+		
 		assertThat( node11, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node11.getChildCount());
 		assertEquals( ast.getNodeById((long)54), ((BinaryOperationExpression)node11).getLeft());
 		assertEquals( ast.getNodeById((long)56), ((BinaryOperationExpression)node11).getRight());
-
+		
 		assertThat( node12, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node12.getChildCount());
 		assertEquals( ast.getNodeById((long)59), ((BinaryOperationExpression)node12).getLeft());
 		assertEquals( ast.getNodeById((long)61), ((BinaryOperationExpression)node12).getRight());
-
+		
 		assertThat( node13, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node13.getChildCount());
 		assertEquals( ast.getNodeById((long)64), ((BinaryOperationExpression)node13).getLeft());
 		assertEquals( ast.getNodeById((long)66), ((BinaryOperationExpression)node13).getRight());
-
+		
 		assertThat( node14, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node14.getChildCount());
 		assertEquals( ast.getNodeById((long)69), ((BinaryOperationExpression)node14).getLeft());
 		assertEquals( ast.getNodeById((long)71), ((BinaryOperationExpression)node14).getRight());
-
+		
 		assertThat( node15, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node15.getChildCount());
 		assertEquals( ast.getNodeById((long)74), ((BinaryOperationExpression)node15).getLeft());
 		assertEquals( ast.getNodeById((long)76), ((BinaryOperationExpression)node15).getRight());
-
+		
 		assertThat( node16, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node16.getChildCount());
 		assertEquals( ast.getNodeById((long)79), ((BinaryOperationExpression)node16).getLeft());
 		assertEquals( ast.getNodeById((long)81), ((BinaryOperationExpression)node16).getRight());
-
+		
 		assertThat( node17, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node17.getChildCount());
 		assertEquals( ast.getNodeById((long)84), ((BinaryOperationExpression)node17).getLeft());
 		assertEquals( ast.getNodeById((long)86), ((BinaryOperationExpression)node17).getRight());
-
+		
 		assertThat( node18, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node18.getChildCount());
 		assertEquals( ast.getNodeById((long)89), ((BinaryOperationExpression)node18).getLeft());
 		assertEquals( ast.getNodeById((long)91), ((BinaryOperationExpression)node18).getRight());
-
+		
 		assertThat( node19, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node19.getChildCount());
 		assertEquals( ast.getNodeById((long)94), ((BinaryOperationExpression)node19).getLeft());
 		assertEquals( ast.getNodeById((long)96), ((BinaryOperationExpression)node19).getRight());
-
+		
 		assertThat( node20, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node20.getChildCount());
 		assertEquals( ast.getNodeById((long)99), ((BinaryOperationExpression)node20).getLeft());
 		assertEquals( ast.getNodeById((long)101), ((BinaryOperationExpression)node20).getRight());
 	}
-
+	
 	/**
 	 * AST_GREATER nodes are used to denote binary operation "greater than" expressions.
-	 *
+	 * 
 	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
 	 * this a normal AST_BINARY_OP node.
-	 *
+	 * 
 	 * Any AST_GREATER node has exactly two children:
 	 * 1) an expression on the left-hand side
 	 * 2) an expression on the right-hand side
-	 *
+	 * 
 	 * This test checks a "greater than" expression's children in the following PHP code:
-	 *
+	 * 
 	 * // comparison operators
 	 * $x > $y;
 	 */
@@ -3435,25 +3434,25 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(GreaterExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((GreaterExpression)node).getLeft());
 		assertEquals( ast.getNodeById((long)6), ((GreaterExpression)node).getRight());
 	}
-
+	
 	/**
 	 * AST_GREATER_EQUAL nodes are used to denote binary operation "greater or equal than" expressions.
-	 *
+	 * 
 	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
 	 * this a normal AST_BINARY_OP node.
-	 *
+	 * 
 	 * Any AST_GREATER_EQUAL node has exactly two children:
 	 * 1) an expression on the left-hand side
 	 * 2) an expression on the right-hand side
-	 *
+	 * 
 	 * This test checks a "greater or equal than" expression's children in the following PHP code:
-	 *
+	 * 
 	 * // comparison operators
 	 * $x >= $y;
 	 */
@@ -3476,25 +3475,25 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(GreaterOrEqualExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((GreaterOrEqualExpression)node).getLeft());
 		assertEquals( ast.getNodeById((long)6), ((GreaterOrEqualExpression)node).getRight());
 	}
-
+	
 	/**
 	 * AST_AND nodes are used to denote binary operation "boolean and" expressions.
-	 *
+	 * 
 	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
 	 * this a normal AST_BINARY_OP node.
-	 *
+	 * 
 	 * Any AST_AND node has exactly two children:
 	 * 1) an expression on the left-hand side
 	 * 2) an expression on the right-hand side
-	 *
+	 * 
 	 * This test checks a "boolean and" expression's children in the following PHP code:
-	 *
+	 * 
 	 * // boolean operators
 	 * $x && $y;
 	 */
@@ -3517,25 +3516,25 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(AndExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((AndExpression)node).getLeft());
 		assertEquals( ast.getNodeById((long)6), ((AndExpression)node).getRight());
 	}
-
+	
 	/**
 	 * AST_OR nodes are used to denote binary operation "boolean or" expressions.
-	 *
+	 * 
 	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
 	 * this a normal AST_BINARY_OP node.
-	 *
+	 * 
 	 * Any AST_OR node has exactly two children:
 	 * 1) an expression on the left-hand side
 	 * 2) an expression on the right-hand side
-	 *
+	 * 
 	 * This test checks a "boolean or" expression's children in the following PHP code:
-	 *
+	 * 
 	 * // boolean operators
 	 * $x || $y;
 	 */
@@ -3558,25 +3557,25 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(OrExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((OrExpression)node).getLeft());
 		assertEquals( ast.getNodeById((long)6), ((OrExpression)node).getRight());
 	}
-
+	
 	/**
 	 * AST_ARRAY_ELEM nodes are used to denote the individual elements of an array expression.
 	 * They are the children of an AST_ARRAY node; see description of AST_ARRAY.
-	 *
+	 * 
 	 * Any AST_ARRAY_ELEM node has exactly two children:
 	 * 1) an expression, representing the array element's value
 	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
 	 * 2) an expression or NULL, representing the array element's key
 	 *    (e.g., could be "string", "integer", AST_VAR, AST_CONST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a few array elements' children in the following PHP code:
-	 *
+	 * 
 	 * array("key1" => 42,
 	 *       2 => "foo",
 	 *       aconst => $bar,
@@ -3632,7 +3631,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)10);
 		ASTNode node4 = ast.getNodeById((long)16);
-
+		
 		assertThat( node, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((PHPArrayElement)node).getValue());
@@ -3642,29 +3641,29 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPArrayElement)node2).getValue());
 		assertEquals( ast.getNodeById((long)9), ((PHPArrayElement)node2).getKey());
-
+		
 		assertThat( node3, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((PHPArrayElement)node3).getValue());
 		assertEquals( ast.getNodeById((long)13), ((PHPArrayElement)node3).getKey());
-
+		
 		assertThat( node4, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)17), ((PHPArrayElement)node4).getValue());
 		assertNull( ((PHPArrayElement)node4).getKey());
 	}
-
+	
 	/**
 	 * AST_NEW nodes are used to denote 'new' expressions used to create a new instance
 	 * of a class.
-	 *
+	 * 
 	 * Any AST_NEW node has exactly 2 children:
 	 * 1) an expression, whose evaluation holds the name of the class to be instantiated
 	 *    (e.g., could be AST_NAME, AST_VAR, ...)
 	 * 2) AST_ARG_LIST, representing the argument list
-	 *
+	 * 
 	 * This test checks a few new expressions' children in the following PHP code:
-	 *
+	 * 
 	 * new Foo($bar);
 	 * new $buz();
 	 */
@@ -3697,14 +3696,14 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)9);
-
+		
 		assertThat( node, instanceOf(NewExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((NewExpression)node).getTargetClass());
 		assertEquals( "Foo", ((Identifier)((NewExpression)node).getTargetClass()).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((NewExpression)node).getArgumentList());
 		assertEquals( 1, ((NewExpression)node).getArgumentList().size());
-
+		
 		assertThat( node2, instanceOf(NewExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((NewExpression)node2).getTargetClass());
@@ -3712,20 +3711,20 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
 		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
 	}
-
+	
 	/**
 	 * AST_INSTANCEOF nodes are used to denote 'instanceof' expressions used to check whether
 	 * a given expression evaluates to an instance of a given class.
-	 *
+	 * 
 	 * Any AST_INSTANCEOF node has exactly 2 children:
 	 * 1) an expression, whose evaluation holds the object to be checked
 	 *    (e.g., could be AST_VAR, AST_CALL, ...)
 	 * 2) an expression, whose evaluation holds the name of the class that the object
 	 *    may or may not be an instance of
 	 *    (e.g., could be AST_NAME, AST_VAR, ...)
-	 *
+	 * 
 	 * This test checks a few instanceof expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $foo instanceof Bar;
 	 * buz() instanceof $qux;
 	 */
@@ -3765,14 +3764,14 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)8);
-
+		
 		assertThat( node, instanceOf(InstanceofExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((InstanceofExpression)node).getInstanceExpression());
 		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassExpression());
 		assertEquals( "Bar", ((Identifier)((InstanceofExpression)node).getClassExpression()).getNameChild().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(InstanceofExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((InstanceofExpression)node2).getInstanceExpression());
@@ -3780,18 +3779,18 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassExpression());
 		assertEquals( "qux", ((Variable)((InstanceofExpression)node2).getClassExpression()).getNameExpression().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_YIELD nodes are used to denote yield expressions used in generators.
 	 * See http://php.net/manual/en/language.generators.syntax.php
-	 *
+	 * 
 	 * Any AST_YIELD node has exactly 2 children:
 	 * 1) an expression or NULL, whose evaluation holds the value to be yielded
 	 *    (if it is NULL, then the function interrupts execution, but returns nothing)
 	 * 2) an expression or NULL, specifying an optional key to be yielded
-	 *
+	 * 
 	 * This test checks a few yield expressions' children in the following PHP code:
-	 *
+	 * 
 	 * function foo() {
 	 *   yield 42;
 	 *   yield $somekey => bar();
@@ -3837,13 +3836,13 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)7);
 		ASTNode node2 = ast.getNodeById((long)10);
-
+		
 		assertThat( node, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPYieldExpression)node).getValue());
 		assertEquals( "42", ((PHPYieldExpression)node).getValue().getEscapedCodeStr());
 		assertNull( ((PHPYieldExpression)node).getKey());
-
+		
 		assertThat( node2, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((PHPYieldExpression)node2).getValue());
@@ -3851,19 +3850,19 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)15), ((PHPYieldExpression)node2).getKey());
 		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameExpression().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_COALESCE nodes are used to represent coalesce expressions, i.e., expressions
 	 * using the ?? operator.
-	 *
+	 * 
 	 * Any AST_COALESCE node has exactly two children:
 	 * 1) various possible types (including plain nodes), representing
 	 *    the expression on the left side
 	 * 2) various possible types (including plain nodes), representing
 	 *    the expression on the right side
-	 *
+	 * 
 	 * This test checks a coalesce expression's children in the following PHP code:
-	 *
+	 * 
 	 * "foo" ?? "bar";
 	 */
 	@Test
@@ -3881,24 +3880,24 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PHPCoalesceExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPCoalesceExpression)node).getLeft());
 		assertEquals( ast.getNodeById((long)5), ((PHPCoalesceExpression)node).getRight());
 	}
-
+	
 	/**
 	 * AST_STATIC nodes are used to denote static variable declarations.
 	 * See http://php.net/manual/en/language.variables.scope.php#language.variables.scope.static
-	 *
+	 * 
 	 * Any AST_STATIC node has exactly two children:
 	 * 1) string, indicating the static variable's name
 	 * 2) various possible child types, representing the default value
 	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
-	 *
+	 *    
 	 * This test checks a few static variable declarations' children in the following PHP code:
-	 *
+	 * 
 	 * function foo() {
 	 *   static $bar, $buz = 42, $qux = norf();
 	 * }
@@ -3950,7 +3949,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)8);
 		ASTNode node2 = ast.getNodeById((long)11);
 		ASTNode node3 = ast.getNodeById((long)14);
-
+		
 		assertThat( node, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((StaticVariableDeclaration)node).getNameChild());
@@ -3963,7 +3962,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "buz", ((StaticVariableDeclaration)node2).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)13), ((StaticVariableDeclaration)node2).getDefault());
 		assertEquals( "42", ((StaticVariableDeclaration)node2).getDefault().getEscapedCodeStr());
-
+		
 		assertThat( node3, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)15), ((StaticVariableDeclaration)node3).getNameChild());
@@ -3971,19 +3970,19 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)16), ((StaticVariableDeclaration)node3).getDefault());
 		assertEquals( "norf", ((Identifier)((CallExpression)((StaticVariableDeclaration)node3).getDefault()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_WHILE nodes are used to declare while loops.
-	 *
+	 * 
 	 * Any AST_WHILE node has exactly two children:
 	 * 1) various possible types, representing the expression in the loop's guard,
 	 *    also known as "condition" or "predicate"
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
 	 * 2) statement types or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a few while loops' children in the following PHP code:
-	 *
+	 * 
 	 * while($foo) {}
 	 * while(true) {}
 	 * while(somecall()) {}
@@ -4040,7 +4039,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)12);
 		ASTNode node4 = ast.getNodeById((long)18);
-
+		
 		assertThat( node, instanceOf(WhileStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((WhileStatement)node).getCondition());
@@ -4050,12 +4049,12 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((WhileStatement)node2).getCondition());
 		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getStatement());
-
+		
 		assertThat( node3, instanceOf(WhileStatement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((WhileStatement)node3).getCondition());
 		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getStatement());
-
+		
 		assertThat( node4, instanceOf(WhileStatement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((WhileStatement)node4).getCondition());
@@ -4064,16 +4063,16 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_DO_WHILE nodes are used to declare do-while loops.
-	 *
+	 * 
 	 * Any AST_DO_WHILE node has exactly two children:
 	 * 1) statement types or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 * 2) various possible types, representing the expression in the loop's guard,
 	 *    also known as "condition" or "predicate"
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
-	 *
+	 * 
 	 * This test checks a few while loops' children in the following PHP code:
-	 *
+	 * 
 	 * do {} while($foo);
 	 * do {} while(true);
 	 * do {} while(somecall());
@@ -4130,7 +4129,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)7);
 		ASTNode node3 = ast.getNodeById((long)12);
 		ASTNode node4 = ast.getNodeById((long)18);
-
+		
 		assertThat( node, instanceOf(DoStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((DoStatement)node).getStatement());
@@ -4140,12 +4139,12 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((DoStatement)node2).getStatement());
 		assertEquals( ast.getNodeById((long)9), ((DoStatement)node2).getCondition());
-
+		
 		assertThat( node3, instanceOf(DoStatement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((DoStatement)node3).getStatement());
 		assertEquals( ast.getNodeById((long)14), ((DoStatement)node3).getCondition());
-
+		
 		assertThat( node4, instanceOf(DoStatement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((DoStatement)node4).getStatement());
@@ -4156,7 +4155,7 @@ public class TestPHPCSVASTBuilder
 	 * AST_IF_ELEM nodes are used to denote the individual elements of an if-statement.
 	 * Similarly as while or do-while loops, they are composed of a condition and
 	 * a statement; see description of AST_IF for the bigger picture.
-	 *
+	 * 
 	 * Any AST_IF_ELEM node has exactly two children:
 	 * 1) various possible types or NULL, representing the expression in the element's guard,
 	 *    also known as "condition" or "predicate"; NULL is used when there is no such
@@ -4164,9 +4163,9 @@ public class TestPHPCSVASTBuilder
 	 *    (e.g., could be NULL, AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
 	 * 2) statement types or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a few if-elements' children in the following PHP code:
-	 *
+	 * 
 	 * if($foo) {}
 	 * elseif($bar) {}
 	 * elseif($buz) {}
@@ -4216,7 +4215,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)8);
 		ASTNode node3 = ast.getNodeById((long)12);
 		ASTNode node4 = ast.getNodeById((long)16);
-
+		
 		assertThat( node, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((PHPIfElement)node).getCondition());
@@ -4226,30 +4225,30 @@ public class TestPHPCSVASTBuilder
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPIfElement)node2).getCondition());
 		assertEquals( ast.getNodeById((long)11), ((PHPIfElement)node2).getStatement());
-
+		
 		assertThat( node3, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((PHPIfElement)node3).getCondition());
 		assertEquals( ast.getNodeById((long)15), ((PHPIfElement)node3).getStatement());
-
+		
 		assertThat( node4, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertNull( ((PHPIfElement)node4).getCondition());
 		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node4).getStatement());
 	}
-
+	
 	/**
 	 * AST_SWITCH nodes are used to denote switch-statements.
 	 * They are composed of an expression that evaluates to a value (matched against the different
 	 * switch-element's values) and a switch list composed of switch-elements.
-	 *
+	 * 
 	 * Any AST_SWITCH node has exactly two children:
 	 * 1) various possible types, representing the expression in the switch statement's guard,
 	 *    (e.g., could be AST_VAR, AST_CONST, AST_CALL, AST_BINARY_OP, etc...)
 	 * 2) AST_SWITCH_LIST, a list of switch-elements in the switch statement's body
-	 *
+	 * 
 	 * This test checks a switch-statement's children in the following PHP code:
-	 *
+	 * 
 	 * switch ($i) {
 	 *   case "foo":
 	 *     break;
@@ -4317,7 +4316,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PHPSwitchStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPSwitchStatement)node).getExpression());
@@ -4325,20 +4324,20 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)6), ((PHPSwitchStatement)node).getSwitchList());
 		assertEquals( 4, ((PHPSwitchStatement)node).getSwitchList().size());
 	}
-
+	
 	/**
 	 * AST_SWITCH_CASE nodes are used to denote the individual switch-elements of a switch list.
 	 * Similarly as if-elements, they are composed of a value (matched against a condition) and
 	 * a statement list; see description of AST_SWITCH_LIST and AST_SWITCH for the bigger picture.
-	 *
+	 * 
 	 * Any AST_SWITCH_CASE node has exactly two children:
 	 * 1) an Expression or NULL, representing the value in the switch element's guard,
 	 *    NULL is used when there is no such value, i.e., in "default" switch-elements.
 	 *    (e.g., could be integer, double, string, AST_CONST, AST_CLASS_CONST, ...)
 	 * 2) AST_STMT_LIST, representing the code in the switch element's body
-	 *
+	 * 
 	 * This test checks a few switch-elements' children in the following PHP code:
-	 *
+	 * 
 	 * switch ($i) {
 	 *   case "foo":
 	 *     break;
@@ -4409,46 +4408,46 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)12);
 		ASTNode node3 = ast.getNodeById((long)15);
 		ASTNode node4 = ast.getNodeById((long)20);
-
+		
 		assertThat( node, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((PHPSwitchCase)node).getValue());
 		assertEquals( "string", ((PHPSwitchCase)node).getValue().getProperty("type"));
 		assertEquals( "foo", ((PHPSwitchCase)node).getValue().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)9), ((PHPSwitchCase)node).getStatement());
-
+		
 		assertThat( node2, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)13), ((PHPSwitchCase)node2).getValue());
 		assertEquals( "double", ((PHPSwitchCase)node2).getValue().getProperty("type"));
 		assertEquals( "1.42", ((PHPSwitchCase)node2).getValue().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)14), ((PHPSwitchCase)node2).getStatement());
-
+		
 		assertThat( node3, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)16), ((PHPSwitchCase)node3).getValue());
 		assertEquals( "integer", ((PHPSwitchCase)node3).getValue().getProperty("type"));
 		assertEquals( "2", ((PHPSwitchCase)node3).getValue().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)17), ((PHPSwitchCase)node3).getStatement());
-
+		
 		assertThat( node4, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node4.getChildCount());
 		assertNull( ((PHPSwitchCase)node4).getValue());
 		assertEquals( ast.getNodeById((long)22), ((PHPSwitchCase)node4).getStatement());
 	}
-
+	
 	/**
 	 * AST_DECLARE nodes are used to denote declare statements.
 	 * See http://php.net/manual/en/control-structures.declare.php
-	 *
+	 * 
 	 * Any AST_DECLARE node has exactly two children:
 	 * 1) AST_CONST_DECL, holding the set directive(s)
 	 * 2) AST_STMT_LIST or NULL, holding the code to be executed under the given directives
 	 *    (If no curly brackets are used, then this child is NULL and the directives affect
 	 *    all code following the declare statement.)
-	 *
+	 *    
 	 * This test checks a few declare statement's children in the following PHP code:
-	 *
+	 * 
 	 * declare(ticks=1) {}
 	 * declare(encoding='ISO-8859-1');
 	 */
@@ -4485,7 +4484,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)9);
-
+		
 		assertThat( node, instanceOf(PHPDeclareStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPDeclareStatement)node).getDeclares());
@@ -4496,19 +4495,19 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)10), ((PHPDeclareStatement)node2).getDeclares());
 		assertNull( ((PHPDeclareStatement)node2).getContent());
 	}
-
+	
 	/**
 	 * AST_PROP_ELEM nodes are used to denote the individual elements of a property declaration
 	 * statement in the top-level scope of a class.
 	 * They are the children of an AST_PROP_DECL node; see description of AST_PROP_DECL.
-	 *
+	 * 
 	 * Any AST_PROP_ELEM node has exactly two children:
 	 * 1) string, indicating the property's name
 	 * 2) various possible child types, representing the default value
 	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
-	 *
+	 *    
 	 * This test checks a few property elements' children in the following PHP code:
-	 *
+	 * 
 	 * class Foo {
 	 *   public $foo, $bar = 3, $buz = "bonjour", $qux = SOMECONSTANT;
 	 * }
@@ -4565,7 +4564,7 @@ public class TestPHPCSVASTBuilder
 		ASTNode node2 = ast.getNodeById((long)12);
 		ASTNode node3 = ast.getNodeById((long)15);
 		ASTNode node4 = ast.getNodeById((long)18);
-
+		
 		assertThat( node, instanceOf(PropertyElement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((PropertyElement)node).getNameChild());
@@ -4578,14 +4577,14 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "bar", ((PropertyElement)node2).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)14), ((PropertyElement)node2).getDefault());
 		assertEquals( "3", ((PropertyElement)node2).getDefault().getEscapedCodeStr());
-
+		
 		assertThat( node3, instanceOf(PropertyElement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)16), ((PropertyElement)node3).getNameChild());
 		assertEquals( "buz", ((PropertyElement)node3).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)17), ((PropertyElement)node3).getDefault());
 		assertEquals( "bonjour", ((PropertyElement)node3).getDefault().getEscapedCodeStr());
-
+		
 		assertThat( node4, instanceOf(PropertyElement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertEquals( ast.getNodeById((long)19), ((PropertyElement)node4).getNameChild());
@@ -4593,20 +4592,20 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)20), ((PropertyElement)node4).getDefault());
 		assertEquals( "SOMECONSTANT", ((Constant)((PropertyElement)node4).getDefault()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_CONST_ELEM nodes are used to denote the individual elements of a constant declaration
 	 * statement, either on top level or within the scope of a class.
 	 * They are the children of AST_CONST_DECL and AST_CLASS_CONST_DECL nodes;
 	 * see descriptions of these.
-	 *
+	 * 
 	 * Any AST_CONST_ELEM node has exactly two children:
 	 * 1) string, indicating the constant's name
 	 * 2) various possible child types, representing the value
 	 *    (e.g., node type could be "string", "integer", but also AST_CONST, etc.)
-	 *
+	 *    
 	 * This test checks a few constant elements' children in the following PHP code:
-	 *
+	 * 
 	 * const QUESTION = "any", ANSWER = 42;
 	 */
 	@Test
@@ -4633,7 +4632,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)4);
 		ASTNode node2 = ast.getNodeById((long)7);
-
+		
 		assertThat( node, instanceOf(ConstantElement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)5), ((ConstantElement)node).getNameChild());
@@ -4648,19 +4647,19 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((ConstantElement)node2).getValue());
 		assertEquals( "42", ((ConstantElement)node2).getValue().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_USE_TRAIT nodes are used to denote trait use statements. They can optionally
 	 * contain trait adaptations.
 	 * See http://php.net/manual/en/language.oop5.traits.php
-	 *
+	 * 
 	 * Any AST_USE_TRAIT node has exactly two children:
 	 * 1) AST_NAME_LIST, holding a list of traits to be used
 	 * 2) AST_TRAIT_ADAPTATIONS or NULL, representing the optional trait adaptations
 	 *    for the used traits
-	 *
+	 *    
 	 * This test checks a use trait statement's children in the following PHP code:
-	 *
+	 * 
 	 * class SomeClass {
 	 *   use Foo, Bar, Buz {
 	 *     qux as protected _qux;
@@ -4748,7 +4747,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)8);
-
+		
 		assertThat( node, instanceOf(PHPUseTrait.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((PHPUseTrait)node).getTraits());
@@ -4757,21 +4756,21 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "Buz", ((PHPUseTrait)node).getTraits().getIdentifier(2).getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)16), ((PHPUseTrait)node).getTraitAdaptations());
 	}
-
+	
 	/**
 	 * AST_TRAIT_PRECEDENCE nodes are used to denote trait precedence statements within a
 	 * trait use statement. Such statements are used to resolve conflicts when using
 	 * several traits that declare the same method name and indicate which of these
 	 * methods is to be used.
 	 * See http://php.net/manual/en/language.oop5.traits.php
-	 *
+	 * 
 	 * Any AST_TRAIT_PRECEDENCE node has exactly two children:
 	 * 1) AST_METHOD_REFERENCE, representing the trait method to be used
 	 * 2) AST_NAME_LIST, holding a list of trait names that declare the same
 	 *    method name but whose method is not to be used
-	 *
+	 *    
 	 * This test checks a trait precedence statement's children in the following PHP code:
-	 *
+	 * 
 	 * class SomeClass {
 	 *   use Foo, Bar, Buz {
 	 *     qux as protected _qux;
@@ -4859,7 +4858,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)28);
-
+		
 		assertThat( node, instanceOf(PHPTraitPrecedence.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)29), ((PHPTraitPrecedence)node).getMethod());
@@ -4867,21 +4866,21 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "Bar", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(0).getNameChild().getEscapedCodeStr());
 		assertEquals( "Buz", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(1).getNameChild().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_METHOD_REFERENCE nodes are used to denote references to methods.
 	 * They are composed of a reference to the class that declares the referenced method,
 	 * and the method name. They appear as children of trait adaptation elements;
 	 * see AST_TRAIT_ALIAS and AST_TRAIT_PRECEDENCE.
 	 * (TODO check if they can appear in other contexts)
-	 *
+	 * 
 	 * Any AST_METHOD_REFERENCE node has exactly two children:
 	 * 1) AST_NAME or NULL, representing the class that the referenced method is declared in
 	 *    (or null if no class name is given)
 	 * 2) string, indicating the method's name
-	 *
+	 *    
 	 * This test checks a few method references' children in the following PHP code:
-	 *
+	 * 
 	 * class SomeClass {
 	 *   use Foo, Bar, Buz {
 	 *     qux as protected _qux;
@@ -4971,20 +4970,20 @@ public class TestPHPCSVASTBuilder
 		ASTNode node = ast.getNodeById((long)18);
 		ASTNode node2 = ast.getNodeById((long)23);
 		ASTNode node3 = ast.getNodeById((long)29);
-
+		
 		assertThat( node, instanceOf(MethodReference.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((MethodReference)node).getClassIdentifier());
 		assertEquals( ast.getNodeById((long)20), ((MethodReference)node).getMethodName());
 		assertEquals( "qux", ((MethodReference)node).getMethodName().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(MethodReference.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)24), ((MethodReference)node2).getClassIdentifier());
 		assertEquals( "Bar", ((MethodReference)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)26), ((MethodReference)node2).getMethodName());
 		assertEquals( "norf", ((MethodReference)node2).getMethodName().getEscapedCodeStr());
-
+		
 		assertThat( node3, instanceOf(MethodReference.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( ast.getNodeById((long)30), ((MethodReference)node3).getClassIdentifier());
@@ -5000,13 +4999,13 @@ public class TestPHPCSVASTBuilder
 	 * following until the next namespace statement; a namespace without a name opens
 	 * a "non-namespaced" scope)
 	 * See  http://php.net/manual/en/language.namespaces.definitionmultiple.php
-	 *
+	 * 
 	 * Any AST_NAMESPACE node has exactly two children:
 	 * 1) string or NULL, representing the namespace name
 	 * 2) AST_STMT_LIST or NULL, holding the namespaced code
-	 *
+	 *    
 	 * This test checks a few use namespace statements' children in the following PHP code:
-	 *
+	 * 
 	 * namespace Foo {}
 	 * namespace Bar;
 	 * namespace {}
@@ -5044,29 +5043,29 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)4), ((NamespaceStatement)node).getName());
 		assertEquals( "Foo", ((NamespaceStatement)node).getName().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)5), ((NamespaceStatement)node).getContent());
-
+		
 		assertThat( node2, instanceOf(NamespaceStatement.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((NamespaceStatement)node2).getName());
 		assertEquals( "Bar", ((NamespaceStatement)node2).getName().getEscapedCodeStr());
 		assertNull( ((NamespaceStatement)node2).getContent());
-
+		
 		assertThat( node3, instanceOf(NamespaceStatement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertNull( ((NamespaceStatement)node3).getName());
 		assertEquals( ast.getNodeById((long)11), ((NamespaceStatement)node3).getContent());
 	}
-
+	
 	/**
 	 * AST_USE_ELEM nodes are used to denote individual use statement elements within a
 	 * use statement. They are the children of AST_USE nodes.
-	 *
+	 * 
 	 * Any AST_USE_ELEM node has exactly two children:
 	 * 1) string, representing the imported namespace
 	 * 2) string or NULL, indicating the optional alias for the namespace
-	 *
+	 *    
 	 * This test checks a few use statement elements' children in the following PHP code:
-	 *
+	 * 
 	 * use Foo\Bar as Buz, Qux as Norf;
 	 */
 	@Test
@@ -5100,7 +5099,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "Foo\\Bar", ((UseElement)node).getNamespace().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)6), ((UseElement)node).getAlias());
 		assertEquals( "Buz", ((UseElement)node).getAlias().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(UseElement.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)8), ((UseElement)node2).getNamespace());
@@ -5108,20 +5107,20 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((UseElement)node2).getAlias());
 		assertEquals( "Norf", ((UseElement)node2).getAlias().getEscapedCodeStr());
 	}
-
+	
 	/**
 	 * AST_TRAIT_ALIAS nodes are used to denote trait alias statements within a
 	 * trait use statement. Such statements are used to declare aliases for
 	 * trait methods, or to change the visibility of trait methods.
 	 * See http://php.net/manual/en/language.oop5.traits.php
-	 *
+	 * 
 	 * Any AST_TRAIT_ALIAS node has exactly two children:
 	 * 1) AST_METHOD_REFERENCE, representing the trait method being referenced
 	 * 2) string or NULL, indicating: if it's a string, the alias name; or if it's NULL,
 	 *    we are only changing a trait method's visibility without declaring an alias
-	 *
+	 *    
 	 * This test checks a few trait alias statements' children in the following PHP code:
-	 *
+	 * 
 	 * class SomeClass {
 	 *   use Foo, Bar, Buz {
 	 *     qux as protected _qux;
@@ -5210,30 +5209,30 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)17);
 		ASTNode node2 = ast.getNodeById((long)22);
-
+		
 		assertThat( node, instanceOf(PHPTraitAlias.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)18), ((PHPTraitAlias)node).getMethod());
 		assertEquals( ast.getNodeById((long)21), ((PHPTraitAlias)node).getAlias());
 		assertEquals( "_qux", ((PHPTraitAlias)node).getAlias().getEscapedCodeStr());
-
+		
 		assertThat( node2, instanceOf(PHPTraitAlias.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)23), ((PHPTraitAlias)node2).getMethod());
 		assertNull( ((PHPTraitAlias)node2).getAlias());
 	}
-
+	
 	/**
 	 * AST_GROUP_USE nodes are used to denote group use statements.
 	 * This is a new feature in PHP 7, see
 	 * http://php.net/manual/en/language.namespaces.importing.php#language.namespaces.importing.group
-	 *
+	 * 
 	 * Any AST_GROUP_USE node has exactly two children:
 	 * 1) string, representing the prefix of the namespaces to be used
 	 * 2) AST_USE, holding the used namespaces
-	 *
+	 *    
 	 * This test checks a group use statement's children in the following PHP code:
-	 *
+	 * 
 	 * use Foo\{Bar as B, Buz, Qux as Q};
 	 */
 	@Test
@@ -5276,13 +5275,13 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "Foo", ((PHPGroupUseStatement)node).getPrefix().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)5), ((PHPGroupUseStatement)node).getUses());
 	}
-
+	
 
 	/* nodes with exactly 3 children */
-
+	
 	/**
 	 * AST_METHOD_CALL nodes are used to denote method call expressions.
-	 *
+	 * 
 	 * Any AST_METHOD_CALL node has exactly 3 children:
 	 * 1) an expression node, representing the expression whose evaluation yields the
 	 *    object that the target method belongs to
@@ -5291,9 +5290,9 @@ public class TestPHPCSVASTBuilder
 	 *    target method's name
 	 *    (e.g., could be AST_VAR, "string", AST_BINARY_OP, ...)
 	 * 3) AST_ARG_LIST, representing the argument list
-	 *
+	 * 
 	 * This test checks a few method call expressions' children in the following PHP code:
-	 *
+	 * 
 	 * $buz->foo($bar, "yabadabadoo");
 	 * buz()->$foo($bar, "yabadabadoo");
 	 */
@@ -5344,7 +5343,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(MethodCallExpression.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((MethodCallExpression)node).getTargetObject());
@@ -5353,7 +5352,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "foo", ((MethodCallExpression)node).getTargetFunc().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)7), ((MethodCallExpression)node).getArgumentList());
 		assertEquals( 2, ((MethodCallExpression)node).getArgumentList().size());
-
+		
 		assertThat( node2, instanceOf(MethodCallExpression.class));
 		assertEquals( 3, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((MethodCallExpression)node2).getTargetObject());
@@ -5363,18 +5362,18 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)18), ((MethodCallExpression)node2).getArgumentList());
 		assertEquals( 2, ((MethodCallExpression)node2).getArgumentList().size());
 	}
-
+	
 	/**
 	 * AST_STATIC_CALL nodes are used to denote static call expressions.
-	 *
+	 * 
 	 * Any AST_STATIC_CALL node has exactly 3 children:
 	 * 1) an expression, whose evaluation holds the class name that the static target method belongs to
 	 *    (e.g., could be AST_NAME, AST_VAR, etc...)
 	 * 2) a "string" node, representing the static method's name within the class
 	 * 3) AST_ARG_LIST, representing the argument list
-	 *
+	 * 
 	 * This test checks a few static call expressions' children in the following PHP code:
-	 *
+	 * 
 	 * Foo::bar($buz);
 	 * $qux::{norf[42]}();
 	 */
@@ -5428,7 +5427,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTargetFunc());
 		assertEquals( "bar", ((StaticCallExpression)node).getTargetFunc().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getArgumentList());
-
+		
 		assertThat( node2, instanceOf(StaticCallExpression.class));
 		assertEquals( 3, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((StaticCallExpression)node2).getTargetClass());
@@ -5437,18 +5436,18 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "norf", ((Variable)((ArrayIndexing)((StaticCallExpression)node2).getTargetFunc()).getArrayExpression()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)17), ((StaticCallExpression)node2).getArgumentList());
 	}
-
+	
 	/**
 	 * AST_CONDITIONAL nodes are used to represent conditional expressions using the ?: operator,
 	 * also known as the ternary conditional operator.
-	 *
+	 * 
 	 * Any AST_CONDITIONAL node has exactly three children:
 	 * 1) an expression representing the conditional
 	 * 2) an expression representing the true branch, or NULL
 	 * 3) an expression representing the false branch
-	 *
+	 * 
 	 * This test checks a conditional expression's children in the following PHP code:
-	 *
+	 * 
 	 * true ? "foo" : "bar";
 	 */
 	@Test
@@ -5472,25 +5471,25 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(ConditionalExpression.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((ConditionalExpression)node).getCondition());
 		assertEquals( ast.getNodeById((long)7), ((ConditionalExpression)node).getTrueExpression());
 		assertEquals( ast.getNodeById((long)8), ((ConditionalExpression)node).getFalseExpression());
 	}
-
+	
 	/**
 	 * AST_TRY nodes are used for try statements.
-	 *
+	 * 
 	 * Any AST_TRY node has exactly three children:
 	 * 1) AST_STMT_LIST, representing the code to be "tried"
 	 * 2) AST_CATCH_LIST, representing the list of catch statements, i.e.,
 	 *    the list of caught exceptions.
 	 * 3) AST_STMT_LIST or NULL, representing a finally statement, if it exists.
-	 *
+	 * 
 	 * This test checks a few catch statements' children in the following PHP code:
-	 *
+	 * 
 	 * try {}
 	 * catch(FooException $f) {}
 	 * catch(BarException $b) {}
@@ -5533,24 +5532,24 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(TryStatement.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((TryStatement)node).getContent());
 		assertEquals( ast.getNodeById((long)5), ((TryStatement)node).getCatchList());
 		assertEquals( ast.getNodeById((long)16), ((TryStatement)node).getFinallyContent());
 	}
-
+	
 	/**
 	 * AST_CATCH nodes are used for catch statements.
-	 *
+	 * 
 	 * Any AST_CATCH node has exactly three children:
 	 * 1) AST_NAME, representing the exception's name
-	 * 2) string, indicating the variable name holding the exception
+	 * 2) string, indicating the variable name holding the exception 
 	 * 3) AST_STMT_LIST, representing the catch statement's content
-	 *
+	 * 
 	 * This test checks a few catch statements' children in the following PHP code:
-	 *
+	 * 
 	 * try {}
 	 * catch(FooException $f) {}
 	 * catch(BarException $b) {}
@@ -5594,7 +5593,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)11);
-
+		
 		assertThat( node, instanceOf(CatchStatement.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((CatchStatement)node).getExceptionIdentifier());
@@ -5603,7 +5602,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((CatchStatement)node).getVariableName());
 		assertEquals( "f", ((CatchStatement)node).getVariableName().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)10), ((CatchStatement)node).getContent());
-
+		
 		assertThat( node2, instanceOf(CatchStatement.class));
 		assertEquals( 3, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)12), ((CatchStatement)node2).getExceptionIdentifier());
@@ -5616,21 +5615,21 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_PARAM nodes are used for function parameters.
-	 *
+	 * 
 	 * Any AST_PARAM node has exactly three children:
 	 * 1) AST_NAME or NULL, representing the parameter's type
 	 * 2) string, indicating the parameter's name
 	 * 3) various possible child types, representing the default value
 	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
-	 *
+	 * 
 	 * This test checks a parameter's children in the following PHP code:
-	 *
+	 * 
 	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
 	 */
 	@Test
 	public void testParameterCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;
+		String nodeStr = nodeHeader;	
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
 		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
 		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
@@ -5659,7 +5658,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)5);
 		ASTNode node2 = ast.getNodeById((long)10);
-
+		
 		assertThat( node, instanceOf(PHPParameter.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)6), ((PHPParameter)node).getType());
@@ -5681,12 +5680,12 @@ public class TestPHPCSVASTBuilder
 		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
 	}
 
-
+	
 	/* nodes with exactly 4 children */
 
 	/**
 	 * AST_FOR nodes are used to declare for-loops.
-	 *
+	 * 
 	 * Any AST_FOR node has exactly four children:
 	 * 1) AST_EXPR_LIST or NULL, representing the list of expressions
 	 *    used to initialize the loop
@@ -5696,9 +5695,9 @@ public class TestPHPCSVASTBuilder
 	 *    used to increment or otherwise modify variables in each step
 	 * 4) statement node or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a for loop's children in the following PHP code:
-	 *
+	 * 
 	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
 	 */
 	@Test
@@ -5764,10 +5763,10 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)18), ((ForStatement)node).getForLoopExpression());
 		assertEquals( ast.getNodeById((long)25), ((ForStatement)node).getStatement());
 	}
-
+	
 	/**
 	 * AST_FOREACH nodes are used to declare foreach-loops.
-	 *
+	 * 
 	 * Any AST_FOREACH node has exactly four children:
 	 * 1) various possible types, representing the array or object to be iterated over
 	 *    (e.g., could be AST_VAR, AST_CALL, AST_CONST, etc...)
@@ -5775,9 +5774,9 @@ public class TestPHPCSVASTBuilder
 	 * 3) AST_VAR or NULL, representing the key of the current element
 	 * 4) statement types or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
-	 *
+	 * 
 	 * This test checks a foreach loop's children in the following PHP code:
-	 *
+	 * 
 	 * foreach ($somearray as $foo) {}
 	 * foreach (somecall() as $bar => $foo) {}
 	 */
@@ -5831,7 +5830,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)6), ((ForEachStatement)node).getValueExpression());
 		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertEquals( ast.getNodeById((long)9), ((ForEachStatement)node).getStatement());
-
+		
 		assertThat( node2, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((ForEachStatement)node2).getIteratedObject());
@@ -5845,12 +5844,12 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_ARG_LIST nodes are used to denote a list of arguments in a function call.
-	 *
+	 * 
 	 * Any AST_ARG_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one argument in the list.
-	 *
+	 * 
 	 * This test checks a few argument lists' children in the following PHP code:
-	 *
+	 * 
 	 * foo($bar, "yabadabadoo");
 	 * $buz(1);
 	 */
@@ -5887,7 +5886,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)13);
-
+		
 		assertThat( node, instanceOf(ArgumentList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ArgumentList)node).size());
@@ -5895,7 +5894,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((ArgumentList)node).getArgument(1));
 		for( ASTNode argument : (ArgumentList)node)
 			assertTrue( ast.containsValue(argument));
-
+		
 		assertThat( node2, instanceOf(ArgumentList.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( 1, ((ArgumentList)node2).size());
@@ -5903,17 +5902,17 @@ public class TestPHPCSVASTBuilder
 		for( ASTNode argument : (ArgumentList)node)
 			assertTrue( ast.containsValue(argument));
 	}
-
+	
 	/**
 	 * AST_LIST nodes are used to denote PHP list expressions.
-	 *
+	 * 
 	 * Any AST_LIST node has between 1 and an arbitrarily large number of children.
 	 * (Note: an empty list will generate an implicit NULL node child,
 	 * see TestPHPCSVASTBuilderMinimal.testMinimalListCreation()).
 	 * Each child corresponds to one element in the list.
-	 *
+	 * 
 	 * This test checks a few PHP list expressions' children in the following PHP code:
-	 *
+	 * 
 	 * list($a, , list($c, $d)) = array("foo", "bar", array("buz", "qux"));
 	 */
 	@Test
@@ -5987,7 +5986,7 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(2));
 		for( ASTNode element : (PHPListExpression)node) // TODO iterate over Expression's
 			assertTrue( null == element || ast.containsValue(element));
-
+		
 		assertThat( node2, instanceOf(PHPListExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( 2, ((PHPListExpression)node2).size());
@@ -5996,15 +5995,15 @@ public class TestPHPCSVASTBuilder
 		for( ASTNode element : (PHPListExpression)node2) // TODO iterate over Expression's
 			assertTrue( ast.containsValue(element));
 	}
-
+	
 	/**
 	 * AST_ARRAY nodes are used to denote array declaration expressions.
-	 *
+	 * 
 	 * Any AST_ARRAY node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one element in the array.
-	 *
+	 * 
 	 * This test checks an array expression's children in the following PHP code:
-	 *
+	 * 
 	 * array("key1" => 42,
 	 *       2 => "foo",
 	 *       aconst => $bar,
@@ -6073,13 +6072,13 @@ public class TestPHPCSVASTBuilder
 	 * AST_ENCAPS_LIST nodes are used for holding strings with variables,
 	 * i.e., non-constant strings wherein variable expansion occurs.
 	 * See http://php.net/manual/en/language.types.string.php#language.types.string.parsing
-	 *
+	 * 
 	 * Any AST_ENCAPS_LIST node has between 1 and an arbitrarily large number
 	 * of children. Each child is either (a) a "string" node; or (b) an AST_VAR node;
 	 * or (c) an AST_DIM node; or (d) an AST_PROP node.
-	 *
+	 * 
 	 * This test checks an encapsulated list's children in the following PHP code:
-	 *
+	 * 
 	 * "Hello {$foo}, {$bar['somekey']} and {$buz->qux}!";
 	 */
 	@Test
@@ -6135,19 +6134,19 @@ public class TestPHPCSVASTBuilder
 		for( Expression element : (PHPEncapsListExpression)node)
 			assertTrue( ast.containsValue(element));
 	}
-
+	
 	/**
 	 * AST_EXPR_LIST nodes are used for holding a list of expressions, e.g.,
 	 * a list of initializations in a for-loop.
-	 *
+	 * 
 	 * Any AST_EXPR_LIST node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one expression in the list.
 	 * TODO I am not sure at the moment whether there are situations where
 	 * an AST_EXPR_LIST with 0 children can be generated; I do not think so,
 	 * but look into it more closely.
-	 *
+	 * 
 	 * This test checks an expression list's children in the following PHP code:
-	 *
+	 * 
 	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
 	 */
 	@Test
@@ -6215,14 +6214,14 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)9), ((ExpressionList)node).getExpression(1));
 		for( Expression expression : (ExpressionList)node)
 			assertTrue( ast.containsValue(expression));
-
+		
 		assertThat( node2, instanceOf(ExpressionList.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( 1, ((ExpressionList)node2).size());
 		assertEquals( ast.getNodeById((long)14), ((ExpressionList)node2).getExpression(0));
 		for( Expression expression : (ExpressionList)node2)
 			assertTrue( ast.containsValue(expression));
-
+		
 		assertThat( node3, instanceOf(ExpressionList.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( 2, ((ExpressionList)node3).size());
@@ -6231,22 +6230,22 @@ public class TestPHPCSVASTBuilder
 		for( Expression expression : (ExpressionList)node3)
 			assertTrue( ast.containsValue(expression));
 	}
-
+	
 	/**
 	 * AST_STMT_LIST nodes are used to declare lists (or "blocks") of statements.
-	 *
+	 * 
 	 * Any AST_STMT_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one statement in the list.
-	 *
+	 * 
 	 * This test checks statements lists' children in the following PHP code:
-	 *
+	 * 
 	 * function foo() {}
 	 * foo();
 	 */
 	@Test
 	public void testCompoundStatementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;
+		String nodeStr = nodeHeader;	
 		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,4,\"foo.php\",\n";
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
@@ -6275,7 +6274,7 @@ public class TestPHPCSVASTBuilder
 
 		ASTNode node = ast.getNodeById((long)2);
 		ASTNode node2 = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(CompoundStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((CompoundStatement)node).size());
@@ -6290,10 +6289,10 @@ public class TestPHPCSVASTBuilder
 		for( ASTNode stmt : (CompoundStatement)node2)
 			assertTrue( ast.containsValue(stmt));
 	}
-
+	
 	/**
 	 * AST_IF nodes are used to denote if-statements.
-	 *
+	 * 
 	 * Any AST_IF node has between 1 and an arbitrarily large number of children.
 	 * Each child corresponds to one if-element. Such if-elements are composed of an
 	 * expression and a statement (see description of AST_IF_ELEM). The PHP interpreter
@@ -6302,9 +6301,9 @@ public class TestPHPCSVASTBuilder
 	 * corresponding statement is executed. This allows to represent if-statements with
 	 * multiple 'elseif' constructs in a flat hierarchy, instead of an arbitrarily deep
 	 * nesting that would be obtained when using 'else if' instead.
-	 *
+	 * 
 	 * This test checks an if-statement's children in the following PHP code:
-	 *
+	 * 
 	 * if($foo) {}
 	 * elseif($bar) {}
 	 * elseif($buz) {}
@@ -6351,9 +6350,8 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-
+		
 		assertThat( node, instanceOf(PHPIfStatement.class));
-		assertNotNull( ((PHPIfStatement) node).getCondition());
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PHPIfStatement)node).size());
 		assertEquals( ast.getNodeById((long)4), ((PHPIfStatement)node).getIfElement(0));
@@ -6361,19 +6359,19 @@ public class TestPHPCSVASTBuilder
 		assertEquals( ast.getNodeById((long)12), ((PHPIfStatement)node).getIfElement(2));
 		assertEquals( ast.getNodeById((long)16), ((PHPIfStatement)node).getIfElement(3));
 	}
-
+	
 	/**
 	 * AST_SWITCH_LIST nodes are used to denote a list of switch-elements.
-	 *
+	 * 
 	 * Any AST_SWITCH_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one switch-case. Such switch-cases are composed of a
 	 * value and a statement list (see description of AST_SWITCH_CASE). AST_SWITCH_LIST nodes
 	 * are always a child of AST_SWITCH nodes, and always have exactly one sister which
 	 * represents an expression whose evaluated form is matched against the values of the
 	 * AST_SWITCH_CASE children (see description of AST_SWITCH).
-	 *
+	 * 
 	 * This test checks a switch list's children in the following PHP code:
-	 *
+	 * 
 	 * switch ($i) {
 	 *   case "foo":
 	 *     break;
@@ -6441,7 +6439,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(PHPSwitchList.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PHPSwitchList)node).size());
@@ -6453,15 +6451,15 @@ public class TestPHPCSVASTBuilder
 		for( PHPSwitchCase switchcase : (PHPSwitchList)node)
 			assertTrue( ast.containsValue(switchcase));
 	}
-
+	
 	/**
 	 * AST_CATCH_LIST nodes are used to denote a list of catch statements.
-	 *
+	 * 
 	 * Any AST_CATCH_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one catch statement in the list.
-	 *
+	 * 
 	 * This test checks a catch list's children in the following PHP code:
-	 *
+	 * 
 	 * try {}
 	 * catch(FooException $f) {}
 	 * catch(BarException $b) {}
@@ -6504,11 +6502,11 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-
+		
 		assertThat( node, instanceOf(CatchList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((CatchList)node).size());
-
+		
 		assertEquals( ast.getNodeById((long)6), ((CatchList)node).getCatchStatement(0));
 		assertEquals( ast.getNodeById((long)11), ((CatchList)node).getCatchStatement(1));
 		for( CatchStatement catchstatement : (CatchList)node)
@@ -6517,18 +6515,18 @@ public class TestPHPCSVASTBuilder
 
 	/**
 	 * AST_PARAM_LIST nodes are used to denote a list of function parameters.
-	 *
+	 * 
 	 * Any AST_PARAM_LIST node has between 0 and an arbitrarily large number of children.
 	 * Each child corresponds to one parameter in the list.
-	 *
+	 * 
 	 * This test checks a parameter list's children in the following PHP code:
-	 *
+	 * 
 	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
 	 */
 	@Test
 	public void testParameterListCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;
+		String nodeStr = nodeHeader;	
 		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
 		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
 		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
@@ -6556,7 +6554,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)4);
-
+		
 		assertThat( node, instanceOf(ParameterList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ParameterList)node).size());
@@ -6565,18 +6563,18 @@ public class TestPHPCSVASTBuilder
 		for( Parameter parameter : (ParameterList)node)
 			assertTrue( ast.containsValue(parameter));
 	}
-
+	
 	/**
 	 * AST_CLOSURE_USES nodes are used for holding a list of variables that
 	 * occur within the 'use' language construct of closure declarations.
-	 *
+	 * 
 	 * Any AST_CLOSURE_USES node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one closure variable in the list.
 	 * (It cannot have 0 children as the 'use' construct can only be used in
 	 * conjunction with at least 1 variable name.)
-	 *
+	 * 
 	 * This test checks a closure 'uses' list's children in the following PHP code:
-	 *
+	 * 
 	 * function() use ($foo,$bar) {};
 	 */
 	@Test
@@ -6606,7 +6604,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-
+		
 		assertThat( node, instanceOf(ClosureUses.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ClosureUses)node).size());
@@ -6615,16 +6613,16 @@ public class TestPHPCSVASTBuilder
 		for( ClosureVar closurevar : (ClosureUses)node)
 			assertTrue( ast.containsValue(closurevar));
 	}
-
+	
 	/**
 	 * AST_PROP_DECL nodes are used to denote property declaration statements
 	 * in the top-level scope of a class.
-	 *
+	 * 
 	 * Any AST_PROP_DECL node has between 1 and an arbitrarily large number of children.
 	 * Each child corresponds to one element in the property declaration statement.
-	 *
+	 * 
 	 * This test checks a property declaration statement's children in the following PHP code:
-	 *
+	 * 
 	 * class Foo {
 	 *   public $foo, $bar = 3, $buz = "bonjour", $qux = SOMECONSTANT;
 	 * }
@@ -6689,16 +6687,16 @@ public class TestPHPCSVASTBuilder
 		for( PropertyElement element : (PropertyDeclaration)node)
 			assertTrue( ast.containsValue(element));
 	}
-
+	
 	/**
 	 * AST_CONST_DECL nodes are used to denote constant declaration statements
 	 * in top-level code.
-	 *
+	 * 
 	 * Any AST_CONST_DECL node has between 1 and an arbitrarily large number of children.
 	 * Each child corresponds to one element in the constant declaration statement.
-	 *
+	 * 
 	 * This test checks a constant declaration statement's children in the following PHP code:
-	 *
+	 * 
 	 * const QUESTION = "any", ANSWER = 42;
 	 */
 	@Test
@@ -6733,16 +6731,16 @@ public class TestPHPCSVASTBuilder
 		for( ConstantElement element : (ConstantDeclaration)node)
 			assertTrue( ast.containsValue(element));
 	}
-
+	
 	/**
 	 * AST_CLASS_CONST_DECL nodes are used to denote class constant declaration statements
 	 * in the top-level scope of a class.
-	 *
+	 * 
 	 * Any AST_CLASS_CONST_DECL node has between 1 and an arbitrarily large number of children.
 	 * Each child corresponds to one element in the class constant declaration statement.
-	 *
+	 * 
 	 * This test checks a class constant declaration statement's children in the following PHP code:
-	 *
+	 * 
 	 * class Foo {
 	 *   const QUESTION = "any", ANSWER = 42;
 	 * }
@@ -6783,15 +6781,15 @@ public class TestPHPCSVASTBuilder
 	/**
 	 * AST_NAME_LIST nodes are used for holding a list of identifiers, e.g.,
 	 * a list of names referring to interfaces that a class extends.
-	 *
+	 * 
 	 * Any AST_NAME_LIST node has between 1 and an arbitrarily large number
 	 * of children. Each child corresponds to one identifier in the list.
 	 * TODO I am not sure at the moment whether there are situations where
 	 * an AST_NAME_LIST with 0 children can be generated; I do not think so,
 	 * but look into it more closely.
-	 *
+	 * 
 	 * This test checks an identifier list's children in the following PHP code:
-	 *
+	 * 
 	 * class foo extends bar implements buz, qux {}
 	 */
 	@Test
@@ -6823,7 +6821,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
-
+		
 		assertThat( node, instanceOf(IdentifierList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((IdentifierList)node).size());
@@ -6832,17 +6830,17 @@ public class TestPHPCSVASTBuilder
 		for( Identifier identifier : (IdentifierList)node)
 			assertTrue( ast.containsValue(identifier));
 	}
-
+	
 	/**
 	 * AST_TRAIT_ADAPTATIONS nodes are used for holding a list of trait adaptations, i.e.,
 	 * a list of AST_TRAIT_ALIAS and AST_TRAIT_PRECEDENCE nodes.
 	 * See http://php.net/manual/en/language.oop5.traits.php
-	 *
+	 * 
 	 * Any AST_TRAIT_ADAPTATIONS node has between 1 and an arbitrarily large number
 	 * of trait adaptations. Each child corresponds to one trait adaptation in the list.
-	 *
+	 *    
 	 * This test checks a trait adaptations statement's children in the following PHP code:
-	 *
+	 * 
 	 * class SomeClass {
 	 *   use Foo, Bar, Buz {
 	 *     qux as protected _qux;
@@ -6930,7 +6928,7 @@ public class TestPHPCSVASTBuilder
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)16);
-
+		
 		assertThat( node, instanceOf(PHPTraitAdaptations.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( 3, ((PHPTraitAdaptations)node).size());
@@ -6940,15 +6938,15 @@ public class TestPHPCSVASTBuilder
 		for( PHPTraitAdaptationElement traitAdaptation : (PHPTraitAdaptations)node)
 			assertTrue( ast.containsValue(traitAdaptation));
 	}
-
+	
 	/**
 	 * AST_USE nodes are used to denote use statements.
-	 *
+	 * 
 	 * Any AST_USE node has between 1 and an arbitrarily large number
 	 * of use statement elements. Each child corresponds to one use element in the list.
-	 *
+	 *    
 	 * This test checks a use statement's children in the following PHP code:
-	 *
+	 * 
 	 * use Foo\Bar as Buz, Qux as Norf;
 	 */
 	@Test
