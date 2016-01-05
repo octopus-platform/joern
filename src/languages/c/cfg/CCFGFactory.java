@@ -25,6 +25,7 @@ import ast.statements.jump.ThrowStatement;
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.CFGFactory;
+import cfg.StructuredFlowVisitor;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGErrorNode;
@@ -35,7 +36,7 @@ import cfg.nodes.InfiniteForNode;
 
 public class CCFGFactory extends CFGFactory
 {
-	private static StructuredFlowVisitor structuredFlowVisitior = new StructuredFlowVisitor();
+	private static StructuredFlowVisitor structuredFlowVisitior = new CStructuredFlowVisitor();
 
 	@Override
 	public CFG newInstance(FunctionDef functionDefinition)

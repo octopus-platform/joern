@@ -16,20 +16,11 @@ import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
-import ast.walking.ASTNodeVisitor;
-import cfg.CFG;
+import cfg.StructuredFlowVisitor;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
 
-class StructuredFlowVisitor extends ASTNodeVisitor
-{
-
-	private CFG returnCFG;
-
-	CFG getCFG()
-	{
-		return returnCFG;
-	}
+public class CStructuredFlowVisitor extends StructuredFlowVisitor {
 
 	public void visit(ParameterList paramList)
 	{
@@ -119,5 +110,5 @@ class StructuredFlowVisitor extends ASTNodeVisitor
 	{
 		returnCFG = CCFGFactory.newInstance(node);
 	}
-
+	
 }
