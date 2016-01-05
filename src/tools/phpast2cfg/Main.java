@@ -39,6 +39,7 @@ public class Main
 		while ((funcAST = (PHPFunctionDef)extractor.getNextFunction()) != null)
 		{
 			CFG cfg = cfgFactory.newInstance(funcAST);
+			System.out.println(cfg);
 		}
 	}
 
