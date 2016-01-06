@@ -20,7 +20,7 @@ public class TestCSV2AST
 	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
 	String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
 
-	private PHPFunctionDef createASTFromStrings(String nodeStr, String edgeStr)
+	public static PHPFunctionDef createASTFromStrings(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile
 	{
 		CSV2AST csv2AST = new CSV2AST();
@@ -29,14 +29,14 @@ public class TestCSV2AST
 		csv2AST.setLanguage("PHP");
 		return (PHPFunctionDef)csv2AST.convert(nodeReader, edgeReader);
 	}
-	
+
 	@Test
 	public void testFunctionCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		
+
 		assertTrue(func != null);
 	}
 
@@ -46,7 +46,7 @@ public class TestCSV2AST
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,foo,\n";
 		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		
+
 		assertEquals("foo", func.getName());
 	}
 
@@ -56,17 +56,17 @@ public class TestCSV2AST
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_FUNC_DECL,,3,,0,,3,,\n";
 		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		
+
 		assertEquals("", func.getName());
 	}
-	
+
 	@Test
 	public void testMethodFlags() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,6,bar,\n";
 		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		
+
 		assertEquals("bar", func.getName());
 		assertEquals("MODIFIER_PUBLIC", func.getFlags());
 	}
@@ -77,23 +77,23 @@ public class TestCSV2AST
 		String nodeStr = nodeHeader;
 		nodeStr += "13,AST_METHOD,MODIFIER_PUBLIC,6,,0,11,36,bar,\n";
 		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		
+
 		assertEquals("bar", func.getName());
 		assertEquals(6, func.getLocation().startLine);
 		assertEquals(36, func.getLocation().endLine);
 	}
-	
+
 	@Test
 	public void testDocComment() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "3,AST_FUNC_DECL,,4,,0,1,4,foo,\"/** This is a doccomment */\"\n";
 		PHPFunctionDef func = createASTFromStrings(nodeStr, edgeHeader);
-		
+
 		assertEquals("foo", func.getName());
 		assertEquals("/** This is a doccomment */", func.getDocComment());
 	}
-	
+
 	/**
 	 * function foo() {
 	 *   $a = 3;
@@ -131,7 +131,7 @@ public class TestCSV2AST
 		assertEquals("a", content.getStatements().get(0).getChild(0).getChild(0).getEscapedCodeStr());
 		assertEquals("3", content.getStatements().get(0).getChild(1).getEscapedCodeStr());
 	}
-	
+
 	/**
 	 * function foo() {
 	 *   $a = 3;
@@ -175,7 +175,7 @@ public class TestCSV2AST
 	{
 		createASTFromStrings(nodeHeader, edgeHeader);
 	}
-	
+
 	/**
 	 * An invalid CSV file that does not start with a function declaration.
 	 */
@@ -184,10 +184,10 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		
+
 		createASTFromStrings(nodeStr, edgeHeader);
 	}
-	
+
 	/**
 	 * An invalid CSV file that contains a toplevel node with invalid flags.
 	 */
@@ -196,7 +196,7 @@ public class TestCSV2AST
 	{
 		String nodeStr = nodeHeader;
 		nodeStr += "1,AST_TOPLEVEL,somerandomflags,1,,,,3,\"foo.php\",\n";
-		
+
 		createASTFromStrings(nodeStr, edgeHeader);
 	}
 }

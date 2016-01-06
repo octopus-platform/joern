@@ -18,5 +18,4 @@ public class CCFGCreatorTest extends CFGCreatorTest
 		return CCFGFactory.convert(getASTForCode(input));
 	}
 
-
 }
