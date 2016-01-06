@@ -6,16 +6,16 @@ import ast.ASTNode;
 import cfg.CFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import languages.php.cfg.PHPCFGFactory;
-import tests.CFGCreatorTest;
-import tests.inputModules.TestCSV2AST;
+import tests.languages.php.PHPCSVBasedTest;
 
-public class PHPCFGCreatorTest extends CFGCreatorTest {
+public class PHPCFGCreatorTest extends PHPCSVBasedTest {
 
 
 	protected ASTNode getASTForCSVLines(String nodeLines, String edgeLines)
 			throws IOException, InvalidCSVFile
 	{
-		return TestCSV2AST.createASTFromStrings(nodeLines, edgeLines);
+		handle(nodeLines, edgeLines);
+		return ast.getNodeById((long) 3);
 	}
 
 	protected CFG getCFGForCSVLines(String nodeLines, String edgeLines)
