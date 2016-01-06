@@ -12,7 +12,7 @@ import cfg.nodes.CFGNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.samples.CSVASTSamples;
 
-public class IfBlockTests extends PHPCFGCreatorTest {
+public class StructuredFlowTests extends PHPCFGCreatorTest {
 
 	@Test
 	public void testIfAndElseIf() throws IOException, InvalidCSVFile
@@ -28,6 +28,15 @@ public class IfBlockTests extends PHPCFGCreatorTest {
 				filter(x -> x.getClass().getSimpleName().equals("ASTNodeContainer"))
 				.toArray();
 		assertEquals(array.length, 3);
+	}
+
+	@Test
+	public void testWhile() throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.whileNodeStr, CSVASTSamples.whileEdgeStr);
+
+		System.out.println(cfg);
+		System.out.println(cfg.size());
 	}
 
 }

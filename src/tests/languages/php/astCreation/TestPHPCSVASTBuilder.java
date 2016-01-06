@@ -3926,47 +3926,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testWhileCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,1,1,,,\n";
-		nodeStr += "7,AST_WHILE,,4,,1,1,,,\n";
-		nodeStr += "8,AST_CONST,,4,,0,1,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"true\",0,1,,,\n";
-		nodeStr += "11,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "12,AST_WHILE,,5,,2,1,,,\n";
-		nodeStr += "13,AST_CALL,,5,,0,1,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "15,string,,5,\"somecall\",0,1,,,\n";
-		nodeStr += "16,AST_ARG_LIST,,5,,1,1,,,\n";
-		nodeStr += "17,AST_STMT_LIST,,5,,1,1,,,\n";
-		nodeStr += "18,AST_WHILE,,6,,3,1,,,\n";
-		nodeStr += "19,AST_BINARY_OP,BINARY_IS_IDENTICAL,6,,0,1,,,\n";
-		nodeStr += "20,AST_VAR,,6,,0,1,,,\n";
-		nodeStr += "21,string,,6,\"var\",0,1,,,\n";
-		nodeStr += "22,integer,,6,1,1,1,,,\n";
-		nodeStr += "23,AST_STMT_LIST,,6,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,11,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "13,16,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,17,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "19,22,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,23,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.whileNodeStr;
+		String edgeStr = CSVASTSamples.whileEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

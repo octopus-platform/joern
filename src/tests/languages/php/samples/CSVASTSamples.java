@@ -93,4 +93,53 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "3,7,PARENT_OF\n";
 
+	/*
+	 * while($foo) {}
+	 * while(true) {}
+	 * while(somecall()) {}
+	 * while($var === 1) {}
+	 */
+
+	public static final String whileNodeStr = CSVASTSamples.nodeHeader
+			+ "3,AST_WHILE,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,AST_STMT_LIST,,3,,1,1,,,\n"
+			+ "7,AST_WHILE,,4,,1,1,,,\n"
+			+ "8,AST_CONST,,4,,0,1,,,\n"
+			+ "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "10,string,,4,\"true\",0,1,,,\n"
+			+ "11,AST_STMT_LIST,,4,,1,1,,,\n"
+			+ "12,AST_WHILE,,5,,2,1,,,\n"
+			+ "13,AST_CALL,,5,,0,1,,,\n"
+			+ "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+			+ "15,string,,5,\"somecall\",0,1,,,\n"
+			+ "16,AST_ARG_LIST,,5,,1,1,,,\n"
+			+ "17,AST_STMT_LIST,,5,,1,1,,,\n"
+			+ "18,AST_WHILE,,6,,3,1,,,\n"
+			+ "19,AST_BINARY_OP,BINARY_IS_IDENTICAL,6,,0,1,,,\n"
+			+ "20,AST_VAR,,6,,0,1,,,\n"
+			+ "21,string,,6,\"var\",0,1,,,\n"
+			+ "22,integer,,6,1,1,1,,,\n"
+			+ "23,AST_STMT_LIST,,6,,1,1,,,\n";
+
+	public static final String whileEdgeStr = CSVASTSamples.edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "7,11,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "13,16,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "12,17,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "19,20,PARENT_OF\n"
+			+ "19,22,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "18,23,PARENT_OF\n";
+
 }
