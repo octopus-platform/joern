@@ -19,6 +19,11 @@ public class PHPCFGFactory extends CFGFactory
 		structuredFlowVisitior = new PHPStructuredFlowVisitor();
 	}
 
+	public PHPCFGFactory()
+	{
+		structuredFlowVisitior = new PHPStructuredFlowVisitor();
+	}
+
 	public static CFG newInstance(IfStatement ifStmt)
 	{
 		try

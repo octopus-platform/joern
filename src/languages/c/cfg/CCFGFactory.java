@@ -14,6 +14,11 @@ public class CCFGFactory extends CFGFactory
 		structuredFlowVisitior = new CStructuredFlowVisitor();
 	}
 
+	public CCFGFactory()
+	{
+		structuredFlowVisitior = new CStructuredFlowVisitor();
+	}
+
 	public static CFG newInstance(IfStatement ifStatement)
 	{
 		try
@@ -49,5 +54,5 @@ public class CCFGFactory extends CFGFactory
 			return newErrorInstance();
 		}
 	}
-	
+
 }

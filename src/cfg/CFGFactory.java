@@ -13,7 +13,6 @@ import ast.logical.statements.Label;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -32,8 +31,8 @@ import cfg.nodes.InfiniteForNode;
 
 public class CFGFactory
 {
-	protected static StructuredFlowVisitor structuredFlowVisitior;	
-	
+	protected static StructuredFlowVisitor structuredFlowVisitior;
+
 	public CFG newInstance(FunctionDef functionDefinition)
 	{
 		try
@@ -512,7 +511,7 @@ public class CFGFactory
 			return newInstance();
 
 		node.accept(structuredFlowVisitior);
-		return (CFG) structuredFlowVisitior.getCFG();
+		return structuredFlowVisitior.getCFG();
 	}
 
 	public static void fixBreakStatements(CFG thisCFG, CFGNode target)

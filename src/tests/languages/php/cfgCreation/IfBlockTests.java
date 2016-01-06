@@ -1,12 +1,14 @@
 package tests.languages.php.cfgCreation;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.junit.Test;
 
-import ast.ASTNode;
+import cfg.CFG;
+import cfg.nodes.CFGNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.samples.CSVASTSamples;
 
@@ -15,10 +17,17 @@ public class IfBlockTests extends PHPCFGCreatorTest {
 	@Test
 	public void testIfAndElseIf() throws IOException, InvalidCSVFile
 	{
-		ASTNode ast = getASTForCSVLines(CSVASTSamples.ifStatementNodeStr, CSVASTSamples.ifStatementEdgeStr);
-		assertNotNull(ast);
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.ifStatementNodeStr, CSVASTSamples.ifStatementEdgeStr);
+		Collection<CFGNode> vertices = cfg.getVertices();
 
-		System.out.println(ast.getChildCount());
+		assertEquals(vertices.size(), 5);
+
+		// Make sure there is exactly one condition node for each predicate
+
+		Object[] array =  vertices.stream().
+				filter(x -> x.getClass().getSimpleName().equals("ASTNodeContainer"))
+				.toArray();
+		assertEquals(array.length, 3);
 	}
 
 }
