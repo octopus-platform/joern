@@ -142,4 +142,46 @@ public class CSVASTSamples {
 			+ "18,19,PARENT_OF\n"
 			+ "18,23,PARENT_OF\n";
 
+	public static final String doNodeStr = 	CSVASTSamples.nodeHeader
+			+ "3,AST_DO_WHILE,,3,,0,1,,,\n"
+			+ "4,AST_STMT_LIST,,3,,0,1,,,\n"
+			+ "5,AST_VAR,,3,,1,1,,,\n"
+			+ "6,string,,3,\"foo\",0,1,,,\n"
+			+ "7,AST_DO_WHILE,,4,,1,1,,,\n"
+			+ "8,AST_STMT_LIST,,4,,0,1,,,\n"
+			+ "9,AST_CONST,,4,,1,1,,,\n"
+			+ "10,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "11,string,,4,\"true\",0,1,,,\n"
+			+ "12,AST_DO_WHILE,,5,,2,1,,,\n"
+			+ "13,AST_STMT_LIST,,5,,0,1,,,\n"
+			+ "14,AST_CALL,,5,,1,1,,,\n"
+			+ "15,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+			+ "16,string,,5,\"somecall\",0,1,,,\n"
+			+ "17,AST_ARG_LIST,,5,,1,1,,,\n"
+			+ "18,AST_DO_WHILE,,6,,3,1,,,\n"
+			+ "19,AST_STMT_LIST,,6,,0,1,,,\n"
+			+ "20,AST_BINARY_OP,BINARY_IS_IDENTICAL,6,,1,1,,,\n"
+			+ "21,AST_VAR,,6,,0,1,,,\n"
+			+ "22,string,,6,\"var\",0,1,,,\n"
+			+ "23,integer,,6,1,1,1,,,\n";
+
+	public static final String doEdgeStr = 	CSVASTSamples.edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "5,6,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "7,9,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "14,17,PARENT_OF\n"
+			+ "12,14,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "21,22,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "20,23,PARENT_OF\n"
+			+ "18,20,PARENT_OF\n";
+
 }

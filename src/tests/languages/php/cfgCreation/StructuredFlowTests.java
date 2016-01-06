@@ -39,4 +39,13 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 		System.out.println(cfg.size());
 	}
 
+	@Test
+	public void testDo() throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.doNodeStr , CSVASTSamples.doEdgeStr);
+
+		System.out.println(cfg);
+		System.out.println(cfg.size());
+	}
+
 }
