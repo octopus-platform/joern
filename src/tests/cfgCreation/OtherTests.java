@@ -7,8 +7,9 @@ import org.junit.Test;
 import cfg.CFG;
 import cfg.nodes.CFGNode;
 import cfg.nodes.InfiniteForNode;
+import tests.cfgCreation.c.CCFGCreatorTest;
 
-public class OtherTests extends CFGCreatorTest
+public class OtherTests extends CCFGCreatorTest
 {
 
 	@Test

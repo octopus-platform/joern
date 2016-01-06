@@ -1,22 +1,9 @@
 package tests.cfgCreation;
 
-import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.CFGNode;
-import languages.c.cfg.CCFGFactory;
-import tests.parseTreeToAST.FunctionContentTestUtil;
 
-public class CFGCreatorTest
-{
-	protected ASTNode getASTForCode(String input)
-	{
-		return FunctionContentTestUtil.parseAndWalk(input);
-	}
-
-	protected CFG getCFGForCode(String input)
-	{
-		return CCFGFactory.convert(getASTForCode(input));
-	}
+public class CFGCreatorTest {
 
 	protected CFGNode getNodeByCode(CFG cfg, String code)
 	{
@@ -40,4 +27,5 @@ public class CFGCreatorTest
 		return cfg.isConnected(getNodeByCode(cfg, srcCode),
 				getNodeByCode(cfg, dstCode));
 	}
+
 }

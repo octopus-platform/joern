@@ -5,8 +5,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import cfg.CFG;
+import tests.cfgCreation.c.CCFGCreatorTest;
 
-public class AssignmentTests extends CFGCreatorTest
+public class AssignmentTests extends CCFGCreatorTest
 {
 	@Test
 	public void testSingleAssignmentBlockNumber()
