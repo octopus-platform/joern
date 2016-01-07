@@ -15,6 +15,7 @@ public class CCFGCreatorTest
 
 	protected CFG getCFGForCode(String input)
 	{
+		CCFGFactory ccfgFactory = new CCFGFactory();
 		return CCFGFactory.convert(getASTForCode(input));
 	}
 
