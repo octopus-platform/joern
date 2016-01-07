@@ -217,10 +217,18 @@ public class CFGFactory
 			doBlock.mountCFG(doBlock.getEntryNode(), conditionContainer, doBody,
 					CFGEdge.EMPTY_LABEL);
 
-			for (CFGEdge edge : doBody.outgoingEdges(doBody.getEntryNode()))
-			{
-				doBlock.addEdge(conditionContainer, edge.getDestination(),
+			int nVerticesOfBody = doBody.getVertices().size();
+			if(nVerticesOfBody == 2){
+				doBlock.addEdge(conditionContainer, conditionContainer,
 						CFGEdge.TRUE_LABEL);
+			}else{
+
+				for (CFGEdge edge : doBody.outgoingEdges(doBody.getEntryNode()))
+				{
+					doBlock.addEdge(conditionContainer, edge.getDestination(),
+							CFGEdge.TRUE_LABEL);
+				}
+
 			}
 
 			fixBreakStatements(doBlock, doBlock.getExitNode());
