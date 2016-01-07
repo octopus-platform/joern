@@ -1,6 +1,9 @@
 package tests.languages.c.cfgCreation;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -33,6 +36,21 @@ public class OtherTests extends CCFGCreatorTest
 		String input = "do{ bar(); }while(foo);";
 		CFG cfg = getCFGForCode(input);
 		assertTrue(cfg.size() == 4);
+	}
+
+	@Test
+	public void testDoEmptyBody()
+	{
+		String input = "do{ }while(foo);";
+		CFG cfg = getCFGForCode(input);
+		assertFalse(containsErrorNode(cfg));
+	}
+
+	private boolean containsErrorNode(CFG cfg)
+	{
+		Stream<CFGNode> s = cfg.getVertices().stream().
+				filter(x -> x.getClass().getSimpleName().equals("CFGErrorNode"));
+		return (s.toArray().length != 0);
 	}
 
 	@Test
