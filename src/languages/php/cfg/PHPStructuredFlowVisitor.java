@@ -1,6 +1,7 @@
 package languages.php.cfg;
 
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.WhileStatement;
 import cfg.CFGFactory;
@@ -23,6 +24,12 @@ public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
 
 	@Override
 	public void visit(DoStatement node)
+	{
+		returnCFG = CFGFactory.newInstance(node);
+	}
+
+	@Override
+	public void visit(ForStatement node)
 	{
 		returnCFG = CFGFactory.newInstance(node);
 	}

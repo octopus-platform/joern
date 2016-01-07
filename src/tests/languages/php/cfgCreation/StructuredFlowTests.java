@@ -58,4 +58,32 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 
 	}
 
+
+	// for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+
+	@Test
+	public void testFor() throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.forNodeStr, CSVASTSamples.forEdgeStr);
+
+		assertEquals(cfg.getVertices().size(), 5);
+
+		Object[] expressions = getNodesOfType(cfg, "ASTNodeContainer");
+		assertEquals(expressions.length, 3);
+
+		// TODO: we don't really care about the order in which expression
+		// nodes are stored in the CFG, but this test does.
+
+		System.out.println(cfg);
+
+		CFGNode condition = (CFGNode) expressions[0];
+		CFGNode forInit = (CFGNode) expressions[1];
+		CFGNode forInc = (CFGNode) expressions[2];
+
+		edgeExists(cfg, cfg.getEntryNode(), forInit);
+		edgeExists(cfg, forInit, condition);
+		edgeExists(cfg, condition, forInc);
+		edgeExists(cfg, condition, cfg.getExitNode());
+	}
+
 }

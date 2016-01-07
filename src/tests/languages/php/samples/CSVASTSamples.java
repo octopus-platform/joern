@@ -191,4 +191,57 @@ public class CSVASTSamples {
 			+ "20,23,PARENT_OF\n"
 			+ "18,20,PARENT_OF\n";
 
+	/*
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
+
+	public static final String forNodeStr = CSVASTSamples.nodeHeader
+			+ "3,AST_FOR,,3,,0,1,,,\n"
+			+ "4,AST_EXPR_LIST,,3,,0,1,,,\n"
+			+ "5,AST_ASSIGN,,3,,0,1,,,\n"
+			+ "6,AST_VAR,,3,,0,1,,,\n"
+			+ "7,string,,3,\"i\",0,1,,,\n"
+			+ "8,integer,,3,0,1,1,,,\n"
+			+ "9,AST_ASSIGN,,3,,1,1,,,\n"
+			+ "10,AST_VAR,,3,,0,1,,,\n"
+			+ "11,string,,3,\"j\",0,1,,,\n"
+			+ "12,integer,,3,1,1,1,,,\n"
+			+ "13,AST_EXPR_LIST,,3,,1,1,,,\n"
+			+ "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n"
+			+ "15,AST_VAR,,3,,0,1,,,\n"
+			+ "16,string,,3,\"i\",0,1,,,\n"
+			+ "17,integer,,3,3,1,1,,,\n"
+			+ "18,AST_EXPR_LIST,,3,,2,1,,,\n"
+			+ "19,AST_POST_INC,,3,,0,1,,,\n"
+			+ "20,AST_VAR,,3,,0,1,,,\n"
+			+ "21,string,,3,\"i\",0,1,,,\n"
+			+ "22,AST_POST_INC,,3,,1,1,,,\n"
+			+ "23,AST_VAR,,3,,0,1,,,\n"
+			+ "24,string,,3,\"j\",0,1,,,\n"
+			+ "25,AST_STMT_LIST,,3,,3,1,,,\n";
+
+	public static final String forEdgeStr = CSVASTSamples.edgeHeader
+			+ "6,7,PARENT_OF\n"
+			+ "5,6,PARENT_OF\n"
+			+ "5,8,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "9,12,PARENT_OF\n"
+			+ "4,9,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "14,17,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "3,13,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "19,20,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "23,24,PARENT_OF\n"
+			+ "22,23,PARENT_OF\n"
+			+ "18,22,PARENT_OF\n"
+			+ "3,18,PARENT_OF\n"
+			+ "3,25,PARENT_OF\n";
+
 }
