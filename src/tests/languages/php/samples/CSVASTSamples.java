@@ -142,6 +142,13 @@ public class CSVASTSamples {
 			+ "18,19,PARENT_OF\n"
 			+ "18,23,PARENT_OF\n";
 
+	/*
+	 * do {} while($foo);
+	 * do {} while(true);
+	 * do {} while(somecall());
+	 * do {} while($var === 1);
+	 */
+
 	public static final String doNodeStr = 	CSVASTSamples.nodeHeader
 			+ "3,AST_DO_WHILE,,3,,0,1,,,\n"
 			+ "4,AST_STMT_LIST,,3,,0,1,,,\n"

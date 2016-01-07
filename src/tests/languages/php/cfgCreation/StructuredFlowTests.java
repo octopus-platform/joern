@@ -24,10 +24,7 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 
 		// Make sure there is exactly one condition node for each predicate
 
-		Object[] array =  vertices.stream().
-				filter(x -> x.getClass().getSimpleName().equals("ASTNodeContainer"))
-				.toArray();
-		assertEquals(array.length, 3);
+		assertEquals(getNodesOfType(cfg, "ASTNodeContainer").length, 3);
 	}
 
 	@Test
@@ -35,17 +32,30 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 	{
 		CFG cfg = getCFGForCSVLines(CSVASTSamples.whileNodeStr, CSVASTSamples.whileEdgeStr);
 
-		System.out.println(cfg);
-		System.out.println(cfg.size());
+		Object[] conditions = getNodesOfType(cfg, "ASTNodeContainer");
+		assertEquals(conditions.length, 1);
+		CFGNode onlyCondition = (CFGNode) conditions[0];
+
+		edgeExists(cfg, cfg.getEntryNode(), onlyCondition);
+		edgeExists(cfg, onlyCondition, onlyCondition);
+		edgeExists(cfg, onlyCondition, cfg.getExitNode());
 	}
+
+	// do {} while($foo);
 
 	@Test
 	public void testDo() throws IOException, InvalidCSVFile
 	{
 		CFG cfg = getCFGForCSVLines(CSVASTSamples.doNodeStr , CSVASTSamples.doEdgeStr);
 
-		System.out.println(cfg);
-		System.out.println(cfg.size());
+		Object[] conditions = getNodesOfType(cfg, "ASTNodeContainer");
+		assertEquals(conditions.length, 1);
+		CFGNode onlyCondition = (CFGNode) conditions[0];
+
+		edgeExists(cfg, cfg.getEntryNode(), onlyCondition);
+		edgeExists(cfg, onlyCondition, onlyCondition);
+		edgeExists(cfg, onlyCondition, cfg.getExitNode());
+
 	}
 
 }
