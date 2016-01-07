@@ -38,18 +38,13 @@ public abstract class ASTDefUseAnalyzer
 	}
 	
 	/**
-	 * The mutually recursive functions traverseAST and traverseASTChildren
-	 * recurse through the given AST and emit uses or defs symbols.
+	 * Recurses through the given AST and emit uses or defs symbols.
 	 */
 	protected void traverseAST(ASTProvider astProvider)
 	{
 		UseDefEnvironment env = createUseDefEnvironment(astProvider);
 		env.setASTProvider(astProvider);
-		traverseASTChildren(astProvider, env);
-	}
-	
-	protected void traverseASTChildren(ASTProvider astProvider,	UseDefEnvironment env)
-	{
+
 		int numChildren = astProvider.getChildCount();
 
 		environmentStack.push(env);
@@ -58,8 +53,7 @@ public abstract class ASTDefUseAnalyzer
 			ASTProvider childProvider = astProvider.getChild(i);
 			traverseAST(childProvider);
 
-			Collection<UseOrDef> toEmit = env.useOrDefsFromSymbols(childProvider);
-			emitUseOrDefs(toEmit);
+			useDefsOfBlock.addAll(env.useOrDefsFromSymbols(childProvider));
 		}
 		environmentStack.pop();
 
@@ -71,13 +65,6 @@ public abstract class ASTDefUseAnalyzer
 	 * This is language-specific and should be implemnted by inheriting classes.
 	 */
 	protected abstract UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider);
-	
-
-	private void emitUseOrDefs(Collection<UseOrDef> toEmit)
-	{
-		for (UseOrDef useOrDef : toEmit)
-			useDefsOfBlock.add(useOrDef);
-	}
 	
 	/**
 	 * Gets upstream symbols from environment and passes them to
