@@ -11,11 +11,11 @@ import udg.useDefGraph.UseOrDef;
  * construction of the symbol graph (UDG).
  */
 
-public abstract interface ASTDefUseAnalyzer
+public interface ASTDefUseAnalyzer
 {
 	/**
 	 * Analyze an AST to determine the symbols used and defined by each AST
 	 * node.
 	 */
-	public abstract Collection<UseOrDef> analyzeAST(ASTProvider astProvider);
+	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider);
 }
