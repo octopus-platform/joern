@@ -15,7 +15,7 @@ import ddg.DefUseCFG.DefUseCFG;
 import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import neo4j.readWriteDB.Neo4JDBInterface;
 import neo4j.traversals.readWriteDB.Traversals;
-import udg.useDefGraph.ReadWriteDbASTProvider;
+import udg.ReadWriteDbASTProvider;
 import udg.useDefGraph.UseOrDef;
 
 public class DefUseCFGPatcher

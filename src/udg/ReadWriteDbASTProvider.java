@@ -1,4 +1,4 @@
-package udg.useDefGraph;
+package udg;
 
 import java.util.ArrayList;
 import java.util.Iterator;
