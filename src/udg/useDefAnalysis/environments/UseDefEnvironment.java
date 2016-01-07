@@ -14,7 +14,7 @@ public class UseDefEnvironment
 {
 
 	protected ASTProvider astProvider;
-	LinkedList<String> symbols = new LinkedList<String>();
+	protected LinkedList<String> symbols = new LinkedList<String>();
 
 	static final LinkedList<UseOrDef> emptyUseOrDef = new LinkedList<UseOrDef>();
 	static final LinkedList<String> emptySymbolList = new LinkedList<String>();

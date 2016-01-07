@@ -9,8 +9,8 @@ import udg.useDefGraph.UseOrDef;
 public class EmitDefAndUseEnvironment extends UseDefEnvironment
 {
 
-	Collection<String> defSymbols = new LinkedList<String>();
-	Collection<String> useSymbols = new LinkedList<String>();
+	protected Collection<String> defSymbols = new LinkedList<String>();
+	protected Collection<String> useSymbols = new LinkedList<String>();
 
 	public void addChildSymbols(LinkedList<String> childSymbols,
 			ASTProvider child)

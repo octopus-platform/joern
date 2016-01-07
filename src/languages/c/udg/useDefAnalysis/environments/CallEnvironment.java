@@ -1,7 +1,9 @@
-package udg.useDefAnalysis.environments;
+package languages.c.udg.useDefAnalysis.environments;
 
 import java.util.Collection;
 import java.util.List;
+
+import udg.useDefAnalysis.environments.UseDefEnvironment;
 
 public class CallEnvironment extends UseDefEnvironment
 {
