@@ -6,14 +6,16 @@ import ast.ASTNode;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
-import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDef;
 
 public class CFGToUDGConverter
 {
-
-	ASTDefUseAnalyzer astAnalyzer = new ASTDefUseAnalyzer();
+	// TODO clearly, this class should be language-independent.
+	// -> possibly add a method setLanguage and create a CASTDefUseAnalyzer
+	// or a PHPASTDefUseAnalyzer accordingly
+	CASTDefUseAnalyzer astAnalyzer = new CASTDefUseAnalyzer();
 
 	public void addTaintSource(String callee, int argNum)
 	{

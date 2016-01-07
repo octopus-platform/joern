@@ -1,6 +1,7 @@
-package udg.useDefAnalysis.environments;
+package languages.c.udg.useDefAnalysis.environments;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.environments.EmitDefEnvironment;
 
 public class DeclEnvironment extends EmitDefEnvironment
 {

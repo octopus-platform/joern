@@ -1,8 +1,9 @@
-package udg.useDefAnalysis.environments;
+package languages.c.udg.useDefAnalysis.environments;
 
 import java.util.LinkedList;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.environments.EmitDefAndUseEnvironment;
 
 public class ArgumentEnvironment extends EmitDefAndUseEnvironment
 {

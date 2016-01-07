@@ -1,9 +1,10 @@
-package udg.useDefAnalysis.environments;
+package languages.c.udg.useDefAnalysis.environments;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefGraph.UseOrDef;
 
 public class PtrMemberAccessEnvironment extends UseDefEnvironment
