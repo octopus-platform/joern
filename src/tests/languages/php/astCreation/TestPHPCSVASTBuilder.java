@@ -5594,41 +5594,9 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testForEachCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"somearray\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "8,NULL,,3,,2,1,,,\n";
-		nodeStr += "9,AST_STMT_LIST,,3,,3,1,,,\n";
-		nodeStr += "10,AST_FOREACH,,4,,1,1,,,\n";
-		nodeStr += "11,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "13,string,,4,\"somecall\",0,1,,,\n";
-		nodeStr += "14,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "15,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "16,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "17,AST_VAR,,4,,2,1,,,\n";
-		nodeStr += "18,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "19,AST_STMT_LIST,,4,,3,1,,,\n";
+		String nodeStr = CSVASTSamples.foreachNodeStr;
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
-		edgeStr += "3,9,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,14,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "10,15,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "10,17,PARENT_OF\n";
-		edgeStr += "10,19,PARENT_OF\n";
+		String edgeStr = CSVASTSamples.foreachEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

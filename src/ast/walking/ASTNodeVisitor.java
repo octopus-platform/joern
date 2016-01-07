@@ -17,6 +17,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Condition;
 import ast.logical.statements.Label;
+import ast.php.statements.blockstarters.ForEachStatement;
 import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 import ast.statements.blockstarters.DoStatement;
@@ -183,10 +184,15 @@ public abstract class ASTNodeVisitor
 		defaultHandler(expression);
 	}
 
+	public void visit(ForEachStatement node)
+	{
+		defaultHandler(node);
+	}
+
 	public void defaultHandler(ASTNode item)
 	{
 		// by default, redirect to visit(ASTNode item)
-		visit((ASTNode) item);
+		visit(item);
 	}
 
 	public void visitChildren(ASTNode item)

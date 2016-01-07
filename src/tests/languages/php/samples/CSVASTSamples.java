@@ -244,4 +244,40 @@ public class CSVASTSamples {
 			+ "3,18,PARENT_OF\n"
 			+ "3,25,PARENT_OF\n";
 
+	public static final String foreachNodeStr = CSVASTSamples.nodeHeader
+			+ "3,AST_FOREACH,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"somearray\",0,1,,,\n"
+			+ "6,AST_VAR,,3,,1,1,,,\n"
+			+ "7,string,,3,\"foo\",0,1,,,\n"
+			+ "8,NULL,,3,,2,1,,,\n"
+			+ "9,AST_STMT_LIST,,3,,3,1,,,\n"
+			+ "10,AST_FOREACH,,4,,1,1,,,\n"
+			+ "11,AST_CALL,,4,,0,1,,,\n"
+			+ "12,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "13,string,,4,\"somecall\",0,1,,,\n"
+			+ "14,AST_ARG_LIST,,4,,1,1,,,\n"
+			+ "15,AST_VAR,,4,,1,1,,,\n"
+			+ "16,string,,4,\"foo\",0,1,,,\n"
+			+ "17,AST_VAR,,4,,2,1,,,\n"
+			+ "18,string,,4,\"bar\",0,1,,,\n"
+			+ "19,AST_STMT_LIST,,4,,3,1,,,\n";
+
+	public static final String foreachEdgeStr = CSVASTSamples.edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "3,8,PARENT_OF\n"
+			+ "3,9,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "11,14,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "10,15,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "10,17,PARENT_OF\n"
+			+ "10,19,PARENT_OF\n";
+
 }
