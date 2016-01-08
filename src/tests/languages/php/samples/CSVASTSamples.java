@@ -473,5 +473,55 @@ public class CSVASTSamples {
 		+ "1,2,PARENT_OF\n"
 		;
 
+	/*
+	<?php
+
+	try{
+	    bar();
+	} catch(Exception $e) {
+	    exceptionHandler();
+	}
+	*/
+	public static final String tryNodeStr = CSVASTSamples.nodeHeader
+		+ "1,AST_STMT_LIST,,1,,0,,,,\n"
+		+ "2,AST_TRY,,3,,0,,,,\n"
+		+ "3,AST_STMT_LIST,,3,,0,,,,\n"
+		+ "4,AST_CALL,,4,,0,,,,\n"
+		+ "5,AST_NAME,NAME_NOT_FQ,4,,0,,,,\n"
+		+ "6,string,,4,\"bar\",0,,,,\n"
+		+ "7,AST_ARG_LIST,,4,,1,,,,\n"
+		+ "8,AST_CATCH_LIST,,5,,1,,,,\n"
+		+ "9,AST_CATCH,,5,,0,,,,\n"
+		+ "10,AST_NAME,NAME_NOT_FQ,5,,0,,,,\n"
+		+ "11,string,,5,\"Exception\",0,,,,\n"
+		+ "12,string,,5,\"e\",1,,,,\n"
+		+ "13,AST_STMT_LIST,,5,,2,,,,\n"
+		+ "14,AST_CALL,,6,,0,,,,\n"
+		+ "15,AST_NAME,NAME_NOT_FQ,6,,0,,,,\n"
+		+ "16,string,,6,\"exceptionHandler\",0,,,,\n"
+		+ "17,AST_ARG_LIST,,6,,1,,,,\n"
+		+ "18,NULL,,3,,2,,,,\n"
+		;
+
+	public static final String tryEdgeStr = CSVASTSamples.edgeHeader
+		+ "5,6,PARENT_OF\n"
+		+ "4,5,PARENT_OF\n"
+		+ "4,7,PARENT_OF\n"
+		+ "3,4,PARENT_OF\n"
+		+ "2,3,PARENT_OF\n"
+		+ "10,11,PARENT_OF\n"
+		+ "9,10,PARENT_OF\n"
+		+ "9,12,PARENT_OF\n"
+		+ "15,16,PARENT_OF\n"
+		+ "14,15,PARENT_OF\n"
+		+ "14,17,PARENT_OF\n"
+		+ "13,14,PARENT_OF\n"
+		+ "9,13,PARENT_OF\n"
+		+ "8,9,PARENT_OF\n"
+		+ "2,8,PARENT_OF\n"
+		+ "2,18,PARENT_OF\n"
+		+ "1,2,PARENT_OF\n"
+		;
+
 
 }
