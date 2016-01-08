@@ -330,5 +330,43 @@ public class CSVASTSamples {
 		+ "9,12,PARENT_OF\n"
 		;
 
+	/*
+	<?php
+	goto a;
+	foo();
+	a:
+	bar();
+	?> 	*/
+	public static final String gotoNodeStr = CSVASTSamples.nodeHeader
+		+ "1,AST_STMT_LIST,,1,,0,,,,\n"
+		+ "2,AST_GOTO,,2,,0,,,,\n"
+		+ "3,string,,2,\"a\",0,,,,\n"
+		+ "4,AST_CALL,,3,,1,,,,\n"
+		+ "5,AST_NAME,NAME_NOT_FQ,3,,0,,,,\n"
+		+ "6,string,,3,\"foo\",0,,,,\n"
+		+ "7,AST_ARG_LIST,,3,,1,,,,\n"
+		+ "8,AST_LABEL,,4,,2,,,,\n"
+		+ "9,string,,4,\"a\",0,,,,\n"
+		+ "10,AST_CALL,,5,,3,,,,\n"
+		+ "11,AST_NAME,NAME_NOT_FQ,5,,0,,,,\n"
+		+ "12,string,,5,\"bar\",0,,,,\n"
+		+ "13,AST_ARG_LIST,,5,,1,,,,\n"
+		;
+
+	public static final String gotoEdgeStr = CSVASTSamples.edgeHeader
+		+ "2,3,PARENT_OF\n"
+		+ "1,2,PARENT_OF\n"
+		+ "5,6,PARENT_OF\n"
+		+ "4,5,PARENT_OF\n"
+		+ "4,7,PARENT_OF\n"
+		+ "1,4,PARENT_OF\n"
+		+ "8,9,PARENT_OF\n"
+		+ "1,8,PARENT_OF\n"
+		+ "11,12,PARENT_OF\n"
+		+ "10,11,PARENT_OF\n"
+		+ "10,13,PARENT_OF\n"
+		+ "1,10,PARENT_OF\n"
+		;
+
 
 }

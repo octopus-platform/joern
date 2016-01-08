@@ -26,6 +26,12 @@ public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
 	}
 
 	@Override
+	public void visit(Label node)
+	{
+		returnCFG = CFGFactory.newInstance(node);
+	}
+
+	@Override
 	public void visit(WhileStatement node)
 	{
 		returnCFG = CFGFactory.newInstance(node);
@@ -63,12 +69,6 @@ public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
 
 	@Override
 	public void visit(SwitchStatement node)
-	{
-		returnCFG = CFGFactory.newInstance(node);
-	}
-
-	@Override
-	public void visit(Label node)
 	{
 		returnCFG = CFGFactory.newInstance(node);
 	}

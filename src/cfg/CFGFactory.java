@@ -439,8 +439,7 @@ public class CFGFactory
 			continueBlock.addVertex(labelContainer);
 			continueBlock.addEdge(continueBlock.getEntryNode(), labelContainer);
 			continueBlock.addEdge(labelContainer, continueBlock.getExitNode());
-			String label = labelStatement.getEscapedCodeStr();
-			label = label.substring(0, label.length() - 2);
+			String label = labelStatement.getLabelName();
 			continueBlock.addBlockLabel(label, labelContainer);
 			return continueBlock;
 		}
