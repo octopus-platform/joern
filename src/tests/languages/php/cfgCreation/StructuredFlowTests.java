@@ -74,8 +74,6 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 		// TODO: we don't really care about the order in which expression
 		// nodes are stored in the CFG, but this test does.
 
-		System.out.println(cfg);
-
 		CFGNode condition = (CFGNode) expressions[0];
 		CFGNode forInit = (CFGNode) expressions[1];
 		CFGNode forInc = (CFGNode) expressions[2];
@@ -84,6 +82,14 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 		edgeExists(cfg, forInit, condition);
 		edgeExists(cfg, condition, forInc);
 		edgeExists(cfg, condition, cfg.getExitNode());
+	}
+
+	@Test
+	public void testForEach() throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.foreachNodeStr, CSVASTSamples.foreachEdgeStr);
+		// TODO
+		System.out.println(cfg);
 	}
 
 }

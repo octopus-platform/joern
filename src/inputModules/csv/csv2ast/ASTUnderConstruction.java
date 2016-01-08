@@ -1,5 +1,6 @@
 package inputModules.csv.csv2ast;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import ast.ASTNode;
@@ -19,7 +20,7 @@ public class ASTUnderConstruction
 	{
 		rootNode = node;
 	}
-	
+
 	// TODO:
 	// - Make ASTUnderConstruction implement Map.
 	// - Accordingly, rename addNodeWithId() to put() and getNodeById() to get();
@@ -37,7 +38,14 @@ public class ASTUnderConstruction
 	{
 		return idToNode.get(id);
 	}
-	
+
+	public ASTNode getNodeWithLowestId()
+	{
+		Object[] array = idToNode.keySet().toArray();
+		Arrays.sort(array);
+		return idToNode.get(array[0]);
+	}
+
 	public boolean containsValue(ASTNode node) {
 		return idToNode.containsValue(node);
 	}

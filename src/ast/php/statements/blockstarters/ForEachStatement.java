@@ -3,6 +3,7 @@ package ast.php.statements.blockstarters;
 import ast.expressions.Expression;
 import ast.expressions.Variable;
 import ast.logical.statements.BlockStarter;
+import ast.walking.ASTNodeVisitor;
 
 public class ForEachStatement extends BlockStarter
 {
@@ -21,7 +22,7 @@ public class ForEachStatement extends BlockStarter
 	{
 		throw new RuntimeException("A condition does not exist for a ForEachStatement!");
 	}
-	
+
 	public Expression getIteratedObject()
 	{
 		return this.iteratedObject;
@@ -43,7 +44,7 @@ public class ForEachStatement extends BlockStarter
 		this.value = value;
 		super.addChild(value);
 	}
-	
+
 	public Variable getKeyVariable()
 	{
 		return this.key;
@@ -53,5 +54,11 @@ public class ForEachStatement extends BlockStarter
 	{
 		this.key = key;
 		super.addChild(key);
+	}
+
+	@Override
+	public void accept(ASTNodeVisitor visitor)
+	{
+		visitor.visit(this);
 	}
 }

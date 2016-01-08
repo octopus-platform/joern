@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import ast.expressions.Expression;
 import ast.logical.statements.Statement;
+import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
 import ast.statements.blockstarters.IfStatement;
@@ -81,6 +82,13 @@ public class PHPCFGFactory extends CFGFactory
 					CFGEdge.FALSE_LABEL);
 		}
 
+		return block;
+	}
+
+	public static CFG newInstance(ForEachStatement forEach)
+	{
+		CFG block = new CFG();
+		// TODO: implement me.
 		return block;
 	}
 

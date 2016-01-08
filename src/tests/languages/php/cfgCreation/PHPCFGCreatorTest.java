@@ -20,7 +20,8 @@ public class PHPCFGCreatorTest extends PHPCSVBasedTest {
 			throws IOException, InvalidCSVFile
 	{
 		handle(nodeLines, edgeLines);
-		return ast.getNodeById((long) 3);
+
+		return ast.getNodeWithLowestId();
 	}
 
 	protected CFG getCFGForCSVLines(String nodeLines, String edgeLines)
@@ -48,15 +49,26 @@ public class PHPCFGCreatorTest extends PHPCSVBasedTest {
 
 	protected void edgeExists(CFG cfg, CFGNode srcNode, CFGNode dstNode)
 	{
+		assertTrue(doesEdgeExist(cfg, srcNode, dstNode));
+	}
+
+	protected void edgeDoesNotExist(CFG cfg, CFGNode srcNode, CFGNode dstNode)
+	{
+		assertTrue(!doesEdgeExist(cfg, srcNode, dstNode));
+	}
+
+
+	protected boolean doesEdgeExist(CFG cfg, CFGNode srcNode, CFGNode dstNode)
+	{
 		Collection<CFGEdge> outgoingEdges = cfg.outgoingEdges(srcNode);
 
 		for(CFGEdge o : outgoingEdges)
 		{
 			if(o.getDestination() == dstNode)
-				return;
+				return true;
 		}
 
-		assertTrue(false);
+		return false;
 	}
 
 }

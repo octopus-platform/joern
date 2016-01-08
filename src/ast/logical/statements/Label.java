@@ -11,13 +11,23 @@ public class Label extends Statement
 		this.name = name;
 		super.addChild(name);
 	}
-	
+
 	public StringExpression getNameChild() {
 		return this.name;
 	}
-	
+
+	@Override
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
+	}
+
+	public String getLabelName()
+	{
+		if(getNameChild() != null)
+			return getNameChild().getEscapedCodeStr();
+
+		String codeStr = getEscapedCodeStr();
+		return codeStr.substring(0, codeStr.length() - 2);
 	}
 }
