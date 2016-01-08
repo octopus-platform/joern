@@ -61,5 +61,9 @@ public class ASTNodeASTProvider extends ASTProvider
 	{
 		return node.getOperatorCode();
 	}
-
+	
+	@Override
+	public String toString() {
+		return "ASTNodeASTProvider{" + getASTNode().toString() + "}";
+	}
 }

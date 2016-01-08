@@ -51,7 +51,8 @@ public abstract class ASTDefUseAnalyzer
 		for (int i = 0; i < numChildren; i++)
 		{
 			ASTProvider childProvider = astProvider.getChild(i);
-			traverseAST(childProvider);
+			if( env.shouldTraverse(childProvider))
+				traverseAST(childProvider);
 
 			useDefsOfBlock.addAll(env.useOrDefsFromSymbols(childProvider));
 		}
@@ -62,7 +63,7 @@ public abstract class ASTDefUseAnalyzer
 	
 	/**
 	 * Creates a UseDefEnvironment for a given AST node.
-	 * This is language-specific and should be implemnted by inheriting classes.
+	 * This is language-specific and should be implemented by inheriting classes.
 	 */
 	protected abstract UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider);
 	
@@ -72,8 +73,7 @@ public abstract class ASTDefUseAnalyzer
 	 * parent-environment to generate useOrDefs and emit them.
 	 */
 	private void reportUpstream(UseDefEnvironment env)
-	{
-
+	{		
 		LinkedList<String> symbols = env.upstreamSymbols();
 		ASTProvider astProvider = env.getASTProvider();
 

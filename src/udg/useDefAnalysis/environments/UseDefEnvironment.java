@@ -9,7 +9,6 @@ import udg.useDefGraph.UseOrDef;
 /**
  * Base-class and default implementation of UseDefEnvironment.
  */
-
 public class UseDefEnvironment
 {
 
@@ -29,6 +28,9 @@ public class UseDefEnvironment
 		return false;
 	}
 
+	/**
+	 * Decides whether a given child node should be traversed by ASTDefUseAnalyzer.
+	 */
 	public boolean shouldTraverse(ASTProvider child)
 	{
 		return true;
@@ -47,16 +49,14 @@ public class UseDefEnvironment
 	/**
 	 * Propagate all symbols to upstream
 	 */
-
 	public LinkedList<String> upstreamSymbols()
 	{
-		return symbols;
+		return this.symbols;
 	}
 
 	/**
 	 * Add all given symbols without exception
 	 **/
-
 	public void addChildSymbols(LinkedList<String> childSymbols,
 			ASTProvider child)
 	{
@@ -66,7 +66,6 @@ public class UseDefEnvironment
 	/**
 	 * By default, don't generate any uses or defs for symbols.
 	 */
-
 	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
 	{
 		return emptyUseOrDef;

@@ -1,5 +1,7 @@
 package languages.php.udg.useDefAnalysis;
 
+import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
+import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
 import udg.ASTProvider;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
@@ -20,10 +22,10 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 		switch (nodeType)
 		{
 			case "AssignmentExpression":
-				return null; // TODO continue here
+				return new AssignmentEnvironment();
 				
 			case "Variable":
-				return null; // TODO create "leaf" environment to get actual symbol name
+				return new VariableEnvironment();
 
 			default:
 				return new UseDefEnvironment();

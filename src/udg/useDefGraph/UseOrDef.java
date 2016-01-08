@@ -1,5 +1,7 @@
 package udg.useDefGraph;
 
+import java.util.Objects;
+
 import udg.ASTProvider;
 
 public class UseOrDef
@@ -17,11 +19,16 @@ public class UseOrDef
 				&& (astProvider.equals(other.astProvider));
 
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
-		return symbol.hashCode();
+		return Objects.hash(this.isDef, this.symbol, this.astProvider);
+	}
+	
+	@Override
+	public String toString() {
+		return this.symbol + "[" + (this.isDef ? "def" : "use") + "]";
 	}
 
 }
