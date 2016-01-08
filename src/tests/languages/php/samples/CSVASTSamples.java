@@ -7,7 +7,7 @@ public class CSVASTSamples {
 	public static final String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
 	public static final String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
 
-	/* 
+	/*
 	 * 42;
 	 * 3.14;
 	 * "Hello World!";
@@ -18,11 +18,11 @@ public class CSVASTSamples {
 			+ "4,double,,1,3.14,1,1,,,\n"
 			+ "5,string,,1,\"Hello World!\",2,1,,,\n";
 
-	
-	/* 
+
+	/*
 	 * class foo extends bar implements buz {}
 	 */
-	
+
 	public static final String nameNodeStr = nodeHeader
 			+ "3,AST_CLASS,,3,,0,1,3,foo,\n"
 			+ "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
@@ -32,7 +32,7 @@ public class CSVASTSamples {
 			+ "8,string,,3,\"buz\",0,1,,,\n"
 			+ "9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n"
 			+ "10,AST_STMT_LIST,,3,,0,9,,,\n";
-	
+
 	public static final String nameEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
@@ -85,7 +85,7 @@ public class CSVASTSamples {
 			+ "16,18,PARENT_OF\n"
 			+ "3,16,PARENT_OF\n";
 
-	
+
 	/*
 	 * function foo() : int {}
 	 */
@@ -105,7 +105,7 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "3,7,PARENT_OF\n";
 
-	
+
 	/*
 	 * while($foo) {}
 	 * while(true) {}
@@ -293,5 +293,42 @@ public class CSVASTSamples {
 			+ "17,18,PARENT_OF\n"
 			+ "10,17,PARENT_OF\n"
 			+ "10,19,PARENT_OF\n";
+
+	/*
+	<?php
+
+	if($foo){
+	    return;
+	}
+	bar();
+
+	?> 	*/
+	public static final String retNodeStr = CSVASTSamples.nodeHeader
+		+ "2,AST_IF,,5,,0,,,,\n"
+		+ "3,AST_IF_ELEM,,3,,0,,,,\n"
+		+ "4,AST_VAR,,3,,0,,,,\n"
+		+ "5,string,,3,\"foo\",0,,,,\n"
+		+ "6,AST_STMT_LIST,,3,,1,,,,\n"
+		+ "7,AST_RETURN,,4,,0,,,,\n"
+		+ "8,NULL,,4,,0,,,,\n"
+		+ "9,AST_CALL,,6,,1,,,,\n"
+		+ "10,AST_NAME,NAME_NOT_FQ,6,,0,,,,\n"
+		+ "11,string,,6,\"bar\",0,,,,\n"
+		+ "12,AST_ARG_LIST,,6,,1,,,,\n"
+		+ "13,NULL,,1,,2,,,,\n"
+		;
+
+	public static final String retEdgeStr = CSVASTSamples.edgeHeader
+		+ "4,5,PARENT_OF\n"
+		+ "3,4,PARENT_OF\n"
+		+ "7,8,PARENT_OF\n"
+		+ "6,7,PARENT_OF\n"
+		+ "3,6,PARENT_OF\n"
+		+ "2,3,PARENT_OF\n"
+		+ "10,11,PARENT_OF\n"
+		+ "9,10,PARENT_OF\n"
+		+ "9,12,PARENT_OF\n"
+		;
+
 
 }

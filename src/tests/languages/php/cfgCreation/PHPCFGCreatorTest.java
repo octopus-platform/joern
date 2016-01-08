@@ -20,7 +20,8 @@ public class PHPCFGCreatorTest extends PHPCSVBasedTest {
 			throws IOException, InvalidCSVFile
 	{
 		handle(nodeLines, edgeLines);
-		return ast.getNodeById((long) 3);
+
+		return ast.getNodeWithLowestId();
 	}
 
 	protected CFG getCFGForCSVLines(String nodeLines, String edgeLines)
