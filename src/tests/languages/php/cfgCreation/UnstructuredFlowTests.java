@@ -93,7 +93,34 @@ public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 		edgeExists(cfg, callNode, whileCondition);
 		edgeExists(cfg, whileCondition, cfg.getExitNode());
 
+	}
+
+	@Test
+	public void testBreak() throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.breakNodeStr, CSVASTSamples.breakEdgeStr);
+
+		Collection<CFGNode> vertices = cfg.getVertices();
+
+		assertEquals(6, vertices.size());
+
+		Object[] nodes = getNodesOfType(cfg, "ASTNodeContainer");
+
+		CFGNode whileCondition = (CFGNode) nodes[0];
+		CFGNode ifCondition = (CFGNode) nodes[1];
+		CFGNode breakNode = (CFGNode) nodes[2];
+		CFGNode callNode = (CFGNode) nodes[3];
+
+		edgeExists(cfg, cfg.getEntryNode(), whileCondition);
+		edgeExists(cfg, whileCondition, ifCondition);
+		edgeExists(cfg, ifCondition, breakNode);
+		edgeExists(cfg, breakNode, cfg.getExitNode());
+		edgeDoesNotExist(cfg, breakNode, callNode);
+		edgeExists(cfg, ifCondition, callNode);
+		edgeExists(cfg, callNode, whileCondition);
+		edgeExists(cfg, whileCondition, cfg.getExitNode());
 
 	}
+
 
 }

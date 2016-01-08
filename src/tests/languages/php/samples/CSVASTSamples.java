@@ -421,6 +421,57 @@ public class CSVASTSamples {
 		+ "1,2,PARENT_OF\n"
 		;
 
+	/*
+	<?php
+
+	while($foo){
+
+	    if($bar)
+	        break;
+
+	    $foo = call();
+	}
+	*/
+	public static final String breakNodeStr = CSVASTSamples.nodeHeader
+		+ "1,AST_STMT_LIST,,1,,0,,,,\n"
+		+ "2,AST_WHILE,,3,,0,,,,\n"
+		+ "3,AST_VAR,,3,,0,,,,\n"
+		+ "4,string,,3,\"foo\",0,,,,\n"
+		+ "5,AST_STMT_LIST,,3,,1,,,,\n"
+		+ "6,AST_IF,,6,,0,,,,\n"
+		+ "7,AST_IF_ELEM,,5,,0,,,,\n"
+		+ "8,AST_VAR,,5,,0,,,,\n"
+		+ "9,string,,5,\"bar\",0,,,,\n"
+		+ "10,AST_BREAK,,6,,1,,,,\n"
+		+ "11,NULL,,6,,0,,,,\n"
+		+ "12,AST_ASSIGN,,8,,1,,,,\n"
+		+ "13,AST_VAR,,8,,0,,,,\n"
+		+ "14,string,,8,\"foo\",0,,,,\n"
+		+ "15,AST_CALL,,8,,1,,,,\n"
+		+ "16,AST_NAME,NAME_NOT_FQ,8,,0,,,,\n"
+		+ "17,string,,8,\"call\",0,,,,\n"
+		+ "18,AST_ARG_LIST,,8,,1,,,,\n"
+		;
+
+	public static final String breakEdgeStr = CSVASTSamples.edgeHeader
+		+ "3,4,PARENT_OF\n"
+		+ "2,3,PARENT_OF\n"
+		+ "8,9,PARENT_OF\n"
+		+ "7,8,PARENT_OF\n"
+		+ "10,11,PARENT_OF\n"
+		+ "7,10,PARENT_OF\n"
+		+ "6,7,PARENT_OF\n"
+		+ "5,6,PARENT_OF\n"
+		+ "13,14,PARENT_OF\n"
+		+ "12,13,PARENT_OF\n"
+		+ "16,17,PARENT_OF\n"
+		+ "15,16,PARENT_OF\n"
+		+ "15,18,PARENT_OF\n"
+		+ "12,15,PARENT_OF\n"
+		+ "5,12,PARENT_OF\n"
+		+ "2,5,PARENT_OF\n"
+		+ "1,2,PARENT_OF\n"
+		;
 
 
 }
