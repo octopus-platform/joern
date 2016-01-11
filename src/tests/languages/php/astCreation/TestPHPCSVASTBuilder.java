@@ -2386,29 +2386,9 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPropertyCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_PROP,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
-		nodeStr += "7,AST_PROP,,4,,1,1,,,\n";
-		nodeStr += "8,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"buz\",0,1,,,\n";
-		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "12,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "13,string,,4,\"qux\",0,1,,,\n";
+		String nodeStr = CSVASTSamples.propertyNodeStr;
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "7,12,PARENT_OF\n";
+		String edgeStr = CSVASTSamples.propertyEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

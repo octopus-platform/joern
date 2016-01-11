@@ -82,6 +82,37 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
 	
+	
+	/*
+	 * $foo->bar;
+	 * buz()->$qux;
+	 */
+	
+	public static final String propertyNodeStr = nodeHeader
+			+ "3,AST_PROP,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,string,,3,\"bar\",1,1,,,\n"
+			+ "7,AST_PROP,,4,,1,1,,,\n"
+			+ "8,AST_CALL,,4,,0,1,,,\n"
+			+ "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "10,string,,4,\"buz\",0,1,,,\n"
+			+ "11,AST_ARG_LIST,,4,,1,1,,,\n"
+			+ "12,AST_VAR,,4,,1,1,,,\n"
+			+ "13,string,,4,\"qux\",0,1,,,\n";
+	
+	public static final String propertyEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "8,11,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "7,12,PARENT_OF\n";
+
+	
 	/*
 	 * if($foo) {}
 	 * elseif($bar) {}
