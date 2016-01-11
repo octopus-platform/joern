@@ -114,6 +114,48 @@ public class CSVASTSamples {
 
 	
 	/*
+	 * Foo::$bar;
+	 * $foo::$bar;
+	 * buz()::$$qux;
+	 */
+	
+	public static final String staticPropertyNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_STATIC_PROP,,3,,0,1,,,\n"
+			+ "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+			+ "5,string,,3,\"Foo\",0,1,,,\n"
+			+ "6,string,,3,\"bar\",1,1,,,\n"
+			+ "7,AST_STATIC_PROP,,4,,1,1,,,\n"
+			+ "8,AST_VAR,,4,,0,1,,,\n"
+			+ "9,string,,4,\"foo\",0,1,,,\n"
+			+ "10,string,,4,\"bar\",1,1,,,\n"
+			+ "11,AST_STATIC_PROP,,5,,2,1,,,\n"
+			+ "12,AST_CALL,,5,,0,1,,,\n"
+			+ "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+			+ "14,string,,5,\"buz\",0,1,,,\n"
+			+ "15,AST_ARG_LIST,,5,,1,1,,,\n"
+			+ "16,AST_VAR,,5,,1,1,,,\n"
+			+ "17,string,,5,\"qux\",0,1,,,\n";
+	
+	public static final String staticPropertyEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "2,7,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "12,15,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "16,17,PARENT_OF\n"
+			+ "11,16,PARENT_OF\n"
+			+ "2,11,PARENT_OF\n";
+	
+	
+	/*
 	 * if($foo) {}
 	 * elseif($bar) {}
 	 * elseif($buz) {}

@@ -3,6 +3,7 @@ package languages.php.udg.useDefAnalysis;
 import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.PropertyEnvironment;
+import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
 import udg.ASTProvider;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
@@ -38,6 +39,9 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 
 			case "PropertyExpression":
 				return new PropertyEnvironment();
+				
+			case "StaticPropertyExpression":
+				return new StaticPropertyEnvironment();
 
 
 			// default environment

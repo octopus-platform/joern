@@ -2413,7 +2413,7 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * 1) an expression, whose evaluation returns the class to be accessed
 	 *    (e.g., could be AST_NAME, AST_VAR, AST_CALL, etc...)
 	 * 2) an expression, whose evaluation holds the property name
-	 * 	  (e.g., could be AST_NAME, AST_VAR, etc...)
+	 * 	  (e.g., could be string, AST_NAME, AST_VAR, etc...)
 	 *
 	 * This test checks a few static property access expressions' children in the following PHP code:
 	 *
@@ -2424,40 +2424,9 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testStaticPropertyCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_STATIC_PROP,,3,,0,1,,,\n";
-		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"Foo\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"bar\",1,1,,,\n";
-		nodeStr += "7,AST_STATIC_PROP,,4,,1,1,,,\n";
-		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "9,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "10,string,,4,\"bar\",1,1,,,\n";
-		nodeStr += "11,AST_STATIC_PROP,,5,,2,1,,,\n";
-		nodeStr += "12,AST_CALL,,5,,0,1,,,\n";
-		nodeStr += "13,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
-		nodeStr += "15,AST_ARG_LIST,,5,,1,1,,,\n";
-		nodeStr += "16,AST_VAR,,5,,1,1,,,\n";
-		nodeStr += "17,string,,5,\"qux\",0,1,,,\n";
+		String nodeStr = CSVASTSamples.staticPropertyNodeStr;
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
-		edgeStr += "2,7,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,15,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "11,16,PARENT_OF\n";
-		edgeStr += "2,11,PARENT_OF\n";
+		String edgeStr = CSVASTSamples.staticPropertyEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
