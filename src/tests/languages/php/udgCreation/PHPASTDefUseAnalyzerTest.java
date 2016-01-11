@@ -70,28 +70,33 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	
 	/**
 	 * $foo;
+	 * $$bar;
 	 */
 	@Test
 	public void testVariable() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"foo\",0,1,,,\n";
+		String nodeStr = CSVASTSamples.variableNodeStr;
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
+		String edgeStr = CSVASTSamples.variableEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
 		Collection<UseOrDef> useOrDefs = analyze(node);
-		
+
 		// a standalone variable should generate neither uses nor defs
 		assertTrue( useOrDefs.isEmpty());
+		
+		ASTNode node2 = ast.getNodeById((long)5);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		// a standalone variable should generate neither uses nor defs
+		assertTrue( useOrDefs2.isEmpty());
 	}
 	
 	/**
 	 * $foo = $bar + $buz;
+	 * $qux = $$norf;
 	 */
 	@Test
 	public void testAssign() throws IOException, InvalidCSVFile
@@ -109,6 +114,16 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "buz"));
+		
+		ASTNode node2 = ast.getNodeById((long)11);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		System.out.println(useOrDefs2);
+		
+		assertTrue( useOrDefs.size() == 2);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node2, "qux"));
+		assertTrue( containsUseSymbol( useOrDefs, node2, "norf"));
 	}
 
 }

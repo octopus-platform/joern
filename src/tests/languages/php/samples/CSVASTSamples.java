@@ -41,8 +41,29 @@ public class CSVASTSamples {
 			+ "3,6,PARENT_OF\n"
 			+ "9,10,PARENT_OF\n"
 			+ "3,9,PARENT_OF\n";
+	
 
-
+	 /*
+	  * $foo;
+	  * $$bar;
+	  */
+	
+	public static final String variableNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_VAR,,3,,0,1,,,\n"
+			+ "4,string,,3,\"foo\",0,1,,,\n"
+			+ "5,AST_VAR,,4,,1,1,,,\n"
+			+ "6,AST_VAR,,4,,0,1,,,\n"
+			+ "7,string,,4,\"bar\",0,1,,,\n";
+	
+	public static final String variableEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "5,6,PARENT_OF\n"
+			+ "2,5,PARENT_OF\n";
+	
+	
 	/*
 	 * if($foo) {}
 	 * elseif($bar) {}
