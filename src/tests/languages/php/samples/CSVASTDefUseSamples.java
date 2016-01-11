@@ -187,4 +187,52 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "3,8,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n";
 
+	
+	/*
+	 * $foo = Foo::BAR + $buz::QUX + norf()::NICKNACK;
+	 */
+	
+	public static final String defUseAssignWithClassConstantsNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,AST_BINARY_OP,BINARY_ADD,3,,1,1,,,\n"
+			+ "7,AST_BINARY_OP,BINARY_ADD,3,,0,1,,,\n"
+			+ "8,AST_CLASS_CONST,,3,,0,1,,,\n"
+			+ "9,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+			+ "10,string,,3,\"Foo\",0,1,,,\n"
+			+ "11,string,,3,\"BAR\",1,1,,,\n"
+			+ "12,AST_CLASS_CONST,,3,,1,1,,,\n"
+			+ "13,AST_VAR,,3,,0,1,,,\n"
+			+ "14,string,,3,\"buz\",0,1,,,\n"
+			+ "15,string,,3,\"QUX\",1,1,,,\n"
+			+ "16,AST_CLASS_CONST,,3,,1,1,,,\n"
+			+ "17,AST_CALL,,3,,0,1,,,\n"
+			+ "18,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+			+ "19,string,,3,\"norf\",0,1,,,\n"
+			+ "20,AST_ARG_LIST,,3,,1,1,,,\n"
+			+ "21,string,,3,\"NICKNACK\",1,1,,,\n";
+
+	public static final String defUseAssignWithClassConstantsEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "8,11,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "12,15,PARENT_OF\n"
+			+ "7,12,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "17,20,PARENT_OF\n"
+			+ "16,17,PARENT_OF\n"
+			+ "16,21,PARENT_OF\n"
+			+ "6,16,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
 }
