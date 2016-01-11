@@ -715,19 +715,9 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testConstantCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CONST,,3,,0,1,,,\n";
-		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"FOO\",0,1,,,\n";
-		nodeStr += "6,AST_CONST,,4,,1,1,,,\n";
-		nodeStr += "7,AST_NAME,NAME_FQ,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"BAR\\BUZ\",0,1,,,\n";
+		String nodeStr = CSVASTSamples.constantNodeStr;
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
+		String edgeStr = CSVASTSamples.constantEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

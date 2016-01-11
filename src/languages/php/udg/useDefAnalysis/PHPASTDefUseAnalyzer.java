@@ -1,6 +1,7 @@
 package languages.php.udg.useDefAnalysis;
 
 import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
+import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
 import udg.ASTProvider;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
@@ -24,9 +25,19 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "AssignmentExpression":
 				return new AssignmentEnvironment();
 				
+			
+			// "base" environments which add symbols to be reported upstream:
+			// variables, constants
+			
 			case "Variable":
 				return new VariableEnvironment();
+				
+			case "Constant":
+				return new ConstantEnvironment();
 
+
+			// default environment
+				
 			default:
 				return new UseDefEnvironment();
 		}

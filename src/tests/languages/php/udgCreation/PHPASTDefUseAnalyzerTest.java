@@ -95,14 +95,40 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	}
 	
 	/**
+	 * FOO;
+	 * \BAR\BUZ;
+	 */
+	@Test
+	public void testConstant() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTSamples.constantNodeStr;
+
+		String edgeStr = CSVASTSamples.constantEdgeStr;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		// a standalone constant should generate neither uses nor defs
+		assertTrue( useOrDefs.isEmpty());
+		
+		ASTNode node2 = ast.getNodeById((long)6);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		// a standalone constant should generate neither uses nor defs
+		assertTrue( useOrDefs2.isEmpty());
+	}
+	
+	/**
 	 * $foo = $bar + $buz;
 	 * $qux = $$norf;
 	 */
 	@Test
-	public void testAssign() throws IOException, InvalidCSVFile
+	public void testAssignWithVariables() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignEdgeStr;
+		String nodeStr = CSVASTDefUseSamples.defUseAssignWithVariablesNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseAssignWithVariablesEdgeStr;
 
 		handle(nodeStr, edgeStr);
 		
@@ -124,6 +150,27 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		
 		assertTrue( containsDefSymbol( useOrDefs, node2, "qux"));
 		assertTrue( containsUseSymbol( useOrDefs, node2, "norf"));
+	}
+	
+	/**
+	 * $foo = FOO + \BAR\BUZ;
+	 */
+	@Test
+	public void testAssignWithConstants() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseAssignWithConstantsNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseAssignWithConstantsEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 3);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "FOO"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "BAR\\BUZ"));
 	}
 
 }

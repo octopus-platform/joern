@@ -63,6 +63,24 @@ public class CSVASTSamples {
 			+ "5,6,PARENT_OF\n"
 			+ "2,5,PARENT_OF\n";
 	
+	/*
+	 * FOO;
+	 * \BAR\BUZ;
+	 */
+	
+	public static final String constantNodeStr = nodeHeader
+			+ "3,AST_CONST,,3,,0,1,,,\n"
+			+ "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+			+ "5,string,,3,\"FOO\",0,1,,,\n"
+			+ "6,AST_CONST,,4,,1,1,,,\n"
+			+ "7,AST_NAME,NAME_FQ,4,,0,1,,,\n"
+			+ "8,string,,4,\"BAR\\BUZ\",0,1,,,\n";
+
+	public static final String constantEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n";
 	
 	/*
 	 * if($foo) {}
