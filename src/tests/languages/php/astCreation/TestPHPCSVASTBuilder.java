@@ -222,26 +222,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClosureVarCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLOSURE,,3,,0,1,3,{closure},\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,AST_CLOSURE_USES,,3,,1,3,,,\n";
-		nodeStr += "6,AST_CLOSURE_VAR,,3,,0,3,,,\n";
-		nodeStr += "7,string,,3,\"foo\",0,3,,,\n";
-		nodeStr += "8,AST_CLOSURE_VAR,,3,,1,3,,,\n";
-		nodeStr += "9,string,,3,\"bar\",0,3,,,\n";
-		nodeStr += "10,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "11,NULL,,3,,3,3,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "5,8,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,10,PARENT_OF\n";
-		edgeStr += "3,11,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.closureVariableNodeStr;
+		String edgeStr = CSVASTSamples.closureVariableEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -676,7 +658,6 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	public void testVariableCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.variableNodeStr;
-
 		String edgeStr = CSVASTSamples.variableEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -716,7 +697,6 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	public void testConstantCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.constantNodeStr;
-
 		String edgeStr = CSVASTSamples.constantEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -2387,7 +2367,6 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	public void testPropertyCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.propertyNodeStr;
-
 		String edgeStr = CSVASTSamples.propertyEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -2425,7 +2404,6 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	public void testStaticPropertyCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.staticPropertyNodeStr;
-
 		String edgeStr = CSVASTSamples.staticPropertyEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -2530,7 +2508,6 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	public void testClassConstantCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.classConstantNodeStr;
-
 		String edgeStr = CSVASTSamples.classConstantEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -5490,7 +5467,6 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	public void testForEachCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.foreachNodeStr;
-
 		String edgeStr = CSVASTSamples.foreachEdgeStr;
 
 		handle(nodeStr, edgeStr);

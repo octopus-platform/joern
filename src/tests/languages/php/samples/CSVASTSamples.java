@@ -42,6 +42,32 @@ public class CSVASTSamples {
 			+ "9,10,PARENT_OF\n"
 			+ "3,9,PARENT_OF\n";
 	
+	
+	/*
+	 * function() use ($foo,$bar) {};
+	 */
+	
+	public static final String closureVariableNodeStr = nodeHeader
+			+ "3,AST_CLOSURE,,3,,0,1,3,{closure},\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,AST_CLOSURE_USES,,3,,1,3,,,\n"
+			+ "6,AST_CLOSURE_VAR,,3,,0,3,,,\n"
+			+ "7,string,,3,\"foo\",0,3,,,\n"
+			+ "8,AST_CLOSURE_VAR,,3,,1,3,,,\n"
+			+ "9,string,,3,\"bar\",0,3,,,\n"
+			+ "10,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "11,NULL,,3,,3,3,,,\n";
+	
+	public static final String closureVariableEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "5,6,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "5,8,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "3,10,PARENT_OF\n"
+			+ "3,11,PARENT_OF\n";
+
 
 	 /*
 	  * $foo;

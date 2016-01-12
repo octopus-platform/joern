@@ -283,6 +283,39 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "3,6,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n";
 
+	
+	/*
+	 * $buz = function() use ($foo,$bar) {};
+	 */
+	
+	public static final String defUseAssignWithClosureVarNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"buz\",0,1,,,\n"
+			+ "6,AST_CLOSURE,,3,,1,1,3,{closure},\n"
+			+ "7,AST_PARAM_LIST,,3,,0,6,,,\n"
+			+ "8,AST_CLOSURE_USES,,3,,1,6,,,\n"
+			+ "9,AST_CLOSURE_VAR,,3,,0,6,,,\n"
+			+ "10,string,,3,\"foo\",0,6,,,\n"
+			+ "11,AST_CLOSURE_VAR,,3,,1,6,,,\n"
+			+ "12,string,,3,\"bar\",0,6,,,\n"
+			+ "13,AST_STMT_LIST,,3,,2,6,,,\n"
+			+ "14,NULL,,3,,3,6,,,\n";
+
+	public static final String defUseAssignWithClosureVarEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "8,11,PARENT_OF\n"
+			+ "6,8,PARENT_OF\n"
+			+ "6,13,PARENT_OF\n"
+			+ "6,14,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
 
 
 }

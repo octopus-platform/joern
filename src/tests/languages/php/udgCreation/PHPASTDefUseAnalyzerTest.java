@@ -73,6 +73,30 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	/* -- and their context generates uses from these symbols.                        -- */
 
 	/**
+	 * function() use ($foo,$bar) {};
+	 */
+	@Test
+	public void testClosureVariable() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTSamples.closureVariableNodeStr;
+		String edgeStr = CSVASTSamples.closureVariableEdgeStr;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)6);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		// a standalone closure variable should generate neither uses nor defs
+		assertTrue( useOrDefs.isEmpty());
+		
+		ASTNode node2 = ast.getNodeById((long)8);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		// a standalone closure variable should generate neither uses nor defs
+		assertTrue( useOrDefs2.isEmpty());
+	}
+	
+	/**
 	 * $foo;
 	 * $$bar;
 	 */
@@ -80,7 +104,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	public void testVariable() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.variableNodeStr;
-
 		String edgeStr = CSVASTSamples.variableEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -106,7 +129,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	public void testConstant() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.constantNodeStr;
-
 		String edgeStr = CSVASTSamples.constantEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -132,7 +154,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	public void testProperty() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.propertyNodeStr;
-
 		String edgeStr = CSVASTSamples.propertyEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -159,7 +180,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	public void testStaticProperty() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.staticPropertyNodeStr;
-
 		String edgeStr = CSVASTSamples.staticPropertyEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -192,7 +212,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	public void testClassConstantProperty() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = CSVASTSamples.classConstantNodeStr;
-
 		String edgeStr = CSVASTSamples.classConstantEdgeStr;
 
 		handle(nodeStr, edgeStr);
@@ -370,4 +389,24 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsUseSymbol( useOrDefs, node, "b"));
 	}
 
+	/**
+	 * $buz = function() use ($foo,$bar) {};
+	 */
+	@Test
+	public void testAssignWithClosureVariables() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseAssignWithClosureVarNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseAssignWithClosureVarEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 3);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "buz"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
+	}
 }

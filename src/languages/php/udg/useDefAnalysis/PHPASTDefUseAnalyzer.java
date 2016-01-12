@@ -2,6 +2,7 @@ package languages.php.udg.useDefAnalysis;
 
 import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClassConstantEnvironment;
+import languages.php.udg.useDefAnalysis.environments.ClosureVarEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.PropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
@@ -30,8 +31,11 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 				
 			
 			// "base" environments which add symbols to be reported upstream:
-			// variables, constants, properties, static properties and class constants
+			// closure variables, variables, constants, properties, static properties and class constants
 			
+			case "ClosureVar":
+				return new ClosureVarEnvironment();
+				
 			case "Variable":
 				return new VariableEnvironment();
 				
