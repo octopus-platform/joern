@@ -4,6 +4,7 @@ import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClassConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClosureVarEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
+import languages.php.udg.useDefAnalysis.environments.IncDecEnvironment;
 import languages.php.udg.useDefAnalysis.environments.PropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
@@ -28,6 +29,12 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 		{
 			case "AssignmentExpression":
 				return new AssignmentEnvironment();
+				
+			case "PreIncOperationExpression":
+			case "PreDecOperationExpression":
+			case "PostIncOperationExpression":
+			case "PostDecOperationExpression":
+				return new IncDecEnvironment();
 				
 			
 			// "base" environments which add symbols to be reported upstream:

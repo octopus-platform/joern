@@ -263,8 +263,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		ASTNode node2 = ast.getNodeById((long)11);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		System.out.println(useOrDefs2);
-		
 		assertTrue( useOrDefs.size() == 2);
 		
 		assertTrue( containsDefSymbol( useOrDefs, node2, "qux"));
@@ -380,8 +378,6 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		ASTNode node = ast.getNodeById((long)3);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		System.out.println(useOrDefs);
-		
 		assertTrue( useOrDefs.size() == 3);
 		
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
@@ -408,5 +404,85 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsDefSymbol( useOrDefs, node, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
+	}
+	
+	/**
+	 * ++$i;
+	 */
+	@Test
+	public void testPreInc() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.preIncNodeStr;
+		String edgeStr = CSVASTDefUseSamples.preIncEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 2);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
+	}
+	
+	/**
+	 * --$i;
+	 */
+	@Test
+	public void testPreDec() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.preDecNodeStr;
+		String edgeStr = CSVASTDefUseSamples.preDecEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 2);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
+	}
+	
+	/**
+	 * $i++;
+	 */
+	@Test
+	public void testPostInc() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.postIncNodeStr;
+		String edgeStr = CSVASTDefUseSamples.postIncEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 2);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
+	}
+	
+	/**
+	 * $i--;
+	 */
+	@Test
+	public void testPostDec() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.postDecNodeStr;
+		String edgeStr = CSVASTDefUseSamples.postDecEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 2);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
 	}
 }

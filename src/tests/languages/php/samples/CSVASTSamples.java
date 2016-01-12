@@ -110,6 +110,61 @@ public class CSVASTSamples {
 	
 	
 	/*
+ 	 * ++$i;
+	 */
+	public static final String preIncNodeStr = nodeHeader
+			+ "3,AST_PRE_INC,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"i\",0,1,,,\n";
+	
+	public static final String preIncEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n";
+
+
+	/*
+	 * --$i;
+	 */
+	
+	public static final String preDecNodeStr = nodeHeader
+			+ "3,AST_PRE_DEC,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"i\",0,1,,,\n";
+	
+	public static final String preDecEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n";
+	
+	
+	/*
+	 * $i++;
+	 */
+	
+	public static final String postIncNodeStr = nodeHeader
+			+ "3,AST_POST_INC,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"i\",0,1,,,\n";
+	
+	public static final String postIncEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n";
+
+
+	/*
+	 * $i--;
+	 */
+	
+	public static final String postDecNodeStr = nodeHeader
+			+ "3,AST_POST_DEC,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"i\",0,1,,,\n";
+	
+	public static final String postDecEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n";
+
+
+	/*
 	 * $foo->bar;
 	 * buz()->$qux;
 	 */
