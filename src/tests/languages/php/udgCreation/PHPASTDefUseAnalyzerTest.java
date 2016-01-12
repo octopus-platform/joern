@@ -346,5 +346,28 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsUseSymbol( useOrDefs, node, "buz::QUX"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "*::NICKNACK"));
 	}
+	
+	/**
+	 * $foo = [3, $a, $$b, "blah"];
+	 */
+	@Test
+	public void testAssignWithArrayIndexing() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseAssignWithArrayIndexingNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseAssignWithArrayIndexingEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		System.out.println(useOrDefs);
+		
+		assertTrue( useOrDefs.size() == 3);
+		
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "a"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "b"));
+	}
 
 }
