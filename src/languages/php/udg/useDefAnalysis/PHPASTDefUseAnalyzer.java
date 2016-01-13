@@ -11,6 +11,7 @@ import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
 import udg.ASTProvider;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import udg.useDefAnalysis.environments.EmitDefEnvironment;
 import udg.useDefAnalysis.environments.EmitUseEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 
@@ -55,6 +56,13 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PHPShellExecExpression":
 			case "PHPCloneExpression":
 				return new EmitUseEnvironment();
+				
+				
+			// environments that emit DEFs for all their children symbols
+				
+			case "PHPGlobalStatement":
+			case "PHPUnsetStatement":
+				return new EmitDefEnvironment();
 				
 			
 			// "base" environments which add symbols to be reported upstream:

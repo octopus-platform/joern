@@ -1656,32 +1656,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testGlobalCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,AST_STMT_LIST,,4,,0,3,,,\n";
-		nodeStr += "8,AST_GLOBAL,,4,,0,3,,,\n";
-		nodeStr += "9,AST_VAR,,4,,0,3,,,\n";
-		nodeStr += "10,string,,4,\"bar\",0,3,,,\n";
-		nodeStr += "11,AST_GLOBAL,,4,,1,3,,,\n";
-		nodeStr += "12,AST_VAR,,4,,0,3,,,\n";
-		nodeStr += "13,string,,4,\"buz\",0,3,,,\n";
-		nodeStr += "14,NULL,,3,,3,3,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "7,11,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,14,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.globalNodeStr;
+		String edgeStr = CSVASTSamples.globalEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -1712,36 +1688,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUnsetCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_STMT_LIST,,3,,0,1,,,\n";
-		nodeStr += "4,AST_UNSET,,3,,0,1,,,\n";
-		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "7,AST_UNSET,,3,,1,1,,,\n";
-		nodeStr += "8,AST_PROP,,3,,0,1,,,\n";
-		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "10,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "11,string,,3,\"buz\",1,1,,,\n";
-		nodeStr += "12,AST_UNSET,,3,,2,1,,,\n";
-		nodeStr += "13,AST_DIM,,3,,0,1,,,\n";
-		nodeStr += "14,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "15,string,,3,\"qux\",0,1,,,\n";
-		nodeStr += "16,integer,,3,42,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "13,16,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "3,12,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.unsetNodeStr;
+		String edgeStr = CSVASTSamples.unsetEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

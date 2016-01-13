@@ -618,4 +618,65 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		
 		assertTrue( useOrDefs2.isEmpty());
 	}
+	
+	
+	/* -- Expressions/statements that generate *only* DEFs for -- */
+	/* -- all their children symbols                           -- */
+	
+	/**
+	 * function foo() {
+	 *   global $bar, $buz;
+	 * }
+	 */
+	@Test
+	public void testGlobal() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.globalNodeStr;
+		String edgeStr = CSVASTDefUseSamples.globalEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)8);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs, node, "bar"));
+		
+		ASTNode node2 = ast.getNodeById((long)11);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
+	}
+	
+	/**
+	 * unset($foo,$bar->buz,$qux[42]);
+	 */
+	@Test
+	public void testUnset() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.unsetNodeStr;
+		String edgeStr = CSVASTDefUseSamples.unsetEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)4);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		
+		ASTNode node2 = ast.getNodeById((long)7);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "bar"));
+		
+		ASTNode node3 = ast.getNodeById((long)12);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+		
+		assertTrue( useOrDefs3.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs3, node3, "qux"));
+	}
+	
 }

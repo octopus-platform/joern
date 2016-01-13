@@ -266,7 +266,77 @@ public class CSVASTSamples {
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n";
 
+	
+	/*
+	 * function foo() {
+	 *   global $bar, $buz;
+	 * }
+	 */
 
+	public static final String globalNodeStr = nodeHeader
+			+ "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,NULL,,3,,1,3,,,\n"
+			+ "6,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "7,AST_STMT_LIST,,4,,0,3,,,\n"
+			+ "8,AST_GLOBAL,,4,,0,3,,,\n"
+			+ "9,AST_VAR,,4,,0,3,,,\n"
+			+ "10,string,,4,\"bar\",0,3,,,\n"
+			+ "11,AST_GLOBAL,,4,,1,3,,,\n"
+			+ "12,AST_VAR,,4,,0,3,,,\n"
+			+ "13,string,,4,\"buz\",0,3,,,\n"
+			+ "14,NULL,,3,,3,3,,,\n";
+
+	public static final String globalEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "7,11,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "3,14,PARENT_OF\n";
+	
+
+	/*
+	 * unset($foo,$bar->buz,$qux[42]);
+	 */
+	
+	public static final String unsetNodeStr = nodeHeader
+			+ "3,AST_STMT_LIST,,3,,0,1,,,\n"
+			+ "4,AST_UNSET,,3,,0,1,,,\n"
+			+ "5,AST_VAR,,3,,0,1,,,\n"
+			+ "6,string,,3,\"foo\",0,1,,,\n"
+			+ "7,AST_UNSET,,3,,1,1,,,\n"
+			+ "8,AST_PROP,,3,,0,1,,,\n"
+			+ "9,AST_VAR,,3,,0,1,,,\n"
+			+ "10,string,,3,\"bar\",0,1,,,\n"
+			+ "11,string,,3,\"buz\",1,1,,,\n"
+			+ "12,AST_UNSET,,3,,2,1,,,\n"
+			+ "13,AST_DIM,,3,,0,1,,,\n"
+			+ "14,AST_VAR,,3,,0,1,,,\n"
+			+ "15,string,,3,\"qux\",0,1,,,\n"
+			+ "16,integer,,3,42,1,1,,,\n";
+
+	public static final String unsetEdgeStr = edgeHeader
+			+ "5,6,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "8,11,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "3,7,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "13,16,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "3,12,PARENT_OF\n";
+	
+	
 	/*
 	 * $foo->bar;
 	 * buz()->$qux;
