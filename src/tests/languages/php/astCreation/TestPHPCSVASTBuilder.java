@@ -1030,23 +1030,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testEmptyCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_EMPTY,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_EMPTY,,4,,1,1,,,\n";
-		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.emptyNodeStr;
+		String edgeStr = CSVASTSamples.emptyEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -1076,23 +1061,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIssetCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ISSET,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_ISSET,,4,,1,1,,,\n";
-		nodeStr += "7,AST_PROP,,4,,0,1,,,\n";
-		nodeStr += "8,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "10,string,,4,\"buz\",1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.issetNodeStr;
+		String edgeStr = CSVASTSamples.issetEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -1176,31 +1146,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testShellExecCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"output\",0,1,,,\n";
-		nodeStr += "6,AST_SHELL_EXEC,,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"cat /var/www/html/.htpasswd\",0,1,,,\n";
-		nodeStr += "8,AST_ASSIGN,,4,,1,1,,,\n";
-		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"output2\",0,1,,,\n";
-		nodeStr += "11,AST_SHELL_EXEC,,4,,1,1,,,\n";
-		nodeStr += "12,AST_ENCAPS_LIST,,4,,0,1,,,\n";
-		nodeStr += "13,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "14,string,,4,\"attackerinput\",0,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.shellExecNodeStr;
+		String edgeStr = CSVASTSamples.shellExecEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -1230,23 +1177,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCloneCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLONE,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_CLONE,,4,,1,1,,,\n";
-		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.cloneNodeStr;
+		String edgeStr = CSVASTSamples.cloneEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

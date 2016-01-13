@@ -11,6 +11,7 @@ import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
 import udg.ASTProvider;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
+import udg.useDefAnalysis.environments.EmitUseEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 
 /**
@@ -28,17 +29,32 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 
 		switch (nodeType)
 		{
+			// environments that need to "cleverly" decide which of its children symbols
+			// are DEFs and which are USEs
+		
 			case "AssignmentExpression":
 				return new AssignmentEnvironment();
 				
 			case "AssignmentWithOpExpression":
 				return new AssignmentWithOpEnvironment();
 				
+				
+			// environments that emit DEFs *and* USEs for all their children symbols
+				
 			case "PreIncOperationExpression":
 			case "PreDecOperationExpression":
 			case "PostIncOperationExpression":
 			case "PostDecOperationExpression":
 				return new IncDecEnvironment();
+				
+				
+			// environments that emit USEs for all their children symbols
+				
+			case "PHPEmptyExpression":
+			case "PHPIssetExpression":
+			case "PHPShellExecExpression":
+			case "PHPCloneExpression":
+				return new EmitUseEnvironment();
 				
 			
 			// "base" environments which add symbols to be reported upstream:

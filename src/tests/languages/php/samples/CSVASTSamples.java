@@ -110,6 +110,109 @@ public class CSVASTSamples {
 	
 	
 	/*
+	 * empty($foo);
+	 * empty(bar());
+	 */
+	
+	public static final String emptyNodeStr = nodeHeader
+			+ "3,AST_EMPTY,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,AST_EMPTY,,4,,1,1,,,\n"
+			+ "7,AST_CALL,,4,,0,1,,,\n"
+			+ "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "9,string,,4,\"bar\",0,1,,,\n"
+			+ "10,AST_ARG_LIST,,4,,1,1,,,\n";	
+	
+	public static final String emptyEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n";
+	
+	
+	/*
+	 * isset($foo);
+	 * isset($bar->buz);
+	 */
+	
+	public static final String issetNodeStr = nodeHeader
+			+ "3,AST_ISSET,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,AST_ISSET,,4,,1,1,,,\n"
+			+ "7,AST_PROP,,4,,0,1,,,\n"
+			+ "8,AST_VAR,,4,,0,1,,,\n"
+			+ "9,string,,4,\"bar\",0,1,,,\n"
+			+ "10,string,,4,\"buz\",1,1,,,\n";
+
+	public static final String issetEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n";
+	
+	
+	/*
+	 * $output = `cat /var/www/html/.htpasswd`;
+	 * $output2 = `$attackerinput`;
+	 */
+
+	public static final String shellExecNodeStr = nodeHeader
+			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"output\",0,1,,,\n"
+			+ "6,AST_SHELL_EXEC,,3,,1,1,,,\n"
+			+ "7,string,,3,\"cat /var/www/html/.htpasswd\",0,1,,,\n"
+			+ "8,AST_ASSIGN,,4,,1,1,,,\n"
+			+ "9,AST_VAR,,4,,0,1,,,\n"
+			+ "10,string,,4,\"output2\",0,1,,,\n"
+			+ "11,AST_SHELL_EXEC,,4,,1,1,,,\n"
+			+ "12,AST_ENCAPS_LIST,,4,,0,1,,,\n"
+			+ "13,AST_VAR,,4,,0,1,,,\n"
+			+ "14,string,,4,\"attackerinput\",0,1,,,\n";
+
+	public static final String shellExecEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "8,11,PARENT_OF\n";
+			
+	
+	/*
+	 * clone($foo);
+	 * clone(bar());
+	 */
+	public static final String cloneNodeStr = nodeHeader
+			+ "3,AST_CLONE,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,AST_CLONE,,4,,1,1,,,\n"
+			+ "7,AST_CALL,,4,,0,1,,,\n"
+			+ "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "9,string,,4,\"bar\",0,1,,,\n"
+			+ "10,AST_ARG_LIST,,4,,1,1,,,\n";
+
+	public static final String cloneEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n";
+
+	
+	/*
  	 * ++$i;
 	 */
 	public static final String preIncNodeStr = nodeHeader
