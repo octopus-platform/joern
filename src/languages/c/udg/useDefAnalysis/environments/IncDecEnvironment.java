@@ -1,9 +1,9 @@
 package languages.c.udg.useDefAnalysis.environments;
 
 import udg.ASTProvider;
-import udg.useDefAnalysis.environments.EmitDefEnvironment;
+import udg.useDefAnalysis.environments.EmitDefAndUseEnvironment;
 
-public class IncDecEnvironment extends EmitDefEnvironment
+public class IncDecEnvironment extends EmitDefAndUseEnvironment
 {
 	@Override
 	public boolean isUse(ASTProvider child)

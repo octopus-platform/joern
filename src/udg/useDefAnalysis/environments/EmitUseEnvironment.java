@@ -7,7 +7,7 @@ import udg.ASTProvider;
 import udg.useDefGraph.UseOrDef;
 
 // emit all symbols as USE and don't hand
-// anything to up stream.
+// anything upstream.
 
 public class EmitUseEnvironment extends UseDefEnvironment
 {

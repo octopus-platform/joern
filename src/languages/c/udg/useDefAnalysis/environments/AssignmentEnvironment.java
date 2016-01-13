@@ -1,9 +1,9 @@
 package languages.c.udg.useDefAnalysis.environments;
 
 import udg.ASTProvider;
-import udg.useDefAnalysis.environments.EmitDefEnvironment;
+import udg.useDefAnalysis.environments.EmitDefAndUseEnvironment;
 
-public class AssignmentEnvironment extends EmitDefEnvironment
+public class AssignmentEnvironment extends EmitDefAndUseEnvironment
 {
 
 	@Override
