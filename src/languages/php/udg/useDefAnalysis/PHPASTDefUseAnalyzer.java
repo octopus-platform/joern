@@ -1,6 +1,7 @@
 package languages.php.udg.useDefAnalysis;
 
 import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
+import languages.php.udg.useDefAnalysis.environments.AssignmentWithOpEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClassConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClosureVarEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
@@ -29,6 +30,9 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 		{
 			case "AssignmentExpression":
 				return new AssignmentEnvironment();
+				
+			case "AssignmentWithOpExpression":
+				return new AssignmentWithOpEnvironment();
 				
 			case "PreIncOperationExpression":
 			case "PreDecOperationExpression":

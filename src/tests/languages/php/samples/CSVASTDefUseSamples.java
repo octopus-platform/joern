@@ -11,7 +11,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * $qux = $$norf;
 	 */
 	
-	public static final String defUseAssignWithVariablesNodeStr = nodeHeader
+	public static final String defUseAssignUsingVariablesNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -28,7 +28,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "15,AST_VAR,,4,,0,1,,,\n"
 			+ "16,string,,4,\"norf\",0,1,,,\n";
 	
-	public static final String defUseAssignWithVariablesEdgeStr = edgeHeader
+	public static final String defUseAssignUsingVariablesEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
 			+ "7,8,PARENT_OF\n"
@@ -49,7 +49,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * $foo = FOO + \BAR\BUZ;
 	 */
 	
-	public static final String defUseAssignWithConstantsNodeStr = nodeHeader
+	public static final String defUseAssignUsingConstantsNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -62,7 +62,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "11,AST_NAME,NAME_FQ,3,,0,1,,,\n"
 			+ "12,string,,3,\"BAR\\BUZ\",0,1,,,\n";
 
-	public static final String defUseAssignWithConstantsEdgeStr = edgeHeader
+	public static final String defUseAssignUsingConstantsEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
 			+ "8,9,PARENT_OF\n"
@@ -80,7 +80,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * $someobj->arrr = somecall()->aye;
 	 */
 	
-	public static final String defUseAssignWithPropertiesNodeStr = nodeHeader
+	public static final String defUseAssignUsingPropertiesNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_PROP,,3,,0,1,,,\n"
@@ -109,7 +109,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "27,AST_ARG_LIST,,4,,1,1,,,\n"
 			+ "28,string,,4,\"aye\",1,1,,,\n";
 	
-	public static final String defUseAssignWithPropertiesEdgeStr = edgeHeader
+	public static final String defUseAssignUsingPropertiesEdgeStr = edgeHeader
 			+ "5,6,PARENT_OF\n"
 			+ "4,5,PARENT_OF\n"
 			+ "4,7,PARENT_OF\n"
@@ -142,7 +142,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * Foo::$bar = $buz::${qux()} + norf()::$$nicknack;
 	 */
 	
-	public static final String defUseAssignWithStaticPropertiesNodeStr = nodeHeader
+	public static final String defUseAssignUsingStaticPropertiesNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_STATIC_PROP,,3,,0,1,,,\n"
@@ -165,7 +165,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "21,AST_VAR,,3,,1,1,,,\n"
 			+ "22,string,,3,\"nicknack\",0,1,,,\n";
 
-	public static final String defUseAssignWithStaticPropertiesEdgeStr = edgeHeader
+	public static final String defUseAssignUsingStaticPropertiesEdgeStr = edgeHeader
 			+ "5,6,PARENT_OF\n"
 			+ "4,5,PARENT_OF\n"
 			+ "4,7,PARENT_OF\n"
@@ -192,7 +192,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * $foo = Foo::BAR + $buz::QUX + norf()::NICKNACK;
 	 */
 	
-	public static final String defUseAssignWithClassConstantsNodeStr = nodeHeader
+	public static final String defUseAssignUsingClassConstantsNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -214,7 +214,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "20,AST_ARG_LIST,,3,,1,1,,,\n"
 			+ "21,string,,3,\"NICKNACK\",1,1,,,\n";
 
-	public static final String defUseAssignWithClassConstantsEdgeStr = edgeHeader
+	public static final String defUseAssignUsingClassConstantsEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
 			+ "9,10,PARENT_OF\n"
@@ -240,7 +240,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * $foo = [3, $a, $$b, "blah"];
 	 */
 	
-	public static final String defUseAssignWithArrayIndexingNodeStr = nodeHeader
+	public static final String defUseAssignUsingArrayIndexingNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -262,7 +262,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "20,string,,3,\"blah\",0,1,,,\n"
 			+ "21,NULL,,3,,1,1,,,\n";
 	
-	public static final String defUseAssignWithArrayIndexingEdgeStr = edgeHeader
+	public static final String defUseAssignUsingArrayIndexingEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
 			+ "7,8,PARENT_OF\n"
@@ -288,7 +288,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 	 * $buz = function() use ($foo,$bar) {};
 	 */
 	
-	public static final String defUseAssignWithClosureVarNodeStr = nodeHeader
+	public static final String defUseAssignUsingClosureVarNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -303,7 +303,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "13,AST_STMT_LIST,,3,,2,6,,,\n"
 			+ "14,NULL,,3,,3,6,,,\n";
 
-	public static final String defUseAssignWithClosureVarEdgeStr = edgeHeader
+	public static final String defUseAssignUsingClosureVarEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n"

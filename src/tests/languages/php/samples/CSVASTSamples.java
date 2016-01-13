@@ -270,6 +270,40 @@ public class CSVASTSamples {
 			+ "12,15,PARENT_OF\n"
 			+ "11,12,PARENT_OF\n"
 			+ "11,16,PARENT_OF\n";
+		
+	
+	/*
+	 * $foo += 42;
+	 * $bar .= "bonjour";
+	 * $buz ^= $onetimepad;
+	 */
+	
+	public static final String assignWithOpNodeStr = nodeHeader
+			+ "3,AST_ASSIGN_OP,ASSIGN_ADD,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,integer,,3,42,1,1,,,\n"
+			+ "7,AST_ASSIGN_OP,ASSIGN_CONCAT,4,,1,1,,,\n"
+			+ "8,AST_VAR,,4,,0,1,,,\n"
+			+ "9,string,,4,\"bar\",0,1,,,\n"
+			+ "10,string,,4,\"bonjour\",1,1,,,\n"
+			+ "11,AST_ASSIGN_OP,ASSIGN_BITWISE_XOR,5,,2,1,,,\n"
+			+ "12,AST_VAR,,5,,0,1,,,\n"
+			+ "13,string,,5,\"buz\",0,1,,,\n"
+			+ "14,AST_VAR,,5,,1,1,,,\n"
+			+ "15,string,,5,\"onetimepad\",0,1,,,\n";
+	
+	public static final String assignWithOpEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "11,14,PARENT_OF\n";
 			
 	
 	/*
