@@ -63,6 +63,18 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PHPEchoStatement":
 			case "ThrowStatement":
 			case "PHPYieldExpression":
+			// All four call environments (see below) also *only* emit USEs for
+			// all their symbols: Although variables may optionally be passed
+			// by reference in function calls, this is not visible from the call
+			// site; rather, this is exclusively determined by the function definition,
+			// which is unknown in the call environment. Therefore we can only:
+			// (1) assume DEFs *and* USEs for all variables in a function call (over-approximation -> more false positives)
+			// (2) assume *only* USEs for all variables in a function call (under-approximation -> more false negatives)
+			// Here we go for (2).
+			case "CallExpression":
+			case "NewExpression":
+			case "MethodCallExpression":
+			case "StaticCallExpression":
 				return new EmitUseEnvironment();
 				
 				
