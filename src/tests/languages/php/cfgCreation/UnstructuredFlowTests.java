@@ -11,7 +11,7 @@ import cfg.CFG;
 import cfg.CFGFactory;
 import cfg.nodes.CFGNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import tests.languages.php.samples.CSVASTSamples;
+import tests.languages.php.samples.CSVASTControlFlowSamples;
 
 public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 
@@ -19,7 +19,7 @@ public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 	public void testRet() throws IOException, InvalidCSVFile
 	{
 
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.retNodeStr , CSVASTSamples.retEdgeStr);
+		CFG cfg = getCFGForCSVLines(CSVASTControlFlowSamples.retNodeStr , CSVASTControlFlowSamples.retEdgeStr);
 		Collection<CFGNode> vertices = cfg.getVertices();
 
 		assertEquals(4, vertices.size());
@@ -40,7 +40,7 @@ public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 	public void testGoto() throws IOException, InvalidCSVFile
 	{
 
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.gotoNodeStr , CSVASTSamples.gotoEdgeStr);
+		CFG cfg = getCFGForCSVLines(CSVASTControlFlowSamples.gotoNodeStr , CSVASTControlFlowSamples.gotoEdgeStr);
 
 		// Since the code is not wrapped in a function, we need
 		// to call fixGotoStatements manually.
@@ -71,7 +71,7 @@ public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 	@Test
 	public void testContinue() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.continueNodeStr, CSVASTSamples.continueEdgeStr);
+		CFG cfg = getCFGForCSVLines(CSVASTControlFlowSamples.continueNodeStr, CSVASTControlFlowSamples.continueEdgeStr);
 
 		Collection<CFGNode> vertices = cfg.getVertices();
 
@@ -98,7 +98,7 @@ public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 	@Test
 	public void testBreak() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.breakNodeStr, CSVASTSamples.breakEdgeStr);
+		CFG cfg = getCFGForCSVLines(CSVASTControlFlowSamples.breakNodeStr, CSVASTControlFlowSamples.breakEdgeStr);
 
 		Collection<CFGNode> vertices = cfg.getVertices();
 
@@ -125,7 +125,7 @@ public class UnstructuredFlowTests extends PHPCFGCreatorTest {
 	@Test
 	public void testTry() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.tryNodeStr, CSVASTSamples.tryEdgeStr);
+		CFG cfg = getCFGForCSVLines(CSVASTControlFlowSamples.tryNodeStr, CSVASTControlFlowSamples.tryEdgeStr);
 
 		Collection<CFGNode> vertices = cfg.getVertices();
 
