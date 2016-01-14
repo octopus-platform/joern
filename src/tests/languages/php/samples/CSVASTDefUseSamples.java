@@ -115,6 +115,120 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "3,23,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n";
 
+
+	/*
+	 * echo $foo, $bar, PHP_EOL;
+	 * echo $buz.$qux.PHP_EOL;
+	 * echo "{$norf}{$nicknack}";
+	 */
+
+	public static final String defUseEchoNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_STMT_LIST,,3,,0,1,,,\n"
+			+ "4,AST_ECHO,,3,,0,1,,,\n"
+			+ "5,AST_VAR,,3,,0,1,,,\n"
+			+ "6,string,,3,\"foo\",0,1,,,\n"
+			+ "7,AST_ECHO,,3,,1,1,,,\n"
+			+ "8,AST_VAR,,3,,0,1,,,\n"
+			+ "9,string,,3,\"bar\",0,1,,,\n"
+			+ "10,AST_ECHO,,3,,2,1,,,\n"
+			+ "11,AST_CONST,,3,,0,1,,,\n"
+			+ "12,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+			+ "13,string,,3,\"PHP_EOL\",0,1,,,\n"
+			+ "14,AST_STMT_LIST,,4,,1,1,,,\n"
+			+ "15,AST_ECHO,,4,,0,1,,,\n"
+			+ "16,AST_BINARY_OP,BINARY_CONCAT,4,,0,1,,,\n"
+			+ "17,AST_BINARY_OP,BINARY_CONCAT,4,,0,1,,,\n"
+			+ "18,AST_VAR,,4,,0,1,,,\n"
+			+ "19,string,,4,\"buz\",0,1,,,\n"
+			+ "20,AST_VAR,,4,,1,1,,,\n"
+			+ "21,string,,4,\"qux\",0,1,,,\n"
+			+ "22,AST_CONST,,4,,1,1,,,\n"
+			+ "23,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "24,string,,4,\"PHP_EOL\",0,1,,,\n"
+			+ "25,AST_STMT_LIST,,5,,2,1,,,\n"
+			+ "26,AST_ECHO,,5,,0,1,,,\n"
+			+ "27,AST_ENCAPS_LIST,,5,,0,1,,,\n"
+			+ "28,AST_VAR,,5,,0,1,,,\n"
+			+ "29,string,,5,\"norf\",0,1,,,\n"
+			+ "30,AST_VAR,,5,,1,1,,,\n"
+			+ "31,string,,5,\"nicknack\",0,1,,,\n";
+
+	public static final String defUseEchoEdgeStr = edgeHeader
+			+ "5,6,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "3,7,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "3,10,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "17,20,PARENT_OF\n"
+			+ "16,17,PARENT_OF\n"
+			+ "23,24,PARENT_OF\n"
+			+ "22,23,PARENT_OF\n"
+			+ "16,22,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "2,14,PARENT_OF\n"
+			+ "28,29,PARENT_OF\n"
+			+ "27,28,PARENT_OF\n"
+			+ "30,31,PARENT_OF\n"
+			+ "27,30,PARENT_OF\n"
+			+ "26,27,PARENT_OF\n"
+			+ "25,26,PARENT_OF\n"
+			+ "2,25,PARENT_OF\n";
+
+	
+	/*
+	 * throw new Exception($error);
+	 * throw new Foo($bar,$buz);
+	 */
+
+	public static final String defUseThrowNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_THROW,,3,,0,1,,,\n"
+			+ "4,AST_NEW,,3,,0,1,,,\n"
+			+ "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+			+ "6,string,,3,\"Exception\",0,1,,,\n"
+			+ "7,AST_ARG_LIST,,3,,1,1,,,\n"
+			+ "8,AST_VAR,,3,,0,1,,,\n"
+			+ "9,string,,3,\"error\",0,1,,,\n"
+			+ "10,AST_THROW,,4,,1,1,,,\n"
+			+ "11,AST_NEW,,4,,0,1,,,\n"
+			+ "12,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "13,string,,4,\"Foo\",0,1,,,\n"
+			+ "14,AST_ARG_LIST,,4,,1,1,,,\n"
+			+ "15,AST_VAR,,4,,0,1,,,\n"
+			+ "16,string,,4,\"bar\",0,1,,,\n"
+			+ "17,AST_VAR,,4,,1,1,,,\n"
+			+ "18,string,,4,\"buz\",0,1,,,\n";
+
+	public static final String defUseThrowEdgeStr = edgeHeader
+			+ "5,6,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "4,7,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "14,17,PARENT_OF\n"
+			+ "11,14,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "2,10,PARENT_OF\n";
+
+	
 	/*
 	 * function counttothree() {
 	 *   foreach( [1,2,3] as $index => $value)
@@ -177,7 +291,7 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "3,27,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n";
 
-
+	
 	/* 
 	 * $foo = $bar + $buz;
 	 * $qux = $$norf;

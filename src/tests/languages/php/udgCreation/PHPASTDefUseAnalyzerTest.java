@@ -753,6 +753,79 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( useOrDefs.size() == 1);
 		assertTrue( containsUseSymbol( useOrDefs, node, "a"));
 	}
+
+	/**
+	 * echo $foo, $bar, PHP_EOL;
+	 * echo $buz.$qux.PHP_EOL;
+	 * echo "{$norf}{$nicknack}";
+	 */
+	@Test
+	public void testEcho() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseEchoNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseEchoEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)4);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
+		
+		ASTNode node2 = ast.getNodeById((long)7);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
+		
+		ASTNode node3 = ast.getNodeById((long)10);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+		
+		assertTrue( useOrDefs3.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs3, node3, "PHP_EOL"));
+		
+		ASTNode node4 = ast.getNodeById((long)15);
+		Collection<UseOrDef> useOrDefs4 = analyze(node4);
+		
+		assertTrue( useOrDefs4.size() == 3);
+		assertTrue( containsUseSymbol( useOrDefs4, node4, "buz"));
+		assertTrue( containsUseSymbol( useOrDefs4, node4, "qux"));
+		assertTrue( containsUseSymbol( useOrDefs4, node4, "PHP_EOL"));
+		
+		ASTNode node5 = ast.getNodeById((long)26);
+		Collection<UseOrDef> useOrDefs5 = analyze(node5);
+		
+		assertTrue( useOrDefs5.size() == 2);
+		assertTrue( containsUseSymbol( useOrDefs5, node5, "norf"));
+		assertTrue( containsUseSymbol( useOrDefs5, node5, "nicknack"));
+	}
+	
+	/**
+	 * throw new Exception($error);
+	 * throw new Foo($bar,$buz);
+	 */
+	@Test
+	public void testThrow() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseThrowNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseThrowEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "error"));
+		
+		ASTNode node2 = ast.getNodeById((long)10);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 2);
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "buz"));
+	}
 	
 	/**
 	 * function counttothree() {
