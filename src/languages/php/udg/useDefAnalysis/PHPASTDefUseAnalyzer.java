@@ -2,6 +2,7 @@ package languages.php.udg.useDefAnalysis;
 
 import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
 import languages.php.udg.useDefAnalysis.environments.AssignmentWithOpEnvironment;
+import languages.php.udg.useDefAnalysis.environments.CatchEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClassConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClosureVarEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
@@ -83,6 +84,13 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PHPGlobalStatement":
 			case "PHPUnsetStatement":
 				return new EmitDefEnvironment();
+			// A catch statement also only emits a DEF for the variable holding the exception,
+			// but we cannot use the EmitDefEnvironment because this variable is not contained
+			// within a Variable (AST_VAR) node as usual. This has been changed in version 20
+			// of php-ast, see https://github.com/nikic/php-ast#20-current
+			// (thus, once we update to version 20, we can use an EmitDefEnvironment for CatchStatement)
+			case "CatchStatement":
+				return new CatchEnvironment();
 				
 			
 			// "base" environments which add symbols to be reported upstream:

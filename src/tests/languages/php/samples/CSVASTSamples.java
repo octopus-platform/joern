@@ -852,6 +852,45 @@ public class CSVASTSamples {
 			
 	
 	/*
+	 * try {}
+	 * catch(FooException $f) {}
+	 * catch(BarException $b) {}
+	 * finally {}
+	 */
+	
+	public static final String catchNodeStr = CSVASTSamples.nodeHeader
+			+ "3,AST_TRY,,3,,0,1,,,\n"
+			+ "4,AST_STMT_LIST,,3,,0,1,,,\n"
+			+ "5,AST_CATCH_LIST,,3,,1,1,,,\n"
+			+ "6,AST_CATCH,,4,,0,1,,,\n"
+			+ "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+			+ "8,string,,4,\"FooException\",0,1,,,\n"
+			+ "9,string,,4,\"f\",1,1,,,\n"
+			+ "10,AST_STMT_LIST,,4,,2,1,,,\n"
+			+ "11,AST_CATCH,,5,,1,1,,,\n"
+			+ "12,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+			+ "13,string,,5,\"BarException\",0,1,,,\n"
+			+ "14,string,,5,\"b\",1,1,,,\n"
+			+ "15,AST_STMT_LIST,,5,,2,1,,,\n"
+			+ "16,AST_STMT_LIST,,6,,2,1,,,\n";
+
+	public static final String catchEdgeStr = CSVASTSamples.edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "6,9,PARENT_OF\n"
+			+ "6,10,PARENT_OF\n"
+			+ "5,6,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "11,14,PARENT_OF\n"
+			+ "11,15,PARENT_OF\n"
+			+ "5,11,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "3,16,PARENT_OF\n";
+
+	
+	/*
 	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
 	 */
 

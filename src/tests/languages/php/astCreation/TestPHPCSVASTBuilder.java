@@ -4934,36 +4934,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCatchCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
-		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
-		nodeStr += "6,AST_CATCH,,4,,0,1,,,\n";
-		nodeStr += "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"FooException\",0,1,,,\n";
-		nodeStr += "9,string,,4,\"f\",1,1,,,\n";
-		nodeStr += "10,AST_STMT_LIST,,4,,2,1,,,\n";
-		nodeStr += "11,AST_CATCH,,5,,1,1,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "13,string,,5,\"BarException\",0,1,,,\n";
-		nodeStr += "14,string,,5,\"b\",1,1,,,\n";
-		nodeStr += "15,AST_STMT_LIST,,5,,2,1,,,\n";
-		nodeStr += "16,AST_STMT_LIST,,6,,2,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "6,9,PARENT_OF\n";
-		edgeStr += "6,10,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,14,PARENT_OF\n";
-		edgeStr += "11,15,PARENT_OF\n";
-		edgeStr += "5,11,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,16,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.catchNodeStr;
+		String edgeStr = CSVASTSamples.catchEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

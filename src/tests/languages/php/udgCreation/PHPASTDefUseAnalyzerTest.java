@@ -1039,4 +1039,31 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsDefSymbol( useOrDefs3, node3, "qux"));
 	}
 	
+	/**
+	 * try {}
+	 * catch(FooException $f) {}
+	 * catch(BarException $b) {}
+	 * finally {}
+	 */
+	@Test
+	public void testCatch() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.catchNodeStr;
+		String edgeStr = CSVASTDefUseSamples.catchEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)6);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs, node, "f"));
+		
+		ASTNode node2 = ast.getNodeById((long)11);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "b"));
+	}
+	
 }
