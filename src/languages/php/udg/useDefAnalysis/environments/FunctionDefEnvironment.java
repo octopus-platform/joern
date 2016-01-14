@@ -7,31 +7,32 @@ import udg.ASTProvider;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefGraph.UseOrDef;
 
-public class CatchEnvironment extends UseDefEnvironment
+public class FunctionDefEnvironment extends UseDefEnvironment
 {
 	public void addChildSymbols(LinkedList<String> childSymbols,
 			ASTProvider child)
 	{
-		// the second child contains the exception variable's symbol
+		// the first and second children contain the parameters, respectively
+		// the used variables (for a closure)
 		int childNum = child.getChildNumber();
-		if( 1 == childNum)
-			this.symbols.add(child.getEscapedCodeStr());
+		if( 0 == childNum || 1 == childNum)
+			this.symbols.addAll(childSymbols);
 	}
 	
 	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
 	{
-		// symbols should contain exactly one string, coming from the second child,
-		// added previously by addChildSymbols()
-		LinkedList<UseOrDef> retval = createDefsForAllSymbols(symbols);
+		// simply created DEFs for all collected symbols, which correspond
+		// to the parameters, respectively to the used variables (for a closure)
+		LinkedList<UseOrDef> retval = createDefsForAllSymbols(this.symbols);
 		return retval;
 	}
 	
-	// a CatchStatement uses exactly one variable whose name is contained in its second child;
+	// a FunctionDef has it DEF'ed symbols only in the first and second children;
 	// no need to traverse any other children
 	@Override
 	public boolean shouldTraverse(ASTProvider child)
 	{
 		int childNum = child.getChildNumber();
-		return 1 == childNum ? true : false;
+		return 0 == childNum || 1 == childNum ? true : false;
 	}
 }

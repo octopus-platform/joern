@@ -73,7 +73,7 @@ public class CSVASTSamples {
 	 * function foo() : int {}
 	 */
 
-	public static final String funcNodeStr =  CSVASTSamples.nodeHeader
+	public static final String functionDefNodeStr =  CSVASTSamples.nodeHeader
 			+ "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n"
 			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
 			+ "5,NULL,,3,,1,3,,,\n"
@@ -81,13 +81,66 @@ public class CSVASTSamples {
 			+ "7,AST_NAME,NAME_NOT_FQ,3,,3,3,,,\n"
 			+ "8,string,,3,\"int\",0,3,,,\n";
 
-	public static final String funcEdgeStr = CSVASTSamples.edgeHeader
+	public static final String functionDefEdgeStr = CSVASTSamples.edgeHeader
 			+ "3,4,PARENT_OF\n"
 			+ "3,5,PARENT_OF\n"
 			+ "3,6,PARENT_OF\n"
 			+ "7,8,PARENT_OF\n"
 			+ "3,7,PARENT_OF\n";
 	
+	
+	/*
+	 * $a = function() use ($foo) : int {};
+	 */
+
+	public static final String closureNodeStr =  CSVASTSamples.nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_ASSIGN,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"a\",0,1,,,\n"
+			+ "6,AST_CLOSURE,,3,,1,1,3,{closure},\n"
+			+ "7,AST_PARAM_LIST,,3,,0,6,,,\n"
+			+ "8,AST_CLOSURE_USES,,3,,1,6,,,\n"
+			+ "9,AST_CLOSURE_VAR,,3,,0,6,,,\n"
+			+ "10,string,,3,\"foo\",0,6,,,\n"
+			+ "11,AST_STMT_LIST,,3,,2,6,,,\n"
+			+ "12,AST_NAME,NAME_NOT_FQ,3,,3,6,,,\n"
+			+ "13,string,,3,\"int\",0,6,,,\n";
+
+	public static final String closureEdgeStr = CSVASTSamples.edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "6,8,PARENT_OF\n"
+			+ "6,11,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "6,12,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
+	
+	/*
+	 * class bar {
+	 *   function foo() : int {}
+	 * }
+	 */
+
+	public static final String methodNodeStr =  CSVASTSamples.nodeHeader
+			+ "8,AST_METHOD,MODIFIER_PUBLIC,4,,0,6,4,foo,\n"
+			+ "9,AST_PARAM_LIST,,4,,0,8,,,\n"
+			+ "10,NULL,,4,,1,8,,,\n"
+			+ "11,AST_STMT_LIST,,4,,2,8,,,\n"
+			+ "12,AST_NAME,NAME_NOT_FQ,4,,3,8,,,\n"
+			+ "13,string,,4,\"int\",0,8,,,\n";
+
+	public static final String methodEdgeStr = CSVASTSamples.edgeHeader
+			+ "8,9,PARENT_OF\n"
+			+ "8,10,PARENT_OF\n"
+			+ "8,11,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "8,12,PARENT_OF\n";
 	
 	 /*
 	  * $foo;

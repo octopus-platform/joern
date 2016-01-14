@@ -7,6 +7,135 @@ package tests.languages.php.samples;
 public class CSVASTDefUseSamples extends CSVASTSamples {
 
 	/*
+	 * function foo($bar,&$buz) {}
+	 */
+
+	public static final String defUseFunctionDefNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,AST_PARAM,,3,,0,3,,,\n"
+			+ "6,NULL,,3,,0,3,,,\n"
+			+ "7,string,,3,\"bar\",1,3,,,\n"
+			+ "8,NULL,,3,,2,3,,,\n"
+			+ "9,AST_PARAM,PARAM_REF,3,,1,3,,,\n"
+			+ "10,NULL,,3,,0,3,,,\n"
+			+ "11,string,,3,\"buz\",1,3,,,\n"
+			+ "12,NULL,,3,,2,3,,,\n"
+			+ "13,NULL,,3,,1,3,,,\n"
+			+ "14,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "15,NULL,,3,,3,3,,,\n";
+
+	public static final String defUseFunctionDefEdgeStr = edgeHeader
+			+ "5,6,PARENT_OF\n"
+			+ "5,7,PARENT_OF\n"
+			+ "5,8,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "9,11,PARENT_OF\n"
+			+ "9,12,PARENT_OF\n"
+			+ "4,9,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "3,13,PARENT_OF\n"
+			+ "3,14,PARENT_OF\n"
+			+ "3,15,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+	
+	
+	/*
+	 * function($bar,&$buz) use ($qux,&$norf) {};
+	 */
+
+	public static final String defUseClosureNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_CLOSURE,,3,,0,1,3,{closure},\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,AST_PARAM,,3,,0,3,,,\n"
+			+ "6,NULL,,3,,0,3,,,\n"
+			+ "7,string,,3,\"bar\",1,3,,,\n"
+			+ "8,NULL,,3,,2,3,,,\n"
+			+ "9,AST_PARAM,PARAM_REF,3,,1,3,,,\n"
+			+ "10,NULL,,3,,0,3,,,\n"
+			+ "11,string,,3,\"buz\",1,3,,,\n"
+			+ "12,NULL,,3,,2,3,,,\n"
+			+ "13,AST_CLOSURE_USES,,3,,1,3,,,\n"
+			+ "14,AST_CLOSURE_VAR,,3,,0,3,,,\n"
+			+ "15,string,,3,\"qux\",0,3,,,\n"
+			+ "16,AST_CLOSURE_VAR,BY_REFERENCE,3,,1,3,,,\n"
+			+ "17,string,,3,\"norf\",0,3,,,\n"
+			+ "18,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "19,NULL,,3,,3,3,,,\n";
+
+
+	public static final String defUseClosureEdgeStr = edgeHeader
+			+ "5,6,PARENT_OF\n"
+			+ "5,7,PARENT_OF\n"
+			+ "5,8,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "9,11,PARENT_OF\n"
+			+ "9,12,PARENT_OF\n"
+			+ "4,9,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "13,14,PARENT_OF\n"
+			+ "16,17,PARENT_OF\n"
+			+ "13,16,PARENT_OF\n"
+			+ "3,13,PARENT_OF\n"
+			+ "3,18,PARENT_OF\n"
+			+ "3,19,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+	
+	
+	/*
+	 * class Foo {
+	 *   function foo($bar,&$buz) {}
+	 * }
+	 */
+	
+	public static final String defUseMethodNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_CLASS,,3,,0,1,5,Foo,\n"
+			+ "4,NULL,,3,,0,1,,,\n"
+			+ "5,NULL,,3,,1,1,,,\n"
+			+ "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,5,\"Foo\",\n"
+			+ "7,AST_STMT_LIST,,3,,0,6,,,\n"
+			+ "8,AST_METHOD,MODIFIER_PUBLIC,4,,0,6,4,foo,\n"
+			+ "9,AST_PARAM_LIST,,4,,0,8,,,\n"
+			+ "10,AST_PARAM,,4,,0,8,,,\n"
+			+ "11,NULL,,4,,0,8,,,\n"
+			+ "12,string,,4,\"bar\",1,8,,,\n"
+			+ "13,NULL,,4,,2,8,,,\n"
+			+ "14,AST_PARAM,PARAM_REF,4,,1,8,,,\n"
+			+ "15,NULL,,4,,0,8,,,\n"
+			+ "16,string,,4,\"buz\",1,8,,,\n"
+			+ "17,NULL,,4,,2,8,,,\n"
+			+ "18,NULL,,4,,1,8,,,\n"
+			+ "19,AST_STMT_LIST,,4,,2,8,,,\n"
+			+ "20,NULL,,4,,3,8,,,\n";
+
+	public static final String defUseMethodEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "10,12,PARENT_OF\n"
+			+ "10,13,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "14,16,PARENT_OF\n"
+			+ "14,17,PARENT_OF\n"
+			+ "9,14,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "8,18,PARENT_OF\n"
+			+ "8,19,PARENT_OF\n"
+			+ "8,20,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
+	
+	/*
 	 * function counttothree() {
 	 *   $a = [1,2,3];
 	 *   yield from $a;

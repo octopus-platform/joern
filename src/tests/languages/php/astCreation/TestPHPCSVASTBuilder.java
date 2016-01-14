@@ -309,8 +309,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testFunctionDefCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.funcNodeStr;
-		String edgeStr = CSVASTSamples.funcEdgeStr;
+		String nodeStr = CSVASTSamples.functionDefNodeStr;
+		String edgeStr = CSVASTSamples.functionDefEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -345,32 +345,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClosureCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"a\",0,1,,,\n";
-		nodeStr += "6,AST_CLOSURE,,3,,1,1,3,{closure},\n";
-		nodeStr += "7,AST_PARAM_LIST,,3,,0,6,,,\n";
-		nodeStr += "8,AST_CLOSURE_USES,,3,,1,6,,,\n";
-		nodeStr += "9,AST_CLOSURE_VAR,,3,,0,6,,,\n";
-		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
-		nodeStr += "11,AST_STMT_LIST,,3,,2,6,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,3,,3,6,,,\n";
-		nodeStr += "13,string,,3,\"int\",0,6,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "6,8,PARENT_OF\n";
-		edgeStr += "6,11,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "6,12,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.closureNodeStr;
+		String edgeStr = CSVASTSamples.closureEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -413,20 +389,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testMethodCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "8,AST_METHOD,MODIFIER_PUBLIC,4,,0,6,4,foo,\n";
-		nodeStr += "9,AST_PARAM_LIST,,4,,0,8,,,\n";
-		nodeStr += "10,NULL,,4,,1,8,,,\n";
-		nodeStr += "11,AST_STMT_LIST,,4,,2,8,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,3,8,,,\n";
-		nodeStr += "13,string,,4,\"int\",0,8,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,10,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "8,12,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.methodNodeStr;
+		String edgeStr = CSVASTSamples.methodEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

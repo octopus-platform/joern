@@ -6,7 +6,9 @@ import languages.php.udg.useDefAnalysis.environments.CatchEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClassConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClosureVarEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
+import languages.php.udg.useDefAnalysis.environments.FunctionDefEnvironment;
 import languages.php.udg.useDefAnalysis.environments.IncDecEnvironment;
+import languages.php.udg.useDefAnalysis.environments.ParameterEnvironment;
 import languages.php.udg.useDefAnalysis.environments.PropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
@@ -91,6 +93,10 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			// (thus, once we update to version 20, we can use an EmitDefEnvironment for CatchStatement)
 			case "CatchStatement":
 				return new CatchEnvironment();
+			case "PHPFunctionDef":
+			case "Closure":
+			case "Method":
+				return new FunctionDefEnvironment();
 				
 			
 			// "base" environments which add symbols to be reported upstream:
@@ -114,7 +120,9 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "ClassConstantExpression":
 				return new ClassConstantEnvironment();
 
-
+			case "PHPParameter":
+				return new ParameterEnvironment();
+				
 			// default environment
 				
 			default:
