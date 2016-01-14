@@ -1211,23 +1211,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testExitCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_EXIT,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_EXIT,,4,,1,1,,,\n";
-		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.exitNodeStr;
+		String edgeStr = CSVASTSamples.exitEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -1258,23 +1243,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPrintCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_PRINT,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_PRINT,,4,,1,1,,,\n";
-		nodeStr += "7,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "9,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "10,AST_ARG_LIST,,4,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,10,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.printNodeStr;
+		String edgeStr = CSVASTSamples.printEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -1315,52 +1285,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIncludeOrEvalCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"foo.php\",0,1,,,\n";
-		nodeStr += "5,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE_ONCE,4,,1,1,,,\n";
-		nodeStr += "6,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "7,string,,4,\"userinput\",0,1,,,\n";
-		nodeStr += "8,AST_INCLUDE_OR_EVAL,EXEC_REQUIRE,5,,2,1,,,\n";
-		nodeStr += "9,AST_CALL,,5,,0,1,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "11,string,,5,\"getuserinput\",0,1,,,\n";
-		nodeStr += "12,AST_ARG_LIST,,5,,1,1,,,\n";
-		nodeStr += "13,AST_INCLUDE_OR_EVAL,EXEC_REQUIRE_ONCE,6,,3,1,,,\n";
-		nodeStr += "14,AST_BINARY_OP,BINARY_CONCAT,6,,0,1,,,\n";
-		nodeStr += "15,AST_BINARY_OP,BINARY_CONCAT,6,,0,1,,,\n";
-		nodeStr += "16,string,,6,\"http://\",0,1,,,\n";
-		nodeStr += "17,AST_VAR,,6,,1,1,,,\n";
-		nodeStr += "18,string,,6,\"userinput\",0,1,,,\n";
-		nodeStr += "19,string,,6,\"bar.php\",1,1,,,\n";
-		nodeStr += "20,AST_INCLUDE_OR_EVAL,EXEC_EVAL,7,,4,1,,,\n";
-		nodeStr += "21,AST_ENCAPS_LIST,,7,,0,1,,,\n";
-		nodeStr += "22,AST_VAR,,7,,0,1,,,\n";
-		nodeStr += "23,string,,7,\"evilinput\",0,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "2,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "2,8,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "15,17,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "14,19,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "2,13,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "2,20,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.includeOrEvalNodeStr;
+		String edgeStr = CSVASTSamples.includeOrEvalEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

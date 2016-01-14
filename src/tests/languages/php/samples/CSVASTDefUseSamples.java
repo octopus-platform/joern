@@ -6,6 +6,178 @@ package tests.languages.php.samples;
  */
 public class CSVASTDefUseSamples extends CSVASTSamples {
 
+	/*
+	 * function counttothree() {
+	 *   $a = [1,2,3];
+	 *   yield from $a;
+	 * }
+	 */
+	
+	public static final String defUseYieldFromNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_FUNC_DECL,,3,,0,1,6,counttothree,\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,NULL,,3,,1,3,,,\n"
+			+ "6,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "7,AST_ASSIGN,,4,,0,3,,,\n"
+			+ "8,AST_VAR,,4,,0,3,,,\n"
+			+ "9,string,,4,\"a\",0,3,,,\n"
+			+ "10,AST_ARRAY,,4,,1,3,,,\n"
+			+ "11,AST_ARRAY_ELEM,,4,,0,3,,,\n"
+			+ "12,integer,,4,1,0,3,,,\n"
+			+ "13,NULL,,4,,1,3,,,\n"
+			+ "14,AST_ARRAY_ELEM,,4,,1,3,,,\n"
+			+ "15,integer,,4,2,0,3,,,\n"
+			+ "16,NULL,,4,,1,3,,,\n"
+			+ "17,AST_ARRAY_ELEM,,4,,2,3,,,\n"
+			+ "18,integer,,4,3,0,3,,,\n"
+			+ "19,NULL,,4,,1,3,,,\n"
+			+ "20,AST_YIELD_FROM,,5,,1,3,,,\n"
+			+ "21,AST_VAR,,5,,0,3,,,\n"
+			+ "22,string,,5,\"a\",0,3,,,\n"
+			+ "23,NULL,,3,,3,3,,,\n";
+	
+	public static final String defUseYieldFromEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "11,13,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "14,16,PARENT_OF\n"
+			+ "10,14,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "17,19,PARENT_OF\n"
+			+ "10,17,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "21,22,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "6,20,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "3,23,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
+	
+	/*
+	 * function foo() {
+	 *   $a = [1,2,3];
+	 *   return $a;
+	 * }
+	 */
+	
+	public static final String defUseReturnNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_FUNC_DECL,,3,,0,1,6,foo,\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,NULL,,3,,1,3,,,\n"
+			+ "6,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "7,AST_ASSIGN,,4,,0,3,,,\n"
+			+ "8,AST_VAR,,4,,0,3,,,\n"
+			+ "9,string,,4,\"a\",0,3,,,\n"
+			+ "10,AST_ARRAY,,4,,1,3,,,\n"
+			+ "11,AST_ARRAY_ELEM,,4,,0,3,,,\n"
+			+ "12,integer,,4,1,0,3,,,\n"
+			+ "13,NULL,,4,,1,3,,,\n"
+			+ "14,AST_ARRAY_ELEM,,4,,1,3,,,\n"
+			+ "15,integer,,4,2,0,3,,,\n"
+			+ "16,NULL,,4,,1,3,,,\n"
+			+ "17,AST_ARRAY_ELEM,,4,,2,3,,,\n"
+			+ "18,integer,,4,3,0,3,,,\n"
+			+ "19,NULL,,4,,1,3,,,\n"
+			+ "20,AST_RETURN,,5,,1,3,,,\n"
+			+ "21,AST_VAR,,5,,0,3,,,\n"
+			+ "22,string,,5,\"a\",0,3,,,\n"
+			+ "23,NULL,,3,,3,3,,,\n";
+
+	public static final String defUseReturnEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "11,13,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "14,16,PARENT_OF\n"
+			+ "10,14,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "17,19,PARENT_OF\n"
+			+ "10,17,PARENT_OF\n"
+			+ "7,10,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "21,22,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "6,20,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "3,23,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
+	/*
+	 * function counttothree() {
+	 *   foreach( [1,2,3] as $index => $value)
+	 *     yield $index => $value;
+	 * }
+	 */
+	
+	public static final String defUseYieldNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_FUNC_DECL,,3,,0,1,6,counttothree,\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,NULL,,3,,1,3,,,\n"
+			+ "6,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "7,AST_FOREACH,,4,,0,3,,,\n"
+			+ "8,AST_ARRAY,,4,,0,3,,,\n"
+			+ "9,AST_ARRAY_ELEM,,4,,0,3,,,\n"
+			+ "10,integer,,4,1,0,3,,,\n"
+			+ "11,NULL,,4,,1,3,,,\n"
+			+ "12,AST_ARRAY_ELEM,,4,,1,3,,,\n"
+			+ "13,integer,,4,2,0,3,,,\n"
+			+ "14,NULL,,4,,1,3,,,\n"
+			+ "15,AST_ARRAY_ELEM,,4,,2,3,,,\n"
+			+ "16,integer,,4,3,0,3,,,\n"
+			+ "17,NULL,,4,,1,3,,,\n"
+			+ "18,AST_VAR,,4,,1,3,,,\n"
+			+ "19,string,,4,\"value\",0,3,,,\n"
+			+ "20,AST_VAR,,4,,2,3,,,\n"
+			+ "21,string,,4,\"index\",0,3,,,\n"
+			+ "22,AST_YIELD,,5,,3,3,,,\n"
+			+ "23,AST_VAR,,5,,0,3,,,\n"
+			+ "24,string,,5,\"value\",0,3,,,\n"
+			+ "25,AST_VAR,,5,,1,3,,,\n"
+			+ "26,string,,5,\"index\",0,3,,,\n"
+			+ "27,NULL,,3,,3,3,,,\n";
+
+	public static final String defUseYieldEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "9,11,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "12,14,PARENT_OF\n"
+			+ "8,12,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "15,17,PARENT_OF\n"
+			+ "8,15,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "7,18,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "7,20,PARENT_OF\n"
+			+ "23,24,PARENT_OF\n"
+			+ "22,23,PARENT_OF\n"
+			+ "25,26,PARENT_OF\n"
+			+ "22,25,PARENT_OF\n"
+			+ "7,22,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "3,27,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
+
 	/* 
 	 * $foo = $bar + $buz;
 	 * $qux = $$norf;

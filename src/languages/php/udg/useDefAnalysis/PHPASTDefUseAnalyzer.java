@@ -55,6 +55,12 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PHPIssetExpression":
 			case "PHPShellExecExpression":
 			case "PHPCloneExpression":
+			case "PHPExitExpression":
+			case "PHPPrintExpression":
+			case "PHPIncludeOrEvalExpression":
+			case "PHPYieldFromExpression":
+			case "ReturnStatement":
+			case "PHPYieldExpression":
 				return new EmitUseEnvironment();
 				
 				
