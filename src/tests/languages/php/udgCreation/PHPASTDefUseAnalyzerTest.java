@@ -473,6 +473,59 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
 	}
 	
+	/**
+	 * class Foo {
+	 *   public $foo = $bar, $buz = $qux->norf;
+	 * }
+	 */
+	@Test
+	public void testPropertyElement() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUsePropertyElementNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUsePropertyElementEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)9);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
+		
+		ASTNode node2 = ast.getNodeById((long)13);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		assertTrue( useOrDefs2.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
+	}
+	
+	/**
+	 * const FOO = $bar, BUZ = $qux->norf;
+	 */
+	@Test
+	public void testConstantElement() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseConstantElementNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseConstantElementEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)4);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs, node, "FOO"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
+		
+		ASTNode node2 = ast.getNodeById((long)8);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		assertTrue( useOrDefs2.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "BUZ"));
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
+	}
 	
 	
 	

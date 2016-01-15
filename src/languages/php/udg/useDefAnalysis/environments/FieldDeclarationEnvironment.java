@@ -7,7 +7,7 @@ import udg.ASTProvider;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefGraph.UseOrDef;
 
-public class StaticVariableEnvironment extends UseDefEnvironment
+public class FieldDeclarationEnvironment extends UseDefEnvironment
 {
 	private Collection<String> defSymbols = new LinkedList<String>();
 	private Collection<String> useSymbols = new LinkedList<String>();
@@ -16,11 +16,11 @@ public class StaticVariableEnvironment extends UseDefEnvironment
 	{
 		this.symbols.addAll( childSymbols);
 
-		// the left child is a StringExpression containing the variable name
+		// the left child is a StringExpression containing the field's name
 		if( isDef( child))
 			defSymbols.add( child.getEscapedCodeStr());
 		// the right side may contain symbols that are USE'd to determine the
-		// default value for the static variable
+		// value assigned to the field
 		if( isUse( child))
 			useSymbols.addAll( childSymbols);
 	}
