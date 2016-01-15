@@ -38,6 +38,9 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			// are DEFs and which are USEs
 		
 			case "AssignmentExpression":
+			// note that we currently do not handle any kind of aliasing, so currently
+			// an assignment by reference behaves like an assignment
+			case "PHPAssignmentByRefExpression":
 				return new AssignmentEnvironment();
 				
 			case "AssignmentWithOpExpression":

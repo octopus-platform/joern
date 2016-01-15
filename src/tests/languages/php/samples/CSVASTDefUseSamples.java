@@ -852,5 +852,23 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "3,6,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n";
 
+	
+	/*
+	 * $foo =& $bar;
+	 */
 
+	public static final String defUseAssignByRefNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_ASSIGN_REF,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"foo\",0,1,,,\n"
+			+ "6,AST_VAR,,3,,1,1,,,\n"
+			+ "7,string,,3,\"bar\",0,1,,,\n";
+
+	public static final String defUseAssignByRefEdgeStr = edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
 }

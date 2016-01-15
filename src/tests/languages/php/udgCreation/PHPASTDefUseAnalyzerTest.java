@@ -446,6 +446,25 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	}
 	
 	/**
+	 * $foo =& $bar;
+	 */
+	@Test
+	public void testAssignByRef() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseAssignByRefNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseAssignByRefEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+		
+		assertTrue( useOrDefs.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
+	}
+	
+	/**
 	 * function foo() {
 	 *   static $foo = $bar, $buz = $qux->norf;
 	 * }
