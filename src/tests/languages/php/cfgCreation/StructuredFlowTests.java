@@ -87,7 +87,7 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 	@Test
 	public void testForEach() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.foreachNodeStr, CSVASTSamples.foreachEdgeStr);
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.forEachNodeStr, CSVASTSamples.forEachEdgeStr);
 		// TODO
 		System.out.println(cfg);
 	}

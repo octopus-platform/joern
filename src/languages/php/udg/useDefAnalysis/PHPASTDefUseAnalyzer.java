@@ -6,13 +6,19 @@ import languages.php.udg.useDefAnalysis.environments.CatchEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClassConstantEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ClosureVarEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ConstantEnvironment;
+import languages.php.udg.useDefAnalysis.environments.DoEnvironment;
 import languages.php.udg.useDefAnalysis.environments.FunctionDefEnvironment;
+import languages.php.udg.useDefAnalysis.environments.IfElementEnvironment;
 import languages.php.udg.useDefAnalysis.environments.IncDecEnvironment;
 import languages.php.udg.useDefAnalysis.environments.ParameterEnvironment;
 import languages.php.udg.useDefAnalysis.environments.PropertyEnvironment;
 import languages.php.udg.useDefAnalysis.environments.StaticPropertyEnvironment;
+import languages.php.udg.useDefAnalysis.environments.SwitchEnvironment;
 import languages.php.udg.useDefAnalysis.environments.FieldDeclarationEnvironment;
+import languages.php.udg.useDefAnalysis.environments.ForEachEnvironment;
+import languages.php.udg.useDefAnalysis.environments.ForEnvironment;
 import languages.php.udg.useDefAnalysis.environments.VariableEnvironment;
+import languages.php.udg.useDefAnalysis.environments.WhileEnvironment;
 import udg.ASTProvider;
 import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefAnalysis.environments.EmitDefEnvironment;
@@ -50,6 +56,27 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PropertyElement":
 			case "ConstantElement":
 				return new FieldDeclarationEnvironment();
+				
+			// environments with predicates: the predicates should emit USEs for the
+			// variables used in them
+				
+			case "WhileStatement":
+				return new WhileEnvironment();
+			
+			case "DoStatement":
+				return new DoEnvironment();
+				
+			case "PHPIfElement":
+				return new IfElementEnvironment();
+
+			case "PHPSwitchStatement":
+				return new SwitchEnvironment();
+				
+			case "ForStatement":
+				return new ForEnvironment();
+				
+			case "ForEachStatement":
+				return new ForEachEnvironment();
 				
 				
 			// environments that emit DEFs *and* USEs for all their children symbols

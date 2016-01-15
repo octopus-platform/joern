@@ -3583,40 +3583,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIfElementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_IF,,3,,0,1,,,\n";
-		nodeStr += "4,AST_IF_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,1,1,,,\n";
-		nodeStr += "8,AST_IF_ELEM,,4,,1,1,,,\n";
-		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "11,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "12,AST_IF_ELEM,,5,,2,1,,,\n";
-		nodeStr += "13,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "14,string,,5,\"buz\",0,1,,,\n";
-		nodeStr += "15,AST_STMT_LIST,,5,,1,1,,,\n";
-		nodeStr += "16,AST_IF_ELEM,,6,,3,1,,,\n";
-		nodeStr += "17,NULL,,6,,0,1,,,\n";
-		nodeStr += "18,AST_STMT_LIST,,6,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,7,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,15,PARENT_OF\n";
-		edgeStr += "3,12,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "16,18,PARENT_OF\n";
-		edgeStr += "3,16,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.ifStatementNodeStr;
+		String edgeStr = CSVASTSamples.ifStatementEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -3671,56 +3639,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testSwitchCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "6,AST_SWITCH_LIST,,4,,1,1,,,\n";
-		nodeStr += "7,AST_SWITCH_CASE,,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "9,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "10,AST_BREAK,,5,,0,1,,,\n";
-		nodeStr += "11,NULL,,5,,0,1,,,\n";
-		nodeStr += "12,AST_SWITCH_CASE,,6,,1,1,,,\n";
-		nodeStr += "13,double,,6,1.42,0,1,,,\n";
-		nodeStr += "14,AST_STMT_LIST,,6,,1,1,,,\n";
-		nodeStr += "15,AST_SWITCH_CASE,,7,,2,1,,,\n";
-		nodeStr += "16,integer,,7,2,0,1,,,\n";
-		nodeStr += "17,AST_STMT_LIST,,7,,1,1,,,\n";
-		nodeStr += "18,AST_BREAK,,8,,0,1,,,\n";
-		nodeStr += "19,NULL,,8,,0,1,,,\n";
-		nodeStr += "20,AST_SWITCH_CASE,,9,,3,1,,,\n";
-		nodeStr += "21,NULL,,9,,0,1,,,\n";
-		nodeStr += "22,AST_STMT_LIST,,9,,1,1,,,\n";
-		nodeStr += "23,AST_CALL,,10,,0,1,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n";
-		nodeStr += "25,string,,10,\"buz\",0,1,,,\n";
-		nodeStr += "26,AST_ARG_LIST,,10,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "6,12,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "15,17,PARENT_OF\n";
-		edgeStr += "6,15,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "20,22,PARENT_OF\n";
-		edgeStr += "6,20,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.switchNodeStr;
+		String edgeStr = CSVASTSamples.switchEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -3760,56 +3680,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testSwitchCaseCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "6,AST_SWITCH_LIST,,4,,1,1,,,\n";
-		nodeStr += "7,AST_SWITCH_CASE,,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "9,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "10,AST_BREAK,,5,,0,1,,,\n";
-		nodeStr += "11,NULL,,5,,0,1,,,\n";
-		nodeStr += "12,AST_SWITCH_CASE,,6,,1,1,,,\n";
-		nodeStr += "13,double,,6,1.42,0,1,,,\n";
-		nodeStr += "14,AST_STMT_LIST,,6,,1,1,,,\n";
-		nodeStr += "15,AST_SWITCH_CASE,,7,,2,1,,,\n";
-		nodeStr += "16,integer,,7,2,0,1,,,\n";
-		nodeStr += "17,AST_STMT_LIST,,7,,1,1,,,\n";
-		nodeStr += "18,AST_BREAK,,8,,0,1,,,\n";
-		nodeStr += "19,NULL,,8,,0,1,,,\n";
-		nodeStr += "20,AST_SWITCH_CASE,,9,,3,1,,,\n";
-		nodeStr += "21,NULL,,9,,0,1,,,\n";
-		nodeStr += "22,AST_STMT_LIST,,9,,1,1,,,\n";
-		nodeStr += "23,AST_CALL,,10,,0,1,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n";
-		nodeStr += "25,string,,10,\"buz\",0,1,,,\n";
-		nodeStr += "26,AST_ARG_LIST,,10,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "6,12,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "15,17,PARENT_OF\n";
-		edgeStr += "6,15,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "20,22,PARENT_OF\n";
-		edgeStr += "6,20,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.switchNodeStr;
+		String edgeStr = CSVASTSamples.switchEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
@@ -5049,8 +4921,8 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testForEachCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.foreachNodeStr;
-		String edgeStr = CSVASTSamples.foreachEdgeStr;
+		String nodeStr = CSVASTSamples.forEachNodeStr;
+		String edgeStr = CSVASTSamples.forEachEdgeStr;
 
 		handle(nodeStr, edgeStr);
 

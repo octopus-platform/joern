@@ -816,6 +816,69 @@ public class CSVASTSamples {
 			+ "20,23,PARENT_OF\n"
 			+ "18,20,PARENT_OF\n";
 	
+	/*
+	 * switch ($i) {
+	 *   case "foo":
+	 *     break;
+	 *   case 1.42:
+	 *   case 2:
+	 *     break;
+	 *   default:
+	 *     buz();
+	 * }
+	 */
+
+	public static final String switchNodeStr = CSVASTSamples.nodeHeader
+			+ "3,AST_SWITCH,,3,,0,1,,,\n"
+			+ "4,AST_VAR,,3,,0,1,,,\n"
+			+ "5,string,,3,\"i\",0,1,,,\n"
+			+ "6,AST_SWITCH_LIST,,4,,1,1,,,\n"
+			+ "7,AST_SWITCH_CASE,,4,,0,1,,,\n"
+			+ "8,string,,4,\"foo\",0,1,,,\n"
+			+ "9,AST_STMT_LIST,,4,,1,1,,,\n"
+			+ "10,AST_BREAK,,5,,0,1,,,\n"
+			+ "11,NULL,,5,,0,1,,,\n"
+			+ "12,AST_SWITCH_CASE,,6,,1,1,,,\n"
+			+ "13,double,,6,1.42,0,1,,,\n"
+			+ "14,AST_STMT_LIST,,6,,1,1,,,\n"
+			+ "15,AST_SWITCH_CASE,,7,,2,1,,,\n"
+			+ "16,integer,,7,2,0,1,,,\n"
+			+ "17,AST_STMT_LIST,,7,,1,1,,,\n"
+			+ "18,AST_BREAK,,8,,0,1,,,\n"
+			+ "19,NULL,,8,,0,1,,,\n"
+			+ "20,AST_SWITCH_CASE,,9,,3,1,,,\n"
+			+ "21,NULL,,9,,0,1,,,\n"
+			+ "22,AST_STMT_LIST,,9,,1,1,,,\n"
+			+ "23,AST_CALL,,10,,0,1,,,\n"
+			+ "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n"
+			+ "25,string,,10,\"buz\",0,1,,,\n"
+			+ "26,AST_ARG_LIST,,10,,1,1,,,\n";
+
+	public static final String switchEdgeStr = CSVASTSamples.edgeHeader
+			+ "4,5,PARENT_OF\n"
+			+ "3,4,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "9,10,PARENT_OF\n"
+			+ "7,9,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "12,14,PARENT_OF\n"
+			+ "6,12,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "18,19,PARENT_OF\n"
+			+ "17,18,PARENT_OF\n"
+			+ "15,17,PARENT_OF\n"
+			+ "6,15,PARENT_OF\n"
+			+ "20,21,PARENT_OF\n"
+			+ "24,25,PARENT_OF\n"
+			+ "23,24,PARENT_OF\n"
+			+ "23,26,PARENT_OF\n"
+			+ "22,23,PARENT_OF\n"
+			+ "20,22,PARENT_OF\n"
+			+ "6,20,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n";
+	
 	
 	/*
 	 * $buz->foo($bar, "yabadabadoo");
@@ -1002,7 +1065,7 @@ public class CSVASTSamples {
 	 * foreach (somecall() as $bar => $foo) {}
 	 */
 	 
-	public static final String foreachNodeStr = CSVASTSamples.nodeHeader
+	public static final String forEachNodeStr = CSVASTSamples.nodeHeader
 			+ "3,AST_FOREACH,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
 			+ "5,string,,3,\"somearray\",0,1,,,\n"
@@ -1021,7 +1084,7 @@ public class CSVASTSamples {
 			+ "18,string,,4,\"bar\",0,1,,,\n"
 			+ "19,AST_STMT_LIST,,4,,3,1,,,\n";
 
-	public static final String foreachEdgeStr = CSVASTSamples.edgeHeader
+	public static final String forEachEdgeStr = CSVASTSamples.edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n"

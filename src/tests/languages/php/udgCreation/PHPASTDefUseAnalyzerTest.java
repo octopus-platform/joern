@@ -546,6 +546,191 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
 	}
 	
+	/**
+	 * while($foo) {}
+	 * while(true) {}
+	 * while(somecall()) {}
+	 * while($var === 1) {}
+	 */
+	@Test
+	public void testWhile() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.whileNodeStr;
+		String edgeStr = CSVASTDefUseSamples.whileEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
+		
+		ASTNode node2 = ast.getNodeById((long)7);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "true"));
+		
+		ASTNode node3 = ast.getNodeById((long)12);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+
+		assertTrue( useOrDefs3.isEmpty());
+		
+		ASTNode node4 = ast.getNodeById((long)18);
+		Collection<UseOrDef> useOrDefs4 = analyze(node4);
+
+		assertTrue( useOrDefs4.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs4, node4, "var"));
+	}
+	
+	/**
+	 * while($foo) {}
+	 * while(true) {}
+	 * while(somecall()) {}
+	 * while($var === 1) {}
+	 */
+	@Test
+	public void testDo() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.doNodeStr;
+		String edgeStr = CSVASTDefUseSamples.doEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
+		
+		ASTNode node2 = ast.getNodeById((long)7);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "true"));
+		
+		ASTNode node3 = ast.getNodeById((long)12);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+
+		assertTrue( useOrDefs3.isEmpty());
+		
+		ASTNode node4 = ast.getNodeById((long)18);
+		Collection<UseOrDef> useOrDefs4 = analyze(node4);
+
+		assertTrue( useOrDefs4.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs4, node4, "var"));
+	}
+	
+	/**
+	 * if($foo) {}
+	 * elseif($bar) {}
+	 * elseif($buz) {}
+	 * else {}
+	 */
+	@Test
+	public void testIfElement() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.ifStatementNodeStr;
+		String edgeStr = CSVASTDefUseSamples.ifStatementEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)4);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
+		
+		ASTNode node2 = ast.getNodeById((long)8);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+
+		assertTrue( useOrDefs2.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
+		
+		ASTNode node3 = ast.getNodeById((long)12);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+		
+		assertTrue( useOrDefs3.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs3, node3, "buz"));
+		
+		ASTNode node4 = ast.getNodeById((long)16);
+		Collection<UseOrDef> useOrDefs4 = analyze(node4);
+
+		assertTrue( useOrDefs4.isEmpty());
+	}
+	
+	/**
+	 * switch ($i) {
+	 *   case "foo":
+	 *     break;
+	 *   case 1.42:
+	 *   case 2:
+	 *     break;
+	 *   default:
+	 *     buz();
+	 * }
+	 */
+	@Test
+	public void testSwitch() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.switchNodeStr;
+		String edgeStr = CSVASTDefUseSamples.switchEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
+	}
+	
+	/**
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
+	@Test
+	public void testFor() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.forNodeStr;
+		String edgeStr = CSVASTDefUseSamples.forEdgeStr;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 1);
+		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
+	}
+	
+	/**
+	 * foreach ($somearray as $foo) {}
+	 * foreach (somecall() as $bar => $foo) {}
+	 */
+	@Test
+	public void testForEach() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.forEachNodeStr;
+		String edgeStr = CSVASTDefUseSamples.forEachEdgeStr;
+
+		handle(nodeStr, edgeStr);
+
+		ASTNode node = ast.getNodeById((long)3);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+
+		assertTrue( useOrDefs.size() == 2);
+		assertTrue( containsUseSymbol( useOrDefs, node, "somearray"));
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		
+		ASTNode node2 = ast.getNodeById((long)10);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "bar"));
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "foo"));
+	}
+	
 	
 	
 	/* -- Expressions/statements that generate DEFs *and* USEs for -- */
