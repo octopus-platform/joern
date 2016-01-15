@@ -445,6 +445,35 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "onetimepad"));
 	}
 	
+	/**
+	 * function foo() {
+	 *   static $foo = $bar, $buz = $qux->norf;
+	 * }
+	 */
+	@Test
+	public void testStaticVariable() throws IOException, InvalidCSVFile
+	{
+		String nodeStr = CSVASTDefUseSamples.defUseStaticVariableNodeStr;
+		String edgeStr = CSVASTDefUseSamples.defUseStaticVariableEdgeStr;
+
+		handle(nodeStr, edgeStr);
+		
+		ASTNode node = ast.getNodeById((long)8);
+		Collection<UseOrDef> useOrDefs = analyze(node);
+			
+		assertTrue( useOrDefs.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
+		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
+		
+		ASTNode node2 = ast.getNodeById((long)12);
+		Collection<UseOrDef> useOrDefs2 = analyze(node2);
+		
+		assertTrue( useOrDefs2.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
+		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
+	}
+	
+	
 	
 	
 	/* -- Expressions/statements that generate DEFs *and* USEs for -- */

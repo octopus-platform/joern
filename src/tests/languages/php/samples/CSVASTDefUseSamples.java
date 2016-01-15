@@ -421,6 +421,50 @@ public class CSVASTDefUseSamples extends CSVASTSamples {
 			+ "2,3,PARENT_OF\n";
 
 	
+	/*
+	 * function foo() {
+	 *   static $foo = $bar, $buz = $qux->norf;
+	 * }
+	 */
+
+	public static final String defUseStaticVariableNodeStr = nodeHeader
+			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
+			+ "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n"
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,NULL,,3,,1,3,,,\n"
+			+ "6,AST_STMT_LIST,,3,,2,3,,,\n"
+			+ "7,AST_STMT_LIST,,4,,0,3,,,\n"
+			+ "8,AST_STATIC,,4,,0,3,,,\n"
+			+ "9,string,,4,\"foo\",0,3,,,\n"
+			+ "10,AST_VAR,,4,,1,3,,,\n"
+			+ "11,string,,4,\"bar\",0,3,,,\n"
+			+ "12,AST_STATIC,,4,,1,3,,,\n"
+			+ "13,string,,4,\"buz\",0,3,,,\n"
+			+ "14,AST_PROP,,4,,1,3,,,\n"
+			+ "15,AST_VAR,,4,,0,3,,,\n"
+			+ "16,string,,4,\"qux\",0,3,,,\n"
+			+ "17,string,,4,\"norf\",1,3,,,\n"
+			+ "18,NULL,,3,,3,3,,,\n";
+
+	public static final String defUseStaticVariableEdgeStr = edgeHeader
+			+ "3,4,PARENT_OF\n"
+			+ "3,5,PARENT_OF\n"
+			+ "8,9,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "8,10,PARENT_OF\n"
+			+ "7,8,PARENT_OF\n"
+			+ "12,13,PARENT_OF\n"
+			+ "15,16,PARENT_OF\n"
+			+ "14,15,PARENT_OF\n"
+			+ "14,17,PARENT_OF\n"
+			+ "12,14,PARENT_OF\n"
+			+ "7,12,PARENT_OF\n"
+			+ "6,7,PARENT_OF\n"
+			+ "3,6,PARENT_OF\n"
+			+ "3,18,PARENT_OF\n"
+			+ "2,3,PARENT_OF\n";
+
+		
 	/* 
 	 * $foo = $bar + $buz;
 	 * $qux = $$norf;
