@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import tests.TestDBTestsBatchInserter;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
@@ -43,6 +44,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	{
 		astToCFG = new ASTToCFGConverter();
 		cfgToUDG = new CFGToUDGConverter();
+		cfgToUDG.setLanguage("C");
 	}
 
 	@Test
@@ -58,7 +60,8 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		String code = functionMap.get("udg_test_def_tainted_call");
 		CFG cfg = getCFGForCode(code);
 		CFGToUDGConverter myCFGToUDG = new CFGToUDGConverter();
-		myCFGToUDG.addTaintSource("foo", 0);
+		myCFGToUDG.setLanguage("C");
+		((CASTDefUseAnalyzer)myCFGToUDG.getASTDefUseAnalyzer()).addTaintSource("foo", 0);
 		UseDefGraph useDefGraph = myCFGToUDG.convert(cfg);
 
 		assertOnlyDefForXFound(useDefGraph, "* x");

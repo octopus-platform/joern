@@ -57,6 +57,7 @@ public class testDDGCreator extends TestDBTestsBatchInserter
 
 		CFGCreator cfgCreator = new CFGCreator();
 		CFGToUDGConverter converter = new CFGToUDGConverter();
+		converter.setLanguage("C");
 		CFGAndUDGToDefUseCFG converter2 = new CFGAndUDGToDefUseCFG();
 
 		CFG cfg = cfgCreator.getCFGForCode("f(){ int x = 0; foo(x);}");

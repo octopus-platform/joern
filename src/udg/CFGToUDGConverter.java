@@ -7,23 +7,22 @@ import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
 import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
+import languages.php.udg.useDefAnalysis.PHPASTDefUseAnalyzer;
+import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDef;
 
 public class CFGToUDGConverter
 {
-	// TODO clearly, this class should be language-independent.
-	// -> possibly add a method setLanguage and create a CASTDefUseAnalyzer
-	// or a PHPASTDefUseAnalyzer accordingly
-	CASTDefUseAnalyzer astAnalyzer = new CASTDefUseAnalyzer();
-
-	public void addTaintSource(String callee, int argNum)
-	{
-		astAnalyzer.addTaintSource(callee, argNum);
-	}
+	private ASTDefUseAnalyzer astAnalyzer;
 
 	public UseDefGraph convert(CFG cfg)
 	{
+		// Make sure that ASTDefUseAnalyzer was initialized by setLanguage(String)
+		if( null == this.astAnalyzer)
+			throw new RuntimeException("Trying to call CFGToUDGConverter.convert(CFG)"
+					+ " without calling CFGToUDGConverter.setLanguage(String) first.");
+		
 		// Incrementally create a UseDefGraph by generating
 		// UseOrDefs for each statement separately and adding those
 		// to the UseDefGraph
@@ -92,4 +91,23 @@ public class CFGToUDGConverter
 		}
 	}
 
+	/**
+	 * This function initializes the ASTAnalyzer according to the
+	 * analyzed language. Currently, the strings "C" and "PHP"
+	 * are supported (case-sensitive!) as parameters.
+	 */
+	public void setLanguage(String language)
+	{
+		if( language.equals("C"))
+			this.astAnalyzer = new CASTDefUseAnalyzer();
+		else if( language.equals("PHP"))
+			this.astAnalyzer = new PHPASTDefUseAnalyzer();
+		else
+			throw new RuntimeException("Unsupported language '" + language +
+					"' passed to CFGToUDGConverter.");
+	}
+
+	public ASTDefUseAnalyzer getASTDefUseAnalyzer() {
+		return this.astAnalyzer;
+	}
 }
