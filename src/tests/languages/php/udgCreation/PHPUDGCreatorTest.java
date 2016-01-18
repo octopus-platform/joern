@@ -1,0 +1,121 @@
+package tests.languages.php.udgCreation;
+
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.Test;
+
+import ast.ASTNode;
+import cfg.CFG;
+import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
+import languages.php.cfg.PHPCFGFactory;
+import tests.languages.php.PHPCSVBasedTest;
+import tests.languages.php.samples.CSVASTUDGSamples;
+import udg.CFGToUDGConverter;
+import udg.useDefGraph.UseDefGraph;
+import udg.useDefGraph.UseOrDefRecord;
+
+public class PHPUDGCreatorTest extends PHPCSVBasedTest {
+
+	/**
+	 * Creates an AST for two given CSV strings (nodes and edges), and
+	 * returns the AST node with the lowest id.
+	 */
+	protected ASTNode getASTForCSVLines(String nodeLines, String edgeLines)
+			throws IOException, InvalidCSVFile
+	{
+		handle(nodeLines, edgeLines);
+
+		return ast.getNodeWithLowestId();
+	}
+	
+	/**
+	 * Creates and returns a CFG for an AST given as two CSV strings (nodes and edges).
+	 */
+	protected CFG getCFGForCSVLines(String nodeLines, String edgeLines)
+			throws IOException, InvalidCSVFile
+	{
+		ASTNode rootnode = getASTForCSVLines(nodeLines, edgeLines);
+
+		// This is a bit clumsy: to ensure that the structured flow visitor
+		// is initialized correctly, we need to create a PHPCFGFactory
+		// object despite the fact that we're only using the factory's static
+		// methods.
+
+		PHPCFGFactory phpcfgFactory = new PHPCFGFactory();
+		return PHPCFGFactory.convert(rootnode);
+	}
+	
+	/**
+	 * Creates and returns a UDG for a given CFG created from two CSV strings (nodes and edges).
+	 */
+	protected UseDefGraph getUDGForCSVLines(String nodeLines, String edgeLines)
+			throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(nodeLines, edgeLines);
+
+		System.out.println(cfg);
+		
+		CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
+		cfgToUDG.setLanguage("PHP");
+		
+		return cfgToUDG.convert(cfg);
+	}
+
+	private boolean containsDef( UseDefGraph udg, String symbol, long id) {
+		return containsUseOrDef( udg, symbol, id, true);
+	}
+	
+	private boolean containsUse( UseDefGraph udg, String symbol, long id) {
+		return containsUseOrDef( udg, symbol, id, false);
+	}
+	
+	/**
+	 * Checks whether a collection of UseOrDef elements contains a definition/use
+	 * of a given symbol for a given node.
+	 */
+	private boolean containsUseOrDef( UseDefGraph udg, String symbol, long id, boolean isDef) {
+		
+		List<UseOrDefRecord> useOrDefRecords = udg.getUsesAndDefsForSymbol(symbol);
+		
+		for( UseOrDefRecord useOrDefRecord : useOrDefRecords) {
+			if( useOrDefRecord.getAstNode().equals( ast.getNodeById(id))
+					&&  useOrDefRecord.isDef() == isDef)
+				return true;
+		}
+		return false;
+	}
+	
+	
+	/* **************** *
+	 * The actual tests *
+	 * **************** */
+	
+	/**
+	 * $x = source();
+	 * if( $x < MAX) {
+	 *   $y = 2*$x;
+	 *   sink($y);
+	 * }
+	 */
+	@Test
+	public void testSimpleFunction() throws IOException, InvalidCSVFile
+	{
+		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGSamples.simpleFunctionNodeStr, CSVASTUDGSamples.simpleFunctionEdgeStr);
+		
+		//System.out.println(udg);
+
+		System.out.println("x: " + udg.getUsesAndDefsForSymbol("x"));
+		System.out.println("y: " + udg.getUsesAndDefsForSymbol("y"));
+		System.out.println("MAX: " + udg.getUsesAndDefsForSymbol("MAX"));
+
+		assertTrue( containsDef( udg, "x", 3));
+		assertTrue( containsUse( udg, "x", 19));
+
+		// TODO: more tests here
+		// We are missing a USE@12 for both x and MAX, improve def/use analysis
+		
+	}
+}

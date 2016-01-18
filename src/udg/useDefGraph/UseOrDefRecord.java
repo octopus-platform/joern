@@ -1,6 +1,7 @@
 package udg.useDefGraph;
 
 import ast.ASTNode;
+import ast.ASTNodeProperties;
 
 public class UseOrDefRecord
 {
@@ -31,6 +32,19 @@ public class UseOrDefRecord
 	public void setDef(boolean isDef)
 	{
 		this.isDef = isDef;
+	}
+	
+	@Override
+	public String toString() {
+		
+		if( null != astNode.getEscapedCodeStr() && null != astNode.getProperty(ASTNodeProperties.NODE_ID))
+			return "[" + (this.isDef ? "DEF" : "USE") + " @ (" + astNode.getProperty(ASTNodeProperties.NODE_ID) + ") " + astNode.getEscapedCodeStr() + "]";
+		if( null != astNode.getEscapedCodeStr())
+			return "[" + (this.isDef ? "DEF" : "USE") + " @ " + astNode.getEscapedCodeStr() + "]";
+		if( null != astNode.getProperty(ASTNodeProperties.NODE_ID))
+			return "[" + (this.isDef ? "DEF" : "USE") + " @ " + astNode.getProperty(ASTNodeProperties.NODE_ID) + "]";
+		
+		return super.toString();
 	}
 
 };

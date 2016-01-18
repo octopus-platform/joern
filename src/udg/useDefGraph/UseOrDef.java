@@ -28,7 +28,7 @@ public class UseOrDef
 	
 	@Override
 	public String toString() {
-		return this.symbol + "[" + (this.isDef ? "def" : "use") + "]{" + this.astProvider.getTypeAsString() + "}";
+		return this.symbol + "[" + (this.isDef ? "DEF" : "USE") + "]{" + this.astProvider.getTypeAsString() + "}";
 	}
 
 }
