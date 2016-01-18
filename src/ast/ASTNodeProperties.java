@@ -2,6 +2,7 @@ package ast;
 
 public class ASTNodeProperties
 {
+	public static final String NODE_ID = "id";
 	public static final String FLAGS = "flags";
 	public static final String NAME = "name";
 	public static final String DOCCOMMENT = "doccomment";
