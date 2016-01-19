@@ -104,18 +104,46 @@ public class PHPUDGCreatorTest extends PHPCSVBasedTest {
 	public void testSimpleFunction() throws IOException, InvalidCSVFile
 	{
 		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGSamples.simpleFunctionNodeStr, CSVASTUDGSamples.simpleFunctionEdgeStr);
-		
-		//System.out.println(udg);
 
 		System.out.println("x: " + udg.getUsesAndDefsForSymbol("x"));
 		System.out.println("y: " + udg.getUsesAndDefsForSymbol("y"));
 		System.out.println("MAX: " + udg.getUsesAndDefsForSymbol("MAX"));
 
 		assertTrue( containsDef( udg, "x", 3));
+		assertTrue( containsUse( udg, "x", 12));
+		// Note: something interesting happens here. There are *two* USEs of the
+		// variable $x in the code line '$y = 2*$x;': once a USE within the
+		// binary operation expression (id 22), and another USE within the
+		// assignment itself (id 19).
+		// TODO Is this a problem? In principle, it does make sense.
 		assertTrue( containsUse( udg, "x", 19));
+		assertTrue( containsUse( udg, "x", 22));
 
-		// TODO: more tests here
-		// We are missing a USE@12 for both x and MAX, improve def/use analysis
+		assertTrue( containsDef( udg, "y", 19));
+		assertTrue( containsUse( udg, "y", 26));
 		
+		assertTrue( containsUse( udg, "MAX", 12));
+	}
+	
+	/**
+	 * $flag = source();
+	 * if( $flag) {
+	 *   $y++;
+	 *   sink($y);
+	 * }
+	 */
+	@Test
+	public void testStandaloneFlag() throws IOException, InvalidCSVFile
+	{
+		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGSamples.standaloneFlagNodeStr, CSVASTUDGSamples.standaloneFlagEdgeStr);
+
+		System.out.println("flag: " + udg.getUsesAndDefsForSymbol("flag"));
+		System.out.println("y: " + udg.getUsesAndDefsForSymbol("y"));
+
+		assertTrue( containsDef( udg, "flag", 3));
+		assertTrue( containsUse( udg, "flag", 12));
+		assertTrue( containsDef( udg, "y", 15));
+		assertTrue( containsUse( udg, "y", 15));
+		assertTrue( containsUse( udg, "y", 18));
 	}
 }

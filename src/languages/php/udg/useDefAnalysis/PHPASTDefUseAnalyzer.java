@@ -1,5 +1,8 @@
 package languages.php.udg.useDefAnalysis;
 
+import java.util.Collection;
+
+import languages.php.udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
 import languages.php.udg.useDefAnalysis.environments.AssignmentEnvironment;
 import languages.php.udg.useDefAnalysis.environments.AssignmentWithOpEnvironment;
 import languages.php.udg.useDefAnalysis.environments.CatchEnvironment;
@@ -24,12 +27,38 @@ import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefAnalysis.environments.EmitDefEnvironment;
 import udg.useDefAnalysis.environments.EmitUseEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
+import udg.useDefGraph.UseOrDef;
 
 /**
  * PHP-specific implementation of ASTDefUseAnalyzer.
  */
 public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 {
+	// Determines whether we want to analyze a predicate or a normal statement
+	private boolean analyzingPredicate = false;
+	
+	/**
+	 * Analyze an AST as usual. In case analyzeAST(ASTProvider) was called
+	 * on a standalone variable/constant/property, assume we are analyzing
+	 * a predicate and set analyzingPredicate to true for this analysis.
+	 */
+	@Override
+	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider)
+	{
+		String nodeType = astProvider.getTypeAsString();
+		if( nodeType.equals("Variable") ||
+			nodeType.equals("Constant") ||
+			nodeType.equals("PropertyExpression") ||
+			nodeType.equals("StaticPropertyExpression") ||
+			nodeType.equals("ClassConstantExpression") ||
+			nodeType.equals("ArrayIndexing"))
+			this.analyzingPredicate = true;
+		
+		Collection<UseOrDef> retval = super.analyzeAST(astProvider);
+		this.analyzingPredicate = false;
+		
+		return retval;
+	}
 	
 	/**
 	 * Creates a UseDefEnvironment for a given AST node.
@@ -37,7 +66,7 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 	protected UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider)
 	{
 		String nodeType = astProvider.getTypeAsString();
-
+		
 		switch (nodeType)
 		{
 			// environments that need to "cleverly" decide which of its children symbols
@@ -56,7 +85,11 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PropertyElement":
 			case "ConstantElement":
 				return new FieldDeclarationEnvironment();
-				
+	
+			/*
+			 * COMMENTED OUT: Actually, these will never be CFG nodes, so these
+			 * environments are useless; USEs should be emitted by the predicates
+			 * themselves. We have the analyzingPredicate field for this now.
 			// environments with predicates: the predicates should emit USEs for the
 			// variables used in them
 				
@@ -69,12 +102,21 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "PHPIfElement":
 				return new IfElementEnvironment();
 
+			case "ForStatement":
+				return new ForEnvironment();
+ 			*/
+
+			// TODO This is temporary.
+			// Until there is no solution for 'switch' nodes in CFG creation,
+			// we cannot really know which nodes should be analyzed in this context,
+			// and how to tackle them.
 			case "PHPSwitchStatement":
 				return new SwitchEnvironment();
 				
-			case "ForStatement":
-				return new ForEnvironment();
-				
+			// TODO This is temporary.
+			// Until there is no solution for 'foreach' nodes in CFG creation,
+			// we cannot really know which nodes should be analyzed in this context,
+			// and how to tackle them.
 			case "ForEachStatement":
 				return new ForEachEnvironment();
 				
@@ -114,6 +156,18 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "NewExpression":
 			case "MethodCallExpression":
 			case "StaticCallExpression":
+			// the following environments should also emit USEs, as they could
+			// be used as standalone expressions as a predicate, i.e., within
+			// the guard of some if/while/etc. statement
+			case "UnaryPlusExpression":
+			case "UnaryMinusExpression":
+			case "UnaryOperationExpression":
+			case "GreaterExpression":
+			case "GreaterOrEqualExpression":
+			case "AndExpression":
+			case "OrExpression":
+			case "BinaryOperationExpression":
+			case "InstanceofExpression":
 				return new EmitUseEnvironment();
 				
 				
@@ -135,29 +189,58 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 				return new FunctionDefEnvironment();
 				
 			
-			// "base" environments which add symbols to be reported upstream:
+			// "Base" environments which add symbols to be reported upstream:
 			// closure variables, variables, constants, properties, static properties and class constants
+			// Also, whenever we are analyzing a predicate instead of a normal statement,
+			// these environments should emit USEs of their variables (see according comments
+			// in CFGToUDGConverter.convert(CFG))
 			
 			case "ClosureVar":
 				return new ClosureVarEnvironment();
 				
 			case "Variable":
-				return new VariableEnvironment();
+				VariableEnvironment venv = new VariableEnvironment();
+				venv.setEmitUse(this.analyzingPredicate);
+				this.analyzingPredicate = false;
+				return venv;
 				
 			case "Constant":
-				return new ConstantEnvironment();
+				ConstantEnvironment cenv = new ConstantEnvironment();
+				cenv.setEmitUse(this.analyzingPredicate);
+				this.analyzingPredicate = false;
+				return cenv;
 
 			case "PropertyExpression":
-				return new PropertyEnvironment();
+				PropertyEnvironment penv = new PropertyEnvironment();
+				penv.setEmitUse(this.analyzingPredicate);
+				this.analyzingPredicate = false;
+				return penv;
 				
 			case "StaticPropertyExpression":
-				return new StaticPropertyEnvironment();
-				
+				StaticPropertyEnvironment spenv = new StaticPropertyEnvironment();
+				spenv.setEmitUse(this.analyzingPredicate);
+				this.analyzingPredicate = false;
+				return spenv;
+						
 			case "ClassConstantExpression":
-				return new ClassConstantEnvironment();
-
+				ClassConstantEnvironment ccenv = new ClassConstantEnvironment();
+				ccenv.setEmitUse(this.analyzingPredicate);
+				this.analyzingPredicate = false;
+				return ccenv;
+				
 			case "PHPParameter":
 				return new ParameterEnvironment();
+			
+			// array accesses are special in their way:
+			// for an expression $foo[$key],
+			// - $key is always a USE (yes, even in things like '$foo[$key] = ...;')
+			// - $foo is to be reported upstream, but should be emitted as USE when
+			//   we are analyzing a predicate (as in: if( $foo[$key]) { ... })
+			case "ArrayIndexing":
+				ArrayIndexingEnvironment aienv = new ArrayIndexingEnvironment();
+				aienv.setEmitUse(this.analyzingPredicate);
+				this.analyzingPredicate = false;
+				return aienv;
 				
 				
 			// default environment
@@ -165,5 +248,9 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			default:
 				return new UseDefEnvironment();
 		}
+	}
+	
+	public void setPredicate( boolean analyzingPredicate) {
+		this.analyzingPredicate = analyzingPredicate;
 	}
 }

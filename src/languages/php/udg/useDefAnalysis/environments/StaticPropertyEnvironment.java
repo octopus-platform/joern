@@ -1,5 +1,6 @@
 package languages.php.udg.useDefAnalysis.environments;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 import ast.expressions.Identifier;
@@ -8,11 +9,14 @@ import ast.expressions.Variable;
 import udg.ASTNodeASTProvider;
 import udg.ASTProvider;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
+import udg.useDefGraph.UseOrDef;
 
 public class StaticPropertyEnvironment extends UseDefEnvironment
 {
 	private String className;
 	private String propName;
+	
+	private boolean emitUse = false;
 	
 	// simply return the symbol corresponding to the static property access,
 	// which we determined in addChildSymbols as good as we could
@@ -53,5 +57,20 @@ public class StaticPropertyEnvironment extends UseDefEnvironment
 			else
 				this.propName = "*"; // neither a string nor a variable; we just don't know
 		}
+	}
+	
+	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
+	{
+		// only add USE for a standalone static property once we visited all children
+		if( this.emitUse && null != this.className && null != this.propName) {
+			LinkedList<UseOrDef> retval = createUsesForAllSymbols(upstreamSymbols());
+			return retval;
+		}
+		else
+			return super.useOrDefsFromSymbols(child);
+	}
+	
+	public void setEmitUse( boolean emitUse) {
+		this.emitUse = emitUse;
 	}
 }

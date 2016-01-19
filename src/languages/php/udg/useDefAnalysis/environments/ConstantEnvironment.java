@@ -1,12 +1,15 @@
 package languages.php.udg.useDefAnalysis.environments;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
+import udg.useDefGraph.UseOrDef;
 
 public class ConstantEnvironment extends UseDefEnvironment
 {
+	private boolean emitUse = false;
 
 	// pass the 'code' of the constant upstream (i.e., the constant's name)
 	@Override
@@ -25,5 +28,19 @@ public class ConstantEnvironment extends UseDefEnvironment
 	public boolean shouldTraverse(ASTProvider child)
 	{
 		return false;
+	}
+	
+	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)
+	{
+		if( this.emitUse) {
+			LinkedList<UseOrDef> retval = createUsesForAllSymbols(upstreamSymbols());
+			return retval;
+		}
+		else
+			return super.useOrDefsFromSymbols(child);
+	}
+	
+	public void setEmitUse( boolean emitUse) {
+		this.emitUse = emitUse;
 	}
 }
