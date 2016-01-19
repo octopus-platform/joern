@@ -37,14 +37,7 @@ public class UseOrDefRecord
 	@Override
 	public String toString() {
 		
-		if( null != astNode.getEscapedCodeStr() && null != astNode.getProperty(ASTNodeProperties.NODE_ID))
-			return "[" + (this.isDef ? "DEF" : "USE") + " @ (" + astNode.getProperty(ASTNodeProperties.NODE_ID) + ") " + astNode.getEscapedCodeStr() + "]";
-		if( null != astNode.getEscapedCodeStr())
-			return "[" + (this.isDef ? "DEF" : "USE") + " @ " + astNode.getEscapedCodeStr() + "]";
-		if( null != astNode.getProperty(ASTNodeProperties.NODE_ID))
-			return "[" + (this.isDef ? "DEF" : "USE") + " @ " + astNode.getProperty(ASTNodeProperties.NODE_ID) + "]";
-		
-		return super.toString();
+		return (this.isDef ? "DEF" : "USE") + "@" + astNode.toString();
 	}
 
 };

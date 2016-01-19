@@ -27,5 +27,10 @@ public class DefUseRelation
 	{
 		return symbol.hashCode();
 	}
+	
+	@Override
+	public String toString() {
+		return this.src + " ==[" + this.symbol + "]==> " + this.dst;
+	}
 
 }

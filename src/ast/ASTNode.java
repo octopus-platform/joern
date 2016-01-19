@@ -189,4 +189,15 @@ public class ASTNode
 		return this.getClass().getName();
 	}
 
+	@Override
+	public String toString() {
+		if( null != getEscapedCodeStr() && null != getProperty(ASTNodeProperties.NODE_ID))
+			return "[(" + getProperty(ASTNodeProperties.NODE_ID) + ") " + getEscapedCodeStr() + "]";
+		if( null != getEscapedCodeStr())
+			return "[" + getEscapedCodeStr() + "]";
+		if( null != getProperty(ASTNodeProperties.NODE_ID))
+			return "[(" + getProperty(ASTNodeProperties.NODE_ID) + ") " + getTypeAsString() + "]";
+		
+		return super.toString();
+	}
 }
