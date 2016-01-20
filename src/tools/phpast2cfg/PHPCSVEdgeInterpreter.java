@@ -136,6 +136,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		if( endNode instanceof Closure) {
 			ClosureExpression closureExpression = new ClosureExpression();
 			closureExpression.setClosure((Closure)endNode);
+			// the ClosureExpression and the Closure get the same NODE_ID, this way CFG creation
+			// can treat the ClosureExpression and actually references the Closure
+			closureExpression.setProperty(PHPCSVNodeTypes.NODE_ID.getName(), endNode.getProperty(PHPCSVNodeTypes.NODE_ID.getName()));
 			endNode = closureExpression;
 		}
 		

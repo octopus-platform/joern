@@ -17,4 +17,11 @@ public class ClosureExpression extends Expression
 		this.closure = closure;
 		super.addChild(closure);
 	}
+	
+	// TODO probably, more methods than only getEscapedCodeStr() should "forward" the call
+	// to the Closure. For instance, calls to obtain the node id, etc. Test this!
+	public String getEscapedCodeStr() {
+		return this.closure.getEscapedCodeStr();
+	}
+
 }

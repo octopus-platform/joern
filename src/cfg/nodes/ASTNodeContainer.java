@@ -1,7 +1,6 @@
 package cfg.nodes;
 
 import ast.ASTNode;
-import ast.ASTNodeProperties;
 
 public class ASTNodeContainer extends AbstractCFGNode
 {
