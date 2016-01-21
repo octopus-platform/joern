@@ -88,7 +88,7 @@ public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
 	@Override
 	public void visit(TryStatement node)
 	{
-		returnCFG = CFGFactory.newInstance(node);
+		returnCFG = PHPCFGFactory.newInstance(node);
 	}
 
 	@Override
