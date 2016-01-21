@@ -51,6 +51,10 @@ public class PHPFunctionDef extends FunctionDef
 
 	protected String getParamListString() {
 		
+		// this should not happen:
+		if( null == getParameterList())
+			return "(ERROR)";
+		
 		String retval = "(";
 		Iterator<Parameter> it = getParameterList().iterator();
 		while( it.hasNext()) {
