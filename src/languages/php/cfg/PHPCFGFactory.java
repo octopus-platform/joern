@@ -1,17 +1,25 @@
 package languages.php.cfg;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import ast.expressions.Expression;
+import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
+import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.TryStatement;
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.CFGFactory;
 import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGEntryNode;
+import cfg.nodes.CFGExceptionNode;
+import cfg.nodes.CFGExitNode;
 import cfg.nodes.CFGNode;
 
 public class PHPCFGFactory extends CFGFactory
@@ -90,6 +98,74 @@ public class PHPCFGFactory extends CFGFactory
 		CFG block = new CFG();
 		// TODO: implement me.
 		return block;
+	}
+
+	public static CFG newInstance(TryStatement tryStatement)
+	{
+		try
+		{
+			CFG tryCFG = convert(tryStatement.getContent());
+			List<CFGNode> statements = new LinkedList<CFGNode>();
+
+			// Get all nodes within try not connected to an exception node.
+			for (CFGNode node : tryCFG.getVertices())
+			{
+				if (!(node instanceof CFGEntryNode)
+						&& !(node instanceof CFGExitNode))
+				{
+					boolean b = true;
+					for (CFGEdge edge : tryCFG.outgoingEdges(node))
+					{
+						CFGNode destination = edge.getDestination();
+						if (destination instanceof CFGExceptionNode)
+						{
+							b = false;
+							break;
+						}
+					}
+					if (b)
+						statements.add(node);
+				}
+			}
+
+			// Add exception node for current try block
+			if (!statements.isEmpty())
+			{
+				CFGExceptionNode exceptionNode = new CFGExceptionNode();
+				tryCFG.setExceptionNode(exceptionNode);
+				for (CFGNode node : statements)
+				{
+					tryCFG.addEdge(node, exceptionNode, CFGEdge.EXCEPT_LABEL);
+				}
+			}
+
+			if (tryStatement.getCatchList().size() == 0)
+			{
+				System.err.println("warning: cannot find catch for try");
+				return tryCFG;
+			}
+
+			// Mount exception handlers
+			for (CatchStatement catchStatement : tryStatement.getCatchList())
+			{
+				CFG catchBlock = convert(catchStatement.getStatement());
+				tryCFG.mountCFG(tryCFG.getExceptionNode(), tryCFG.getExitNode(),
+						catchBlock, CFGEdge.HANDLED_EXCEPT_LABEL);
+			}
+
+			// now deal with the finally block
+
+			CompoundStatement finallyContent = tryStatement.getFinallyContent();
+			tryCFG.appendCFG(convert(finallyContent));
+
+			return tryCFG;
+
+		}
+		catch (Exception e)
+		{
+			// e.printStackTrace();
+			return newErrorInstance();
+		}
 	}
 
 }

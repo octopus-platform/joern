@@ -1,53 +1,25 @@
 package tests.languages.php.cfgCreation;
 
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 
 import org.junit.Test;
 
-import ast.ASTNode;
 import cfg.CFG;
+import cfg.nodes.CFGExceptionNode;
+import cfg.nodes.CFGNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import languages.php.cfg.PHPCFGFactory;
-import tests.languages.php.PHPCSVBasedTest;
 import tests.languages.php.samples.CSVASTSamples;
 
-public class TrickyCFGTests extends PHPCSVBasedTest {
+public class TrickyCFGTests extends PHPCFGCreatorTest {
 
-	/**
-	 * Creates an AST for two given CSV strings (nodes and edges), and
-	 * returns the AST node with the lowest id.
-	 */
-	protected ASTNode getASTForCSVLines(String nodeLines, String edgeLines)
-			throws IOException, InvalidCSVFile
-	{
-		handle(nodeLines, edgeLines);
-
-		return ast.getNodeWithLowestId();
-	}
-	
-	/**
-	 * Creates and returns a CFG for an AST given as two CSV strings (nodes and edges).
-	 */
-	protected CFG getCFGForCSVLines(String nodeLines, String edgeLines)
-			throws IOException, InvalidCSVFile
-	{
-		ASTNode rootnode = getASTForCSVLines(nodeLines, edgeLines);
-
-		// This is a bit clumsy: to ensure that the structured flow visitor
-		// is initialized correctly, we need to create a PHPCFGFactory
-		// object despite the fact that we're only using the factory's static
-		// methods.
-
-		PHPCFGFactory phpcfgFactory = new PHPCFGFactory();
-		return PHPCFGFactory.convert(rootnode);
-	}
-	
 
 	/* **************** *
 	 * The actual tests *
 	 * **************** */
-		
+
 	/**
 	 * try {
 	 *   foo();
@@ -138,17 +110,34 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		edgeStr += "32,33,PARENT_OF\n";
 		edgeStr += "3,32,PARENT_OF\n";
 		edgeStr += "2,3,PARENT_OF\n";
-		
-		// Problems: 
-		// (1) No CFG nodes inside the try {} block, thus no [except] edges from those nodes to [EXCEPTION]
-		//     --> they should be there
-		// (2) "backwards" [except] edge from node id 33 (norf();) inside the finally {} block to [EXCEPTION]
-		//     --> this should not be there
-		// (3) epsilon edges from node ids 19 and 28 directly to [EXIT], thus ignoring over the finally {} block
-		//     --> the epsilon edges from 19 and 28 should first go into the finally {} block, i.e., node 33
-		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
+
+		CFG cfg = getCFGForCSVLines(nodeStr, edgeStr);
+		CFGExceptionNode exceptionNode = cfg.getExceptionNode();
+
+
+		Object[] calls = getNodesOfType(cfg, "ASTNodeContainer");
+
+		assertEquals(5, calls.length);
+
+		CFGNode foo = (CFGNode) calls[0];
+		CFGNode bar = (CFGNode) calls[1];
+		CFGNode buz = (CFGNode) calls[2];
+		CFGNode qux = (CFGNode) calls[3];
+		CFGNode norf = (CFGNode) calls[4];
+
+		edgeExists(cfg, foo, bar);
+		edgeExists(cfg, bar, norf);
+		edgeExists(cfg, foo, exceptionNode);
+		edgeExists(cfg, bar, exceptionNode);
+
+		edgeExists(cfg, exceptionNode, buz);
+		edgeExists(cfg, exceptionNode, qux);
+
+		edgeExists(cfg, buz, norf);
+		edgeExists(cfg, qux, norf);
+
 	}
-	
+
 	/**
 	 * foo();
 	 * while(true) {
@@ -214,13 +203,13 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		edgeStr += "23,24,PARENT_OF\n";
 		edgeStr += "23,26,PARENT_OF\n";
 		edgeStr += "2,23,PARENT_OF\n";
-		
+
 		// Problem:
 		// edge from 17 to 19 should not be there;
 		// instead, there should be an edge from 17 to 23
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 	/**
 	 * foo();
 	 * while(true) {
@@ -307,13 +296,13 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		edgeStr += "32,33,PARENT_OF\n";
 		edgeStr += "32,35,PARENT_OF\n";
 		edgeStr += "2,32,PARENT_OF\n";
-		
+
 		// Problem:
 		// edge from 22 to 18 should not be there;
 		// instead, there should be an edge from 22 to 8
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 	/**
 	 * true ? "foo" : "bar";
 	 */
@@ -334,7 +323,7 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "3,7,PARENT_OF\n";
 		edgeStr += "3,8,PARENT_OF\n";
-		
+
 		// Problem:
 		// treated as a normal statement;
 		// instead of a CFG node for 3,
@@ -342,7 +331,7 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		// with a [true] edge from 4 to 7 and a [false] edge from 4 to 8.
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 	/**
 	 * foo();
 	 * switch ($i) {
@@ -427,13 +416,13 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		edgeStr += "31,32,PARENT_OF\n";
 		edgeStr += "31,34,PARENT_OF\n";
 		edgeStr += "2,31,PARENT_OF\n";
-		
+
 		// Problem:
 		// no CFG nodes at all generated for switch statement or anything inside it;
 		// instead, an [ERROR] node is generated for the entire switch statement
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 	/**
 	 * "foo" ?? "bar";
 	 */
@@ -448,14 +437,14 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		String edgeStr = CSVASTSamples.edgeHeader;
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "3,5,PARENT_OF\n";
-		
+
 		// Problem:
 		// treated as a normal statement; can we do better?
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
 
-	
+
+
 	/**
 	 * foo();
 	 * foreach( $x as $y) { buz(); }
@@ -506,20 +495,20 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		edgeStr += "18,19,PARENT_OF\n";
 		edgeStr += "18,21,PARENT_OF\n";
 		edgeStr += "2,18,PARENT_OF\n";
-		
+
 		// Problem:
 		// not even treated as a normal statement, the foreach node completely
 		// disappears as if it had never been there in the first place; can we do better?
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 	/**
 	 * //function foo() {
 	 *   yield 42;
 	 *   yield $somekey => bar();
 	 *   buz();
 	 * //}
-	 * 
+	 *
 	 * //foo();
 	 */
 	@Test
@@ -575,20 +564,20 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		//edgeStr += "22,23,PARENT_OF\n";
 		//edgeStr += "22,25,PARENT_OF\n";
 		//edgeStr += "2,22,PARENT_OF\n";
-		
+
 		// Problem:
 		// epsilon edges from 7 to 10 and from 10 to 17 are there which is correct in a sense,
 		// but somehow should there perhaps be edges from 7 to [EXIT] and from 10 to [EXIT] too?
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 	/**
 	 * //function foo() {
 	 *   bar();
 	 *   yield from norf();
 	 *   buz();
 	 * //}
-	 * 
+	 *
 	 * //foo();
 	 */
 	@Test
@@ -642,7 +631,7 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		//edgeStr += "21,22,PARENT_OF\n";
 		//edgeStr += "21,24,PARENT_OF\n";
 		//edgeStr += "2,21,PARENT_OF\n";
-		
+
 		// Problem:
 		// epsilon edge from 11 to 16 which is correct in a sense,
 		// but somehow should there perhaps be an edge from 11 to [EXIT] too?
@@ -650,6 +639,6 @@ public class TrickyCFGTests extends PHPCSVBasedTest {
 		// But then what about 'yield from' with iterables, like 'yield from [1,2];' ?
 		System.out.println(getCFGForCSVLines(nodeStr, edgeStr));
 	}
-	
+
 
 }
