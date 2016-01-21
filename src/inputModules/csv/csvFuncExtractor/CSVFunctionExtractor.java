@@ -78,15 +78,23 @@ public class CSVFunctionExtractor
 	 *    funcid currently on top of the funcIdStack to the CSVAST on top of
 	 *    the csvStack.
 	 * 2. Upon finding a function declaration:
+	 *    [<outdated>
 	 *    a) It adds the line to the CSVAST on top of the csvStack, since the
 	 *       declaration as such is indeed part of the outer scope and belongs there.
+	 *    </outdated>]
+	 *       UPDATE: 2a) does not hold anymore! We now only add function declarations
+	 *       once, as root node of the CSVAST that corresponds to this function itself.
 	 *    b) It pushes a new CSVAST on top of  the csvStack and that function's id
 	 *       on top of the funcIdStack. The line is also added to this new CSVAST.
+	 *       [<outdated>
 	 *       Do note that this means that we intentionally duplicate a line by adding it
 	 *       to two separate CSVAST instances. This second addition is needed for
 	 *       technical reasons, because the line contains meta-information about the
 	 *       function (e.g., its name) that we will need when converting the CSVAST to an
 	 *       ast.functionDef.FunctionDef node using the CSV2AST class.
+	 *       </outdated>]
+	 *       UPDATE: So now, this line is not duplicated anymore. The line is *only*
+	 *       added to new new CSVAST.
 	 * 3. Upon finding a funcId different from the one on top of the funcIdStack,
 	 *    it looks for that funcId within the stack. In a valid CSV file, this
 	 *    funcId must have been previously declared by a function declaration.
@@ -227,6 +235,19 @@ public class CSVFunctionExtractor
 	{
 		String currId = currNodeRow.getFieldForKey(PHPCSVNodeTypes.NODE_ID);
 		String currType = currNodeRow.getFieldForKey(PHPCSVNodeTypes.TYPE);
+		
+		if( PHPCSVNodeTypes.funcTypes.contains(currType)) {
+			// if we met a function declaration node, push a new CSVAST atop the stack
+			initCSVAST(currId);
+		}
+		// add the declaration onto the top CSVAST
+		addRowToTopCSVAST(currNodeRow);
+		
+		// UPDATE: we now do not add the function declaration to the "outer scope" CSVAST
+		// anymore; this way each function is analyzed once on its own, and we do not get
+		// problems from redundancy (in particular, the parameter list of a function "defines"
+		// its variables, but only within the scope of the function, not in the outer scope.)
+		/*
 		addRowToTopCSVAST(currNodeRow);
 		if( PHPCSVNodeTypes.funcTypes.contains(currType)) {
 			// if we met a function declaration node, push a new CSVAST atop the stack
@@ -234,6 +255,7 @@ public class CSVFunctionExtractor
 			// *also* add the declaration onto the newly created CSVAST
 			addRowToTopCSVAST(currNodeRow);
 		}
+		*/
 	}
 	
 	/**

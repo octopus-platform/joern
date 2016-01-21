@@ -75,7 +75,7 @@ public class TestCSVFunctionExtractor
 		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
 		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
 		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
-
+		
 		assertEquals("foo", function.getName());
 		assertEquals("<foo.php>", function2.getName());
 		assertNull(function3);
@@ -603,12 +603,15 @@ public class TestCSVFunctionExtractor
 		edgeReader = new StringReader(edgeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
-		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
-
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction(); // function foo()
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction(); // <foo.php>
+		
 		assertEquals(4, function.getChildCount());
 		assertEquals(1, function2.getChildCount());
-		assertEquals(1, function2.getContent().getChildCount());
+		// Note: the top-level function does not have any children,
+		// since the only statement in it - the function declaration of function foo() -
+		// is ignored within the top-level function, as foo() gets its own AST and analysis.
+		assertEquals(0, function2.getContent().getChildCount());
 	}
 	
 	/**
@@ -664,20 +667,26 @@ public class TestCSVFunctionExtractor
 		edgeReader = new StringReader(edgeStr);
 
 		extractor.initialize(nodeReader, edgeReader);
-		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction();
-		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction();
-		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction();
-		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction();
-
+		PHPFunctionDef function = (PHPFunctionDef)extractor.getNextFunction(); // function foo()
+		PHPFunctionDef function2 = (PHPFunctionDef)extractor.getNextFunction(); // <foobar/foo.php>
+		PHPFunctionDef function3 = (PHPFunctionDef)extractor.getNextFunction(); // function bar()
+		PHPFunctionDef function4 = (PHPFunctionDef)extractor.getNextFunction(); // <foobar/bar.php>
+		
 		assertEquals(4, function.getChildCount());
 		assertEquals(1, function2.getChildCount());
 		assertEquals(4, function3.getChildCount());
 		assertEquals(1, function4.getChildCount());
 		
 		assertEquals(0, function.getContent().getChildCount());
-		assertEquals(1, function2.getContent().getChildCount());
+		// Note: the top-level function <foobar/foo.php> does not have any children,
+		// since the only statement in it - the function declaration of function foo() -
+		// is ignored within the top-level function, as foo() gets its own AST and analysis.
+		assertEquals(0, function2.getContent().getChildCount());
 		assertEquals(0, function3.getContent().getChildCount());
-		assertEquals(1, function4.getContent().getChildCount());
+		// Note: the top-level function <foobar/bar.php> does not have any children,
+		// since the only statement in it - the function declaration of function bar() -
+		// is ignored within the top-level function, as foo() gets its own AST and analysis.
+		assertEquals(0, function4.getContent().getChildCount());
 	}
 	
 	/**

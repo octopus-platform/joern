@@ -1,5 +1,6 @@
 package tests.languages.php.udgCreation;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -8,60 +9,59 @@ import java.util.List;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.ASTNodeProperties;
+import ast.functionDef.FunctionDef;
 import cfg.CFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import languages.php.cfg.PHPCFGFactory;
-import tests.languages.php.PHPCSVBasedTest;
-import tests.languages.php.samples.CSVASTUDGSamples;
-import udg.CFGToUDGConverter;
+import tests.languages.php.PHPCSVFunctionConverterBasedTest;
+import tests.languages.php.samples.CSVASTUDGAndDDGSamples;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
 
-public class PHPUDGCreatorTest extends PHPCSVBasedTest {
-
+public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
+	
 	/**
-	 * Creates an AST for two given CSV strings (nodes and edges), and
-	 * returns the AST node with the lowest id.
+	 * Helper method that does the conversions
+	 * o AST -> CFG
+	 * o CFG -> UDG
+	 * for a given AST node.
 	 */
-	protected ASTNode getASTForCSVLines(String nodeLines, String edgeLines)
-			throws IOException, InvalidCSVFile
-	{
-		handle(nodeLines, edgeLines);
-
-		return ast.getNodeWithLowestId();
+	private UseDefGraph getUDGForASTNode(ASTNode rootnode) throws IOException, InvalidCSVFile {
+		
+		CFG cfg = getCFGForAST(rootnode);
+		UseDefGraph udg = getUDGForCFG(cfg);
+		
+		System.out.println();
+		System.out.println("CFG\n~~~");
+		System.out.println(cfg);
+	
+		System.out.println("UDG\n~~~");
+		for( String symbol : udg.keySet())
+			System.out.println( symbol + ": " + udg.getUsesAndDefsForSymbol(symbol));
+		System.out.println();
+		
+		return udg;
 	}
 	
 	/**
-	 * Creates and returns a CFG for an AST given as two CSV strings (nodes and edges).
+	 * Creates an AST for two given CSV files and computes a UDG.
 	 */
-	protected CFG getCFGForCSVLines(String nodeLines, String edgeLines)
+	private UseDefGraph getUDGForCSVLines(String nodeLines, String edgeLines)
 			throws IOException, InvalidCSVFile
 	{
 		ASTNode rootnode = getASTForCSVLines(nodeLines, edgeLines);
-
-		// This is a bit clumsy: to ensure that the structured flow visitor
-		// is initialized correctly, we need to create a PHPCFGFactory
-		// object despite the fact that we're only using the factory's static
-		// methods.
-
-		PHPCFGFactory phpcfgFactory = new PHPCFGFactory();
-		return PHPCFGFactory.convert(rootnode);
+		return getUDGForASTNode(rootnode);		
 	}
 	
 	/**
-	 * Creates and returns a UDG for a given CFG created from two CSV strings (nodes and edges).
+	 * Obtains a function AST from the function extractor and computes a UDG.
 	 */
-	protected UseDefGraph getUDGForCSVLines(String nodeLines, String edgeLines)
+	private UseDefGraph getUDGForNextFunction()
 			throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(nodeLines, edgeLines);
-
-		System.out.println(cfg);
-		
-		CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
-		cfgToUDG.setLanguage("PHP");
-		
-		return cfgToUDG.convert(cfg);
+		FunctionDef rootnode = getASTOfNextFunction();
+		// TODO actually, we want rootnode instead of rootnode.getContent() !
+		return getUDGForASTNode(rootnode.getContent());
 	}
 
 	private boolean containsDef( UseDefGraph udg, String symbol, long id) {
@@ -81,11 +81,39 @@ public class PHPUDGCreatorTest extends PHPCSVBasedTest {
 		List<UseOrDefRecord> useOrDefRecords = udg.getUsesAndDefsForSymbol(symbol);
 		
 		for( UseOrDefRecord useOrDefRecord : useOrDefRecords) {
-			if( useOrDefRecord.getAstNode().equals( ast.getNodeById(id))
+			if( useOrDefRecord.getAstNode().getProperty(ASTNodeProperties.NODE_ID).equals( String.valueOf(id))
 					&&  useOrDefRecord.isDef() == isDef)
 				return true;
 		}
 		return false;
+	}
+	
+	private int numberOfDefsForSymbol( UseDefGraph udg, String symbol) {
+		
+		return numberOfDefsOrUsesForSymbol( udg, symbol,  true);
+	}
+	
+	private int numberOfUsesForSymbol( UseDefGraph udg, String symbol) {
+		
+		return numberOfDefsOrUsesForSymbol( udg, symbol, false);
+	}
+	
+	/**
+	 * Checks whether a collection of UseOrDef elements contains an expected number
+	 * of definitions/uses of a given symbol.
+	 */
+	private int numberOfDefsOrUsesForSymbol( UseDefGraph udg, String symbol, boolean isDef) {
+		
+		List<UseOrDefRecord> useOrDefRecords = udg.getUsesAndDefsForSymbol(symbol);
+		
+		int number = 0;
+		
+		for( UseOrDefRecord useOrDefRecord : useOrDefRecords) {
+			if( useOrDefRecord.isDef() == isDef)
+				number++;
+		}
+		
+		return number;
 	}
 	
 	
@@ -101,14 +129,12 @@ public class PHPUDGCreatorTest extends PHPCSVBasedTest {
 	 * }
 	 */
 	@Test
-	public void testSimpleFunction() throws IOException, InvalidCSVFile
+	public void testUDGSimpleFunction() throws IOException, InvalidCSVFile
 	{
-		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGSamples.simpleFunctionNodeStr, CSVASTUDGSamples.simpleFunctionEdgeStr);
+		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGAndDDGSamples.simpleFunctionNodeStr, CSVASTUDGAndDDGSamples.simpleFunctionEdgeStr);
 
-		System.out.println("x: " + udg.getUsesAndDefsForSymbol("x"));
-		System.out.println("y: " + udg.getUsesAndDefsForSymbol("y"));
-		System.out.println("MAX: " + udg.getUsesAndDefsForSymbol("MAX"));
-
+		assertEquals( 1, numberOfDefsForSymbol( udg, "x"));
+		assertEquals( 3, numberOfUsesForSymbol( udg, "x"));
 		assertTrue( containsDef( udg, "x", 3));
 		assertTrue( containsUse( udg, "x", 12));
 		// Note: something interesting happens here. There are *two* USEs of the
@@ -119,9 +145,13 @@ public class PHPUDGCreatorTest extends PHPCSVBasedTest {
 		assertTrue( containsUse( udg, "x", 19));
 		assertTrue( containsUse( udg, "x", 22));
 
+		assertEquals( 1, numberOfDefsForSymbol( udg, "y"));
+		assertEquals( 1, numberOfUsesForSymbol( udg, "y"));
 		assertTrue( containsDef( udg, "y", 19));
 		assertTrue( containsUse( udg, "y", 26));
 		
+		assertEquals( 0, numberOfDefsForSymbol( udg, "MAX"));
+		assertEquals( 1, numberOfUsesForSymbol( udg, "MAX"));
 		assertTrue( containsUse( udg, "MAX", 12));
 	}
 	
@@ -133,46 +163,98 @@ public class PHPUDGCreatorTest extends PHPCSVBasedTest {
 	 * }
 	 */
 	@Test
-	public void testStandaloneFlag() throws IOException, InvalidCSVFile
+	public void testUDGStandaloneFlag() throws IOException, InvalidCSVFile
 	{
-		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGSamples.standaloneFlagNodeStr, CSVASTUDGSamples.standaloneFlagEdgeStr);
+		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGAndDDGSamples.standaloneFlagNodeStr, CSVASTUDGAndDDGSamples.standaloneFlagEdgeStr);
 
-		System.out.println("flag: " + udg.getUsesAndDefsForSymbol("flag"));
-		System.out.println("y: " + udg.getUsesAndDefsForSymbol("y"));
-
+		assertEquals( 1, numberOfDefsForSymbol( udg, "flag"));
+		assertEquals( 1, numberOfUsesForSymbol( udg, "flag"));
 		assertTrue( containsDef( udg, "flag", 3));
 		assertTrue( containsUse( udg, "flag", 12));
+		
+		assertEquals( 1, numberOfDefsForSymbol( udg, "y"));
+		assertEquals( 2, numberOfUsesForSymbol( udg, "y"));
 		assertTrue( containsDef( udg, "y", 15));
 		assertTrue( containsUse( udg, "y", 15));
 		assertTrue( containsUse( udg, "y", 18));
 	}
 	
 	/**
-	 * const MAX = 10;
+	 * const MAX = 10;           ( 3) ConstantDeclaration; (4) ConstantElement
 	 * 
-	 * function foo() {
-	 *   $x = source();
-	 *   if( $x < MAX) {
-	 *     $y = 2*$x;
-	 *     sink($y);
+	 * function foo() {          ( 7)
+	 *   $x = source();          (11)
+	 *   if( $x < MAX) {         (20)
+	 *     $y = 2*$x;            (27) AssignmentExpression; (30) BinaryOperationExpression
+	 *     sink($y);             (34)
 	 *   }
 	 * }
 	 * 
-	 * function source() {
-	 *   global $argv;
-	 *   return $argv[1];
+	 * function source() {       (41)
+	 *   global $argv;           (46)
+	 *   return $argv[1];        (49)
 	 * }
 	 * 
-	 * function sink($arg) {
-	 *   echo $arg, PHP_EOL;
+	 * function sink($arg) {     (55)
+	 *   echo $arg, PHP_EOL;     (64) PHPEchoStatement; (67) PHPEchoStatement
 	 * }
 	 * 
-	 * foo();
+	 * foo();                    (72)
 	 */
 	@Test
-	public void testSimpleCompleteProgram() throws IOException, InvalidCSVFile
+	public void testUDGSimpleCompleteProgram() throws IOException, InvalidCSVFile
 	{
-		UseDefGraph udg = getUDGForCSVLines(CSVASTUDGSamples.simpleCompleteProgramNodeStr, CSVASTUDGSamples.simpleCompleteProgramEdgeStr);
+		initFunctionExtractor(CSVASTUDGAndDDGSamples.simpleCompleteProgramNodeStr, CSVASTUDGAndDDGSamples.simpleCompleteProgramEdgeStr);
+		
+		// Testing UDG of foo()
+		UseDefGraph fooUDG = getUDGForNextFunction(); // gets UDG for foo()
+
+		assertEquals( 1, numberOfDefsForSymbol( fooUDG, "x"));
+		assertEquals( 3, numberOfUsesForSymbol( fooUDG, "x"));
+		assertTrue( containsDef( fooUDG, "x", 11));
+		assertTrue( containsUse( fooUDG, "x", 20));
+		// "double" use of x:
+		assertTrue( containsUse( fooUDG, "x", 27));
+		assertTrue( containsUse( fooUDG, "x", 30));
+
+		assertEquals( 1, numberOfDefsForSymbol( fooUDG, "y"));
+		assertEquals( 1, numberOfUsesForSymbol( fooUDG, "y"));
+		assertTrue( containsDef( fooUDG, "y", 27));
+		assertTrue( containsUse( fooUDG, "y", 34));
+		
+		assertEquals( 0, numberOfDefsForSymbol( fooUDG, "MAX"));
+		assertEquals( 1, numberOfUsesForSymbol( fooUDG, "MAX"));
+		assertTrue( containsUse( fooUDG, "MAX", 20));
+		
+		
+		// Testing UDG of source()
+		UseDefGraph sourceUDG = getUDGForNextFunction(); // gets UDG for source()
+
+		assertEquals( 1, numberOfDefsForSymbol( sourceUDG, "argv"));
+		assertEquals( 1, numberOfUsesForSymbol( sourceUDG, "argv"));
+		assertTrue( containsDef( sourceUDG, "argv", 46));
+		assertTrue( containsUse( sourceUDG, "argv", 49));
+		
+		
+		// Testing UDG of sink($arg)
+		UseDefGraph sinkUDG = getUDGForNextFunction(); // gets UDG for sink($arg)
+
+		assertEquals( 0, numberOfDefsForSymbol( sinkUDG, "arg")); // TODO this should actually be 1; but we are parsing only the body of the function for now
+		assertEquals( 1, numberOfUsesForSymbol( sinkUDG, "arg"));
+		assertTrue( containsUse( sinkUDG, "arg", 64));
+
+		assertEquals( 0, numberOfDefsForSymbol( sinkUDG, "PHP_EOL"));
+		assertEquals( 1, numberOfUsesForSymbol( sinkUDG, "PHP_EOL"));
+		assertTrue( containsUse( sinkUDG, "PHP_EOL", 67));
+		
+		
+		// Testing UDG of top-level function
+		UseDefGraph __topUDG = getUDGForNextFunction(); // gets UDG for artificial top-level function
+		assertEquals( 2, numberOfDefsForSymbol( __topUDG, "MAX"));
+		assertEquals( 0, numberOfUsesForSymbol( __topUDG, "MAX"));
+		// "double" definition of MAX:
+		assertTrue( containsDef( __topUDG, "MAX", 3));
+		assertTrue( containsDef( __topUDG, "MAX", 4));
 	}
 	
 }

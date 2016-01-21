@@ -1,6 +1,7 @@
 package udg.useDefGraph;
 
 import java.util.List;
+import java.util.Set;
 
 import ast.ASTNode;
 import misc.MultiHashMap;
@@ -40,5 +41,8 @@ public class UseDefGraph
 		UseOrDefRecord record = new UseOrDefRecord(astNode, isDef);
 		useOrDefRecordTable.add(identifier, record);
 	}
-
+	
+	public Set<String> keySet() {
+		return this.useOrDefRecordTable.keySet();
+	}
 }

@@ -4,7 +4,7 @@ package tests.languages.php.samples;
  * Simlarly as CSVASTSamples, this class contains some PHP AST samples in CSV format,
  * optimized for testing def/use analysis.
  */
-public class CSVASTUDGSamples extends CSVASTSamples {
+public class CSVASTUDGAndDDGSamples extends CSVASTSamples {
 
 	/*
 	 * $x = source();
@@ -156,6 +156,8 @@ public class CSVASTUDGSamples extends CSVASTSamples {
      */
 
     public static final String simpleCompleteProgramNodeStr = nodeHeader
+            + "0,File,,,,,,,\"foo.php\",\n"
+            + "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,22,\"foo.php\",\n"
             + "2,AST_STMT_LIST,,1,,0,1,,,\n"
             + "3,AST_CONST_DECL,,3,,0,1,,,\n"
             + "4,AST_CONST_ELEM,,3,,0,1,,,\n"
@@ -304,7 +306,9 @@ public class CSVASTUDGSamples extends CSVASTSamples {
             + "73,74,PARENT_OF\n"
             + "72,73,PARENT_OF\n"
             + "72,75,PARENT_OF\n"
-            + "2,72,PARENT_OF\n";
+            + "2,72,PARENT_OF\n"
+            + "1,2,PARENT_OF\n"
+            + "0,1,FILE_OF\n";
 
 
 }
