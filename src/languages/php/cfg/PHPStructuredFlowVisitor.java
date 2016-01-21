@@ -1,5 +1,7 @@
 package languages.php.cfg;
 
+import ast.functionDef.Parameter;
+import ast.functionDef.ParameterList;
 import ast.logical.statements.Label;
 import ast.php.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.DoStatement;
@@ -15,9 +17,32 @@ import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
 import cfg.CFGFactory;
 import cfg.StructuredFlowVisitor;
+import cfg.nodes.ASTNodeContainer;
+import cfg.nodes.CFGNode;
+import languages.c.cfg.CCFGFactory;
 
 
 public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
+
+	@Override
+	public void visit(ParameterList paramList)
+	{
+		returnCFG = CCFGFactory.newInstance(paramList);
+	}
+
+	@Override
+	public void visit(Parameter param)
+	{
+		returnCFG = CCFGFactory.newInstance(param);
+
+		for (CFGNode node : returnCFG.getVertices())
+		{
+			if (!(node instanceof ASTNodeContainer))
+				continue;
+			returnCFG.registerParameter(node);
+		}
+
+	}
 
 	@Override
 	public void visit(IfStatement node)

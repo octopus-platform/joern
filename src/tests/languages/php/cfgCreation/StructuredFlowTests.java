@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -82,6 +83,17 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 		edgeExists(cfg, forInit, condition);
 		edgeExists(cfg, condition, forInc);
 		edgeExists(cfg, condition, cfg.getExitNode());
+	}
+
+	@Test
+	public void testParams() throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(CSVASTSamples.paramNodeStr, CSVASTSamples.paramEdgeStr);
+
+		List<CFGNode> parameters = cfg.getParameters();
+		edgeExists(cfg, cfg.getEntryNode(), parameters.get(0));
+		edgeExists(cfg, parameters.get(0), parameters.get(1));
+		edgeExists(cfg, parameters.get(1), cfg.getExitNode());
 	}
 
 	@Test

@@ -41,12 +41,12 @@ public class CSVASTSamples {
 			+ "3,6,PARENT_OF\n"
 			+ "9,10,PARENT_OF\n"
 			+ "3,9,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * function() use ($foo,$bar) {};
 	 */
-	
+
 	public static final String closureVariableNodeStr = nodeHeader
 			+ "3,AST_CLOSURE,,3,,0,1,3,{closure},\n"
 			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
@@ -57,7 +57,7 @@ public class CSVASTSamples {
 			+ "9,string,,3,\"bar\",0,3,,,\n"
 			+ "10,AST_STMT_LIST,,3,,2,3,,,\n"
 			+ "11,NULL,,3,,3,3,,,\n";
-	
+
 	public static final String closureVariableEdgeStr = edgeHeader
 			+ "3,4,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n"
@@ -87,8 +87,8 @@ public class CSVASTSamples {
 			+ "3,6,PARENT_OF\n"
 			+ "7,8,PARENT_OF\n"
 			+ "3,7,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * $a = function() use ($foo) : int {};
 	 */
@@ -120,7 +120,7 @@ public class CSVASTSamples {
 			+ "3,6,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n";
 
-	
+
 	/*
 	 * class bar {
 	 *   function foo() : int {}
@@ -141,12 +141,12 @@ public class CSVASTSamples {
 			+ "8,11,PARENT_OF\n"
 			+ "12,13,PARENT_OF\n"
 			+ "8,12,PARENT_OF\n";
-	
+
 	 /*
 	  * $foo;
 	  * $$bar;
 	  */
-	
+
 	public static final String variableNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_VAR,,3,,0,1,,,\n"
@@ -154,19 +154,19 @@ public class CSVASTSamples {
 			+ "5,AST_VAR,,4,,1,1,,,\n"
 			+ "6,AST_VAR,,4,,0,1,,,\n"
 			+ "7,string,,4,\"bar\",0,1,,,\n";
-	
+
 	public static final String variableEdgeStr = edgeHeader
 			+ "3,4,PARENT_OF\n"
 			+ "2,3,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n"
 			+ "5,6,PARENT_OF\n"
 			+ "2,5,PARENT_OF\n";
-	
+
 	/*
 	 * FOO;
 	 * \BAR\BUZ;
 	 */
-	
+
 	public static final String constantNodeStr = nodeHeader
 			+ "3,AST_CONST,,3,,0,1,,,\n"
 			+ "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
@@ -180,13 +180,13 @@ public class CSVASTSamples {
 			+ "3,4,PARENT_OF\n"
 			+ "7,8,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * empty($foo);
 	 * empty(bar());
 	 */
-	
+
 	public static final String emptyNodeStr = nodeHeader
 			+ "3,AST_EMPTY,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -195,8 +195,8 @@ public class CSVASTSamples {
 			+ "7,AST_CALL,,4,,0,1,,,\n"
 			+ "8,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
 			+ "9,string,,4,\"bar\",0,1,,,\n"
-			+ "10,AST_ARG_LIST,,4,,1,1,,,\n";	
-	
+			+ "10,AST_ARG_LIST,,4,,1,1,,,\n";
+
 	public static final String emptyEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
@@ -204,13 +204,13 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "7,10,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * isset($foo);
 	 * isset($bar->buz);
 	 */
-	
+
 	public static final String issetNodeStr = nodeHeader
 			+ "3,AST_ISSET,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -228,8 +228,8 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "7,10,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * $output = `cat /var/www/html/.htpasswd`;
 	 * $output2 = `$attackerinput`;
@@ -260,8 +260,8 @@ public class CSVASTSamples {
 			+ "12,13,PARENT_OF\n"
 			+ "11,12,PARENT_OF\n"
 			+ "8,11,PARENT_OF\n";
-			
-	
+
+
 	/*
 	 * clone($foo);
 	 * clone(bar());
@@ -284,7 +284,7 @@ public class CSVASTSamples {
 			+ "7,10,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
 
-	
+
 	/*
 	 * exit($foo);
 	 * exit(bar());
@@ -307,8 +307,8 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "7,10,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
-			
-	
+
+
 	/*
 	 * print($foo);
 	 * print(bar());
@@ -331,8 +331,8 @@ public class CSVASTSamples {
 			+ "7,8,PARENT_OF\n"
 			+ "7,10,PARENT_OF\n"
 			+ "6,7,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * include 'foo.php';
 	 * include_once $userinput;
@@ -340,7 +340,7 @@ public class CSVASTSamples {
 	 * require_once "http://".$userinput."bar.php";
 	 * eval("{$evilinput}");
 	 */
-	
+
 	public static final String includeOrEvalNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_INCLUDE_OR_EVAL,EXEC_INCLUDE,3,,0,1,,,\n"
@@ -387,9 +387,9 @@ public class CSVASTSamples {
 			+ "21,22,PARENT_OF\n"
 			+ "20,21,PARENT_OF\n"
 			+ "2,20,PARENT_OF\n";
-	
-	
-	
+
+
+
 	/*
  	 * ++$i;
 	 */
@@ -397,7 +397,7 @@ public class CSVASTSamples {
 			+ "3,AST_PRE_INC,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
 			+ "5,string,,3,\"i\",0,1,,,\n";
-	
+
 	public static final String preIncEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n";
@@ -406,26 +406,26 @@ public class CSVASTSamples {
 	/*
 	 * --$i;
 	 */
-	
+
 	public static final String preDecNodeStr = nodeHeader
 			+ "3,AST_PRE_DEC,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
 			+ "5,string,,3,\"i\",0,1,,,\n";
-	
+
 	public static final String preDecEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * $i++;
 	 */
-	
+
 	public static final String postIncNodeStr = nodeHeader
 			+ "3,AST_POST_INC,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
 			+ "5,string,,3,\"i\",0,1,,,\n";
-	
+
 	public static final String postIncEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n";
@@ -434,17 +434,17 @@ public class CSVASTSamples {
 	/*
 	 * $i--;
 	 */
-	
+
 	public static final String postDecNodeStr = nodeHeader
 			+ "3,AST_POST_DEC,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
 			+ "5,string,,3,\"i\",0,1,,,\n";
-	
+
 	public static final String postDecEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n";
 
-	
+
 	/*
 	 * function foo() {
 	 *   global $bar, $buz;
@@ -477,12 +477,12 @@ public class CSVASTSamples {
 			+ "6,7,PARENT_OF\n"
 			+ "3,6,PARENT_OF\n"
 			+ "3,14,PARENT_OF\n";
-	
+
 
 	/*
 	 * unset($foo,$bar->buz,$qux[42]);
 	 */
-	
+
 	public static final String unsetNodeStr = nodeHeader
 			+ "3,AST_STMT_LIST,,3,,0,1,,,\n"
 			+ "4,AST_UNSET,,3,,0,1,,,\n"
@@ -513,13 +513,13 @@ public class CSVASTSamples {
 			+ "13,16,PARENT_OF\n"
 			+ "12,13,PARENT_OF\n"
 			+ "3,12,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * $foo->bar;
 	 * buz()->$qux;
 	 */
-	
+
 	public static final String propertyNodeStr = nodeHeader
 			+ "3,AST_PROP,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -532,7 +532,7 @@ public class CSVASTSamples {
 			+ "11,AST_ARG_LIST,,4,,1,1,,,\n"
 			+ "12,AST_VAR,,4,,1,1,,,\n"
 			+ "13,string,,4,\"qux\",0,1,,,\n";
-	
+
 	public static final String propertyEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
@@ -544,13 +544,13 @@ public class CSVASTSamples {
 			+ "12,13,PARENT_OF\n"
 			+ "7,12,PARENT_OF\n";
 
-	
+
 	/*
 	 * Foo::$bar;
 	 * $foo::$bar;
 	 * buz()::$$qux;
 	 */
-	
+
 	public static final String staticPropertyNodeStr = nodeHeader
 			+ "2,AST_STMT_LIST,,1,,0,1,,,\n"
 			+ "3,AST_STATIC_PROP,,3,,0,1,,,\n"
@@ -568,7 +568,7 @@ public class CSVASTSamples {
 			+ "15,AST_ARG_LIST,,5,,1,1,,,\n"
 			+ "16,AST_VAR,,5,,1,1,,,\n"
 			+ "17,string,,5,\"qux\",0,1,,,\n";
-	
+
 	public static final String staticPropertyEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
@@ -585,8 +585,8 @@ public class CSVASTSamples {
 			+ "16,17,PARENT_OF\n"
 			+ "11,16,PARENT_OF\n"
 			+ "2,11,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * foo($bar, "yabadabadoo");
 	 * $buz(1);
@@ -617,8 +617,8 @@ public class CSVASTSamples {
 			+ "10,11,PARENT_OF\n"
 			+ "13,14,PARENT_OF\n"
 			+ "10,13,PARENT_OF\n";
-			
-	
+
+
 	/*
 	 * Foo::BAR;
 	 * $foo::BAR;
@@ -640,7 +640,7 @@ public class CSVASTSamples {
 			+ "14,string,,5,\"buz\",0,1,,,\n"
 			+ "15,AST_ARG_LIST,,5,,1,1,,,\n"
 			+ "16,string,,5,\"QUX\",1,1,,,\n";
-	
+
 	public static final String classConstantEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
@@ -653,14 +653,14 @@ public class CSVASTSamples {
 			+ "12,15,PARENT_OF\n"
 			+ "11,12,PARENT_OF\n"
 			+ "11,16,PARENT_OF\n";
-		
-	
+
+
 	/*
 	 * $foo += 42;
 	 * $bar .= "bonjour";
 	 * $buz ^= $onetimepad;
 	 */
-	
+
 	public static final String assignWithOpNodeStr = nodeHeader
 			+ "3,AST_ASSIGN_OP,ASSIGN_ADD,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -675,7 +675,7 @@ public class CSVASTSamples {
 			+ "13,string,,5,\"buz\",0,1,,,\n"
 			+ "14,AST_VAR,,5,,1,1,,,\n"
 			+ "15,string,,5,\"onetimepad\",0,1,,,\n";
-	
+
 	public static final String assignWithOpEdgeStr = edgeHeader
 			+ "4,5,PARENT_OF\n"
 			+ "3,4,PARENT_OF\n"
@@ -687,13 +687,13 @@ public class CSVASTSamples {
 			+ "11,12,PARENT_OF\n"
 			+ "14,15,PARENT_OF\n"
 			+ "11,14,PARENT_OF\n";
-			
-	
+
+
 	/*
 	 * new Foo($bar);
 	 * new $buz();
 	 */
-	
+
 	public static final String newNodeStr = nodeHeader
 			+ "3,AST_NEW,,3,,0,1,,,\n"
 			+ "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
@@ -715,8 +715,8 @@ public class CSVASTSamples {
 			+ "10,11,PARENT_OF\n"
 			+ "9,10,PARENT_OF\n"
 			+ "9,12,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * while($foo) {}
 	 * while(true) {}
@@ -815,7 +815,7 @@ public class CSVASTSamples {
 			+ "20,21,PARENT_OF\n"
 			+ "20,23,PARENT_OF\n"
 			+ "18,20,PARENT_OF\n";
-	
+
 	/*
 	 * switch ($i) {
 	 *   case "foo":
@@ -878,8 +878,8 @@ public class CSVASTSamples {
 			+ "20,22,PARENT_OF\n"
 			+ "6,20,PARENT_OF\n"
 			+ "3,6,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * $buz->foo($bar, "yabadabadoo");
 	 * buz()->$foo($bar, "yabadabadoo");
@@ -924,7 +924,7 @@ public class CSVASTSamples {
 			+ "18,19,PARENT_OF\n"
 			+ "18,21,PARENT_OF\n"
 			+ "11,18,PARENT_OF\n";
-	
+
 
 	/*
 	 * Foo::bar($buz);
@@ -965,15 +965,15 @@ public class CSVASTSamples {
 			+ "10,13,PARENT_OF\n"
 			+ "10,17,PARENT_OF\n"
 			+ "2,10,PARENT_OF\n";
-			
-	
+
+
 	/*
 	 * try {}
 	 * catch(FooException $f) {}
 	 * catch(BarException $b) {}
 	 * finally {}
 	 */
-	
+
 	public static final String catchNodeStr = CSVASTSamples.nodeHeader
 			+ "3,AST_TRY,,3,,0,1,,,\n"
 			+ "4,AST_STMT_LIST,,3,,0,1,,,\n"
@@ -1005,7 +1005,7 @@ public class CSVASTSamples {
 			+ "3,5,PARENT_OF\n"
 			+ "3,16,PARENT_OF\n";
 
-	
+
 	/*
 	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
 	 */
@@ -1059,12 +1059,12 @@ public class CSVASTSamples {
 			+ "3,18,PARENT_OF\n"
 			+ "3,25,PARENT_OF\n";
 
-	
+
 	/*
 	 * foreach ($somearray as $foo) {}
 	 * foreach (somecall() as $bar => $foo) {}
 	 */
-	 
+
 	public static final String forEachNodeStr = CSVASTSamples.nodeHeader
 			+ "3,AST_FOREACH,,3,,0,1,,,\n"
 			+ "4,AST_VAR,,3,,0,1,,,\n"
@@ -1100,8 +1100,8 @@ public class CSVASTSamples {
 			+ "17,18,PARENT_OF\n"
 			+ "10,17,PARENT_OF\n"
 			+ "10,19,PARENT_OF\n";
-	
-	
+
+
 	/*
 	 * if($foo) {}
 	 * elseif($bar) {}
@@ -1143,5 +1143,35 @@ public class CSVASTSamples {
 			+ "16,17,PARENT_OF\n"
 			+ "16,18,PARENT_OF\n"
 			+ "3,16,PARENT_OF\n";
+
+	/*
+		function foo(int $bar = 3, string $buz = "yabadabadoo") {}
+	*/
+
+	public static final String paramNodeStr = nodeHeader
+			+ "4,AST_PARAM_LIST,,3,,0,3,,,\n"
+			+ "5,AST_PARAM,,3,,0,3,,,\n"
+			+ "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n"
+			+ "7,string,,3,\"int\",0,3,,,\n"
+			+ "8,string,,3,\"bar\",1,3,,,\n"
+			+ "9,integer,,3,3,2,3,,,\n"
+			+ "10,AST_PARAM,,3,,1,3,,,\n"
+			+ "11,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n"
+			+ "12,string,,3,\"string\",0,3,,,\n"
+			+ "13,string,,3,\"buz\",1,3,,,\n"
+			+ "14,string,,3,\"yabadabadoo\",2,3,,,\n";
+
+	public static final String paramEdgeStr = edgeHeader
+			+ "6,7,PARENT_OF\n"
+			+ "5,6,PARENT_OF\n"
+			+ "5,8,PARENT_OF\n"
+			+ "5,9,PARENT_OF\n"
+			+ "4,5,PARENT_OF\n"
+			+ "11,12,PARENT_OF\n"
+			+ "10,11,PARENT_OF\n"
+			+ "10,13,PARENT_OF\n"
+			+ "10,14,PARENT_OF\n"
+			+ "4,10,PARENT_OF\n";
+
 
 }
