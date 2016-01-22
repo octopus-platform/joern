@@ -15,8 +15,8 @@ import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
-import tools.phpast2cfg.PHPCSVEdgeTypes;
-import tools.phpast2cfg.PHPCSVNodeTypes;
+import tools.php.ast2cfgddg.PHPCSVEdgeTypes;
+import tools.php.ast2cfgddg.PHPCSVNodeTypes;
 
 public class CSVFunctionExtractor
 {

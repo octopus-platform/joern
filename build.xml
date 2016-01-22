@@ -116,12 +116,12 @@
     </jar>
   </target>
 
-  <target name="phpast2cfg" depends="compile">
-    <jar destfile="${build.dir}/phpast2cfg.jar"
+  <target name="phpast2cfgddg" depends="compile">
+    <jar destfile="${build.dir}/phpast2cfgddg.jar"
 	 basedir="${build.dir}"
 	 includes="**/*.class">
       <manifest>
-	<attribute name="Main-Class" value="tools.phpast2cfg.Main" />
+	<attribute name="Main-Class" value="tools.php.ast2cfgddg.Main" />
       </manifest>
     <fileset dir="${build.dir}" includes="**/*.class" />
     <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />

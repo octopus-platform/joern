@@ -1,4 +1,4 @@
-package tools.phpast2cfg;
+package tools.php.ast2cfgddg;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,41 +6,59 @@ import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 
 import ast.functionDef.FunctionDef;
-import ast.php.functionDef.PHPFunctionDef;
 import cfg.CFG;
+import ddg.CFGAndUDGToDefUseCFG;
+import ddg.DDGCreator;
+import ddg.DataDependenceGraph.DDG;
+import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import inputModules.csv.csv2ast.CSV2AST;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import languages.php.cfg.PHPCFGFactory;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
 import outputModules.csv.exporters.CSVCFGExporter;
+import outputModules.csv.exporters.CSVDDGExporter;
+import udg.CFGToUDGConverter;
+import udg.useDefGraph.UseDefGraph;
 
 public class Main
 {
+	// command line interface
 	static CommandLineInterface cmdLine = new CommandLineInterface();
-	static CSV2AST csv2astConverter = new CSV2AST();
+	
+	// converters
+	static CSVFunctionExtractor extractor = new CSVFunctionExtractor();
 	static PHPCFGFactory cfgFactory = new PHPCFGFactory();
+	static CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
+	static CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
+	static DDGCreator ddgCreator = new DDGCreator();
 
+	// exporters
 	static CSVCFGExporter csvCFGExporter = new CSVCFGExporter();
+	static CSVDDGExporter csvDDGExporter = new CSVDDGExporter();
 
 	public static void main(String[] args) throws InvalidCSVFile, IOException
 	{
-		CSVWriterImpl csvWriter = new CSVWriterImpl();
-		csvWriter.openEdgeFile(".", "cfg_edges.csv");
-		Writer.setWriterImpl( csvWriter);
-
+		// parse command line
 		parseCommandLine(args);
 
+		// initialize readers
 		String nodeFilename = cmdLine.getNodeFile();
 		String edgeFilename = cmdLine.getEdgeFile();
 		FileReader nodeFileReader = new FileReader(nodeFilename);
 		FileReader edgeFileReader = new FileReader(edgeFilename);
-
-		CSVFunctionExtractor extractor = new CSVFunctionExtractor();
+		
+		// initialize converters
 		extractor.setLanguage("PHP");
 		extractor.initialize(nodeFileReader, edgeFileReader);
+		cfgToUDG.setLanguage("PHP");
+		
+		// initialize writers
+		CSVWriterImpl csvWriter = new CSVWriterImpl();
+		csvWriter.openEdgeFile( ".", "cfg_ddg_edges.csv");
+		Writer.setWriterImpl( csvWriter);
 
+		// let's go...
 		FunctionDef rootnode;
 		while ((rootnode = extractor.getNextFunction()) != null)
 		{
@@ -48,10 +66,13 @@ public class Main
 			// CFG factory. Rather, it would be cleaner to pass rootnode itself.
 			// However, if we do this, currently the CFG factory does not return
 			// meaningful results.
-			CFG cfg = cfgFactory.convert(rootnode.getContent());
+			CFG cfg = PHPCFGFactory.convert(rootnode.getContent());
 			csvCFGExporter.writeCFGEdges(cfg);
 
-		
+			UseDefGraph udg = cfgToUDG.convert(cfg);
+			DefUseCFG defUseCFG = udgAndCfgToDefUseCFG.convert(cfg, udg);
+			DDG ddg = ddgCreator.createForDefUseCFG(defUseCFG);
+			csvDDGExporter.writeDDGEdges(ddg);
 		}
 		
 		csvWriter.closeEdgeFile();

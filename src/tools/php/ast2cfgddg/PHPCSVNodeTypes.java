@@ -1,4 +1,4 @@
-package tools.phpast2cfg;
+package tools.php.ast2cfgddg;
 
 import java.util.Arrays;
 import java.util.List;

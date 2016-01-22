@@ -1,0 +1,41 @@
+# How to take a bunch of PHP files, calculate ASTs, CFGs and DDGs
+# and get them into a Neo4J database.
+#################################################################
+
+# Let
+# $PHPJOERN = the directory of your phpjoern parser installation
+# $PHPINPUT = the file/directory of the PHP code you wish to analyze
+# $JEXP_HOME = the directory of your batch-import installation
+
+# Generate node and edge files using phpjoern parser.
+
+$PHPJOERN/parser -n nodes_joern.csv -r edges_joern.csv $PHPINPUT
+
+# It's a bit clumsy, but we have to generate the very same files
+# once more, in a different format. This is because Joern can only
+# read CSV files in the neo4j-import format, but only write CSV files
+# in the jexp format. For importing into a Neo4J database, we need the
+# jexp format, as the Gremlin plugin for Neo4J only works up to Neo4J
+# 2.1 (i.e., we must use a Neo4J version <= 2.1), but the neo4j-import
+# tool works only from Neo4J 2.2 onwards. *sigh*
+# (Note: This is also temporary. In time, we can teach Joern to read
+# the jexp format, or to write out the neo4j-import format. Or maybe
+# yet, we'll use another input/output format altogether because we'll
+# switch from Neo4J to OrientDB or some other graph db... we'll see.)
+# These two files will be used as input for Neo4J.
+
+$PHPJOERN/parser -f jexp -n nodes.csv -r edges.csv $PHPINPUT
+
+# Use Joern to generate CFG and DDG edges and export them
+
+ant phpast2cfgddg
+java -jar bin/phpast2cfgddg.jar nodes_joern.csv edges_joern.csv
+
+# Joern generates the file cfg_ddg_edges.csv in the current
+# directory. We thus now have one nodes file and two edges files,
+# and we can import them into a Neo4J database.
+
+java -classpath "$JEXP_HOME/lib/*" -Dfile.encoding=UTF-8 org.neo4j.batchimport.Importer $PHPJOERN/conf/batch.properties graph.db nodes.csv edges.csv,cfg_ddg_edges.csv
+
+# Point your Neo4J installation to the database you just created,
+# start the server, and rejoice! :-)

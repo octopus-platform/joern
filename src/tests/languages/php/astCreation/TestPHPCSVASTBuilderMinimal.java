@@ -46,8 +46,8 @@ import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
-import tools.phpast2cfg.PHPCSVEdgeInterpreter;
-import tools.phpast2cfg.PHPCSVNodeInterpreter;
+import tools.php.ast2cfgddg.PHPCSVEdgeInterpreter;
+import tools.php.ast2cfgddg.PHPCSVNodeInterpreter;
 
 /**
  * This class implements some tests similar to those in TestPHPCSVASTBuilder,

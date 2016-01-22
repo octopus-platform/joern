@@ -120,7 +120,7 @@ import ast.statements.jump.ThrowStatement;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVBasedTest;
 import tests.languages.php.samples.CSVASTSamples;
-import tools.phpast2cfg.PHPCSVNodeTypes;
+import tools.php.ast2cfgddg.PHPCSVNodeTypes;
 
 /*
  * TODO: We should move all node and edge strings into the class CSVASTSamples.

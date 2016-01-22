@@ -1,4 +1,4 @@
-package tools.phpast2cfg;
+package tools.php.ast2cfgddg;
 
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;

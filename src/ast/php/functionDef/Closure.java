@@ -2,7 +2,7 @@ package ast.php.functionDef;
 
 import java.util.Iterator;
 
-import tools.phpast2cfg.PHPCSVNodeTypes;
+import tools.php.ast2cfgddg.PHPCSVNodeTypes;
 
 public class Closure extends PHPFunctionDef
 {
