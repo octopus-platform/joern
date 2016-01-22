@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
+import ast.functionDef.FunctionDef;
 import ast.php.functionDef.PHPFunctionDef;
 import cfg.CFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -13,6 +14,7 @@ import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import languages.php.cfg.PHPCFGFactory;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
+import outputModules.csv.exporters.CSVCFGExporter;
 
 public class Main
 {
@@ -20,9 +22,13 @@ public class Main
 	static CSV2AST csv2astConverter = new CSV2AST();
 	static PHPCFGFactory cfgFactory = new PHPCFGFactory();
 
+	static CSVCFGExporter csvCFGExporter = new CSVCFGExporter();
+
 	public static void main(String[] args) throws InvalidCSVFile, IOException
 	{
-		Writer.setWriterImpl(new CSVWriterImpl());
+		CSVWriterImpl csvWriter = new CSVWriterImpl();
+		csvWriter.openEdgeFile(".", "cfg_edges.csv");
+		Writer.setWriterImpl( csvWriter);
 
 		parseCommandLine(args);
 
@@ -35,12 +41,20 @@ public class Main
 		extractor.setLanguage("PHP");
 		extractor.initialize(nodeFileReader, edgeFileReader);
 
-		PHPFunctionDef funcAST;
-		while ((funcAST = (PHPFunctionDef)extractor.getNextFunction()) != null)
+		FunctionDef rootnode;
+		while ((rootnode = extractor.getNextFunction()) != null)
 		{
-			CFG cfg = cfgFactory.newInstance(funcAST);
-			System.out.println(cfg);
+			// TODO: it is weird that we should pass rootnode.getContent() to the
+			// CFG factory. Rather, it would be cleaner to pass rootnode itself.
+			// However, if we do this, currently the CFG factory does not return
+			// meaningful results.
+			CFG cfg = cfgFactory.convert(rootnode.getContent());
+			csvCFGExporter.writeCFGEdges(cfg);
+
+		
 		}
+		
+		csvWriter.closeEdgeFile();
 	}
 
 	private static void parseCommandLine(String[] args)

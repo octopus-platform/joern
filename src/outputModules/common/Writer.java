@@ -18,9 +18,14 @@ public class Writer
 		objectToId.clear();
 	}
 
-	static public Long getIdForObject(Object o)
+	public static Long getIdForObject(Object o)
 	{
 		return objectToId.get(o);
+	}
+	
+	public static void setIdForObject(Object o, Long l)
+	{
+		objectToId.put(o, l);
 	}
 
 	public static void changeOutputDir(String dirNameForFileNode)

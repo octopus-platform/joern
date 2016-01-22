@@ -92,9 +92,14 @@ public class CSVWriterImpl implements WriterImpl
 		edgeWriter.println(joined);
 	}
 
-	private void openEdgeFile(String outDir)
+	public void openEdgeFile(String outDir)
 	{
-		String path = outDir + File.separator + "edges.csv";
+		openEdgeFile(outDir, "edges.csv");
+	}
+	
+	public void openEdgeFile(String outDir, String fileName)
+	{
+		String path = outDir + File.separator + fileName;
 		edgeWriter = createWriter(path);
 		writeEdgePropertyNames();
 	}
@@ -116,7 +121,7 @@ public class CSVWriterImpl implements WriterImpl
 			nodeWriter.close();
 	}
 
-	private void closeEdgeFile()
+	public void closeEdgeFile()
 	{
 		if (edgeWriter != null)
 			edgeWriter.close();

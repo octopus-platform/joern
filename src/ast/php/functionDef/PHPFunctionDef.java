@@ -43,7 +43,10 @@ public class PHPFunctionDef extends FunctionDef
 	@Override
 	public String getFunctionSignature()
 	{
-		String retval = "function " + getName();
+		String retval = "";
+		if( getProperty(PHPCSVNodeTypes.FLAGS.getName()).contains(PHPCSVNodeTypes.FLAG_RETURNS_REF))
+			retval += "&";
+		retval += "function " + getName();
 		retval += getParamListString();
 		retval += getReturnTypeString();
 		return retval;

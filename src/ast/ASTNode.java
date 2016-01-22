@@ -179,6 +179,18 @@ public class ASTNode
 		return getProperty(ASTNodeProperties.CODE);
 	}
 
+	public Long getNodeId() {
+		Long id;
+		try {
+			id = Long.parseLong(getProperty(ASTNodeProperties.NODE_ID));
+		}
+		catch(NumberFormatException e) {
+			id = -1l;
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 	public void setLocation(CodeLocation loc)
 	{
 		this.location = loc;
@@ -188,7 +200,7 @@ public class ASTNode
 	{
 		return this.getClass().getName();
 	}
-
+	
 	@Override
 	public String toString() {
 		if( null != getEscapedCodeStr() && null != getProperty(ASTNodeProperties.NODE_ID))
