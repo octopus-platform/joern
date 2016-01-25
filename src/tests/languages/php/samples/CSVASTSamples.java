@@ -1173,5 +1173,45 @@ public class CSVASTSamples {
 			+ "10,14,PARENT_OF\n"
 			+ "4,10,PARENT_OF\n";
 
+	/*
+	<?php
+	function foo($x)
+	{
+	    return $x + 1;
+	}
+	*/
+	public static final String funcWithParamsNodeStr = CSVASTSamples.nodeHeader
+		+ "2,AST_FUNC_DECL,,2,,0,,5,foo,\n"
+		+ "3,AST_PARAM_LIST,,2,,0,2,,,\n"
+		+ "4,AST_PARAM,,2,,0,2,,,\n"
+		+ "5,NULL,,2,,0,2,,,\n"
+		+ "6,string,,2,\"x\",1,2,,,\n"
+		+ "7,NULL,,2,,2,2,,,\n"
+		+ "8,NULL,,2,,1,2,,,\n"
+		+ "9,AST_STMT_LIST,,3,,2,2,,,\n"
+		+ "10,AST_RETURN,,4,,0,2,,,\n"
+		+ "11,AST_BINARY_OP,BINARY_ADD,4,,0,2,,,\n"
+		+ "12,AST_VAR,,4,,0,2,,,\n"
+		+ "13,string,,4,\"x\",0,2,,,\n"
+		+ "14,integer,,4,1,1,2,,,\n"
+		+ "15,NULL,,2,,3,2,,,\n"
+		;
+
+	public static final String funcWithParamsEdgeStr = CSVASTSamples.edgeHeader
+		+ "4,5,PARENT_OF\n"
+		+ "4,6,PARENT_OF\n"
+		+ "4,7,PARENT_OF\n"
+		+ "3,4,PARENT_OF\n"
+		+ "2,3,PARENT_OF\n"
+		+ "2,8,PARENT_OF\n"
+		+ "12,13,PARENT_OF\n"
+		+ "11,12,PARENT_OF\n"
+		+ "11,14,PARENT_OF\n"
+		+ "10,11,PARENT_OF\n"
+		+ "9,10,PARENT_OF\n"
+		+ "2,9,PARENT_OF\n"
+		+ "2,15,PARENT_OF\n"
+		;
+
 
 }

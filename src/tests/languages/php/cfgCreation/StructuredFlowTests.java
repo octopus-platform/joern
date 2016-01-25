@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import ast.ASTNode;
+import ast.functionDef.FunctionDef;
+import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import cfg.nodes.CFGNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -95,6 +98,27 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 		edgeExists(cfg, parameters.get(0), parameters.get(1));
 		edgeExists(cfg, parameters.get(1), cfg.getExitNode());
 	}
+
+	@Test
+	public void testFuncWithParams() throws IOException, InvalidCSVFile
+	{
+
+		ASTNode anAST = getASTForCSVLines(CSVASTSamples.funcWithParamsNodeStr , CSVASTSamples.funcWithParamsEdgeStr);
+
+		ASTToCFGConverter converter = new ASTToCFGConverter();
+		converter.setLanguage("PHP");
+		CFG cfg = converter.convert((FunctionDef) anAST);
+
+		// ASTNode anAST = getASTForCSVLines(CSVASTSamples.funcWithParamsNodeStr , CSVASTSamples.funcWithParamsEdgeStr);
+		// System.out.println(anAST.getChild(3).getClass().getName());
+
+		// ParameterList
+		// NullNode
+		// CompoundStatement
+
+		System.out.println(cfg);
+	}
+
 
 	@Test
 	public void testForEach() throws IOException, InvalidCSVFile
