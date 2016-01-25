@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 
 import ast.functionDef.FunctionDef;
+import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
@@ -25,7 +26,7 @@ public class Main
 {
 	// command line interface
 	static CommandLineInterface cmdLine = new CommandLineInterface();
-	
+
 	// converters
 	static CSVFunctionExtractor extractor = new CSVFunctionExtractor();
 	static PHPCFGFactory cfgFactory = new PHPCFGFactory();
@@ -47,12 +48,15 @@ public class Main
 		String edgeFilename = cmdLine.getEdgeFile();
 		FileReader nodeFileReader = new FileReader(nodeFilename);
 		FileReader edgeFileReader = new FileReader(edgeFilename);
-		
+
 		// initialize converters
 		extractor.setLanguage("PHP");
 		extractor.initialize(nodeFileReader, edgeFileReader);
 		cfgToUDG.setLanguage("PHP");
-		
+		ASTToCFGConverter ast2cfgConverter = new ASTToCFGConverter();
+		ast2cfgConverter.setLanguage("PHP");
+
+
 		// initialize writers
 		CSVWriterImpl csvWriter = new CSVWriterImpl();
 		csvWriter.openEdgeFile( ".", "cfg_ddg_edges.csv");
@@ -62,11 +66,7 @@ public class Main
 		FunctionDef rootnode;
 		while ((rootnode = extractor.getNextFunction()) != null)
 		{
-			// TODO: it is weird that we should pass rootnode.getContent() to the
-			// CFG factory. Rather, it would be cleaner to pass rootnode itself.
-			// However, if we do this, currently the CFG factory does not return
-			// meaningful results.
-			CFG cfg = PHPCFGFactory.convert(rootnode.getContent());
+			CFG cfg = ast2cfgConverter.convert(rootnode);
 			csvCFGExporter.writeCFGEdges(cfg);
 
 			UseDefGraph udg = cfgToUDG.convert(cfg);
@@ -74,7 +74,7 @@ public class Main
 			DDG ddg = ddgCreator.createForDefUseCFG(defUseCFG);
 			csvDDGExporter.writeDDGEdges(ddg);
 		}
-		
+
 		csvWriter.closeEdgeFile();
 	}
 
