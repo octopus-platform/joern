@@ -109,14 +109,16 @@ public class StructuredFlowTests extends PHPCFGCreatorTest {
 		converter.setLanguage("PHP");
 		CFG cfg = converter.convert((FunctionDef) anAST);
 
-		// ASTNode anAST = getASTForCSVLines(CSVASTSamples.funcWithParamsNodeStr , CSVASTSamples.funcWithParamsEdgeStr);
-		// System.out.println(anAST.getChild(3).getClass().getName());
+		Object[] nodes = getNodesOfType(cfg, "ASTNodeContainer");
+		assertEquals(2, nodes.length);
 
-		// ParameterList
-		// NullNode
-		// CompoundStatement
+		CFGNode parameterNode = (CFGNode) nodes[0];
+		CFGNode returnNode = (CFGNode) nodes[1];
 
-		System.out.println(cfg);
+		edgeExists(cfg, cfg.getEntryNode(), parameterNode);
+		edgeExists(cfg, parameterNode, returnNode);
+		edgeExists(cfg, returnNode, cfg.getExitNode());
+
 	}
 
 
