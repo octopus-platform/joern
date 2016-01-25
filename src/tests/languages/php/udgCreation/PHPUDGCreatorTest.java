@@ -29,6 +29,23 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	private UseDefGraph getUDGForASTNode(ASTNode rootnode) throws IOException, InvalidCSVFile {
 		
 		CFG cfg = getCFGForAST(rootnode);
+		return transformCFGToUDG(cfg);
+	}
+	
+	/**
+	 * Helper method that does the conversions
+	 * o AST -> CFG
+	 * o CFG -> UDG
+	 * for a given FunctionDef AST node.
+	 */
+	private UseDefGraph getUDGForFunctionNode(FunctionDef rootnode) throws IOException, InvalidCSVFile {
+		
+		CFG cfg = getCFGForFunctionNode(rootnode);
+		return transformCFGToUDG(cfg);
+	}
+
+	private UseDefGraph transformCFGToUDG(CFG cfg) throws IOException, InvalidCSVFile {
+		
 		UseDefGraph udg = getUDGForCFG(cfg);
 		
 		System.out.println();
@@ -60,8 +77,7 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 			throws IOException, InvalidCSVFile
 	{
 		FunctionDef rootnode = getASTOfNextFunction();
-		// TODO actually, we want rootnode instead of rootnode.getContent() !
-		return getUDGForASTNode(rootnode.getContent());
+		return getUDGForFunctionNode(rootnode);
 	}
 
 	private boolean containsDef( UseDefGraph udg, String symbol, long id) {
@@ -195,7 +211,7 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 *   return $argv[1];        (49)
 	 * }
 	 * 
-	 * function sink($arg) {     (55)
+	 * function sink($arg) {     (55) PHPFunctionDef; (57) PHPParameter
 	 *   echo $arg, PHP_EOL;     (64) PHPEchoStatement; (67) PHPEchoStatement
 	 * }
 	 * 
@@ -239,8 +255,9 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		// Testing UDG of sink($arg)
 		UseDefGraph sinkUDG = getUDGForNextFunction(); // gets UDG for sink($arg)
 
-		assertEquals( 0, numberOfDefsForSymbol( sinkUDG, "arg")); // TODO this should actually be 1; but we are parsing only the body of the function for now
+		assertEquals( 1, numberOfDefsForSymbol( sinkUDG, "arg"));
 		assertEquals( 1, numberOfUsesForSymbol( sinkUDG, "arg"));
+		assertTrue( containsDef( sinkUDG, "arg", 57));
 		assertTrue( containsUse( sinkUDG, "arg", 64));
 
 		assertEquals( 0, numberOfDefsForSymbol( sinkUDG, "PHP_EOL"));

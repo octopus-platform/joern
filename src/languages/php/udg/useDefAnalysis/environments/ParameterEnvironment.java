@@ -3,27 +3,19 @@ package languages.php.udg.useDefAnalysis.environments;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
-import udg.useDefAnalysis.environments.UseDefEnvironment;
+import udg.useDefAnalysis.environments.EmitDefEnvironment;
 
-public class ParameterEnvironment extends UseDefEnvironment
+public class ParameterEnvironment extends EmitDefEnvironment
 {
-
-	// pass the 'code' of the parameter's second child upstream (i.e., the parameter's name)
-	@Override
-	public LinkedList<String> upstreamSymbols()
-	{	
-		// A PHPParameter has three children, and the second one is a StringExpression child
-		// whose code string contains the parameter's name.
-		String code = astProvider.getChild(1).getEscapedCodeStr();
-		symbols.add(code);
-		return symbols;
-	}
-	
-	// we add the parameter's name to the upstream symbols in upstreamSymbols(),
-	// no need to traverse any further
-	@Override
-	public boolean shouldTraverse(ASTProvider child)
+	public void addChildSymbols(LinkedList<String> childSymbols,
+			ASTProvider child)
 	{
-		return false;
+		// the second child of a parameter contains the symbol
+		int childNum = child.getChildNumber();
+		if( 1 == childNum)
+			this.defSymbols.add(child.getEscapedCodeStr());
 	}
+
+	// TODO: might be nice to emit USEs for the third child, which is the default value
+	// of the parameter
 }

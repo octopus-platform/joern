@@ -183,11 +183,17 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			// (thus, once we update to version 20, we can use an EmitDefEnvironment for CatchStatement)
 			case "CatchStatement":
 				return new CatchEnvironment();
+				
+			/* COMMENTED OUT: Actually, these will never be CFG nodes, so these
+			 * environments are useless. We use the ParameterEnvironment instead,
+			 * now that parameters are CFG nodes too.
 			case "PHPFunctionDef":
 			case "Closure":
 			case "Method":
 				return new FunctionDefEnvironment();
-				
+			*/
+			case "PHPParameter":
+				return new ParameterEnvironment();
 			
 			// "Base" environments which add symbols to be reported upstream:
 			// closure variables, variables, constants, properties, static properties and class constants
@@ -227,9 +233,6 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 				ccenv.setEmitUse(this.analyzingPredicate);
 				this.analyzingPredicate = false;
 				return ccenv;
-				
-			case "PHPParameter":
-				return new ParameterEnvironment();
 			
 			// array accesses are special in their way:
 			// for an expression $foo[$key],

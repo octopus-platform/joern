@@ -7,6 +7,7 @@ import org.junit.Before;
 
 import ast.ASTNode;
 import ast.functionDef.FunctionDef;
+import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
@@ -97,6 +98,18 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 
 		PHPCFGFactory phpcfgFactory = new PHPCFGFactory();
 		return PHPCFGFactory.convert(rootnode);
+	}
+	
+	/**
+	 * Creates and returns a CFG for a given AST function node.
+	 */
+	protected CFG getCFGForFunctionNode(FunctionDef rootnode)
+			throws IOException, InvalidCSVFile
+	{
+		ASTToCFGConverter ast2cfgConverter = new ASTToCFGConverter();
+		ast2cfgConverter.setLanguage("PHP");
+	
+		return ast2cfgConverter.convert(rootnode);
 	}
 	
 	/**

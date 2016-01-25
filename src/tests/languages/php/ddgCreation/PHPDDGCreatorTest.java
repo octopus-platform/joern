@@ -31,6 +31,25 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 			throws IOException, InvalidCSVFile
 	{
 		CFG cfg = getCFGForAST(rootnode);
+		return transformCFGtoDDG(cfg);		
+	}
+	
+	/**
+	 * Helper method that does the conversions
+	 * o AST -> CFG
+	 * o CFG -> UDG
+	 * o CFG & UDG -> DDG
+	 * for a given FunctionDef AST node.
+	 */
+	protected DDG getDDGForFunctionNode(FunctionDef rootnode)
+			throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForFunctionNode(rootnode);
+		return transformCFGtoDDG(cfg);		
+	}
+
+	private DDG transformCFGtoDDG(CFG cfg) throws IOException, InvalidCSVFile {
+		
 		UseDefGraph udg = getUDGForCFG(cfg);
 		DDG ddg = getDDGForCFGAndUDG(cfg, udg);
 		
@@ -48,7 +67,7 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 			System.out.println(ddgEdge);
 		System.out.println();
 
-		return ddg;		
+		return ddg;
 	}
 	
 	/**
@@ -68,8 +87,7 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 			throws IOException, InvalidCSVFile
 	{
 		FunctionDef rootnode = getASTOfNextFunction();
-		// TODO actually, we want rootnode instead of rootnode.getContent() !
-		return getDDGForASTNode(rootnode.getContent());
+		return getDDGForFunctionNode(rootnode);
 	}
 	
 	/**
@@ -150,7 +168,7 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 *   return $argv[1];        (49)
 	 * }
 	 * 
-	 * function sink($arg) {     (55)
+	 * function sink($arg) {     (55) PHPFunctionDef; (57) PHPParameter
 	 *   echo $arg, PHP_EOL;     (64) PHPEchoStatement; (67) PHPEchoStatement
 	 * }
 	 * 
@@ -177,8 +195,9 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		
 		// Testing DDG of sink($arg)
 		DDG sinkDDG = getDDGForNextFunction(); // gets DDG for sink($arg)
-		assertEquals( 0, sinkDDG.getDefUseEdges().size());
-		
+		assertEquals( 1, sinkDDG.getDefUseEdges().size());
+		assertTrue( edgeExists( sinkDDG, "arg", 57, 64));
+
 		
 		// Testing DDG of top-level function
 		DDG __topUDG = getDDGForNextFunction(); // gets DDG for artificial top-level function

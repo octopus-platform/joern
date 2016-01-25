@@ -14,7 +14,6 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
-import languages.php.cfg.PHPCFGFactory;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
 import outputModules.csv.exporters.CSVCFGExporter;
@@ -29,7 +28,8 @@ public class Main
 
 	// converters
 	static CSVFunctionExtractor extractor = new CSVFunctionExtractor();
-	static PHPCFGFactory cfgFactory = new PHPCFGFactory();
+	//static PHPCFGFactory cfgFactory = new PHPCFGFactory();
+	static ASTToCFGConverter ast2cfgConverter = new ASTToCFGConverter();
 	static CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
 	static CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
 	static DDGCreator ddgCreator = new DDGCreator();
@@ -52,10 +52,8 @@ public class Main
 		// initialize converters
 		extractor.setLanguage("PHP");
 		extractor.initialize(nodeFileReader, edgeFileReader);
-		cfgToUDG.setLanguage("PHP");
-		ASTToCFGConverter ast2cfgConverter = new ASTToCFGConverter();
 		ast2cfgConverter.setLanguage("PHP");
-
+		cfgToUDG.setLanguage("PHP");
 
 		// initialize writers
 		CSVWriterImpl csvWriter = new CSVWriterImpl();
