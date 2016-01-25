@@ -19,7 +19,6 @@ import cfg.CFGFactory;
 import cfg.StructuredFlowVisitor;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
-import languages.c.cfg.CCFGFactory;
 
 
 public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
@@ -27,13 +26,13 @@ public class PHPStructuredFlowVisitor extends StructuredFlowVisitor  {
 	@Override
 	public void visit(ParameterList paramList)
 	{
-		returnCFG = CCFGFactory.newInstance(paramList);
+		returnCFG = CFGFactory.newInstance(paramList);
 	}
 
 	@Override
 	public void visit(Parameter param)
 	{
-		returnCFG = CCFGFactory.newInstance(param);
+		returnCFG = CFGFactory.newInstance(param);
 
 		for (CFGNode node : returnCFG.getVertices())
 		{
