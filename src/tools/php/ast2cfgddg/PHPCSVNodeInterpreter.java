@@ -1,9 +1,5 @@
 package tools.php.ast2cfgddg;
 
-import inputModules.csv.KeyedCSV.KeyedCSVRow;
-import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import inputModules.csv.csv2ast.ASTUnderConstruction;
-import inputModules.csv.csv2ast.CSVRowInterpreter;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.NullNode;
@@ -95,8 +91,6 @@ import ast.php.statements.blockstarters.PHPTraitAdaptations;
 import ast.php.statements.blockstarters.PHPTraitAlias;
 import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
-import ast.php.statements.jump.PHPBreakStatement;
-import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
@@ -106,9 +100,15 @@ import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.BreakStatement;
+import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
+import inputModules.csv.KeyedCSV.KeyedCSVRow;
+import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
+import inputModules.csv.csv2ast.ASTUnderConstruction;
+import inputModules.csv.csv2ast.CSVRowInterpreter;
 
 public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 {
@@ -136,7 +136,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_STRING:
 				retval = handleString(row, ast);
 				break;
-		
+
 			// special nodes
 			case PHPCSVNodeTypes.TYPE_NAME:
 				retval = handleName(row, ast);
@@ -144,7 +144,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CLOSURE_VAR:
 				retval = handleClosureVar(row, ast);
 				break;
-			
+
 			// declaration nodes
 			case PHPCSVNodeTypes.TYPE_TOPLEVEL:
 				retval = handleTopLevelFunction(row, ast);
@@ -233,7 +233,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
 				retval = handleYieldFrom(row, ast);
 				break;
-			
+
 			// statements
 			case PHPCSVNodeTypes.TYPE_GLOBAL:
 				retval = handleGlobal(row, ast);
@@ -375,7 +375,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_GROUP_USE:
 				retval = handleGroupUse(row, ast);
 				break;
-				
+
 			// nodes with exactly 3 children
 			// expressions
 			case PHPCSVNodeTypes.TYPE_METHOD_CALL:
@@ -387,7 +387,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_CONDITIONAL:
 				retval = handleConditional(row, ast);
 				break;
-				
+
 			// statements
 			case PHPCSVNodeTypes.TYPE_TRY:
 				retval = handleTry(row, ast);
@@ -493,7 +493,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		return id;
 	}
 
-	
+
 	/* null nodes (leafs) */
 
 	private long handleNull(KeyedCSVRow row, ASTUnderConstruction ast)
@@ -516,8 +516,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* primary expressions (leafs) */
 
 	private long handleInteger(KeyedCSVRow row, ASTUnderConstruction ast)
@@ -542,7 +542,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleDouble(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		DoubleExpression newNode = new DoubleExpression();
@@ -565,7 +565,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleString(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		StringExpression newNode = new StringExpression();
@@ -588,10 +588,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* special nodes */
-	
+
 	private long handleName(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Identifier newNode = new Identifier();
@@ -614,7 +614,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleClosureVar(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ClosureVar newNode = new ClosureVar();
@@ -637,8 +637,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* declaration nodes */
 
 	private static long handleTopLevelFunction(KeyedCSVRow row,
@@ -704,7 +704,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private static long handleClosure(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Closure newNode = new Closure();
@@ -762,7 +762,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private static long handleClass(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPClassDef newNode = new PHPClassDef();
@@ -791,10 +791,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* nodes without children (leafs) */
-	
+
 	private long handleMagicConst(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPMagicConstant newNode = new PHPMagicConstant();
@@ -817,7 +817,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleTypeHint(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTypeHint newNode = new PHPTypeHint();
@@ -840,10 +840,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* nodes with exactly 1 child */
-	
+
 	private long handleVariable(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Variable newNode = new Variable();
@@ -866,7 +866,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleConstant(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Constant newNode = new Constant();
@@ -889,7 +889,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUnpack(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPUnpackExpression newNode = new PHPUnpackExpression();
@@ -912,7 +912,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUnaryPlus(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		UnaryPlusExpression newNode = new UnaryPlusExpression();
@@ -935,7 +935,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUnaryMinus(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		UnaryMinusExpression newNode = new UnaryMinusExpression();
@@ -958,7 +958,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleCast(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		CastExpression newNode = new CastExpression();
@@ -981,7 +981,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleEmpty(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPEmptyExpression newNode = new PHPEmptyExpression();
@@ -1004,7 +1004,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleIsset(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPIssetExpression newNode = new PHPIssetExpression();
@@ -1027,7 +1027,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleSilence(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPSilenceExpression newNode = new PHPSilenceExpression();
@@ -1050,7 +1050,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleShellExec(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPShellExecExpression newNode = new PHPShellExecExpression();
@@ -1073,7 +1073,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleClone(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPCloneExpression newNode = new PHPCloneExpression();
@@ -1096,7 +1096,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleExit(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPExitExpression newNode = new PHPExitExpression();
@@ -1119,7 +1119,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handlePrint(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPPrintExpression newNode = new PHPPrintExpression();
@@ -1142,7 +1142,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleIncludeOrEval(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPIncludeOrEvalExpression newNode = new PHPIncludeOrEvalExpression();
@@ -1165,7 +1165,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUnaryOperation(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		UnaryOperationExpression newNode = new UnaryOperationExpression();
@@ -1234,7 +1234,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handlePostInc(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PostIncOperationExpression newNode = new PostIncOperationExpression();
@@ -1280,7 +1280,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleYieldFrom(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPYieldFromExpression newNode = new PHPYieldFromExpression();
@@ -1303,7 +1303,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleGlobal(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPGlobalStatement newNode = new PHPGlobalStatement();
@@ -1326,7 +1326,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUnset(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPUnsetStatement newNode = new PHPUnsetStatement();
@@ -1349,7 +1349,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleReturn(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ReturnStatement newNode = new ReturnStatement();
@@ -1372,7 +1372,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleLabel(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		Label newNode = new Label();
@@ -1395,7 +1395,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleReference(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPReferenceExpression newNode = new PHPReferenceExpression();
@@ -1418,7 +1418,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleHaltCompiler(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPHaltCompilerStatement newNode = new PHPHaltCompilerStatement();
@@ -1441,7 +1441,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleEcho(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPEchoStatement newNode = new PHPEchoStatement();
@@ -1464,7 +1464,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleThrow(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ThrowStatement newNode = new ThrowStatement();
@@ -1487,7 +1487,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleGoto(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		GotoStatement newNode = new GotoStatement();
@@ -1510,10 +1510,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleBreak(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPBreakStatement newNode = new PHPBreakStatement();
+		BreakStatement newNode = new BreakStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1533,10 +1533,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleContinue(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPContinueStatement newNode = new PHPContinueStatement();
+		ContinueStatement newNode = new ContinueStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1556,10 +1556,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* nodes with exactly 2 children */
-	
+
 	private long handleArrayIndexing(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ArrayIndexing newNode = new ArrayIndexing();
@@ -1582,7 +1582,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleProperty(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PropertyExpression newNode = new PropertyExpression();
@@ -1605,7 +1605,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleStaticProperty(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		StaticPropertyExpression newNode = new StaticPropertyExpression();
@@ -1628,7 +1628,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleCall(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		CallExpression newNode = new CallExpression();
@@ -1651,7 +1651,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleClassConstant(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ClassConstantExpression newNode = new ClassConstantExpression();
@@ -1674,7 +1674,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleAssign(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		AssignmentExpression newNode = new AssignmentExpression();
@@ -1697,7 +1697,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleAssignByRef(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPAssignmentByRefExpression newNode = new PHPAssignmentByRefExpression();
@@ -1720,7 +1720,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleAssignWithOp(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		AssignmentWithOpExpression newNode = new AssignmentWithOpExpression();
@@ -1743,7 +1743,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleBinaryOperation(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		BinaryOperationExpression newNode = new BinaryOperationExpression();
@@ -1766,7 +1766,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleGreater(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		GreaterExpression newNode = new GreaterExpression();
@@ -1789,7 +1789,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleGreaterOrEqual(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		GreaterOrEqualExpression newNode = new GreaterOrEqualExpression();
@@ -1812,7 +1812,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleAnd(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		AndExpression newNode = new AndExpression();
@@ -1835,7 +1835,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleOr(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		OrExpression newNode = new OrExpression();
@@ -1858,7 +1858,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleArrayElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPArrayElement newNode = new PHPArrayElement();
@@ -1881,7 +1881,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleNew(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		NewExpression newNode = new NewExpression();
@@ -1904,7 +1904,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleInstanceof(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		InstanceofExpression newNode = new InstanceofExpression();
@@ -1927,7 +1927,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleYield(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPYieldExpression newNode = new PHPYieldExpression();
@@ -1950,7 +1950,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleCoalesce(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPCoalesceExpression newNode = new PHPCoalesceExpression();
@@ -1973,7 +1973,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleStaticVariable(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		StaticVariableDeclaration newNode = new StaticVariableDeclaration();
@@ -1996,7 +1996,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleWhile(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		WhileStatement newNode = new WhileStatement();
@@ -2019,7 +2019,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleDo(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		DoStatement newNode = new DoStatement();
@@ -2042,7 +2042,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleIfElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPIfElement newNode = new PHPIfElement();
@@ -2065,7 +2065,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleSwitch(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPSwitchStatement newNode = new PHPSwitchStatement();
@@ -2088,7 +2088,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleSwitchCase(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPSwitchCase newNode = new PHPSwitchCase();
@@ -2111,7 +2111,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleDeclare(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPDeclareStatement newNode = new PHPDeclareStatement();
@@ -2134,7 +2134,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handlePropertyElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PropertyElement newNode = new PropertyElement();
@@ -2157,7 +2157,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleConstantElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ConstantElement newNode = new ConstantElement();
@@ -2180,7 +2180,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUseTrait(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPUseTrait newNode = new PHPUseTrait();
@@ -2203,7 +2203,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleTraitPrecedence(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTraitPrecedence newNode = new PHPTraitPrecedence();
@@ -2226,7 +2226,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleMethodReference(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		MethodReference newNode = new MethodReference();
@@ -2249,7 +2249,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleNamespace(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		NamespaceStatement newNode = new NamespaceStatement();
@@ -2272,7 +2272,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUseElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		UseElement newNode = new UseElement();
@@ -2295,7 +2295,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleTraitAlias(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTraitAlias newNode = new PHPTraitAlias();
@@ -2318,7 +2318,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleGroupUse(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPGroupUseStatement newNode = new PHPGroupUseStatement();
@@ -2367,7 +2367,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleStaticCall(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		StaticCallExpression newNode = new StaticCallExpression();
@@ -2390,7 +2390,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleConditional(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ConditionalExpression newNode = new ConditionalExpression();
@@ -2413,7 +2413,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleTry(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		TryStatement newNode = new TryStatement();
@@ -2459,7 +2459,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleParameter(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPParameter newNode = new PHPParameter();
@@ -2482,10 +2482,10 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* nodes with exactly 4 children */
-	
+
 	private long handleFor(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ForStatement newNode = new ForStatement();
@@ -2508,7 +2508,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleForEach(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ForEachStatement newNode = new ForEachStatement();
@@ -2531,8 +2531,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
-	
+
+
 	/* nodes with an arbitrary number of children */
 
 	private long handleArgumentList(KeyedCSVRow row, ASTUnderConstruction ast)
@@ -2557,7 +2557,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPListExpression newNode = new PHPListExpression();
@@ -2580,7 +2580,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleArray(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPArrayExpression newNode = new PHPArrayExpression();
@@ -2603,7 +2603,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleEncapsList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPEncapsListExpression newNode = new PHPEncapsListExpression();
@@ -2626,7 +2626,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleExpressionList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ExpressionList newNode = new ExpressionList();
@@ -2695,7 +2695,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleSwitchList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPSwitchList newNode = new PHPSwitchList();
@@ -2718,7 +2718,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleCatchList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		CatchList newNode = new CatchList();
@@ -2741,7 +2741,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleParameterList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ParameterList newNode = new ParameterList();
@@ -2764,7 +2764,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleClosureUses(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ClosureUses newNode = new ClosureUses();
@@ -2787,7 +2787,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handlePropertyDeclaration(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PropertyDeclaration newNode = new PropertyDeclaration();
@@ -2810,7 +2810,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleConstantDeclaration(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ConstantDeclaration newNode = new ConstantDeclaration();
@@ -2833,7 +2833,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleClassConstantDeclaration(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		ClassConstantDeclaration newNode = new ClassConstantDeclaration();
@@ -2856,7 +2856,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleIdentifierList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		IdentifierList newNode = new IdentifierList();
@@ -2879,7 +2879,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleTraitAdaptations(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		PHPTraitAdaptations newNode = new PHPTraitAdaptations();
@@ -2902,7 +2902,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 		return id;
 	}
-	
+
 	private long handleUseStatement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		UseStatement newNode = new UseStatement();

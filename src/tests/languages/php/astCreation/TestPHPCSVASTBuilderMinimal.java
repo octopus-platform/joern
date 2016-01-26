@@ -32,8 +32,6 @@ import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchList;
 import ast.php.statements.blockstarters.PHPUseTrait;
-import ast.php.statements.jump.PHPBreakStatement;
-import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.blockstarters.CatchList;
@@ -41,6 +39,8 @@ import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.BreakStatement;
+import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.ReturnStatement;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
@@ -62,11 +62,11 @@ public class TestPHPCSVASTBuilderMinimal
 {
 	PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
 	PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
-	
+
 	ASTUnderConstruction ast;
 	KeyedCSVReader nodeReader;
 	KeyedCSVReader edgeReader;
-	
+
 	// See {@link http://neo4j.com/docs/stable/import-tool-header-format.html} for detailed
 	// information about the header file format
 	String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
@@ -75,17 +75,17 @@ public class TestPHPCSVASTBuilderMinimal
 	@Before
 	public void init()
 	{
-		ast = new ASTUnderConstruction();	
+		ast = new ASTUnderConstruction();
 		nodeReader = new KeyedCSVReader();
 		edgeReader = new KeyedCSVReader();
 	}
-	
+
 	private void handle(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile
 	{
 		nodeReader.init(new StringReader(nodeStr));
 		edgeReader.init(new StringReader(edgeStr));
-		
+
 		KeyedCSVRow keyedRow;
 		while ((keyedRow = nodeReader.getNextRow()) != null)
 			nodeInterpreter.handle(keyedRow, ast);
@@ -94,7 +94,7 @@ public class TestPHPCSVASTBuilderMinimal
 	}
 
 
-	/* declaration nodes */	
+	/* declaration nodes */
 
 	/**
 	 * <empty file>
@@ -108,16 +108,16 @@ public class TestPHPCSVASTBuilderMinimal
 
 		String edgeStr = edgeHeader;
 		edgeStr += "1,2,PARENT_OF\n";
-		
+
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)1);
-		
+
 		assertThat( node, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( 1, node.getChildCount());
 		assertNull( ((TopLevelFunctionDef)node).getContent());
 	}
-	
+
 	/**
 	 * function foo() {}
 	 */
@@ -136,11 +136,11 @@ public class TestPHPCSVASTBuilderMinimal
 		edgeStr += "3,5,PARENT_OF\n";
 		edgeStr += "3,6,PARENT_OF\n";
 		edgeStr += "3,7,PARENT_OF\n";
-		
+
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-		
+
 		assertThat( node, instanceOf(PHPFunctionDef.class));
 		assertEquals( 4, node.getChildCount());
 		assertNull( ((PHPFunctionDef)node).getReturnType());
@@ -168,7 +168,7 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-		
+
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( 4, node.getChildCount());
 		assertNull( ((Closure)node).getClosureUses());
@@ -199,13 +199,13 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)8);
-		
+
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( 4, node.getChildCount());
 		assertNull( ((Method)node).getContent());
 		assertNull( ((Method)node).getReturnType());
 	}
-	
+
 	/**
 	 * class foo {}
 	 */
@@ -213,13 +213,13 @@ public class TestPHPCSVASTBuilderMinimal
 	public void testMinimalClassCreation() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		
+
 		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
 		nodeStr += "4,NULL,,3,,0,1,,,\n";
 		nodeStr += "5,NULL,,3,,1,1,,,\n";
 		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
 		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
-		
+
 		String edgeStr = edgeHeader;
 		edgeStr += "3,4,PARENT_OF\n";
 		edgeStr += "3,5,PARENT_OF\n";
@@ -229,16 +229,16 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-		
+
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( 3, node.getChildCount());
 		assertNull( ((PHPClassDef)node).getExtends());
 		assertNull( ((PHPClassDef)node).getImplements());
 	}
-	
-	
+
+
 	/* nodes with exactly 1 child */
-	
+
 	/**
 	 * exit;
 	 */
@@ -260,7 +260,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 1, node.getChildCount());
 		assertNull( ((PHPExitExpression)node).getExpression());
 	}
-	
+
 	/**
 	 * function foo() {
 	 *   return;
@@ -289,12 +289,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)7);
-		
+
 		assertThat( node, instanceOf(ReturnStatement.class));
 		assertEquals( 1, node.getChildCount());
 		assertNull( ((ReturnStatement)node).getReturnExpression());
 	}
-	
+
 	/**
 	 * while (1)
 	 *   break;
@@ -316,12 +316,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-		
-		assertThat( node, instanceOf(PHPBreakStatement.class));
+
+		assertThat( node, instanceOf(BreakStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertNull( ((PHPBreakStatement)node).getDepth());
+		assertNull( ((BreakStatement)node).getDepth());
 	}
-	
+
 	/**
 	 * while (1)
 	 *   continue;
@@ -343,15 +343,15 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-		
-		assertThat( node, instanceOf(PHPContinueStatement.class));
+
+		assertThat( node, instanceOf(ContinueStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertNull( ((PHPContinueStatement)node).getDepth());
+		assertNull( ((ContinueStatement)node).getDepth());
 	}
 
 
 	/* nodes with exactly 2 children */
-	
+
 	/**
 	 * function foo() {
 	 *   yield;
@@ -382,13 +382,13 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)7);
-		
+
 		assertThat( node, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((PHPYieldExpression)node).getValue());
 		assertNull( ((PHPYieldExpression)node).getKey());
 	}
-	
+
 	/**
 	 * while($foo);
 	 * while($foo) bar();
@@ -471,7 +471,7 @@ public class TestPHPCSVASTBuilderMinimal
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)7);
-		
+
 		assertThat( node, instanceOf(DoStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((DoStatement)node).getStatement());
@@ -482,7 +482,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((DoStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)8), ((ExpressionStatement)((DoStatement)node2).getStatement()).getExpression());
 	}
-	
+
 	/**
 	 * if(true) ;
 	 * else ;
@@ -551,7 +551,7 @@ public class TestPHPCSVASTBuilderMinimal
 		ASTNode node2 = ast.getNodeById((long)9);
 		ASTNode node3 = ast.getNodeById((long)13);
 		ASTNode node4 = ast.getNodeById((long)21);
-		
+
 		assertThat( node, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((PHPIfElement)node).getStatement());
@@ -560,13 +560,13 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 2, node2.getChildCount());
 		assertNull( ((PHPIfElement)node2).getCondition());
 		assertNull( ((PHPIfElement)node2).getStatement());
-		
+
 		assertThat( node3, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertThat( ((PHPIfElement)node3).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((PHPIfElement)node3).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)17), ((ExpressionStatement)((PHPIfElement)node3).getStatement()).getExpression());
-		
+
 		assertThat( node4, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertNull( ((PHPIfElement)node4).getCondition());
@@ -574,7 +574,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((PHPIfElement)node4).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)23), ((ExpressionStatement)((PHPIfElement)node4).getStatement()).getExpression());
 	}
-	
+
 	/**
 	 * switch ($j) {
 	 *   default:
@@ -602,12 +602,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)11);
-		
+
 		assertThat( node, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((PHPSwitchCase)node).getValue());
 	}
-	
+
 	/**
 	 * class SomeClass {
 	 *   use Foo;
@@ -642,12 +642,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)8);
-		
+
 		assertThat( node, instanceOf(PHPUseTrait.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((PHPUseTrait)node).getTraitAdaptations());
 	}
-	
+
 	/**
 	 * use Foo\Bar;
 	 */
@@ -676,7 +676,7 @@ public class TestPHPCSVASTBuilderMinimal
 
 
 	/* nodes with exactly 3 children */
-	
+
 	/**
 	 * true ?: "bar";
 	 */
@@ -701,7 +701,7 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-		
+
 		assertThat( node, instanceOf(ConditionalExpression.class));
 		assertEquals( 3, node.getChildCount());
 		assertNull( ((ConditionalExpression)node).getTrueExpression());
@@ -738,12 +738,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
-		
+
 		assertThat( node, instanceOf(TryStatement.class));
 		assertEquals( 3, node.getChildCount());
 		assertNull( ((TryStatement)node).getFinallyContent());
 	}
-	
+
 	/**
 	 * function foo($bar) {}
 	 */
@@ -769,14 +769,14 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-		
+
 		assertThat( node, instanceOf(PHPParameter.class));
 		assertEquals( 3, node.getChildCount());
 		assertNull( ((PHPParameter)node).getType());
 		assertNull( ((PHPParameter)node).getDefault());
 	}
 
-	
+
 	/* nodes with exactly 4 children */
 
 	/**
@@ -838,7 +838,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((ForStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)12), ((ExpressionStatement)((ForStatement)node2).getStatement()).getExpression());
 	}
-	
+
 	/**
 	 * foreach ($somearray as $foo);
 	 * foreach ($somearray as $foo) bar();
@@ -894,7 +894,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 4, node.getChildCount());
 		assertNull( ((ForEachStatement)node).getKeyVariable());
 		assertNull( ((ForEachStatement)node).getStatement());
-		
+
 		assertThat( node2, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node2.getChildCount());
 		assertNull( ((ForEachStatement)node2).getKeyVariable());
@@ -926,17 +926,17 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
-		
+
 		assertThat( node, instanceOf(ArgumentList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((ArgumentList)node).size());
 	}
-	
+
 	/**
 	 * Fun note: The following code was perfectly valid prior to PHP 7.
 	 * Starting with PHP 7, it will throw a runtime exception.
 	 * However, it will *parse* fine in all cases.
-	 * 
+	 *
 	 * list() = array();
 	 */
 	@Test
@@ -962,7 +962,7 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 1, ((PHPListExpression)node).size());
 		assertNull( ((PHPListExpression)node).getElement(0));
 	}
-	
+
 	/**
 	 * array();
 	 */
@@ -982,14 +982,14 @@ public class TestPHPCSVASTBuilderMinimal
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((PHPArrayExpression)node).size());
 	}
-	
+
 	/**
 	 * <?php
 	 */
 	@Test
 	public void testMinimalCompoundStatementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = nodeHeader;	
+		String nodeStr = nodeHeader;
 		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
 
 		String edgeStr = edgeHeader;
@@ -997,12 +997,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)2);
-		
+
 		assertThat( node, instanceOf(CompoundStatement.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((CompoundStatement)node).getStatements().size());
 	}
-	
+
 	/**
 	 * switch ($i) {}
 	 */
@@ -1023,12 +1023,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
-		
+
 		assertThat( node, instanceOf(PHPSwitchList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((PHPSwitchList)node).size());
 	}
-	
+
 	/**
 	 * try {}
 	 * finally {}
@@ -1050,12 +1050,12 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)5);
-		
+
 		assertThat( node, instanceOf(CatchList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((CatchList)node).size());
 	}
-	
+
 	/**
 	 * function foo() {}
 	 */
@@ -1070,7 +1070,7 @@ public class TestPHPCSVASTBuilderMinimal
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)4);
-		
+
 		assertThat( node, instanceOf(ParameterList.class));
 		assertEquals( 0, node.getChildCount());
 		assertEquals( 0, ((ParameterList)node).size());

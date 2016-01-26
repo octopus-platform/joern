@@ -103,8 +103,6 @@ import ast.php.statements.blockstarters.PHPTraitAdaptations;
 import ast.php.statements.blockstarters.PHPTraitAlias;
 import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
-import ast.php.statements.jump.PHPBreakStatement;
-import ast.php.statements.jump.PHPContinueStatement;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
@@ -114,6 +112,8 @@ import ast.statements.blockstarters.ForStatement;
 import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
+import ast.statements.jump.BreakStatement;
+import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
@@ -1932,15 +1932,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)9);
 		ASTNode node2 = ast.getNodeById((long)11);
 
-		assertThat( node, instanceOf(PHPBreakStatement.class));
+		assertThat( node, instanceOf(BreakStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPBreakStatement)node).getDepth());
-		assertEquals( "2", ((PHPBreakStatement)node).getDepth().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((BreakStatement)node).getDepth());
+		assertEquals( "2", ((BreakStatement)node).getDepth().getEscapedCodeStr());
 
-		assertThat( node2, instanceOf(PHPBreakStatement.class));
+		assertThat( node2, instanceOf(BreakStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPBreakStatement)node2).getDepth());
-		assertEquals( "1", ((PHPBreakStatement)node2).getDepth().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((BreakStatement)node2).getDepth());
+		assertEquals( "1", ((BreakStatement)node2).getDepth().getEscapedCodeStr());
 	}
 
 	/**
@@ -1990,15 +1990,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)9);
 		ASTNode node2 = ast.getNodeById((long)11);
 
-		assertThat( node, instanceOf(PHPContinueStatement.class));
+		assertThat( node, instanceOf(ContinueStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPContinueStatement)node).getDepth());
-		assertEquals( "2", ((PHPContinueStatement)node).getDepth().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((ContinueStatement)node).getDepth());
+		assertEquals( "2", ((ContinueStatement)node).getDepth().getEscapedCodeStr());
 
-		assertThat( node2, instanceOf(PHPContinueStatement.class));
+		assertThat( node2, instanceOf(ContinueStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPContinueStatement)node2).getDepth());
-		assertEquals( "1", ((PHPContinueStatement)node2).getDepth().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((ContinueStatement)node2).getDepth());
+		assertEquals( "1", ((ContinueStatement)node2).getDepth().getEscapedCodeStr());
 	}
 
 
