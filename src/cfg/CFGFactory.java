@@ -1,5 +1,6 @@
 package cfg;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -523,22 +524,30 @@ public class CFGFactory
 
 	public static void fixBreakStatements(CFG thisCFG, CFGNode target)
 	{
-		for (CFGNode breakStatement : thisCFG.getBreakStatements())
-		{
-			thisCFG.removeEdgesFrom(breakStatement);
-			thisCFG.addEdge(breakStatement, target);
-		}
-		thisCFG.getBreakStatements().clear();
+		List<CFGNode> breakStatements = thisCFG.getBreakStatements();
+		Iterator<CFGNode> it = breakStatements.iterator();
+
+		fixBreakOrContinueStatements(thisCFG, target, it);
 	}
 
 	public static void fixContinueStatement(CFG thisCFG, CFGNode target)
 	{
-		for (CFGNode continueStatement : thisCFG.getContinueStatements())
+		List<CFGNode> continueStatements = thisCFG.getContinueStatements();
+		Iterator<CFGNode> it = continueStatements.iterator();
+
+		fixBreakOrContinueStatements(thisCFG, target, it);
+
+	}
+
+	private static void fixBreakOrContinueStatements(CFG thisCFG, CFGNode target, Iterator<CFGNode> it)
+	{
+		while(it.hasNext())
 		{
-			thisCFG.removeEdgesFrom(continueStatement);
-			thisCFG.addEdge(continueStatement, target);
+			CFGNode breakOrContinueNode = it.next();
+			thisCFG.removeEdgesFrom(breakOrContinueNode);
+			thisCFG.addEdge(breakOrContinueNode, target);
+			it.remove();
 		}
-		thisCFG.getContinueStatements().clear();
 	}
 
 	public static void fixGotoStatements(CFG thisCFG)
