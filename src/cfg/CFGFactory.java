@@ -9,6 +9,7 @@ import ast.ASTNode;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.functionDef.ParameterList;
+import ast.logical.statements.BreakOrContinueStatement;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.statements.blockstarters.CatchStatement;
@@ -536,7 +537,6 @@ public class CFGFactory
 		Iterator<CFGNode> it = continueStatements.iterator();
 
 		fixBreakOrContinueStatements(thisCFG, target, it);
-
 	}
 
 	private static void fixBreakOrContinueStatements(CFG thisCFG, CFGNode target, Iterator<CFGNode> it)
@@ -544,6 +544,16 @@ public class CFGFactory
 		while(it.hasNext())
 		{
 			CFGNode breakOrContinueNode = it.next();
+
+			ASTNodeContainer nodeContainer = (ASTNodeContainer) breakOrContinueNode;
+			BreakOrContinueStatement statement = (BreakOrContinueStatement) nodeContainer.getASTNode();
+
+			Integer depth = statement.getDepthAsInteger();
+			if(depth != 0 && depth != 1){
+				statement.decrementDepth();
+				continue;
+			}
+
 			thisCFG.removeEdgesFrom(breakOrContinueNode);
 			thisCFG.addEdge(breakOrContinueNode, target);
 			it.remove();

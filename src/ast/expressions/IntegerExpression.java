@@ -14,4 +14,11 @@ public class IntegerExpression extends PrimaryExpression
 		}
 	}
 
+	public void decrement()
+	{
+		Integer value = getValue();
+		value--;
+		this.setCodeStr(value.toString());
+	}
+
 }
