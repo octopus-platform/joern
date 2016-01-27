@@ -9,7 +9,6 @@ import java.util.List;
 import org.junit.Test;
 
 import ast.ASTNode;
-import ast.ASTNodeProperties;
 import ast.functionDef.FunctionDef;
 import cfg.CFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -97,7 +96,7 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		List<UseOrDefRecord> useOrDefRecords = udg.getUsesAndDefsForSymbol(symbol);
 		
 		for( UseOrDefRecord useOrDefRecord : useOrDefRecords) {
-			if( useOrDefRecord.getAstNode().getProperty(ASTNodeProperties.NODE_ID).equals( String.valueOf(id))
+			if( useOrDefRecord.getAstNode().getNodeId().equals( id)
 					&&  useOrDefRecord.isDef() == isDef)
 				return true;
 		}

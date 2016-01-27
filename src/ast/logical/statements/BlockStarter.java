@@ -2,7 +2,6 @@ package ast.logical.statements;
 
 import ast.ASTNode;
 import ast.expressions.Expression;
-import ast.statements.ExpressionStatement;
 
 public class BlockStarter extends Statement
 {
@@ -29,18 +28,6 @@ public class BlockStarter extends Statement
 	{
 		this.statement = statement;
 		super.addChild(statement);
-	}
-	
-	// Expressions can be used as statements. For instance, in the code 'if(true) foo();',
-	// - foo() is an expression
-	// - foo(); is an expression statement
-	// In this case, we need to create an ExpressionStatement that holds the given Expression.
-	public void setStatement(Expression expression)
-	{
-		ExpressionStatement expressionStatement = new ExpressionStatement();
-		expressionStatement.setExpression(expression);
-		
-		setStatement(expressionStatement);
 	}
 
 	@Override

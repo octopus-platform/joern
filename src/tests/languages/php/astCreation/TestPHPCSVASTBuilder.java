@@ -363,11 +363,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 		assertEquals( "int", ((Closure)node).getReturnType().getNameChild().getEscapedCodeStr());
 
 		// special test for the artificial ClosureExpression node:
+		
 		ASTNode node2 = ast.getNodeById((long)3);
 		assertThat( node2, instanceOf(AssignmentExpression.class));
+		
 		ASTNode node3 = ((AssignmentExpression)node2).getRight();
 		assertThat( node3, instanceOf(ClosureExpression.class));
 		assertEquals( node, ((ClosureExpression)node3).getClosure());
+		// the closure wrapper should have the same node id as the closure itself
+		assertEquals( node.getNodeId(), node3.getNodeId());
 	}
 
 	/**

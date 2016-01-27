@@ -8,7 +8,6 @@ import java.io.IOException;
 import org.junit.Test;
 
 import ast.ASTNode;
-import ast.ASTNodeProperties;
 import ast.functionDef.FunctionDef;
 import cfg.CFG;
 import ddg.DataDependenceGraph.DDG;
@@ -102,8 +101,8 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 			assert ddgEdge.dst instanceof ASTNode;
 
 			if( ddgEdge.symbol.equals(symbol)
-					&& ((ASTNode)ddgEdge.src).getProperty(ASTNodeProperties.NODE_ID).equals( String.valueOf(srcid))
-					&& ((ASTNode)ddgEdge.dst).getProperty(ASTNodeProperties.NODE_ID).equals( String.valueOf(dstid)))
+					&& ((ASTNode)ddgEdge.src).getNodeId().equals( srcid)
+					&& ((ASTNode)ddgEdge.dst).getNodeId().equals( dstid))
 				return true;
 		}
 

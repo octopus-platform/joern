@@ -91,6 +91,7 @@ import ast.php.statements.blockstarters.PHPTraitAdaptations;
 import ast.php.statements.blockstarters.PHPTraitAlias;
 import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
+import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
@@ -133,14 +134,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		// We cannot do this in the PHPCSVNodeInterpreter, since CSV2AST expects an instance of PHPFunctionDef
 		// for the first row of the CSVAST that it converts. (Closure is an instance of PHPFunctionDef and thus
 		// cannot be an instance of Expression.)
-		if( endNode instanceof Closure) {
-			ClosureExpression closureExpression = new ClosureExpression();
-			closureExpression.setClosure((Closure)endNode);
-			// the ClosureExpression and the Closure get the same NODE_ID, this way CFG creation
-			// can treat the ClosureExpression and actually references the Closure
-			closureExpression.setProperty(PHPCSVNodeTypes.NODE_ID.getName(), endNode.getProperty(PHPCSVNodeTypes.NODE_ID.getName()));
-			endNode = closureExpression;
-		}
+		if( endNode instanceof Closure)
+			endNode = createClosureExpression((Closure)endNode);
 
 		int errno = 0;
 		String type = startNode.getProperty(PHPCSVNodeTypes.TYPE.getName());
@@ -1635,7 +1630,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else if( endNode instanceof Expression) // the child is an expression used as a statement
-					startNode.setStatement((Expression)endNode);
+					startNode.setStatement(createExpressionStatement((Expression)endNode));
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -1657,7 +1652,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else if( endNode instanceof Expression) // the child is an expression used as a statement
-					startNode.setStatement((Expression)endNode);
+					startNode.setStatement(createExpressionStatement((Expression)endNode));
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -1688,7 +1683,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else if( endNode instanceof Expression) // the child is an expression used as a statement
-					startNode.setStatement((Expression)endNode);
+					startNode.setStatement(createExpressionStatement((Expression)endNode));
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -2157,7 +2152,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else if( endNode instanceof Expression) // the child is an expression used as a statement
-					startNode.setStatement((Expression)endNode);
+					startNode.setStatement(createExpressionStatement((Expression)endNode));
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -2191,7 +2186,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else if( endNode instanceof Expression) // the child is an expression used as a statement
-					startNode.setStatement((Expression)endNode);
+					startNode.setStatement(createExpressionStatement((Expression)endNode));
 				else
 					startNode.setStatement((Statement)endNode);
 				break;
@@ -2328,5 +2323,47 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		startNode.addUseElement((UseElement)endNode);
 
 		return 0;
+	}
+	
+	/* Helper methods */
+	
+	/**
+	 * Creates an ExpressionStatement wrapper around an Expression node.
+	 */
+	private ExpressionStatement createExpressionStatement(Expression expression) {
+		
+		ExpressionStatement expressionStatement = new ExpressionStatement();
+		expressionStatement.setExpression(expression);
+		
+		// the ExpressionStatement gets the same NODE_ID as the Expression, this way CFG creation
+		// can handle the ExpressionStatement, but the end node that we reference when writing
+		// out edges is actually the Expression
+		copyProperty( expression, expressionStatement, PHPCSVNodeTypes.NODE_ID.getName());
+		
+		return expressionStatement;
+	}
+	
+	/**
+	 * Creates a ClosureExpression wrapper around a Closure node.
+	 */
+	private ClosureExpression createClosureExpression(Closure closure) {
+		
+		ClosureExpression closureExpression = new ClosureExpression();
+		closureExpression.setClosure(closure);
+
+		// the ClosureExpression gets the same NODE_ID as the Closure, this way CFG creation
+		// can handle the ClosureExpression, but the end node that we reference when writing
+		// out edges is actually the Closure
+		copyProperty( closure, closureExpression, PHPCSVNodeTypes.NODE_ID.getName());
+
+		return closureExpression;
+	}
+
+	/**
+	 * Copies a given property from one ASTNode to another.
+	 */
+	private void copyProperty( ASTNode from, ASTNode to, String property) {
+		
+		to.setProperty( property, from.getProperty( property));
 	}
 }

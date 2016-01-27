@@ -434,6 +434,8 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((WhileStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((WhileStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)10), ((ExpressionStatement)((WhileStatement)node2).getStatement()).getExpression());
+		// the expression wrapper should have the same node id as the expression itself
+		assertEquals( Long.valueOf(10), ((ExpressionStatement)((WhileStatement)node2).getStatement()).getNodeId());
 	}
 
 	/**
@@ -481,6 +483,8 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((DoStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((DoStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)8), ((ExpressionStatement)((DoStatement)node2).getStatement()).getExpression());
+		// the expression wrapper should have the same node id as the expression itself
+		assertEquals( Long.valueOf(8), ((ExpressionStatement)((DoStatement)node2).getStatement()).getNodeId());
 	}
 
 	/**
@@ -566,6 +570,8 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((PHPIfElement)node3).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((PHPIfElement)node3).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)17), ((ExpressionStatement)((PHPIfElement)node3).getStatement()).getExpression());
+		// the expression wrapper should have the same node id as the expression itself
+		assertEquals( Long.valueOf(17), ((ExpressionStatement)((PHPIfElement)node3).getStatement()).getNodeId());
 
 		assertThat( node4, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node4.getChildCount());
@@ -573,6 +579,8 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((PHPIfElement)node4).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((PHPIfElement)node4).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)23), ((ExpressionStatement)((PHPIfElement)node4).getStatement()).getExpression());
+		// the expression wrapper should have the same node id as the expression itself
+		assertEquals( Long.valueOf(23), ((ExpressionStatement)((PHPIfElement)node4).getStatement()).getNodeId());
 	}
 
 	/**
@@ -837,6 +845,8 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((ForStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((ForStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)12), ((ExpressionStatement)((ForStatement)node2).getStatement()).getExpression());
+		// the expression wrapper should have the same node id as the expression itself
+		assertEquals( Long.valueOf(12), ((ExpressionStatement)((ForStatement)node2).getStatement()).getNodeId());
 	}
 
 	/**
@@ -901,6 +911,8 @@ public class TestPHPCSVASTBuilderMinimal
 		assertThat( ((ForEachStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((ForEachStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)16), ((ExpressionStatement)((ForEachStatement)node2).getStatement()).getExpression());
+		// the expression wrapper should have the same node id as the expression itself
+		assertEquals( Long.valueOf(16), ((ExpressionStatement)((ForEachStatement)node2).getStatement()).getNodeId());
 	}
 
 
