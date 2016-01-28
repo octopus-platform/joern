@@ -1060,46 +1060,78 @@ public class CSVASTSamples {
 			+ "3,25,PARENT_OF\n";
 
 
-	/*
-	 * foreach ($somearray as $foo) {}
-	 * foreach (somecall() as $bar => $foo) {}
-	 */
+    /*
+     * foreach ($somearray as $foo) {}
+     * foreach (somecall() as $bar => $buz) {}
+     * foreach ($someobj->qux as $someobj->norf => $someobj->nicknack) {}
+     */
 
-	public static final String forEachNodeStr = CSVASTSamples.nodeHeader
-			+ "3,AST_FOREACH,,3,,0,1,,,\n"
-			+ "4,AST_VAR,,3,,0,1,,,\n"
-			+ "5,string,,3,\"somearray\",0,1,,,\n"
-			+ "6,AST_VAR,,3,,1,1,,,\n"
-			+ "7,string,,3,\"foo\",0,1,,,\n"
-			+ "8,NULL,,3,,2,1,,,\n"
-			+ "9,AST_STMT_LIST,,3,,3,1,,,\n"
-			+ "10,AST_FOREACH,,4,,1,1,,,\n"
-			+ "11,AST_CALL,,4,,0,1,,,\n"
-			+ "12,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
-			+ "13,string,,4,\"somecall\",0,1,,,\n"
-			+ "14,AST_ARG_LIST,,4,,1,1,,,\n"
-			+ "15,AST_VAR,,4,,1,1,,,\n"
-			+ "16,string,,4,\"foo\",0,1,,,\n"
-			+ "17,AST_VAR,,4,,2,1,,,\n"
-			+ "18,string,,4,\"bar\",0,1,,,\n"
-			+ "19,AST_STMT_LIST,,4,,3,1,,,\n";
+    public static final String forEachNodeStr = nodeHeader
+            + "2,AST_STMT_LIST,,1,,0,1,,,\n"
+            + "3,AST_FOREACH,,3,,0,1,,,\n"
+            + "4,AST_VAR,,3,,0,1,,,\n"
+            + "5,string,,3,\"somearray\",0,1,,,\n"
+            + "6,AST_VAR,,3,,1,1,,,\n"
+            + "7,string,,3,\"foo\",0,1,,,\n"
+            + "8,NULL,,3,,2,1,,,\n"
+            + "9,AST_STMT_LIST,,3,,3,1,,,\n"
+            + "10,AST_FOREACH,,4,,1,1,,,\n"
+            + "11,AST_CALL,,4,,0,1,,,\n"
+            + "12,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n"
+            + "13,string,,4,\"somecall\",0,1,,,\n"
+            + "14,AST_ARG_LIST,,4,,1,1,,,\n"
+            + "15,AST_VAR,,4,,1,1,,,\n"
+            + "16,string,,4,\"buz\",0,1,,,\n"
+            + "17,AST_VAR,,4,,2,1,,,\n"
+            + "18,string,,4,\"bar\",0,1,,,\n"
+            + "19,AST_STMT_LIST,,4,,3,1,,,\n"
+            + "20,AST_FOREACH,,5,,2,1,,,\n"
+            + "21,AST_PROP,,5,,0,1,,,\n"
+            + "22,AST_VAR,,5,,0,1,,,\n"
+            + "23,string,,5,\"someobj\",0,1,,,\n"
+            + "24,string,,5,\"qux\",1,1,,,\n"
+            + "25,AST_PROP,,5,,1,1,,,\n"
+            + "26,AST_VAR,,5,,0,1,,,\n"
+            + "27,string,,5,\"someobj\",0,1,,,\n"
+            + "28,string,,5,\"nicknack\",1,1,,,\n"
+            + "29,AST_PROP,,5,,2,1,,,\n"
+            + "30,AST_VAR,,5,,0,1,,,\n"
+            + "31,string,,5,\"someobj\",0,1,,,\n"
+            + "32,string,,5,\"norf\",1,1,,,\n"
+            + "33,AST_STMT_LIST,,5,,3,1,,,\n";
 
-	public static final String forEachEdgeStr = CSVASTSamples.edgeHeader
-			+ "4,5,PARENT_OF\n"
-			+ "3,4,PARENT_OF\n"
-			+ "6,7,PARENT_OF\n"
-			+ "3,6,PARENT_OF\n"
-			+ "3,8,PARENT_OF\n"
-			+ "3,9,PARENT_OF\n"
-			+ "12,13,PARENT_OF\n"
-			+ "11,12,PARENT_OF\n"
-			+ "11,14,PARENT_OF\n"
-			+ "10,11,PARENT_OF\n"
-			+ "15,16,PARENT_OF\n"
-			+ "10,15,PARENT_OF\n"
-			+ "17,18,PARENT_OF\n"
-			+ "10,17,PARENT_OF\n"
-			+ "10,19,PARENT_OF\n";
+    public static final String forEachEdgeStr = edgeHeader
+            + "4,5,PARENT_OF\n"
+            + "3,4,PARENT_OF\n"
+            + "6,7,PARENT_OF\n"
+            + "3,6,PARENT_OF\n"
+            + "3,8,PARENT_OF\n"
+            + "3,9,PARENT_OF\n"
+            + "2,3,PARENT_OF\n"
+            + "12,13,PARENT_OF\n"
+            + "11,12,PARENT_OF\n"
+            + "11,14,PARENT_OF\n"
+            + "10,11,PARENT_OF\n"
+            + "15,16,PARENT_OF\n"
+            + "10,15,PARENT_OF\n"
+            + "17,18,PARENT_OF\n"
+            + "10,17,PARENT_OF\n"
+            + "10,19,PARENT_OF\n"
+            + "2,10,PARENT_OF\n"
+            + "22,23,PARENT_OF\n"
+            + "21,22,PARENT_OF\n"
+            + "21,24,PARENT_OF\n"
+            + "20,21,PARENT_OF\n"
+            + "26,27,PARENT_OF\n"
+            + "25,26,PARENT_OF\n"
+            + "25,28,PARENT_OF\n"
+            + "20,25,PARENT_OF\n"
+            + "30,31,PARENT_OF\n"
+            + "29,30,PARENT_OF\n"
+            + "29,32,PARENT_OF\n"
+            + "20,29,PARENT_OF\n"
+            + "20,33,PARENT_OF\n"
+            + "2,20,PARENT_OF\n";
 
 
 	/*

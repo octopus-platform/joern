@@ -2194,14 +2194,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // expr child: Expression node
 				startNode.setIteratedObject((Expression)endNode);
 				break;
-			case 1: // value child: Variable or PHPReferenceExpression node
+			case 1: // value child: Expression node
 				startNode.setValueExpression((Expression)endNode);
 				break;
-			case 2: // key child: Variable or null node
+			case 2: // key child: Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else
-					startNode.setKeyVariable((Variable)endNode);
+					startNode.setKeyExpression((Expression)endNode);
 				break;
 			case 3: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)

@@ -795,7 +795,8 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	
 	/**
 	 * foreach ($somearray as $foo) {}
-	 * foreach (somecall() as $bar => $foo) {}
+	 * foreach (somecall() as $bar => $buz) {}
+	 * foreach ($someobj->qux as $someobj->norf => $someobj->nicknack) {}
 	 */
 	@Test
 	public void testForEach() throws IOException, InvalidCSVFile
@@ -822,7 +823,14 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		
 		assertTrue( useOrDefs2.size() == 2);
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "bar"));
-		assertTrue( containsDefSymbol( useOrDefs2, node2, "foo"));
+		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
+		
+		ASTNode node3 = ast.getNodeById((long)20);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+		
+		assertTrue( useOrDefs3.size() == 2);
+		assertTrue( containsDefSymbol( useOrDefs3, node3, "someobj"));
+		assertTrue( containsDefSymbol( useOrDefs3, node3, "someobj"));
 	}
 	
 	

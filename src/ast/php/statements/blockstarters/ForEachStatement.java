@@ -1,14 +1,13 @@
 package ast.php.statements.blockstarters;
 
 import ast.expressions.Expression;
-import ast.expressions.Variable;
 import ast.logical.statements.BlockStarter;
 import ast.walking.ASTNodeVisitor;
 
 public class ForEachStatement extends BlockStarter
 {
 	private Expression iteratedObject = null;
-	private Variable key = null;
+	private Expression key = null;
 	private Expression value = null;
 
 	@Override
@@ -45,12 +44,12 @@ public class ForEachStatement extends BlockStarter
 		super.addChild(value);
 	}
 
-	public Variable getKeyVariable()
+	public Expression getKeyExpression()
 	{
 		return this.key;
 	}
 
-	public void setKeyVariable(Variable key)
+	public void setKeyExpression(Expression key)
 	{
 		this.key = key;
 		super.addChild(key);

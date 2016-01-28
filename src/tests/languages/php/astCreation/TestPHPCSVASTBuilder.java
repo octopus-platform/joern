@@ -4888,17 +4888,20 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * AST_FOREACH nodes are used to declare foreach-loops.
 	 *
 	 * Any AST_FOREACH node has exactly four children:
-	 * 1) various possible types, representing the array or object to be iterated over
+	 * 1) an expression, representing the array or object to be iterated over
 	 *    (e.g., could be AST_VAR, AST_CALL, AST_CONST, etc...)
-	 * 2) AST_VAR or AST_REF, representing the value of the current element
-	 * 3) AST_VAR or NULL, representing the key of the current element
+	 * 2) an expression, representing the value of the current element
+	 *    (typically AST_VAR or AST_REF, but could also be AST_PROP etc...) 
+	 * 3) an expression or NULL, representing the value of the current element
+	 *    (typically AST_VAR or NULL, but could also be AST_PROP etc...) 
 	 * 4) statement types or NULL, representing the code in the loop's body
 	 *    (e.g., could be AST_STMT_LIST, AST_CALL, etc...)
 	 *
 	 * This test checks a foreach loop's children in the following PHP code:
 	 *
 	 * foreach ($somearray as $foo) {}
-	 * foreach (somecall() as $bar => $foo) {}
+	 * foreach (somecall() as $bar => $buz) {}
+	 * foreach ($someobj->qux as $someobj->norf => $someobj->nicknack) {}
 	 */
 	@Test
 	public void testForEachCreation() throws IOException, InvalidCSVFile
@@ -4910,20 +4913,28 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)20);
 
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((ForEachStatement)node).getIteratedObject());
 		assertEquals( ast.getNodeById((long)6), ((ForEachStatement)node).getValueExpression());
-		assertNull( ((ForEachStatement)node).getKeyVariable());
+		assertNull( ((ForEachStatement)node).getKeyExpression());
 		assertEquals( ast.getNodeById((long)9), ((ForEachStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)11), ((ForEachStatement)node2).getIteratedObject());
 		assertEquals( ast.getNodeById((long)15), ((ForEachStatement)node2).getValueExpression());
-		assertEquals( ast.getNodeById((long)17), ((ForEachStatement)node2).getKeyVariable());
+		assertEquals( ast.getNodeById((long)17), ((ForEachStatement)node2).getKeyExpression());
 		assertEquals( ast.getNodeById((long)19), ((ForEachStatement)node2).getStatement());
+		
+		assertThat( node3, instanceOf(ForEachStatement.class));
+		assertEquals( 4, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)21), ((ForEachStatement)node3).getIteratedObject());
+		assertEquals( ast.getNodeById((long)25), ((ForEachStatement)node3).getValueExpression());
+		assertEquals( ast.getNodeById((long)29), ((ForEachStatement)node3).getKeyExpression());
+		assertEquals( ast.getNodeById((long)33), ((ForEachStatement)node3).getStatement());
 	}
 
 

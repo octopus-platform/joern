@@ -902,12 +902,12 @@ public class TestPHPCSVASTBuilderMinimal
 
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
-		assertNull( ((ForEachStatement)node).getKeyVariable());
+		assertNull( ((ForEachStatement)node).getKeyExpression());
 		assertNull( ((ForEachStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node2.getChildCount());
-		assertNull( ((ForEachStatement)node2).getKeyVariable());
+		assertNull( ((ForEachStatement)node2).getKeyExpression());
 		assertThat( ((ForEachStatement)node2).getStatement(), not(instanceOf(CompoundStatement.class)));
 		assertThat( ((ForEachStatement)node2).getStatement(), instanceOf(ExpressionStatement.class));
 		assertEquals( ast.getNodeById((long)16), ((ExpressionStatement)((ForEachStatement)node2).getStatement()).getExpression());
