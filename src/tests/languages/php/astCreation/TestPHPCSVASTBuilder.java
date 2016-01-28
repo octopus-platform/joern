@@ -49,6 +49,7 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.ClassExpression;
 import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
@@ -3160,12 +3161,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * Any AST_NEW node has exactly 2 children:
 	 * 1) an expression, whose evaluation holds the name of the class to be instantiated
 	 *    (e.g., could be AST_NAME, AST_VAR, ...)
+	 *    - or -
+	 *    AST_CLASS, representing the instantiation of an anonymous class
 	 * 2) AST_ARG_LIST, representing the argument list
 	 *
 	 * This test checks a few new expressions' children in the following PHP code:
 	 *
 	 * new Foo($bar);
 	 * new $buz();
+	 * new class() extends A implements B, C {};
+	 * 
+	 * It also checks that a ClassExpression holding an anonymous class definition is created.
 	 */
 	@Test
 	public void testNewCreation() throws IOException, InvalidCSVFile
@@ -3177,6 +3183,7 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(NewExpression.class));
 		assertEquals( 2, node.getChildCount());
@@ -3191,6 +3198,22 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameExpression().getEscapedCodeStr());
 		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
 		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
+
+		assertThat( node3, instanceOf(NewExpression.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)24), ((NewExpression)node3).getArgumentList());
+		assertEquals( 0, ((NewExpression)node3).getArgumentList().size());
+
+		// special test for the artificial ClassExpression node:
+		
+		ASTNode node4 = ((NewExpression)node3).getTargetClass();
+		assertThat( node4, instanceOf(ClassExpression.class));
+
+		ASTNode node5 = ast.getNodeById((long)14);
+		assertThat( node5, instanceOf(PHPClassDef.class));
+		assertEquals( node5, ((ClassExpression)node4).getClassDef());
+		// the class definition wrapper should have the same node id as the anonymous class definition itself
+		assertEquals( node5.getNodeId(), node4.getNodeId());
 	}
 
 	/**

@@ -39,6 +39,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
 import ast.php.declarations.PHPClassDef;
+import ast.php.expressions.ClassExpression;
 import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.PHPArrayElement;
@@ -1535,9 +1536,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		switch (childnum)
 		{
-			case 0: // class child: Expression node
-				startNode.setTargetClass((Expression)endNode);
+			case 0: // class child: ClassDef or Expression node
+				if( endNode instanceof PHPClassDef) // the child is a class used as an expression
+					startNode.setTargetClass(createClassExpression((PHPClassDef)endNode));
+				else
+					startNode.setTargetClass((Expression)endNode);
 				break;
+				
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
 				break;
@@ -2378,6 +2383,22 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		copyProperty( closure, closureExpression, PHPCSVNodeTypes.NODE_ID.getName());
 
 		return closureExpression;
+	}
+	
+	/**
+	 * Creates a ClassExpression wrapper around a PHPClassDef node (for anonymous classes.)
+	 */
+	private ClassExpression createClassExpression(PHPClassDef classDef) {
+		
+		ClassExpression classExpression = new ClassExpression();
+		classExpression.setClassDef(classDef);
+
+		// the ClassExpression gets the same NODE_ID as the PHPClassDef, this way CFG creation
+		// can handle the ClassExpression, but the end node that we reference when writing
+		// out edges is actually the PHPClassDef
+		copyProperty( classDef, classExpression, PHPCSVNodeTypes.NODE_ID.getName());
+
+		return classExpression;
 	}
 
 	/**

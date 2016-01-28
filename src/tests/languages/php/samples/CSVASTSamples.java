@@ -740,32 +740,61 @@ public class CSVASTSamples {
 			+ "11,14,PARENT_OF\n";
 
 
-	/*
-	 * new Foo($bar);
-	 * new $buz();
-	 */
+    /*
+     * new Foo($bar);
+     * new $buz();
+     * new class() extends A implements B, C {};
+     */
 
-	public static final String newNodeStr = nodeHeader
-			+ "3,AST_NEW,,3,,0,1,,,\n"
-			+ "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
-			+ "5,string,,3,\"Foo\",0,1,,,\n"
-			+ "6,AST_ARG_LIST,,3,,1,1,,,\n"
-			+ "7,AST_VAR,,3,,0,1,,,\n"
-			+ "8,string,,3,\"bar\",0,1,,,\n"
-			+ "9,AST_NEW,,4,,1,1,,,\n"
-			+ "10,AST_VAR,,4,,0,1,,,\n"
-			+ "11,string,,4,\"buz\",0,1,,,\n"
-			+ "12,AST_ARG_LIST,,4,,1,1,,,\n";
+    public static final String newNodeStr = nodeHeader
+            + "2,AST_STMT_LIST,,1,,0,1,,,\n"
+            + "3,AST_NEW,,3,,0,1,,,\n"
+            + "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n"
+            + "5,string,,3,\"Foo\",0,1,,,\n"
+            + "6,AST_ARG_LIST,,3,,1,1,,,\n"
+            + "7,AST_VAR,,3,,0,1,,,\n"
+            + "8,string,,3,\"bar\",0,1,,,\n"
+            + "9,AST_NEW,,4,,1,1,,,\n"
+            + "10,AST_VAR,,4,,0,1,,,\n"
+            + "11,string,,4,\"buz\",0,1,,,\n"
+            + "12,AST_ARG_LIST,,4,,1,1,,,\n"
+            + "13,AST_NEW,,5,,2,1,,,\n"
+            // TODO: modify phpjoern to generate correct flag
+            + "14,AST_CLASS,\"[WARNING] Unexpected flags for kind: kind=69 and flags=256\",5,,0,1,5,,\n"
+            + "15,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+            + "16,string,,5,\"A\",0,1,,,\n"
+            + "17,AST_NAME_LIST,,5,,1,1,,,\n"
+            + "18,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+            + "19,string,,5,\"B\",0,1,,,\n"
+            + "20,AST_NAME,NAME_NOT_FQ,5,,1,1,,,\n"
+            + "21,string,,5,\"C\",0,1,,,\n"
+            + "22,AST_TOPLEVEL,TOPLEVEL_CLASS,5,,2,1,5,\"\",\n"
+            + "23,AST_STMT_LIST,,5,,0,22,,,\n"
+            + "24,AST_ARG_LIST,,5,,1,1,,,\n";
 
-	public static final String newEdgeStr = edgeHeader
-			+ "4,5,PARENT_OF\n"
-			+ "3,4,PARENT_OF\n"
-			+ "7,8,PARENT_OF\n"
-			+ "6,7,PARENT_OF\n"
-			+ "3,6,PARENT_OF\n"
-			+ "10,11,PARENT_OF\n"
-			+ "9,10,PARENT_OF\n"
-			+ "9,12,PARENT_OF\n";
+    public static final String newEdgeStr = edgeHeader
+            + "4,5,PARENT_OF\n"
+            + "3,4,PARENT_OF\n"
+            + "7,8,PARENT_OF\n"
+            + "6,7,PARENT_OF\n"
+            + "3,6,PARENT_OF\n"
+            + "2,3,PARENT_OF\n"
+            + "10,11,PARENT_OF\n"
+            + "9,10,PARENT_OF\n"
+            + "9,12,PARENT_OF\n"
+            + "2,9,PARENT_OF\n"
+            + "15,16,PARENT_OF\n"
+            + "14,15,PARENT_OF\n"
+            + "18,19,PARENT_OF\n"
+            + "17,18,PARENT_OF\n"
+            + "20,21,PARENT_OF\n"
+            + "17,20,PARENT_OF\n"
+            + "14,17,PARENT_OF\n"
+            + "22,23,PARENT_OF\n"
+            + "14,22,PARENT_OF\n"
+            + "13,14,PARENT_OF\n"
+            + "13,24,PARENT_OF\n"
+            + "2,13,PARENT_OF\n";
 
 
 	/*

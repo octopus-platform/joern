@@ -1300,6 +1300,7 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	/**
 	 * new Foo($bar);
 	 * new $buz();
+	 * new class() extends A implements B, C {};
 	 */
 	@Test
 	public void testNew() throws IOException, InvalidCSVFile
@@ -1320,6 +1321,11 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		
 		assertTrue( useOrDefs2.size() == 1);
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "buz"));
+		
+		ASTNode node3 = ast.getNodeById((long)13);
+		Collection<UseOrDef> useOrDefs3 = analyze(node3);
+		
+		assertTrue( useOrDefs3.isEmpty());
 	}
 	
 	/**
