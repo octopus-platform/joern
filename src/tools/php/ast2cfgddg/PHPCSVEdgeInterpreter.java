@@ -1188,8 +1188,19 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // depth child: IntegerExpression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
-				else
-					startNode.setDepth((IntegerExpression)endNode);
+				else {
+					try {
+						startNode.setDepth((IntegerExpression)endNode);
+					}
+					catch( ClassCastException e) {
+						// in PHP 5.4, Variable children were allowed and we might still stumble upon
+						// such code when using Joern on older PHP programs
+						System.err.println("Warning: node " + startNode.getNodeId() + " is a break statement "
+								+ "with a non-constant numerical argument. This has been disallowed since PHP 5.4 "
+								+ "and is unsupported in Joern. Assuming a numerical argument of 0.");
+						// CFG creation will handle this when the depth child is undefined
+					}
+				}
 				break;
 
 			default:
@@ -1209,7 +1220,17 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else
-					startNode.setDepth((IntegerExpression)endNode);
+					try {
+						startNode.setDepth((IntegerExpression)endNode);
+					}
+					catch( ClassCastException e) {
+						// in PHP 5.4, Variable children were allowed and we might still stumble upon
+						// such code when using Joern on older PHP programs
+						System.err.println("Warning: node " + startNode.getNodeId() + " is a continue statement "
+								+ "with a non-constant numerical argument. This has been disallowed since PHP 5.4 "
+								+ "and is unsupported in Joern. Assuming a numerical argument of 0.");
+						// CFG creation will handle this when the depth child is undefined
+					}
 				break;
 
 			default:
