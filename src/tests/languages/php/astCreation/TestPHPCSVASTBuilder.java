@@ -1683,51 +1683,41 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	}
 
 	/**
-	 * AST_REF nodes are used to denote references to variables.
+	 * AST_REF nodes are used to denote references to variables/properties.
 	 * TODO As far as I currently understand, this is a node useful *only* in the
 	 * context of a foreach statement; for AST_ARRAY_ELEM nodes that designate a reference,
 	 * functions that return references, and function parameters taken as references,
 	 * a simple flag is used; for assignments, there is a special kind of node AST_ASSIGN_REF.
 	 * But look into this more closely.
 	 *
-	 * Any AST_REF node has exactly one child, which is a variable being referenced.
+	 * Any AST_REF node has exactly one child, which is a variable/property being referenced.
 	 *
 	 * This test checks a reference expression's children in the following PHP code:
-	 *
+	 * 
 	 * foreach( $iterable as $somekey => &$someval) {}
+	 * foreach( $iterable as $somekey => &$obj->someval) {}
 	 */
 	@Test
 	public void testReferenceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FOREACH,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"iterable\",0,1,,,\n";
-		nodeStr += "6,AST_REF,,3,,1,1,,,\n";
-		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "8,string,,3,\"someval\",0,1,,,\n";
-		nodeStr += "9,AST_VAR,,3,,2,1,,,\n";
-		nodeStr += "10,string,,3,\"somekey\",0,1,,,\n";
-		nodeStr += "11,AST_STMT_LIST,,3,,3,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "3,9,PARENT_OF\n";
-		edgeStr += "3,11,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.referenceNodeStr;
+		String edgeStr = CSVASTSamples.referenceEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(PHPReferenceExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariable());
-		assertEquals( "someval", ((PHPReferenceExpression)node).getVariable().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariableExpression());
+		assertEquals( "someval", ((Variable)((PHPReferenceExpression)node).getVariableExpression()).getNameExpression().getEscapedCodeStr());
+		
+		assertThat( node2, instanceOf(PHPReferenceExpression.class));
+		assertEquals( 1, node2.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PHPReferenceExpression)node2).getVariableExpression());
+		assertEquals( "obj", ((Variable)((PropertyExpression)((PHPReferenceExpression)node2).getVariableExpression()).getObjectExpression()).getNameExpression().getEscapedCodeStr());
+		assertEquals( "someval", ((PropertyExpression)((PHPReferenceExpression)node2).getVariableExpression()).getPropertyExpression().getEscapedCodeStr());
 	}
 
 	/**

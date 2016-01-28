@@ -515,6 +515,57 @@ public class CSVASTSamples {
 			+ "3,12,PARENT_OF\n";
 
 
+    /*
+     * foreach( $iterable as $somekey => &$someval) {}
+     * foreach( $iterable as $somekey => &$obj->someval) {}
+     */
+
+    public static final String referenceNodeStr = nodeHeader
+            + "2,AST_STMT_LIST,,1,,0,1,,,\n"
+            + "3,AST_FOREACH,,3,,0,1,,,\n"
+            + "4,AST_VAR,,3,,0,1,,,\n"
+            + "5,string,,3,\"iterable\",0,1,,,\n"
+            + "6,AST_REF,,3,,1,1,,,\n"
+            + "7,AST_VAR,,3,,0,1,,,\n"
+            + "8,string,,3,\"someval\",0,1,,,\n"
+            + "9,AST_VAR,,3,,2,1,,,\n"
+            + "10,string,,3,\"somekey\",0,1,,,\n"
+            + "11,AST_STMT_LIST,,3,,3,1,,,\n"
+            + "12,AST_FOREACH,,4,,1,1,,,\n"
+            + "13,AST_VAR,,4,,0,1,,,\n"
+            + "14,string,,4,\"iterable\",0,1,,,\n"
+            + "15,AST_REF,,4,,1,1,,,\n"
+            + "16,AST_PROP,,4,,0,1,,,\n"
+            + "17,AST_VAR,,4,,0,1,,,\n"
+            + "18,string,,4,\"obj\",0,1,,,\n"
+            + "19,string,,4,\"someval\",1,1,,,\n"
+            + "20,AST_VAR,,4,,2,1,,,\n"
+            + "21,string,,4,\"somekey\",0,1,,,\n"
+            + "22,AST_STMT_LIST,,4,,3,1,,,\n";
+
+    public static final String referenceEdgeStr = edgeHeader
+            + "4,5,PARENT_OF\n"
+            + "3,4,PARENT_OF\n"
+            + "7,8,PARENT_OF\n"
+            + "6,7,PARENT_OF\n"
+            + "3,6,PARENT_OF\n"
+            + "9,10,PARENT_OF\n"
+            + "3,9,PARENT_OF\n"
+            + "3,11,PARENT_OF\n"
+            + "2,3,PARENT_OF\n"
+            + "13,14,PARENT_OF\n"
+            + "12,13,PARENT_OF\n"
+            + "17,18,PARENT_OF\n"
+            + "16,17,PARENT_OF\n"
+            + "16,19,PARENT_OF\n"
+            + "15,16,PARENT_OF\n"
+            + "12,15,PARENT_OF\n"
+            + "20,21,PARENT_OF\n"
+            + "12,20,PARENT_OF\n"
+            + "12,22,PARENT_OF\n"
+            + "2,12,PARENT_OF\n";
+
+
 	/*
 	 * $foo->bar;
 	 * buz()->$qux;

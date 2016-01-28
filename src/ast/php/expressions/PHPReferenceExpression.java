@@ -1,17 +1,18 @@
 package ast.php.expressions;
 
+import ast.expressions.Expression;
 import ast.expressions.Variable;
 
 public class PHPReferenceExpression extends Variable
 {
-	private Variable variable = null;
+	private Expression variable = null;
 
-	public Variable getVariable()
+	public Expression getVariableExpression()
 	{
 		return this.variable;
 	}
 
-	public void setVariable(Variable variable)
+	public void setVariableExpression(Expression variable)
 	{
 		this.variable = variable;
 		super.addChild(variable);
