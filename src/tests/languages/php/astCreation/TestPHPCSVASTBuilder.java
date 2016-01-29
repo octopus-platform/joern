@@ -104,6 +104,7 @@ import ast.php.statements.blockstarters.PHPTraitAdaptations;
 import ast.php.statements.blockstarters.PHPTraitAlias;
 import ast.php.statements.blockstarters.PHPTraitPrecedence;
 import ast.php.statements.blockstarters.PHPUseTrait;
+import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
@@ -3740,58 +3741,52 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 *
 	 * Any AST_DECLARE node has exactly two children:
 	 * 1) AST_CONST_DECL, holding the set directive(s)
-	 * 2) AST_STMT_LIST or NULL, holding the code to be executed under the given directives
-	 *    (If no curly brackets are used, then this child is NULL and the directives affect
+	 * 2) statement types or NULL, holding the code to be executed under the given directives
+	 *    (If a standalone semicolon is used, then this child is NULL and the directives affect
 	 *    all code following the declare statement.)
 	 *
 	 * This test checks a few declare statement's children in the following PHP code:
 	 *
 	 * declare(ticks=1) {}
 	 * declare(encoding='ISO-8859-1');
+	 * declare(ticks=0) foo();
 	 */
 	@Test
 	public void testDeclareCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_DECLARE,,3,,0,1,,,\n";
-		nodeStr += "4,AST_CONST_DECL,,3,,0,1,,,\n";
-		nodeStr += "5,AST_CONST_ELEM,,3,,0,1,,,\n";
-		nodeStr += "6,string,,3,\"ticks\",0,1,,,\n";
-		nodeStr += "7,integer,,3,1,1,1,,,\n";
-		nodeStr += "8,AST_STMT_LIST,,3,,1,1,,,\n";
-		nodeStr += "9,AST_DECLARE,,4,,1,1,,,\n";
-		nodeStr += "10,AST_CONST_DECL,,4,,0,1,,,\n";
-		nodeStr += "11,AST_CONST_ELEM,,4,,0,1,,,\n";
-		nodeStr += "12,string,,4,\"encoding\",0,1,,,\n";
-		nodeStr += "13,string,,4,\"ISO-8859-1\",1,1,,,\n";
-		nodeStr += "14,NULL,,4,,1,1,,,\n";
-
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "5,7,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,13,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,14,PARENT_OF\n";
+		String nodeStr = CSVASTSamples.declareNodeStr;
+		String edgeStr = CSVASTSamples.declareEdgeStr;
 
 		handle(nodeStr, edgeStr);
 
 		ASTNode node = ast.getNodeById((long)3);
 		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(PHPDeclareStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( ast.getNodeById((long)4), ((PHPDeclareStatement)node).getDeclares());
-		assertEquals( ast.getNodeById((long)8), ((PHPDeclareStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)8), ((PHPDeclareStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(PHPDeclareStatement.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((PHPDeclareStatement)node2).getDeclares());
-		assertNull( ((PHPDeclareStatement)node2).getContent());
+		assertNull( ((PHPDeclareStatement)node2).getStatement());
+		
+		assertThat( node3, instanceOf(PHPDeclareStatement.class));
+		assertEquals( 2, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((PHPDeclareStatement)node3).getDeclares());
+		
+		// special test for the artificial ExpressionStatement node:
+
+		ASTNode node4 = ((PHPDeclareStatement)node3).getStatement();
+		assertThat( node4, instanceOf(ExpressionStatement.class));
+
+		ASTNode node5 = ast.getNodeById((long)20);
+		assertThat( node5, instanceOf(CallExpression.class));
+		assertEquals( node5, ((ExpressionStatement)node4).getExpression());
+		// the expression statement wrapper should have the same node id as the expression itself
+		assertEquals( node5.getNodeId(), node4.getNodeId());
 	}
 
 	/**

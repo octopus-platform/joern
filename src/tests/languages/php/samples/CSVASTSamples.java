@@ -959,6 +959,60 @@ public class CSVASTSamples {
 			+ "6,20,PARENT_OF\n"
 			+ "3,6,PARENT_OF\n";
 
+	
+    /*
+     * declare(ticks=1) {}
+     * declare(encoding='ISO-8859-1');
+     * declare(ticks=0) foo();
+     */
+
+    public static final String declareNodeStr = nodeHeader
+            + "2,AST_STMT_LIST,,1,,0,1,,,\n"
+            + "3,AST_DECLARE,,3,,0,1,,,\n"
+            + "4,AST_CONST_DECL,,3,,0,1,,,\n"
+            + "5,AST_CONST_ELEM,,3,,0,1,,,\n"
+            + "6,string,,3,\"ticks\",0,1,,,\n"
+            + "7,integer,,3,1,1,1,,,\n"
+            + "8,AST_STMT_LIST,,3,,1,1,,,\n"
+            + "9,AST_DECLARE,,4,,1,1,,,\n"
+            + "10,AST_CONST_DECL,,4,,0,1,,,\n"
+            + "11,AST_CONST_ELEM,,4,,0,1,,,\n"
+            + "12,string,,4,\"encoding\",0,1,,,\n"
+            + "13,string,,4,\"ISO-8859-1\",1,1,,,\n"
+            + "14,NULL,,4,,1,1,,,\n"
+            + "15,AST_DECLARE,,5,,2,1,,,\n"
+            + "16,AST_CONST_DECL,,5,,0,1,,,\n"
+            + "17,AST_CONST_ELEM,,5,,0,1,,,\n"
+            + "18,string,,5,\"ticks\",0,1,,,\n"
+            + "19,integer,,5,0,1,1,,,\n"
+            + "20,AST_CALL,,5,,1,1,,,\n"
+            + "21,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n"
+            + "22,string,,5,\"foo\",0,1,,,\n"
+            + "23,AST_ARG_LIST,,5,,1,1,,,\n";
+
+    public static final String declareEdgeStr = edgeHeader
+            + "5,6,PARENT_OF\n"
+            + "5,7,PARENT_OF\n"
+            + "4,5,PARENT_OF\n"
+            + "3,4,PARENT_OF\n"
+            + "3,8,PARENT_OF\n"
+            + "2,3,PARENT_OF\n"
+            + "11,12,PARENT_OF\n"
+            + "11,13,PARENT_OF\n"
+            + "10,11,PARENT_OF\n"
+            + "9,10,PARENT_OF\n"
+            + "9,14,PARENT_OF\n"
+            + "2,9,PARENT_OF\n"
+            + "17,18,PARENT_OF\n"
+            + "17,19,PARENT_OF\n"
+            + "16,17,PARENT_OF\n"
+            + "15,16,PARENT_OF\n"
+            + "21,22,PARENT_OF\n"
+            + "20,21,PARENT_OF\n"
+            + "20,23,PARENT_OF\n"
+            + "15,20,PARENT_OF\n"
+            + "2,15,PARENT_OF\n";
+
 
 	/*
 	 * $buz->foo($bar, "yabadabadoo");

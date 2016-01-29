@@ -1773,11 +1773,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // declares child: ConstantDeclaration node
 				startNode.setDeclares((ConstantDeclaration)endNode);
 				break;
-			case 1: // stmts child: CompoundStatement or null node
+			case 1: // stmts child: Statement or Expression or null node
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
+				else if( endNode instanceof Expression) // the child is an expression used as a statement
+					startNode.setStatement(createExpressionStatement((Expression)endNode));
 				else
-					startNode.setContent((CompoundStatement)endNode);
+					startNode.setStatement((Statement)endNode);
 				break;
 
 			default:
