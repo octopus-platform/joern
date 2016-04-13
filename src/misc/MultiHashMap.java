@@ -1,66 +1,173 @@
 package misc;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 
-public class MultiHashMap<K, V>
-{
+/*
+ * Malte TODO:
+ * Consider deprecating this class entirely and using org.apache.commons.collections4.MultiValuedMap instead.
+ */
+public class MultiHashMap<K, V> implements Map<K, List<V>> {
 
 	private HashMap<K, List<V>> hashMap = new HashMap<K, List<V>>();
 
-	public Set<Entry<K, List<V>>> entrySet()
-	{
-		return hashMap.entrySet();
+	
+	/* Methods prescribed by Map interface */
+	/* *********************************** */
+
+	@Override
+	public int size() {
+		return this.hashMap.size();
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return this.hashMap.isEmpty();
+	}
+	
+	@Override
+	public boolean containsKey(Object key) {
+		return this.hashMap.containsKey(key);
+	}
+	
+	@Override
+	public boolean containsValue(Object value) {
+		return this.hashMap.containsValue(value);
+	}
+	
+	@Override
+	public List<V> get(Object key) {
+		return this.hashMap.get(key);
+	}
+	
+	/**
+	 * Associates the specified list of values with the specified key in this map.
+	 * 
+	 * Note:
+	 * If the map previously contained a mapping for the key, the old list of values is *replaced* by
+	 * the specified list of values.
+	 * In order to *add* all values from a specified list of values to a list of values previously
+	 * contained for a key, use addAll(K,List<V>) instead.
+	 */
+	@Override
+	public List<V> put(K key, List<V> value) {
+		return this.hashMap.put(key, value);
+	}
+	
+	/**
+	 * Removes *all* values associated with the specified key.
+	 * 
+	 * Note:
+	 * In order to remove only a specific key-value mapping, use removeMapping(K,V) instead.
+	 */
+	@Override
+	public List<V> remove(Object key) {
+		return this.hashMap.remove(key);
+	}	
+	
+	/**
+	 * Copies all of the mappings from the specified map to this map.
+	 * The effect of this call is equivalent to that of calling put(k, v) on this map
+	 * once for each mapping from key k to value v in the specified map.
+	 * 
+	 * Note:
+	 * If the map previously contained a mapping for a key also contained in the specified map,
+	 * the old list of values is *replaced* by the list of values in the specified map.
+	 * In order to *add* all values contained in the list of values for a key k in the specified map
+	 * to the list of values for the same key k in this map (if it exists), use addAll(Map<? extends K, ? extends List<V>>) instead.
+	 */
+	@Override
+	public void putAll(Map<? extends K, ? extends List<V>> m) {
+		this.hashMap.putAll(m);
 	}
 
-	public Set<K> keySet()
-	{
-		return hashMap.keySet();
+	@Override
+	public void clear() {
+		this.hashMap.clear();
+	}
+	
+	@Override
+	public Set<K> keySet() {
+		return this.hashMap.keySet();
+	}
+	
+	@Override
+	public Collection<List<V>> values() {
+		return this.hashMap.values();
 	}
 
-	public boolean containsKey(K key)
-	{
-		return hashMap.containsKey(key);
+	@Override
+	public Set<Entry<K, List<V>>> entrySet() {
+		return this.hashMap.entrySet();
 	}
 
-	public Iterator<Entry<K, List<V>>> getEntrySetIterator()
-	{
-		return entrySet().iterator();
+	@Override
+	public boolean equals(Object o) {
+		if( o instanceof Map)
+			return entrySet().equals(((Map<?,?>)o).entrySet());
+		return false;
 	}
 
-	public Iterator<K> getKeySetIterator()
-	{
-		return keySet().iterator();
+	@Override
+	public int hashCode() {
+		int ret = 0;
+		for( Entry<K,List<V>> e : entrySet())
+			ret += e.hashCode();
+		return ret;
 	}
+
+
+
+	/* Methods implemented by MultiHashMap in addition to those prescribed by Map */
+	/* ************************************************************************** */
 
 	/**
+	 * Removes a key-value mapping from the map.
+	 * 
+	 * The item is removed from the collection mapped to the specified key. Other values attached to that key are unaffected.
+	 * 
+	 * If the last value for a key k is removed, returns an empty collection for a subsequent get(k).
+	 * 
+	 * @param key   the key to remove from
+	 * @param value the item to remove
+	 * 
+	 * @return true if the mapping was removed, false otherwise
+	 */
+	public boolean removeMapping(K key, V value) {
+		
+		if(containsKey(key))
+			return get(key).remove(value);
+		return false;
+	}	
+	
+	/**
 	 * Associates the specified value with the specified key. If the map
-	 * previously contained a mapping for the key, the new value is appended.
+	 * previously contained a mapping for the key, the new value is *appended*.
 	 * 
 	 * @param key
 	 *            key with which the specified value is to be associated
 	 * 
 	 * @param values
 	 *            value to be associated with the specified key
+	 *            
+	 * @return true if the map changed as a result of this put operation, or false otherwise
 	 */
-	public void add(K key, V value)
-	{
-		if (containsKey(key))
-		{
-			hashMap.get(key).add(value);
-		} else
-		{
+	public boolean add(K key, V value) {
+		
+		if(containsKey(key))
+			return this.hashMap.get(key).add(value);
+		else {
 			List<V> list = new LinkedList<V>();
 			list.add(value);
-			hashMap.put(key, list);
-
+			List<V> oldlist = put(key, list);
+			return null == oldlist ? true : !oldlist.equals(list);
 		}
 	}
-
+	
 	/**
 	 * Associates the specified values with the specified key. If the map
 	 * previously contained a mapping for the key, the new values are appended.
@@ -70,143 +177,49 @@ public class MultiHashMap<K, V>
 	 * 
 	 * @param values
 	 *            values to be associated with the specified key
+	 *            
+ 	 * @return true if the map changed as a result of this put operation, or false otherwise
 	 */
-	public void addAll(K key, List<V> values)
-	{
-		if (containsKey(key))
-		{
-			hashMap.get(key).addAll(values);
-		} else
-		{
-			hashMap.put(key, values);
+	public boolean addAll(K key, List<V> values) {
+		
+		if(containsKey(key))
+			return this.hashMap.get(key).addAll(values);
+		else {
+			this.hashMap.put(key, values);
+			return true;
 		}
 	}
-
-	public void addAll(MultiHashMap<K, V> otherMap)
-	{
-		for (Entry<K, List<V>> entry : otherMap.entrySet())
-		{
-			addAll(entry.getKey(), entry.getValue());
-		}
-	}
-
-	@Deprecated
+	
 	/**
-	 * @deprecated Use addAll instead.
-	 */
-	public void addMultiHashMap(MultiHashMap<K, V> otherHashMap)
-	{
-		Set<Entry<K, List<V>>> entrySet = otherHashMap.entrySet();
-		Iterator<Entry<K, List<V>>> it = entrySet.iterator();
-		while (it.hasNext())
-		{
-			Entry<K, List<V>> pair = it.next();
-			Iterator<V> it2 = pair.getValue().iterator();
-			while (it2.hasNext())
-			{
-				add(pair.getKey(), it2.next());
-			}
-		}
-	}
-
-	/**
-	 * Removes the value from list associated with the specified key if it
-	 * exists.
+	 * Adds all of the mappings from the specified map to this map.
+	 * The effect of this call is equivalent to that of calling addAll(k, v) on this map
+	 * once for each mapping from key k to value v in the specified map.
 	 * 
-	 * @param key
-	 * @param value
-	 * @return true if the map was modified otherwise false.
+ 	 * @return true if the map changed as a result of this put operation, or false otherwise
 	 */
-	public boolean remove(K key, V value)
-	{
-		if (containsKey(key))
-		{
-			return get(key).remove(value);
-		}
-		return false;
-		// List<V> dstList = hashMap.get(key);
-		// if (dstList == null)
-		// return false;
-		// dstList.remove(val);
-		// return true;
+	public boolean addAll(Map<? extends K, ? extends List<V>> map) {
+		
+		boolean ret = false;
+		
+		for( K key : map.keySet())
+			ret = addAll( key, map.get(key));
+		
+		return ret;
 	}
-
-	@Deprecated
-	/**
-	 * @deprecated Use removeAll instead.
-	 */
-	public void removeAllForKey(K key)
-	{
-		hashMap.put(key, new LinkedList<V>());
-	}
-
-	/**
-	 * Removes the mapping for the specified key from this map if present.
-	 * 
-	 * @param key
-	 *            key whose mapping is to be removed from the map
-	 * @return the previous value associated with key, or null if there was no
-	 *         mapping for key.
-	 */
-	public List<V> removeAll(K key)
-	{
-		return hashMap.remove(key);
-	}
-
-	@Deprecated
-	/**
-	 * @deprecated Use totalSize instead.
-	 */
-	// this could return hashMap.size()
-	public int size()
-	{
-		int s = 0;
-		Set<Entry<K, List<V>>> entrySet = hashMap.entrySet();
-		Iterator<Entry<K, List<V>>> it = entrySet.iterator();
-		while (it.hasNext())
-		{
-			Entry<K, List<V>> pair = it.next();
-			s += pair.getValue().size();
-		}
-		return s;
-	}
-
+	
 	/**
 	 * Calculates the total count of all values in this map.
 	 * 
 	 * @return the total count of all values.
 	 */
-	public int totalSize()
-	{
+	public int totalSize() {
+		
 		int size = 0;
-		for (List<V> values : hashMap.values())
-		{
+		
+		for(List<V> values : values())
 			size += values.size();
-		}
+		
 		return size;
 	}
-
-	@Deprecated
-	/**
-	 * @deprecated Use get instead.
-	 */
-	public List<V> getListForKey(K k)
-	{
-		return hashMap.get(k);
-	}
-
-	/**
-	 * Returns the value to which the specified key is mapped, or null if this
-	 * map contains no mapping for the key.
-	 * 
-	 * @param key
-	 *            the key whose associated value is to be returned
-	 * @return the value to which the specified key is mapped, or null if this
-	 *         map contains no mapping for the key
-	 */
-	public List<V> get(K key)
-	{
-		return hashMap.get(key);
-	}
-
+	
 }

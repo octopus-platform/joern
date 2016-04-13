@@ -57,7 +57,7 @@ public class CFGAndUDGToDefUseCFG
 	{
 		MultiHashMap<String, UseOrDefRecord> useDefDict = udg.getUseDefDict();
 		Iterator<Entry<String, List<UseOrDefRecord>>> it = useDefDict
-				.getEntrySetIterator();
+				.entrySet().iterator();
 
 		while (it.hasNext())
 		{

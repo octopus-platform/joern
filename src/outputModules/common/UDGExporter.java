@@ -21,7 +21,7 @@ public abstract class UDGExporter
 	{
 		MultiHashMap<String, UseOrDefRecord> useDefDict = graph.getUseDefDict();
 
-		Iterator<String> it = useDefDict.getKeySetIterator();
+		Iterator<String> it = useDefDict.keySet().iterator();
 
 		while (it.hasNext())
 		{

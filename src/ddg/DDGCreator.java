@@ -67,7 +67,7 @@ public class DDGCreator
 				continue;
 
 			List<Object> children = cfg.getChildBlocks()
-					.getListForKey(currentBlock);
+					.get(currentBlock);
 			if (children == null)
 				continue;
 
@@ -104,7 +104,7 @@ public class DDGCreator
 			out.removeAllForKey(statement);
 
 			List<Object> symsDefined = cfg.getSymbolsDefined()
-					.getListForKey(statement);
+					.get(statement);
 			if (symsDefined == null)
 				continue;
 
@@ -127,7 +127,7 @@ public class DDGCreator
 
 	private void updateIn(Object x)
 	{
-		List<Object> parents = cfg.getParentBlocks().getListForKey(x);
+		List<Object> parents = cfg.getParentBlocks().get(x);
 		if (parents == null)
 			return;
 
@@ -162,7 +162,7 @@ public class DDGCreator
 		}
 
 		// -kill(x)
-		List<Object> killX = cfg.getSymbolsDefined().getListForKey(x);
+		List<Object> killX = cfg.getSymbolsDefined().get(x);
 		if (killX != null)
 		{
 
@@ -200,7 +200,7 @@ public class DDGCreator
 			if (inForBlock == null)
 				continue;
 			List<Object> usedSymbols = cfg.getSymbolsUsed()
-					.getListForKey(statement);
+					.get(statement);
 			if (usedSymbols == null)
 				continue;
 

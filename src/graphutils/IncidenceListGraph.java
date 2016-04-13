@@ -178,7 +178,7 @@ public class IncidenceListGraph<V, E extends Edge<V>> implements Iterable<V>
 
 	public void removeEdgesFrom(V vertex)
 	{
-		List<E> removed = outNeighborhood.removeAll(vertex);
+		List<E> removed = outNeighborhood.remove(vertex);
 		if (removed != null)
 		{
 			for (E edge : removed)
@@ -198,7 +198,7 @@ public class IncidenceListGraph<V, E extends Edge<V>> implements Iterable<V>
 
 	public void removeEdgesTo(V vertex)
 	{
-		List<E> removed = inNeighborhood.removeAll(vertex);
+		List<E> removed = inNeighborhood.remove(vertex);
 		if (removed != null)
 		{
 			for (E edge : removed)
