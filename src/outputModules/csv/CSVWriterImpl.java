@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import databaseNodes.EdgeKeys;
 import databaseNodes.NodeKeys;
 import outputModules.common.WriterImpl;
 
@@ -18,7 +19,7 @@ public class CSVWriterImpl implements WriterImpl
 			NodeKeys.LOCATION, NodeKeys.FUNCTION_ID, NodeKeys.NAME,
 			NodeKeys.FILEPATH, NodeKeys.CHILD_NUMBER };
 
-	final String[] edgeProperties = {};
+	final String[] edgeProperties = { EdgeKeys.VAR };
 
 	long lastNodeId = 0;
 
@@ -54,7 +55,7 @@ public class CSVWriterImpl implements WriterImpl
 		for (String property : edgeProperties)
 		{
 			edgeWriter.write(SEPARATOR);
-			String propValue = (String) properties.get(property);
+			String propValue = (null == properties) ? null : (String) properties.get(property);
 			if (propValue != null)
 				edgeWriter.write(propValue);
 		}

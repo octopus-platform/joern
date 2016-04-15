@@ -1,8 +1,10 @@
 package outputModules.csv.exporters;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import ast.ASTNode;
+import databaseNodes.EdgeKeys;
 import databaseNodes.EdgeTypes;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DefUseRelation;
@@ -25,6 +27,8 @@ public class CSVDDGExporter extends DDGExporter
 	 */
 	public void writeDDGEdges(DDG ddg) {
 	
+		Map<String, Object> properties = new HashMap<String, Object>();
+		
 		for( DefUseRelation ddgEdge : ddg.getDefUseEdges())	{
 		
 			// should always be instances of ASTNode
@@ -32,7 +36,8 @@ public class CSVDDGExporter extends DDGExporter
 				
 				Writer.setIdForObject(ddgEdge.src, ((ASTNode)ddgEdge.src).getNodeId());
 				Writer.setIdForObject(ddgEdge.dst, ((ASTNode)ddgEdge.dst).getNodeId());
-				addDDGEdge( ddgEdge, null);
+				properties.put( EdgeKeys.VAR, ddgEdge.symbol);
+				addDDGEdge( ddgEdge, properties);
 			}
 		}
 		// clean up

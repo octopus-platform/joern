@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import databaseNodes.EdgeKeys;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DefUseRelation;
 
@@ -20,7 +21,7 @@ public abstract class DDGExporter
 
 		for (DefUseRelation defUseRel : defUseEdges)
 		{
-			properties.put("var", defUseRel.symbol);
+			properties.put( EdgeKeys.VAR, defUseRel.symbol);
 			addDDGEdge(defUseRel, properties);
 		}
 	}

@@ -65,8 +65,8 @@ public class PHPCGCreatorTest {
 	}
 	
 	/**
-	 * Checks whether an edge exists in a given DDG from a given
-	 * source node to a given destination node for a given symbol.
+	 * Checks whether an edge exists in a given CG from a given
+	 * source node to a given destination node.
 	 */
 	private boolean edgeExists( CG cg, long srcid, long dstid) {
 			
