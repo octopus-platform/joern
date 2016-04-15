@@ -21,10 +21,9 @@ public abstract class DDGExporter
 		for (DefUseRelation defUseRel : defUseEdges)
 		{
 			properties.put("var", defUseRel.symbol);
-			addDDGEdge(properties, defUseRel);
+			addDDGEdge(defUseRel, properties);
 		}
 	}
 
-	protected abstract void addDDGEdge(Map<String, Object> properties,
-			DefUseRelation defUseRel);
+	protected abstract void addDDGEdge(DefUseRelation defUseRel, Map<String, Object> properties);
 }

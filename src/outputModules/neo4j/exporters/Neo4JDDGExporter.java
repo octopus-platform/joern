@@ -21,8 +21,7 @@ public class Neo4JDDGExporter extends DDGExporter
 	}
 
 	@Override
-	protected void addDDGEdge(Map<String, Object> properties,
-			DefUseRelation defUseRel)
+	protected void addDDGEdge(DefUseRelation defUseRel, Map<String, Object> properties)
 	{
 		long srcId = nodeStore.getIdForObject(defUseRel.src);
 		long dstId = nodeStore.getIdForObject(defUseRel.dst);

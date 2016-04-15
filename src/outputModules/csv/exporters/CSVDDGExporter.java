@@ -13,8 +13,7 @@ public class CSVDDGExporter extends DDGExporter
 {
 
 	@Override
-	protected void addDDGEdge(Map<String, Object> properties,
-			DefUseRelation defUseRel)
+	protected void addDDGEdge(DefUseRelation defUseRel, Map<String, Object> properties)
 	{
 		long srcId = Writer.getIdForObject(defUseRel.src);
 		long dstId = Writer.getIdForObject(defUseRel.dst);
@@ -33,7 +32,7 @@ public class CSVDDGExporter extends DDGExporter
 				
 				Writer.setIdForObject(ddgEdge.src, ((ASTNode)ddgEdge.src).getNodeId());
 				Writer.setIdForObject(ddgEdge.dst, ((ASTNode)ddgEdge.dst).getNodeId());
-				addDDGEdge( null, ddgEdge);
+				addDDGEdge( ddgEdge, null);
 			}
 		}
 		// clean up
