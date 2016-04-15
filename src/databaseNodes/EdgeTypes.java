@@ -44,5 +44,10 @@ public class EdgeTypes
 	public static final String DOM = "DOM";
 
 	public static final String CONTROLS = "CONTROLS";
+	
+	/**
+	 * Links call expressions to the definitions of the called functions.
+	 */
+	public static final String CALLS = "CALLS";
 
 }
