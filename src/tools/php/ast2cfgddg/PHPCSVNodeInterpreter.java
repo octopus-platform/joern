@@ -109,6 +109,7 @@ import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
+import languages.php.cg.PHPCGFactory;
 
 public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 {
@@ -1649,6 +1650,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		ast.addNodeWithId(newNode, id);
 		newNode.setNodeId(id);
 
+		// special in the case of function calls:
+		// we add the created node to the PHP call graph factory's list of function calls;
+		// hence we get a list of all function calls without any additional traversals of
+		// the final AST
+		PHPCGFactory.addFunctionCall(newNode);
+		
 		return id;
 	}
 
