@@ -6,6 +6,7 @@
 # $PHPJOERN = the directory of your phpjoern parser installation
 # $PHPINPUT = the file/directory of the PHP code you wish to analyze
 # $JEXP_HOME = the directory of your batch-import installation
+# $JOERN = the directory your joern installation
 
 # Generate node and edge files using phpjoern parser.
 
@@ -28,8 +29,8 @@ $PHPJOERN/parser -f jexp -n nodes.csv -r edges.csv $PHPINPUT
 
 # Use Joern to generate CFG and DDG edges and export them
 
-ant phpast2cfgddg
-java -jar bin/phpast2cfgddg.jar nodes_joern.csv edges_joern.csv
+cd $JOERN; ant phpast2cfgddg
+java -jar $JOERN/bin/phpast2cfgddg.jar nodes_joern.csv edges_joern.csv
 
 # Joern generates the file cfg_ddg_edges.csv in the current
 # directory. We thus now have one nodes file and two edges files,
