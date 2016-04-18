@@ -128,6 +128,12 @@ public class CSVFunctionExtractor
 					continue;
 			}
 			
+			// ignore artificial CFG entry and exit nodes; they will be generated
+			// by the CFG factory and their node ids will be computed using a fixed offset
+			// from the id of the considered function
+			if( currType.equals(PHPCSVNodeTypes.TYPE_CFG_ENTRY) || currType.equals(PHPCSVNodeTypes.TYPE_CFG_EXIT))
+				continue;
+			
 			// if we met a toplevel node of a file, then make sure the csvStack is
 			// empty, put a new CSVAST on the stack, add current row, and continue
 			if( currType.equals(PHPCSVNodeTypes.TYPE_TOPLEVEL) &&
@@ -205,6 +211,12 @@ public class CSVFunctionExtractor
 			// break at file edges
 			if( currType.equals(PHPCSVEdgeTypes.TYPE_FILE_OF))
 				break;
+			
+			// ignore artificial CFG entry and exit nodes; they will be generated
+			// by the CFG factory and their node ids will be computed using a fixed offset
+			// from the id of the considered function
+			if( currType.equals(PHPCSVEdgeTypes.TYPE_CFG_ENTRY) || currType.equals(PHPCSVEdgeTypes.TYPE_CFG_EXIT))
+				continue;
 			
 			if( !currType.equals(PHPCSVEdgeTypes.TYPE_AST_PARENT_OF))
 				throw new InvalidCSVFile( "edgeReader, line " + edgeReader.getCurrentLineNumber() + ": "

@@ -13,5 +13,7 @@ public class PHPCSVEdgeTypes
 	public static final String TYPE_FILE_OF = "FILE_OF";
 	public static final String TYPE_DIRECTORY_OF = "DIRECTORY_OF";
 	public static final String TYPE_AST_PARENT_OF = "PARENT_OF";
+	public static final String TYPE_CFG_ENTRY = "ENTRY";
+	public static final String TYPE_CFG_EXIT = "EXIT";
 
 }

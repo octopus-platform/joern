@@ -60,6 +60,10 @@ public class PHPCSVNodeTypes
 
 	public static final String TYPE_CLASS = "AST_CLASS";
 
+	// CFG entry and exit nodes
+	public static final String TYPE_CFG_ENTRY = "CFG_FUNC_ENTRY";
+	public static final String TYPE_CFG_EXIT = "CFG_FUNC_EXIT";
+
 	// nodes without children (leafs)
 	// expressions
 	public static final String TYPE_MAGIC_CONST = "AST_MAGIC_CONST";

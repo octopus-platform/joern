@@ -10,7 +10,7 @@ public class CFGExitNode extends AbstractCFGNode
 	@Override
 	public String toString()
 	{
-		return "[EXIT]";
+		return -1 != getNodeId() ? "[(" + getNodeId() + ") EXIT]" : "[EXIT]";
 	}
 
 	@Override

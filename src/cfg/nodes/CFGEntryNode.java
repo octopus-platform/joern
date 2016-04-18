@@ -10,7 +10,7 @@ public class CFGEntryNode extends AbstractCFGNode
 	@Override
 	public String toString()
 	{
-		return "[ENTRY]";
+		return -1 != getNodeId() ? "[(" + getNodeId() + ") ENTRY]" : "[ENTRY]";
 	}
 
 	@Override

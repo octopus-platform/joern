@@ -7,6 +7,15 @@ import databaseNodes.NodeKeys;
 
 public abstract class AbstractCFGNode implements CFGNode
 {
+	private Long id = -1l;
+
+	public Long getNodeId() {
+		return this.id;
+	}
+
+	public void setNodeId( Long id) {
+		this.id = id;
+	}
 
 	@Override
 	public String toString()

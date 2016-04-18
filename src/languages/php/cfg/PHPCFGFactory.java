@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ast.expressions.Expression;
+import ast.functionDef.FunctionDef;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
 import ast.php.statements.blockstarters.ForEachStatement;
@@ -22,17 +23,34 @@ import cfg.nodes.CFGExceptionNode;
 import cfg.nodes.CFGExitNode;
 import cfg.nodes.CFGNode;
 
-public class PHPCFGFactory extends CFGFactory
-{
-	static{
+public class PHPCFGFactory extends CFGFactory {
+	
+	// node id offsets for entry and exit nodes of function definitions
+	private static final int CFG_ENTRY_OFFSET = 1;
+	private static final int CFG_EXIT_OFFSET = 2;
+	
+	static {
 		structuredFlowVisitior = new PHPStructuredFlowVisitor();
 	}
 
-	public PHPCFGFactory()
+	public PHPCFGFactory() {
+		structuredFlowVisitior = new PHPStructuredFlowVisitor();
+	}
+
+	@Override
+	public CFG newInstance(FunctionDef functionDefinition)
 	{
-		structuredFlowVisitior = new PHPStructuredFlowVisitor();
+		CFG cfg = super.newInstance(functionDefinition);
+		
+		// for PHP, we additionally set the node ids for the function entry and exit nodes:
+		// their ids match the ids of the entry and exit nodes output by the PHP AST parser
+		Long id = functionDefinition.getNodeId();
+		((CFGEntryNode)cfg.getEntryNode()).setNodeId( id + CFG_ENTRY_OFFSET);
+		((CFGExitNode)cfg.getExitNode()).setNodeId( id + CFG_EXIT_OFFSET);
+		
+		return cfg;
 	}
-
+	
 	public static CFG newInstance(IfStatement ifStmt)
 	{
 		try
