@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
@@ -121,18 +122,16 @@ import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVBasedTest;
-import tests.languages.php.samples.CSVASTSamples;
 import tools.php.ast2cfgddg.PHPCSVNodeTypes;
-
-/*
- * TODO: We should move all node and edge strings into the class CSVASTSamples.
- * This way, we will have a clear separation between code and data, and we can re-use
- * ASTs in CSV format in tests for CFG creation.
- * */
 
 public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 {
-
+	// set sample directory
+	@Before
+	public void setSampleDir() {
+		super.setSampleDir( "astCreation");
+	}
+	
 	// primary expressions (leafs)
 
 	/**
@@ -150,14 +149,11 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPrimaryExpressionCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.primaryExpressionNodeStr;
-		String edgeStr = CSVASTSamples.edgeHeader;
+		handleCSVFiles( "testPrimaryExpression");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)4);
-		ASTNode node3 = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)8);
 
 		assertThat( node, instanceOf(IntegerExpression.class));
 		assertEquals( 0, node.getChildCount());
@@ -192,22 +188,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testNameCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nameNodeStr;
-		String edgeStr = CSVASTSamples.nameEdgeStr;
+		handleCSVFiles( "testClass");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 
 		assertThat( node, instanceOf(Identifier.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((Identifier)node).getNameChild());
+		assertEquals( ast.getNodeById((long)8), ((Identifier)node).getNameChild());
 		assertEquals( "bar", ((Identifier)node).getNameChild().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(Identifier.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((Identifier)node2).getNameChild());
+		assertEquals( ast.getNodeById((long)11), ((Identifier)node2).getNameChild());
 		assertEquals( "buz", ((Identifier)node2).getNameChild().getEscapedCodeStr());
 	}
 
@@ -224,22 +217,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClosureVarCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.closureVariableNodeStr;
-		String edgeStr = CSVASTSamples.closureVariableEdgeStr;
+		handleCSVFiles( "testClosureVar");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(ClosureVar.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((ClosureVar)node).getNameChild());
+		assertEquals( ast.getNodeById((long)12), ((ClosureVar)node).getNameChild());
 		assertEquals( "foo", ((ClosureVar)node).getNameChild().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(ClosureVar.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((ClosureVar)node2).getNameChild());
+		assertEquals( ast.getNodeById((long)14), ((ClosureVar)node2).getNameChild());
 		assertEquals( "bar", ((ClosureVar)node2).getNameChild().getEscapedCodeStr());
 	}
 
@@ -261,37 +251,20 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testTopLevelFuncCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,3,\"foo.php\",\n";
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_CLASS,,3,,0,1,3,bar,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
-		nodeStr += "5,NULL,,3,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"bar\",\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
+		handleCSVFiles( "testTopLevelFunc");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "1,2,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)1);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)2);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( "<foo.php>", ((TopLevelFunctionDef)node).getName());
-		assertEquals( ast.getNodeById((long)2), ((TopLevelFunctionDef)node).getContent());
+		assertEquals( "<./foo.php>", ((TopLevelFunctionDef)node).getName());
+		assertEquals( ast.getNodeById((long)5), ((TopLevelFunctionDef)node).getContent());
 
 		assertThat( node2, instanceOf(TopLevelFunctionDef.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( "[bar]", ((TopLevelFunctionDef)node2).getName());
-		assertEquals( ast.getNodeById((long)7), ((TopLevelFunctionDef)node2).getContent());
+		assertEquals( ast.getNodeById((long)12), ((TopLevelFunctionDef)node2).getContent());
 	}
 
 	/**
@@ -311,20 +284,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testFunctionDefCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.functionDefNodeStr;
-		String edgeStr = CSVASTSamples.functionDefEdgeStr;
+		handleCSVFiles( "testFunctionDef");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPFunctionDef.class));
 		assertEquals( "foo", ((PHPFunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPFunctionDef)node).getParameterList());
-		assertEquals( ast.getNodeById((long)6), ((PHPFunctionDef)node).getContent());
-		assertEquals( ast.getNodeById((long)7), ((PHPFunctionDef)node).getReturnType());
-		assertEquals( ast.getNodeById((long)8), ((PHPFunctionDef)node).getReturnType().getNameChild());
+		assertEquals( ast.getNodeById((long)9), ((PHPFunctionDef)node).getParameterList());
+		assertEquals( ast.getNodeById((long)11), ((PHPFunctionDef)node).getContent());
+		assertEquals( ast.getNodeById((long)12), ((PHPFunctionDef)node).getReturnType());
+		assertEquals( ast.getNodeById((long)13), ((PHPFunctionDef)node).getReturnType().getNameChild());
 		assertEquals( "int", ((PHPFunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 
@@ -347,26 +317,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClosureCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.closureNodeStr;
-		String edgeStr = CSVASTSamples.closureEdgeStr;
+		handleCSVFiles( "testClosure");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(Closure.class));
 		assertEquals( "{closure}", ((Closure)node).getName());
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((Closure)node).getParameterList());
-		assertEquals( ast.getNodeById((long)8), ((Closure)node).getClosureUses());
-		assertEquals( ast.getNodeById((long)11), ((Closure)node).getContent());
-		assertEquals( ast.getNodeById((long)12), ((Closure)node).getReturnType());
-		assertEquals( ast.getNodeById((long)13), ((Closure)node).getReturnType().getNameChild());
+		assertEquals( ast.getNodeById((long)12), ((Closure)node).getParameterList());
+		assertEquals( ast.getNodeById((long)13), ((Closure)node).getClosureUses());
+		assertEquals( ast.getNodeById((long)16), ((Closure)node).getContent());
+		assertEquals( ast.getNodeById((long)17), ((Closure)node).getReturnType());
+		assertEquals( ast.getNodeById((long)18), ((Closure)node).getReturnType().getNameChild());
 		assertEquals( "int", ((Closure)node).getReturnType().getNameChild().getEscapedCodeStr());
 
 		// special test for the artificial ClosureExpression node:
 		
-		ASTNode node2 = ast.getNodeById((long)3);
+		ASTNode node2 = ast.getNodeById((long)6);
 		assertThat( node2, instanceOf(AssignmentExpression.class));
 		
 		ASTNode node3 = ((AssignmentExpression)node2).getRight();
@@ -395,20 +362,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testMethodCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.methodNodeStr;
-		String edgeStr = CSVASTSamples.methodEdgeStr;
+		handleCSVFiles( "testMethod");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(Method.class));
 		assertEquals( "foo", ((Method)node).getName());
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((Method)node).getParameterList());
-		assertEquals( ast.getNodeById((long)11), ((Method)node).getContent());
-		assertEquals( ast.getNodeById((long)12), ((Method)node).getReturnType());
-		assertEquals( ast.getNodeById((long)13), ((Method)node).getReturnType().getNameChild());
+		assertEquals( ast.getNodeById((long)16), ((Method)node).getParameterList());
+		assertEquals( ast.getNodeById((long)18), ((Method)node).getContent());
+		assertEquals( ast.getNodeById((long)19), ((Method)node).getReturnType());
+		assertEquals( ast.getNodeById((long)20), ((Method)node).getReturnType().getNameChild());
 		assertEquals( "int", ((Method)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 
@@ -427,42 +391,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClassCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "6,AST_NAME_LIST,,3,,1,1,,,\n";
-		nodeStr += "7,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "8,string,,3,\"buz\",0,1,,,\n";
-		nodeStr += "9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
-		nodeStr += "10,AST_STMT_LIST,,3,,0,9,,,\n";
+		handleCSVFiles( "testClass");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "3,9,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPClassDef.class));
 		assertEquals( "foo", ((PHPClassDef)node).getName());
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPClassDef)node).getExtends());
-		assertEquals( ast.getNodeById((long)5), ((PHPClassDef)node).getExtends().getNameChild());
+		assertEquals( ast.getNodeById((long)7), ((PHPClassDef)node).getExtends());
+		assertEquals( ast.getNodeById((long)8), ((PHPClassDef)node).getExtends().getNameChild());
 		assertEquals( "bar", ((PHPClassDef)node).getExtends().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((PHPClassDef)node).getImplements());
-		assertEquals( ast.getNodeById((long)7), ((PHPClassDef)node).getImplements().getIdentifier(0));
-		assertEquals( ast.getNodeById((long)8), ((PHPClassDef)node).getImplements().getIdentifier(0).getNameChild());
+		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getImplements());
+		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getImplements().getIdentifier(0));
+		assertEquals( ast.getNodeById((long)11), ((PHPClassDef)node).getImplements().getIdentifier(0).getNameChild());
 		assertEquals( "buz", ((PHPClassDef)node).getImplements().getIdentifier(0).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((PHPClassDef)node).getTopLevelFunc());
+		assertEquals( ast.getNodeById((long)12), ((PHPClassDef)node).getTopLevelFunc());
 		assertEquals( "[foo]", ((PHPClassDef)node).getTopLevelFunc().getName());
-		assertEquals( ast.getNodeById((long)10), ((PHPClassDef)node).getTopLevelFunc().getContent());
+		assertEquals( ast.getNodeById((long)15), ((PHPClassDef)node).getTopLevelFunc().getContent());
 	}
 
 
@@ -498,28 +443,16 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testMagicConstantCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_MAGIC_CONST,T_LINE,3,,0,1,,,\n";
-		nodeStr += "4,AST_MAGIC_CONST,T_FILE,4,,1,1,,,\n";
-		nodeStr += "5,AST_MAGIC_CONST,T_DIR,5,,2,1,,,\n";
-		nodeStr += "6,AST_MAGIC_CONST,T_NS_C,6,,3,1,,,\n";
-		nodeStr += "7,AST_MAGIC_CONST,T_FUNC_C,7,,4,1,,,\n";
-		nodeStr += "8,AST_MAGIC_CONST,T_METHOD_C,8,,5,1,,,\n";
-		nodeStr += "9,AST_MAGIC_CONST,T_CLASS_C,9,,6,1,,,\n";
-		nodeStr += "10,AST_MAGIC_CONST,T_TRAIT_C,10,,7,1,,,\n";
+		handleCSVFiles( "testMagicConstant");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)4);
-		ASTNode node3 = ast.getNodeById((long)5);
-		ASTNode node4 = ast.getNodeById((long)6);
-		ASTNode node5 = ast.getNodeById((long)7);
-		ASTNode node6 = ast.getNodeById((long)8);
-		ASTNode node7 = ast.getNodeById((long)9);
-		ASTNode node8 = ast.getNodeById((long)10);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node3 = ast.getNodeById((long)8);
+		ASTNode node4 = ast.getNodeById((long)9);
+		ASTNode node5 = ast.getNodeById((long)10);
+		ASTNode node6 = ast.getNodeById((long)11);
+		ASTNode node7 = ast.getNodeById((long)12);
+		ASTNode node8 = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(PHPMagicConstant.class));
 		assertEquals( 0, node.getChildCount());
@@ -574,28 +507,11 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testTypeHintCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
-		nodeStr += "6,AST_TYPE,TYPE_ARRAY,3,,0,3,,,\n";
-		nodeStr += "7,string,,3,\"bar\",1,3,,,\n";
-		nodeStr += "8,NULL,,3,,2,3,,,\n";
-		nodeStr += "9,AST_PARAM,,3,,1,3,,,\n";
-		nodeStr += "10,AST_TYPE,TYPE_CALLABLE,3,,0,3,,,\n";
-		nodeStr += "11,string,,3,\"buz\",1,3,,,\n";
-		nodeStr += "12,NULL,,3,,2,3,,,\n";
-		nodeStr += "13,NULL,,3,,1,3,,,\n";
-		nodeStr += "14,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "15,AST_TYPE,TYPE_CALLABLE,3,,3,3,,,\n";
+		handleCSVFiles( "testTypeHint");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)10);
-		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)15);
+		ASTNode node3 = ast.getNodeById((long)20);
 
 		assertThat( node, instanceOf(PHPTypeHint.class));
 		assertEquals( 0, node.getChildCount());
@@ -627,27 +543,24 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testVariableCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.variableNodeStr;
-		String edgeStr = CSVASTSamples.variableEdgeStr;
+		handleCSVFiles( "testVariable");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)5);
-		ASTNode node3 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(Variable.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((Variable)node).getNameExpression());
+		assertEquals( ast.getNodeById((long)7), ((Variable)node).getNameExpression());
 		assertEquals( "foo", ((Variable)node).getNameExpression().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(Variable.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)6), ((Variable)node2).getNameExpression());
+		assertEquals( ast.getNodeById((long)9), ((Variable)node2).getNameExpression());
 
 		assertThat( node3, instanceOf(Variable.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((Variable)node3).getNameExpression());
+		assertEquals( ast.getNodeById((long)10), ((Variable)node3).getNameExpression());
 		assertEquals( "bar", ((Variable)node3).getNameExpression().getEscapedCodeStr());
 	}
 
@@ -666,22 +579,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testConstantCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.constantNodeStr;
-		String edgeStr = CSVASTSamples.constantEdgeStr;
+		handleCSVFiles( "testConstant");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(Constant.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((Constant)node).getIdentifier());
+		assertEquals( ast.getNodeById((long)7), ((Constant)node).getIdentifier());
 		assertEquals( "FOO", ((Constant)node).getIdentifier().getNameChild().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(Constant.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((Constant)node2).getIdentifier());
+		assertEquals( ast.getNodeById((long)10), ((Constant)node2).getIdentifier());
 		assertEquals( "BAR\\BUZ", ((Constant)node2).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 
@@ -702,58 +612,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUnpackCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
-		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
-		nodeStr += "7,AST_UNPACK,,3,,0,1,,,\n";
-		nodeStr += "8,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "9,string,,3,\"traversable\",0,1,,,\n";
-		nodeStr += "10,AST_CALL,,4,,1,1,,,\n";
-		nodeStr += "11,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "12,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "13,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "14,AST_UNPACK,,4,,0,1,,,\n";
-		nodeStr += "15,AST_ARRAY,,4,,0,1,,,\n";
-		nodeStr += "16,AST_ARRAY_ELEM,,4,,0,1,,,\n";
-		nodeStr += "17,integer,,4,4,0,1,,,\n";
-		nodeStr += "18,NULL,,4,,1,1,,,\n";
-		nodeStr += "19,AST_ARRAY_ELEM,,4,,1,1,,,\n";
-		nodeStr += "20,integer,,4,2,0,1,,,\n";
-		nodeStr += "21,NULL,,4,,1,1,,,\n";
+		handleCSVFiles( "testUnpack");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "16,18,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "19,21,PARENT_OF\n";
-		edgeStr += "15,19,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "10,13,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)7);
-		ASTNode node2 = ast.getNodeById((long)14);
+		ASTNode node = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)17);
 
 		assertThat( node, instanceOf(PHPUnpackExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPUnpackExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)11), ((PHPUnpackExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(PHPUnpackExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)15), ((PHPUnpackExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)18), ((PHPUnpackExpression)node2).getExpression());
 	}
 
 	/**
@@ -770,22 +640,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUnaryPlusCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_UNARY_PLUS,,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		handleCSVFiles( "testUnaryPlus");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(UnaryPlusExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((UnaryPlusExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((UnaryPlusExpression)node).getExpression());
 	}
 
 	/**
@@ -802,22 +663,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUnaryMinusCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_UNARY_MINUS,,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
+		handleCSVFiles( "testUnaryMinus");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(UnaryMinusExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((UnaryMinusExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((UnaryMinusExpression)node).getExpression());
 	}
 
 	/**
@@ -861,128 +713,73 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCastCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_CAST,TYPE_NULL,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"n\",0,1,,,\n";
-		nodeStr += "6,AST_CAST,TYPE_BOOL,6,,1,1,,,\n";
-		nodeStr += "7,integer,,6,0,0,1,,,\n";
-		nodeStr += "8,AST_CAST,TYPE_BOOL,7,,2,1,,,\n";
-		nodeStr += "9,integer,,7,1,0,1,,,\n";
-		nodeStr += "10,AST_CAST,TYPE_LONG,9,,3,1,,,\n";
-		nodeStr += "11,integer,,9,2,0,1,,,\n";
-		nodeStr += "12,AST_CAST,TYPE_LONG,10,,4,1,,,\n";
-		nodeStr += "13,integer,,10,3,0,1,,,\n";
-		nodeStr += "14,AST_CAST,TYPE_DOUBLE,12,,5,1,,,\n";
-		nodeStr += "15,double,,12,3.14,0,1,,,\n";
-		nodeStr += "16,AST_CAST,TYPE_DOUBLE,13,,6,1,,,\n";
-		nodeStr += "17,double,,13,4.2,0,1,,,\n";
-		nodeStr += "18,AST_CAST,TYPE_DOUBLE,14,,7,1,,,\n";
-		nodeStr += "19,double,,14,6.6,0,1,,,\n";
-		nodeStr += "20,AST_CAST,TYPE_STRING,16,,8,1,,,\n";
-		nodeStr += "21,string,,16,\"hello\",0,1,,,\n";
-		nodeStr += "22,AST_CAST,TYPE_ARRAY,18,,9,1,,,\n";
-		nodeStr += "23,AST_VAR,,18,,0,1,,,\n";
-		nodeStr += "24,string,,18,\"a\",0,1,,,\n";
-		nodeStr += "25,AST_CAST,TYPE_OBJECT,20,,10,1,,,\n";
-		nodeStr += "26,AST_VAR,,20,,0,1,,,\n";
-		nodeStr += "27,string,,20,\"o\",0,1,,,\n";
+		handleCSVFiles( "testCast");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "2,6,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "2,8,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "2,10,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "2,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "2,14,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "2,16,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "2,18,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "2,20,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "2,22,PARENT_OF\n";
-		edgeStr += "26,27,PARENT_OF\n";
-		edgeStr += "25,26,PARENT_OF\n";
-		edgeStr += "2,25,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
-		ASTNode node3 = ast.getNodeById((long)8);
-		ASTNode node4 = ast.getNodeById((long)10);
-		ASTNode node5 = ast.getNodeById((long)12);
-		ASTNode node6 = ast.getNodeById((long)14);
-		ASTNode node7 = ast.getNodeById((long)16);
-		ASTNode node8 = ast.getNodeById((long)18);
-		ASTNode node9 = ast.getNodeById((long)20);
-		ASTNode node10 = ast.getNodeById((long)22);
-		ASTNode node11 = ast.getNodeById((long)25);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node4 = ast.getNodeById((long)13);
+		ASTNode node5 = ast.getNodeById((long)15);
+		ASTNode node6 = ast.getNodeById((long)17);
+		ASTNode node7 = ast.getNodeById((long)19);
+		ASTNode node8 = ast.getNodeById((long)21);
+		ASTNode node9 = ast.getNodeById((long)23);
+		ASTNode node10 = ast.getNodeById((long)25);
+		ASTNode node11 = ast.getNodeById((long)28);
 
 		assertThat( node, instanceOf(CastExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((CastExpression)node).getCastExpression());
+		assertEquals( ast.getNodeById((long)7), ((CastExpression)node).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_NULL, ((CastExpression)node).getFlags());
 
 		assertThat( node2, instanceOf(CastExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((CastExpression)node2).getCastExpression());
+		assertEquals( ast.getNodeById((long)10), ((CastExpression)node2).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_BOOL, ((CastExpression)node2).getFlags());
 
 		assertThat( node3, instanceOf(CastExpression.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((CastExpression)node3).getCastExpression());
+		assertEquals( ast.getNodeById((long)12), ((CastExpression)node3).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_BOOL, ((CastExpression)node3).getFlags());
 
 		assertThat( node4, instanceOf(CastExpression.class));
 		assertEquals( 1, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((CastExpression)node4).getCastExpression());
+		assertEquals( ast.getNodeById((long)14), ((CastExpression)node4).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_LONG, ((CastExpression)node4).getFlags());
 
 		assertThat( node5, instanceOf(CastExpression.class));
 		assertEquals( 1, node5.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((CastExpression)node5).getCastExpression());
+		assertEquals( ast.getNodeById((long)16), ((CastExpression)node5).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_LONG, ((CastExpression)node5).getFlags());
 
 		assertThat( node6, instanceOf(CastExpression.class));
 		assertEquals( 1, node6.getChildCount());
-		assertEquals( ast.getNodeById((long)15), ((CastExpression)node6).getCastExpression());
+		assertEquals( ast.getNodeById((long)18), ((CastExpression)node6).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node6).getFlags());
 
 		assertThat( node7, instanceOf(CastExpression.class));
 		assertEquals( 1, node7.getChildCount());
-		assertEquals( ast.getNodeById((long)17), ((CastExpression)node7).getCastExpression());
+		assertEquals( ast.getNodeById((long)20), ((CastExpression)node7).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node7).getFlags());
 
 		assertThat( node8, instanceOf(CastExpression.class));
 		assertEquals( 1, node8.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((CastExpression)node8).getCastExpression());
+		assertEquals( ast.getNodeById((long)22), ((CastExpression)node8).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_DOUBLE, ((CastExpression)node8).getFlags());
 
 		assertThat( node9, instanceOf(CastExpression.class));
 		assertEquals( 1, node9.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((CastExpression)node9).getCastExpression());
+		assertEquals( ast.getNodeById((long)24), ((CastExpression)node9).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_STRING, ((CastExpression)node9).getFlags());
 
 		assertThat( node10, instanceOf(CastExpression.class));
 		assertEquals( 1, node10.getChildCount());
-		assertEquals( ast.getNodeById((long)23), ((CastExpression)node10).getCastExpression());
+		assertEquals( ast.getNodeById((long)26), ((CastExpression)node10).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((CastExpression)node10).getFlags());
 
 		assertThat( node11, instanceOf(CastExpression.class));
 		assertEquals( 1, node11.getChildCount());
-		assertEquals( ast.getNodeById((long)26), ((CastExpression)node11).getCastExpression());
+		assertEquals( ast.getNodeById((long)29), ((CastExpression)node11).getCastExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_OBJECT, ((CastExpression)node11).getFlags());
 	}
 
@@ -1000,21 +797,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testEmptyCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.emptyNodeStr;
-		String edgeStr = CSVASTSamples.emptyEdgeStr;
+		handleCSVFiles( "testEmpty");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPEmptyExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPEmptyExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPEmptyExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(PHPEmptyExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPEmptyExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPEmptyExpression)node2).getExpression());
 	}
 
 	/**
@@ -1031,21 +825,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIssetCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.issetNodeStr;
-		String edgeStr = CSVASTSamples.issetEdgeStr;
+		handleCSVFiles( "testIsset");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPIssetExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPIssetExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPIssetExpression)node).getVariableExpression());
 
 		assertThat( node2, instanceOf(PHPIssetExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPIssetExpression)node2).getVariableExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPIssetExpression)node2).getVariableExpression());
 	}
 
 	/**
@@ -1064,40 +855,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testSilenceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_SILENCE,,4,,0,1,,,\n";
-		nodeStr += "4,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "5,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "6,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "7,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "8,AST_SILENCE,,5,,1,1,,,\n";
-		nodeStr += "9,AST_DIM,,5,,0,1,,,\n";
-		nodeStr += "10,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "11,string,,5,\"bar\",0,1,,,\n";
-		nodeStr += "12,integer,,5,42,1,1,,,\n";
+		handleCSVFiles( "testSilence");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,7,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)11);
 
 		assertThat( node, instanceOf(PHPSilenceExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPSilenceExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPSilenceExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(PHPSilenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPSilenceExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)12), ((PHPSilenceExpression)node2).getExpression());
 	}
 
 	/**
@@ -1116,21 +885,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testShellExecCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.shellExecNodeStr;
-		String edgeStr = CSVASTSamples.shellExecEdgeStr;
+		handleCSVFiles( "testShellExec");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(PHPShellExecExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPShellExecExpression)node).getShellCommand());
+		assertEquals( ast.getNodeById((long)10), ((PHPShellExecExpression)node).getShellCommand());
 
 		assertThat( node2, instanceOf(PHPShellExecExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPShellExecExpression)node2).getShellCommand());
+		assertEquals( ast.getNodeById((long)15), ((PHPShellExecExpression)node2).getShellCommand());
 	}
 
 	/**
@@ -1147,21 +913,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCloneCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.cloneNodeStr;
-		String edgeStr = CSVASTSamples.cloneEdgeStr;
+		handleCSVFiles( "testClone");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPCloneExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPCloneExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPCloneExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(PHPCloneExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPCloneExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPCloneExpression)node2).getExpression());
 	}
 
 	/**
@@ -1181,21 +944,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testExitCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.exitNodeStr;
-		String edgeStr = CSVASTSamples.exitEdgeStr;
+		handleCSVFiles( "testExit");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPExitExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPExitExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPExitExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(PHPExitExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPExitExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPExitExpression)node2).getExpression());
 	}
 
 	/**
@@ -1213,21 +973,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPrintCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.printNodeStr;
-		String edgeStr = CSVASTSamples.printEdgeStr;
+		handleCSVFiles( "testPrint");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPPrintExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPPrintExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(PHPPrintExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPPrintExpression)node2).getExpression());
 	}
 
 	/**
@@ -1255,40 +1012,37 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIncludeOrEvalCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.includeOrEvalNodeStr;
-		String edgeStr = CSVASTSamples.includeOrEvalEdgeStr;
+		handleCSVFiles( "testIncludeOrEval");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)5);
-		ASTNode node3 = ast.getNodeById((long)8);
-		ASTNode node4 = ast.getNodeById((long)13);
-		ASTNode node5 = ast.getNodeById((long)20);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node4 = ast.getNodeById((long)16);
+		ASTNode node5 = ast.getNodeById((long)23);
 
 		assertThat( node, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPIncludeOrEvalExpression)node).getIncludeOrEvalExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPIncludeOrEvalExpression)node).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE, ((PHPIncludeOrEvalExpression)node).getFlags());
 
 		assertThat( node2, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)6), ((PHPIncludeOrEvalExpression)node2).getIncludeOrEvalExpression());
+		assertEquals( ast.getNodeById((long)9), ((PHPIncludeOrEvalExpression)node2).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE_ONCE, ((PHPIncludeOrEvalExpression)node2).getFlags());
 
 		assertThat( node3, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPIncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
+		assertEquals( ast.getNodeById((long)12), ((PHPIncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE, ((PHPIncludeOrEvalExpression)node3).getFlags());
 
 		assertThat( node4, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((PHPIncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
+		assertEquals( ast.getNodeById((long)17), ((PHPIncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE_ONCE, ((PHPIncludeOrEvalExpression)node4).getFlags());
 
 		assertThat( node5, instanceOf(PHPIncludeOrEvalExpression.class));
 		assertEquals( 1, node5.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((PHPIncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
+		assertEquals( ast.getNodeById((long)24), ((PHPIncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
 		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_EVAL, ((PHPIncludeOrEvalExpression)node5).getFlags());
 	}
 
@@ -1308,32 +1062,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUnaryOperationCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_UNARY_OP,UNARY_BITWISE_NOT,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_UNARY_OP,UNARY_BOOL_NOT,6,,1,1,,,\n";
-		nodeStr += "7,AST_VAR,,6,,0,1,,,\n";
-		nodeStr += "8,string,,6,\"foo\",0,1,,,\n";
+		handleCSVFiles( "testUnaryOperation");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((UnaryOperationExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node).getExpression());
 
 		assertThat( node2, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((UnaryOperationExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((UnaryOperationExpression)node2).getExpression());
 	}
 
 	/**
@@ -1349,16 +1089,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPreIncCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.preIncNodeStr;
-		String edgeStr = CSVASTSamples.preIncEdgeStr;
+		handleCSVFiles( "testPreInc");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PreIncOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PreIncOperationExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((PreIncOperationExpression)node).getVariableExpression());
 	}
 
 	/**
@@ -1374,16 +1111,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPreDecCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.preDecNodeStr;
-		String edgeStr = CSVASTSamples.preDecEdgeStr;
+		handleCSVFiles( "testPreDec");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PreDecOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PreDecOperationExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((PreDecOperationExpression)node).getVariableExpression());
 	}
 
 	/**
@@ -1399,16 +1133,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPostIncCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.postIncNodeStr;
-		String edgeStr = CSVASTSamples.postIncEdgeStr;
+		handleCSVFiles( "testPostInc");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PostIncOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PostIncOperationExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((PostIncOperationExpression)node).getVariableExpression());
 	}
 
 	/**
@@ -1424,16 +1155,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPostDecCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.postDecNodeStr;
-		String edgeStr = CSVASTSamples.postDecEdgeStr;
+		handleCSVFiles( "testPostDec");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PostDecOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PostDecOperationExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((PostDecOperationExpression)node).getVariableExpression());
 	}
 
 	/**
@@ -1454,86 +1182,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testYieldFromCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,7,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,AST_YIELD_FROM,,4,,0,3,,,\n";
-		nodeStr += "8,AST_ARRAY,,4,,0,3,,,\n";
-		nodeStr += "9,AST_ARRAY_ELEM,,4,,0,3,,,\n";
-		nodeStr += "10,integer,,4,4,0,3,,,\n";
-		nodeStr += "11,NULL,,4,,1,3,,,\n";
-		nodeStr += "12,AST_ARRAY_ELEM,,4,,1,3,,,\n";
-		nodeStr += "13,integer,,4,2,0,3,,,\n";
-		nodeStr += "14,NULL,,4,,1,3,,,\n";
-		nodeStr += "15,AST_YIELD_FROM,,5,,1,3,,,\n";
-		nodeStr += "16,AST_NEW,,5,,0,3,,,\n";
-		nodeStr += "17,AST_NAME,NAME_NOT_FQ,5,,0,3,,,\n";
-		nodeStr += "18,string,,5,\"ArrayIterator\",0,3,,,\n";
-		nodeStr += "19,AST_ARG_LIST,,5,,1,3,,,\n";
-		nodeStr += "20,AST_ARRAY,,5,,0,3,,,\n";
-		nodeStr += "21,AST_ARRAY_ELEM,,5,,0,3,,,\n";
-		nodeStr += "22,string,,5,\"hello\",0,3,,,\n";
-		nodeStr += "23,NULL,,5,,1,3,,,\n";
-		nodeStr += "24,AST_ARRAY_ELEM,,5,,1,3,,,\n";
-		nodeStr += "25,string,,5,\"world\",0,3,,,\n";
-		nodeStr += "26,NULL,,5,,1,3,,,\n";
-		nodeStr += "27,AST_YIELD_FROM,,6,,2,3,,,\n";
-		nodeStr += "28,AST_CALL,,6,,0,3,,,\n";
-		nodeStr += "29,AST_NAME,NAME_NOT_FQ,6,,0,3,,,\n";
-		nodeStr += "30,string,,6,\"bar\",0,3,,,\n";
-		nodeStr += "31,AST_ARG_LIST,,6,,1,3,,,\n";
-		nodeStr += "32,NULL,,3,,3,3,,,\n";
+		handleCSVFiles( "testYieldFrom");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,11,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "8,12,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "21,23,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "24,26,PARENT_OF\n";
-		edgeStr += "20,24,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "16,19,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "6,15,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "28,31,PARENT_OF\n";
-		edgeStr += "27,28,PARENT_OF\n";
-		edgeStr += "6,27,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,32,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)7);
-		ASTNode node2 = ast.getNodeById((long)15);
-		ASTNode node3 = ast.getNodeById((long)27);
+		ASTNode node = ast.getNodeById((long)12);
+		ASTNode node2 = ast.getNodeById((long)20);
+		ASTNode node3 = ast.getNodeById((long)32);
 
 		assertThat( node, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPYieldFromExpression)node).getFromExpression());
+		assertEquals( ast.getNodeById((long)13), ((PHPYieldFromExpression)node).getFromExpression());
 
 		assertThat( node2, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPYieldFromExpression)node2).getFromExpression());
+		assertEquals( ast.getNodeById((long)21), ((PHPYieldFromExpression)node2).getFromExpression());
 
 		assertThat( node3, instanceOf(PHPYieldFromExpression.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)28), ((PHPYieldFromExpression)node3).getFromExpression());
+		assertEquals( ast.getNodeById((long)33), ((PHPYieldFromExpression)node3).getFromExpression());
 	}
 
 	/**
@@ -1552,22 +1217,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testGlobalCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.globalNodeStr;
-		String edgeStr = CSVASTSamples.globalEdgeStr;
+		handleCSVFiles( "testGlobal");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)8);
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)13);
+		ASTNode node2 = ast.getNodeById((long)16);
 
 		assertThat( node, instanceOf(PHPGlobalStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPGlobalStatement)node).getVariable());
+		assertEquals( ast.getNodeById((long)14), ((PHPGlobalStatement)node).getVariable());
 		assertEquals( "bar", ((PHPGlobalStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(PHPGlobalStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPGlobalStatement)node2).getVariable());
+		assertEquals( ast.getNodeById((long)17), ((PHPGlobalStatement)node2).getVariable());
 		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
 	}
 
@@ -1584,26 +1246,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUnsetCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.unsetNodeStr;
-		String edgeStr = CSVASTSamples.unsetEdgeStr;
+		handleCSVFiles( "testUnset");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)12);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(PHPUnsetStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((PHPUnsetStatement)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)8), ((PHPUnsetStatement)node).getVariableExpression());
 
 		assertThat( node2, instanceOf(PHPUnsetStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPUnsetStatement)node2).getVariableExpression());
+		assertEquals( ast.getNodeById((long)11), ((PHPUnsetStatement)node2).getVariableExpression());
 
 		assertThat( node3, instanceOf(PHPUnsetStatement.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PHPUnsetStatement)node3).getVariableExpression());
+		assertEquals( ast.getNodeById((long)16), ((PHPUnsetStatement)node3).getVariableExpression());
 	}
 
 	/**
@@ -1620,34 +1279,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * }
 	 */
 	@Test
-	public void testReturnStatementCreation() throws IOException, InvalidCSVFile
+	public void testReturnCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,AST_RETURN,,4,,0,3,,,\n";
-		nodeStr += "8,integer,,4,42,0,3,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,3,,3,3,,,\n";
-		nodeStr += "10,string,,3,\"int\",0,3,,,\n";
+		handleCSVFiles( "testReturn");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "3,9,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node = ast.getNodeById((long)12);
 
 		assertThat( node, instanceOf(ReturnStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((ReturnStatement)node).getReturnExpression());
+		assertEquals( ast.getNodeById((long)13), ((ReturnStatement)node).getReturnExpression());
 		assertEquals( "42", ((ReturnStatement)node).getReturnExpression().getEscapedCodeStr());
 	}
 
@@ -1662,25 +1302,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * a:
 	 */
 	@Test
-	public void testLabelStatementCreation() throws IOException, InvalidCSVFile
+	public void testLabelCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_GOTO,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"a\",0,1,,,\n";
-		nodeStr += "5,AST_LABEL,,4,,1,1,,,\n";
-		nodeStr += "6,string,,4,\"a\",0,1,,,\n";
+		handleCSVFiles( "testGoto");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)8);
 
 		assertThat( node, instanceOf(Label.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)6), ((Label)node).getNameChild());
+		assertEquals( ast.getNodeById((long)9), ((Label)node).getNameChild());
 		assertEquals( "a", ((Label)node).getNameChild().getEscapedCodeStr());
 	}
 
@@ -1702,22 +1332,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testReferenceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.referenceNodeStr;
-		String edgeStr = CSVASTSamples.referenceEdgeStr;
+		handleCSVFiles( "testReference");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)15);
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)18);
 
 		assertThat( node, instanceOf(PHPReferenceExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPReferenceExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPReferenceExpression)node).getVariableExpression());
 		assertEquals( "someval", ((Variable)((PHPReferenceExpression)node).getVariableExpression()).getNameExpression().getEscapedCodeStr());
 		
 		assertThat( node2, instanceOf(PHPReferenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPReferenceExpression)node2).getVariableExpression());
+		assertEquals( ast.getNodeById((long)19), ((PHPReferenceExpression)node2).getVariableExpression());
 		assertEquals( "obj", ((Variable)((PropertyExpression)((PHPReferenceExpression)node2).getVariableExpression()).getObjectExpression()).getNameExpression().getEscapedCodeStr());
 		assertEquals( "someval", ((PropertyExpression)((PHPReferenceExpression)node2).getVariableExpression()).getPropertyExpression().getEscapedCodeStr());
 	}
@@ -1740,20 +1367,13 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testHaltCompilerCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_HALT_COMPILER,,3,,0,1,,,\n";
-		nodeStr += "4,integer,,3,25,0,1,,,\n";
+		handleCSVFiles( "testHaltCompiler");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPHaltCompilerStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPHaltCompilerStatement)node).getOffset());
+		assertEquals( ast.getNodeById((long)7), ((PHPHaltCompilerStatement)node).getOffset());
 		assertEquals( "25", ((PHPHaltCompilerStatement)node).getOffset().getEscapedCodeStr());
 	}
 
@@ -1776,38 +1396,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testEchoCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_STMT_LIST,,3,,0,1,,,\n";
-		nodeStr += "4,AST_ECHO,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"Hello World!\",0,1,,,\n";
-		nodeStr += "6,AST_ECHO,,3,,1,1,,,\n";
-		nodeStr += "7,AST_CONST,,3,,0,1,,,\n";
-		nodeStr += "8,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "9,string,,3,\"PHP_EOL\",0,1,,,\n";
+		handleCSVFiles( "testEcho");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPEchoStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((PHPEchoStatement)node).getEchoExpression());
+		assertEquals( ast.getNodeById((long)8), ((PHPEchoStatement)node).getEchoExpression());
 		assertEquals( "Hello World!", ((PHPEchoStatement)node).getEchoExpression().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(PHPEchoStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPEchoStatement)node2).getEchoExpression());
+		assertEquals( ast.getNodeById((long)10), ((PHPEchoStatement)node2).getEchoExpression());
 		assertEquals( "PHP_EOL", ((Constant)((PHPEchoStatement)node2).getEchoExpression()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 
@@ -1822,30 +1423,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * throw new Exception("foo");
 	 */
 	@Test
-	public void testThrowStatementCreation() throws IOException, InvalidCSVFile
+	public void testThrowCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_THROW,,3,,0,1,,,\n";
-		nodeStr += "4,AST_NEW,,3,,0,1,,,\n";
-		nodeStr += "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "6,string,,3,\"Exception\",0,1,,,\n";
-		nodeStr += "7,AST_ARG_LIST,,3,,1,1,,,\n";
-		nodeStr += "8,string,,3,\"foo\",0,1,,,\n";
+		handleCSVFiles( "testThrow");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "4,7,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(ThrowStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((ThrowStatement)node).getThrowExpression());
+		assertEquals( ast.getNodeById((long)7), ((ThrowStatement)node).getThrowExpression());
 	}
 
 	/**
@@ -1859,25 +1445,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * a:
 	 */
 	@Test
-	public void testGotoStatementCreation() throws IOException, InvalidCSVFile
+	public void testGotoCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_GOTO,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"a\",0,1,,,\n";
-		nodeStr += "5,AST_LABEL,,4,,1,1,,,\n";
-		nodeStr += "6,string,,4,\"a\",0,1,,,\n";
+		handleCSVFiles( "testGoto");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(GotoStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((GotoStatement)node).getTargetLabel());
+		assertEquals( ast.getNodeById((long)7), ((GotoStatement)node).getTargetLabel());
 		assertEquals( "a", ((GotoStatement)node).getTargetLabel().getEscapedCodeStr());
 	}
 
@@ -1898,44 +1474,21 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * }
 	 */
 	@Test
-	public void testBreakStatementCreation() throws IOException, InvalidCSVFile
+	public void testBreakCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
-		nodeStr += "4,integer,,3,1,0,1,,,\n";
-		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
-		nodeStr += "6,AST_WHILE,,4,,0,1,,,\n";
-		nodeStr += "7,integer,,4,1,0,1,,,\n";
-		nodeStr += "8,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "9,AST_BREAK,,5,,0,1,,,\n";
-		nodeStr += "10,integer,,5,2,0,1,,,\n";
-		nodeStr += "11,AST_BREAK,,7,,1,1,,,\n";
-		nodeStr += "12,integer,,7,1,0,1,,,\n";
+		handleCSVFiles( "testBreak");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "6,8,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "5,11,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)9);
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)12);
+		ASTNode node2 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(BreakStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((BreakStatement)node).getDepth());
+		assertEquals( ast.getNodeById((long)13), ((BreakStatement)node).getDepth());
 		assertEquals( "2", ((BreakStatement)node).getDepth().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(BreakStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((BreakStatement)node2).getDepth());
+		assertEquals( ast.getNodeById((long)15), ((BreakStatement)node2).getDepth());
 		assertEquals( "1", ((BreakStatement)node2).getDepth().getEscapedCodeStr());
 	}
 
@@ -1956,44 +1509,21 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * }
 	 */
 	@Test
-	public void testContinueStatementCreation() throws IOException, InvalidCSVFile
+	public void testContinueCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_WHILE,,3,,0,1,,,\n";
-		nodeStr += "4,integer,,3,1,0,1,,,\n";
-		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
-		nodeStr += "6,AST_WHILE,,4,,0,1,,,\n";
-		nodeStr += "7,integer,,4,1,0,1,,,\n";
-		nodeStr += "8,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "9,AST_CONTINUE,,5,,0,1,,,\n";
-		nodeStr += "10,integer,,5,2,0,1,,,\n";
-		nodeStr += "11,AST_CONTINUE,,7,,1,1,,,\n";
-		nodeStr += "12,integer,,7,1,0,1,,,\n";
+		handleCSVFiles( "testContinue");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "6,8,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "5,11,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)9);
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)12);
+		ASTNode node2 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(ContinueStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((ContinueStatement)node).getDepth());
+		assertEquals( ast.getNodeById((long)13), ((ContinueStatement)node).getDepth());
 		assertEquals( "2", ((ContinueStatement)node).getDepth().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(ContinueStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((ContinueStatement)node2).getDepth());
+		assertEquals( ast.getNodeById((long)15), ((ContinueStatement)node2).getDepth());
 		assertEquals( "1", ((ContinueStatement)node2).getDepth().getEscapedCodeStr());
 	}
 
@@ -2019,75 +1549,31 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testArrayIndexingCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_DIM,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,integer,,3,42,1,1,,,\n";
-		nodeStr += "7,AST_DIM,,4,,1,1,,,\n";
-		nodeStr += "8,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "12,string,,4,\"key\",1,1,,,\n";
-		nodeStr += "13,AST_DIM,,5,,2,1,,,\n";
-		nodeStr += "14,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "15,string,,5,\"buz\",0,1,,,\n";
-		nodeStr += "16,AST_CALL,,5,,1,1,,,\n";
-		nodeStr += "17,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "18,string,,5,\"qux\",0,1,,,\n";
-		nodeStr += "19,AST_ARG_LIST,,5,,1,1,,,\n";
-		nodeStr += "20,AST_DIM,,6,,3,1,,,\n";
-		nodeStr += "21,AST_CONST,,6,,0,1,,,\n";
-		nodeStr += "22,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "23,string,,6,\"SOMECONSTANT\",0,1,,,\n";
-		nodeStr += "24,NULL,,6,,1,1,,,\n";
+		handleCSVFiles( "testArrayIndexing");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "16,19,PARENT_OF\n";
-		edgeStr += "13,16,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "20,24,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)13);
-		ASTNode node4 = ast.getNodeById((long)20);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)16);
+		ASTNode node4 = ast.getNodeById((long)23);
 
 		assertThat( node, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((ArrayIndexing)node).getArrayExpression());
-		assertEquals( ast.getNodeById((long)6), ((ArrayIndexing)node).getIndexExpression());
+		assertEquals( ast.getNodeById((long)7), ((ArrayIndexing)node).getArrayExpression());
+		assertEquals( ast.getNodeById((long)9), ((ArrayIndexing)node).getIndexExpression());
 
 		assertThat( node2, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((ArrayIndexing)node2).getArrayExpression());
-		assertEquals( ast.getNodeById((long)12), ((ArrayIndexing)node2).getIndexExpression());
+		assertEquals( ast.getNodeById((long)11), ((ArrayIndexing)node2).getArrayExpression());
+		assertEquals( ast.getNodeById((long)15), ((ArrayIndexing)node2).getIndexExpression());
 
 		assertThat( node3, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((ArrayIndexing)node3).getArrayExpression());
-		assertEquals( ast.getNodeById((long)16), ((ArrayIndexing)node3).getIndexExpression());
+		assertEquals( ast.getNodeById((long)17), ((ArrayIndexing)node3).getArrayExpression());
+		assertEquals( ast.getNodeById((long)19), ((ArrayIndexing)node3).getIndexExpression());
 
 		assertThat( node4, instanceOf(ArrayIndexing.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((ArrayIndexing)node4).getArrayExpression());
+		assertEquals( ast.getNodeById((long)24), ((ArrayIndexing)node4).getArrayExpression());
 		assertNull( ((ArrayIndexing)node4).getIndexExpression());
 	}
 
@@ -2108,23 +1594,20 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPropertyCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.propertyNodeStr;
-		String edgeStr = CSVASTSamples.propertyEdgeStr;
+		handleCSVFiles( "testProperty");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
 
 		assertThat( node, instanceOf(PropertyExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PropertyExpression)node).getObjectExpression());
-		assertEquals( ast.getNodeById((long)6), ((PropertyExpression)node).getPropertyExpression());
+		assertEquals( ast.getNodeById((long)7), ((PropertyExpression)node).getObjectExpression());
+		assertEquals( ast.getNodeById((long)9), ((PropertyExpression)node).getPropertyExpression());
 
 		assertThat( node2, instanceOf(PropertyExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PropertyExpression)node2).getObjectExpression());
-		assertEquals( ast.getNodeById((long)12), ((PropertyExpression)node2).getPropertyExpression());
+		assertEquals( ast.getNodeById((long)11), ((PropertyExpression)node2).getObjectExpression());
+		assertEquals( ast.getNodeById((long)15), ((PropertyExpression)node2).getPropertyExpression());
 	}
 
 	/**
@@ -2145,29 +1628,26 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testStaticPropertyCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.staticPropertyNodeStr;
-		String edgeStr = CSVASTSamples.staticPropertyEdgeStr;
+		handleCSVFiles( "testStaticProperty");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((StaticPropertyExpression)node).getClassExpression());
-		assertEquals( ast.getNodeById((long)6), ((StaticPropertyExpression)node).getPropertyExpression());
+		assertEquals( ast.getNodeById((long)7), ((StaticPropertyExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)9), ((StaticPropertyExpression)node).getPropertyExpression());
 
 		assertThat( node2, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((StaticPropertyExpression)node2).getClassExpression());
-		assertEquals( ast.getNodeById((long)10), ((StaticPropertyExpression)node2).getPropertyExpression());
+		assertEquals( ast.getNodeById((long)11), ((StaticPropertyExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)13), ((StaticPropertyExpression)node2).getPropertyExpression());
 
 		assertThat( node3, instanceOf(StaticPropertyExpression.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((StaticPropertyExpression)node3).getClassExpression());
-		assertEquals( ast.getNodeById((long)16), ((StaticPropertyExpression)node3).getPropertyExpression());
+		assertEquals( ast.getNodeById((long)15), ((StaticPropertyExpression)node3).getClassExpression());
+		assertEquals( ast.getNodeById((long)19), ((StaticPropertyExpression)node3).getPropertyExpression());
 	}
 
 	/**
@@ -2186,26 +1666,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCallCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.callNodeStr;
-		String edgeStr = CSVASTSamples.callEdgeStr;
+		handleCSVFiles( "testCall");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(CallExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((CallExpression)node).getTargetFunc());
+		assertEquals( ast.getNodeById((long)7), ((CallExpression)node).getTargetFunc());
 		assertEquals( "foo", ((Identifier)((CallExpression)node).getTargetFunc()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((CallExpression)node).getArgumentList());
+		assertEquals( ast.getNodeById((long)9), ((CallExpression)node).getArgumentList());
 		assertEquals( 2, ((CallExpression)node).getArgumentList().size());
 
 		assertThat( node2, instanceOf(CallExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((CallExpression)node2).getTargetFunc());
+		assertEquals( ast.getNodeById((long)14), ((CallExpression)node2).getTargetFunc());
 		assertEquals( "buz", ((Variable)((CallExpression)node2).getTargetFunc()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((CallExpression)node2).getArgumentList());
+		assertEquals( ast.getNodeById((long)16), ((CallExpression)node2).getArgumentList());
 		assertEquals( 1, ((CallExpression)node2).getArgumentList().size());
 	}
 
@@ -2226,29 +1703,26 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClassConstantCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.classConstantNodeStr;
-		String edgeStr = CSVASTSamples.classConstantEdgeStr;
+		handleCSVFiles( "testClassConstant");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(ClassConstantExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((ClassConstantExpression)node).getClassExpression());
-		assertEquals( ast.getNodeById((long)6), ((ClassConstantExpression)node).getConstantName());
+		assertEquals( ast.getNodeById((long)7), ((ClassConstantExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)9), ((ClassConstantExpression)node).getConstantName());
 
 		assertThat( node2, instanceOf(ClassConstantExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((ClassConstantExpression)node2).getClassExpression());
-		assertEquals( ast.getNodeById((long)10), ((ClassConstantExpression)node2).getConstantName());
+		assertEquals( ast.getNodeById((long)11), ((ClassConstantExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)13), ((ClassConstantExpression)node2).getConstantName());
 
 		assertThat( node3, instanceOf(ClassConstantExpression.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((ClassConstantExpression)node3).getClassExpression());
-		assertEquals( ast.getNodeById((long)16), ((ClassConstantExpression)node3).getConstantName());
+		assertEquals( ast.getNodeById((long)15), ((ClassConstantExpression)node3).getClassExpression());
+		assertEquals( ast.getNodeById((long)19), ((ClassConstantExpression)node3).getConstantName());
 	}
 
 	/**
@@ -2271,107 +1745,38 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testAssignCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,integer,,3,42,1,1,,,\n";
-		nodeStr += "7,AST_ASSIGN,,4,,1,1,,,\n";
-		nodeStr += "8,AST_DIM,,4,,0,1,,,\n";
-		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "11,integer,,4,3,1,1,,,\n";
-		nodeStr += "12,string,,4,\"bonjour\",1,1,,,\n";
-		nodeStr += "13,AST_ASSIGN,,5,,2,1,,,\n";
-		nodeStr += "14,AST_PROP,,5,,0,1,,,\n";
-		nodeStr += "15,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "16,string,,5,\"buz\",0,1,,,\n";
-		nodeStr += "17,string,,5,\"qux\",1,1,,,\n";
-		nodeStr += "18,AST_CONST,,5,,1,1,,,\n";
-		nodeStr += "19,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "20,string,,5,\"SOMECONST\",0,1,,,\n";
-		nodeStr += "21,AST_ASSIGN,,6,,3,1,,,\n";
-		nodeStr += "22,AST_STATIC_PROP,,6,,0,1,,,\n";
-		nodeStr += "23,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "24,string,,6,\"Buz\",0,1,,,\n";
-		nodeStr += "25,string,,6,\"qux\",1,1,,,\n";
-		nodeStr += "26,AST_CALL,,6,,1,1,,,\n";
-		nodeStr += "27,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "28,string,,6,\"somecall\",0,1,,,\n";
-		nodeStr += "29,AST_ARG_LIST,,6,,1,1,,,\n";
-		nodeStr += "30,AST_ASSIGN,,7,,4,1,,,\n";
-		nodeStr += "31,AST_LIST,,7,,0,1,,,\n";
-		nodeStr += "32,AST_VAR,,7,,0,1,,,\n";
-		nodeStr += "33,string,,7,\"a\",0,1,,,\n";
-		nodeStr += "34,AST_ARRAY,,7,,1,1,,,\n";
-		nodeStr += "35,AST_ARRAY_ELEM,,7,,0,1,,,\n";
-		nodeStr += "36,integer,,7,3,0,1,,,\n";
-		nodeStr += "37,NULL,,7,,1,1,,,\n";
+		handleCSVFiles( "testAssign");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,12,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "14,17,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "13,18,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,25,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "27,28,PARENT_OF\n";
-		edgeStr += "26,27,PARENT_OF\n";
-		edgeStr += "26,29,PARENT_OF\n";
-		edgeStr += "21,26,PARENT_OF\n";
-		edgeStr += "32,33,PARENT_OF\n";
-		edgeStr += "31,32,PARENT_OF\n";
-		edgeStr += "30,31,PARENT_OF\n";
-		edgeStr += "35,36,PARENT_OF\n";
-		edgeStr += "35,37,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "30,34,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)13);
-		ASTNode node4 = ast.getNodeById((long)21);
-		ASTNode node5 = ast.getNodeById((long)30);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)16);
+		ASTNode node4 = ast.getNodeById((long)24);
+		ASTNode node5 = ast.getNodeById((long)33);
 
 		assertThat( node, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((AssignmentExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((AssignmentExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((AssignmentExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((AssignmentExpression)node).getRight());
 
 		assertThat( node2, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((AssignmentExpression)node2).getLeft());
-		assertEquals( ast.getNodeById((long)12), ((AssignmentExpression)node2).getRight());
+		assertEquals( ast.getNodeById((long)11), ((AssignmentExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)15), ((AssignmentExpression)node2).getRight());
 
 		assertThat( node3, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((AssignmentExpression)node3).getLeft());
-		assertEquals( ast.getNodeById((long)18), ((AssignmentExpression)node3).getRight());
+		assertEquals( ast.getNodeById((long)17), ((AssignmentExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)21), ((AssignmentExpression)node3).getRight());
 
 		assertThat( node4, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)22), ((AssignmentExpression)node4).getLeft());
-		assertEquals( ast.getNodeById((long)26), ((AssignmentExpression)node4).getRight());
+		assertEquals( ast.getNodeById((long)25), ((AssignmentExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)29), ((AssignmentExpression)node4).getRight());
 
 		assertThat( node5, instanceOf(AssignmentExpression.class));
 		assertEquals( 2, node5.getChildCount());
-		assertEquals( ast.getNodeById((long)31), ((AssignmentExpression)node5).getLeft());
-		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getRight());
+		assertEquals( ast.getNodeById((long)34), ((AssignmentExpression)node5).getLeft());
+		assertEquals( ast.getNodeById((long)37), ((AssignmentExpression)node5).getRight());
 	}
 
 	/**
@@ -2395,100 +1800,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testAssignByRefCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ASSIGN_REF,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"someref\",0,1,,,\n";
-		nodeStr += "8,AST_ASSIGN_REF,,4,,1,1,,,\n";
-		nodeStr += "9,AST_DIM,,4,,0,1,,,\n";
-		nodeStr += "10,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "11,string,,4,\"bar\",0,1,,,\n";
-		nodeStr += "12,integer,,4,3,1,1,,,\n";
-		nodeStr += "13,AST_DIM,,4,,1,1,,,\n";
-		nodeStr += "14,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "15,string,,4,\"someref\",0,1,,,\n";
-		nodeStr += "16,integer,,4,4,1,1,,,\n";
-		nodeStr += "17,AST_ASSIGN_REF,,5,,2,1,,,\n";
-		nodeStr += "18,AST_PROP,,5,,0,1,,,\n";
-		nodeStr += "19,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "20,string,,5,\"buz\",0,1,,,\n";
-		nodeStr += "21,string,,5,\"qux\",1,1,,,\n";
-		nodeStr += "22,AST_METHOD_CALL,,5,,1,1,,,\n";
-		nodeStr += "23,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "24,string,,5,\"buz\",0,1,,,\n";
-		nodeStr += "25,string,,5,\"somecall\",1,1,,,\n";
-		nodeStr += "26,AST_ARG_LIST,,5,,2,1,,,\n";
-		nodeStr += "27,AST_ASSIGN_REF,,6,,3,1,,,\n";
-		nodeStr += "28,AST_STATIC_PROP,,6,,0,1,,,\n";
-		nodeStr += "29,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "30,string,,6,\"Buz\",0,1,,,\n";
-		nodeStr += "31,string,,6,\"qux\",1,1,,,\n";
-		nodeStr += "32,AST_STATIC_CALL,,6,,1,1,,,\n";
-		nodeStr += "33,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "34,string,,6,\"Buz\",0,1,,,\n";
-		nodeStr += "35,string,,6,\"somestaticcall\",1,1,,,\n";
-		nodeStr += "36,AST_ARG_LIST,,6,,2,1,,,\n";
+		handleCSVFiles( "testAssignByRef");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "13,16,PARENT_OF\n";
-		edgeStr += "8,13,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,21,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,25,PARENT_OF\n";
-		edgeStr += "22,26,PARENT_OF\n";
-		edgeStr += "17,22,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "28,31,PARENT_OF\n";
-		edgeStr += "27,28,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "32,33,PARENT_OF\n";
-		edgeStr += "32,35,PARENT_OF\n";
-		edgeStr += "32,36,PARENT_OF\n";
-		edgeStr += "27,32,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)8);
-		ASTNode node3 = ast.getNodeById((long)17);
-		ASTNode node4 = ast.getNodeById((long)27);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)20);
+		ASTNode node4 = ast.getNodeById((long)30);
 
 		assertThat( node, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPAssignmentByRefExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((PHPAssignmentByRefExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((PHPAssignmentByRefExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node).getRight());
 
 		assertThat( node2, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node2).getLeft());
-		assertEquals( ast.getNodeById((long)13), ((PHPAssignmentByRefExpression)node2).getRight());
+		assertEquals( ast.getNodeById((long)12), ((PHPAssignmentByRefExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)16), ((PHPAssignmentByRefExpression)node2).getRight());
 
 		assertThat( node3, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)18), ((PHPAssignmentByRefExpression)node3).getLeft());
-		assertEquals( ast.getNodeById((long)22), ((PHPAssignmentByRefExpression)node3).getRight());
+		assertEquals( ast.getNodeById((long)21), ((PHPAssignmentByRefExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)25), ((PHPAssignmentByRefExpression)node3).getRight());
 
 		assertThat( node4, instanceOf(PHPAssignmentByRefExpression.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)28), ((PHPAssignmentByRefExpression)node4).getLeft());
-		assertEquals( ast.getNodeById((long)32), ((PHPAssignmentByRefExpression)node4).getRight());
+		assertEquals( ast.getNodeById((long)31), ((PHPAssignmentByRefExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)35), ((PHPAssignmentByRefExpression)node4).getRight());
 	}
 
 	/**
@@ -2510,29 +1847,26 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testAssignWithOpCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.assignWithOpNodeStr;
-		String edgeStr = CSVASTSamples.assignWithOpEdgeStr;
+		handleCSVFiles( "testAssignWithOp");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((AssignmentWithOpExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((AssignmentWithOpExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((AssignmentWithOpExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((AssignmentWithOpExpression)node).getRight());
 
 		assertThat( node2, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((AssignmentWithOpExpression)node2).getLeft());
-		assertEquals( ast.getNodeById((long)10), ((AssignmentWithOpExpression)node2).getRight());
+		assertEquals( ast.getNodeById((long)11), ((AssignmentWithOpExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)13), ((AssignmentWithOpExpression)node2).getRight());
 
 		assertThat( node3, instanceOf(AssignmentWithOpExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((AssignmentWithOpExpression)node3).getLeft());
-		assertEquals( ast.getNodeById((long)14), ((AssignmentWithOpExpression)node3).getRight());
+		assertEquals( ast.getNodeById((long)15), ((AssignmentWithOpExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)17), ((AssignmentWithOpExpression)node3).getRight());
 	}
 
 	/**
@@ -2573,333 +1907,128 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testBinaryOperationCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_BINARY_OP,BINARY_BITWISE_OR,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"or1\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"or2\",0,1,,,\n";
-		nodeStr += "8,AST_BINARY_OP,BINARY_BITWISE_AND,4,,1,1,,,\n";
-		nodeStr += "9,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"and1\",0,1,,,\n";
-		nodeStr += "11,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "12,string,,4,\"and2\",0,1,,,\n";
-		nodeStr += "13,AST_BINARY_OP,BINARY_BITWISE_XOR,5,,2,1,,,\n";
-		nodeStr += "14,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "15,string,,5,\"msg\",0,1,,,\n";
-		nodeStr += "16,AST_VAR,,5,,1,1,,,\n";
-		nodeStr += "17,string,,5,\"otp\",0,1,,,\n";
-		nodeStr += "18,AST_BINARY_OP,BINARY_CONCAT,7,,3,1,,,\n";
-		nodeStr += "19,AST_VAR,,7,,0,1,,,\n";
-		nodeStr += "20,string,,7,\"str1\",0,1,,,\n";
-		nodeStr += "21,AST_VAR,,7,,1,1,,,\n";
-		nodeStr += "22,string,,7,\"str2\",0,1,,,\n";
-		nodeStr += "23,AST_BINARY_OP,BINARY_ADD,9,,4,1,,,\n";
-		nodeStr += "24,AST_VAR,,9,,0,1,,,\n";
-		nodeStr += "25,string,,9,\"x\",0,1,,,\n";
-		nodeStr += "26,AST_VAR,,9,,1,1,,,\n";
-		nodeStr += "27,string,,9,\"y\",0,1,,,\n";
-		nodeStr += "28,AST_BINARY_OP,BINARY_SUB,10,,5,1,,,\n";
-		nodeStr += "29,AST_VAR,,10,,0,1,,,\n";
-		nodeStr += "30,string,,10,\"x\",0,1,,,\n";
-		nodeStr += "31,AST_VAR,,10,,1,1,,,\n";
-		nodeStr += "32,string,,10,\"y\",0,1,,,\n";
-		nodeStr += "33,AST_BINARY_OP,BINARY_MUL,11,,6,1,,,\n";
-		nodeStr += "34,AST_VAR,,11,,0,1,,,\n";
-		nodeStr += "35,string,,11,\"x\",0,1,,,\n";
-		nodeStr += "36,AST_VAR,,11,,1,1,,,\n";
-		nodeStr += "37,string,,11,\"y\",0,1,,,\n";
-		nodeStr += "38,AST_BINARY_OP,BINARY_DIV,12,,7,1,,,\n";
-		nodeStr += "39,AST_VAR,,12,,0,1,,,\n";
-		nodeStr += "40,string,,12,\"x\",0,1,,,\n";
-		nodeStr += "41,AST_VAR,,12,,1,1,,,\n";
-		nodeStr += "42,string,,12,\"y\",0,1,,,\n";
-		nodeStr += "43,AST_BINARY_OP,BINARY_MOD,13,,8,1,,,\n";
-		nodeStr += "44,AST_VAR,,13,,0,1,,,\n";
-		nodeStr += "45,string,,13,\"x\",0,1,,,\n";
-		nodeStr += "46,AST_VAR,,13,,1,1,,,\n";
-		nodeStr += "47,string,,13,\"y\",0,1,,,\n";
-		nodeStr += "48,AST_BINARY_OP,BINARY_POW,14,,9,1,,,\n";
-		nodeStr += "49,AST_VAR,,14,,0,1,,,\n";
-		nodeStr += "50,string,,14,\"x\",0,1,,,\n";
-		nodeStr += "51,AST_VAR,,14,,1,1,,,\n";
-		nodeStr += "52,string,,14,\"y\",0,1,,,\n";
-		nodeStr += "53,AST_BINARY_OP,BINARY_SHIFT_LEFT,15,,10,1,,,\n";
-		nodeStr += "54,AST_VAR,,15,,0,1,,,\n";
-		nodeStr += "55,string,,15,\"x\",0,1,,,\n";
-		nodeStr += "56,AST_VAR,,15,,1,1,,,\n";
-		nodeStr += "57,string,,15,\"y\",0,1,,,\n";
-		nodeStr += "58,AST_BINARY_OP,BINARY_SHIFT_RIGHT,16,,11,1,,,\n";
-		nodeStr += "59,AST_VAR,,16,,0,1,,,\n";
-		nodeStr += "60,string,,16,\"x\",0,1,,,\n";
-		nodeStr += "61,AST_VAR,,16,,1,1,,,\n";
-		nodeStr += "62,string,,16,\"y\",0,1,,,\n";
-		nodeStr += "63,AST_BINARY_OP,BINARY_BOOL_XOR,18,,12,1,,,\n";
-		nodeStr += "64,AST_VAR,,18,,0,1,,,\n";
-		nodeStr += "65,string,,18,\"x\",0,1,,,\n";
-		nodeStr += "66,AST_VAR,,18,,1,1,,,\n";
-		nodeStr += "67,string,,18,\"y\",0,1,,,\n";
-		nodeStr += "68,AST_BINARY_OP,BINARY_IS_IDENTICAL,20,,13,1,,,\n";
-		nodeStr += "69,AST_VAR,,20,,0,1,,,\n";
-		nodeStr += "70,string,,20,\"x\",0,1,,,\n";
-		nodeStr += "71,AST_VAR,,20,,1,1,,,\n";
-		nodeStr += "72,string,,20,\"y\",0,1,,,\n";
-		nodeStr += "73,AST_BINARY_OP,BINARY_IS_NOT_IDENTICAL,21,,14,1,,,\n";
-		nodeStr += "74,AST_VAR,,21,,0,1,,,\n";
-		nodeStr += "75,string,,21,\"x\",0,1,,,\n";
-		nodeStr += "76,AST_VAR,,21,,1,1,,,\n";
-		nodeStr += "77,string,,21,\"y\",0,1,,,\n";
-		nodeStr += "78,AST_BINARY_OP,BINARY_IS_EQUAL,22,,15,1,,,\n";
-		nodeStr += "79,AST_VAR,,22,,0,1,,,\n";
-		nodeStr += "80,string,,22,\"x\",0,1,,,\n";
-		nodeStr += "81,AST_VAR,,22,,1,1,,,\n";
-		nodeStr += "82,string,,22,\"y\",0,1,,,\n";
-		nodeStr += "83,AST_BINARY_OP,BINARY_IS_NOT_EQUAL,23,,16,1,,,\n";
-		nodeStr += "84,AST_VAR,,23,,0,1,,,\n";
-		nodeStr += "85,string,,23,\"x\",0,1,,,\n";
-		nodeStr += "86,AST_VAR,,23,,1,1,,,\n";
-		nodeStr += "87,string,,23,\"y\",0,1,,,\n";
-		nodeStr += "88,AST_BINARY_OP,BINARY_IS_SMALLER,24,,17,1,,,\n";
-		nodeStr += "89,AST_VAR,,24,,0,1,,,\n";
-		nodeStr += "90,string,,24,\"x\",0,1,,,\n";
-		nodeStr += "91,AST_VAR,,24,,1,1,,,\n";
-		nodeStr += "92,string,,24,\"y\",0,1,,,\n";
-		nodeStr += "93,AST_BINARY_OP,BINARY_IS_SMALLER_OR_EQUAL,25,,18,1,,,\n";
-		nodeStr += "94,AST_VAR,,25,,0,1,,,\n";
-		nodeStr += "95,string,,25,\"x\",0,1,,,\n";
-		nodeStr += "96,AST_VAR,,25,,1,1,,,\n";
-		nodeStr += "97,string,,25,\"y\",0,1,,,\n";
-		nodeStr += "98,AST_BINARY_OP,BINARY_SPACESHIP,26,,19,1,,,\n";
-		nodeStr += "99,AST_VAR,,26,,0,1,,,\n";
-		nodeStr += "100,string,,26,\"x\",0,1,,,\n";
-		nodeStr += "101,AST_VAR,,26,,1,1,,,\n";
-		nodeStr += "102,string,,26,\"y\",0,1,,,\n";
+		handleCSVFiles( "testBinaryOperation");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "2,8,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "13,16,PARENT_OF\n";
-		edgeStr += "2,13,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "18,21,PARENT_OF\n";
-		edgeStr += "2,18,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "26,27,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "2,23,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "31,32,PARENT_OF\n";
-		edgeStr += "28,31,PARENT_OF\n";
-		edgeStr += "2,28,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "36,37,PARENT_OF\n";
-		edgeStr += "33,36,PARENT_OF\n";
-		edgeStr += "2,33,PARENT_OF\n";
-		edgeStr += "39,40,PARENT_OF\n";
-		edgeStr += "38,39,PARENT_OF\n";
-		edgeStr += "41,42,PARENT_OF\n";
-		edgeStr += "38,41,PARENT_OF\n";
-		edgeStr += "2,38,PARENT_OF\n";
-		edgeStr += "44,45,PARENT_OF\n";
-		edgeStr += "43,44,PARENT_OF\n";
-		edgeStr += "46,47,PARENT_OF\n";
-		edgeStr += "43,46,PARENT_OF\n";
-		edgeStr += "2,43,PARENT_OF\n";
-		edgeStr += "49,50,PARENT_OF\n";
-		edgeStr += "48,49,PARENT_OF\n";
-		edgeStr += "51,52,PARENT_OF\n";
-		edgeStr += "48,51,PARENT_OF\n";
-		edgeStr += "2,48,PARENT_OF\n";
-		edgeStr += "54,55,PARENT_OF\n";
-		edgeStr += "53,54,PARENT_OF\n";
-		edgeStr += "56,57,PARENT_OF\n";
-		edgeStr += "53,56,PARENT_OF\n";
-		edgeStr += "2,53,PARENT_OF\n";
-		edgeStr += "59,60,PARENT_OF\n";
-		edgeStr += "58,59,PARENT_OF\n";
-		edgeStr += "61,62,PARENT_OF\n";
-		edgeStr += "58,61,PARENT_OF\n";
-		edgeStr += "2,58,PARENT_OF\n";
-		edgeStr += "64,65,PARENT_OF\n";
-		edgeStr += "63,64,PARENT_OF\n";
-		edgeStr += "66,67,PARENT_OF\n";
-		edgeStr += "63,66,PARENT_OF\n";
-		edgeStr += "2,63,PARENT_OF\n";
-		edgeStr += "69,70,PARENT_OF\n";
-		edgeStr += "68,69,PARENT_OF\n";
-		edgeStr += "71,72,PARENT_OF\n";
-		edgeStr += "68,71,PARENT_OF\n";
-		edgeStr += "2,68,PARENT_OF\n";
-		edgeStr += "74,75,PARENT_OF\n";
-		edgeStr += "73,74,PARENT_OF\n";
-		edgeStr += "76,77,PARENT_OF\n";
-		edgeStr += "73,76,PARENT_OF\n";
-		edgeStr += "2,73,PARENT_OF\n";
-		edgeStr += "79,80,PARENT_OF\n";
-		edgeStr += "78,79,PARENT_OF\n";
-		edgeStr += "81,82,PARENT_OF\n";
-		edgeStr += "78,81,PARENT_OF\n";
-		edgeStr += "2,78,PARENT_OF\n";
-		edgeStr += "84,85,PARENT_OF\n";
-		edgeStr += "83,84,PARENT_OF\n";
-		edgeStr += "86,87,PARENT_OF\n";
-		edgeStr += "83,86,PARENT_OF\n";
-		edgeStr += "2,83,PARENT_OF\n";
-		edgeStr += "89,90,PARENT_OF\n";
-		edgeStr += "88,89,PARENT_OF\n";
-		edgeStr += "91,92,PARENT_OF\n";
-		edgeStr += "88,91,PARENT_OF\n";
-		edgeStr += "2,88,PARENT_OF\n";
-		edgeStr += "94,95,PARENT_OF\n";
-		edgeStr += "93,94,PARENT_OF\n";
-		edgeStr += "96,97,PARENT_OF\n";
-		edgeStr += "93,96,PARENT_OF\n";
-		edgeStr += "2,93,PARENT_OF\n";
-		edgeStr += "99,100,PARENT_OF\n";
-		edgeStr += "98,99,PARENT_OF\n";
-		edgeStr += "101,102,PARENT_OF\n";
-		edgeStr += "98,101,PARENT_OF\n";
-		edgeStr += "2,98,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)8);
-		ASTNode node3 = ast.getNodeById((long)13);
-		ASTNode node4 = ast.getNodeById((long)18);
-		ASTNode node5 = ast.getNodeById((long)23);
-		ASTNode node6 = ast.getNodeById((long)28);
-		ASTNode node7 = ast.getNodeById((long)33);
-		ASTNode node8 = ast.getNodeById((long)38);
-		ASTNode node9 = ast.getNodeById((long)43);
-		ASTNode node10 = ast.getNodeById((long)48);
-		ASTNode node11 = ast.getNodeById((long)53);
-		ASTNode node12 = ast.getNodeById((long)58);
-		ASTNode node13 = ast.getNodeById((long)63);
-		ASTNode node14 = ast.getNodeById((long)68);
-		ASTNode node15 = ast.getNodeById((long)73);
-		ASTNode node16 = ast.getNodeById((long)78);
-		ASTNode node17 = ast.getNodeById((long)83);
-		ASTNode node18 = ast.getNodeById((long)88);
-		ASTNode node19 = ast.getNodeById((long)93);
-		ASTNode node20 = ast.getNodeById((long)98);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)16);
+		ASTNode node4 = ast.getNodeById((long)21);
+		ASTNode node5 = ast.getNodeById((long)26);
+		ASTNode node6 = ast.getNodeById((long)31);
+		ASTNode node7 = ast.getNodeById((long)36);
+		ASTNode node8 = ast.getNodeById((long)41);
+		ASTNode node9 = ast.getNodeById((long)46);
+		ASTNode node10 = ast.getNodeById((long)51);
+		ASTNode node11 = ast.getNodeById((long)56);
+		ASTNode node12 = ast.getNodeById((long)61);
+		ASTNode node13 = ast.getNodeById((long)66);
+		ASTNode node14 = ast.getNodeById((long)71);
+		ASTNode node15 = ast.getNodeById((long)76);
+		ASTNode node16 = ast.getNodeById((long)81);
+		ASTNode node17 = ast.getNodeById((long)86);
+		ASTNode node18 = ast.getNodeById((long)91);
+		ASTNode node19 = ast.getNodeById((long)96);
+		ASTNode node20 = ast.getNodeById((long)101);
 
 		assertThat( node, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((BinaryOperationExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((BinaryOperationExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((BinaryOperationExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((BinaryOperationExpression)node).getRight());
 
 		assertThat( node2, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((BinaryOperationExpression)node2).getLeft());
-		assertEquals( ast.getNodeById((long)11), ((BinaryOperationExpression)node2).getRight());
+		assertEquals( ast.getNodeById((long)12), ((BinaryOperationExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)14), ((BinaryOperationExpression)node2).getRight());
 
 		assertThat( node3, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((BinaryOperationExpression)node3).getLeft());
-		assertEquals( ast.getNodeById((long)16), ((BinaryOperationExpression)node3).getRight());
+		assertEquals( ast.getNodeById((long)17), ((BinaryOperationExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)19), ((BinaryOperationExpression)node3).getRight());
 
 		assertThat( node4, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((BinaryOperationExpression)node4).getLeft());
-		assertEquals( ast.getNodeById((long)21), ((BinaryOperationExpression)node4).getRight());
+		assertEquals( ast.getNodeById((long)22), ((BinaryOperationExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)24), ((BinaryOperationExpression)node4).getRight());
 
 		assertThat( node5, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node5.getChildCount());
-		assertEquals( ast.getNodeById((long)24), ((BinaryOperationExpression)node5).getLeft());
-		assertEquals( ast.getNodeById((long)26), ((BinaryOperationExpression)node5).getRight());
+		assertEquals( ast.getNodeById((long)27), ((BinaryOperationExpression)node5).getLeft());
+		assertEquals( ast.getNodeById((long)29), ((BinaryOperationExpression)node5).getRight());
 
 		assertThat( node6, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node6.getChildCount());
-		assertEquals( ast.getNodeById((long)29), ((BinaryOperationExpression)node6).getLeft());
-		assertEquals( ast.getNodeById((long)31), ((BinaryOperationExpression)node6).getRight());
+		assertEquals( ast.getNodeById((long)32), ((BinaryOperationExpression)node6).getLeft());
+		assertEquals( ast.getNodeById((long)34), ((BinaryOperationExpression)node6).getRight());
 
 		assertThat( node7, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node7.getChildCount());
-		assertEquals( ast.getNodeById((long)34), ((BinaryOperationExpression)node7).getLeft());
-		assertEquals( ast.getNodeById((long)36), ((BinaryOperationExpression)node7).getRight());
+		assertEquals( ast.getNodeById((long)37), ((BinaryOperationExpression)node7).getLeft());
+		assertEquals( ast.getNodeById((long)39), ((BinaryOperationExpression)node7).getRight());
 
 		assertThat( node8, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node8.getChildCount());
-		assertEquals( ast.getNodeById((long)39), ((BinaryOperationExpression)node8).getLeft());
-		assertEquals( ast.getNodeById((long)41), ((BinaryOperationExpression)node8).getRight());
+		assertEquals( ast.getNodeById((long)42), ((BinaryOperationExpression)node8).getLeft());
+		assertEquals( ast.getNodeById((long)44), ((BinaryOperationExpression)node8).getRight());
 
 		assertThat( node9, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node9.getChildCount());
-		assertEquals( ast.getNodeById((long)44), ((BinaryOperationExpression)node9).getLeft());
-		assertEquals( ast.getNodeById((long)46), ((BinaryOperationExpression)node9).getRight());
+		assertEquals( ast.getNodeById((long)47), ((BinaryOperationExpression)node9).getLeft());
+		assertEquals( ast.getNodeById((long)49), ((BinaryOperationExpression)node9).getRight());
 
 		assertThat( node10, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node10.getChildCount());
-		assertEquals( ast.getNodeById((long)49), ((BinaryOperationExpression)node10).getLeft());
-		assertEquals( ast.getNodeById((long)51), ((BinaryOperationExpression)node10).getRight());
+		assertEquals( ast.getNodeById((long)52), ((BinaryOperationExpression)node10).getLeft());
+		assertEquals( ast.getNodeById((long)54), ((BinaryOperationExpression)node10).getRight());
 
 		assertThat( node11, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node11.getChildCount());
-		assertEquals( ast.getNodeById((long)54), ((BinaryOperationExpression)node11).getLeft());
-		assertEquals( ast.getNodeById((long)56), ((BinaryOperationExpression)node11).getRight());
+		assertEquals( ast.getNodeById((long)57), ((BinaryOperationExpression)node11).getLeft());
+		assertEquals( ast.getNodeById((long)59), ((BinaryOperationExpression)node11).getRight());
 
 		assertThat( node12, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node12.getChildCount());
-		assertEquals( ast.getNodeById((long)59), ((BinaryOperationExpression)node12).getLeft());
-		assertEquals( ast.getNodeById((long)61), ((BinaryOperationExpression)node12).getRight());
+		assertEquals( ast.getNodeById((long)62), ((BinaryOperationExpression)node12).getLeft());
+		assertEquals( ast.getNodeById((long)64), ((BinaryOperationExpression)node12).getRight());
 
 		assertThat( node13, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node13.getChildCount());
-		assertEquals( ast.getNodeById((long)64), ((BinaryOperationExpression)node13).getLeft());
-		assertEquals( ast.getNodeById((long)66), ((BinaryOperationExpression)node13).getRight());
+		assertEquals( ast.getNodeById((long)67), ((BinaryOperationExpression)node13).getLeft());
+		assertEquals( ast.getNodeById((long)69), ((BinaryOperationExpression)node13).getRight());
 
 		assertThat( node14, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node14.getChildCount());
-		assertEquals( ast.getNodeById((long)69), ((BinaryOperationExpression)node14).getLeft());
-		assertEquals( ast.getNodeById((long)71), ((BinaryOperationExpression)node14).getRight());
+		assertEquals( ast.getNodeById((long)72), ((BinaryOperationExpression)node14).getLeft());
+		assertEquals( ast.getNodeById((long)74), ((BinaryOperationExpression)node14).getRight());
 
 		assertThat( node15, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node15.getChildCount());
-		assertEquals( ast.getNodeById((long)74), ((BinaryOperationExpression)node15).getLeft());
-		assertEquals( ast.getNodeById((long)76), ((BinaryOperationExpression)node15).getRight());
+		assertEquals( ast.getNodeById((long)77), ((BinaryOperationExpression)node15).getLeft());
+		assertEquals( ast.getNodeById((long)79), ((BinaryOperationExpression)node15).getRight());
 
 		assertThat( node16, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node16.getChildCount());
-		assertEquals( ast.getNodeById((long)79), ((BinaryOperationExpression)node16).getLeft());
-		assertEquals( ast.getNodeById((long)81), ((BinaryOperationExpression)node16).getRight());
+		assertEquals( ast.getNodeById((long)82), ((BinaryOperationExpression)node16).getLeft());
+		assertEquals( ast.getNodeById((long)84), ((BinaryOperationExpression)node16).getRight());
 
 		assertThat( node17, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node17.getChildCount());
-		assertEquals( ast.getNodeById((long)84), ((BinaryOperationExpression)node17).getLeft());
-		assertEquals( ast.getNodeById((long)86), ((BinaryOperationExpression)node17).getRight());
+		assertEquals( ast.getNodeById((long)87), ((BinaryOperationExpression)node17).getLeft());
+		assertEquals( ast.getNodeById((long)89), ((BinaryOperationExpression)node17).getRight());
 
 		assertThat( node18, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node18.getChildCount());
-		assertEquals( ast.getNodeById((long)89), ((BinaryOperationExpression)node18).getLeft());
-		assertEquals( ast.getNodeById((long)91), ((BinaryOperationExpression)node18).getRight());
+		assertEquals( ast.getNodeById((long)92), ((BinaryOperationExpression)node18).getLeft());
+		assertEquals( ast.getNodeById((long)94), ((BinaryOperationExpression)node18).getRight());
 
 		assertThat( node19, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node19.getChildCount());
-		assertEquals( ast.getNodeById((long)94), ((BinaryOperationExpression)node19).getLeft());
-		assertEquals( ast.getNodeById((long)96), ((BinaryOperationExpression)node19).getRight());
+		assertEquals( ast.getNodeById((long)97), ((BinaryOperationExpression)node19).getLeft());
+		assertEquals( ast.getNodeById((long)99), ((BinaryOperationExpression)node19).getRight());
 
 		assertThat( node20, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node20.getChildCount());
-		assertEquals( ast.getNodeById((long)99), ((BinaryOperationExpression)node20).getLeft());
-		assertEquals( ast.getNodeById((long)101), ((BinaryOperationExpression)node20).getRight());
+		assertEquals( ast.getNodeById((long)102), ((BinaryOperationExpression)node20).getLeft());
+		assertEquals( ast.getNodeById((long)104), ((BinaryOperationExpression)node20).getRight());
 	}
 
 	/**
@@ -2920,27 +2049,14 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testGreaterCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_GREATER,,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+		handleCSVFiles( "testGreater");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(GreaterExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((GreaterExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((GreaterExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((GreaterExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((GreaterExpression)node).getRight());
 	}
 
 	/**
@@ -2961,27 +2077,14 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testGreaterOrEqualCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_GREATER_EQUAL,,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+		handleCSVFiles( "testGreaterOrEqual");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(GreaterOrEqualExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((GreaterOrEqualExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((GreaterOrEqualExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((GreaterOrEqualExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((GreaterOrEqualExpression)node).getRight());
 	}
 
 	/**
@@ -3002,27 +2105,14 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testAndCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_AND,,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+		handleCSVFiles( "testAnd");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(AndExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((AndExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((AndExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((AndExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((AndExpression)node).getRight());
 	}
 
 	/**
@@ -3043,27 +2133,14 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testOrCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_OR,,4,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "5,string,,4,\"x\",0,1,,,\n";
-		nodeStr += "6,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "7,string,,4,\"y\",0,1,,,\n";
+		handleCSVFiles( "testOr");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(OrExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((OrExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)6), ((OrExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((OrExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((OrExpression)node).getRight());
 	}
 
 	/**
@@ -3086,72 +2163,31 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testArrayElementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ARRAY,,3,,0,1,,,\n";
-		nodeStr += "4,AST_ARRAY_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,integer,,3,42,0,1,,,\n";
-		nodeStr += "6,string,,3,\"key1\",1,1,,,\n";
-		nodeStr += "7,AST_ARRAY_ELEM,,4,,1,1,,,\n";
-		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "9,integer,,4,2,1,1,,,\n";
-		nodeStr += "10,AST_ARRAY_ELEM,,5,,2,1,,,\n";
-		nodeStr += "11,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "12,string,,5,\"bar\",0,1,,,\n";
-		nodeStr += "13,AST_CONST,,5,,1,1,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "15,string,,5,\"aconst\",0,1,,,\n";
-		nodeStr += "16,AST_ARRAY_ELEM,,6,,3,1,,,\n";
-		nodeStr += "17,AST_CALL,,6,,0,1,,,\n";
-		nodeStr += "18,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "19,string,,6,\"buz\",0,1,,,\n";
-		nodeStr += "20,AST_ARG_LIST,,6,,1,1,,,\n";
-		nodeStr += "21,NULL,,6,,1,1,,,\n";
+		handleCSVFiles( "testArray");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,6,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "10,13,PARENT_OF\n";
-		edgeStr += "3,10,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,20,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "16,21,PARENT_OF\n";
-		edgeStr += "3,16,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)10);
-		ASTNode node4 = ast.getNodeById((long)16);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)19);
 
 		assertThat( node, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((PHPArrayElement)node).getValue());
-		assertEquals( ast.getNodeById((long)6), ((PHPArrayElement)node).getKey());
+		assertEquals( ast.getNodeById((long)8), ((PHPArrayElement)node).getValue());
+		assertEquals( ast.getNodeById((long)9), ((PHPArrayElement)node).getKey());
 
 		assertThat( node2, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPArrayElement)node2).getValue());
-		assertEquals( ast.getNodeById((long)9), ((PHPArrayElement)node2).getKey());
+		assertEquals( ast.getNodeById((long)11), ((PHPArrayElement)node2).getValue());
+		assertEquals( ast.getNodeById((long)12), ((PHPArrayElement)node2).getKey());
 
 		assertThat( node3, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPArrayElement)node3).getValue());
-		assertEquals( ast.getNodeById((long)13), ((PHPArrayElement)node3).getKey());
+		assertEquals( ast.getNodeById((long)14), ((PHPArrayElement)node3).getValue());
+		assertEquals( ast.getNodeById((long)16), ((PHPArrayElement)node3).getKey());
 
 		assertThat( node4, instanceOf(PHPArrayElement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)17), ((PHPArrayElement)node4).getValue());
+		assertEquals( ast.getNodeById((long)20), ((PHPArrayElement)node4).getValue());
 		assertNull( ((PHPArrayElement)node4).getKey());
 	}
 
@@ -3177,32 +2213,29 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testNewCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.newNodeStr;
-		String edgeStr = CSVASTSamples.newEdgeStr;
+		handleCSVFiles( "testNew");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)9);
-		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)12);
+		ASTNode node3 = ast.getNodeById((long)16);
 
 		assertThat( node, instanceOf(NewExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((NewExpression)node).getTargetClass());
+		assertEquals( ast.getNodeById((long)7), ((NewExpression)node).getTargetClass());
 		assertEquals( "Foo", ((Identifier)((NewExpression)node).getTargetClass()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((NewExpression)node).getArgumentList());
+		assertEquals( ast.getNodeById((long)9), ((NewExpression)node).getArgumentList());
 		assertEquals( 1, ((NewExpression)node).getArgumentList().size());
 
 		assertThat( node2, instanceOf(NewExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((NewExpression)node2).getTargetClass());
+		assertEquals( ast.getNodeById((long)13), ((NewExpression)node2).getTargetClass());
 		assertEquals( "buz", ((Variable)((NewExpression)node2).getTargetClass()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)12), ((NewExpression)node2).getArgumentList());
+		assertEquals( ast.getNodeById((long)15), ((NewExpression)node2).getArgumentList());
 		assertEquals( 0, ((NewExpression)node2).getArgumentList().size());
 
 		assertThat( node3, instanceOf(NewExpression.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)24), ((NewExpression)node3).getArgumentList());
+		assertEquals( ast.getNodeById((long)29), ((NewExpression)node3).getArgumentList());
 		assertEquals( 0, ((NewExpression)node3).getArgumentList().size());
 
 		// special test for the artificial ClassExpression node:
@@ -3210,7 +2243,7 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 		ASTNode node4 = ((NewExpression)node3).getTargetClass();
 		assertThat( node4, instanceOf(ClassExpression.class));
 
-		ASTNode node5 = ast.getNodeById((long)14);
+		ASTNode node5 = ast.getNodeById((long)17);
 		assertThat( node5, instanceOf(PHPClassDef.class));
 		assertEquals( node5, ((ClassExpression)node4).getClassDef());
 		// the class definition wrapper should have the same node id as the anonymous class definition itself
@@ -3236,52 +2269,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testInstanceofCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_INSTANCEOF,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,1,1,,,\n";
-		nodeStr += "7,string,,3,\"Bar\",0,1,,,\n";
-		nodeStr += "8,AST_INSTANCEOF,,4,,1,1,,,\n";
-		nodeStr += "9,AST_CALL,,4,,0,1,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "11,string,,4,\"buz\",0,1,,,\n";
-		nodeStr += "12,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "13,AST_VAR,,4,,1,1,,,\n";
-		nodeStr += "14,string,,4,\"qux\",0,1,,,\n";
+		handleCSVFiles( "testInstanceof");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "8,13,PARENT_OF\n";
-		edgeStr += "2,8,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)11);
 
 		assertThat( node, instanceOf(InstanceofExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((InstanceofExpression)node).getInstanceExpression());
+		assertEquals( ast.getNodeById((long)7), ((InstanceofExpression)node).getInstanceExpression());
 		assertEquals( "foo", ((Variable)((InstanceofExpression)node).getInstanceExpression()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((InstanceofExpression)node).getClassExpression());
+		assertEquals( ast.getNodeById((long)9), ((InstanceofExpression)node).getClassExpression());
 		assertEquals( "Bar", ((Identifier)((InstanceofExpression)node).getClassExpression()).getNameChild().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(InstanceofExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((InstanceofExpression)node2).getInstanceExpression());
+		assertEquals( ast.getNodeById((long)12), ((InstanceofExpression)node2).getInstanceExpression());
 		assertEquals( "buz", ((Identifier)((CallExpression)((InstanceofExpression)node2).getInstanceExpression()).getTargetFunc()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((InstanceofExpression)node2).getClassExpression());
+		assertEquals( ast.getNodeById((long)16), ((InstanceofExpression)node2).getClassExpression());
 		assertEquals( "qux", ((Variable)((InstanceofExpression)node2).getClassExpression()).getNameExpression().getEscapedCodeStr());
 	}
 
@@ -3304,55 +2308,22 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testYieldCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,6,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,AST_YIELD,,4,,0,3,,,\n";
-		nodeStr += "8,integer,,4,42,0,3,,,\n";
-		nodeStr += "9,NULL,,4,,1,3,,,\n";
-		nodeStr += "10,AST_YIELD,,5,,1,3,,,\n";
-		nodeStr += "11,AST_CALL,,5,,0,3,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,3,,,\n";
-		nodeStr += "13,string,,5,\"bar\",0,3,,,\n";
-		nodeStr += "14,AST_ARG_LIST,,5,,1,3,,,\n";
-		nodeStr += "15,AST_VAR,,5,,1,3,,,\n";
-		nodeStr += "16,string,,5,\"somekey\",0,3,,,\n";
-		nodeStr += "17,NULL,,3,,3,3,,,\n";
+		handleCSVFiles( "testYield");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,14,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "10,15,PARENT_OF\n";
-		edgeStr += "6,10,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,17,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)7);
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node = ast.getNodeById((long)12);
+		ASTNode node2 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPYieldExpression)node).getValue());
+		assertEquals( ast.getNodeById((long)13), ((PHPYieldExpression)node).getValue());
 		assertEquals( "42", ((PHPYieldExpression)node).getValue().getEscapedCodeStr());
 		assertNull( ((PHPYieldExpression)node).getKey());
 
 		assertThat( node2, instanceOf(PHPYieldExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPYieldExpression)node2).getValue());
+		assertEquals( ast.getNodeById((long)16), ((PHPYieldExpression)node2).getValue());
 		assertEquals( "bar", ((Identifier)((CallExpression)((PHPYieldExpression)node2).getValue()).getTargetFunc()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)15), ((PHPYieldExpression)node2).getKey());
+		assertEquals( ast.getNodeById((long)20), ((PHPYieldExpression)node2).getKey());
 		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameExpression().getEscapedCodeStr());
 	}
 
@@ -3373,23 +2344,14 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCoalesceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_COALESCE,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "5,string,,3,\"bar\",1,1,,,\n";
+		handleCSVFiles( "testCoalesce");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPCoalesceExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPCoalesceExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)5), ((PHPCoalesceExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((PHPCoalesceExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)8), ((PHPCoalesceExpression)node).getRight());
 	}
 
 	/**
@@ -3408,71 +2370,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * }
 	 */
 	@Test
-	public void testStaticVariableCreation() throws IOException, InvalidCSVFile
+	public void testStaticCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,5,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,AST_STMT_LIST,,4,,0,3,,,\n";
-		nodeStr += "8,AST_STATIC,,4,,0,3,,,\n";
-		nodeStr += "9,string,,4,\"bar\",0,3,,,\n";
-		nodeStr += "10,NULL,,4,,1,3,,,\n";
-		nodeStr += "11,AST_STATIC,,4,,1,3,,,\n";
-		nodeStr += "12,string,,4,\"buz\",0,3,,,\n";
-		nodeStr += "13,integer,,4,42,1,3,,,\n";
-		nodeStr += "14,AST_STATIC,,4,,2,3,,,\n";
-		nodeStr += "15,string,,4,\"qux\",0,3,,,\n";
-		nodeStr += "16,AST_CALL,,4,,1,3,,,\n";
-		nodeStr += "17,AST_NAME,NAME_NOT_FQ,4,,0,3,,,\n";
-		nodeStr += "18,string,,4,\"norf\",0,3,,,\n";
-		nodeStr += "19,AST_ARG_LIST,,4,,1,3,,,\n";
-		nodeStr += "20,NULL,,3,,3,3,,,\n";
+		handleCSVFiles( "testStatic");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,10,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,13,PARENT_OF\n";
-		edgeStr += "7,11,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "16,19,PARENT_OF\n";
-		edgeStr += "14,16,PARENT_OF\n";
-		edgeStr += "7,14,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,20,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)8);
-		ASTNode node2 = ast.getNodeById((long)11);
-		ASTNode node3 = ast.getNodeById((long)14);
+		ASTNode node = ast.getNodeById((long)13);
+		ASTNode node2 = ast.getNodeById((long)16);
+		ASTNode node3 = ast.getNodeById((long)19);
 
 		assertThat( node, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((StaticVariableDeclaration)node).getNameChild());
+		assertEquals( ast.getNodeById((long)14), ((StaticVariableDeclaration)node).getNameChild());
 		assertEquals( "bar", ((StaticVariableDeclaration)node).getNameChild().getEscapedCodeStr());
 		assertNull( ((StaticVariableDeclaration)node).getDefault());
 
 		assertThat( node2, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((StaticVariableDeclaration)node2).getNameChild());
+		assertEquals( ast.getNodeById((long)17), ((StaticVariableDeclaration)node2).getNameChild());
 		assertEquals( "buz", ((StaticVariableDeclaration)node2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((StaticVariableDeclaration)node2).getDefault());
+		assertEquals( ast.getNodeById((long)18), ((StaticVariableDeclaration)node2).getDefault());
 		assertEquals( "42", ((StaticVariableDeclaration)node2).getDefault().getEscapedCodeStr());
 
 		assertThat( node3, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)15), ((StaticVariableDeclaration)node3).getNameChild());
+		assertEquals( ast.getNodeById((long)20), ((StaticVariableDeclaration)node3).getNameChild());
 		assertEquals( "qux", ((StaticVariableDeclaration)node3).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)16), ((StaticVariableDeclaration)node3).getDefault());
+		assertEquals( ast.getNodeById((long)21), ((StaticVariableDeclaration)node3).getDefault());
 		assertEquals( "norf", ((Identifier)((CallExpression)((StaticVariableDeclaration)node3).getDefault()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 	}
 
@@ -3496,35 +2419,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testWhileCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.whileNodeStr;
-		String edgeStr = CSVASTSamples.whileEdgeStr;
+		handleCSVFiles( "testWhile");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)12);
-		ASTNode node4 = ast.getNodeById((long)18);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)21);
 
 		assertThat( node, instanceOf(WhileStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((WhileStatement)node).getCondition());
-		assertEquals( ast.getNodeById((long)6), ((WhileStatement)node).getStatement());
+		assertEquals( ast.getNodeById((long)7), ((WhileStatement)node).getCondition());
+		assertEquals( ast.getNodeById((long)9), ((WhileStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(WhileStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((WhileStatement)node2).getCondition());
-		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getStatement());
+		assertEquals( ast.getNodeById((long)11), ((WhileStatement)node2).getCondition());
+		assertEquals( ast.getNodeById((long)14), ((WhileStatement)node2).getStatement());
 
 		assertThat( node3, instanceOf(WhileStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((WhileStatement)node3).getCondition());
-		assertEquals( ast.getNodeById((long)17), ((WhileStatement)node3).getStatement());
+		assertEquals( ast.getNodeById((long)16), ((WhileStatement)node3).getCondition());
+		assertEquals( ast.getNodeById((long)20), ((WhileStatement)node3).getStatement());
 
 		assertThat( node4, instanceOf(WhileStatement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((WhileStatement)node4).getCondition());
-		assertEquals( ast.getNodeById((long)23), ((WhileStatement)node4).getStatement());
+		assertEquals( ast.getNodeById((long)22), ((WhileStatement)node4).getCondition());
+		assertEquals( ast.getNodeById((long)26), ((WhileStatement)node4).getStatement());
 	}
 
 	/**
@@ -3547,35 +2467,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testDoCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.doNodeStr;
-		String edgeStr = CSVASTSamples.doEdgeStr;
+		handleCSVFiles( "testDo");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)7);
-		ASTNode node3 = ast.getNodeById((long)12);
-		ASTNode node4 = ast.getNodeById((long)18);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)21);
 
 		assertThat( node, instanceOf(DoStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((DoStatement)node).getStatement());
-		assertEquals( ast.getNodeById((long)5), ((DoStatement)node).getCondition());
+		assertEquals( ast.getNodeById((long)7), ((DoStatement)node).getStatement());
+		assertEquals( ast.getNodeById((long)8), ((DoStatement)node).getCondition());
 
 		assertThat( node2, instanceOf(DoStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((DoStatement)node2).getStatement());
-		assertEquals( ast.getNodeById((long)9), ((DoStatement)node2).getCondition());
+		assertEquals( ast.getNodeById((long)11), ((DoStatement)node2).getStatement());
+		assertEquals( ast.getNodeById((long)12), ((DoStatement)node2).getCondition());
 
 		assertThat( node3, instanceOf(DoStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((DoStatement)node3).getStatement());
-		assertEquals( ast.getNodeById((long)14), ((DoStatement)node3).getCondition());
+		assertEquals( ast.getNodeById((long)16), ((DoStatement)node3).getStatement());
+		assertEquals( ast.getNodeById((long)17), ((DoStatement)node3).getCondition());
 
 		assertThat( node4, instanceOf(DoStatement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((DoStatement)node4).getStatement());
-		assertEquals( ast.getNodeById((long)20), ((DoStatement)node4).getCondition());
+		assertEquals( ast.getNodeById((long)22), ((DoStatement)node4).getStatement());
+		assertEquals( ast.getNodeById((long)23), ((DoStatement)node4).getCondition());
 	}
 
 	/**
@@ -3601,35 +2518,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIfElementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.ifStatementNodeStr;
-		String edgeStr = CSVASTSamples.ifStatementEdgeStr;
+		handleCSVFiles( "testIf");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)8);
-		ASTNode node3 = ast.getNodeById((long)12);
-		ASTNode node4 = ast.getNodeById((long)16);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)19);
 
 		assertThat( node, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((PHPIfElement)node).getCondition());
-		assertEquals( ast.getNodeById((long)7), ((PHPIfElement)node).getStatement());
+		assertEquals( ast.getNodeById((long)8), ((PHPIfElement)node).getCondition());
+		assertEquals( ast.getNodeById((long)10), ((PHPIfElement)node).getStatement());
 
 		assertThat( node2, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPIfElement)node2).getCondition());
-		assertEquals( ast.getNodeById((long)11), ((PHPIfElement)node2).getStatement());
+		assertEquals( ast.getNodeById((long)12), ((PHPIfElement)node2).getCondition());
+		assertEquals( ast.getNodeById((long)14), ((PHPIfElement)node2).getStatement());
 
 		assertThat( node3, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PHPIfElement)node3).getCondition());
-		assertEquals( ast.getNodeById((long)15), ((PHPIfElement)node3).getStatement());
+		assertEquals( ast.getNodeById((long)16), ((PHPIfElement)node3).getCondition());
+		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node3).getStatement());
 
 		assertThat( node4, instanceOf(PHPIfElement.class));
 		assertEquals( 2, node4.getChildCount());
 		assertNull( ((PHPIfElement)node4).getCondition());
-		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node4).getStatement());
+		assertEquals( ast.getNodeById((long)21), ((PHPIfElement)node4).getStatement());
 	}
 
 	/**
@@ -3657,18 +2571,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testSwitchCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.switchNodeStr;
-		String edgeStr = CSVASTSamples.switchEdgeStr;
+		handleCSVFiles( "testSwitch");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPSwitchStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPSwitchStatement)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PHPSwitchStatement)node).getExpression());
 		assertEquals( "i", ((Variable)((PHPSwitchStatement)node).getExpression()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((PHPSwitchStatement)node).getSwitchList());
+		assertEquals( ast.getNodeById((long)9), ((PHPSwitchStatement)node).getSwitchList());
 		assertEquals( 4, ((PHPSwitchStatement)node).getSwitchList().size());
 	}
 
@@ -3698,41 +2609,38 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testSwitchCaseCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.switchNodeStr;
-		String edgeStr = CSVASTSamples.switchEdgeStr;
+		handleCSVFiles( "testSwitch");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)7);
-		ASTNode node2 = ast.getNodeById((long)12);
-		ASTNode node3 = ast.getNodeById((long)15);
-		ASTNode node4 = ast.getNodeById((long)20);
+		ASTNode node = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)15);
+		ASTNode node3 = ast.getNodeById((long)18);
+		ASTNode node4 = ast.getNodeById((long)23);
 
 		assertThat( node, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPSwitchCase)node).getValue());
+		assertEquals( ast.getNodeById((long)11), ((PHPSwitchCase)node).getValue());
 		assertEquals( "string", ((PHPSwitchCase)node).getValue().getProperty("type"));
 		assertEquals( "foo", ((PHPSwitchCase)node).getValue().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((PHPSwitchCase)node).getStatement());
+		assertEquals( ast.getNodeById((long)12), ((PHPSwitchCase)node).getStatement());
 
 		assertThat( node2, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PHPSwitchCase)node2).getValue());
+		assertEquals( ast.getNodeById((long)16), ((PHPSwitchCase)node2).getValue());
 		assertEquals( "double", ((PHPSwitchCase)node2).getValue().getProperty("type"));
 		assertEquals( "1.42", ((PHPSwitchCase)node2).getValue().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)14), ((PHPSwitchCase)node2).getStatement());
+		assertEquals( ast.getNodeById((long)17), ((PHPSwitchCase)node2).getStatement());
 
 		assertThat( node3, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPSwitchCase)node3).getValue());
+		assertEquals( ast.getNodeById((long)19), ((PHPSwitchCase)node3).getValue());
 		assertEquals( "integer", ((PHPSwitchCase)node3).getValue().getProperty("type"));
 		assertEquals( "2", ((PHPSwitchCase)node3).getValue().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)17), ((PHPSwitchCase)node3).getStatement());
+		assertEquals( ast.getNodeById((long)20), ((PHPSwitchCase)node3).getStatement());
 
 		assertThat( node4, instanceOf(PHPSwitchCase.class));
 		assertEquals( 2, node4.getChildCount());
 		assertNull( ((PHPSwitchCase)node4).getValue());
-		assertEquals( ast.getNodeById((long)22), ((PHPSwitchCase)node4).getStatement());
+		assertEquals( ast.getNodeById((long)25), ((PHPSwitchCase)node4).getStatement());
 	}
 
 	/**
@@ -3748,41 +2656,38 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * This test checks a few declare statement's children in the following PHP code:
 	 *
 	 * declare(ticks=1) {}
-	 * declare(encoding='ISO-8859-1');
-	 * declare(ticks=0) foo();
+	 * declare(foo='bar');
+	 * declare(buz=$qux) norf();
 	 */
 	@Test
 	public void testDeclareCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.declareNodeStr;
-		String edgeStr = CSVASTSamples.declareEdgeStr;
+		handleCSVFiles( "testDeclare");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)9);
-		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)12);
+		ASTNode node3 = ast.getNodeById((long)18);
 
 		assertThat( node, instanceOf(PHPDeclareStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPDeclareStatement)node).getDeclares());
-		assertEquals( ast.getNodeById((long)8), ((PHPDeclareStatement)node).getStatement());
+		assertEquals( ast.getNodeById((long)7), ((PHPDeclareStatement)node).getDeclares());
+		assertEquals( ast.getNodeById((long)11), ((PHPDeclareStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(PHPDeclareStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPDeclareStatement)node2).getDeclares());
+		assertEquals( ast.getNodeById((long)13), ((PHPDeclareStatement)node2).getDeclares());
 		assertNull( ((PHPDeclareStatement)node2).getStatement());
 		
 		assertThat( node3, instanceOf(PHPDeclareStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPDeclareStatement)node3).getDeclares());
+		assertEquals( ast.getNodeById((long)19), ((PHPDeclareStatement)node3).getDeclares());
 		
 		// special test for the artificial ExpressionStatement node:
 
 		ASTNode node4 = ((PHPDeclareStatement)node3).getStatement();
 		assertThat( node4, instanceOf(ExpressionStatement.class));
 
-		ASTNode node5 = ast.getNodeById((long)20);
+		ASTNode node5 = ast.getNodeById((long)24);
 		assertThat( node5, instanceOf(CallExpression.class));
 		assertEquals( node5, ((ExpressionStatement)node4).getExpression());
 		// the expression statement wrapper should have the same node id as the expression itself
@@ -3808,81 +2713,38 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPropertyElementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,2,,0,1,4,Foo,\n";
-		nodeStr += "4,NULL,,2,,0,1,,,\n";
-		nodeStr += "5,NULL,,2,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,1,4,\"Foo\",\n";
-		nodeStr += "7,AST_STMT_LIST,,2,,0,6,,,\n";
-		nodeStr += "8,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,6,,,\n";
-		nodeStr += "9,AST_PROP_ELEM,,3,,0,6,,,\n";
-		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
-		nodeStr += "11,NULL,,3,,1,6,,,\n";
-		nodeStr += "12,AST_PROP_ELEM,,3,,1,6,,,\n";
-		nodeStr += "13,string,,3,\"bar\",0,6,,,\n";
-		nodeStr += "14,integer,,3,3,1,6,,,\n";
-		nodeStr += "15,AST_PROP_ELEM,,3,,2,6,,,\n";
-		nodeStr += "16,string,,3,\"buz\",0,6,,,\n";
-		nodeStr += "17,string,,3,\"bonjour\",1,6,,,\n";
-		nodeStr += "18,AST_PROP_ELEM,,3,,3,6,,,\n";
-		nodeStr += "19,string,,3,\"qux\",0,6,,,\n";
-		nodeStr += "20,AST_CONST,,3,,1,6,,,\n";
-		nodeStr += "21,AST_NAME,NAME_NOT_FQ,3,,0,6,,,\n";
-		nodeStr += "22,string,,3,\"SOMECONSTANT\",0,6,,,\n";
+		handleCSVFiles( "testPropertyDeclaration");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,11,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "8,12,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "15,17,PARENT_OF\n";
-		edgeStr += "8,15,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "8,18,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)9);
-		ASTNode node2 = ast.getNodeById((long)12);
-		ASTNode node3 = ast.getNodeById((long)15);
-		ASTNode node4 = ast.getNodeById((long)18);
+		ASTNode node = ast.getNodeById((long)14);
+		ASTNode node2 = ast.getNodeById((long)17);
+		ASTNode node3 = ast.getNodeById((long)20);
+		ASTNode node4 = ast.getNodeById((long)23);
 
 		assertThat( node, instanceOf(PropertyElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PropertyElement)node).getNameChild());
+		assertEquals( ast.getNodeById((long)15), ((PropertyElement)node).getNameChild());
 		assertEquals( "foo", ((PropertyElement)node).getNameChild().getEscapedCodeStr());
 		assertNull( ((PropertyElement)node).getDefault());
 
 		assertThat( node2, instanceOf(PropertyElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PropertyElement)node2).getNameChild());
+		assertEquals( ast.getNodeById((long)18), ((PropertyElement)node2).getNameChild());
 		assertEquals( "bar", ((PropertyElement)node2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)14), ((PropertyElement)node2).getDefault());
+		assertEquals( ast.getNodeById((long)19), ((PropertyElement)node2).getDefault());
 		assertEquals( "3", ((PropertyElement)node2).getDefault().getEscapedCodeStr());
 
 		assertThat( node3, instanceOf(PropertyElement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PropertyElement)node3).getNameChild());
+		assertEquals( ast.getNodeById((long)21), ((PropertyElement)node3).getNameChild());
 		assertEquals( "buz", ((PropertyElement)node3).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)17), ((PropertyElement)node3).getDefault());
+		assertEquals( ast.getNodeById((long)22), ((PropertyElement)node3).getDefault());
 		assertEquals( "bonjour", ((PropertyElement)node3).getDefault().getEscapedCodeStr());
 
 		assertThat( node4, instanceOf(PropertyElement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((PropertyElement)node4).getNameChild());
+		assertEquals( ast.getNodeById((long)24), ((PropertyElement)node4).getNameChild());
 		assertEquals( "qux", ((PropertyElement)node4).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)20), ((PropertyElement)node4).getDefault());
+		assertEquals( ast.getNodeById((long)25), ((PropertyElement)node4).getDefault());
 		assertEquals( "SOMECONSTANT", ((Constant)((PropertyElement)node4).getDefault()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 
@@ -3904,40 +2766,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testConstantElementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CONST_DECL,,3,,0,1,,,\n";
-		nodeStr += "4,AST_CONST_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"QUESTION\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"any\",1,1,,,\n";
-		nodeStr += "7,AST_CONST_ELEM,,3,,1,1,,,\n";
-		nodeStr += "8,string,,3,\"ANSWER\",0,1,,,\n";
-		nodeStr += "9,integer,,3,42,1,1,,,\n";
+		handleCSVFiles( "testConstantDeclaration");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,6,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 
 		assertThat( node, instanceOf(ConstantElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((ConstantElement)node).getNameChild());
+		assertEquals( ast.getNodeById((long)8), ((ConstantElement)node).getNameChild());
 		assertEquals( "QUESTION", ((ConstantElement)node).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((ConstantElement)node).getValue());
+		assertEquals( ast.getNodeById((long)9), ((ConstantElement)node).getValue());
 		assertEquals( "any", ((ConstantElement)node).getValue().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(ConstantElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((ConstantElement)node2).getNameChild());
+		assertEquals( ast.getNodeById((long)11), ((ConstantElement)node2).getNameChild());
 		assertEquals( "ANSWER", ((ConstantElement)node2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((ConstantElement)node2).getValue());
+		assertEquals( ast.getNodeById((long)12), ((ConstantElement)node2).getValue());
 		assertEquals( "42", ((ConstantElement)node2).getValue().getEscapedCodeStr());
 	}
 
@@ -3964,90 +2809,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUseTraitCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
-		nodeStr += "5,NULL,,3,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
-		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
-		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
-		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
-		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
-		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
-		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
-		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
-		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
-		nodeStr += "19,NULL,,5,,0,6,,,\n";
-		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
-		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
-		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
-		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
-		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
-		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
-		nodeStr += "27,NULL,,6,,1,6,,,\n";
-		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
-		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
-		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
-		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
-		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
-		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
-		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
-		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+		handleCSVFiles( "testUseTrait");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "9,14,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,21,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,27,PARENT_OF\n";
-		edgeStr += "16,22,PARENT_OF\n";
-		edgeStr += "30,31,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "29,32,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "36,37,PARENT_OF\n";
-		edgeStr += "33,36,PARENT_OF\n";
-		edgeStr += "28,33,PARENT_OF\n";
-		edgeStr += "16,28,PARENT_OF\n";
-		edgeStr += "8,16,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(PHPUseTrait.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPUseTrait)node).getTraits());
+		assertEquals( ast.getNodeById((long)14), ((PHPUseTrait)node).getTraits());
 		assertEquals( "Foo", ((PHPUseTrait)node).getTraits().getIdentifier(0).getNameChild().getEscapedCodeStr());
 		assertEquals( "Bar", ((PHPUseTrait)node).getTraits().getIdentifier(1).getNameChild().getEscapedCodeStr());
 		assertEquals( "Buz", ((PHPUseTrait)node).getTraits().getIdentifier(2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)16), ((PHPUseTrait)node).getTraitAdaptations());
+		assertEquals( ast.getNodeById((long)21), ((PHPUseTrait)node).getTraitAdaptations());
 	}
 
 	/**
@@ -4075,87 +2847,14 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testTraitPrecedenceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
-		nodeStr += "5,NULL,,3,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
-		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
-		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
-		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
-		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
-		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
-		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
-		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
-		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
-		nodeStr += "19,NULL,,5,,0,6,,,\n";
-		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
-		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
-		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
-		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
-		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
-		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
-		nodeStr += "27,NULL,,6,,1,6,,,\n";
-		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
-		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
-		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
-		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
-		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
-		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
-		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
-		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+		handleCSVFiles( "testUseTrait");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "9,14,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,21,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,27,PARENT_OF\n";
-		edgeStr += "16,22,PARENT_OF\n";
-		edgeStr += "30,31,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "29,32,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "36,37,PARENT_OF\n";
-		edgeStr += "33,36,PARENT_OF\n";
-		edgeStr += "28,33,PARENT_OF\n";
-		edgeStr += "16,28,PARENT_OF\n";
-		edgeStr += "8,16,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)28);
+		ASTNode node = ast.getNodeById((long)33);
 
 		assertThat( node, instanceOf(PHPTraitPrecedence.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)29), ((PHPTraitPrecedence)node).getMethod());
-		assertEquals( ast.getNodeById((long)33), ((PHPTraitPrecedence)node).getInsteadOf());
+		assertEquals( ast.getNodeById((long)34), ((PHPTraitPrecedence)node).getMethod());
+		assertEquals( ast.getNodeById((long)38), ((PHPTraitPrecedence)node).getInsteadOf());
 		assertEquals( "Bar", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(0).getNameChild().getEscapedCodeStr());
 		assertEquals( "Buz", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(1).getNameChild().getEscapedCodeStr());
 	}
@@ -4185,103 +2884,30 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testMethodReferenceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
-		nodeStr += "5,NULL,,3,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
-		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
-		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
-		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
-		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
-		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
-		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
-		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
-		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
-		nodeStr += "19,NULL,,5,,0,6,,,\n";
-		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
-		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
-		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
-		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
-		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
-		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
-		nodeStr += "27,NULL,,6,,1,6,,,\n";
-		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
-		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
-		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
-		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
-		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
-		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
-		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
-		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+		handleCSVFiles( "testUseTrait");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "9,14,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,21,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,27,PARENT_OF\n";
-		edgeStr += "16,22,PARENT_OF\n";
-		edgeStr += "30,31,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "29,32,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "36,37,PARENT_OF\n";
-		edgeStr += "33,36,PARENT_OF\n";
-		edgeStr += "28,33,PARENT_OF\n";
-		edgeStr += "16,28,PARENT_OF\n";
-		edgeStr += "8,16,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)18);
-		ASTNode node2 = ast.getNodeById((long)23);
-		ASTNode node3 = ast.getNodeById((long)29);
+		ASTNode node = ast.getNodeById((long)23);
+		ASTNode node2 = ast.getNodeById((long)28);
+		ASTNode node3 = ast.getNodeById((long)34);
 
 		assertThat( node, instanceOf(MethodReference.class));
 		assertEquals( 2, node.getChildCount());
 		assertNull( ((MethodReference)node).getClassIdentifier());
-		assertEquals( ast.getNodeById((long)20), ((MethodReference)node).getMethodName());
+		assertEquals( ast.getNodeById((long)25), ((MethodReference)node).getMethodName());
 		assertEquals( "qux", ((MethodReference)node).getMethodName().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(MethodReference.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)24), ((MethodReference)node2).getClassIdentifier());
+		assertEquals( ast.getNodeById((long)29), ((MethodReference)node2).getClassIdentifier());
 		assertEquals( "Bar", ((MethodReference)node2).getClassIdentifier().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)26), ((MethodReference)node2).getMethodName());
+		assertEquals( ast.getNodeById((long)31), ((MethodReference)node2).getMethodName());
 		assertEquals( "norf", ((MethodReference)node2).getMethodName().getEscapedCodeStr());
 
 		assertThat( node3, instanceOf(MethodReference.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)30), ((MethodReference)node3).getClassIdentifier());
+		assertEquals( ast.getNodeById((long)35), ((MethodReference)node3).getClassIdentifier());
 		assertEquals( "Foo", ((MethodReference)node3).getClassIdentifier().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)32), ((MethodReference)node3).getMethodName());
+		assertEquals( ast.getNodeById((long)37), ((MethodReference)node3).getMethodName());
 		assertEquals( "nicknack", ((MethodReference)node3).getMethodName().getEscapedCodeStr());
 	}
 
@@ -4306,47 +2932,28 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testNamespaceCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_NAMESPACE,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"Foo\",0,1,,,\n";
-		nodeStr += "5,AST_STMT_LIST,,3,,1,1,,,\n";
-		nodeStr += "6,AST_NAMESPACE,,4,,1,1,,,\n";
-		nodeStr += "7,string,,4,\"Bar\",0,1,,,\n";
-		nodeStr += "8,NULL,,4,,1,1,,,\n";
-		nodeStr += "9,AST_NAMESPACE,,5,,2,1,,,\n";
-		nodeStr += "10,NULL,,5,,0,1,,,\n";
-		nodeStr += "11,AST_STMT_LIST,,5,,1,1,,,\n";
+		handleCSVFiles( "testNamespace");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "6,8,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,11,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)6);
-		ASTNode node3 = ast.getNodeById((long)9);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)12);
 
 		assertThat( node, instanceOf(NamespaceStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((NamespaceStatement)node).getName());
+		assertEquals( ast.getNodeById((long)7), ((NamespaceStatement)node).getName());
 		assertEquals( "Foo", ((NamespaceStatement)node).getName().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)5), ((NamespaceStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)8), ((NamespaceStatement)node).getContent());
 
 		assertThat( node2, instanceOf(NamespaceStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((NamespaceStatement)node2).getName());
+		assertEquals( ast.getNodeById((long)10), ((NamespaceStatement)node2).getName());
 		assertEquals( "Bar", ((NamespaceStatement)node2).getName().getEscapedCodeStr());
 		assertNull( ((NamespaceStatement)node2).getContent());
 
 		assertThat( node3, instanceOf(NamespaceStatement.class));
 		assertEquals( 2, node3.getChildCount());
 		assertNull( ((NamespaceStatement)node3).getName());
-		assertEquals( ast.getNodeById((long)11), ((NamespaceStatement)node3).getContent());
+		assertEquals( ast.getNodeById((long)14), ((NamespaceStatement)node3).getContent());
 	}
 
 	/**
@@ -4364,40 +2971,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testUseElementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
-		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"Buz\",1,1,,,\n";
-		nodeStr += "7,AST_USE_ELEM,,3,,1,1,,,\n";
-		nodeStr += "8,string,,3,\"Qux\",0,1,,,\n";
-		nodeStr += "9,string,,3,\"Norf\",1,1,,,\n";
+		handleCSVFiles( "testUse");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,6,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 
 		assertThat( node, instanceOf(UseElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)5), ((UseElement)node).getNamespace());
+		assertEquals( ast.getNodeById((long)8), ((UseElement)node).getNamespace());
 		assertEquals( "Foo\\Bar", ((UseElement)node).getNamespace().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((UseElement)node).getAlias());
+		assertEquals( ast.getNodeById((long)9), ((UseElement)node).getAlias());
 		assertEquals( "Buz", ((UseElement)node).getAlias().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(UseElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((UseElement)node2).getNamespace());
+		assertEquals( ast.getNodeById((long)11), ((UseElement)node2).getNamespace());
 		assertEquals( "Qux", ((UseElement)node2).getNamespace().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((UseElement)node2).getAlias());
+		assertEquals( ast.getNodeById((long)12), ((UseElement)node2).getAlias());
 		assertEquals( "Norf", ((UseElement)node2).getAlias().getEscapedCodeStr());
 	}
 
@@ -4425,93 +3015,20 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testTraitAliasCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
-		nodeStr += "5,NULL,,3,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
-		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
-		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
-		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
-		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
-		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
-		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
-		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
-		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
-		nodeStr += "19,NULL,,5,,0,6,,,\n";
-		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
-		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
-		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
-		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
-		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
-		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
-		nodeStr += "27,NULL,,6,,1,6,,,\n";
-		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
-		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
-		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
-		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
-		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
-		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
-		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
-		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+		handleCSVFiles( "testUseTrait");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "9,14,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,21,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,27,PARENT_OF\n";
-		edgeStr += "16,22,PARENT_OF\n";
-		edgeStr += "30,31,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "29,32,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "36,37,PARENT_OF\n";
-		edgeStr += "33,36,PARENT_OF\n";
-		edgeStr += "28,33,PARENT_OF\n";
-		edgeStr += "16,28,PARENT_OF\n";
-		edgeStr += "8,16,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)17);
-		ASTNode node2 = ast.getNodeById((long)22);
+		ASTNode node = ast.getNodeById((long)22);
+		ASTNode node2 = ast.getNodeById((long)27);
 
 		assertThat( node, instanceOf(PHPTraitAlias.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)18), ((PHPTraitAlias)node).getMethod());
-		assertEquals( ast.getNodeById((long)21), ((PHPTraitAlias)node).getAlias());
+		assertEquals( ast.getNodeById((long)23), ((PHPTraitAlias)node).getMethod());
+		assertEquals( ast.getNodeById((long)26), ((PHPTraitAlias)node).getAlias());
 		assertEquals( "_qux", ((PHPTraitAlias)node).getAlias().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(PHPTraitAlias.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)23), ((PHPTraitAlias)node2).getMethod());
+		assertEquals( ast.getNodeById((long)28), ((PHPTraitAlias)node2).getMethod());
 		assertNull( ((PHPTraitAlias)node2).getAlias());
 	}
 
@@ -4531,42 +3048,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testGroupUseCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_GROUP_USE,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"Foo\",0,1,,,\n";
-		nodeStr += "5,AST_USE,,3,,1,1,,,\n";
-		nodeStr += "6,AST_USE_ELEM,T_CLASS,3,,0,1,,,\n";
-		nodeStr += "7,string,,3,\"Bar\",0,1,,,\n";
-		nodeStr += "8,string,,3,\"B\",1,1,,,\n";
-		nodeStr += "9,AST_USE_ELEM,T_CLASS,3,,1,1,,,\n";
-		nodeStr += "10,string,,3,\"Buz\",0,1,,,\n";
-		nodeStr += "11,NULL,,3,,1,1,,,\n";
-		nodeStr += "12,AST_USE_ELEM,T_CLASS,3,,2,1,,,\n";
-		nodeStr += "13,string,,3,\"Qux\",0,1,,,\n";
-		nodeStr += "14,string,,3,\"Q\",1,1,,,\n";
+		handleCSVFiles( "testGroupUse");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "6,8,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,11,PARENT_OF\n";
-		edgeStr += "5,9,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "5,12,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPGroupUseStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((PHPGroupUseStatement)node).getPrefix());
+		assertEquals( ast.getNodeById((long)7), ((PHPGroupUseStatement)node).getPrefix());
 		assertEquals( "Foo", ((PHPGroupUseStatement)node).getPrefix().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)5), ((PHPGroupUseStatement)node).getUses());
+		assertEquals( ast.getNodeById((long)8), ((PHPGroupUseStatement)node).getUses());
 	}
 
 
@@ -4592,30 +3082,27 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testMethodCallCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.methodCallNodeStr;
-		String edgeStr = CSVASTSamples.methodCallEdgeStr;
+		handleCSVFiles( "testMethodCall");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(MethodCallExpression.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((MethodCallExpression)node).getTargetObject());
+		assertEquals( ast.getNodeById((long)7), ((MethodCallExpression)node).getTargetObject());
 		assertEquals( "buz", ((Variable)((MethodCallExpression)node).getTargetObject()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((MethodCallExpression)node).getTargetFunc());
+		assertEquals( ast.getNodeById((long)9), ((MethodCallExpression)node).getTargetFunc());
 		assertEquals( "foo", ((MethodCallExpression)node).getTargetFunc().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)7), ((MethodCallExpression)node).getArgumentList());
+		assertEquals( ast.getNodeById((long)10), ((MethodCallExpression)node).getArgumentList());
 		assertEquals( 2, ((MethodCallExpression)node).getArgumentList().size());
 
 		assertThat( node2, instanceOf(MethodCallExpression.class));
 		assertEquals( 3, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((MethodCallExpression)node2).getTargetObject());
+		assertEquals( ast.getNodeById((long)15), ((MethodCallExpression)node2).getTargetObject());
 		assertEquals( "buz", ((Identifier)((CallExpression)((MethodCallExpression)node2).getTargetObject()).getTargetFunc()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)16), ((MethodCallExpression)node2).getTargetFunc());
+		assertEquals( ast.getNodeById((long)19), ((MethodCallExpression)node2).getTargetFunc());
 		assertEquals( "foo", ((Variable)((MethodCallExpression)node2).getTargetFunc()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)18), ((MethodCallExpression)node2).getArgumentList());
+		assertEquals( ast.getNodeById((long)21), ((MethodCallExpression)node2).getArgumentList());
 		assertEquals( 2, ((MethodCallExpression)node2).getArgumentList().size());
 	}
 
@@ -4636,29 +3123,26 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testStaticCallCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.staticCallNodeStr;
-		String edgeStr = CSVASTSamples.staticCallEdgeStr;
+		handleCSVFiles( "testStaticCall");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(StaticCallExpression.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((StaticCallExpression)node).getTargetClass());
+		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getTargetClass());
 		assertEquals( "Foo", ((Identifier)((StaticCallExpression)node).getTargetClass()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)6), ((StaticCallExpression)node).getTargetFunc());
+		assertEquals( ast.getNodeById((long)9), ((StaticCallExpression)node).getTargetFunc());
 		assertEquals( "bar", ((StaticCallExpression)node).getTargetFunc().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)7), ((StaticCallExpression)node).getArgumentList());
+		assertEquals( ast.getNodeById((long)10), ((StaticCallExpression)node).getArgumentList());
 
 		assertThat( node2, instanceOf(StaticCallExpression.class));
 		assertEquals( 3, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((StaticCallExpression)node2).getTargetClass());
+		assertEquals( ast.getNodeById((long)14), ((StaticCallExpression)node2).getTargetClass());
 		assertEquals( "qux", ((StringExpression)((Variable)((StaticCallExpression)node2).getTargetClass()).getNameExpression()).getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((StaticCallExpression)node2).getTargetFunc());
+		assertEquals( ast.getNodeById((long)16), ((StaticCallExpression)node2).getTargetFunc());
 		assertEquals( "norf", ((Variable)((ArrayIndexing)((StaticCallExpression)node2).getTargetFunc()).getArrayExpression()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)17), ((StaticCallExpression)node2).getArgumentList());
+		assertEquals( ast.getNodeById((long)20), ((StaticCallExpression)node2).getArgumentList());
 	}
 
 	/**
@@ -4677,30 +3161,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testConditionalCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CONDITIONAL,,3,,0,1,,,\n";
-		nodeStr += "4,AST_CONST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "6,string,,3,\"true\",0,1,,,\n";
-		nodeStr += "7,string,,3,\"foo\",1,1,,,\n";
-		nodeStr += "8,string,,3,\"bar\",2,1,,,\n";
+		handleCSVFiles( "testConditional");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(ConditionalExpression.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((ConditionalExpression)node).getCondition());
-		assertEquals( ast.getNodeById((long)7), ((ConditionalExpression)node).getTrueExpression());
-		assertEquals( ast.getNodeById((long)8), ((ConditionalExpression)node).getFalseExpression());
+		assertEquals( ast.getNodeById((long)7), ((ConditionalExpression)node).getCondition());
+		assertEquals( ast.getNodeById((long)10), ((ConditionalExpression)node).getTrueExpression());
+		assertEquals( ast.getNodeById((long)11), ((ConditionalExpression)node).getFalseExpression());
 	}
 
 	/**
@@ -4722,46 +3191,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testTryCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
-		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
-		nodeStr += "6,AST_CATCH,,4,,0,1,,,\n";
-		nodeStr += "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"FooException\",0,1,,,\n";
-		nodeStr += "9,string,,4,\"f\",1,1,,,\n";
-		nodeStr += "10,AST_STMT_LIST,,4,,2,1,,,\n";
-		nodeStr += "11,AST_CATCH,,5,,1,1,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "13,string,,5,\"BarException\",0,1,,,\n";
-		nodeStr += "14,string,,5,\"b\",1,1,,,\n";
-		nodeStr += "15,AST_STMT_LIST,,5,,2,1,,,\n";
-		nodeStr += "16,AST_STMT_LIST,,6,,2,1,,,\n";
+		handleCSVFiles( "testTry");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "6,9,PARENT_OF\n";
-		edgeStr += "6,10,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,14,PARENT_OF\n";
-		edgeStr += "11,15,PARENT_OF\n";
-		edgeStr += "5,11,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,16,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(TryStatement.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((TryStatement)node).getContent());
-		assertEquals( ast.getNodeById((long)5), ((TryStatement)node).getCatchList());
-		assertEquals( ast.getNodeById((long)16), ((TryStatement)node).getFinallyContent());
+		assertEquals( ast.getNodeById((long)7), ((TryStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)8), ((TryStatement)node).getCatchList());
+		assertEquals( ast.getNodeById((long)19), ((TryStatement)node).getFinallyContent());
 	}
 
 	/**
@@ -4782,31 +3220,28 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCatchCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.catchNodeStr;
-		String edgeStr = CSVASTSamples.catchEdgeStr;
+		handleCSVFiles( "testTry");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(CatchStatement.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((CatchStatement)node).getExceptionIdentifier());
-		assertEquals( ast.getNodeById((long)8), ((CatchStatement)node).getExceptionIdentifier().getNameChild());
+		assertEquals( ast.getNodeById((long)10), ((CatchStatement)node).getExceptionIdentifier());
+		assertEquals( ast.getNodeById((long)11), ((CatchStatement)node).getExceptionIdentifier().getNameChild());
 		assertEquals( "FooException", ((CatchStatement)node).getExceptionIdentifier().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((CatchStatement)node).getVariableName());
+		assertEquals( ast.getNodeById((long)12), ((CatchStatement)node).getVariableName());
 		assertEquals( "f", ((CatchStatement)node).getVariableName().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)10), ((CatchStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)13), ((CatchStatement)node).getContent());
 
 		assertThat( node2, instanceOf(CatchStatement.class));
 		assertEquals( 3, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((CatchStatement)node2).getExceptionIdentifier());
-		assertEquals( ast.getNodeById((long)13), ((CatchStatement)node2).getExceptionIdentifier().getNameChild());
+		assertEquals( ast.getNodeById((long)15), ((CatchStatement)node2).getExceptionIdentifier());
+		assertEquals( ast.getNodeById((long)16), ((CatchStatement)node2).getExceptionIdentifier().getNameChild());
 		assertEquals( "BarException", ((CatchStatement)node2).getExceptionIdentifier().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)14), ((CatchStatement)node2).getVariableName());
+		assertEquals( ast.getNodeById((long)17), ((CatchStatement)node2).getVariableName());
 		assertEquals( "b", ((CatchStatement)node2).getVariableName().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)15), ((CatchStatement)node2).getContent());
+		assertEquals( ast.getNodeById((long)18), ((CatchStatement)node2).getContent());
 	}
 
 	/**
@@ -4825,32 +3260,29 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testParameterCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.paramNodeStr;
-		String edgeStr = CSVASTSamples.paramEdgeStr;
+		handleCSVFiles( "testParameterList");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)5);
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(PHPParameter.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)6), ((PHPParameter)node).getType());
-		assertEquals( ast.getNodeById((long)7), ((PHPParameter)node).getType().getNameChild());
+		assertEquals( ast.getNodeById((long)11), ((PHPParameter)node).getType());
+		assertEquals( ast.getNodeById((long)12), ((PHPParameter)node).getType().getNameChild());
 		assertEquals( "int", ((PHPParameter)node).getType().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)8), ((PHPParameter)node).getNameChild());
+		assertEquals( ast.getNodeById((long)13), ((PHPParameter)node).getNameChild());
 		assertEquals( "bar", ((PHPParameter)node).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((PHPParameter)node).getDefault());
+		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node).getDefault());
 		assertEquals( "3", ((PHPParameter)node).getDefault().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(PHPParameter.class));
 		assertEquals( 3, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPParameter)node2).getType());
-		assertEquals( ast.getNodeById((long)12), ((PHPParameter)node2).getType().getNameChild());
+		assertEquals( ast.getNodeById((long)16), ((PHPParameter)node2).getType());
+		assertEquals( ast.getNodeById((long)17), ((PHPParameter)node2).getType().getNameChild());
 		assertEquals( "string", ((PHPParameter)node2).getType().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((PHPParameter)node2).getNameChild());
+		assertEquals( ast.getNodeById((long)18), ((PHPParameter)node2).getNameChild());
 		assertEquals( "buz", ((PHPParameter)node2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node2).getDefault());
+		assertEquals( ast.getNodeById((long)19), ((PHPParameter)node2).getDefault());
 		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
 	}
 
@@ -4877,19 +3309,16 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testForCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.forNodeStr;
-		String edgeStr = CSVASTSamples.forEdgeStr;
+		handleCSVFiles( "testFor");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(ForStatement.class));
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((ForStatement)node).getForInitExpression());
-		assertEquals( ast.getNodeById((long)13), ((ForStatement)node).getCondition());
-		assertEquals( ast.getNodeById((long)18), ((ForStatement)node).getForLoopExpression());
-		assertEquals( ast.getNodeById((long)25), ((ForStatement)node).getStatement());
+		assertEquals( ast.getNodeById((long)7), ((ForStatement)node).getForInitExpression());
+		assertEquals( ast.getNodeById((long)16), ((ForStatement)node).getCondition());
+		assertEquals( ast.getNodeById((long)21), ((ForStatement)node).getForLoopExpression());
+		assertEquals( ast.getNodeById((long)28), ((ForStatement)node).getStatement());
 	}
 
 	/**
@@ -4914,35 +3343,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testForEachCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.forEachNodeStr;
-		String edgeStr = CSVASTSamples.forEachEdgeStr;
+		handleCSVFiles( "testForEach");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
-		ASTNode node2 = ast.getNodeById((long)10);
-		ASTNode node3 = ast.getNodeById((long)20);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)13);
+		ASTNode node3 = ast.getNodeById((long)23);
 
 		assertThat( node, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)4), ((ForEachStatement)node).getIteratedObject());
-		assertEquals( ast.getNodeById((long)6), ((ForEachStatement)node).getValueExpression());
+		assertEquals( ast.getNodeById((long)7), ((ForEachStatement)node).getIteratedObject());
+		assertEquals( ast.getNodeById((long)9), ((ForEachStatement)node).getValueExpression());
 		assertNull( ((ForEachStatement)node).getKeyExpression());
-		assertEquals( ast.getNodeById((long)9), ((ForEachStatement)node).getStatement());
+		assertEquals( ast.getNodeById((long)12), ((ForEachStatement)node).getStatement());
 
 		assertThat( node2, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((ForEachStatement)node2).getIteratedObject());
-		assertEquals( ast.getNodeById((long)15), ((ForEachStatement)node2).getValueExpression());
-		assertEquals( ast.getNodeById((long)17), ((ForEachStatement)node2).getKeyExpression());
-		assertEquals( ast.getNodeById((long)19), ((ForEachStatement)node2).getStatement());
+		assertEquals( ast.getNodeById((long)14), ((ForEachStatement)node2).getIteratedObject());
+		assertEquals( ast.getNodeById((long)18), ((ForEachStatement)node2).getValueExpression());
+		assertEquals( ast.getNodeById((long)20), ((ForEachStatement)node2).getKeyExpression());
+		assertEquals( ast.getNodeById((long)22), ((ForEachStatement)node2).getStatement());
 		
 		assertThat( node3, instanceOf(ForEachStatement.class));
 		assertEquals( 4, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((ForEachStatement)node3).getIteratedObject());
-		assertEquals( ast.getNodeById((long)25), ((ForEachStatement)node3).getValueExpression());
-		assertEquals( ast.getNodeById((long)29), ((ForEachStatement)node3).getKeyExpression());
-		assertEquals( ast.getNodeById((long)33), ((ForEachStatement)node3).getStatement());
+		assertEquals( ast.getNodeById((long)24), ((ForEachStatement)node3).getIteratedObject());
+		assertEquals( ast.getNodeById((long)28), ((ForEachStatement)node3).getValueExpression());
+		assertEquals( ast.getNodeById((long)32), ((ForEachStatement)node3).getKeyExpression());
+		assertEquals( ast.getNodeById((long)36), ((ForEachStatement)node3).getStatement());
 	}
 
 
@@ -4962,49 +3388,23 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testArgumentListCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CALL,,3,,0,1,,,\n";
-		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "6,AST_ARG_LIST,,3,,1,1,,,\n";
-		nodeStr += "7,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "8,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "9,string,,3,\"yabadabadoo\",1,1,,,\n";
-		nodeStr += "10,AST_CALL,,4,,1,1,,,\n";
-		nodeStr += "11,AST_VAR,,4,,0,1,,,\n";
-		nodeStr += "12,string,,4,\"buz\",0,1,,,\n";
-		nodeStr += "13,AST_ARG_LIST,,4,,1,1,,,\n";
-		nodeStr += "14,integer,,4,1,0,1,,,\n";
+		handleCSVFiles( "testCall");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "6,9,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "10,13,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)13);
+		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)16);
 
 		assertThat( node, instanceOf(ArgumentList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ArgumentList)node).size());
-		assertEquals( ast.getNodeById((long)7), ((ArgumentList)node).getArgument(0));
-		assertEquals( ast.getNodeById((long)9), ((ArgumentList)node).getArgument(1));
+		assertEquals( ast.getNodeById((long)10), ((ArgumentList)node).getArgument(0));
+		assertEquals( ast.getNodeById((long)12), ((ArgumentList)node).getArgument(1));
 		for( ASTNode argument : (ArgumentList)node)
 			assertTrue( ast.containsValue(argument));
 
 		assertThat( node2, instanceOf(ArgumentList.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( 1, ((ArgumentList)node2).size());
-		assertEquals( ast.getNodeById((long)14), ((ArgumentList)node2).getArgument(0));
+		assertEquals( ast.getNodeById((long)17), ((ArgumentList)node2).getArgument(0));
 		for( ASTNode argument : (ArgumentList)node)
 			assertTrue( ast.containsValue(argument));
 	}
@@ -5024,81 +3424,26 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testListCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ASSIGN,,3,,0,1,,,\n";
-		nodeStr += "4,AST_LIST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "6,string,,3,\"a\",0,1,,,\n";
-		nodeStr += "7,NULL,,3,,1,1,,,\n";
-		nodeStr += "8,AST_LIST,,3,,2,1,,,\n";
-		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "10,string,,3,\"c\",0,1,,,\n";
-		nodeStr += "11,AST_VAR,,3,,1,1,,,\n";
-		nodeStr += "12,string,,3,\"d\",0,1,,,\n";
-		nodeStr += "13,AST_ARRAY,,3,,1,1,,,\n";
-		nodeStr += "14,AST_ARRAY_ELEM,,3,,0,1,,,\n";
-		nodeStr += "15,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "16,NULL,,3,,1,1,,,\n";
-		nodeStr += "17,AST_ARRAY_ELEM,,3,,1,1,,,\n";
-		nodeStr += "18,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "19,NULL,,3,,1,1,,,\n";
-		nodeStr += "20,AST_ARRAY_ELEM,,3,,2,1,,,\n";
-		nodeStr += "21,AST_ARRAY,,3,,0,1,,,\n";
-		nodeStr += "22,AST_ARRAY_ELEM,,3,,0,1,,,\n";
-		nodeStr += "23,string,,3,\"buz\",0,1,,,\n";
-		nodeStr += "24,NULL,,3,,1,1,,,\n";
-		nodeStr += "25,AST_ARRAY_ELEM,,3,,1,1,,,\n";
-		nodeStr += "26,string,,3,\"qux\",0,1,,,\n";
-		nodeStr += "27,NULL,,3,,1,1,,,\n";
-		nodeStr += "28,NULL,,3,,1,1,,,\n";
+		handleCSVFiles( "testList");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,7,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "4,8,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "14,16,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,19,PARENT_OF\n";
-		edgeStr += "13,17,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,24,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "25,26,PARENT_OF\n";
-		edgeStr += "25,27,PARENT_OF\n";
-		edgeStr += "21,25,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "20,28,PARENT_OF\n";
-		edgeStr += "13,20,PARENT_OF\n";
-		edgeStr += "3,13,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)11);
 
 		assertThat( node, instanceOf(PHPListExpression.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( 3, ((PHPListExpression)node).size());
-		assertEquals( ast.getNodeById((long)5), ((PHPListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(0));
 		assertNull( ((PHPListExpression)node).getElement(1));
-		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(2));
-		for( ASTNode element : (PHPListExpression)node) // TODO iterate over Expression's
+		assertEquals( ast.getNodeById((long)11), ((PHPListExpression)node).getElement(2));
+		for( Expression element : (PHPListExpression)node)
 			assertTrue( null == element || ast.containsValue(element));
 
 		assertThat( node2, instanceOf(PHPListExpression.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( 2, ((PHPListExpression)node2).size());
-		assertEquals( ast.getNodeById((long)9), ((PHPListExpression)node2).getElement(0));
-		assertEquals( ast.getNodeById((long)11), ((PHPListExpression)node2).getElement(1));
-		for( ASTNode element : (PHPListExpression)node2) // TODO iterate over Expression's
+		assertEquals( ast.getNodeById((long)12), ((PHPListExpression)node2).getElement(0));
+		assertEquals( ast.getNodeById((long)14), ((PHPListExpression)node2).getElement(1));
+		for( Expression element : (PHPListExpression)node2)
 			assertTrue( ast.containsValue(element));
 	}
 
@@ -5118,58 +3463,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testArrayCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ARRAY,,3,,0,1,,,\n";
-		nodeStr += "4,AST_ARRAY_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,integer,,3,42,0,1,,,\n";
-		nodeStr += "6,string,,3,\"key1\",1,1,,,\n";
-		nodeStr += "7,AST_ARRAY_ELEM,,4,,1,1,,,\n";
-		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "9,integer,,4,2,1,1,,,\n";
-		nodeStr += "10,AST_ARRAY_ELEM,,5,,2,1,,,\n";
-		nodeStr += "11,AST_VAR,,5,,0,1,,,\n";
-		nodeStr += "12,string,,5,\"bar\",0,1,,,\n";
-		nodeStr += "13,AST_CONST,,5,,1,1,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "15,string,,5,\"aconst\",0,1,,,\n";
-		nodeStr += "16,AST_ARRAY_ELEM,,6,,3,1,,,\n";
-		nodeStr += "17,AST_CALL,,6,,0,1,,,\n";
-		nodeStr += "18,AST_NAME,NAME_NOT_FQ,6,,0,1,,,\n";
-		nodeStr += "19,string,,6,\"buz\",0,1,,,\n";
-		nodeStr += "20,AST_ARG_LIST,,6,,1,1,,,\n";
-		nodeStr += "21,NULL,,6,,1,1,,,\n";
+		handleCSVFiles( "testArray");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,6,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "10,13,PARENT_OF\n";
-		edgeStr += "3,10,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,20,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "16,21,PARENT_OF\n";
-		edgeStr += "3,16,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPArrayExpression.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PHPArrayExpression)node).size());
-		assertEquals( ast.getNodeById((long)4), ((PHPArrayExpression)node).getArrayElement(0));
-		assertEquals( ast.getNodeById((long)7), ((PHPArrayExpression)node).getArrayElement(1));
-		assertEquals( ast.getNodeById((long)10), ((PHPArrayExpression)node).getArrayElement(2));
-		assertEquals( ast.getNodeById((long)16), ((PHPArrayExpression)node).getArrayElement(3));
+		assertEquals( ast.getNodeById((long)7), ((PHPArrayExpression)node).getArrayElement(0));
+		assertEquals( ast.getNodeById((long)10), ((PHPArrayExpression)node).getArrayElement(1));
+		assertEquals( ast.getNodeById((long)13), ((PHPArrayExpression)node).getArrayElement(2));
+		assertEquals( ast.getNodeById((long)19), ((PHPArrayExpression)node).getArrayElement(3));
 		for( PHPArrayElement element : (PHPArrayExpression)node)
 			assertTrue( ast.containsValue(element));
 	}
@@ -5190,53 +3494,20 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testEncapsulatedList() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_ENCAPS_LIST,,3,,0,1,,,\n";
-		nodeStr += "4,string,,3,\"Hello \",0,1,,,\n";
-		nodeStr += "5,AST_VAR,,3,,1,1,,,\n";
-		nodeStr += "6,string,,3,\"foo\",0,1,,,\n";
-		nodeStr += "7,string,,3,\", \",2,1,,,\n";
-		nodeStr += "8,AST_DIM,,3,,3,1,,,\n";
-		nodeStr += "9,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "10,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "11,string,,3,\"somekey\",1,1,,,\n";
-		nodeStr += "12,string,,3,\" and \",4,1,,,\n";
-		nodeStr += "13,AST_PROP,,3,,5,1,,,\n";
-		nodeStr += "14,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "15,string,,3,\"buz\",0,1,,,\n";
-		nodeStr += "16,string,,3,\"qux\",1,1,,,\n";
-		nodeStr += "17,string,,3,\"!\",6,1,,,\n";
+		handleCSVFiles( "testEncapsulatedList");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "3,8,PARENT_OF\n";
-		edgeStr += "3,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "13,16,PARENT_OF\n";
-		edgeStr += "3,13,PARENT_OF\n";
-		edgeStr += "3,17,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPEncapsListExpression.class));
 		assertEquals( 7, node.getChildCount());
 		assertEquals( 7, ((PHPEncapsListExpression)node).size());
-		assertEquals( ast.getNodeById((long)4), ((PHPEncapsListExpression)node).getElement(0));
-		assertEquals( ast.getNodeById((long)5), ((PHPEncapsListExpression)node).getElement(1));
-		assertEquals( ast.getNodeById((long)7), ((PHPEncapsListExpression)node).getElement(2));
-		assertEquals( ast.getNodeById((long)8), ((PHPEncapsListExpression)node).getElement(3));
-		assertEquals( ast.getNodeById((long)12), ((PHPEncapsListExpression)node).getElement(4));
-		assertEquals( ast.getNodeById((long)13), ((PHPEncapsListExpression)node).getElement(5));
-		assertEquals( ast.getNodeById((long)17), ((PHPEncapsListExpression)node).getElement(6));
+		assertEquals( ast.getNodeById((long)7), ((PHPEncapsListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)8), ((PHPEncapsListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)10), ((PHPEncapsListExpression)node).getElement(2));
+		assertEquals( ast.getNodeById((long)11), ((PHPEncapsListExpression)node).getElement(3));
+		assertEquals( ast.getNodeById((long)15), ((PHPEncapsListExpression)node).getElement(4));
+		assertEquals( ast.getNodeById((long)16), ((PHPEncapsListExpression)node).getElement(5));
+		assertEquals( ast.getNodeById((long)20), ((PHPEncapsListExpression)node).getElement(6));
 		for( Expression element : (PHPEncapsListExpression)node)
 			assertTrue( ast.containsValue(element));
 	}
@@ -5258,81 +3529,32 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testExpressionList() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_FOR,,3,,0,1,,,\n";
-		nodeStr += "4,AST_EXPR_LIST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_ASSIGN,,3,,0,1,,,\n";
-		nodeStr += "6,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "7,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "8,integer,,3,0,1,1,,,\n";
-		nodeStr += "9,AST_ASSIGN,,3,,1,1,,,\n";
-		nodeStr += "10,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "11,string,,3,\"j\",0,1,,,\n";
-		nodeStr += "12,integer,,3,1,1,1,,,\n";
-		nodeStr += "13,AST_EXPR_LIST,,3,,1,1,,,\n";
-		nodeStr += "14,AST_BINARY_OP,BINARY_IS_SMALLER,3,,0,1,,,\n";
-		nodeStr += "15,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "16,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "17,integer,,3,3,1,1,,,\n";
-		nodeStr += "18,AST_EXPR_LIST,,3,,2,1,,,\n";
-		nodeStr += "19,AST_POST_INC,,3,,0,1,,,\n";
-		nodeStr += "20,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "21,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "22,AST_POST_INC,,3,,1,1,,,\n";
-		nodeStr += "23,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "24,string,,3,\"j\",0,1,,,\n";
-		nodeStr += "25,AST_STMT_LIST,,3,,3,1,,,\n";
+		handleCSVFiles( "testFor");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "5,8,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "4,9,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "14,17,PARENT_OF\n";
-		edgeStr += "13,14,PARENT_OF\n";
-		edgeStr += "3,13,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "19,20,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "18,22,PARENT_OF\n";
-		edgeStr += "3,18,PARENT_OF\n";
-		edgeStr += "3,25,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
-		ASTNode node2 = ast.getNodeById((long)13);
-		ASTNode node3 = ast.getNodeById((long)18);
+		ASTNode node = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)16);
+		ASTNode node3 = ast.getNodeById((long)21);
 
 		assertThat( node, instanceOf(ExpressionList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ExpressionList)node).size());
-		assertEquals( ast.getNodeById((long)5), ((ExpressionList)node).getExpression(0));
-		assertEquals( ast.getNodeById((long)9), ((ExpressionList)node).getExpression(1));
+		assertEquals( ast.getNodeById((long)8), ((ExpressionList)node).getExpression(0));
+		assertEquals( ast.getNodeById((long)12), ((ExpressionList)node).getExpression(1));
 		for( Expression expression : (ExpressionList)node)
 			assertTrue( ast.containsValue(expression));
 
 		assertThat( node2, instanceOf(ExpressionList.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( 1, ((ExpressionList)node2).size());
-		assertEquals( ast.getNodeById((long)14), ((ExpressionList)node2).getExpression(0));
+		assertEquals( ast.getNodeById((long)17), ((ExpressionList)node2).getExpression(0));
 		for( Expression expression : (ExpressionList)node2)
 			assertTrue( ast.containsValue(expression));
 
 		assertThat( node3, instanceOf(ExpressionList.class));
 		assertEquals( 2, node3.getChildCount());
 		assertEquals( 2, ((ExpressionList)node3).size());
-		assertEquals( ast.getNodeById((long)19), ((ExpressionList)node3).getExpression(0));
-		assertEquals( ast.getNodeById((long)22), ((ExpressionList)node3).getExpression(1));
+		assertEquals( ast.getNodeById((long)22), ((ExpressionList)node3).getExpression(0));
+		assertEquals( ast.getNodeById((long)25), ((ExpressionList)node3).getExpression(1));
 		for( Expression expression : (ExpressionList)node3)
 			assertTrue( ast.containsValue(expression));
 	}
@@ -5351,41 +3573,16 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCompoundStatementCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,4,\"foo.php\",\n";
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,NULL,,3,,3,3,,,\n";
-		nodeStr += "8,AST_CALL,,4,,1,1,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "10,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "11,AST_ARG_LIST,,4,,1,1,,,\n";
+		handleCSVFiles( "testCompoundStatement");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "8,11,PARENT_OF\n";
-		edgeStr += "2,8,PARENT_OF\n";
-		edgeStr += "1,2,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)2);
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node2 = ast.getNodeById((long)11);
 
 		assertThat( node, instanceOf(CompoundStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((CompoundStatement)node).size());
-		assertEquals( ast.getNodeById((long)3), ((CompoundStatement)node).getStatement(0));
-		assertEquals( ast.getNodeById((long)8), ((CompoundStatement)node).getStatement(1));
+		assertEquals( ast.getNodeById((long)6), ((CompoundStatement)node).getStatement(0));
+		assertEquals( ast.getNodeById((long)13), ((CompoundStatement)node).getStatement(1));
 		for( ASTNode stmt : (CompoundStatement)node)
 			assertTrue( ast.containsValue(stmt));
 
@@ -5416,22 +3613,19 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * else {}
 	 */
 	@Test
-	public void testIfStatementCreation() throws IOException, InvalidCSVFile
+	public void testIfCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.ifStatementNodeStr;
-		String edgeStr = CSVASTSamples.ifStatementEdgeStr;
+		handleCSVFiles( "testIf");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(PHPIfStatement.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PHPIfStatement)node).size());
-		assertEquals( ast.getNodeById((long)4), ((PHPIfStatement)node).getIfElement(0));
-		assertEquals( ast.getNodeById((long)8), ((PHPIfStatement)node).getIfElement(1));
-		assertEquals( ast.getNodeById((long)12), ((PHPIfStatement)node).getIfElement(2));
-		assertEquals( ast.getNodeById((long)16), ((PHPIfStatement)node).getIfElement(3));
+		assertEquals( ast.getNodeById((long)7), ((PHPIfStatement)node).getIfElement(0));
+		assertEquals( ast.getNodeById((long)11), ((PHPIfStatement)node).getIfElement(1));
+		assertEquals( ast.getNodeById((long)15), ((PHPIfStatement)node).getIfElement(2));
+		assertEquals( ast.getNodeById((long)19), ((PHPIfStatement)node).getIfElement(3));
 	}
 
 	/**
@@ -5459,69 +3653,18 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testSwitchListCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_SWITCH,,3,,0,1,,,\n";
-		nodeStr += "4,AST_VAR,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"i\",0,1,,,\n";
-		nodeStr += "6,AST_SWITCH_LIST,,4,,1,1,,,\n";
-		nodeStr += "7,AST_SWITCH_CASE,,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"foo\",0,1,,,\n";
-		nodeStr += "9,AST_STMT_LIST,,4,,1,1,,,\n";
-		nodeStr += "10,AST_BREAK,,5,,0,1,,,\n";
-		nodeStr += "11,NULL,,5,,0,1,,,\n";
-		nodeStr += "12,AST_SWITCH_CASE,,6,,1,1,,,\n";
-		nodeStr += "13,double,,6,1.42,0,1,,,\n";
-		nodeStr += "14,AST_STMT_LIST,,6,,1,1,,,\n";
-		nodeStr += "15,AST_SWITCH_CASE,,7,,2,1,,,\n";
-		nodeStr += "16,integer,,7,2,0,1,,,\n";
-		nodeStr += "17,AST_STMT_LIST,,7,,1,1,,,\n";
-		nodeStr += "18,AST_BREAK,,8,,0,1,,,\n";
-		nodeStr += "19,NULL,,8,,0,1,,,\n";
-		nodeStr += "20,AST_SWITCH_CASE,,9,,3,1,,,\n";
-		nodeStr += "21,NULL,,9,,0,1,,,\n";
-		nodeStr += "22,AST_STMT_LIST,,9,,1,1,,,\n";
-		nodeStr += "23,AST_CALL,,10,,0,1,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,10,,0,1,,,\n";
-		nodeStr += "25,string,,10,\"buz\",0,1,,,\n";
-		nodeStr += "26,AST_ARG_LIST,,10,,1,1,,,\n";
+		handleCSVFiles( "testSwitch");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "6,12,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "15,17,PARENT_OF\n";
-		edgeStr += "6,15,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "20,22,PARENT_OF\n";
-		edgeStr += "6,20,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(PHPSwitchList.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PHPSwitchList)node).size());
 
-		assertEquals( ast.getNodeById((long)7), ((PHPSwitchList)node).getSwitchCase(0));
-		assertEquals( ast.getNodeById((long)12), ((PHPSwitchList)node).getSwitchCase(1));
-		assertEquals( ast.getNodeById((long)15), ((PHPSwitchList)node).getSwitchCase(2));
-		assertEquals( ast.getNodeById((long)20), ((PHPSwitchList)node).getSwitchCase(3));
+		assertEquals( ast.getNodeById((long)10), ((PHPSwitchList)node).getSwitchCase(0));
+		assertEquals( ast.getNodeById((long)15), ((PHPSwitchList)node).getSwitchCase(1));
+		assertEquals( ast.getNodeById((long)18), ((PHPSwitchList)node).getSwitchCase(2));
+		assertEquals( ast.getNodeById((long)23), ((PHPSwitchList)node).getSwitchCase(3));
 		for( PHPSwitchCase switchcase : (PHPSwitchList)node)
 			assertTrue( ast.containsValue(switchcase));
 	}
@@ -5542,47 +3685,16 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testCatchListCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_TRY,,3,,0,1,,,\n";
-		nodeStr += "4,AST_STMT_LIST,,3,,0,1,,,\n";
-		nodeStr += "5,AST_CATCH_LIST,,3,,1,1,,,\n";
-		nodeStr += "6,AST_CATCH,,4,,0,1,,,\n";
-		nodeStr += "7,AST_NAME,NAME_NOT_FQ,4,,0,1,,,\n";
-		nodeStr += "8,string,,4,\"FooException\",0,1,,,\n";
-		nodeStr += "9,string,,4,\"f\",1,1,,,\n";
-		nodeStr += "10,AST_STMT_LIST,,4,,2,1,,,\n";
-		nodeStr += "11,AST_CATCH,,5,,1,1,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,5,,0,1,,,\n";
-		nodeStr += "13,string,,5,\"BarException\",0,1,,,\n";
-		nodeStr += "14,string,,5,\"b\",1,1,,,\n";
-		nodeStr += "15,AST_STMT_LIST,,5,,2,1,,,\n";
-		nodeStr += "16,AST_STMT_LIST,,6,,2,1,,,\n";
+		handleCSVFiles( "testTry");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "6,9,PARENT_OF\n";
-		edgeStr += "6,10,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "11,14,PARENT_OF\n";
-		edgeStr += "11,15,PARENT_OF\n";
-		edgeStr += "5,11,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,16,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)8);
 
 		assertThat( node, instanceOf(CatchList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((CatchList)node).size());
 
-		assertEquals( ast.getNodeById((long)6), ((CatchList)node).getCatchStatement(0));
-		assertEquals( ast.getNodeById((long)11), ((CatchList)node).getCatchStatement(1));
+		assertEquals( ast.getNodeById((long)9), ((CatchList)node).getCatchStatement(0));
+		assertEquals( ast.getNodeById((long)14), ((CatchList)node).getCatchStatement(1));
 		for( CatchStatement catchstatement : (CatchList)node)
 			assertTrue( ast.containsValue(catchstatement));
 	}
@@ -5600,40 +3712,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testParameterListCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,AST_PARAM,,3,,0,3,,,\n";
-		nodeStr += "6,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
-		nodeStr += "7,string,,3,\"int\",0,3,,,\n";
-		nodeStr += "8,string,,3,\"bar\",1,3,,,\n";
-		nodeStr += "9,integer,,3,3,2,3,,,\n";
-		nodeStr += "10,AST_PARAM,,3,,1,3,,,\n";
-		nodeStr += "11,AST_NAME,NAME_NOT_FQ,3,,0,3,,,\n";
-		nodeStr += "12,string,,3,\"string\",0,3,,,\n";
-		nodeStr += "13,string,,3,\"buz\",1,3,,,\n";
-		nodeStr += "14,string,,3,\"yabadabadoo\",2,3,,,\n";
+		handleCSVFiles( "testParameterList");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "5,8,PARENT_OF\n";
-		edgeStr += "5,9,PARENT_OF\n";
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "10,13,PARENT_OF\n";
-		edgeStr += "10,14,PARENT_OF\n";
-		edgeStr += "4,10,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(ParameterList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ParameterList)node).size());
-		assertEquals( ast.getNodeById((long)5), ((ParameterList)node).getParameter(0));
-		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(1));
+		assertEquals( ast.getNodeById((long)10), ((ParameterList)node).getParameter(0));
+		assertEquals( ast.getNodeById((long)15), ((ParameterList)node).getParameter(1));
 		for( Parameter parameter : (ParameterList)node)
 			assertTrue( ast.containsValue(parameter));
 	}
@@ -5654,36 +3741,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClosureUsesCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLOSURE,,3,,0,1,3,{closure},\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,AST_CLOSURE_USES,,3,,1,3,,,\n";
-		nodeStr += "6,AST_CLOSURE_VAR,,3,,0,3,,,\n";
-		nodeStr += "7,string,,3,\"foo\",0,3,,,\n";
-		nodeStr += "8,AST_CLOSURE_VAR,,3,,1,3,,,\n";
-		nodeStr += "9,string,,3,\"bar\",0,3,,,\n";
-		nodeStr += "10,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "11,NULL,,3,,3,3,,,\n";
+		handleCSVFiles( "testClosureVar");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "5,6,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "5,8,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,10,PARENT_OF\n";
-		edgeStr += "3,11,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)10);
 
 		assertThat( node, instanceOf(ClosureUses.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ClosureUses)node).size());
-		assertEquals( ast.getNodeById((long)6), ((ClosureUses)node).getClosureVar(0));
-		assertEquals( ast.getNodeById((long)8), ((ClosureUses)node).getClosureVar(1));
+		assertEquals( ast.getNodeById((long)11), ((ClosureUses)node).getClosureVar(0));
+		assertEquals( ast.getNodeById((long)13), ((ClosureUses)node).getClosureVar(1));
 		for( ClosureVar closurevar : (ClosureUses)node)
 			assertTrue( ast.containsValue(closurevar));
 	}
@@ -5704,60 +3770,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testPropertyDeclarationCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,2,,0,1,4,Foo,\n";
-		nodeStr += "4,NULL,,2,,0,1,,,\n";
-		nodeStr += "5,NULL,,2,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,1,4,\"Foo\",\n";
-		nodeStr += "7,AST_STMT_LIST,,2,,0,6,,,\n";
-		nodeStr += "8,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,6,,,\n";
-		nodeStr += "9,AST_PROP_ELEM,,3,,0,6,,,\n";
-		nodeStr += "10,string,,3,\"foo\",0,6,,,\n";
-		nodeStr += "11,NULL,,3,,1,6,,,\n";
-		nodeStr += "12,AST_PROP_ELEM,,3,,1,6,,,\n";
-		nodeStr += "13,string,,3,\"bar\",0,6,,,\n";
-		nodeStr += "14,integer,,3,3,1,6,,,\n";
-		nodeStr += "15,AST_PROP_ELEM,,3,,2,6,,,\n";
-		nodeStr += "16,string,,3,\"buz\",0,6,,,\n";
-		nodeStr += "17,string,,3,\"bonjour\",1,6,,,\n";
-		nodeStr += "18,AST_PROP_ELEM,,3,,3,6,,,\n";
-		nodeStr += "19,string,,3,\"qux\",0,6,,,\n";
-		nodeStr += "20,AST_CONST,,3,,1,6,,,\n";
-		nodeStr += "21,AST_NAME,NAME_NOT_FQ,3,,0,6,,,\n";
-		nodeStr += "22,string,,3,\"SOMECONSTANT\",0,6,,,\n";
+		handleCSVFiles( "testPropertyDeclaration");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,11,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "8,12,PARENT_OF\n";
-		edgeStr += "15,16,PARENT_OF\n";
-		edgeStr += "15,17,PARENT_OF\n";
-		edgeStr += "8,15,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "21,22,PARENT_OF\n";
-		edgeStr += "20,21,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "8,18,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(PropertyDeclaration.class));
 		assertEquals( 4, node.getChildCount());
 		assertEquals( 4, ((PropertyDeclaration)node).size());
-		assertEquals( ast.getNodeById((long)9), ((PropertyDeclaration)node).getPropertyElement(0));
-		assertEquals( ast.getNodeById((long)12), ((PropertyDeclaration)node).getPropertyElement(1));
-		assertEquals( ast.getNodeById((long)15), ((PropertyDeclaration)node).getPropertyElement(2));
-		assertEquals( ast.getNodeById((long)18), ((PropertyDeclaration)node).getPropertyElement(3));
+		assertEquals( ast.getNodeById((long)14), ((PropertyDeclaration)node).getPropertyElement(0));
+		assertEquals( ast.getNodeById((long)17), ((PropertyDeclaration)node).getPropertyElement(1));
+		assertEquals( ast.getNodeById((long)20), ((PropertyDeclaration)node).getPropertyElement(2));
+		assertEquals( ast.getNodeById((long)23), ((PropertyDeclaration)node).getPropertyElement(3));
 		for( PropertyElement element : (PropertyDeclaration)node)
 			assertTrue( ast.containsValue(element));
 	}
@@ -5776,32 +3799,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testConstantDeclarationCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CONST_DECL,,3,,0,1,,,\n";
-		nodeStr += "4,AST_CONST_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"QUESTION\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"any\",1,1,,,\n";
-		nodeStr += "7,AST_CONST_ELEM,,3,,1,1,,,\n";
-		nodeStr += "8,string,,3,\"ANSWER\",0,1,,,\n";
-		nodeStr += "9,integer,,3,42,1,1,,,\n";
+		handleCSVFiles( "testConstantDeclaration");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,6,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(ConstantDeclaration.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ConstantDeclaration)node).size());
-		assertEquals( ast.getNodeById((long)4), ((ConstantDeclaration)node).getConstantElement(0));
-		assertEquals( ast.getNodeById((long)7), ((ConstantDeclaration)node).getConstantElement(1));
+		assertEquals( ast.getNodeById((long)7), ((ConstantDeclaration)node).getConstantElement(0));
+		assertEquals( ast.getNodeById((long)10), ((ConstantDeclaration)node).getConstantElement(1));
 		for( ConstantElement element : (ConstantDeclaration)node)
 			assertTrue( ast.containsValue(element));
 	}
@@ -5822,32 +3828,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testClassConstantDeclarationCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "8,AST_CLASS_CONST_DECL,,4,,0,6,,,\n";
-		nodeStr += "9,AST_CONST_ELEM,,4,,0,6,,,\n";
-		nodeStr += "10,string,,4,\"QUESTION\",0,6,,,\n";
-		nodeStr += "11,string,,4,\"any\",1,6,,,\n";
-		nodeStr += "12,AST_CONST_ELEM,,4,,1,6,,,\n";
-		nodeStr += "13,string,,4,\"ANSWER\",0,6,,,\n";
-		nodeStr += "14,integer,,4,42,1,6,,,\n";
+		handleCSVFiles( "testClassConstantDeclaration");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "9,11,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "12,14,PARENT_OF\n";
-		edgeStr += "8,12,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 
 		assertThat( node, instanceOf(ClassConstantDeclaration.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((ClassConstantDeclaration)node).size());
-		assertEquals( ast.getNodeById((long)9), ((ClassConstantDeclaration)node).getConstantElement(0));
-		assertEquals( ast.getNodeById((long)12), ((ClassConstantDeclaration)node).getConstantElement(1));
+		assertEquals( ast.getNodeById((long)14), ((ClassConstantDeclaration)node).getConstantElement(0));
+		assertEquals( ast.getNodeById((long)17), ((ClassConstantDeclaration)node).getConstantElement(1));
 		for( ConstantElement element : (ClassConstantDeclaration)node)
 			assertTrue( ast.containsValue(element));
 	}
@@ -5869,38 +3858,15 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testIdentifierList() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"bar\",0,1,,,\n";
-		nodeStr += "6,AST_NAME_LIST,,3,,1,1,,,\n";
-		nodeStr += "7,AST_NAME,NAME_NOT_FQ,3,,0,1,,,\n";
-		nodeStr += "8,string,,3,\"buz\",0,1,,,\n";
-		nodeStr += "9,AST_NAME,NAME_NOT_FQ,3,,1,1,,,\n";
-		nodeStr += "10,string,,3,\"qux\",0,1,,,\n";
-		nodeStr += "11,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,3,\"foo\",\n";
-		nodeStr += "12,AST_STMT_LIST,,3,,0,11,,,\n";
+		handleCSVFiles( "testIdentifierList");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "6,9,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "11,12,PARENT_OF\n";
-		edgeStr += "3,11,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)9);
 
 		assertThat( node, instanceOf(IdentifierList.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((IdentifierList)node).size());
-		assertEquals( ast.getNodeById((long)7), ((IdentifierList)node).getIdentifier(0));
-		assertEquals( ast.getNodeById((long)9), ((IdentifierList)node).getIdentifier(1));
+		assertEquals( ast.getNodeById((long)10), ((IdentifierList)node).getIdentifier(0));
+		assertEquals( ast.getNodeById((long)12), ((IdentifierList)node).getIdentifier(1));
 		for( Identifier identifier : (IdentifierList)node)
 			assertTrue( ast.containsValue(identifier));
 	}
@@ -5926,89 +3892,16 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	@Test
 	public void testTraitAdaptations() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_CLASS,,3,,0,1,9,SomeClass,\n";
-		nodeStr += "4,NULL,,3,,0,1,,,\n";
-		nodeStr += "5,NULL,,3,,1,1,,,\n";
-		nodeStr += "6,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,1,9,\"SomeClass\",\n";
-		nodeStr += "7,AST_STMT_LIST,,3,,0,6,,,\n";
-		nodeStr += "8,AST_USE_TRAIT,,4,,0,6,,,\n";
-		nodeStr += "9,AST_NAME_LIST,,4,,0,6,,,\n";
-		nodeStr += "10,AST_NAME,NAME_NOT_FQ,4,,0,6,,,\n";
-		nodeStr += "11,string,,4,\"Foo\",0,6,,,\n";
-		nodeStr += "12,AST_NAME,NAME_NOT_FQ,4,,1,6,,,\n";
-		nodeStr += "13,string,,4,\"Bar\",0,6,,,\n";
-		nodeStr += "14,AST_NAME,NAME_NOT_FQ,4,,2,6,,,\n";
-		nodeStr += "15,string,,4,\"Buz\",0,6,,,\n";
-		nodeStr += "16,AST_TRAIT_ADAPTATIONS,,5,,1,6,,,\n";
-		nodeStr += "17,AST_TRAIT_ALIAS,MODIFIER_PROTECTED,5,,0,6,,,\n";
-		nodeStr += "18,AST_METHOD_REFERENCE,,5,,0,6,,,\n";
-		nodeStr += "19,NULL,,5,,0,6,,,\n";
-		nodeStr += "20,string,,5,\"qux\",1,6,,,\n";
-		nodeStr += "21,string,,5,\"_qux\",1,6,,,\n";
-		nodeStr += "22,AST_TRAIT_ALIAS,MODIFIER_PRIVATE,6,,1,6,,,\n";
-		nodeStr += "23,AST_METHOD_REFERENCE,,6,,0,6,,,\n";
-		nodeStr += "24,AST_NAME,NAME_NOT_FQ,6,,0,6,,,\n";
-		nodeStr += "25,string,,6,\"Bar\",0,6,,,\n";
-		nodeStr += "26,string,,6,\"norf\",1,6,,,\n";
-		nodeStr += "27,NULL,,6,,1,6,,,\n";
-		nodeStr += "28,AST_TRAIT_PRECEDENCE,,7,,2,6,,,\n";
-		nodeStr += "29,AST_METHOD_REFERENCE,,7,,0,6,,,\n";
-		nodeStr += "30,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "31,string,,7,\"Foo\",0,6,,,\n";
-		nodeStr += "32,string,,7,\"nicknack\",1,6,,,\n";
-		nodeStr += "33,AST_NAME_LIST,,7,,1,6,,,\n";
-		nodeStr += "34,AST_NAME,NAME_NOT_FQ,7,,0,6,,,\n";
-		nodeStr += "35,string,,7,\"Bar\",0,6,,,\n";
-		nodeStr += "36,AST_NAME,NAME_NOT_FQ,7,,1,6,,,\n";
-		nodeStr += "37,string,,7,\"Buz\",0,6,,,\n";
+		handleCSVFiles( "testUseTrait");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "10,11,PARENT_OF\n";
-		edgeStr += "9,10,PARENT_OF\n";
-		edgeStr += "12,13,PARENT_OF\n";
-		edgeStr += "9,12,PARENT_OF\n";
-		edgeStr += "14,15,PARENT_OF\n";
-		edgeStr += "9,14,PARENT_OF\n";
-		edgeStr += "8,9,PARENT_OF\n";
-		edgeStr += "18,19,PARENT_OF\n";
-		edgeStr += "18,20,PARENT_OF\n";
-		edgeStr += "17,18,PARENT_OF\n";
-		edgeStr += "17,21,PARENT_OF\n";
-		edgeStr += "16,17,PARENT_OF\n";
-		edgeStr += "24,25,PARENT_OF\n";
-		edgeStr += "23,24,PARENT_OF\n";
-		edgeStr += "23,26,PARENT_OF\n";
-		edgeStr += "22,23,PARENT_OF\n";
-		edgeStr += "22,27,PARENT_OF\n";
-		edgeStr += "16,22,PARENT_OF\n";
-		edgeStr += "30,31,PARENT_OF\n";
-		edgeStr += "29,30,PARENT_OF\n";
-		edgeStr += "29,32,PARENT_OF\n";
-		edgeStr += "28,29,PARENT_OF\n";
-		edgeStr += "34,35,PARENT_OF\n";
-		edgeStr += "33,34,PARENT_OF\n";
-		edgeStr += "36,37,PARENT_OF\n";
-		edgeStr += "33,36,PARENT_OF\n";
-		edgeStr += "28,33,PARENT_OF\n";
-		edgeStr += "16,28,PARENT_OF\n";
-		edgeStr += "8,16,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "6,7,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)16);
+		ASTNode node = ast.getNodeById((long)21);
 
 		assertThat( node, instanceOf(PHPTraitAdaptations.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( 3, ((PHPTraitAdaptations)node).size());
-		assertEquals( ast.getNodeById((long)17), ((PHPTraitAdaptations)node).getTraitAdaptationElement(0));
-		assertEquals( ast.getNodeById((long)22), ((PHPTraitAdaptations)node).getTraitAdaptationElement(1));
-		assertEquals( ast.getNodeById((long)28), ((PHPTraitAdaptations)node).getTraitAdaptationElement(2));
+		assertEquals( ast.getNodeById((long)22), ((PHPTraitAdaptations)node).getTraitAdaptationElement(0));
+		assertEquals( ast.getNodeById((long)27), ((PHPTraitAdaptations)node).getTraitAdaptationElement(1));
+		assertEquals( ast.getNodeById((long)33), ((PHPTraitAdaptations)node).getTraitAdaptationElement(2));
 		for( PHPTraitAdaptationElement traitAdaptation : (PHPTraitAdaptations)node)
 			assertTrue( ast.containsValue(traitAdaptation));
 	}
@@ -6024,34 +3917,17 @@ public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
 	 * use Foo\Bar as Buz, Qux as Norf;
 	 */
 	@Test
-	public void testUseStatementCreation() throws IOException, InvalidCSVFile
+	public void testUseCreation() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.nodeHeader;
-		nodeStr += "3,AST_USE,T_CLASS,3,,0,1,,,\n";
-		nodeStr += "4,AST_USE_ELEM,,3,,0,1,,,\n";
-		nodeStr += "5,string,,3,\"Foo\\Bar\",0,1,,,\n";
-		nodeStr += "6,string,,3,\"Buz\",1,1,,,\n";
-		nodeStr += "7,AST_USE_ELEM,,3,,1,1,,,\n";
-		nodeStr += "8,string,,3,\"Qux\",0,1,,,\n";
-		nodeStr += "9,string,,3,\"Norf\",1,1,,,\n";
+		handleCSVFiles( "testUse");
 
-		String edgeStr = CSVASTSamples.edgeHeader;
-		edgeStr += "4,5,PARENT_OF\n";
-		edgeStr += "4,6,PARENT_OF\n";
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "7,8,PARENT_OF\n";
-		edgeStr += "7,9,PARENT_OF\n";
-		edgeStr += "3,7,PARENT_OF\n";
-
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(UseStatement.class));
 		assertEquals( 2, node.getChildCount());
 		assertEquals( 2, ((UseStatement)node).size());
-		assertEquals( ast.getNodeById((long)4), ((UseStatement)node).getUseElement(0));
-		assertEquals( ast.getNodeById((long)7), ((UseStatement)node).getUseElement(1));
+		assertEquals( ast.getNodeById((long)7), ((UseStatement)node).getUseElement(0));
+		assertEquals( ast.getNodeById((long)10), ((UseStatement)node).getUseElement(1));
 		for( UseElement useElement : (UseStatement)node)
 			assertTrue( ast.containsValue(useElement));
 	}
