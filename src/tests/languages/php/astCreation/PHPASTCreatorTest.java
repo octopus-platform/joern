@@ -124,7 +124,7 @@ import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVBasedTest;
 import tools.php.ast2cfgddg.PHPCSVNodeTypes;
 
-public class TestPHPCSVASTBuilder extends PHPCSVBasedTest
+public class PHPASTCreatorTest extends PHPCSVBasedTest
 {
 	// set sample directory
 	@Before

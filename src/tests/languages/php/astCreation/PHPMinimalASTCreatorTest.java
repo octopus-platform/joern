@@ -53,7 +53,7 @@ import tests.languages.php.PHPCSVBasedTest;
  * are abstract and unimplemented, etc. (whereas tests in TestPHPCSVASTBuilder
  * do the exact opposite and aim to generate every possible child for testing.)
  */
-public class TestPHPCSVASTBuilderMinimal extends PHPCSVBasedTest
+public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 {
 	// set sample directory
 	@Before
