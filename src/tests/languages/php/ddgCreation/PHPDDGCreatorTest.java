@@ -43,7 +43,7 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	protected DDG getDDGForFunctionNode(FunctionDef rootnode)
 			throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForFunctionNode(rootnode);
+		CFG cfg = getCFGForFuncAST(rootnode);
 		return transformCFGtoDDG(cfg);		
 	}
 

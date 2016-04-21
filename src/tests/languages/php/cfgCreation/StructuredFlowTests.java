@@ -1,133 +1,200 @@
 package tests.languages.php.cfgCreation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import ast.ASTNode;
-import ast.functionDef.FunctionDef;
-import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import cfg.CFGEdge;
 import cfg.nodes.CFGNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import tests.languages.php.samples.CSVASTSamples;
+import tests.languages.php.PHPCSVFunctionConverterBasedTest;
 
-public class StructuredFlowTests extends PHPCFGCreatorTest {
+public class StructuredFlowTests extends PHPCSVFunctionConverterBasedTest {
 
+	// set sample directory
+	@Before
+	public void setSampleDir() {
+		super.setSampleDir( "cfgCreation");
+	}
+	
+	
+	/**
+	 * if($foo) {}
+	 * elseif($bar) {}
+	 * elseif($buz) {}
+	 * else {}
+	 */
 	@Test
 	public void testIfAndElseIf() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.ifStatementNodeStr, CSVASTSamples.ifStatementEdgeStr);
-		Collection<CFGNode> vertices = cfg.getVertices();
-
-		assertEquals(vertices.size(), 5);
-
+		CFG cfg = getTopCFGForCSVFiles( "testIf");
+		
+		assertEquals( 5, cfg.getVertices().size());
+		assertEquals( 7, cfg.getEdges().size());
+		
 		// Make sure there is exactly one condition node for each predicate
-
-		assertEquals(getNodesOfType(cfg, "ASTNodeContainer").length, 3);
+		assertEquals( 3, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), 8, CFGEdge.EMPTY_LABEL));;
+		assertTrue( edgeExists( cfg, 8, cfg.getExitNode(), CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 8, 12, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 12, cfg.getExitNode(), CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 12, 16, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 16, cfg.getExitNode(), CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 16, cfg.getExitNode(), CFGEdge.FALSE_LABEL));
 	}
 
+	/**
+	 * while($foo) {}
+	 * while(true) {}
+	 * while(somecall()) {}
+	 * while($var === 1) {}
+	 */
 	@Test
 	public void testWhile() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.whileNodeStr, CSVASTSamples.whileEdgeStr);
+		CFG cfg = getTopCFGForCSVFiles( "testWhile");
 
-		Object[] conditions = getNodesOfType(cfg, "ASTNodeContainer");
-		assertEquals(conditions.length, 1);
-		CFGNode onlyCondition = (CFGNode) conditions[0];
-
-		edgeExists(cfg, cfg.getEntryNode(), onlyCondition);
-		edgeExists(cfg, onlyCondition, onlyCondition);
-		edgeExists(cfg, onlyCondition, cfg.getExitNode());
+		assertEquals( 6, cfg.getVertices().size());
+		assertEquals( 9, cfg.getEdges().size());
+		
+		// Make sure there is exactly one condition node for each predicate
+		assertEquals( 4, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), 7, CFGEdge.EMPTY_LABEL));;
+		assertTrue( edgeExists( cfg, 7, 7, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 7, 11, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 11, 11, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 11, 16, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 16, 16, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 16, 22, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 22, 22, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 22, cfg.getExitNode(), CFGEdge.FALSE_LABEL));
 	}
 
-	// do {} while($foo);
-
+	/**
+	 * do {} while($foo);
+	 * do {} while(true);
+	 * do {} while(somecall());
+	 * do {} while($var === 1);
+	 */
 	@Test
 	public void testDo() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.doNodeStr , CSVASTSamples.doEdgeStr);
+		CFG cfg = getTopCFGForCSVFiles( "testDo");
 
-		Object[] conditions = getNodesOfType(cfg, "ASTNodeContainer");
-		assertEquals(conditions.length, 1);
-		CFGNode onlyCondition = (CFGNode) conditions[0];
-
-		edgeExists(cfg, cfg.getEntryNode(), onlyCondition);
-		edgeExists(cfg, onlyCondition, onlyCondition);
-		edgeExists(cfg, onlyCondition, cfg.getExitNode());
-
+		assertEquals( 6, cfg.getVertices().size());
+		assertEquals( 9, cfg.getEdges().size());
+		
+		// Make sure there is exactly one condition node for each predicate
+		assertEquals( 4, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), 8, CFGEdge.EMPTY_LABEL));;
+		assertTrue( edgeExists( cfg, 8, 8, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 8, 12, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 12, 12, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 12, 17, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 17, 17, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 17, 23, CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 23, 23, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 23, cfg.getExitNode(), CFGEdge.FALSE_LABEL));
 	}
 
 
-	// for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
-
+	/**
+	 * for ($i = 0, $j = 1; $i < 3; $i++, $j++) {}
+	 */
 	@Test
 	public void testFor() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.forNodeStr, CSVASTSamples.forEdgeStr);
+		CFG cfg = getTopCFGForCSVFiles( "testFor");
 
-		assertEquals(cfg.getVertices().size(), 5);
-
-		Object[] expressions = getNodesOfType(cfg, "ASTNodeContainer");
-		assertEquals(expressions.length, 3);
-
-		// TODO: we don't really care about the order in which expression
-		// nodes are stored in the CFG, but this test does.
-
-		CFGNode condition = (CFGNode) expressions[0];
-		CFGNode forInit = (CFGNode) expressions[1];
-		CFGNode forInc = (CFGNode) expressions[2];
-
-		edgeExists(cfg, cfg.getEntryNode(), forInit);
-		edgeExists(cfg, forInit, condition);
-		edgeExists(cfg, condition, forInc);
-		edgeExists(cfg, condition, cfg.getExitNode());
+		assertEquals( 5, cfg.getVertices().size());
+		assertEquals( 5, cfg.getEdges().size());
+		
+		// TODO actually, there should be an ASTNodeContainer for each expression in an expression list
+		assertEquals( 3, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), 7, CFGEdge.EMPTY_LABEL));;
+		assertTrue( edgeExists( cfg, 7, 16, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists( cfg, 16, 21, CFGEdge.TRUE_LABEL));
+		assertTrue( edgeExists( cfg, 16, cfg.getExitNode(), CFGEdge.FALSE_LABEL));
+		assertTrue( edgeExists( cfg, 21, 16, CFGEdge.EMPTY_LABEL));
 	}
 
+	/**
+	 * function foo(int $bar = 3, string $buz = "yabadabadoo") {}
+	 */
 	@Test
 	public void testParams() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.paramNodeStr, CSVASTSamples.paramEdgeStr);
+		HashMap<String,CFG> cfgs = getAllCFGsForCSVFiles( "testParameterList");
 
+		CFG cfg = cfgs.get( "foo");
+		
+		assertEquals( 4, cfg.getVertices().size());
+		assertEquals( 3, cfg.getEdges().size());
+		
+		assertEquals( 2, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
 		List<CFGNode> parameters = cfg.getParameters();
-		edgeExists(cfg, cfg.getEntryNode(), parameters.get(0));
-		edgeExists(cfg, parameters.get(0), parameters.get(1));
-		edgeExists(cfg, parameters.get(1), cfg.getExitNode());
+		
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), parameters.get(0), CFGEdge.EMPTY_LABEL));;
+		assertTrue( edgeExists( cfg, parameters.get(0), parameters.get(1), CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists( cfg, parameters.get(1), cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
 	}
 
+	/**
+	 * function foo( $x) {
+	 *   return $x + 1;
+	 * }
+	 */
 	@Test
 	public void testFuncWithParams() throws IOException, InvalidCSVFile
 	{
+		HashMap<String,CFG> cfgs = getAllCFGsForCSVFiles( "testFuncWithParams");
 
-		ASTNode anAST = getASTForCSVLines(CSVASTSamples.funcWithParamsNodeStr , CSVASTSamples.funcWithParamsEdgeStr);
+		CFG cfg = cfgs.get( "foo");
 
-		ASTToCFGConverter converter = new ASTToCFGConverter();
-		converter.setLanguage("PHP");
-		CFG cfg = converter.convert((FunctionDef) anAST);
-
-		Object[] nodes = getNodesOfType(cfg, "ASTNodeContainer");
-		assertEquals(2, nodes.length);
-
-		CFGNode parameterNode = (CFGNode) nodes[0];
-		CFGNode returnNode = (CFGNode) nodes[1];
-
-		edgeExists(cfg, cfg.getEntryNode(), parameterNode);
-		edgeExists(cfg, parameterNode, returnNode);
-		edgeExists(cfg, returnNode, cfg.getExitNode());
-
+		assertEquals( 4, cfg.getVertices().size());
+		assertEquals( 3, cfg.getEdges().size());
+		
+		assertEquals( 2, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		List<CFGNode> parameters = cfg.getParameters();
+		@SuppressWarnings("unused")
+		List<CFGNode> returns = cfg.getReturnStatements();
+		
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), parameters.get(0), CFGEdge.EMPTY_LABEL));;
+		
+		// TODO something is not working here: 'returns' is an empty list, so we cannot test the following:
+		//assertTrue( edgeExists( cfg, parameters.get(0), returns.get(0), CFGEdge.EMPTY_LABEL));
+		//assertTrue( edgeExists( cfg, returns.get(0), cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
+		
+		// instead, we do this for now:
+		assertTrue( edgeExists( cfg, parameters.get(0), 16, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists( cfg, 16, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
 	}
 
-
+    /**
+     * foreach ($somearray as $foo) {}
+     * foreach (somecall() as $bar => $buz) {}
+     * foreach ($someobj->qux as $someobj->norf => $someobj->nicknack) {}
+     */
 	@Test
 	public void testForEach() throws IOException, InvalidCSVFile
 	{
-		CFG cfg = getCFGForCSVLines(CSVASTSamples.forEachNodeStr, CSVASTSamples.forEachEdgeStr);
-		// TODO
-		System.out.println(cfg);
+		@SuppressWarnings("unused")
+		CFG cfg = getTopCFGForCSVFiles( "testForEach");
+		
+		// TODO treat foreach blocks, they are completely ignored for now
 	}
 
 }

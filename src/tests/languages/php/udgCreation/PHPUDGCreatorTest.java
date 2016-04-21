@@ -39,7 +39,7 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 */
 	private UseDefGraph getUDGForFunctionNode(FunctionDef rootnode) throws IOException, InvalidCSVFile {
 		
-		CFG cfg = getCFGForFunctionNode(rootnode);
+		CFG cfg = getCFGForFuncAST(rootnode);
 		return transformCFGToUDG(cfg);
 	}
 

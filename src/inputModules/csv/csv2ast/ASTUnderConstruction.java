@@ -11,11 +11,21 @@ public class ASTUnderConstruction
 	HashMap<Long, ASTNode> idToNode = new HashMap<Long, ASTNode>();
 	FunctionDef rootNode;
 
+	/**
+	 * @return The AST's root node, or null if none is set.
+	 * @see setRootNode(FunctionDef)
+	 */
 	public FunctionDef getRootNode()
 	{
 		return rootNode;
 	}
 
+	/**
+	 * For ASTUnderConstruction instances representing single functions,
+	 * the function's root node may be explicitly set.
+	 *
+	 * @param node The node to be considered as the AST's root node.
+	 */
 	public void setRootNode(FunctionDef node)
 	{
 		rootNode = node;

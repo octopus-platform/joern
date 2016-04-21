@@ -14,7 +14,7 @@ public class CFGEdge extends Edge<CFGNode>
 	public static final String FALSE_LABEL = "False";
 	public static final String EXCEPT_LABEL = "except";
 	public static final String HANDLED_EXCEPT_LABEL = "catch";
-	public static final String UNHANDLED_EXCEPT_LABEL = "";
+	public static final String UNHANDLED_EXCEPT_LABEL = "unhandled";
 
 	private String label;
 	private Map<String, Object> properties;

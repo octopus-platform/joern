@@ -28,8 +28,8 @@ public class PHPCSVBasedTest {
 	private String sampleDir = sampleRootDir;
 	
 	// standard names for nodes and edges files
-	private static final String nodesFile = "nodes.csv";
-	private static final String edgesFile = "edges.csv";
+	protected static final String nodesFile = "nodes.csv";
+	protected static final String edgesFile = "edges.csv";
 	
 	PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
 	PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
@@ -51,19 +51,6 @@ public class PHPCSVBasedTest {
 	
 	protected String getSampleDir() {
 		return this.sampleDir;
-	}
-	
-	protected void handle(String nodeStr, String edgeStr)
-			throws IOException, InvalidCSVFile {
-		
-		nodeReader.init(new StringReader(nodeStr));
-		edgeReader.init(new StringReader(edgeStr));
-
-		KeyedCSVRow keyedRow;
-		while ((keyedRow = nodeReader.getNextRow()) != null)
-			nodeInterpreter.handle(keyedRow, ast);
-		while ((keyedRow = edgeReader.getNextRow()) != null)
-			edgeInterpreter.handle(keyedRow, ast);
 	}
 	
 	protected void handleCSVFiles(String testDir)
@@ -91,4 +78,17 @@ public class PHPCSVBasedTest {
 		}
 	}
 
+	@Deprecated
+	protected void handle(String nodeStr, String edgeStr)
+			throws IOException, InvalidCSVFile {
+		
+		nodeReader.init(new StringReader(nodeStr));
+		edgeReader.init(new StringReader(edgeStr));
+
+		KeyedCSVRow keyedRow;
+		while ((keyedRow = nodeReader.getNextRow()) != null)
+			nodeInterpreter.handle(keyedRow, ast);
+		while ((keyedRow = edgeReader.getNextRow()) != null)
+			edgeInterpreter.handle(keyedRow, ast);
+	}
 }
