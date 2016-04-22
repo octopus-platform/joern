@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -31,10 +32,13 @@ import languages.php.cfg.PHPCFGFactory;
 import tests.languages.php.PHPCSVBasedTest;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
+import udg.useDefGraph.UseOrDefRecord;
 
 public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 
 	private ASTToCFGConverter ast2cfgConverter;
+	private CFGToUDGConverter cfgToUDG;
+
 	private CSVFunctionExtractor extractor;
 
 	/* ***** */
@@ -49,6 +53,10 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		this.ast2cfgConverter = new ASTToCFGConverter();
 		this.ast2cfgConverter.setLanguage("PHP");
 		
+		// initialize CFG to UDG converter
+		this.cfgToUDG = new CFGToUDGConverter();
+		this.cfgToUDG.setLanguage("PHP");
+
 		// initialize a function extractor
 		this.extractor = new CSVFunctionExtractor();
 		this.extractor.setLanguage("PHP");
@@ -134,6 +142,33 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		return cfgs;
 	}
 	
+	protected UseDefGraph getTopUDGForCSVFiles(String testDir)
+			throws IOException, InvalidCSVFile {
+		
+		FunctionDef node = getTopFuncAST(testDir);
+		CFG cfg = getCFGForFuncAST(node);
+		UseDefGraph udg = getUDGForCFG(cfg);
+		
+		return udg;
+	}
+	
+	protected HashMap<String,UseDefGraph> getAllUDGsForCSVFiles(String testDir)
+			throws IOException, InvalidCSVFile {
+		
+		HashMap<String,UseDefGraph> udgs = new HashMap<String,UseDefGraph>();
+		
+		HashMap<String,FunctionDef> functions = getAllFuncASTs(testDir);
+		for( String name : functions.keySet()) {
+
+			CFG cfg = getCFGForFuncAST(functions.get(name));
+			UseDefGraph udg = getUDGForCFG(cfg);
+			udgs.put( name, udg);
+		}
+		
+		return udgs;
+	}
+	
+	
 	
 	/* ******************** */
 	/* Conversion functions */
@@ -160,10 +195,13 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 	protected UseDefGraph getUDGForCFG(CFG cfg)
 			throws IOException, InvalidCSVFile
 	{
-		CFGToUDGConverter cfgToUDG = new CFGToUDGConverter();
-		cfgToUDG.setLanguage("PHP");
+		UseDefGraph udg = this.cfgToUDG.convert(cfg);
 		
-		return cfgToUDG.convert(cfg);
+		System.out.println();
+		System.out.println("UDG\n~~~");
+		System.out.println(udg);
+		
+		return udg;
 	}
 	
 	/**
@@ -239,6 +277,63 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 	
 	
 	
+	/* ****************************** */
+	/* Test helper functions for UDGs */
+	/* ****************************** */
+	
+	protected boolean containsDef( UseDefGraph udg, String symbol, long id) {
+		return containsUseOrDef( udg, symbol, id, true);
+	}
+	
+	protected boolean containsUse( UseDefGraph udg, String symbol, long id) {
+		return containsUseOrDef( udg, symbol, id, false);
+	}
+	
+	/**
+	 * Checks whether a collection of UseOrDef elements contains a definition/use
+	 * of a given symbol for a given node.
+	 */
+	private boolean containsUseOrDef( UseDefGraph udg, String symbol, long id, boolean isDef) {
+		
+		List<UseOrDefRecord> useOrDefRecords = udg.getUsesAndDefsForSymbol(symbol);
+		
+		for( UseOrDefRecord useOrDefRecord : useOrDefRecords) {
+			if( useOrDefRecord.getAstNode().getNodeId().equals( id)
+					&&  useOrDefRecord.isDef() == isDef)
+				return true;
+		}
+		return false;
+	}
+	
+	protected int numberOfDefsForSymbol( UseDefGraph udg, String symbol) {
+		
+		return numberOfDefsOrUsesForSymbol( udg, symbol,  true);
+	}
+	
+	protected int numberOfUsesForSymbol( UseDefGraph udg, String symbol) {
+		
+		return numberOfDefsOrUsesForSymbol( udg, symbol, false);
+	}
+	
+	/**
+	 * Checks whether a collection of UseOrDef elements contains an expected number
+	 * of definitions/uses of a given symbol.
+	 */
+	private int numberOfDefsOrUsesForSymbol( UseDefGraph udg, String symbol, boolean isDef) {
+		
+		List<UseOrDefRecord> useOrDefRecords = udg.getUsesAndDefsForSymbol(symbol);
+		
+		int number = 0;
+		
+		for( UseOrDefRecord useOrDefRecord : useOrDefRecords) {
+			if( useOrDefRecord.isDef() == isDef)
+				number++;
+		}
+		
+		return number;
+	}
+	
+	
 	
 	
 	
@@ -247,11 +342,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 	/* DEPRECATED */
 	/* ********** */
 		
-	
-	/* "lower-level" functions that:
-	 * - take an AST as two CSV strings instead of a directory name
-	 * - use PHPCFGFactory's convert(ASTNode) to create a CFG instead of newInstance(ASTNode)
-	 */
+	/* "lower-level" functions that take an AST as two CSV strings instead of a directory name */
 	
 	/**
 	 * Creates and returns an AST for two given CSV strings (nodes and edges),
@@ -271,13 +362,20 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 			throws IOException, InvalidCSVFile {
 		
 		ASTNode node = getASTForCSVLines(nodeLines, edgeLines);
-		CFG cfg = PHPCFGFactory.convert(node);
-		
-		System.out.println();
-		System.out.println("CFG\n~~");
-		System.out.println(cfg);
+		CFG cfg = PHPCFGFactory.newInstance(node);
 		
 		return cfg;
+	}
+	
+	/**
+	 * Creates an AST for two given CSV files and computes a UDG.
+	 */
+	@Deprecated
+	protected UseDefGraph getUDGForCSVLines(String nodeLines, String edgeLines)
+			throws IOException, InvalidCSVFile
+	{
+		CFG cfg = getCFGForCSVLines(nodeLines, edgeLines);
+		return getUDGForCFG(cfg);
 	}
 	
 	
@@ -286,6 +384,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 	/**
 	 * Creates and returns a CFG for a given AST.
 	 */
+	@Deprecated
 	protected CFG getCFGForAST(ASTNode node)
 			throws IOException, InvalidCSVFile
 	{
@@ -298,6 +397,20 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		return cfg;
 	}
 	
+	/**
+	 * Helper method that does the conversions
+	 * o AST -> CFG
+	 * o CFG -> UDG
+	 * for a given FunctionDef AST node.
+	 */
+	@Deprecated
+	protected UseDefGraph getUDGForFuncAST(FunctionDef rootnode) throws IOException, InvalidCSVFile {
+		
+		CFG cfg = getCFGForFuncAST(rootnode);
+		return getUDGForCFG(cfg);
+	}
+	
+
 	/**
 	 * Initializes the function extractor for two given CSV strings (nodes and edges).
 	 */
@@ -325,5 +438,15 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		return rootnode;
 	}
 
+	/**
+	 * Obtains a function AST from the function extractor and computes a UDG.
+	 */
+	@Deprecated
+	protected UseDefGraph getUDGForNextFunction()
+			throws IOException, InvalidCSVFile
+	{
+		FunctionDef rootnode = getASTOfNextFunction();
+		return getUDGForFuncAST(rootnode);
+	}
 
 }

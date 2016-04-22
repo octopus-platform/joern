@@ -45,4 +45,14 @@ public class UseDefGraph
 	public Set<String> keySet() {
 		return this.useOrDefRecordTable.keySet();
 	}
+	
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+		
+		for( String symbol : this.keySet())
+			sb.append( symbol).append( ": ").append( this.getUsesAndDefsForSymbol( symbol)).append( "\n");
+
+		return sb.toString();
+	}
 }
