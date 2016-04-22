@@ -1,8 +1,5 @@
 package tests.languages.php;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,22 +24,19 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import languages.php.cfg.PHPCFGFactory;
-import tests.languages.php.PHPCSVBasedTest;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
 
-public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
+public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBasedTest {
 
 	private ASTToCFGConverter ast2cfgConverter;
 	private CFGToUDGConverter cfgToUDG;
 	private CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG;
 	private DDGCreator ddgCreator;
 	
-	private CSVFunctionExtractor extractor;
-
+	
 	/* ***** */
 	/* Setup */
 	/* ***** */
@@ -62,10 +56,6 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		// initialize CFG+UDG to DDG converter
 		this.udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
 		this.ddgCreator = new DDGCreator();
-
-		// initialize a function extractor
-		this.extractor = new CSVFunctionExtractor();
-		this.extractor.setLanguage("PHP");
 	}
 
 	
@@ -137,28 +127,12 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		return ddg;
 	}
 	
-	protected HashMap<String,FunctionDef> getAllFuncASTs( String testDir)
-			throws IOException, InvalidCSVFile {
-		
-		HashMap<String,FunctionDef> functions = new HashMap<String,FunctionDef>();
-		
-	    BufferedReader nodeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + nodesFile));
-	    BufferedReader edgeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + edgesFile));
-		
-		this.extractor.initialize(nodeFileReader, edgeFileReader);
-		PHPFunctionDef function;
-		while( (function = (PHPFunctionDef)extractor.getNextFunction()) != null)
-			functions.put( function.getName(), function);
-
-		return functions;
-	}
-		
 	protected HashMap<String,CFG> getAllCFGsForCSVFiles(String testDir)
 			throws IOException, InvalidCSVFile {
 		
 		HashMap<String,CFG> cfgs = new HashMap<String,CFG>();
 		
-		HashMap<String,FunctionDef> functions = getAllFuncASTs(testDir);
+		HashMap<String, PHPFunctionDef> functions = super.getAllFuncASTs(testDir);
 		for( String name : functions.keySet()) {
 
 			CFG cfg = getCFGForFuncAST(functions.get(name));
@@ -173,7 +147,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		
 		HashMap<String,UseDefGraph> udgs = new HashMap<String,UseDefGraph>();
 		
-		HashMap<String,FunctionDef> functions = getAllFuncASTs(testDir);
+		HashMap<String, PHPFunctionDef> functions = super.getAllFuncASTs(testDir);
 		for( String name : functions.keySet()) {
 
 			CFG cfg = getCFGForFuncAST(functions.get(name));
@@ -189,7 +163,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		
 		HashMap<String,DDG> ddgs = new HashMap<String,DDG>();
 		
-		HashMap<String,FunctionDef> functions = getAllFuncASTs(testDir);
+		HashMap<String, PHPFunctionDef> functions = super.getAllFuncASTs(testDir);
 		for( String name : functions.keySet()) {
 
 			CFG cfg = getCFGForFuncAST(functions.get(name));

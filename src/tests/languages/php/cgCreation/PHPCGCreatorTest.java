@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
@@ -15,31 +14,12 @@ import ast.php.functionDef.PHPFunctionDef;
 import cg.CG;
 import cg.CGEdge;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import languages.php.cg.PHPCGFactory;
+import tests.languages.php.PHPCSVFunctionExtractorBasedTest;
 import tests.languages.php.samples.CSVASTCallSamples;
 
-public class PHPCGCreatorTest {
+public class PHPCGCreatorTest extends PHPCSVFunctionExtractorBasedTest {
 
-	CSVFunctionExtractor extractor;
-
-	@Before
-	public void init() {
-		this.extractor = new CSVFunctionExtractor();
-		this.extractor.setLanguage("PHP");		
-	}
-	
-	/**
-	 * Initializes the function extractor for two given CSV strings (nodes and edges).
-	 */
-	protected void initFunctionExtractor(String nodeLines, String edgeLines)
-			throws IOException, InvalidCSVFile {
-		
-		StringReader nodeReader = new StringReader(nodeLines);
-		StringReader edgeReader = new StringReader(edgeLines);
-		
-		this.extractor.initialize(nodeReader, edgeReader);
-	}
 	
 	/**
 	 * For two given CSV strings, initializes a function extractor, extracts all
@@ -48,7 +28,10 @@ public class PHPCGCreatorTest {
 	 */
 	private CG buildCallGraph(String nodeStr, String edgeStr) throws IOException, InvalidCSVFile {
 
-		initFunctionExtractor(nodeStr, edgeStr);
+		StringReader nodeReader = new StringReader(nodeStr);
+		StringReader edgeReader = new StringReader(edgeStr);
+		
+		this.extractor.initialize(nodeReader, edgeReader);
 		
 		PHPFunctionDef rootnode;
 		while( (rootnode = (PHPFunctionDef)extractor.getNextFunction()) != null) {			

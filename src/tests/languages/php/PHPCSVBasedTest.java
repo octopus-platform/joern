@@ -31,18 +31,18 @@ public class PHPCSVBasedTest {
 	protected static final String nodesFile = "nodes.csv";
 	protected static final String edgesFile = "edges.csv";
 	
-	PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
-	PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
+	private PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
+	private PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
 
 	protected ASTUnderConstruction ast;
-	KeyedCSVReader nodeReader;
-	KeyedCSVReader edgeReader;
+	private KeyedCSVReader nodeReader;
+	private KeyedCSVReader edgeReader;
 
 	@Before
 	public void init() {
-		ast = new ASTUnderConstruction();
-		nodeReader = new KeyedCSVReader();
-		edgeReader = new KeyedCSVReader();
+		this.ast = new ASTUnderConstruction();
+		this.nodeReader = new KeyedCSVReader();
+		this.edgeReader = new KeyedCSVReader();
 	}
 
 	protected void setSampleDir( String sampleDir) {
@@ -88,8 +88,8 @@ public class PHPCSVBasedTest {
 	protected void handleCSVLines(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile {
 		
-		nodeReader.init(new StringReader(nodeStr));
-		edgeReader.init(new StringReader(edgeStr));
+		this.nodeReader.init(new StringReader(nodeStr));
+		this.edgeReader.init(new StringReader(edgeStr));
 
 		KeyedCSVRow keyedRow;
 		while ((keyedRow = nodeReader.getNextRow()) != null)
