@@ -105,6 +105,11 @@ public class MultiHashMap<K, V> implements Map<K, List<V>> {
 		return this.hashMap.entrySet();
 	}
 
+	
+	/* Standard methods */
+	/* **************** */
+	
+	
 	@Override
 	public boolean equals(Object o) {
 		if( o instanceof Map)
@@ -120,6 +125,11 @@ public class MultiHashMap<K, V> implements Map<K, List<V>> {
 		return ret;
 	}
 
+	@Override
+	public String toString() {
+		
+		return this.hashMap.toString();
+	}
 
 
 	/* Methods implemented by MultiHashMap in addition to those prescribed by Map */
