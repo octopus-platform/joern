@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 
 import ast.ASTNode;
+import ast.expressions.CallExpression;
 import ast.functionDef.FunctionDef;
 import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.TopLevelFunctionDef;
@@ -18,6 +19,8 @@ import cfg.CFGEdge;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.AbstractCFGNode;
 import cfg.nodes.CFGNode;
+import cg.CG;
+import cg.CGEdge;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
@@ -25,6 +28,7 @@ import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import languages.php.cfg.PHPCFGFactory;
+import languages.php.cg.PHPCGFactory;
 import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
@@ -172,6 +176,27 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 		}
 		
 		return ddgs;
+	}
+	
+	/**
+	 * For two CSV files in a given folder, initializes a function extractor, extracts all
+	 * functions and stores them in the PHPCGFactory, then uses the PHPCGFactory
+	 * to build a call graph and returns it.
+	 */
+	protected CG getCGForCSVFiles(String testDir) throws IOException, InvalidCSVFile {
+
+		HashMap<String,PHPFunctionDef> funcs = super.getAllFuncASTs( testDir);
+
+		for( PHPFunctionDef func : funcs.values())
+			PHPCGFactory.addFunctionDef( func);
+
+		CG cg = PHPCGFactory.newInstance();
+		
+		System.out.println();
+		System.out.println("CG\n~~");
+		System.out.println(cg);
+
+		return cg;
 	}
 	
 	
@@ -368,6 +393,31 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 	}
 	
 	
+	
+	/* ****************************** */
+	/* Test helper functions for UDGs */
+	/* ****************************** */
+	
+	/**
+	 * Checks whether an edge exists in a given CG from a given
+	 * source node to a given destination node.
+	 */
+	protected boolean edgeExists( CG cg, long srcid, long dstid) {
+			
+		for (CGEdge cgEdge : cg.getEdges()) {
+			
+			ASTNode srcNode = cgEdge.getSource().getASTNode();
+			ASTNode dstNode = cgEdge.getDestination().getASTNode();
+					
+			assert srcNode instanceof CallExpression;
+			assert dstNode instanceof PHPFunctionDef;
+
+			if( srcNode.getNodeId().equals( srcid) && dstNode.getNodeId().equals( dstid))
+				return true;
+		}
+
+		return false;
+	}
 	
 	
 	
