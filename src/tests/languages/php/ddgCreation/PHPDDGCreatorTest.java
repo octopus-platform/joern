@@ -4,115 +4,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.HashMap;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import ast.ASTNode;
-import ast.functionDef.FunctionDef;
-import cfg.CFG;
 import ddg.DataDependenceGraph.DDG;
-import ddg.DataDependenceGraph.DefUseRelation;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVFunctionConverterBasedTest;
-import tests.languages.php.samples.CSVASTUDGAndDDGSamples;
-import udg.useDefGraph.UseDefGraph;
 
 public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 
-	/**
-	 * Helper method that does the conversions
-	 * o AST -> CFG
-	 * o CFG -> UDG
-	 * o CFG & UDG -> DDG
-	 * for a given AST node.
-	 */
-	protected DDG getDDGForASTNode(ASTNode rootnode)
-			throws IOException, InvalidCSVFile
-	{
-		CFG cfg = getCFGForAST(rootnode);
-		return transformCFGtoDDG(cfg);		
+	// set sample directory
+	@Before
+	public void setSampleDir() {
+		super.setSampleDir( "ddgCreation");
 	}
 	
-	/**
-	 * Helper method that does the conversions
-	 * o AST -> CFG
-	 * o CFG -> UDG
-	 * o CFG & UDG -> DDG
-	 * for a given FunctionDef AST node.
-	 */
-	protected DDG getDDGForFunctionNode(FunctionDef rootnode)
-			throws IOException, InvalidCSVFile
-	{
-		CFG cfg = getCFGForFuncAST(rootnode);
-		return transformCFGtoDDG(cfg);		
-	}
-
-	private DDG transformCFGtoDDG(CFG cfg) throws IOException, InvalidCSVFile {
-		
-		UseDefGraph udg = getUDGForCFG(cfg);
-		DDG ddg = getDDGForCFGAndUDG(cfg, udg);
-		
-		System.out.println();
-		System.out.println("CFG\n~~~");
-		System.out.println(cfg);
-		
-		System.out.println("UDG\n~~~");
-		for( String symbol : udg.keySet())
-			System.out.println( symbol + ": " + udg.getUsesAndDefsForSymbol(symbol));
-		System.out.println();
-
-		System.out.println("DDG\n~~~");
-		for (DefUseRelation ddgEdge : ddg.getDefUseEdges())
-			System.out.println(ddgEdge);
-		System.out.println();
-
-		return ddg;
-	}
-	
-	/**
-	 * Creates an AST for two given CSV files and computes a DDG.
-	 */
-	private DDG getDDGForCSVLines(String nodeLines, String edgeLines)
-			throws IOException, InvalidCSVFile
-	{
-		ASTNode rootnode = getASTForCSVLines(nodeLines, edgeLines);
-		return getDDGForASTNode(rootnode);		
-	}
-	
-	/**
-	 * Obtains a function AST from the function extractor and computes a DDG.
-	 */
-	private DDG getDDGForNextFunction()
-			throws IOException, InvalidCSVFile
-	{
-		FunctionDef rootnode = getASTOfNextFunction();
-		return getDDGForFunctionNode(rootnode);
-	}
-	
-	/**
-	 * Checks whether an edge exists in a given DDG from a given
-	 * source node to a given destination node for a given symbol.
-	 */
-	private boolean edgeExists( DDG ddg, String symbol, long srcid, long dstid) {
-		
-		for (DefUseRelation ddgEdge : ddg.getDefUseEdges()) {
-			
-			assert ddgEdge.src instanceof ASTNode;
-			assert ddgEdge.dst instanceof ASTNode;
-
-			if( ddgEdge.symbol.equals(symbol)
-					&& ((ASTNode)ddgEdge.src).getNodeId().equals( srcid)
-					&& ((ASTNode)ddgEdge.dst).getNodeId().equals( dstid))
-				return true;
-		}
-
-		return false;
-	}
-	
-	
-	/* **************** *
-	 * The actual tests *
-	 * **************** */
 	
 	/**
 	 * $x = source();
@@ -122,15 +30,15 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 * }
 	 */
 	@Test
-	public void testDDGSimpleFunction() throws IOException, InvalidCSVFile
+	public void testSimpleFunction() throws IOException, InvalidCSVFile
 	{
-		DDG ddg = getDDGForCSVLines(CSVASTUDGAndDDGSamples.simpleFunctionNodeStr, CSVASTUDGAndDDGSamples.simpleFunctionEdgeStr);
+		DDG ddg = getTopDDGForCSVFiles( "testSimpleFunction");
 
 		// Looks real nice! :-)
-		assertTrue( ddg.getDefUseEdges().size() == 3);
-		assertTrue( edgeExists( ddg, "x", 3, 12));
-		assertTrue( edgeExists( ddg, "x", 3, 19));
-		assertTrue( edgeExists( ddg, "y", 19, 26));
+		assertEquals( 3, ddg.getDefUseEdges().size());
+		assertTrue( edgeExists( ddg, "x", 6, 15));
+		assertTrue( edgeExists( ddg, "x", 6, 22));
+		assertTrue( edgeExists( ddg, "y", 22, 29));
 	}
 
 	/**
@@ -141,14 +49,14 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 * }
 	 */
 	@Test
-	public void testDDGStandaloneFlag() throws IOException, InvalidCSVFile
+	public void testStandaloneFlag() throws IOException, InvalidCSVFile
 	{
-		DDG ddg = getDDGForCSVLines(CSVASTUDGAndDDGSamples.standaloneFlagNodeStr, CSVASTUDGAndDDGSamples.standaloneFlagEdgeStr);
+		DDG ddg = getTopDDGForCSVFiles( "testStandaloneFlag");
 		
 		// Looks real nice! :-)
-		assertTrue( ddg.getDefUseEdges().size() == 2);
-		assertTrue( edgeExists( ddg, "flag", 3, 12));
-		assertTrue( edgeExists( ddg, "y", 15, 18));
+		assertEquals( 2, ddg.getDefUseEdges().size());
+		assertTrue( edgeExists( ddg, "flag", 6, 15));
+		assertTrue( edgeExists( ddg, "y", 18, 21));
 	}
 	
 	/**
@@ -174,32 +82,37 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 * foo();                    (72)
 	 */
 	@Test
-	public void testDDGSimpleCompleteProgram() throws IOException, InvalidCSVFile
+	public void testSimpleCompleteProgram() throws IOException, InvalidCSVFile
 	{
-		initFunctionExtractor(CSVASTUDGAndDDGSamples.simpleCompleteProgramNodeStr, CSVASTUDGAndDDGSamples.simpleCompleteProgramEdgeStr);
+		HashMap<String,DDG> ddgs = getAllDDGsForCSVFiles( "testSimpleCompleteProgram");
+
 		
 		// Testing DDG of foo()
-		DDG fooDDG = getDDGForNextFunction(); // gets DDG for foo()
+		DDG fooDDG = ddgs.get( "foo");
+
 		assertEquals( 3, fooDDG.getDefUseEdges().size());
-		assertTrue( edgeExists( fooDDG, "x", 11, 20));
-		assertTrue( edgeExists( fooDDG, "x", 11, 27));
-		assertTrue( edgeExists( fooDDG, "y", 27, 34));
+		assertTrue( edgeExists( fooDDG, "x", 16, 25));
+		assertTrue( edgeExists( fooDDG, "x", 16, 32));
+		assertTrue( edgeExists( fooDDG, "y", 32, 39));
 
 		
 		// Testing DDG of source()
-		DDG sourceDDG = getDDGForNextFunction(); // gets DDG for source()
+		DDG sourceDDG = ddgs.get( "source");
+
 		assertEquals( 1, sourceDDG.getDefUseEdges().size());
-		assertTrue( edgeExists( sourceDDG, "argv", 46, 49));
+		assertTrue( edgeExists( sourceDDG, "argv", 53, 56));
 		
 		
 		// Testing DDG of sink($arg)
-		DDG sinkDDG = getDDGForNextFunction(); // gets DDG for sink($arg)
+		DDG sinkDDG = ddgs.get( "sink");
+
 		assertEquals( 1, sinkDDG.getDefUseEdges().size());
-		assertTrue( edgeExists( sinkDDG, "arg", 57, 64));
+		assertTrue( edgeExists( sinkDDG, "arg", 66, 73));
 
 		
 		// Testing DDG of top-level function
-		DDG __topUDG = getDDGForNextFunction(); // gets DDG for artificial top-level function
+		DDG __topUDG = ddgs.get( "<./foo.php>");
+
 		assertEquals( 0, __topUDG.getDefUseEdges().size());
 	}
 }
