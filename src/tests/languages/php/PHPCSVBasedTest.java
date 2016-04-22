@@ -78,8 +78,14 @@ public class PHPCSVBasedTest {
 		}
 	}
 
+	/**
+	 * Takes two CSV strings, hands them directly to the node and edge interpreters and builds an AST.
+	 * We now prefer to read CSV strings directly from files.
+	 * 
+	 * @see handleCSVFiles(String)
+	 */
 	@Deprecated
-	protected void handle(String nodeStr, String edgeStr)
+	protected void handleCSVLines(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile {
 		
 		nodeReader.init(new StringReader(nodeStr));

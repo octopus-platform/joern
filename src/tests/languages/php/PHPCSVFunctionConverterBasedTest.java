@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +108,35 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		return (FunctionDef)node;
 	}
 	
+	protected CFG getTopCFGForCSVFiles(String testDir)
+			throws IOException, InvalidCSVFile {
+		
+		FunctionDef node = getTopFuncAST(testDir);
+		CFG cfg = getCFGForFuncAST(node);
+
+		return cfg;
+	}
+	
+	protected UseDefGraph getTopUDGForCSVFiles(String testDir)
+			throws IOException, InvalidCSVFile {
+		
+		FunctionDef node = getTopFuncAST(testDir);
+		CFG cfg = getCFGForFuncAST(node);
+		UseDefGraph udg = getUDGForCFG(cfg);
+		
+		return udg;
+	}
+	
+	protected DDG getTopDDGForCSVFiles(String testDir)
+			throws IOException, InvalidCSVFile {
+		
+		FunctionDef node = getTopFuncAST(testDir);
+		CFG cfg = getCFGForFuncAST(node);
+		DDG ddg = getDDGForCFG(cfg);
+		
+		return ddg;
+	}
+	
 	protected HashMap<String,FunctionDef> getAllFuncASTs( String testDir)
 			throws IOException, InvalidCSVFile {
 		
@@ -124,16 +152,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 
 		return functions;
 	}
-	
-	protected CFG getTopCFGForCSVFiles(String testDir)
-			throws IOException, InvalidCSVFile {
 		
-		FunctionDef node = getTopFuncAST(testDir);
-		CFG cfg = getCFGForFuncAST(node);
-
-		return cfg;
-	}
-	
 	protected HashMap<String,CFG> getAllCFGsForCSVFiles(String testDir)
 			throws IOException, InvalidCSVFile {
 		
@@ -148,17 +167,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		
 		return cfgs;
 	}
-	
-	protected UseDefGraph getTopUDGForCSVFiles(String testDir)
-			throws IOException, InvalidCSVFile {
 		
-		FunctionDef node = getTopFuncAST(testDir);
-		CFG cfg = getCFGForFuncAST(node);
-		UseDefGraph udg = getUDGForCFG(cfg);
-		
-		return udg;
-	}
-	
 	protected HashMap<String,UseDefGraph> getAllUDGsForCSVFiles(String testDir)
 			throws IOException, InvalidCSVFile {
 		
@@ -174,17 +183,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		
 		return udgs;
 	}
-	
-	protected DDG getTopDDGForCSVFiles(String testDir)
-			throws IOException, InvalidCSVFile {
 		
-		FunctionDef node = getTopFuncAST(testDir);
-		CFG cfg = getCFGForFuncAST(node);
-		DDG ddg = getDDGForCFG(cfg);
-		
-		return ddg;
-	}
-	
 	protected HashMap<String,DDG> getAllDDGsForCSVFiles(String testDir)
 			throws IOException, InvalidCSVFile {
 		
@@ -398,7 +397,6 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 	
 	
 	
-	
 	/* ********** */
 	/* DEPRECATED */
 	/* ********** */
@@ -414,7 +412,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 	protected ASTNode getASTForCSVLines(String nodeLines, String edgeLines)
 			throws IOException, InvalidCSVFile
 	{
-		handle(nodeLines, edgeLines);
+		handleCSVLines(nodeLines, edgeLines);
 
 		return ast.getNodeWithLowestId();
 	}
@@ -458,102 +456,4 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVBasedTest {
 		return getDDGForCFG(cfg);
 	}
 	
-	
-	// Deprecated functions to remove
-	
-	/**
-	 * Creates and returns a CFG for a given AST.
-	 */
-	@Deprecated
-	protected CFG getCFGForAST(ASTNode node)
-			throws IOException, InvalidCSVFile
-	{
-		CFG cfg = PHPCFGFactory.convert(node);
-
-		System.out.println();
-		System.out.println("CFG (" + node + ")\n~~~");
-		System.out.println(cfg);
-		
-		return cfg;
-	}
-	
-
-	/**
-	 * Helper method that does the conversions
-	 * o AST -> CFG
-	 * o CFG -> UDG
-	 * for a given FunctionDef AST node.
-	 */
-	@Deprecated
-	protected UseDefGraph getUDGForFuncAST(FunctionDef rootnode) throws IOException, InvalidCSVFile {
-		
-		CFG cfg = getCFGForFuncAST(rootnode);
-		return getUDGForCFG(cfg);
-	}
-	
-	/**
-	 * Helper method that does the conversions
-	 * o AST -> CFG
-	 * o CFG -> UDG
-	 * o CFG & UDG -> DDG
-	 * for a given FunctionDef AST node.
-	 */
-	@Deprecated
-	protected DDG getDDGForFuncAST(FunctionDef rootnode)
-			throws IOException, InvalidCSVFile
-	{
-		CFG cfg = getCFGForFuncAST(rootnode);
-		return getDDGForCFG(cfg);
-	}
-	
-
-	/**
-	 * Initializes the function extractor for two given CSV strings (nodes and edges).
-	 */
-	@Deprecated
-	protected void initFunctionExtractor(String nodeLines, String edgeLines)
-			throws IOException, InvalidCSVFile
-	{
-		StringReader nodeReader = new StringReader(nodeLines);
-		StringReader edgeReader = new StringReader(edgeLines);
-		
-		this.extractor.initialize(nodeReader, edgeReader);
-	}
-	
-	/**
-	 * Obtains and returns a function AST from the function extractor.
-	 * 
-	 * Note: initFunctionExtractor(String,String) must be called
-	 * prior to calling this function!
-	 */
-	@Deprecated
-	protected FunctionDef getASTOfNextFunction()
-			throws IOException, InvalidCSVFile
-	{
-		FunctionDef rootnode = extractor.getNextFunction();
-		return rootnode;
-	}
-
-	/**
-	 * Obtains a function AST from the function extractor and computes a UDG.
-	 */
-	@Deprecated
-	protected UseDefGraph getUDGForNextFunction()
-			throws IOException, InvalidCSVFile
-	{
-		FunctionDef rootnode = getASTOfNextFunction();
-		return getUDGForFuncAST(rootnode);
-	}
-	
-	/**
-	 * Obtains a function AST from the function extractor and computes a DDG.
-	 */
-	@Deprecated
-	protected DDG getDDGForNextFunction()
-			throws IOException, InvalidCSVFile
-	{
-		FunctionDef rootnode = getASTOfNextFunction();
-		return getDDGForFuncAST(rootnode);
-	}
-
 }
