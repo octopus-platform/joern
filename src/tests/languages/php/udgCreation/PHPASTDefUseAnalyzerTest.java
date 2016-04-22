@@ -1,24 +1,30 @@
 package tests.languages.php.udgCreation;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Collection;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import languages.php.udg.useDefAnalysis.PHPASTDefUseAnalyzer;
 import tests.languages.php.PHPCSVBasedTest;
-import tests.languages.php.samples.CSVASTDefUseSamples;
-import tests.languages.php.samples.CSVASTSamples;
 import udg.ASTNodeASTProvider;
 import udg.useDefGraph.UseOrDef;
 
 public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 
 	private PHPASTDefUseAnalyzer analyzer = new PHPASTDefUseAnalyzer();
+	
+	// set sample directory
+	@Before
+	public void setSampleDir() {
+		super.setSampleDir( "udgCreation");
+	}
 	
 	/**
 	 * For a given node, runs a def/use analysis and returns a collection of
@@ -79,18 +85,15 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testClosureVariable() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.closureVariableNodeStr;
-		String edgeStr = CSVASTSamples.closureVariableEdgeStr;
+		handleCSVFiles( "testClosureVariable");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)11);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
 		// a standalone closure variable should generate neither uses nor defs
 		assertTrue( useOrDefs.isEmpty());
 		
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
 		// a standalone closure variable should generate neither uses nor defs
@@ -104,25 +107,22 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testVariable() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.variableNodeStr;
-		String edgeStr = CSVASTSamples.variableEdgeStr;
+		handleCSVFiles( "testVariable");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
 		// a *standalone* variable should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 
-		ASTNode node2 = ast.getNodeById((long)5);
+		ASTNode node2 = ast.getNodeById((long)8);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
 		// a *standalone* variable should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
 	}
 	
@@ -133,25 +133,22 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testConstant() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.constantNodeStr;
-		String edgeStr = CSVASTSamples.constantEdgeStr;
+		handleCSVFiles( "testConstant");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
 		// a *standalone* constant should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "FOO"));
 		
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
 		// a *standalone* constant should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "BAR\\BUZ"));
 	}
 	
@@ -162,20 +159,17 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testProperty() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.propertyNodeStr;
-		String edgeStr = CSVASTSamples.propertyEdgeStr;
+		handleCSVFiles( "testProperty");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
 		// a *standalone* property should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
 		// If we do not know the object being accessed, we can only under-approximate;
@@ -193,33 +187,30 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testStaticProperty() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.staticPropertyNodeStr;
-		String edgeStr = CSVASTSamples.staticPropertyEdgeStr;
+		handleCSVFiles( "testStaticProperty");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
 		// a *standalone* static property should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "Foo::bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
 		// a *standalone* static property should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "foo::bar"));
 		
-		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 
 		// a *standalone* static property should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs3.size() == 1);
+		assertEquals( 1, useOrDefs3.size());
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "*::qux"));
 	}
 	
@@ -231,33 +222,30 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testClassConstantProperty() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.classConstantNodeStr;
-		String edgeStr = CSVASTSamples.classConstantEdgeStr;
+		handleCSVFiles( "testClassConstant");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
 		// a *standalone* class constant should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "Foo::BAR"));
 		
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
 		// a *standalone* class constant should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "foo::BAR"));
 		
-		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 
 		// a *standalone* class constant should generate a USE; this is because
 		// it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs3.size() == 1);
+		assertEquals( 1, useOrDefs3.size());
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "*::QUX"));
 	}
 	
@@ -269,34 +257,31 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testArrayIndexing() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseArrayIndexingNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseArrayIndexingEdgeStr;
+		handleCSVFiles( "testArrayIndexing");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
 		// a *standalone* array access should generate a USE for the array's name;
 		// this is because it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)11);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
 		// a *standalone* array access should generate a USE for the array's name;
 		// this is because it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "buz"));
 		
-		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node3 = ast.getNodeById((long)18);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
 		// a *standalone* array access should generate a USE for the array's name;
 		// this is because it might appear as a predicate inside an if/while/etc. guard
-		assertTrue( useOrDefs3.size() == 1);
+		assertEquals( 1, useOrDefs3.size());
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "nicknack"));
 	}
 	
@@ -312,23 +297,20 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingVariables() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingVariablesNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingVariablesEdgeStr;
+		handleCSVFiles( "testAssignUsingVariables");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)6), "bar"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)6), "buz"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)9), "bar"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)9), "buz"));
 		
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "qux"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "norf"));
 	}
@@ -339,18 +321,15 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingConstants() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingConstantsNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingConstantsEdgeStr;
+		handleCSVFiles( "testAssignUsingConstants");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)6), "FOO"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)6), "BAR\\BUZ"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)9), "FOO"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)9), "BAR\\BUZ"));
 	}
 	
 	/**
@@ -360,26 +339,23 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingProperties() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingPropertiesNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingPropertiesEdgeStr;
+		handleCSVFiles( "testAssignUsingProperties");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)8), "buz"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)8), "norf"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)11), "buz"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)11), "norf"));
 		
-		ASTNode node2 = ast.getNodeById((long)18);
+		ASTNode node2 = ast.getNodeById((long)21);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
 		// here we don't know anything about the "used" object,
 		// we only know which object is being modified
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "someobj"));
 	}
 	
@@ -389,18 +365,15 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingStaticProperties() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingStaticPropertiesNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingStaticPropertiesEdgeStr;
+		handleCSVFiles( "testAssignUsingStaticProperties");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "Foo::bar"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)8), "buz::*"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)8), "*::nicknack"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)11), "buz::*"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)11), "*::nicknack"));
 	}
 	
 	/**
@@ -409,19 +382,16 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingClassConstants() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingClassConstantsNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingClassConstantsEdgeStr;
+		handleCSVFiles( "testAssignUsingClassConstants");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 4);
+		assertEquals( 4, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)7), "Foo::BAR"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)7), "buz::QUX"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)6), "*::NICKNACK"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)10), "Foo::BAR"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)10), "buz::QUX"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)9), "*::NICKNACK"));
 	}
 	
 	/**
@@ -430,15 +400,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingArray() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingArrayNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingArrayEdgeStr;
+		handleCSVFiles( "testAssignUsingArray");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "a"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "b"));
@@ -451,26 +418,23 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingArrayIndexing() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingArrayIndexingNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingArrayIndexingEdgeStr;
+		handleCSVFiles( "testAssignUsingArrayIndexing");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)4), "bar"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)7), "bar"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "buz"));
 		
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 3);
+		assertEquals( 3, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "qux"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "norf"));
-		assertTrue( containsUseSymbol( useOrDefs2, ast.getNodeById((long)14), "nicknack"));
+		assertTrue( containsUseSymbol( useOrDefs2, ast.getNodeById((long)17), "nicknack"));
 	}
 
 	/**
@@ -479,15 +443,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignUsingClosureVariables() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignUsingClosureVarNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignUsingClosureVarEdgeStr;
+		handleCSVFiles( "testAssignUsingClosureVariables");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 3);
+		assertEquals( 3, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
@@ -501,29 +462,26 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignWithOp() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.assignWithOpNodeStr;
-		String edgeStr = CSVASTSamples.assignWithOpEdgeStr;
+		handleCSVFiles( "testAssignWithOp");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "bar"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
 		
-		ASTNode node3 = ast.getNodeById((long)11);
+		ASTNode node3 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
-		assertTrue( useOrDefs3.size() == 3);
+		assertEquals( 3, useOrDefs3.size());
 		assertTrue( containsDefSymbol( useOrDefs3, node3, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "onetimepad"));
@@ -535,15 +493,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testAssignByRef() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseAssignByRefNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseAssignByRefEdgeStr;
+		handleCSVFiles( "testAssignByRef");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 	}
@@ -556,22 +511,19 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testStaticVariable() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseStaticVariableNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseStaticVariableEdgeStr;
+		handleCSVFiles( "testStaticVariable");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 			
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)12);
+		ASTNode node2 = ast.getNodeById((long)17);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
 	}
@@ -584,22 +536,19 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testPropertyElement() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUsePropertyElementNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUsePropertyElementEdgeStr;
+		handleCSVFiles( "testPropertyElement");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)9);
+		ASTNode node = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)13);
+		ASTNode node2 = ast.getNodeById((long)18);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
 	}
@@ -610,22 +559,19 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testConstantElement() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseConstantElementNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseConstantElementEdgeStr;
+		handleCSVFiles( "testConstantElement");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node = ast.getNodeById((long)7);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "FOO"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)11);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "BUZ"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
 	}
@@ -639,70 +585,64 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testWhile() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.whileNodeStr;
-		String edgeStr = CSVASTSamples.whileEdgeStr;
+		handleCSVFiles( "testWhile");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node = ast.getNodeById((long)7);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)8);
+		ASTNode node2 = ast.getNodeById((long)11);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "true"));
 		
-		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node3 = ast.getNodeById((long)16);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 
 		assertTrue( useOrDefs3.isEmpty());
 		
-		ASTNode node4 = ast.getNodeById((long)19);
+		ASTNode node4 = ast.getNodeById((long)22);
 		Collection<UseOrDef> useOrDefs4 = analyze(node4);
 
-		assertTrue( useOrDefs4.size() == 1);
+		assertEquals( 1, useOrDefs4.size());
 		assertTrue( containsUseSymbol( useOrDefs4, node4, "var"));
 	}
 	
 	/**
-	 * while($foo) {}
-	 * while(true) {}
-	 * while(somecall()) {}
-	 * while($var === 1) {}
+	 * do {} while($foo);
+	 * do {} while(true);
+	 * do {} while(somecall());
+	 * do {} while($var === 1);
 	 */
 	@Test
 	public void testDo() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.doNodeStr;
-		String edgeStr = CSVASTSamples.doEdgeStr;
+		handleCSVFiles( "testDo");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)8);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)12);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "true"));
 		
-		ASTNode node3 = ast.getNodeById((long)14);
+		ASTNode node3 = ast.getNodeById((long)17);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 
 		assertTrue( useOrDefs3.isEmpty());
 		
-		ASTNode node4 = ast.getNodeById((long)20);
+		ASTNode node4 = ast.getNodeById((long)23);
 		Collection<UseOrDef> useOrDefs4 = analyze(node4);
 
-		assertTrue( useOrDefs4.size() == 1);
+		assertEquals( 1, useOrDefs4.size());
 		assertTrue( containsUseSymbol( useOrDefs4, node4, "var"));
 	}
 	
@@ -715,30 +655,27 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testIfElement() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.ifStatementNodeStr;
-		String edgeStr = CSVASTSamples.ifStatementEdgeStr;
+		handleCSVFiles( "testIf");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)5);
+		ASTNode node = ast.getNodeById((long)8);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)12);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
 		
-		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node3 = ast.getNodeById((long)16);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
-		assertTrue( useOrDefs3.size() == 1);
+		assertEquals( 1, useOrDefs3.size());
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "buz"));
 		
-		ASTNode node4 = ast.getNodeById((long)17);
+		ASTNode node4 = ast.getNodeById((long)20);
 		Collection<UseOrDef> useOrDefs4 = analyze(node4);
 
 		assertTrue( useOrDefs4.isEmpty());
@@ -763,15 +700,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		// we cannot really know which nodes should be analyzed in this context,
 		// and how to tackle them.
 		
-		String nodeStr = CSVASTSamples.switchNodeStr;
-		String edgeStr = CSVASTSamples.switchEdgeStr;
+		handleCSVFiles( "testSwitch");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
 	}
 	
@@ -781,16 +715,13 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testFor() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.forNodeStr;
-		String edgeStr = CSVASTSamples.forEdgeStr;
+		handleCSVFiles( "testFor");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)13);
+		ASTNode node = ast.getNodeById((long)16);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)14), "i"));
+		assertEquals( 1, useOrDefs.size());
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)17), "i"));
 	}
 	
 	/**
@@ -806,29 +737,26 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		// we cannot really know which nodes should be analyzed in this context,
 		// and how to tackle them.
 		
-		String nodeStr = CSVASTSamples.forEachNodeStr;
-		String edgeStr = CSVASTSamples.forEachEdgeStr;
+		handleCSVFiles( "testForEach");
 
-		handle(nodeStr, edgeStr);
-
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "somearray"));
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "bar"));
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
 		
-		ASTNode node3 = ast.getNodeById((long)20);
+		ASTNode node3 = ast.getNodeById((long)23);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
-		assertTrue( useOrDefs3.size() == 2);
+		assertEquals( 2, useOrDefs3.size());
 		assertTrue( containsDefSymbol( useOrDefs3, node3, "someobj"));
 		assertTrue( containsDefSymbol( useOrDefs3, node3, "someobj"));
 	}
@@ -844,15 +772,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testPreInc() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.preIncNodeStr;
-		String edgeStr = CSVASTSamples.preIncEdgeStr;
+		handleCSVFiles( "testPreInc");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
 	}
@@ -863,15 +788,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testPreDec() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.preDecNodeStr;
-		String edgeStr = CSVASTSamples.preDecEdgeStr;
+		handleCSVFiles( "testPreDec");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
 	}
@@ -882,15 +804,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testPostInc() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.postIncNodeStr;
-		String edgeStr = CSVASTSamples.postIncEdgeStr;
+		handleCSVFiles( "testPostInc");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
 	}
@@ -901,15 +820,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testPostDec() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.postDecNodeStr;
-		String edgeStr = CSVASTSamples.postDecEdgeStr;
+		handleCSVFiles( "testPostDec");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "i"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "i"));
 	}
@@ -926,18 +842,15 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testEmpty() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.emptyNodeStr;
-		String edgeStr = CSVASTSamples.emptyEdgeStr;
+		handleCSVFiles( "testEmpty");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
 		assertTrue( useOrDefs2.isEmpty());
@@ -950,21 +863,18 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testIsset() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.issetNodeStr;
-		String edgeStr = CSVASTSamples.issetEdgeStr;
+		handleCSVFiles( "testIsset");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
 	}
 	
@@ -975,20 +885,17 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testShellExec() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.shellExecNodeStr;
-		String edgeStr = CSVASTSamples.shellExecEdgeStr;
+		handleCSVFiles( "testShellExec");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
 		assertTrue( useOrDefs.isEmpty());
 		
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "attackerinput"));
 	}
 	
@@ -999,18 +906,15 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testClone() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.cloneNodeStr;
-		String edgeStr = CSVASTSamples.cloneEdgeStr;
+		handleCSVFiles( "testClone");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
 		assertTrue( useOrDefs2.isEmpty());
@@ -1023,18 +927,15 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testExit() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.exitNodeStr;
-		String edgeStr = CSVASTSamples.exitEdgeStr;
+		handleCSVFiles( "testExit");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
 		assertTrue( useOrDefs2.isEmpty());
@@ -1047,19 +948,16 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testPrint() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.printNodeStr;
-		String edgeStr = CSVASTSamples.printEdgeStr;
+		handleCSVFiles( "testPrint");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
 		
-		ASTNode node2 = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
 		assertTrue( useOrDefs2.isEmpty());
@@ -1075,37 +973,34 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testIncludeOrEval() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.includeOrEvalNodeStr;
-		String edgeStr = CSVASTSamples.includeOrEvalEdgeStr;
+		handleCSVFiles( "testIncludeOrEval");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
 		assertTrue( useOrDefs.isEmpty());
 		
-		ASTNode node2 = ast.getNodeById((long)5);
+		ASTNode node2 = ast.getNodeById((long)8);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "userinput"));
 		
-		ASTNode node3 = ast.getNodeById((long)8);
+		ASTNode node3 = ast.getNodeById((long)11);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
 		assertTrue( useOrDefs3.isEmpty());
 		
-		ASTNode node4 = ast.getNodeById((long)13);
+		ASTNode node4 = ast.getNodeById((long)16);
 		Collection<UseOrDef> useOrDefs4 = analyze(node4);
 		
-		assertTrue( useOrDefs4.size() == 1);
-		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)15), "userinput"));
+		assertEquals( 1, useOrDefs4.size());
+		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)18), "userinput"));
 		
-		ASTNode node5 = ast.getNodeById((long)20);
+		ASTNode node5 = ast.getNodeById((long)23);
 		Collection<UseOrDef> useOrDefs5 = analyze(node5);
 		
-		assertTrue( useOrDefs5.size() == 1);
+		assertEquals( 1, useOrDefs5.size());
 		assertTrue( containsUseSymbol( useOrDefs5, node5, "evilinput"));
 	}
 	
@@ -1118,15 +1013,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testYieldFrom() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseYieldFromNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseYieldFromEdgeStr;
+		handleCSVFiles( "testYieldFrom");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)20);
+		ASTNode node = ast.getNodeById((long)25);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "a"));
 	}
 	
@@ -1139,15 +1031,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testReturn() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseReturnNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseReturnEdgeStr;
+		handleCSVFiles( "testReturn");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)20);
+		ASTNode node = ast.getNodeById((long)25);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "a"));
 	}
 
@@ -1159,41 +1048,38 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testEcho() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseEchoNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseEchoEdgeStr;
+		handleCSVFiles( "testEcho");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node = ast.getNodeById((long)7);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
 		
-		ASTNode node3 = ast.getNodeById((long)10);
+		ASTNode node3 = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
-		assertTrue( useOrDefs3.size() == 1);
+		assertEquals( 1, useOrDefs3.size());
 		assertTrue( containsUseSymbol( useOrDefs3, node3, "PHP_EOL"));
 		
-		ASTNode node4 = ast.getNodeById((long)15);
+		ASTNode node4 = ast.getNodeById((long)18);
 		Collection<UseOrDef> useOrDefs4 = analyze(node4);
 		
-		assertTrue( useOrDefs4.size() == 3);
-		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)17), "buz"));
-		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)17), "qux"));
-		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)16), "PHP_EOL"));
+		assertEquals( 3, useOrDefs4.size());
+		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)20), "buz"));
+		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)20), "qux"));
+		assertTrue( containsUseSymbol( useOrDefs4, ast.getNodeById((long)19), "PHP_EOL"));
 		
-		ASTNode node5 = ast.getNodeById((long)26);
+		ASTNode node5 = ast.getNodeById((long)29);
 		Collection<UseOrDef> useOrDefs5 = analyze(node5);
 		
-		assertTrue( useOrDefs5.size() == 2);
+		assertEquals( 2, useOrDefs5.size());
 		assertTrue( containsUseSymbol( useOrDefs5, node5, "norf"));
 		assertTrue( containsUseSymbol( useOrDefs5, node5, "nicknack"));
 	}
@@ -1205,27 +1091,24 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testThrow() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseThrowNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseThrowEdgeStr;
+		handleCSVFiles( "testThrow");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		// TODO: special case! In this case the UseOrDef object contains a reference
 		// to the NewExpression node generated by the "new" statement, rather than
 		// a reference to the ThrowStatement. This is because the NewExpression is
 		// the innermost environment which emits the USE symbol. Is this a problem,
 		// is it actually what we want, or does it not matter?
-		// (That's why we pass 'ast.getNodeById((long)4)' instead of 'node' below,
+		// (That's why we pass 'ast.getNodeById((long)7)' instead of 'node' below,
 		// at any rate.)
-		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)4), "error"));
+		assertTrue( containsUseSymbol( useOrDefs, ast.getNodeById((long)7), "error"));
 		
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		// TODO: special case! In this case the UseOrDef object contains a reference
 		// to the NewExpression node generated by the "new" statement, rather than
 		// a reference to the ThrowStatement. This is because the NewExpression is
@@ -1233,8 +1116,8 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 		// is it actually what we want, or does it not matter?
 		// (That's why we pass 'ast.getNodeById((long)11)' instead of 'node2' below,
 		// at any rate.)
-		assertTrue( containsUseSymbol( useOrDefs2, ast.getNodeById((long)11), "bar"));
-		assertTrue( containsUseSymbol( useOrDefs2, ast.getNodeById((long)11), "buz"));
+		assertTrue( containsUseSymbol( useOrDefs2, ast.getNodeById((long)14), "bar"));
+		assertTrue( containsUseSymbol( useOrDefs2, ast.getNodeById((long)14), "buz"));
 	}
 	
 	/**
@@ -1246,15 +1129,12 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testYield() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseYieldNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseYieldEdgeStr;
+		handleCSVFiles( "testYield");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)22);
+		ASTNode node = ast.getNodeById((long)27);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "index"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "value"));
 	}
@@ -1279,21 +1159,18 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testCall() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.callNodeStr;
-		String edgeStr = CSVASTSamples.callEdgeStr;
+		handleCSVFiles( "testCall");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "buz"));
 	}
 	
@@ -1305,24 +1182,21 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testNew() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.newNodeStr;
-		String edgeStr = CSVASTSamples.newEdgeStr;
+		handleCSVFiles( "testNew");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node2 = ast.getNodeById((long)12);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "buz"));
 		
-		ASTNode node3 = ast.getNodeById((long)13);
+		ASTNode node3 = ast.getNodeById((long)16);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
 		assertTrue( useOrDefs3.isEmpty());
@@ -1335,22 +1209,19 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testMethodCall() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.methodCallNodeStr;
-		String edgeStr = CSVASTSamples.methodCallEdgeStr;
+		handleCSVFiles( "testMethodCall");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
+		assertEquals( 2, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "buz"));
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "foo"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "bar"));
 	}
@@ -1362,21 +1233,18 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testStaticCall() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.staticCallNodeStr;
-		String edgeStr = CSVASTSamples.staticCallEdgeStr;
+		handleCSVFiles( "testStaticCall");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "buz"));
 		
-		ASTNode node2 = ast.getNodeById((long)10);
+		ASTNode node2 = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 
-		assertTrue( useOrDefs2.size() == 2);
+		assertEquals( 2, useOrDefs2.size());
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "qux"));
 		assertTrue( containsUseSymbol( useOrDefs2, node2, "norf"));
 	}
@@ -1394,21 +1262,18 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testGlobal() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.globalNodeStr;
-		String edgeStr = CSVASTSamples.globalEdgeStr;
+		handleCSVFiles( "testGlobal");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "bar"));
 		
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)16);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "buz"));
 	}
 	
@@ -1418,27 +1283,24 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testUnset() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.unsetNodeStr;
-		String edgeStr = CSVASTSamples.unsetEdgeStr;
+		handleCSVFiles( "testUnset");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)4);
+		ASTNode node = ast.getNodeById((long)7);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "foo"));
 		
-		ASTNode node2 = ast.getNodeById((long)7);
+		ASTNode node2 = ast.getNodeById((long)10);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "bar"));
 		
-		ASTNode node3 = ast.getNodeById((long)12);
+		ASTNode node3 = ast.getNodeById((long)15);
 		Collection<UseOrDef> useOrDefs3 = analyze(node3);
 		
-		assertTrue( useOrDefs3.size() == 1);
+		assertEquals( 1, useOrDefs3.size());
 		assertTrue( containsDefSymbol( useOrDefs3, node3, "qux"));
 	}
 	
@@ -1451,21 +1313,18 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testCatch() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTSamples.catchNodeStr;
-		String edgeStr = CSVASTSamples.catchEdgeStr;
+		handleCSVFiles( "testCatch");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node = ast.getNodeById((long)9);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 1);
+		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsDefSymbol( useOrDefs, node, "f"));
 		
-		ASTNode node2 = ast.getNodeById((long)11);
+		ASTNode node2 = ast.getNodeById((long)14);
 		Collection<UseOrDef> useOrDefs2 = analyze(node2);
 		
-		assertTrue( useOrDefs2.size() == 1);
+		assertEquals( 1, useOrDefs2.size());
 		assertTrue( containsDefSymbol( useOrDefs2, node2, "b"));
 	}
 	
@@ -1481,17 +1340,14 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testFunctionDef() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseFunctionDefNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseFunctionDefEdgeStr;
+		handleCSVFiles( "testFunctionDef");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
-		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)5), "bar"));
-		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)9), "buz"));
+		assertEquals( 2, useOrDefs.size());
+		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)10), "bar"));
+		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)14), "buz"));
 	}
 
 	/**
@@ -1500,17 +1356,14 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testClosure() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseClosureNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseClosureEdgeStr;
+		handleCSVFiles( "testClosure");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)3);
+		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
-		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)5), "bar"));
-		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)9), "buz"));
+		assertEquals( 2, useOrDefs.size());
+		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)10), "bar"));
+		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)14), "buz"));
 		// TODO: think about how to handle closure variables; when analyzing
 		// a closure itself, the use variables should emit DEFs, like parameters;
 		// but when analyzing a function which simply contains a closure declaration,
@@ -1528,16 +1381,13 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	@Test
 	public void testMethod() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTDefUseSamples.defUseMethodNodeStr;
-		String edgeStr = CSVASTDefUseSamples.defUseMethodEdgeStr;
+		handleCSVFiles( "testMethod");
 
-		handle(nodeStr, edgeStr);
-		
-		ASTNode node = ast.getNodeById((long)8);
+		ASTNode node = ast.getNodeById((long)13);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 		
-		assertTrue( useOrDefs.size() == 2);
-		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)10), "bar"));
-		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)14), "buz"));
+		assertEquals( 2, useOrDefs.size());
+		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)17), "bar"));
+		assertTrue( containsDefSymbol( useOrDefs, ast.getNodeById((long)21), "buz"));
 	}
 }
