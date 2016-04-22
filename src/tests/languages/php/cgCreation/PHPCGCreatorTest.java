@@ -4,8 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.util.HashMap;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
@@ -16,28 +17,28 @@ import cg.CGEdge;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import languages.php.cg.PHPCGFactory;
 import tests.languages.php.PHPCSVFunctionExtractorBasedTest;
-import tests.languages.php.samples.CSVASTCallSamples;
 
 public class PHPCGCreatorTest extends PHPCSVFunctionExtractorBasedTest {
 
+	// set sample directory
+	@Before
+	public void setSampleDir() {
+		super.setSampleDir( "cgCreation");
+	}
+	
 	
 	/**
-	 * For two given CSV strings, initializes a function extractor, extracts all
+	 * For two CSV files in a given folder, initializes a function extractor, extracts all
 	 * functions and stores them in the PHPCGFactory, then uses the PHPCGFactory
 	 * to build a call graph and returns it.
 	 */
-	private CG buildCallGraph(String nodeStr, String edgeStr) throws IOException, InvalidCSVFile {
+	private CG buildCallGraph(String testDir) throws IOException, InvalidCSVFile {
 
-		StringReader nodeReader = new StringReader(nodeStr);
-		StringReader edgeReader = new StringReader(edgeStr);
-		
-		this.extractor.initialize(nodeReader, edgeReader);
-		
-		PHPFunctionDef rootnode;
-		while( (rootnode = (PHPFunctionDef)extractor.getNextFunction()) != null) {			
-			PHPCGFactory.addFunctionDef( rootnode);
-		}
-		
+		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( testDir);
+
+		for( PHPFunctionDef func : funcs.values())
+			PHPCGFactory.addFunctionDef( func);
+
 		CG cg = PHPCGFactory.newInstance();
 		
 		System.out.println();
@@ -90,10 +91,7 @@ public class PHPCGCreatorTest extends PHPCSVFunctionExtractorBasedTest {
 	@Test
 	public void testSimpleCalls() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTCallSamples.simpleCallsNodeStr;
-		String edgeStr = CSVASTCallSamples.simpleCallsEdgeStr;
-
-		CG cg = buildCallGraph(nodeStr, edgeStr);
+		CG cg = buildCallGraph( "testSimpleCalls");
 		
 		// 8 nodes: 6 calls and 2 definitions
 		assertEquals(8, cg.size());
@@ -102,12 +100,12 @@ public class PHPCGCreatorTest extends PHPCSVFunctionExtractorBasedTest {
 		
 		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
 
-		assertTrue( edgeExists( cg, 7, 3));
-		assertTrue( edgeExists( cg, 11, 17));
-		assertTrue( edgeExists( cg, 25, 3));
-		assertTrue( edgeExists( cg, 29, 17));
-		assertTrue( edgeExists( cg, 35, 3));
-		assertTrue( edgeExists( cg, 39, 17));
+		assertTrue( edgeExists( cg, 12, 6));
+		assertTrue( edgeExists( cg, 16, 22));
+		assertTrue( edgeExists( cg, 32, 6));
+		assertTrue( edgeExists( cg, 36, 22));
+		assertTrue( edgeExists( cg, 42, 6));
+		assertTrue( edgeExists( cg, 46, 22));
 	}
 
 	/**
@@ -132,10 +130,7 @@ public class PHPCGCreatorTest extends PHPCSVFunctionExtractorBasedTest {
 	@Test
 	public void testTwoFiles() throws IOException, InvalidCSVFile
 	{
-		String nodeStr = CSVASTCallSamples.twoFilesNodeStr;
-		String edgeStr = CSVASTCallSamples.twoFilesEdgeStr;
-
-		CG cg = buildCallGraph(nodeStr, edgeStr);
+		CG cg = buildCallGraph( "testTwoFiles");
 		
 		// 4 nodes: 2 calls and 2 definitions
 		assertEquals(4, cg.size());
@@ -144,8 +139,8 @@ public class PHPCGCreatorTest extends PHPCSVFunctionExtractorBasedTest {
 		
 		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
 
-		assertTrue( edgeExists( cg, 11, 20));
-		assertTrue( edgeExists( cg, 25, 6));
+		assertTrue( edgeExists( cg, 15, 26));
+		assertTrue( edgeExists( cg, 33, 8));
 	}
 
 }
