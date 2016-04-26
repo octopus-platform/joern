@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import org.junit.Before;
 
@@ -37,8 +39,28 @@ public class PHPCSVFunctionExtractorBasedTest extends PHPCSVBasedTest
 		
 		this.extractor.initialize(nodeFileReader, edgeFileReader);
 		PHPFunctionDef function;
-		while( (function = (PHPFunctionDef)extractor.getNextFunction()) != null)
+		while( (function = (PHPFunctionDef)extractor.getNextFunction()) != null) {
+
 			functions.put( function.getName(), function);
+		}
+
+		return functions;
+	}
+	
+	protected HashSet<PHPFunctionDef> getAllFuncASTsUnkeyed( String testDir)
+			throws IOException, InvalidCSVFile {
+		
+		HashSet<PHPFunctionDef> functions = new LinkedHashSet<PHPFunctionDef>();
+		
+	    BufferedReader nodeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + nodesFile));
+	    BufferedReader edgeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + edgesFile));
+		
+		this.extractor.initialize(nodeFileReader, edgeFileReader);
+		PHPFunctionDef function;
+		while( (function = (PHPFunctionDef)extractor.getNextFunction()) != null) {
+
+			functions.add( function);
+		}
 
 		return functions;
 	}

@@ -1,5 +1,6 @@
 package ast.expressions;
 
+import ast.ASTNodeProperties;
 import ast.walking.ASTNodeVisitor;
 
 public class Identifier extends Expression
@@ -15,6 +16,14 @@ public class Identifier extends Expression
 		super(name);
 	}
 
+	public String getNamespace() {
+		return getProperty(ASTNodeProperties.NAMESPACE);
+	}
+	
+	public void setNamespace(String namespace) {
+		setProperty(ASTNodeProperties.NAMESPACE, namespace);
+	}
+	
 	public void setNameChild(StringExpression name) {
 		this.name = name;
 		super.addChild(name);

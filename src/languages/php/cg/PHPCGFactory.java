@@ -6,9 +6,11 @@ import java.util.LinkedList;
 import ast.expressions.CallExpression;
 import ast.expressions.Identifier;
 import ast.php.functionDef.PHPFunctionDef;
+import ast.php.functionDef.TopLevelFunctionDef;
 import cg.CG;
 import cg.CGEdge;
 import cg.CGNode;
+import tools.php.ast2cfgddg.PHPCSVNodeTypes;
 
 public class PHPCGFactory {
 
@@ -30,23 +32,44 @@ public class PHPCGFactory {
 	public static CG newInstance() {
 		
 		CG cg = new CG();
-		
+
 		for( CallExpression functionCall : functionCalls) {
 
 			// make sure the call target is statically known
 			if( functionCall.getTargetFunc() instanceof Identifier) {
-				String name = ((Identifier)functionCall.getTargetFunc()).getNameChild().getEscapedCodeStr();
-				// check whether we know the called function
-				if( functionDefs.containsKey(name)) {
-					CGNode caller = new CGNode(functionCall);
-					CGNode callee = new CGNode(functionDefs.get(name));
-					// note that adding a callee node many times is perfectly fine:
-					// CGNode overrides the equals() and hashCode() methods,
-					// so it will actually only be added the first time
-					cg.addVertex(caller);
-					cg.addVertex(callee);
-					cg.addEdge(new CGEdge(caller, callee));
+				
+				Identifier callIdentifier = (Identifier)functionCall.getTargetFunc();
+				
+				// if call identifier is fully qualified,
+				// just look for the function's definition right away
+				if( callIdentifier.getFlags().contains( PHPCSVNodeTypes.FLAG_NAME_FQ)) {
+					String functionKey = callIdentifier.getNameChild().getEscapedCodeStr();
+					addCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
 				}
+
+				// otherwise, i.e., if the call identifier is not fully qualified,
+				// first look in the current namespace, then if the function is not found,
+				// look in the global namespace
+				// (see http://php.net/manual/en/language.namespaces.rules.php)
+				else {
+					boolean found = false;
+					// note that looking in the current namespace first only makes
+					// sense if we are not already in the global namespace anyway
+					if( !callIdentifier.getNamespace().isEmpty()) {
+						String functionKey = callIdentifier.getNamespace() + "\\"
+								+ callIdentifier.getNameChild().getEscapedCodeStr();
+						found = addCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
+					}
+					
+					// we did not find the function or were already in global namespace;
+					// try to find the function in the global namespace
+					if( !found) {
+						String functionKey = callIdentifier.getNameChild().getEscapedCodeStr();
+						addCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
+					}
+				}
+	
+
 			}
 			else
 				System.err.println("Statically unknown function call at node id " + functionCall.getNodeId() + "!");
@@ -55,6 +78,32 @@ public class PHPCGFactory {
 		reset();
 		
 		return cg;
+	}
+
+	/**
+	 * Checks whether a given function key is known and if yes,
+	 * adds a corresponding edge in the given call graph.
+	 * 
+	 * @return true if an edge was added, false otherwise
+	 */
+	private static boolean addCallEdgeIfFunctionKnown(CG cg, CallExpression functionCall, String functionKey) {
+		
+		boolean ret = false;
+		
+		// check whether we know the called function
+		if( functionDefs.containsKey(functionKey)) {
+			
+			CGNode caller = new CGNode(functionCall);
+			CGNode callee = new CGNode(functionDefs.get(functionKey));
+			ret = cg.addVertex(caller);
+			// note that adding a callee node many times is perfectly fine:
+			// CGNode overrides the equals() and hashCode() methods,
+			// so it will actually only be added the first time
+			cg.addVertex(callee);
+			cg.addEdge(new CGEdge(caller, callee));
+		}
+		
+		return ret;
 	}
 	
 	private static void reset() {
@@ -73,16 +122,22 @@ public class PHPCGFactory {
 	 *         then returns that function definition. Otherwise, returns null.
 	 */
 	public static PHPFunctionDef addFunctionDef( PHPFunctionDef functionDef) {
+
+		// artificial toplevel functions wrapping toplevel code cannot be called
+		if( functionDef instanceof TopLevelFunctionDef)
+			return null;
 		
-		String name = functionDef.getName();
+		String functionKey = functionDef.getName();
+		if( !functionDef.getNamespace().isEmpty())
+			functionKey = functionDef.getNamespace() + "\\" + functionKey;
 		
-		if( functionDefs.containsKey(name)) {
-			System.err.println("Function name '" + name + "' ambiguous: There are at least two known " +
-					" matching function definitions (id " + functionDefs.get(name).getNodeId() +
+		if( functionDefs.containsKey(functionKey)) {
+			System.err.println("Function definition '" + functionKey + "' ambiguous: There are at least two known " +
+					" matching function definitions (id " + functionDefs.get(functionKey).getNodeId() +
 					" and id " + functionDef.getNodeId() + ")");
 		}
 		
-		return functionDefs.put( name, functionDef);
+		return functionDefs.put( functionKey, functionDef);
 	}
 	
 	/**

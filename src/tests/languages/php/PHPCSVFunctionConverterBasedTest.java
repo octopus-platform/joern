@@ -3,6 +3,7 @@ package tests.languages.php;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -185,9 +186,9 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 	 */
 	protected CG getCGForCSVFiles(String testDir) throws IOException, InvalidCSVFile {
 
-		HashMap<String,PHPFunctionDef> funcs = super.getAllFuncASTs( testDir);
+		HashSet<PHPFunctionDef> funcs = super.getAllFuncASTsUnkeyed( testDir);
 
-		for( PHPFunctionDef func : funcs.values())
+		for( PHPFunctionDef func : funcs)
 			PHPCGFactory.addFunctionDef( func);
 
 		CG cg = PHPCGFactory.newInstance();
