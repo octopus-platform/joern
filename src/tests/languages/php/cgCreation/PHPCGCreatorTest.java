@@ -1,6 +1,7 @@
 package tests.languages.php.cgCreation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -40,9 +41,9 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 * functwo();
 	 */
 	@Test
-	public void testSimpleCalls() throws IOException, InvalidCSVFile
+	public void testSimpleFunctionCalls() throws IOException, InvalidCSVFile
 	{
-		CG cg = getCGForCSVFiles( "testSimpleCalls");
+		CG cg = getCGForCSVFiles( "testSimpleFunctionCalls");
 		
 		// 8 nodes: 6 calls and 2 definitions
 		assertEquals(8, cg.size());
@@ -79,9 +80,9 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * foo();
 	 */
 	@Test
-	public void testTwoFiles() throws IOException, InvalidCSVFile
+	public void testTwoFilesFunctionCalls() throws IOException, InvalidCSVFile
 	{
-		CG cg = getCGForCSVFiles( "testTwoFiles");
+		CG cg = getCGForCSVFiles( "testTwoFilesFunctionCalls");
 		
 		// 4 nodes: 2 calls and 2 definitions
 		assertEquals(4, cg.size());
@@ -116,9 +117,9 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * \A\foo();
 	 */
 	@Test
-	public void testTwoNamespacedFiles() throws IOException, InvalidCSVFile
+	public void testTwoFilesNamespacedFunctionCalls() throws IOException, InvalidCSVFile
 	{
-		CG cg = getCGForCSVFiles( "testTwoNamespacedFiles");
+		CG cg = getCGForCSVFiles( "testTwoFilesNamespacedFunctionCalls");
 		
 		// 4 nodes: 2 calls and 2 definitions
 		assertEquals(4, cg.size());
@@ -138,6 +139,7 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 *   function bar() {}
 	 *   
 	 *   foo(); // calls \A\B\foo()
+	 *   \foo(); // calls global foo()
 	 *   \A\B\foo(); // calls \A\B\foo()
 	 *   \A\B\bar(); // calls \A\B\bar()
 	 *   buz(); // calls global buz()
@@ -149,30 +151,214 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	 *   function buz() {}
 	 *   
 	 *   foo(); // calls global foo()
+	 *   \foo(); // calls global foo()
 	 *   \A\B\foo(); // calls \A\B\foo()
 	 *   \A\B\bar(); // calls \A\B\bar()
 	 *   buz(); // calls global buz()
 	 * }
 	 */
 	@Test
-	public void testGlobalAndOtherNamespace() throws IOException, InvalidCSVFile
+	public void testGlobalAndOtherNamespaceFunctionCalls() throws IOException, InvalidCSVFile
 	{
-		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespace");
+		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespaceFunctionCalls");
 		
-		// 12 nodes: 8 calls and 4 definitions
-		assertEquals(12, cg.size());
-		assertEquals(8, cg.numberOfCallers());
+		// 14 nodes: 10 calls and 4 definitions
+		assertEquals(14, cg.size());
+		assertEquals(10, cg.numberOfCallers());
 		assertEquals(4, cg.numberOfCallees());
 		
 		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
 
 		assertTrue( edgeExists( cg, 23, 9));
-		assertTrue( edgeExists( cg, 27, 9));
-		assertTrue( edgeExists( cg, 31, 16));
-		assertTrue( edgeExists( cg, 35, 49));
-		assertTrue( edgeExists( cg, 56, 42));
-		assertTrue( edgeExists( cg, 60, 9));
-		assertTrue( edgeExists( cg, 64, 16));
-		assertTrue( edgeExists( cg, 68, 49));
+		assertTrue( edgeExists( cg, 27, 46));
+		assertTrue( edgeExists( cg, 31, 9));
+		assertTrue( edgeExists( cg, 35, 16));
+		assertTrue( edgeExists( cg, 39, 53));
+		assertTrue( edgeExists( cg, 60, 46));
+		assertTrue( edgeExists( cg, 64, 46));
+		assertTrue( edgeExists( cg, 68, 9));
+		assertTrue( edgeExists( cg, 72, 16));
+		assertTrue( edgeExists( cg, 76, 53));
+	}
+	
+	/**
+	 * class ClassOne {
+	 *   static function funcone() {
+	 *     ClassOne::funcone();
+	 *     ClassTwo::functwo("foo");
+	 *   }
+	 * }
+	 * 
+	 * class ClassTwo {
+	 *   static function functwo($a) {
+	 *     ClassOne::funcone();
+	 *     ClassTwo::functwo("bar");
+	 *   }
+	 * }
+	 * 
+	 * ClassOne::funcone();
+	 * ClassTwo::functwo();
+	 */
+	@Test
+	public void testSimpleStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testSimpleStaticCalls");
+		
+		// 8 nodes: 6 calls and 2 definitions
+		assertEquals(8, cg.size());
+		assertEquals(6, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 19, 13));
+		assertTrue( edgeExists( cg, 24, 38));
+		assertTrue( edgeExists( cg, 48, 13));
+		assertTrue( edgeExists( cg, 53, 38));
+		assertTrue( edgeExists( cg, 60, 13));
+		assertTrue( edgeExists( cg, 65, 38));
+	}
+	
+	/**
+     * foo.php
+     * -------
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   static function bar() {}
+     * }
+     * 
+     * ClassOne::foo();
+     * 
+     * bar.php
+     * -------
+     * 
+     * include_once "bar.php";
+     * 
+     * class ClassOne {
+     *   static function foo() {}
+     * }
+     * 
+     * ClassTwo::bar();
+	 */
+	@Test
+	public void testTwoFilesStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesStaticCalls");
+		
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 22, 41));
+		assertTrue( edgeExists( cg, 48, 15));
+	}
+	
+	/**
+     * foo.php
+     * -------
+     * namespace A;
+     * 
+     * include_once "bar.php";
+     * 
+     * class ClassOne {
+     *   static function foo() {}
+     * }
+     * 
+     * \B\ClassTwo::bar();
+     * 
+     * bar.php
+     * -------
+     * namespace B;
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   static function bar() {}
+     * }
+     * 
+     * \A\ClassOne::foo();
+	 */
+	@Test
+	public void testTwoFilesNamespacedStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesNamespacedStaticCalls");
+		
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 25, 47));
+		assertTrue( edgeExists( cg, 54, 18));
+	}
+	
+	/**
+	 * namespace A\B {
+	 * 
+	 *   class ClassFoo {
+	 *     static function foo() {}
+	 *   }
+	 * 
+	 *   class ClassBar {
+	 *     static function foo() {}
+	 *   }
+	 * 
+	 *   ClassFoo::foo(); // calls \A\B\ClassFoo::foo()
+	 *   \ClassFoo::foo(); // calls global ClassFoo::foo()
+	 *   \A\B\ClassFoo::foo(); // calls \A\B\ClassFoo::foo()
+	 *   \A\B\ClassBar::foo(); // calls \A\B\ClassBar::foo()
+	 *   ClassBuz::foo(); // not found
+	 *   \ClassBuz::foo(); // calls global ClassBuz::foo()
+	 * }
+	 * 
+	 * namespace {
+	 * 
+	 *   class ClassFoo {
+	 *     static function foo() {}
+	 *   }
+	 *   
+	 *   class ClassBuz {
+	 *     static function foo() {}
+	 *   }
+	 *   
+	 *   ClassFoo::foo(); // calls global ClassFoo::foo()
+	 *   \ClassFoo::foo(); // calls global ClassFoo::foo()
+	 *   \A\B\ClassFoo::foo(); // calls \A\B\ClassFoo::foo()
+	 *   \A\B\ClassBar::foo(); // calls \A\B\ClassBar::foo()
+	 *   ClassBuz::foo(); // calls global ClassBuz::foo()
+	 *   \ClassBuz::foo(); // calls global ClassBuz::foo()
+	 * }
+	 */
+	@Test
+	public void testGlobalAndOtherNamespaceStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespaceStaticCalls");
+		
+		// 15 nodes: 11 calls (not 12!) and 4 definitions
+		assertEquals(15, cg.size());
+		assertEquals(11, cg.numberOfCallers());
+		assertEquals(4, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 37, 16));
+		assertTrue( edgeExists( cg, 42, 77));
+		assertTrue( edgeExists( cg, 47, 16));
+		assertTrue( edgeExists( cg, 52, 30));
+		assertFalse( edgeExists( cg, 57, 91)); // the "not found" call (see above)---there should be no edge
+		assertTrue( edgeExists( cg, 62, 91));
+		assertTrue( edgeExists( cg, 98, 77));
+		assertTrue( edgeExists( cg, 103, 77));
+		assertTrue( edgeExists( cg, 108, 16));
+		assertTrue( edgeExists( cg, 113, 30));
+		assertTrue( edgeExists( cg, 118, 91)); // the same call within the global namespace is found, though
+		assertTrue( edgeExists( cg, 123, 91));
 	}
 }

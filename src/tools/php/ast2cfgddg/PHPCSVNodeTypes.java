@@ -24,6 +24,7 @@ public class PHPCSVNodeTypes
 	public static final CSVKey CODE = new CSVKey("code");
 	public static final CSVKey CHILDNUM = new CSVKey("childnum","int");
 	public static final CSVKey FUNCID = new CSVKey("funcid","int");
+	public static final CSVKey CLASSNAME = new CSVKey("classname");
 	public static final CSVKey NAMESPACE = new CSVKey("namespace");
 
 	

@@ -747,6 +747,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+		String classname = row.getFieldForKey(PHPCSVNodeTypes.CLASSNAME);
+		String namespace = row.getFieldForKey(PHPCSVNodeTypes.NAMESPACE);
 		String endlineno = row.getFieldForKey(PHPCSVNodeTypes.ENDLINENO);
 		String name = row.getFieldForKey(PHPCSVNodeTypes.NAME);
 		String doccomment = row.getFieldForKey(PHPCSVNodeTypes.DOCCOMMENT);
@@ -758,6 +760,8 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+		newNode.setEnclosingClass(classname);
+		newNode.setNamespace(namespace);
 		newNode.setName(name);
 		newNode.setDocComment(doccomment);
 
@@ -2399,6 +2403,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		ast.addNodeWithId(newNode, id);
 		newNode.setNodeId(id);
 
+		// special in the case of static method calls:
+		// we add the created node to the PHP call graph factory's list of static method calls;
+		// hence we get a list of all static method calls without any additional traversals of
+		// the final AST
+		PHPCGFactory.addFunctionCall(newNode);
+		
 		return id;
 	}
 

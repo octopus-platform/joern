@@ -3112,7 +3112,8 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	 * Any AST_STATIC_CALL node has exactly 3 children:
 	 * 1) an expression, whose evaluation holds the class name that the static target method belongs to
 	 *    (e.g., could be AST_NAME, AST_VAR, etc...)
-	 * 2) a "string" node, representing the static method's name within the class
+	 * 2) an expression, whose evaluation holds the static method's name within the class
+	 *    (e.g., could be string, AST_DIM, etc...)
 	 * 3) AST_ARG_LIST, representing the argument list
 	 *
 	 * This test checks a few static call expressions' children in the following PHP code:
