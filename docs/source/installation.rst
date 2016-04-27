@@ -165,7 +165,7 @@ Installing python-joern
 ``python-joern`` is a thin python access layer for joern and a set of
 utility traversals. It depends on the following python modules:
 
-- py2neo 2.0 (http://py2neo.org/)
+- py2neo 2.0 (https://github.com/nigelsmall/py2neo/releases/tag/py2neo-2.0)
 
 To install ``python-joern``, first make sure python setuptools are
 correctly installed. On Debian/Ubuntu, issuing the following command
