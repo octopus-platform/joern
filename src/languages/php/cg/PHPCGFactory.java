@@ -82,7 +82,7 @@ public class PHPCGFactory {
 				// just look for the function's definition right away
 				if( callIdentifier.getFlags().contains( PHPCSVNodeTypes.FLAG_NAME_FQ)) {
 					String functionKey = callIdentifier.getNameChild().getEscapedCodeStr();
-					addFunctionCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
+					addCallEdgeIfDefinitionKnown(cg, functionDefs, functionCall, functionKey);
 				}
 
 				// otherwise, i.e., if the call identifier is not fully qualified,
@@ -96,14 +96,14 @@ public class PHPCGFactory {
 					if( !callIdentifier.getEnclosingNamespace().isEmpty()) {
 						String functionKey = callIdentifier.getEnclosingNamespace() + "\\"
 								+ callIdentifier.getNameChild().getEscapedCodeStr();
-						found = addFunctionCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
+						found = addCallEdgeIfDefinitionKnown(cg, functionDefs, functionCall, functionKey);
 					}
 					
 					// we did not find the function or were already in global namespace;
 					// try to find the function in the global namespace
 					if( !found) {
 						String functionKey = callIdentifier.getNameChild().getEscapedCodeStr();
-						addFunctionCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
+						addCallEdgeIfDefinitionKnown(cg, functionDefs, functionCall, functionKey);
 					}
 				}
 			}
@@ -128,7 +128,7 @@ public class PHPCGFactory {
 				if( classIdentifier.getFlags().contains( PHPCSVNodeTypes.FLAG_NAME_FQ)) {
 					String staticMethodKey = classIdentifier.getNameChild().getEscapedCodeStr()
 							+ "::" + methodName.getEscapedCodeStr();
-					addStaticCallEdgeIfMethodKnown(cg, staticCall, staticMethodKey);
+					addCallEdgeIfDefinitionKnown(cg, staticMethodDefs, staticCall, staticMethodKey);
 				}
 
 				// otherwise, i.e., if the call identifier is not fully qualified,
@@ -142,14 +142,14 @@ public class PHPCGFactory {
 						String staticMethodKey = classIdentifier.getEnclosingNamespace() + "\\"
 								+ classIdentifier.getNameChild().getEscapedCodeStr()
 								+ "::" + methodName.getEscapedCodeStr();
-						addStaticCallEdgeIfMethodKnown(cg, staticCall, staticMethodKey);
+						addCallEdgeIfDefinitionKnown(cg, staticMethodDefs, staticCall, staticMethodKey);
 					}
 					
 					// if we are in the global namespace, we should not accidentally prepend a backslash
 					else {
 						String staticMethodKey = classIdentifier.getNameChild().getEscapedCodeStr()
 								+ "::" + methodName.getEscapedCodeStr();
-						addStaticCallEdgeIfMethodKnown(cg, staticCall, staticMethodKey);
+						addCallEdgeIfDefinitionKnown(cg, staticMethodDefs, staticCall, staticMethodKey);
 					}
 				}
 			}
@@ -171,7 +171,7 @@ public class PHPCGFactory {
 				// just look for the constructor's definition right away
 				if( classIdentifier.getFlags().contains( PHPCSVNodeTypes.FLAG_NAME_FQ)) {
 					String constructorKey = classIdentifier.getNameChild().getEscapedCodeStr();
-					addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
+					addCallEdgeIfDefinitionKnown(cg, constructorDefs, constructorCall, constructorKey);
 				}
 
 				// otherwise, i.e., if the call identifier is not fully qualified,
@@ -184,13 +184,13 @@ public class PHPCGFactory {
 					if( !classIdentifier.getEnclosingNamespace().isEmpty()) {
 						String constructorKey = classIdentifier.getEnclosingNamespace() + "\\"
 								+ classIdentifier.getNameChild().getEscapedCodeStr();
-						addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
+						addCallEdgeIfDefinitionKnown(cg, constructorDefs, constructorCall, constructorKey);
 					}
 					
 					// if we are in the global namespace, we should not accidentally prepend a backslash
 					else {
 						String constructorKey = classIdentifier.getNameChild().getEscapedCodeStr();
-						addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
+						addCallEdgeIfDefinitionKnown(cg, constructorDefs, constructorCall, constructorKey);
 					}
 				}
 			}
@@ -208,7 +208,7 @@ public class PHPCGFactory {
 				
 				StringExpression methodName = (StringExpression)methodCall.getTargetFunc();
 				String methodKey = methodName.getEscapedCodeStr();
-				addNonStaticCallEdgeIfMethodKnown(cg, methodCall, methodKey);
+				addCallEdgeIfDefinitionKnown(cg, nonStaticMethodDefs, methodCall, methodKey);
 			}
 			else
 				System.err.println("Statically unknown non-static method call at node id " + methodCall.getNodeId() + "!");
@@ -221,93 +221,15 @@ public class PHPCGFactory {
 	 * 
 	 * @return true if an edge was added, false otherwise
 	 */
-	private static boolean addFunctionCallEdgeIfFunctionKnown(CG cg, CallExpression functionCall, String functionKey) {
+	private static boolean addCallEdgeIfDefinitionKnown(CG cg, HashMap<String,? extends PHPFunctionDef> defSet, CallExpression functionCall, String functionKey) {
 		
 		boolean ret = false;
 		
 		// check whether we know the called function
-		if( functionDefs.containsKey(functionKey)) {
+		if( defSet.containsKey(functionKey)) {
 			
 			CGNode caller = new CGNode(functionCall);
-			CGNode callee = new CGNode(functionDefs.get(functionKey));
-			ret = cg.addVertex(caller);
-			// note that adding a callee node many times is perfectly fine:
-			// CGNode overrides the equals() and hashCode() methods,
-			// so it will actually only be added the first time
-			cg.addVertex(callee);
-			cg.addEdge(new CGEdge(caller, callee));
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Checks whether a given static method key is known and if yes,
-	 * adds a corresponding edge in the given call graph.
-	 * 
-	 * @return true if an edge was added, false otherwise
-	 */
-	private static boolean addStaticCallEdgeIfMethodKnown(CG cg, StaticCallExpression staticCall, String staticMethodKey) {
-		
-		boolean ret = false;
-		
-		// check whether we know the called function
-		if( staticMethodDefs.containsKey(staticMethodKey)) {
-			
-			CGNode caller = new CGNode(staticCall);
-			CGNode callee = new CGNode(staticMethodDefs.get(staticMethodKey));
-			ret = cg.addVertex(caller);
-			// note that adding a callee node many times is perfectly fine:
-			// CGNode overrides the equals() and hashCode() methods,
-			// so it will actually only be added the first time
-			cg.addVertex(callee);
-			cg.addEdge(new CGEdge(caller, callee));
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Checks whether a given constructor key is known and if yes,
-	 * adds a corresponding edge in the given call graph.
-	 * 
-	 * @return true if an edge was added, false otherwise
-	 */
-	private static boolean addConstructorCallEdgeIfConstructorKnown(CG cg, NewExpression constructorCall, String constructorKey) {
-		
-		boolean ret = false;
-		
-		// check whether we know the called function
-		if( constructorDefs.containsKey(constructorKey)) {
-			
-			CGNode caller = new CGNode(constructorCall);
-			CGNode callee = new CGNode(constructorDefs.get(constructorKey));
-			ret = cg.addVertex(caller);
-			// note that adding a callee node many times is perfectly fine:
-			// CGNode overrides the equals() and hashCode() methods,
-			// so it will actually only be added the first time
-			cg.addVertex(callee);
-			cg.addEdge(new CGEdge(caller, callee));
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Checks whether a given non-static method key is known and if yes,
-	 * adds a corresponding edge in the given call graph.
-	 * 
-	 * @return true if an edge was added, false otherwise
-	 */
-	private static boolean addNonStaticCallEdgeIfMethodKnown(CG cg, MethodCallExpression methodCall, String methodKey) {
-		
-		boolean ret = false;
-		
-		// check whether we know the called function
-		if( nonStaticMethodDefs.containsKey(methodKey)) {
-			
-			CGNode caller = new CGNode(methodCall);
-			CGNode callee = new CGNode(nonStaticMethodDefs.get(methodKey));
+			CGNode callee = new CGNode(defSet.get(functionKey));
 			ret = cg.addVertex(caller);
 			// note that adding a callee node many times is perfectly fine:
 			// CGNode overrides the equals() and hashCode() methods,
