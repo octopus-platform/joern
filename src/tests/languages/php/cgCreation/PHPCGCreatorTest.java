@@ -223,17 +223,6 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * foo.php
      * -------
      * 
-     * include_once "foo.php";
-     * 
-     * class ClassTwo {
-     *   static function bar() {}
-     * }
-     * 
-     * ClassOne::foo();
-     * 
-     * bar.php
-     * -------
-     * 
      * include_once "bar.php";
      * 
      * class ClassOne {
@@ -241,6 +230,17 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * }
      * 
      * ClassTwo::bar();
+     * 
+     * bar.php
+     * -------
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   static function bar() {}
+     * }
+     * 
+     * ClassOne::foo();
 	 */
 	@Test
 	public void testTwoFilesStaticCalls() throws IOException, InvalidCSVFile
@@ -541,5 +541,282 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		assertTrue( edgeExists( cg, 104, 30));
 		assertTrue( edgeExists( cg, 108, 85)); // the same call within the global namespace is found, though
 		assertTrue( edgeExists( cg, 112, 85));
+	}
+	
+	/**
+	 * class ClassOne {
+	 *   public function funcone() {
+	 *     $this->funcone();
+	 *     $classtwo = new ClassTwo();
+	 *     $classtwo->functwo("foo");
+	 *   }
+	 * }
+	 * 
+	 * class ClassTwo {
+	 *   public function functwo($a) {
+	 *     $classone = new ClassOne();
+	 *     $classone->funcone();
+	 *     $this->functwo("bar");
+	 *   }
+	 * }
+	 * 
+	 * $classone = new ClassOne();
+	 * $classtwo = new ClassTwo();
+	 * $classone->funcone();
+	 * $classtwo->functwo("foo");
+	 */
+	@Test
+	public void testSimpleNonStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testSimpleNonStaticCalls");
+		
+		// as long as non-static method names are unique, we can still build call edges to them!
+		
+		// 8 nodes: 6 calls and 2 definitions
+		assertEquals(8, cg.size());
+		assertEquals(6, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 19, 13));
+		assertTrue( edgeExists( cg, 31, 45));
+		assertTrue( edgeExists( cg, 62, 13));
+		assertTrue( edgeExists( cg, 67, 45));
+		assertTrue( edgeExists( cg, 88, 13));
+		assertTrue( edgeExists( cg, 93, 45));
+	}
+	
+	/**
+	 * class ClassOne {
+	 *   public function foo() {
+	 *     $this->foo();
+	 *     $classtwo = new ClassTwo();
+	 *     $classtwo->foo("foo");
+	 *   }
+	 * }
+	 * 
+	 * class ClassTwo {
+	 *   public function foo($a) {
+	 *     $classone = new ClassOne();
+	 *     $classone->foo();
+	 *     $this->foo("bar");
+	 *   }
+	 * }
+	 * 
+	 * $classone = new ClassOne();
+	 * $classtwo = new ClassTwo();
+	 * $classone->foo();
+	 * $classtwo->foo("foo");
+	 */
+	@Test
+	public void testSimpleNonStaticCallsWithNameCollision() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testSimpleNonStaticCallsWithNameCollision");
+
+		// the non-static method names are not unique, hence our call graph is empty
+		assertEquals(0, cg.size());
+	}
+	
+	/**
+     * foo.php
+     * -------
+     * 
+     * include_once "bar.php";
+     * 
+     * class ClassOne {
+     *   public function foo() {}
+     * }
+     * 
+     * $classtwo = new ClassTwo();
+     * $classtwo->bar();
+     * 
+     * bar.php
+     * -------
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   public function bar() {}
+     * }
+     * 
+     * $classone = new ClassOne();
+     * $classone->foo();
+	 */
+	@Test
+	public void testTwoFilesNonStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesNonStaticCalls");
+		
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 29, 48));
+		assertTrue( edgeExists( cg, 62, 15));
+	}
+	
+	/**
+     * foo.php
+     * -------
+     * namespace A;
+     * 
+     * include_once "bar.php";
+     * 
+     * class ClassOne {
+     *   public function foo() {}
+     * }
+     * 
+     * $classtwo = new \B\ClassTwo();
+     * $classtwo->bar();
+     * 
+     * bar.php
+     * -------
+     * namespace B;
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   public function foo() {}
+     * }
+     * 
+     * $classone = new \A\ClassOne();
+     * $classone->foo();
+	 */
+	@Test
+	public void testTwoFilesNamespacedNonStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesNamespacedNonStaticCalls");
+		
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 32, 54));
+		assertTrue( edgeExists( cg, 68, 18));
+	}
+	
+	/**
+	 * namespace A\B {
+	 * 
+	 *   class ClassFoo {
+	 *     public function foo() {}
+	 *   }
+	 *   
+	 *   class ClassBar {
+	 *     public function foo() {}
+	 *   }
+	 *   
+	 *   (new ClassFoo())->foo(); // calls \A\B\ClassFoo()->foo()
+	 *   (new \ClassFoo())->foo(); // calls global ClassFoo()->foo()
+	 *   (new \A\B\ClassFoo())->foo(); // calls \A\B\ClassFoo()->foo()
+	 *   (new \A\B\ClassBar())->foo(); // calls \A\B\ClassBar()->foo()
+	 *   (new ClassBuz())->foo(); // not found
+	 *   (new \ClassBuz())->foo(); // calls global ClassBuz()->foo()
+	 * }
+	 * 
+	 * namespace {
+	 * 
+	 *   class ClassFoo {
+	 *     public function foo() {}
+	 *   }
+	 *   
+	 *   class ClassBuz {
+	 *     public function foo() {}
+	 *   }
+	 *   
+	 *   (new ClassFoo())->foo(); // calls global ClassFoo()->foo()
+	 *   (new \ClassFoo())->foo(); // calls global ClassFoo()->foo()
+	 *   (new \A\B\ClassFoo())->foo(); // calls \A\B\ClassFoo()->foo()
+	 *   (new \A\B\ClassBar())->foo(); // calls \A\B\ClassBar()->foo()
+	 *   (new ClassBuz())->foo(); // calls global ClassBuz()->foo()
+	 *   (new \ClassBuz())->foo(); // calls global ClassBuz()->foo()
+	 * }
+	 */
+	@Test
+	public void testGlobalAndOtherNamespaceNonStaticCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespaceNonStaticCalls");
+		
+		// the non-static method names are not unique, hence our call graph is empty
+		assertEquals(0, cg.size());
+	}
+	
+	/**
+	 * namespace A\B {
+	 * 
+	 *   class ClassFoo {
+	 *     public function foo() { echo "ab foo", PHP_EOL; }
+	 *   }
+	 *   
+	 *   class ClassBar {
+	 *     public function bar() { echo "ab bar", PHP_EOL; }
+	 *   }
+	 *   
+	 *   (new ClassFoo())->foo(); // calls \A\B\ClassFoo()->foo()
+	 *   (new \ClassFoo())->foo(); // calls global ClassFoo()->foo()
+	 *   (new \A\B\ClassFoo())->foo(); // calls \A\B\ClassFoo()->foo()
+	 *   (new \A\B\ClassBar())->bar(); // calls \A\B\ClassBar()->bar()
+	 *   (new ClassBuz())->buz(); // not found
+	 *   (new \ClassBuz())->buz(); // calls global ClassBuz()->buz()
+	 * }
+	 * 
+	 * namespace {
+	 * 
+	 *   class ClassFoo {
+	 *     public function foo() { echo "global foo", PHP_EOL; }
+	 *   }
+	 *   
+	 *   class ClassBuz {
+	 *     public function buz() { echo "global buz", PHP_EOL; }
+	 *   }
+	 *   
+	 *   (new ClassFoo())->foo(); // calls global ClassFoo()->foo()
+	 *   (new \ClassFoo())->foo(); // calls global ClassFoo()->foo()
+	 *   (new \A\B\ClassFoo())->foo(); // calls \A\B\ClassFoo()->foo()
+	 *   (new \A\B\ClassBar())->bar(); // calls \A\B\ClassBar()->bar()
+	 *   (new ClassBuz())->buz(); // calls global ClassBuz()->buz()
+	 *   (new \ClassBuz())->buz(); // calls global ClassBuz()->buz()
+	 * }
+	 */
+	@Test
+	public void testGlobalAndOtherNamespaceNonStaticCallsWithLessCollisions() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespaceNonStaticCallsWithLessCollisions");
+		
+		// 8 nodes: 6 calls to *unique* method names and 2 method definitions with *unique* names
+		assertEquals(8, cg.size());
+		assertEquals(6, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		// note that non-unique method names do not get call edges,
+		// i.e., we do not have any edges to nodes 16 or 103 because
+		// both represent a method called foo, though in different classes
+		
+		assertFalse( edgeExists( cg, 51, 16));
+		assertFalse( edgeExists( cg, 58, 103));
+		assertFalse( edgeExists( cg, 65, 16));
+		assertTrue( edgeExists( cg, 72, 37));
+		assertTrue( edgeExists( cg, 79, 124)); // the "not found" call is *there*!
+		// this is because its method name is unique, so we construct the edge even
+		// though the class cannot be found in namespace \A\B
+		// it doesn't hurt us to build this edge, because in practice this call
+		// would lead to a fatal PHP error as the class cannot be found, and we
+		// are only interested in sensible code that actually works
+		assertTrue( edgeExists( cg, 86, 124));
+		assertFalse( edgeExists( cg, 138, 103));
+		assertFalse( edgeExists( cg, 145, 103));
+		assertFalse( edgeExists( cg, 152, 16));
+		assertTrue( edgeExists( cg, 159, 37));
+		assertTrue( edgeExists( cg, 166, 124)); // the same call within the global namespace is found, though
+		assertTrue( edgeExists( cg, 173, 124));
 	}
 }

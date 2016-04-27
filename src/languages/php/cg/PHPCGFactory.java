@@ -1,12 +1,14 @@
 package languages.php.cg;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import ast.expressions.CallExpression;
 import ast.expressions.Identifier;
 import ast.expressions.NewExpression;
 import ast.expressions.StringExpression;
+import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
@@ -34,6 +36,15 @@ public class PHPCGFactory {
 	// maintains a list of static method calls
 	private static LinkedList<NewExpression> constructorCalls = new LinkedList<NewExpression>();
 	
+	// maintains a map of known non-static method names
+	private static HashMap<String,Method> nonStaticMethodDefs = new HashMap<String,Method>();
+	// maintains a list of non-static method calls
+	private static LinkedList<MethodCallExpression> nonStaticMethodCalls = new LinkedList<MethodCallExpression>();
+	// maintains a set of blacklisted non-static method names
+	// (these are non-static method names that not unique, and so we do not construct any 
+	// call edges pointing to them)
+	private static HashSet<String> blacklistedMethodNames = new HashSet<String>();
+	
 	/**
 	 * Creates a new CG instance based on the lists of known function definitions and function calls.
 	 * 
@@ -51,6 +62,7 @@ public class PHPCGFactory {
 		createFunctionCallEdges(cg);
 		createStaticMethodCallEdges(cg);
 		createConstructorCallEdges(cg);
+		createNonStaticMethodCallEdges(cg);
 
 		reset();
 		
@@ -187,6 +199,22 @@ public class PHPCGFactory {
 		}
 	}
 	
+	private static void createNonStaticMethodCallEdges(CG cg) {
+		
+		for( MethodCallExpression methodCall : nonStaticMethodCalls) {
+			
+			// make sure the call target is statically known
+			if( methodCall.getTargetFunc() instanceof StringExpression) {
+				
+				StringExpression methodName = (StringExpression)methodCall.getTargetFunc();
+				String methodKey = methodName.getEscapedCodeStr();
+				addNonStaticCallEdgeIfMethodKnown(cg, methodCall, methodKey);
+			}
+			else
+				System.err.println("Statically unknown non-static method call at node id " + methodCall.getNodeId() + "!");
+		}
+	}
+	
 	/**
 	 * Checks whether a given function key is known and if yes,
 	 * adds a corresponding edge in the given call graph.
@@ -265,6 +293,32 @@ public class PHPCGFactory {
 		return ret;
 	}
 	
+	/**
+	 * Checks whether a given non-static method key is known and if yes,
+	 * adds a corresponding edge in the given call graph.
+	 * 
+	 * @return true if an edge was added, false otherwise
+	 */
+	private static boolean addNonStaticCallEdgeIfMethodKnown(CG cg, MethodCallExpression methodCall, String methodKey) {
+		
+		boolean ret = false;
+		
+		// check whether we know the called function
+		if( nonStaticMethodDefs.containsKey(methodKey)) {
+			
+			CGNode caller = new CGNode(methodCall);
+			CGNode callee = new CGNode(nonStaticMethodDefs.get(methodKey));
+			ret = cg.addVertex(caller);
+			// note that adding a callee node many times is perfectly fine:
+			// CGNode overrides the equals() and hashCode() methods,
+			// so it will actually only be added the first time
+			cg.addVertex(callee);
+			cg.addEdge(new CGEdge(caller, callee));
+		}
+		
+		return ret;
+	}
+	
 	private static void reset() {
 	
 		functionDefs.clear();
@@ -275,6 +329,10 @@ public class PHPCGFactory {
 		
 		constructorDefs.clear();
 		constructorCalls.clear();
+		
+		nonStaticMethodDefs.clear();
+		nonStaticMethodCalls.clear();
+		blacklistedMethodNames.clear();
 	}
 	
 	/**
@@ -333,9 +391,23 @@ public class PHPCGFactory {
 			return constructorDefs.put( constructorKey, (Method)functionDef);
 		}
 		
-		
-		// TODO
-		// ...non-static methods...
+		// other methods than the above are non-static methods
+		else if( functionDef instanceof Method) {
+			// use foo as key for a static method foo in any class in any namespace;
+			// note that we only deal with unique method names, and that the enclosing namespace
+			// of a non-static method call is irrelevant here
+			String methodKey = ((Method)functionDef).getName();
+			
+			if( nonStaticMethodDefs.containsKey(methodKey) || blacklistedMethodNames.contains(methodKey)) {
+				// we do not output an error message here; non-unique non-static method names
+				// should not be that uncommon. in this case we do not know which one is referenced,
+				// and we blacklist it
+				blacklistedMethodNames.add(methodKey);
+				return nonStaticMethodDefs.remove(methodKey);
+			}
+			
+			return nonStaticMethodDefs.put( methodKey, (Method)functionDef);
+		}
 		
 		// it's a function (i.e., not inside a class)
 		else {
@@ -357,9 +429,9 @@ public class PHPCGFactory {
 	/**
 	 * Adds a new function call.
 	 * 
-	 * @param functionCall A PHP function call. An arbitrary number of distinguished calls
-	 *                     to the same function can be added. This class maintains a list of
-	 *                     PHP function call nodes for each called function name.
+	 * @param functionCall A PHP function/method/constructor call. An arbitrary number of
+	 *                     distinguished calls to the same function/method/constructor can
+	 *                     be added.
 	 */
 	public static boolean addFunctionCall( CallExpression callExpression) {
 		
@@ -375,12 +447,9 @@ public class PHPCGFactory {
 			return staticMethodCalls.add( (StaticCallExpression)callExpression);
 		else if( callExpression instanceof NewExpression)
 			return constructorCalls.add( (NewExpression)callExpression);
-		// TODO
-		// else if non-static method call...
+		else if( callExpression instanceof MethodCallExpression)
+			return nonStaticMethodCalls.add( (MethodCallExpression)callExpression);
 		else
 			return functionCalls.add( callExpression);
 	}
-	
-
-
 }
