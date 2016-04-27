@@ -1916,6 +1916,12 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
 		newNode.setNodeId(id);
+		
+		// special in the case of constructor calls:
+		// we add the created node to the PHP call graph factory's list of constructor calls;
+		// hence we get a list of all constructor calls without any additional traversals of
+		// the final AST
+		PHPCGFactory.addFunctionCall(newNode);
 
 		return id;
 	}

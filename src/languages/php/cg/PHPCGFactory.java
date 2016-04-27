@@ -5,8 +5,10 @@ import java.util.LinkedList;
 
 import ast.expressions.CallExpression;
 import ast.expressions.Identifier;
+import ast.expressions.NewExpression;
 import ast.expressions.StringExpression;
 import ast.php.expressions.StaticCallExpression;
+import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
 import ast.php.functionDef.PHPFunctionDef;
 import ast.php.functionDef.TopLevelFunctionDef;
@@ -22,10 +24,15 @@ public class PHPCGFactory {
 	// maintains a list of function calls
 	private static LinkedList<CallExpression> functionCalls = new LinkedList<CallExpression>();
 	
-	// maintains a map of known method names
+	// maintains a map of known static method names
 	private static HashMap<String,Method> staticMethodDefs = new HashMap<String,Method>();
 	// maintains a list of static method calls
 	private static LinkedList<StaticCallExpression> staticMethodCalls = new LinkedList<StaticCallExpression>();
+	
+	// maintains a map of known constructors
+	private static HashMap<String,Method> constructorDefs = new HashMap<String,Method>();
+	// maintains a list of static method calls
+	private static LinkedList<NewExpression> constructorCalls = new LinkedList<NewExpression>();
 	
 	/**
 	 * Creates a new CG instance based on the lists of known function definitions and function calls.
@@ -43,6 +50,7 @@ public class PHPCGFactory {
 
 		createFunctionCallEdges(cg);
 		createStaticMethodCallEdges(cg);
+		createConstructorCallEdges(cg);
 
 		reset();
 		
@@ -138,6 +146,47 @@ public class PHPCGFactory {
 		}
 	}
 
+	private static void createConstructorCallEdges(CG cg) {
+		
+		for( NewExpression constructorCall : constructorCalls) {
+			
+			// make sure the call target is statically known
+			if( constructorCall.getTargetClass() instanceof Identifier) {
+				
+				Identifier classIdentifier = (Identifier)constructorCall.getTargetClass();
+				
+				// if class identifier is fully qualified,
+				// just look for the constructor's definition right away
+				if( classIdentifier.getFlags().contains( PHPCSVNodeTypes.FLAG_NAME_FQ)) {
+					String constructorKey = classIdentifier.getNameChild().getEscapedCodeStr();
+					addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
+				}
+
+				// otherwise, i.e., if the call identifier is not fully qualified,
+				// prepend the current namespace first and look for it there
+				// (see http://php.net/manual/en/language.namespaces.rules.php)
+				else {
+
+					// note that prepending the current namespace only makes
+					// sense if there is one
+					if( !classIdentifier.getNamespace().isEmpty()) {
+						String constructorKey = classIdentifier.getNamespace() + "\\"
+								+ classIdentifier.getNameChild().getEscapedCodeStr();
+						addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
+					}
+					
+					// if we are in the global namespace, we should not accidentally prepend a backslash
+					else {
+						String constructorKey = classIdentifier.getNameChild().getEscapedCodeStr();
+						addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
+					}
+				}
+			}
+			else
+				System.err.println("Statically unknown constructor call at node id " + constructorCall.getNodeId() + "!");
+		}
+	}
+	
 	/**
 	 * Checks whether a given function key is known and if yes,
 	 * adds a corresponding edge in the given call graph.
@@ -190,6 +239,32 @@ public class PHPCGFactory {
 		return ret;
 	}
 	
+	/**
+	 * Checks whether a given constructor key is known and if yes,
+	 * adds a corresponding edge in the given call graph.
+	 * 
+	 * @return true if an edge was added, false otherwise
+	 */
+	private static boolean addConstructorCallEdgeIfConstructorKnown(CG cg, NewExpression constructorCall, String constructorKey) {
+		
+		boolean ret = false;
+		
+		// check whether we know the called function
+		if( constructorDefs.containsKey(constructorKey)) {
+			
+			CGNode caller = new CGNode(constructorCall);
+			CGNode callee = new CGNode(constructorDefs.get(constructorKey));
+			ret = cg.addVertex(caller);
+			// note that adding a callee node many times is perfectly fine:
+			// CGNode overrides the equals() and hashCode() methods,
+			// so it will actually only be added the first time
+			cg.addVertex(callee);
+			cg.addEdge(new CGEdge(caller, callee));
+		}
+		
+		return ret;
+	}
+	
 	private static void reset() {
 	
 		functionDefs.clear();
@@ -197,6 +272,9 @@ public class PHPCGFactory {
 		
 		staticMethodDefs.clear();
 		staticMethodCalls.clear();
+		
+		constructorDefs.clear();
+		constructorCalls.clear();
 	}
 	
 	/**
@@ -214,28 +292,54 @@ public class PHPCGFactory {
 		if( functionDef instanceof TopLevelFunctionDef)
 			return null;
 		
+		// we also ignore closures as they do not have a statically known reference
+		else if( functionDef instanceof Closure)
+			return null;
+		
 		// it's a static method
 		else if( functionDef instanceof Method
 				&& functionDef.getFlags().contains(PHPCSVNodeTypes.FLAG_MODIFIER_STATIC)) {
-			String functionKey = ((Method)functionDef).getEnclosingClass() + "::" + functionDef.getName();
+			// use A\B\C::foo as key for a static method foo in class A\B\C
+			String staticMethodKey = ((Method)functionDef).getEnclosingClass() + "::" + functionDef.getName();
 			if( !functionDef.getNamespace().isEmpty())
-				functionKey = functionDef.getNamespace() + "\\" + functionKey;
+				staticMethodKey = functionDef.getNamespace() + "\\" + staticMethodKey;
 			
-			if( staticMethodDefs.containsKey(functionKey)) {
-				System.err.println("Static method definition '" + functionKey + "' ambiguous: There are at least two known " +
-						" matching static method definitions (id " + staticMethodDefs.get(functionKey).getNodeId() +
+			if( staticMethodDefs.containsKey(staticMethodKey)) {
+				System.err.println("Static method definition '" + staticMethodKey + "' ambiguous: There are at least two known " +
+						" matching static method definitions (id " + staticMethodDefs.get(staticMethodKey).getNodeId() +
 						" and id " + functionDef.getNodeId() + ")");
 			}
 			
-			return staticMethodDefs.put( functionKey, (Method)functionDef);
+			return staticMethodDefs.put( staticMethodKey, (Method)functionDef);
 		}
+		
+		// it's a constructor
+		// Note that a PHP constructor cannot be static, so the previous case for static methods evaluates to false;
+		// also note that there are two possible constructor names: __construct() (recommended) and ClassName() (legacy)
+		else if( functionDef instanceof Method
+				&& (functionDef.getName().equals("__construct")
+						|| functionDef.getName().equals(((Method)functionDef).getEnclosingClass()))) {
+			// use A\B\C as key for the unique constructor of a class A\B\C
+			String constructorKey = ((Method)functionDef).getEnclosingClass();
+			if( !functionDef.getNamespace().isEmpty())
+				constructorKey = functionDef.getNamespace() + "\\" + constructorKey;
+			
+			if( constructorDefs.containsKey(constructorKey)) {
+				System.err.println("Constructor definition for '" + constructorKey + "' ambiguous: There are at least two known " +
+						" constructor definitions (id " + staticMethodDefs.get(constructorKey).getNodeId() +
+						" and id " + functionDef.getNodeId() + ")");
+			}
+			
+			return constructorDefs.put( constructorKey, (Method)functionDef);
+		}
+		
 		
 		// TODO
 		// ...non-static methods...
-		// ...constructors...
 		
 		// it's a function (i.e., not inside a class)
 		else {
+			// use A\B\foo as key for a function foo() in namespace \A\B
 			String functionKey = functionDef.getName();
 			if( !functionDef.getNamespace().isEmpty())
 				functionKey = functionDef.getNamespace() + "\\" + functionKey;
@@ -269,9 +373,10 @@ public class PHPCGFactory {
 	
 		if( callExpression instanceof StaticCallExpression)
 			return staticMethodCalls.add( (StaticCallExpression)callExpression);
+		else if( callExpression instanceof NewExpression)
+			return constructorCalls.add( (NewExpression)callExpression);
 		// TODO
-		// else if method call...
-		// else if new operator...
+		// else if non-static method call...
 		else
 			return functionCalls.add( callExpression);
 	}

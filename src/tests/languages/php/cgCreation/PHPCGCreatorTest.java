@@ -361,4 +361,185 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		assertTrue( edgeExists( cg, 118, 91)); // the same call within the global namespace is found, though
 		assertTrue( edgeExists( cg, 123, 91));
 	}
+	
+	/**
+	 * class ClassOne {
+	 *   public function __construct() {
+	 *     new ClassOne();
+	 *     new ClassTwo("foo");
+	 *   }
+	 * }
+	 * 
+	 * class ClassTwo {
+	 *   public function __construct($a) {
+	 *     new ClassOne();
+	 *     new ClassTwo("bar");
+	 *   }
+	 * }
+	 * 
+	 * new ClassOne();
+	 * new ClassTwo("bar");
+	 */
+	@Test
+	public void testSimpleConstructorCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testSimpleConstructorCalls");
+		
+		// 8 nodes: 6 calls and 2 definitions
+		assertEquals(8, cg.size());
+		assertEquals(6, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 19, 13));
+		assertTrue( edgeExists( cg, 23, 36));
+		assertTrue( edgeExists( cg, 46, 13));
+		assertTrue( edgeExists( cg, 50, 36));
+		assertTrue( edgeExists( cg, 56, 13));
+		assertTrue( edgeExists( cg, 60, 36));
+	}
+	
+	/**
+     * foo.php
+     * -------
+     * 
+     * include_once "bar.php";
+     * 
+     * class ClassOne {
+     *   public function __construct() {}
+     * }
+     * 
+     * new ClassTwo();
+     * 
+     * bar.php
+     * -------
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   public function ClassTwo() {}
+     * }
+     * 
+     * new ClassOne();
+	 */
+	@Test
+	public void testTwoFilesConstructorCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesConstructorCalls");
+		
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 22, 40));
+		assertTrue( edgeExists( cg, 47, 15));
+	}
+	
+	/**
+     * foo.php
+     * -------
+     * namespace A;
+     * 
+     * include_once "bar.php";
+     * 
+     * class ClassOne {
+     *   public function __construct() {}
+     * }
+     * 
+     * new \B\ClassTwo();
+     * 
+     * bar.php
+     * -------
+     * namespace B;
+     * 
+     * include_once "foo.php";
+     * 
+     * class ClassTwo {
+     *   public function ClassTwo() {}
+     * }
+     * 
+     * new \A\ClassOne();
+	 */
+	@Test
+	public void testTwoFilesNamespacedConstructorCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesNamespacedConstructorCalls");
+		
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 25, 46));
+		assertTrue( edgeExists( cg, 53, 18));
+	}
+	
+	/**
+	 * namespace A\B {
+	 * 
+	 *   class ClassFoo {
+	 *     public function __construct() {}
+	 *   }
+	 *   
+	 *   class ClassBar {
+	 *     public function __construct() {}
+	 *   }
+	 *   
+	 *   new ClassFoo(); // calls \A\B\ClassFoo::__construct()
+	 *   new \ClassFoo(); // calls global ClassFoo::__construct()
+	 *   new \A\B\ClassFoo(); // calls \A\B\ClassFoo::__construct()
+	 *   new \A\B\ClassBar(); // calls \A\B\ClassBar::__construct()
+	 *   new ClassBuz(); // not found
+	 *   new \ClassBuz(); // calls global ClassBuz::__construct()
+	 * }
+	 * 
+	 * namespace {
+	 * 
+	 *   class ClassFoo {
+	 *     public function __construct() {}
+	 *   }
+	 *   
+	 *   class ClassBuz {
+	 *     public function __construct() {}
+	 *   }
+	 *   
+	 *   new ClassFoo(); // calls global ClassFoo::__construct()
+	 *   new \ClassFoo(); // calls global ClassFoo::__construct()
+	 *   new \A\B\ClassFoo(); // calls \A\B\ClassFoo::__construct()
+	 *   new \A\B\ClassBar(); // calls \A\B\ClassBar::__construct()
+	 *   new ClassBuz(); // calls global ClassBuz::__construct()
+	 *   new \ClassBuz(); // calls global ClassBuz::__construct()
+	 * }
+	 */
+	@Test
+	public void testGlobalAndOtherNamespaceConstructorCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespaceConstructorCalls");
+		
+		// 15 nodes: 11 calls (not 12!) and 4 definitions
+		assertEquals(15, cg.size());
+		assertEquals(11, cg.numberOfCallers());
+		assertEquals(4, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 37, 16));
+		assertTrue( edgeExists( cg, 41, 71));
+		assertTrue( edgeExists( cg, 45, 16));
+		assertTrue( edgeExists( cg, 49, 30));
+		assertFalse( edgeExists( cg, 53, 85)); // the "not found" call (see above)---there should be no edge
+		assertTrue( edgeExists( cg, 57, 85));
+		assertTrue( edgeExists( cg, 92, 71));
+		assertTrue( edgeExists( cg, 96, 71));
+		assertTrue( edgeExists( cg, 100, 16));
+		assertTrue( edgeExists( cg, 104, 30));
+		assertTrue( edgeExists( cg, 108, 85)); // the same call within the global namespace is found, though
+		assertTrue( edgeExists( cg, 112, 85));
+	}
 }
