@@ -13,11 +13,11 @@ public class PHPFunctionDef extends FunctionDef
 {
 	protected Identifier returnType = null;
 
-	public String getNamespace() {
+	public String getEnclosingNamespace() {
 		return getProperty(ASTNodeProperties.NAMESPACE);
 	}
 	
-	public void setNamespace(String namespace) {
+	public void setEnclosingNamespace(String namespace) {
 		setProperty(ASTNodeProperties.NAMESPACE, namespace);
 	}
 	

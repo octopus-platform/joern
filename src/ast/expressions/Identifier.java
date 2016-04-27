@@ -16,11 +16,11 @@ public class Identifier extends Expression
 		super(name);
 	}
 
-	public String getNamespace() {
+	public String getEnclosingNamespace() {
 		return getProperty(ASTNodeProperties.NAMESPACE);
 	}
 	
-	public void setNamespace(String namespace) {
+	public void setEnclosingNamespace(String namespace) {
 		setProperty(ASTNodeProperties.NAMESPACE, namespace);
 	}
 	

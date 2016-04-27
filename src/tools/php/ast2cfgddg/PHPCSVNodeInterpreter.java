@@ -609,7 +609,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.startLine = Integer.parseInt(lineno);
 		newNode.setLocation(codeloc);
 		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
-		newNode.setNamespace(namespace);
+		newNode.setEnclosingNamespace(namespace);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);
@@ -699,7 +699,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.endLine = Integer.parseInt(endlineno);
 		newNode.setLocation(codeloc);
 		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
-		newNode.setNamespace(namespace);
+		newNode.setEnclosingNamespace(namespace);
 		newNode.setName(name);
 		newNode.setDocComment(doccomment);
 
@@ -761,7 +761,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		newNode.setLocation(codeloc);
 		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
 		newNode.setEnclosingClass(classname);
-		newNode.setNamespace(namespace);
+		newNode.setEnclosingNamespace(namespace);
 		newNode.setName(name);
 		newNode.setDocComment(doccomment);
 

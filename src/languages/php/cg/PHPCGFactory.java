@@ -81,8 +81,8 @@ public class PHPCGFactory {
 					boolean found = false;
 					// note that looking in the current namespace first only makes
 					// sense if we are not already in the global namespace anyway
-					if( !callIdentifier.getNamespace().isEmpty()) {
-						String functionKey = callIdentifier.getNamespace() + "\\"
+					if( !callIdentifier.getEnclosingNamespace().isEmpty()) {
+						String functionKey = callIdentifier.getEnclosingNamespace() + "\\"
 								+ callIdentifier.getNameChild().getEscapedCodeStr();
 						found = addFunctionCallEdgeIfFunctionKnown(cg, functionCall, functionKey);
 					}
@@ -126,8 +126,8 @@ public class PHPCGFactory {
 
 					// note that prepending the current namespace only makes
 					// sense if there is one
-					if( !classIdentifier.getNamespace().isEmpty()) {
-						String staticMethodKey = classIdentifier.getNamespace() + "\\"
+					if( !classIdentifier.getEnclosingNamespace().isEmpty()) {
+						String staticMethodKey = classIdentifier.getEnclosingNamespace() + "\\"
 								+ classIdentifier.getNameChild().getEscapedCodeStr()
 								+ "::" + methodName.getEscapedCodeStr();
 						addStaticCallEdgeIfMethodKnown(cg, staticCall, staticMethodKey);
@@ -169,8 +169,8 @@ public class PHPCGFactory {
 
 					// note that prepending the current namespace only makes
 					// sense if there is one
-					if( !classIdentifier.getNamespace().isEmpty()) {
-						String constructorKey = classIdentifier.getNamespace() + "\\"
+					if( !classIdentifier.getEnclosingNamespace().isEmpty()) {
+						String constructorKey = classIdentifier.getEnclosingNamespace() + "\\"
 								+ classIdentifier.getNameChild().getEscapedCodeStr();
 						addConstructorCallEdgeIfConstructorKnown(cg, constructorCall, constructorKey);
 					}
@@ -301,8 +301,8 @@ public class PHPCGFactory {
 				&& functionDef.getFlags().contains(PHPCSVNodeTypes.FLAG_MODIFIER_STATIC)) {
 			// use A\B\C::foo as key for a static method foo in class A\B\C
 			String staticMethodKey = ((Method)functionDef).getEnclosingClass() + "::" + functionDef.getName();
-			if( !functionDef.getNamespace().isEmpty())
-				staticMethodKey = functionDef.getNamespace() + "\\" + staticMethodKey;
+			if( !functionDef.getEnclosingNamespace().isEmpty())
+				staticMethodKey = functionDef.getEnclosingNamespace() + "\\" + staticMethodKey;
 			
 			if( staticMethodDefs.containsKey(staticMethodKey)) {
 				System.err.println("Static method definition '" + staticMethodKey + "' ambiguous: There are at least two known " +
@@ -321,8 +321,8 @@ public class PHPCGFactory {
 						|| functionDef.getName().equals(((Method)functionDef).getEnclosingClass()))) {
 			// use A\B\C as key for the unique constructor of a class A\B\C
 			String constructorKey = ((Method)functionDef).getEnclosingClass();
-			if( !functionDef.getNamespace().isEmpty())
-				constructorKey = functionDef.getNamespace() + "\\" + constructorKey;
+			if( !functionDef.getEnclosingNamespace().isEmpty())
+				constructorKey = functionDef.getEnclosingNamespace() + "\\" + constructorKey;
 			
 			if( constructorDefs.containsKey(constructorKey)) {
 				System.err.println("Constructor definition for '" + constructorKey + "' ambiguous: There are at least two known " +
@@ -341,8 +341,8 @@ public class PHPCGFactory {
 		else {
 			// use A\B\foo as key for a function foo() in namespace \A\B
 			String functionKey = functionDef.getName();
-			if( !functionDef.getNamespace().isEmpty())
-				functionKey = functionDef.getNamespace() + "\\" + functionKey;
+			if( !functionDef.getEnclosingNamespace().isEmpty())
+				functionKey = functionDef.getEnclosingNamespace() + "\\" + functionKey;
 		
 			if( functionDefs.containsKey(functionKey)) {
 				System.err.println("Function definition '" + functionKey + "' ambiguous: There are at least two known " +
