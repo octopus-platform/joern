@@ -182,6 +182,123 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	}
 	
 	/**
+     * foo.php
+     * -------
+     * namespace A\B\C;
+     * use \D\E\F;
+     * 
+     * include_once "bar.php";
+     * 
+     * function foo() { echo "i am foo", PHP_EOL; }
+     * 
+     * \D\E\F\bar(); // absolute reference - works
+     * F\bar(); // translated to D\E\F\bar(); - works
+     * \F\bar(); // absolute reference, not translated - not found
+     * 
+     * namespace X; // cancels all uses in effect
+     * 
+     * F\bar(); // not found
+     * use \D\E\F;
+     * F\bar(); // translated to D\E\F\bar(); - works
+     * 
+     * bar.php
+     * -------
+     * 
+     * namespace D\E\F;
+     * use A\B\C as G, D\E\F as H;
+     * 
+     * include_once "foo.php";
+     * 
+     * function bar() { echo "i am bar", PHP_EOL; }
+     * 
+     * \A\B\C\foo(); // absolute reference - works
+     * G\foo(); // translated to A\B\C\foo(); - works
+     * H\bar(); // translated to A\B\C\foo(); - works
+     * \G\foo(); // absolute reference, not translated - not found
+     * 
+     * namespace Y; // cancels all uses in effect
+     * 
+     * G\foo(); // not found
+     * use A\B\C as G;
+     * G\foo(); // translated to D\E\F\bar(); - works
+	 */
+	@Test
+	public void testTwoFilesNamespaceImportFunctionCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testTwoFilesNamespaceImportFunctionCalls");
+		
+		// 9 nodes: 7 calls and 2 definitions
+		assertEquals(9, cg.size());
+		assertEquals(7, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 22, 66));
+		assertTrue( edgeExists( cg, 26, 66));
+		assertFalse( edgeExists( cg, 30, 66)); // \F\bar(); should not be found, see above
+		assertFalse( edgeExists( cg, 37, 66)); // F\bar(); in namespace X should not be found, see above
+		assertTrue( edgeExists( cg, 45, 66));
+		assertTrue( edgeExists( cg, 73, 15));
+		assertTrue( edgeExists( cg, 77, 15));
+		assertTrue( edgeExists( cg, 81, 66));
+		assertFalse( edgeExists( cg, 85, 15)); // \G\foo(); should not be found, see above
+		assertFalse( edgeExists( cg, 92, 15)); // G\foo(); in namespace Y should not be found, see above
+		assertTrue( edgeExists( cg, 100, 15));
+	}
+	
+	/**
+	 * namespace A\B {
+	 * 
+	 *   function foo() {}
+	 *   
+	 *   C\bar();
+	 * }
+	 * 
+	 * namespace A\B\C {
+	 * 
+	 *   use A\B as D;
+	 *   
+	 *   function bar() {}
+	 *   
+	 *   D\foo(); // calls \A\B\foo()
+	 *   D\C\bar(); // calls \A\B\C\bar()
+	 * }
+	 * 
+	 * namespace {
+	 * 
+	 *   use A\B, A\B\C as E;
+	 *   
+	 *   B\foo(); // calls \A\B\foo()
+	 *   \B\foo(); // absolute reference, not translated - not found
+	 *   B\C\bar(); // calls \A\B\C\bar()
+	 *   E\bar(); // calls \A\B\C\bar()
+	 *   \D\bar(); // absolute reference, not translated - not found
+	 * }
+	 */
+	@Test
+	public void testGlobalAndOtherNamespaceImportFunctionCalls() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testGlobalAndOtherNamespaceImportFunctionCalls");
+		
+		// 8 nodes: 6 calls and 2 definitions
+		assertEquals(8, cg.size());
+		assertEquals(6, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 16, 27));
+		assertTrue( edgeExists( cg, 34, 9));
+		assertTrue( edgeExists( cg, 38, 27));
+		assertTrue( edgeExists( cg, 53, 9));
+		assertFalse( edgeExists( cg, 57, 9)); // \B\foo(); should not be found, see above
+		assertTrue( edgeExists( cg, 61, 27));
+		assertTrue( edgeExists( cg, 65, 27));
+		assertFalse( edgeExists( cg, 69, 27)); // \D\bar(); should not be found, see above
+	}
+	
+	/**
 	 * class ClassOne {
 	 *   static function funcone() {
 	 *     ClassOne::funcone();
