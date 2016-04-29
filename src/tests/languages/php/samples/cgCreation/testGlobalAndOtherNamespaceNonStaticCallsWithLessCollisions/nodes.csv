@@ -1,181 +1,181 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",37,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_NAMESPACE,,3,,0,2,,"A\\B",,,
-7,string,,3,"A\\B",0,2,,"A\\B",,,
-8,AST_STMT_LIST,,3,,1,2,,"A\\B",,,
-9,AST_CLASS,,5,,0,2,,"A\\B",7,ClassFoo,
-10,NULL,,5,,0,2,ClassFoo,"A\\B",,,
-11,NULL,,5,,1,2,ClassFoo,"A\\B",,,
-12,AST_TOPLEVEL,TOPLEVEL_CLASS,5,,2,2,,"A\\B",7,"ClassFoo",
-13,CFG_FUNC_ENTRY,,,,,12,,,,"ClassFoo",
-14,CFG_FUNC_EXIT,,,,,12,,,,"ClassFoo",
-15,AST_STMT_LIST,,5,,0,12,ClassFoo,"A\\B",,,
-16,AST_METHOD,MODIFIER_PUBLIC,6,,0,12,ClassFoo,"A\\B",6,foo,
-17,CFG_FUNC_ENTRY,,,,,16,ClassFoo,"A\\B",,"foo",
-18,CFG_FUNC_EXIT,,,,,16,ClassFoo,"A\\B",,"foo",
-19,AST_PARAM_LIST,,6,,0,16,ClassFoo,"A\\B",,,
-20,NULL,,6,,1,16,ClassFoo,"A\\B",,,
-21,AST_STMT_LIST,,6,,2,16,ClassFoo,"A\\B",,,
-22,AST_STMT_LIST,,6,,0,16,ClassFoo,"A\\B",,,
-23,AST_ECHO,,6,,0,16,ClassFoo,"A\\B",,,
-24,string,,6,"ab foo",0,16,ClassFoo,"A\\B",,,
-25,AST_ECHO,,6,,1,16,ClassFoo,"A\\B",,,
-26,AST_CONST,,6,,0,16,ClassFoo,"A\\B",,,
-27,AST_NAME,NAME_NOT_FQ,6,,0,16,ClassFoo,"A\\B",,,
-28,string,,6,"PHP_EOL",0,16,ClassFoo,"A\\B",,,
-29,NULL,,6,,3,16,ClassFoo,"A\\B",,,
-30,AST_CLASS,,9,,1,2,,"A\\B",11,ClassBar,
-31,NULL,,9,,0,2,ClassBar,"A\\B",,,
-32,NULL,,9,,1,2,ClassBar,"A\\B",,,
-33,AST_TOPLEVEL,TOPLEVEL_CLASS,9,,2,2,,"A\\B",11,"ClassBar",
-34,CFG_FUNC_ENTRY,,,,,33,,,,"ClassBar",
-35,CFG_FUNC_EXIT,,,,,33,,,,"ClassBar",
-36,AST_STMT_LIST,,9,,0,33,ClassBar,"A\\B",,,
-37,AST_METHOD,MODIFIER_PUBLIC,10,,0,33,ClassBar,"A\\B",10,bar,
-38,CFG_FUNC_ENTRY,,,,,37,ClassBar,"A\\B",,"bar",
-39,CFG_FUNC_EXIT,,,,,37,ClassBar,"A\\B",,"bar",
-40,AST_PARAM_LIST,,10,,0,37,ClassBar,"A\\B",,,
-41,NULL,,10,,1,37,ClassBar,"A\\B",,,
-42,AST_STMT_LIST,,10,,2,37,ClassBar,"A\\B",,,
-43,AST_STMT_LIST,,10,,0,37,ClassBar,"A\\B",,,
-44,AST_ECHO,,10,,0,37,ClassBar,"A\\B",,,
-45,string,,10,"ab bar",0,37,ClassBar,"A\\B",,,
-46,AST_ECHO,,10,,1,37,ClassBar,"A\\B",,,
-47,AST_CONST,,10,,0,37,ClassBar,"A\\B",,,
-48,AST_NAME,NAME_NOT_FQ,10,,0,37,ClassBar,"A\\B",,,
-49,string,,10,"PHP_EOL",0,37,ClassBar,"A\\B",,,
-50,NULL,,10,,3,37,ClassBar,"A\\B",,,
-51,AST_METHOD_CALL,,13,,2,2,,"A\\B",,,
-52,AST_NEW,,13,,0,2,,"A\\B",,,
-53,AST_NAME,NAME_NOT_FQ,13,,0,2,,"A\\B",,,
-54,string,,13,"ClassFoo",0,2,,"A\\B",,,
-55,AST_ARG_LIST,,13,,1,2,,"A\\B",,,
-56,string,,13,"foo",1,2,,"A\\B",,,
-57,AST_ARG_LIST,,13,,2,2,,"A\\B",,,
-58,AST_METHOD_CALL,,14,,3,2,,"A\\B",,,
-59,AST_NEW,,14,,0,2,,"A\\B",,,
-60,AST_NAME,NAME_FQ,14,,0,2,,"A\\B",,,
-61,string,,14,"ClassFoo",0,2,,"A\\B",,,
-62,AST_ARG_LIST,,14,,1,2,,"A\\B",,,
-63,string,,14,"foo",1,2,,"A\\B",,,
-64,AST_ARG_LIST,,14,,2,2,,"A\\B",,,
-65,AST_METHOD_CALL,,15,,4,2,,"A\\B",,,
-66,AST_NEW,,15,,0,2,,"A\\B",,,
-67,AST_NAME,NAME_FQ,15,,0,2,,"A\\B",,,
-68,string,,15,"A\\B\\ClassFoo",0,2,,"A\\B",,,
-69,AST_ARG_LIST,,15,,1,2,,"A\\B",,,
-70,string,,15,"foo",1,2,,"A\\B",,,
-71,AST_ARG_LIST,,15,,2,2,,"A\\B",,,
-72,AST_METHOD_CALL,,16,,5,2,,"A\\B",,,
-73,AST_NEW,,16,,0,2,,"A\\B",,,
-74,AST_NAME,NAME_FQ,16,,0,2,,"A\\B",,,
-75,string,,16,"A\\B\\ClassBar",0,2,,"A\\B",,,
-76,AST_ARG_LIST,,16,,1,2,,"A\\B",,,
-77,string,,16,"bar",1,2,,"A\\B",,,
-78,AST_ARG_LIST,,16,,2,2,,"A\\B",,,
-79,AST_METHOD_CALL,,17,,6,2,,"A\\B",,,
-80,AST_NEW,,17,,0,2,,"A\\B",,,
-81,AST_NAME,NAME_NOT_FQ,17,,0,2,,"A\\B",,,
-82,string,,17,"ClassBuz",0,2,,"A\\B",,,
-83,AST_ARG_LIST,,17,,1,2,,"A\\B",,,
-84,string,,17,"buz",1,2,,"A\\B",,,
-85,AST_ARG_LIST,,17,,2,2,,"A\\B",,,
-86,AST_METHOD_CALL,,18,,7,2,,"A\\B",,,
-87,AST_NEW,,18,,0,2,,"A\\B",,,
-88,AST_NAME,NAME_FQ,18,,0,2,,"A\\B",,,
-89,string,,18,"ClassBuz",0,2,,"A\\B",,,
-90,AST_ARG_LIST,,18,,1,2,,"A\\B",,,
-91,string,,18,"buz",1,2,,"A\\B",,,
-92,AST_ARG_LIST,,18,,2,2,,"A\\B",,,
-93,AST_NAMESPACE,,21,,1,2,,"",,,
-94,NULL,,21,,0,2,,"",,,
-95,AST_STMT_LIST,,21,,1,2,,"",,,
-96,AST_CLASS,,23,,0,2,,"",25,ClassFoo,
-97,NULL,,23,,0,2,ClassFoo,"",,,
-98,NULL,,23,,1,2,ClassFoo,"",,,
-99,AST_TOPLEVEL,TOPLEVEL_CLASS,23,,2,2,,"",25,"ClassFoo",
-100,CFG_FUNC_ENTRY,,,,,99,,,,"ClassFoo",
-101,CFG_FUNC_EXIT,,,,,99,,,,"ClassFoo",
-102,AST_STMT_LIST,,23,,0,99,ClassFoo,"",,,
-103,AST_METHOD,MODIFIER_PUBLIC,24,,0,99,ClassFoo,"",24,foo,
-104,CFG_FUNC_ENTRY,,,,,103,ClassFoo,"",,"foo",
-105,CFG_FUNC_EXIT,,,,,103,ClassFoo,"",,"foo",
-106,AST_PARAM_LIST,,24,,0,103,ClassFoo,"",,,
-107,NULL,,24,,1,103,ClassFoo,"",,,
-108,AST_STMT_LIST,,24,,2,103,ClassFoo,"",,,
-109,AST_STMT_LIST,,24,,0,103,ClassFoo,"",,,
-110,AST_ECHO,,24,,0,103,ClassFoo,"",,,
-111,string,,24,"global foo",0,103,ClassFoo,"",,,
-112,AST_ECHO,,24,,1,103,ClassFoo,"",,,
-113,AST_CONST,,24,,0,103,ClassFoo,"",,,
-114,AST_NAME,NAME_NOT_FQ,24,,0,103,ClassFoo,"",,,
-115,string,,24,"PHP_EOL",0,103,ClassFoo,"",,,
-116,NULL,,24,,3,103,ClassFoo,"",,,
-117,AST_CLASS,,27,,1,2,,"",29,ClassBuz,
-118,NULL,,27,,0,2,ClassBuz,"",,,
-119,NULL,,27,,1,2,ClassBuz,"",,,
-120,AST_TOPLEVEL,TOPLEVEL_CLASS,27,,2,2,,"",29,"ClassBuz",
-121,CFG_FUNC_ENTRY,,,,,120,,,,"ClassBuz",
-122,CFG_FUNC_EXIT,,,,,120,,,,"ClassBuz",
-123,AST_STMT_LIST,,27,,0,120,ClassBuz,"",,,
-124,AST_METHOD,MODIFIER_PUBLIC,28,,0,120,ClassBuz,"",28,buz,
-125,CFG_FUNC_ENTRY,,,,,124,ClassBuz,"",,"buz",
-126,CFG_FUNC_EXIT,,,,,124,ClassBuz,"",,"buz",
-127,AST_PARAM_LIST,,28,,0,124,ClassBuz,"",,,
-128,NULL,,28,,1,124,ClassBuz,"",,,
-129,AST_STMT_LIST,,28,,2,124,ClassBuz,"",,,
-130,AST_STMT_LIST,,28,,0,124,ClassBuz,"",,,
-131,AST_ECHO,,28,,0,124,ClassBuz,"",,,
-132,string,,28,"global buz",0,124,ClassBuz,"",,,
-133,AST_ECHO,,28,,1,124,ClassBuz,"",,,
-134,AST_CONST,,28,,0,124,ClassBuz,"",,,
-135,AST_NAME,NAME_NOT_FQ,28,,0,124,ClassBuz,"",,,
-136,string,,28,"PHP_EOL",0,124,ClassBuz,"",,,
-137,NULL,,28,,3,124,ClassBuz,"",,,
-138,AST_METHOD_CALL,,31,,2,2,,"",,,
-139,AST_NEW,,31,,0,2,,"",,,
-140,AST_NAME,NAME_NOT_FQ,31,,0,2,,"",,,
-141,string,,31,"ClassFoo",0,2,,"",,,
-142,AST_ARG_LIST,,31,,1,2,,"",,,
-143,string,,31,"foo",1,2,,"",,,
-144,AST_ARG_LIST,,31,,2,2,,"",,,
-145,AST_METHOD_CALL,,32,,3,2,,"",,,
-146,AST_NEW,,32,,0,2,,"",,,
-147,AST_NAME,NAME_FQ,32,,0,2,,"",,,
-148,string,,32,"ClassFoo",0,2,,"",,,
-149,AST_ARG_LIST,,32,,1,2,,"",,,
-150,string,,32,"foo",1,2,,"",,,
-151,AST_ARG_LIST,,32,,2,2,,"",,,
-152,AST_METHOD_CALL,,33,,4,2,,"",,,
-153,AST_NEW,,33,,0,2,,"",,,
-154,AST_NAME,NAME_FQ,33,,0,2,,"",,,
-155,string,,33,"A\\B\\ClassFoo",0,2,,"",,,
-156,AST_ARG_LIST,,33,,1,2,,"",,,
-157,string,,33,"foo",1,2,,"",,,
-158,AST_ARG_LIST,,33,,2,2,,"",,,
-159,AST_METHOD_CALL,,34,,5,2,,"",,,
-160,AST_NEW,,34,,0,2,,"",,,
-161,AST_NAME,NAME_FQ,34,,0,2,,"",,,
-162,string,,34,"A\\B\\ClassBar",0,2,,"",,,
-163,AST_ARG_LIST,,34,,1,2,,"",,,
-164,string,,34,"bar",1,2,,"",,,
-165,AST_ARG_LIST,,34,,2,2,,"",,,
-166,AST_METHOD_CALL,,35,,6,2,,"",,,
-167,AST_NEW,,35,,0,2,,"",,,
-168,AST_NAME,NAME_NOT_FQ,35,,0,2,,"",,,
-169,string,,35,"ClassBuz",0,2,,"",,,
-170,AST_ARG_LIST,,35,,1,2,,"",,,
-171,string,,35,"buz",1,2,,"",,,
-172,AST_ARG_LIST,,35,,2,2,,"",,,
-173,AST_METHOD_CALL,,36,,7,2,,"",,,
-174,AST_NEW,,36,,0,2,,"",,,
-175,AST_NAME,NAME_FQ,36,,0,2,,"",,,
-176,string,,36,"ClassBuz",0,2,,"",,,
-177,AST_ARG_LIST,,36,,1,2,,"",,,
-178,string,,36,"buz",1,2,,"",,,
-179,AST_ARG_LIST,,36,,2,2,,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	37	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_NAMESPACE		3		0	2		"A\\B"			
+7	string		3	"A\\B"	0	2		"A\\B"			
+8	AST_STMT_LIST		3		1	2		"A\\B"			
+9	AST_CLASS		5		0	2		"A\\B"	7	ClassFoo	
+10	NULL		5		0	2	ClassFoo	"A\\B"			
+11	NULL		5		1	2	ClassFoo	"A\\B"			
+12	AST_TOPLEVEL	TOPLEVEL_CLASS	5		2	2		"A\\B"	7	"ClassFoo"	
+13	CFG_FUNC_ENTRY					12				"ClassFoo"	
+14	CFG_FUNC_EXIT					12				"ClassFoo"	
+15	AST_STMT_LIST		5		0	12	ClassFoo	"A\\B"			
+16	AST_METHOD	MODIFIER_PUBLIC	6		0	12	ClassFoo	"A\\B"	6	foo	
+17	CFG_FUNC_ENTRY					16	ClassFoo	"A\\B"		"foo"	
+18	CFG_FUNC_EXIT					16	ClassFoo	"A\\B"		"foo"	
+19	AST_PARAM_LIST		6		0	16	ClassFoo	"A\\B"			
+20	NULL		6		1	16	ClassFoo	"A\\B"			
+21	AST_STMT_LIST		6		2	16	ClassFoo	"A\\B"			
+22	AST_STMT_LIST		6		0	16	ClassFoo	"A\\B"			
+23	AST_ECHO		6		0	16	ClassFoo	"A\\B"			
+24	string		6	"ab foo"	0	16	ClassFoo	"A\\B"			
+25	AST_ECHO		6		1	16	ClassFoo	"A\\B"			
+26	AST_CONST		6		0	16	ClassFoo	"A\\B"			
+27	AST_NAME	NAME_NOT_FQ	6		0	16	ClassFoo	"A\\B"			
+28	string		6	"PHP_EOL"	0	16	ClassFoo	"A\\B"			
+29	NULL		6		3	16	ClassFoo	"A\\B"			
+30	AST_CLASS		9		1	2		"A\\B"	11	ClassBar	
+31	NULL		9		0	2	ClassBar	"A\\B"			
+32	NULL		9		1	2	ClassBar	"A\\B"			
+33	AST_TOPLEVEL	TOPLEVEL_CLASS	9		2	2		"A\\B"	11	"ClassBar"	
+34	CFG_FUNC_ENTRY					33				"ClassBar"	
+35	CFG_FUNC_EXIT					33				"ClassBar"	
+36	AST_STMT_LIST		9		0	33	ClassBar	"A\\B"			
+37	AST_METHOD	MODIFIER_PUBLIC	10		0	33	ClassBar	"A\\B"	10	bar	
+38	CFG_FUNC_ENTRY					37	ClassBar	"A\\B"		"bar"	
+39	CFG_FUNC_EXIT					37	ClassBar	"A\\B"		"bar"	
+40	AST_PARAM_LIST		10		0	37	ClassBar	"A\\B"			
+41	NULL		10		1	37	ClassBar	"A\\B"			
+42	AST_STMT_LIST		10		2	37	ClassBar	"A\\B"			
+43	AST_STMT_LIST		10		0	37	ClassBar	"A\\B"			
+44	AST_ECHO		10		0	37	ClassBar	"A\\B"			
+45	string		10	"ab bar"	0	37	ClassBar	"A\\B"			
+46	AST_ECHO		10		1	37	ClassBar	"A\\B"			
+47	AST_CONST		10		0	37	ClassBar	"A\\B"			
+48	AST_NAME	NAME_NOT_FQ	10		0	37	ClassBar	"A\\B"			
+49	string		10	"PHP_EOL"	0	37	ClassBar	"A\\B"			
+50	NULL		10		3	37	ClassBar	"A\\B"			
+51	AST_METHOD_CALL		13		2	2		"A\\B"			
+52	AST_NEW		13		0	2		"A\\B"			
+53	AST_NAME	NAME_NOT_FQ	13		0	2		"A\\B"			
+54	string		13	"ClassFoo"	0	2		"A\\B"			
+55	AST_ARG_LIST		13		1	2		"A\\B"			
+56	string		13	"foo"	1	2		"A\\B"			
+57	AST_ARG_LIST		13		2	2		"A\\B"			
+58	AST_METHOD_CALL		14		3	2		"A\\B"			
+59	AST_NEW		14		0	2		"A\\B"			
+60	AST_NAME	NAME_FQ	14		0	2		"A\\B"			
+61	string		14	"ClassFoo"	0	2		"A\\B"			
+62	AST_ARG_LIST		14		1	2		"A\\B"			
+63	string		14	"foo"	1	2		"A\\B"			
+64	AST_ARG_LIST		14		2	2		"A\\B"			
+65	AST_METHOD_CALL		15		4	2		"A\\B"			
+66	AST_NEW		15		0	2		"A\\B"			
+67	AST_NAME	NAME_FQ	15		0	2		"A\\B"			
+68	string		15	"A\\B\\ClassFoo"	0	2		"A\\B"			
+69	AST_ARG_LIST		15		1	2		"A\\B"			
+70	string		15	"foo"	1	2		"A\\B"			
+71	AST_ARG_LIST		15		2	2		"A\\B"			
+72	AST_METHOD_CALL		16		5	2		"A\\B"			
+73	AST_NEW		16		0	2		"A\\B"			
+74	AST_NAME	NAME_FQ	16		0	2		"A\\B"			
+75	string		16	"A\\B\\ClassBar"	0	2		"A\\B"			
+76	AST_ARG_LIST		16		1	2		"A\\B"			
+77	string		16	"bar"	1	2		"A\\B"			
+78	AST_ARG_LIST		16		2	2		"A\\B"			
+79	AST_METHOD_CALL		17		6	2		"A\\B"			
+80	AST_NEW		17		0	2		"A\\B"			
+81	AST_NAME	NAME_NOT_FQ	17		0	2		"A\\B"			
+82	string		17	"ClassBuz"	0	2		"A\\B"			
+83	AST_ARG_LIST		17		1	2		"A\\B"			
+84	string		17	"buz"	1	2		"A\\B"			
+85	AST_ARG_LIST		17		2	2		"A\\B"			
+86	AST_METHOD_CALL		18		7	2		"A\\B"			
+87	AST_NEW		18		0	2		"A\\B"			
+88	AST_NAME	NAME_FQ	18		0	2		"A\\B"			
+89	string		18	"ClassBuz"	0	2		"A\\B"			
+90	AST_ARG_LIST		18		1	2		"A\\B"			
+91	string		18	"buz"	1	2		"A\\B"			
+92	AST_ARG_LIST		18		2	2		"A\\B"			
+93	AST_NAMESPACE		21		1	2		""			
+94	NULL		21		0	2		""			
+95	AST_STMT_LIST		21		1	2		""			
+96	AST_CLASS		23		0	2		""	25	ClassFoo	
+97	NULL		23		0	2	ClassFoo	""			
+98	NULL		23		1	2	ClassFoo	""			
+99	AST_TOPLEVEL	TOPLEVEL_CLASS	23		2	2		""	25	"ClassFoo"	
+100	CFG_FUNC_ENTRY					99				"ClassFoo"	
+101	CFG_FUNC_EXIT					99				"ClassFoo"	
+102	AST_STMT_LIST		23		0	99	ClassFoo	""			
+103	AST_METHOD	MODIFIER_PUBLIC	24		0	99	ClassFoo	""	24	foo	
+104	CFG_FUNC_ENTRY					103	ClassFoo	""		"foo"	
+105	CFG_FUNC_EXIT					103	ClassFoo	""		"foo"	
+106	AST_PARAM_LIST		24		0	103	ClassFoo	""			
+107	NULL		24		1	103	ClassFoo	""			
+108	AST_STMT_LIST		24		2	103	ClassFoo	""			
+109	AST_STMT_LIST		24		0	103	ClassFoo	""			
+110	AST_ECHO		24		0	103	ClassFoo	""			
+111	string		24	"global foo"	0	103	ClassFoo	""			
+112	AST_ECHO		24		1	103	ClassFoo	""			
+113	AST_CONST		24		0	103	ClassFoo	""			
+114	AST_NAME	NAME_NOT_FQ	24		0	103	ClassFoo	""			
+115	string		24	"PHP_EOL"	0	103	ClassFoo	""			
+116	NULL		24		3	103	ClassFoo	""			
+117	AST_CLASS		27		1	2		""	29	ClassBuz	
+118	NULL		27		0	2	ClassBuz	""			
+119	NULL		27		1	2	ClassBuz	""			
+120	AST_TOPLEVEL	TOPLEVEL_CLASS	27		2	2		""	29	"ClassBuz"	
+121	CFG_FUNC_ENTRY					120				"ClassBuz"	
+122	CFG_FUNC_EXIT					120				"ClassBuz"	
+123	AST_STMT_LIST		27		0	120	ClassBuz	""			
+124	AST_METHOD	MODIFIER_PUBLIC	28		0	120	ClassBuz	""	28	buz	
+125	CFG_FUNC_ENTRY					124	ClassBuz	""		"buz"	
+126	CFG_FUNC_EXIT					124	ClassBuz	""		"buz"	
+127	AST_PARAM_LIST		28		0	124	ClassBuz	""			
+128	NULL		28		1	124	ClassBuz	""			
+129	AST_STMT_LIST		28		2	124	ClassBuz	""			
+130	AST_STMT_LIST		28		0	124	ClassBuz	""			
+131	AST_ECHO		28		0	124	ClassBuz	""			
+132	string		28	"global buz"	0	124	ClassBuz	""			
+133	AST_ECHO		28		1	124	ClassBuz	""			
+134	AST_CONST		28		0	124	ClassBuz	""			
+135	AST_NAME	NAME_NOT_FQ	28		0	124	ClassBuz	""			
+136	string		28	"PHP_EOL"	0	124	ClassBuz	""			
+137	NULL		28		3	124	ClassBuz	""			
+138	AST_METHOD_CALL		31		2	2		""			
+139	AST_NEW		31		0	2		""			
+140	AST_NAME	NAME_NOT_FQ	31		0	2		""			
+141	string		31	"ClassFoo"	0	2		""			
+142	AST_ARG_LIST		31		1	2		""			
+143	string		31	"foo"	1	2		""			
+144	AST_ARG_LIST		31		2	2		""			
+145	AST_METHOD_CALL		32		3	2		""			
+146	AST_NEW		32		0	2		""			
+147	AST_NAME	NAME_FQ	32		0	2		""			
+148	string		32	"ClassFoo"	0	2		""			
+149	AST_ARG_LIST		32		1	2		""			
+150	string		32	"foo"	1	2		""			
+151	AST_ARG_LIST		32		2	2		""			
+152	AST_METHOD_CALL		33		4	2		""			
+153	AST_NEW		33		0	2		""			
+154	AST_NAME	NAME_FQ	33		0	2		""			
+155	string		33	"A\\B\\ClassFoo"	0	2		""			
+156	AST_ARG_LIST		33		1	2		""			
+157	string		33	"foo"	1	2		""			
+158	AST_ARG_LIST		33		2	2		""			
+159	AST_METHOD_CALL		34		5	2		""			
+160	AST_NEW		34		0	2		""			
+161	AST_NAME	NAME_FQ	34		0	2		""			
+162	string		34	"A\\B\\ClassBar"	0	2		""			
+163	AST_ARG_LIST		34		1	2		""			
+164	string		34	"bar"	1	2		""			
+165	AST_ARG_LIST		34		2	2		""			
+166	AST_METHOD_CALL		35		6	2		""			
+167	AST_NEW		35		0	2		""			
+168	AST_NAME	NAME_NOT_FQ	35		0	2		""			
+169	string		35	"ClassBuz"	0	2		""			
+170	AST_ARG_LIST		35		1	2		""			
+171	string		35	"buz"	1	2		""			
+172	AST_ARG_LIST		35		2	2		""			
+173	AST_METHOD_CALL		36		7	2		""			
+174	AST_NEW		36		0	2		""			
+175	AST_NAME	NAME_FQ	36		0	2		""			
+176	string		36	"ClassBuz"	0	2		""			
+177	AST_ARG_LIST		36		1	2		""			
+178	string		36	"buz"	1	2		""			
+179	AST_ARG_LIST		36		2	2		""			

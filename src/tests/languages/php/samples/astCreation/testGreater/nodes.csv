@@ -1,12 +1,12 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",4,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_GREATER,,4,,0,2,,"",,,
-7,AST_VAR,,4,,0,2,,"",,,
-8,string,,4,"x",0,2,,"",,,
-9,AST_VAR,,4,,1,2,,"",,,
-10,string,,4,"y",0,2,,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	4	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_GREATER		4		0	2		""			
+7	AST_VAR		4		0	2		""			
+8	string		4	"x"	0	2		""			
+9	AST_VAR		4		1	2		""			
+10	string		4	"y"	0	2		""			

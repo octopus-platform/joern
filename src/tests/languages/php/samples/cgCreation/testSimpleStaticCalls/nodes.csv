@@ -1,71 +1,71 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",18,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_CLASS,,3,,0,2,,"",8,ClassOne,
-7,NULL,,3,,0,2,ClassOne,"",,,
-8,NULL,,3,,1,2,ClassOne,"",,,
-9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,2,,"",8,"ClassOne",
-10,CFG_FUNC_ENTRY,,,,,9,,,,"ClassOne",
-11,CFG_FUNC_EXIT,,,,,9,,,,"ClassOne",
-12,AST_STMT_LIST,,3,,0,9,ClassOne,"",,,
-13,AST_METHOD,MODIFIER_PUBLIC;MODIFIER_STATIC,4,,0,9,ClassOne,"",7,funcone,
-14,CFG_FUNC_ENTRY,,,,,13,ClassOne,"",,"funcone",
-15,CFG_FUNC_EXIT,,,,,13,ClassOne,"",,"funcone",
-16,AST_PARAM_LIST,,4,,0,13,ClassOne,"",,,
-17,NULL,,4,,1,13,ClassOne,"",,,
-18,AST_STMT_LIST,,4,,2,13,ClassOne,"",,,
-19,AST_STATIC_CALL,,5,,0,13,ClassOne,"",,,
-20,AST_NAME,NAME_NOT_FQ,5,,0,13,ClassOne,"",,,
-21,string,,5,"ClassOne",0,13,ClassOne,"",,,
-22,string,,5,"funcone",1,13,ClassOne,"",,,
-23,AST_ARG_LIST,,5,,2,13,ClassOne,"",,,
-24,AST_STATIC_CALL,,6,,1,13,ClassOne,"",,,
-25,AST_NAME,NAME_NOT_FQ,6,,0,13,ClassOne,"",,,
-26,string,,6,"ClassTwo",0,13,ClassOne,"",,,
-27,string,,6,"functwo",1,13,ClassOne,"",,,
-28,AST_ARG_LIST,,6,,2,13,ClassOne,"",,,
-29,string,,6,"foo",0,13,ClassOne,"",,,
-30,NULL,,4,,3,13,ClassOne,"",,,
-31,AST_CLASS,,10,,1,2,,"",15,ClassTwo,
-32,NULL,,10,,0,2,ClassTwo,"",,,
-33,NULL,,10,,1,2,ClassTwo,"",,,
-34,AST_TOPLEVEL,TOPLEVEL_CLASS,10,,2,2,,"",15,"ClassTwo",
-35,CFG_FUNC_ENTRY,,,,,34,,,,"ClassTwo",
-36,CFG_FUNC_EXIT,,,,,34,,,,"ClassTwo",
-37,AST_STMT_LIST,,10,,0,34,ClassTwo,"",,,
-38,AST_METHOD,MODIFIER_PUBLIC;MODIFIER_STATIC,11,,0,34,ClassTwo,"",14,functwo,
-39,CFG_FUNC_ENTRY,,,,,38,ClassTwo,"",,"functwo",
-40,CFG_FUNC_EXIT,,,,,38,ClassTwo,"",,"functwo",
-41,AST_PARAM_LIST,,11,,0,38,ClassTwo,"",,,
-42,AST_PARAM,,11,,0,38,ClassTwo,"",,,
-43,NULL,,11,,0,38,ClassTwo,"",,,
-44,string,,11,"a",1,38,ClassTwo,"",,,
-45,NULL,,11,,2,38,ClassTwo,"",,,
-46,NULL,,11,,1,38,ClassTwo,"",,,
-47,AST_STMT_LIST,,11,,2,38,ClassTwo,"",,,
-48,AST_STATIC_CALL,,12,,0,38,ClassTwo,"",,,
-49,AST_NAME,NAME_NOT_FQ,12,,0,38,ClassTwo,"",,,
-50,string,,12,"ClassOne",0,38,ClassTwo,"",,,
-51,string,,12,"funcone",1,38,ClassTwo,"",,,
-52,AST_ARG_LIST,,12,,2,38,ClassTwo,"",,,
-53,AST_STATIC_CALL,,13,,1,38,ClassTwo,"",,,
-54,AST_NAME,NAME_NOT_FQ,13,,0,38,ClassTwo,"",,,
-55,string,,13,"ClassTwo",0,38,ClassTwo,"",,,
-56,string,,13,"functwo",1,38,ClassTwo,"",,,
-57,AST_ARG_LIST,,13,,2,38,ClassTwo,"",,,
-58,string,,13,"bar",0,38,ClassTwo,"",,,
-59,NULL,,11,,3,38,ClassTwo,"",,,
-60,AST_STATIC_CALL,,17,,2,2,,"",,,
-61,AST_NAME,NAME_NOT_FQ,17,,0,2,,"",,,
-62,string,,17,"ClassOne",0,2,,"",,,
-63,string,,17,"funcone",1,2,,"",,,
-64,AST_ARG_LIST,,17,,2,2,,"",,,
-65,AST_STATIC_CALL,,18,,3,2,,"",,,
-66,AST_NAME,NAME_NOT_FQ,18,,0,2,,"",,,
-67,string,,18,"ClassTwo",0,2,,"",,,
-68,string,,18,"functwo",1,2,,"",,,
-69,AST_ARG_LIST,,18,,2,2,,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	18	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_CLASS		3		0	2		""	8	ClassOne	
+7	NULL		3		0	2	ClassOne	""			
+8	NULL		3		1	2	ClassOne	""			
+9	AST_TOPLEVEL	TOPLEVEL_CLASS	3		2	2		""	8	"ClassOne"	
+10	CFG_FUNC_ENTRY					9				"ClassOne"	
+11	CFG_FUNC_EXIT					9				"ClassOne"	
+12	AST_STMT_LIST		3		0	9	ClassOne	""			
+13	AST_METHOD	MODIFIER_PUBLIC,MODIFIER_STATIC	4		0	9	ClassOne	""	7	funcone	
+14	CFG_FUNC_ENTRY					13	ClassOne	""		"funcone"	
+15	CFG_FUNC_EXIT					13	ClassOne	""		"funcone"	
+16	AST_PARAM_LIST		4		0	13	ClassOne	""			
+17	NULL		4		1	13	ClassOne	""			
+18	AST_STMT_LIST		4		2	13	ClassOne	""			
+19	AST_STATIC_CALL		5		0	13	ClassOne	""			
+20	AST_NAME	NAME_NOT_FQ	5		0	13	ClassOne	""			
+21	string		5	"ClassOne"	0	13	ClassOne	""			
+22	string		5	"funcone"	1	13	ClassOne	""			
+23	AST_ARG_LIST		5		2	13	ClassOne	""			
+24	AST_STATIC_CALL		6		1	13	ClassOne	""			
+25	AST_NAME	NAME_NOT_FQ	6		0	13	ClassOne	""			
+26	string		6	"ClassTwo"	0	13	ClassOne	""			
+27	string		6	"functwo"	1	13	ClassOne	""			
+28	AST_ARG_LIST		6		2	13	ClassOne	""			
+29	string		6	"foo"	0	13	ClassOne	""			
+30	NULL		4		3	13	ClassOne	""			
+31	AST_CLASS		10		1	2		""	15	ClassTwo	
+32	NULL		10		0	2	ClassTwo	""			
+33	NULL		10		1	2	ClassTwo	""			
+34	AST_TOPLEVEL	TOPLEVEL_CLASS	10		2	2		""	15	"ClassTwo"	
+35	CFG_FUNC_ENTRY					34				"ClassTwo"	
+36	CFG_FUNC_EXIT					34				"ClassTwo"	
+37	AST_STMT_LIST		10		0	34	ClassTwo	""			
+38	AST_METHOD	MODIFIER_PUBLIC,MODIFIER_STATIC	11		0	34	ClassTwo	""	14	functwo	
+39	CFG_FUNC_ENTRY					38	ClassTwo	""		"functwo"	
+40	CFG_FUNC_EXIT					38	ClassTwo	""		"functwo"	
+41	AST_PARAM_LIST		11		0	38	ClassTwo	""			
+42	AST_PARAM		11		0	38	ClassTwo	""			
+43	NULL		11		0	38	ClassTwo	""			
+44	string		11	"a"	1	38	ClassTwo	""			
+45	NULL		11		2	38	ClassTwo	""			
+46	NULL		11		1	38	ClassTwo	""			
+47	AST_STMT_LIST		11		2	38	ClassTwo	""			
+48	AST_STATIC_CALL		12		0	38	ClassTwo	""			
+49	AST_NAME	NAME_NOT_FQ	12		0	38	ClassTwo	""			
+50	string		12	"ClassOne"	0	38	ClassTwo	""			
+51	string		12	"funcone"	1	38	ClassTwo	""			
+52	AST_ARG_LIST		12		2	38	ClassTwo	""			
+53	AST_STATIC_CALL		13		1	38	ClassTwo	""			
+54	AST_NAME	NAME_NOT_FQ	13		0	38	ClassTwo	""			
+55	string		13	"ClassTwo"	0	38	ClassTwo	""			
+56	string		13	"functwo"	1	38	ClassTwo	""			
+57	AST_ARG_LIST		13		2	38	ClassTwo	""			
+58	string		13	"bar"	0	38	ClassTwo	""			
+59	NULL		11		3	38	ClassTwo	""			
+60	AST_STATIC_CALL		17		2	2		""			
+61	AST_NAME	NAME_NOT_FQ	17		0	2		""			
+62	string		17	"ClassOne"	0	2		""			
+63	string		17	"funcone"	1	2		""			
+64	AST_ARG_LIST		17		2	2		""			
+65	AST_STATIC_CALL		18		3	2		""			
+66	AST_NAME	NAME_NOT_FQ	18		0	2		""			
+67	string		18	"ClassTwo"	0	2		""			
+68	string		18	"functwo"	1	2		""			
+69	AST_ARG_LIST		18		2	2		""			

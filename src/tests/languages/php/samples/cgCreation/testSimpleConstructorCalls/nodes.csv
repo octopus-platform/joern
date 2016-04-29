@@ -1,66 +1,66 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",18,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_CLASS,,3,,0,2,,"",8,ClassOne,
-7,NULL,,3,,0,2,ClassOne,"",,,
-8,NULL,,3,,1,2,ClassOne,"",,,
-9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,2,,"",8,"ClassOne",
-10,CFG_FUNC_ENTRY,,,,,9,,,,"ClassOne",
-11,CFG_FUNC_EXIT,,,,,9,,,,"ClassOne",
-12,AST_STMT_LIST,,3,,0,9,ClassOne,"",,,
-13,AST_METHOD,MODIFIER_PUBLIC,4,,0,9,ClassOne,"",7,__construct,
-14,CFG_FUNC_ENTRY,,,,,13,ClassOne,"",,"__construct",
-15,CFG_FUNC_EXIT,,,,,13,ClassOne,"",,"__construct",
-16,AST_PARAM_LIST,,4,,0,13,ClassOne,"",,,
-17,NULL,,4,,1,13,ClassOne,"",,,
-18,AST_STMT_LIST,,4,,2,13,ClassOne,"",,,
-19,AST_NEW,,5,,0,13,ClassOne,"",,,
-20,AST_NAME,NAME_NOT_FQ,5,,0,13,ClassOne,"",,,
-21,string,,5,"ClassOne",0,13,ClassOne,"",,,
-22,AST_ARG_LIST,,5,,1,13,ClassOne,"",,,
-23,AST_NEW,,6,,1,13,ClassOne,"",,,
-24,AST_NAME,NAME_NOT_FQ,6,,0,13,ClassOne,"",,,
-25,string,,6,"ClassTwo",0,13,ClassOne,"",,,
-26,AST_ARG_LIST,,6,,1,13,ClassOne,"",,,
-27,string,,6,"foo",0,13,ClassOne,"",,,
-28,NULL,,4,,3,13,ClassOne,"",,,
-29,AST_CLASS,,10,,1,2,,"",15,ClassTwo,
-30,NULL,,10,,0,2,ClassTwo,"",,,
-31,NULL,,10,,1,2,ClassTwo,"",,,
-32,AST_TOPLEVEL,TOPLEVEL_CLASS,10,,2,2,,"",15,"ClassTwo",
-33,CFG_FUNC_ENTRY,,,,,32,,,,"ClassTwo",
-34,CFG_FUNC_EXIT,,,,,32,,,,"ClassTwo",
-35,AST_STMT_LIST,,10,,0,32,ClassTwo,"",,,
-36,AST_METHOD,MODIFIER_PUBLIC,11,,0,32,ClassTwo,"",14,ClassTwo,
-37,CFG_FUNC_ENTRY,,,,,36,ClassTwo,"",,"ClassTwo",
-38,CFG_FUNC_EXIT,,,,,36,ClassTwo,"",,"ClassTwo",
-39,AST_PARAM_LIST,,11,,0,36,ClassTwo,"",,,
-40,AST_PARAM,,11,,0,36,ClassTwo,"",,,
-41,NULL,,11,,0,36,ClassTwo,"",,,
-42,string,,11,"a",1,36,ClassTwo,"",,,
-43,NULL,,11,,2,36,ClassTwo,"",,,
-44,NULL,,11,,1,36,ClassTwo,"",,,
-45,AST_STMT_LIST,,11,,2,36,ClassTwo,"",,,
-46,AST_NEW,,12,,0,36,ClassTwo,"",,,
-47,AST_NAME,NAME_NOT_FQ,12,,0,36,ClassTwo,"",,,
-48,string,,12,"ClassOne",0,36,ClassTwo,"",,,
-49,AST_ARG_LIST,,12,,1,36,ClassTwo,"",,,
-50,AST_NEW,,13,,1,36,ClassTwo,"",,,
-51,AST_NAME,NAME_NOT_FQ,13,,0,36,ClassTwo,"",,,
-52,string,,13,"ClassTwo",0,36,ClassTwo,"",,,
-53,AST_ARG_LIST,,13,,1,36,ClassTwo,"",,,
-54,string,,13,"bar",0,36,ClassTwo,"",,,
-55,NULL,,11,,3,36,ClassTwo,"",,,
-56,AST_NEW,,17,,2,2,,"",,,
-57,AST_NAME,NAME_NOT_FQ,17,,0,2,,"",,,
-58,string,,17,"ClassOne",0,2,,"",,,
-59,AST_ARG_LIST,,17,,1,2,,"",,,
-60,AST_NEW,,18,,3,2,,"",,,
-61,AST_NAME,NAME_NOT_FQ,18,,0,2,,"",,,
-62,string,,18,"ClassTwo",0,2,,"",,,
-63,AST_ARG_LIST,,18,,1,2,,"",,,
-64,string,,18,"bar",0,2,,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	18	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_CLASS		3		0	2		""	8	ClassOne	
+7	NULL		3		0	2	ClassOne	""			
+8	NULL		3		1	2	ClassOne	""			
+9	AST_TOPLEVEL	TOPLEVEL_CLASS	3		2	2		""	8	"ClassOne"	
+10	CFG_FUNC_ENTRY					9				"ClassOne"	
+11	CFG_FUNC_EXIT					9				"ClassOne"	
+12	AST_STMT_LIST		3		0	9	ClassOne	""			
+13	AST_METHOD	MODIFIER_PUBLIC	4		0	9	ClassOne	""	7	__construct	
+14	CFG_FUNC_ENTRY					13	ClassOne	""		"__construct"	
+15	CFG_FUNC_EXIT					13	ClassOne	""		"__construct"	
+16	AST_PARAM_LIST		4		0	13	ClassOne	""			
+17	NULL		4		1	13	ClassOne	""			
+18	AST_STMT_LIST		4		2	13	ClassOne	""			
+19	AST_NEW		5		0	13	ClassOne	""			
+20	AST_NAME	NAME_NOT_FQ	5		0	13	ClassOne	""			
+21	string		5	"ClassOne"	0	13	ClassOne	""			
+22	AST_ARG_LIST		5		1	13	ClassOne	""			
+23	AST_NEW		6		1	13	ClassOne	""			
+24	AST_NAME	NAME_NOT_FQ	6		0	13	ClassOne	""			
+25	string		6	"ClassTwo"	0	13	ClassOne	""			
+26	AST_ARG_LIST		6		1	13	ClassOne	""			
+27	string		6	"foo"	0	13	ClassOne	""			
+28	NULL		4		3	13	ClassOne	""			
+29	AST_CLASS		10		1	2		""	15	ClassTwo	
+30	NULL		10		0	2	ClassTwo	""			
+31	NULL		10		1	2	ClassTwo	""			
+32	AST_TOPLEVEL	TOPLEVEL_CLASS	10		2	2		""	15	"ClassTwo"	
+33	CFG_FUNC_ENTRY					32				"ClassTwo"	
+34	CFG_FUNC_EXIT					32				"ClassTwo"	
+35	AST_STMT_LIST		10		0	32	ClassTwo	""			
+36	AST_METHOD	MODIFIER_PUBLIC	11		0	32	ClassTwo	""	14	ClassTwo	
+37	CFG_FUNC_ENTRY					36	ClassTwo	""		"ClassTwo"	
+38	CFG_FUNC_EXIT					36	ClassTwo	""		"ClassTwo"	
+39	AST_PARAM_LIST		11		0	36	ClassTwo	""			
+40	AST_PARAM		11		0	36	ClassTwo	""			
+41	NULL		11		0	36	ClassTwo	""			
+42	string		11	"a"	1	36	ClassTwo	""			
+43	NULL		11		2	36	ClassTwo	""			
+44	NULL		11		1	36	ClassTwo	""			
+45	AST_STMT_LIST		11		2	36	ClassTwo	""			
+46	AST_NEW		12		0	36	ClassTwo	""			
+47	AST_NAME	NAME_NOT_FQ	12		0	36	ClassTwo	""			
+48	string		12	"ClassOne"	0	36	ClassTwo	""			
+49	AST_ARG_LIST		12		1	36	ClassTwo	""			
+50	AST_NEW		13		1	36	ClassTwo	""			
+51	AST_NAME	NAME_NOT_FQ	13		0	36	ClassTwo	""			
+52	string		13	"ClassTwo"	0	36	ClassTwo	""			
+53	AST_ARG_LIST		13		1	36	ClassTwo	""			
+54	string		13	"bar"	0	36	ClassTwo	""			
+55	NULL		11		3	36	ClassTwo	""			
+56	AST_NEW		17		2	2		""			
+57	AST_NAME	NAME_NOT_FQ	17		0	2		""			
+58	string		17	"ClassOne"	0	2		""			
+59	AST_ARG_LIST		17		1	2		""			
+60	AST_NEW		18		3	2		""			
+61	AST_NAME	NAME_NOT_FQ	18		0	2		""			
+62	string		18	"ClassTwo"	0	2		""			
+63	AST_ARG_LIST		18		1	2		""			
+64	string		18	"bar"	0	2		""			

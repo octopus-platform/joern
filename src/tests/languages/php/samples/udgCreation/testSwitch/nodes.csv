@@ -1,31 +1,31 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",11,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_SWITCH,,3,,0,2,,"",,,
-7,AST_VAR,,3,,0,2,,"",,,
-8,string,,3,"i",0,2,,"",,,
-9,AST_SWITCH_LIST,,4,,1,2,,"",,,
-10,AST_SWITCH_CASE,,4,,0,2,,"",,,
-11,string,,4,"foo",0,2,,"",,,
-12,AST_STMT_LIST,,4,,1,2,,"",,,
-13,AST_BREAK,,5,,0,2,,"",,,
-14,NULL,,5,,0,2,,"",,,
-15,AST_SWITCH_CASE,,6,,1,2,,"",,,
-16,double,,6,1.42,0,2,,"",,,
-17,AST_STMT_LIST,,6,,1,2,,"",,,
-18,AST_SWITCH_CASE,,7,,2,2,,"",,,
-19,integer,,7,2,0,2,,"",,,
-20,AST_STMT_LIST,,7,,1,2,,"",,,
-21,AST_BREAK,,8,,0,2,,"",,,
-22,NULL,,8,,0,2,,"",,,
-23,AST_SWITCH_CASE,,9,,3,2,,"",,,
-24,NULL,,9,,0,2,,"",,,
-25,AST_STMT_LIST,,9,,1,2,,"",,,
-26,AST_CALL,,10,,0,2,,"",,,
-27,AST_NAME,NAME_NOT_FQ,10,,0,2,,"",,,
-28,string,,10,"buz",0,2,,"",,,
-29,AST_ARG_LIST,,10,,1,2,,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	11	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_SWITCH		3		0	2		""			
+7	AST_VAR		3		0	2		""			
+8	string		3	"i"	0	2		""			
+9	AST_SWITCH_LIST		4		1	2		""			
+10	AST_SWITCH_CASE		4		0	2		""			
+11	string		4	"foo"	0	2		""			
+12	AST_STMT_LIST		4		1	2		""			
+13	AST_BREAK		5		0	2		""			
+14	NULL		5		0	2		""			
+15	AST_SWITCH_CASE		6		1	2		""			
+16	double		6	1.42	0	2		""			
+17	AST_STMT_LIST		6		1	2		""			
+18	AST_SWITCH_CASE		7		2	2		""			
+19	integer		7	2	0	2		""			
+20	AST_STMT_LIST		7		1	2		""			
+21	AST_BREAK		8		0	2		""			
+22	NULL		8		0	2		""			
+23	AST_SWITCH_CASE		9		3	2		""			
+24	NULL		9		0	2		""			
+25	AST_STMT_LIST		9		1	2		""			
+26	AST_CALL		10		0	2		""			
+27	AST_NAME	NAME_NOT_FQ	10		0	2		""			
+28	string		10	"buz"	0	2		""			
+29	AST_ARG_LIST		10		1	2		""			

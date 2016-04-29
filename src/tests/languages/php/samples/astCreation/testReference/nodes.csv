@@ -1,27 +1,27 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",4,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_FOREACH,,3,,0,2,,"",,,
-7,AST_VAR,,3,,0,2,,"",,,
-8,string,,3,"iterable",0,2,,"",,,
-9,AST_REF,,3,,1,2,,"",,,
-10,AST_VAR,,3,,0,2,,"",,,
-11,string,,3,"someval",0,2,,"",,,
-12,AST_VAR,,3,,2,2,,"",,,
-13,string,,3,"somekey",0,2,,"",,,
-14,AST_STMT_LIST,,3,,3,2,,"",,,
-15,AST_FOREACH,,4,,1,2,,"",,,
-16,AST_VAR,,4,,0,2,,"",,,
-17,string,,4,"iterable",0,2,,"",,,
-18,AST_REF,,4,,1,2,,"",,,
-19,AST_PROP,,4,,0,2,,"",,,
-20,AST_VAR,,4,,0,2,,"",,,
-21,string,,4,"obj",0,2,,"",,,
-22,string,,4,"someval",1,2,,"",,,
-23,AST_VAR,,4,,2,2,,"",,,
-24,string,,4,"somekey",0,2,,"",,,
-25,AST_STMT_LIST,,4,,3,2,,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	4	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_FOREACH		3		0	2		""			
+7	AST_VAR		3		0	2		""			
+8	string		3	"iterable"	0	2		""			
+9	AST_REF		3		1	2		""			
+10	AST_VAR		3		0	2		""			
+11	string		3	"someval"	0	2		""			
+12	AST_VAR		3		2	2		""			
+13	string		3	"somekey"	0	2		""			
+14	AST_STMT_LIST		3		3	2		""			
+15	AST_FOREACH		4		1	2		""			
+16	AST_VAR		4		0	2		""			
+17	string		4	"iterable"	0	2		""			
+18	AST_REF		4		1	2		""			
+19	AST_PROP		4		0	2		""			
+20	AST_VAR		4		0	2		""			
+21	string		4	"obj"	0	2		""			
+22	string		4	"someval"	1	2		""			
+23	AST_VAR		4		2	2		""			
+24	string		4	"somekey"	0	2		""			
+25	AST_STMT_LIST		4		3	2		""			

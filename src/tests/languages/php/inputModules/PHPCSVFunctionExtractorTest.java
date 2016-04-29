@@ -1,4 +1,4 @@
-package tests.languages.php;
+package tests.languages.php.inputModules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -14,13 +14,31 @@ import org.junit.Test;
 import ast.functionDef.FunctionDef;
 import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
+import tests.languages.php.PHPCSVFunctionExtractorBasedTest;
 
 public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTest
 {
 	private StringReader nodeReader;
 	private StringReader edgeReader;
-	private String nodeHeader = "id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,endlineno:int,name,doccomment\n";
-	private String edgeHeader = ":START_ID,:END_ID,:TYPE\n";
+	// See {@link https://github.com/jexp/batch-import} for detailed
+	// information about the header file format
+	private final static String DELIMITER = "\t";
+	private final static String RECORD_SEPARATOR = "\n";
+	String nodeHeader = "id:int" + DELIMITER +
+						"type" + DELIMITER +
+						"flags:string_array" + DELIMITER +
+						"lineno:int" + DELIMITER +
+						"code" + DELIMITER +
+						"childnum:int" + DELIMITER +
+						"funcid:int" + DELIMITER +
+						"classname" + DELIMITER +
+						"namespace" + DELIMITER +
+						"endlineno:int" + DELIMITER +
+						"name" + DELIMITER +
+						"doccomment" + RECORD_SEPARATOR;
+	String edgeHeader = "start" + DELIMITER +
+						"end" + DELIMITER +
+						"type" + RECORD_SEPARATOR;
 	
 	// set sample directory
 	@Before
@@ -335,14 +353,20 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	public void testInvalidNoFileTopLevelNode() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		//nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,NULL,,3,,3,3,,,\n";
+		nodeStr +=
+				"0	File									\"foo.php\"	" + RECORD_SEPARATOR +
+				//"1	AST_TOPLEVEL	TOPLEVEL_FILE	1					\"\"	3	\"foo.php\"	" + RECORD_SEPARATOR +
+				"2	CFG_FUNC_ENTRY					1				\"foo.php\"	" + RECORD_SEPARATOR +
+				"3	CFG_FUNC_EXIT					1				\"foo.php\"	" + RECORD_SEPARATOR +
+				"4	AST_STMT_LIST		1		0	1		\"\"			" + RECORD_SEPARATOR +
+				"5	AST_FUNC_DECL		3		0	1		\"\"	3	foo	" + RECORD_SEPARATOR +
+				"6	CFG_FUNC_ENTRY					5		\"\"		\"foo\"	" + RECORD_SEPARATOR +
+				"7	CFG_FUNC_EXIT					5		\"\"		\"foo\"	" + RECORD_SEPARATOR +
+				"8	AST_PARAM_LIST		3		0	5		\"\"			" + RECORD_SEPARATOR +
+				"9	NULL		3		1	5		\"\"			" + RECORD_SEPARATOR +
+				"10	AST_STMT_LIST		3		2	5		\"\"			" + RECORD_SEPARATOR +
+				"11	NULL		3		3	5		\"\"			" + RECORD_SEPARATOR;
+
 
 		this.nodeReader = new StringReader(nodeStr);
 
@@ -359,14 +383,19 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	public void testInvalidUninitializedFuncId() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		//nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,NULL,,3,,3,3,,,\n";
+		nodeStr +=
+				"0	File									\"foo.php\"	" + RECORD_SEPARATOR +
+				"1	AST_TOPLEVEL	TOPLEVEL_FILE	1					\"\"	3	\"foo.php\"	" + RECORD_SEPARATOR +
+				"2	CFG_FUNC_ENTRY					1				\"foo.php\"	" + RECORD_SEPARATOR +
+				"3	CFG_FUNC_EXIT					1				\"foo.php\"	" + RECORD_SEPARATOR +
+				"4	AST_STMT_LIST		1		0	1		\"\"			" + RECORD_SEPARATOR +
+				//"5	AST_FUNC_DECL		3		0	1		\"\"	3	foo	" + RECORD_SEPARATOR +
+				"6	CFG_FUNC_ENTRY					5		\"\"		\"foo\"	" + RECORD_SEPARATOR +
+				"7	CFG_FUNC_EXIT					5		\"\"		\"foo\"	" + RECORD_SEPARATOR +
+				"8	AST_PARAM_LIST		3		0	5		\"\"			" + RECORD_SEPARATOR +
+				"9	NULL		3		1	5		\"\"			" + RECORD_SEPARATOR +
+				"10	AST_STMT_LIST		3		2	5		\"\"			" + RECORD_SEPARATOR +
+				"11	NULL		3		3	5		\"\"			" + RECORD_SEPARATOR;
 		
 		this.nodeReader = new StringReader(nodeStr);
 
@@ -382,16 +411,18 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	public void testInvalidToplevelNodeWithoutFileNode() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,NULL,,3,,3,3,,,\n";
-		//nodeStr += "8,File,,,,,,,\"bar.php\",\n";
-		nodeStr += "9,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"bar.php\",\n";
+		nodeStr +=
+				"0	Directory									\"foobar\"	" + RECORD_SEPARATOR +
+				"1	File									\"foo.php\"	" + RECORD_SEPARATOR +
+				"2	AST_TOPLEVEL	TOPLEVEL_FILE	1					\"\"	0	\"foobar/foo.php\"	" + RECORD_SEPARATOR +
+				"3	CFG_FUNC_ENTRY					2				\"foobar/foo.php\"	" + RECORD_SEPARATOR +
+				"4	CFG_FUNC_EXIT					2				\"foobar/foo.php\"	" + RECORD_SEPARATOR +
+				"5	NULL		0		0	2		\"\"			" + RECORD_SEPARATOR +
+				//"6	File									\"bar.php\"	" + RECORD_SEPARATOR +
+				"7	AST_TOPLEVEL	TOPLEVEL_FILE	1					\"\"	0	\"foobar/bar.php\"	" + RECORD_SEPARATOR +
+				"8	CFG_FUNC_ENTRY					7				\"foobar/bar.php\"	" + RECORD_SEPARATOR +
+				"9	CFG_FUNC_EXIT					7				\"foobar/bar.php\"	" + RECORD_SEPARATOR +
+				"10	NULL		0		0	7		\"\"			" + RECORD_SEPARATOR;
 		
 		this.nodeReader = new StringReader(nodeStr);
 
@@ -476,23 +507,33 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	public void testInvalidEdgeType() throws IOException, InvalidCSVFile
 	{
 		String nodeStr = nodeHeader;
-		nodeStr += "0,File,,,,,,,\"foo.php\",\n";
-		nodeStr += "1,AST_TOPLEVEL,TOPLEVEL_FILE,,,,,,\"foo.php\",\n";
-		nodeStr += "2,AST_STMT_LIST,,1,,0,1,,,\n";
-		nodeStr += "3,AST_FUNC_DECL,,3,,0,1,3,foo,\n";
-		nodeStr += "4,AST_PARAM_LIST,,3,,0,3,,,\n";
-		nodeStr += "5,NULL,,3,,1,3,,,\n";
-		nodeStr += "6,AST_STMT_LIST,,3,,2,3,,,\n";
-		nodeStr += "7,NULL,,3,,3,3,,,\n";
+		nodeStr +=
+				"0	File									\"bla.php\"	" + RECORD_SEPARATOR +
+				"1	AST_TOPLEVEL	TOPLEVEL_FILE	1					\"\"	3	\"bla.php\"	" + RECORD_SEPARATOR +
+				"2	CFG_FUNC_ENTRY					1				\"bla.php\"	" + RECORD_SEPARATOR +
+				"3	CFG_FUNC_EXIT					1				\"bla.php\"	" + RECORD_SEPARATOR +
+				"4	AST_STMT_LIST		1		0	1		\"\"			" + RECORD_SEPARATOR +
+				"5	AST_FUNC_DECL		3		0	1		\"\"	3	foo	" + RECORD_SEPARATOR +
+				"6	CFG_FUNC_ENTRY					5		\"\"		\"foo\"	" + RECORD_SEPARATOR +
+				"7	CFG_FUNC_EXIT					5		\"\"		\"foo\"	" + RECORD_SEPARATOR +
+				"8	AST_PARAM_LIST		3		0	5		\"\"			" + RECORD_SEPARATOR +
+				"9	NULL		3		1	5		\"\"			" + RECORD_SEPARATOR +
+				"10	AST_STMT_LIST		3		2	5		\"\"			" + RECORD_SEPARATOR +
+				"11	NULL		3		3	5		\"\"			" + RECORD_SEPARATOR;
 
 		String edgeStr = edgeHeader;
-		edgeStr += "3,4,PARENT_OF\n";
-		edgeStr += "3,5,PARENT_OF\n";
-		edgeStr += "3,6,PARENT_OF\n";
-		edgeStr += "3,7,somerandomtype\n";
-		edgeStr += "2,3,PARENT_OF\n";
-		edgeStr += "1,2,PARENT_OF\n";
-		edgeStr += "0,1,FILE_OF\n";
+		edgeStr +=
+				"1	2	ENTRY" + RECORD_SEPARATOR +
+				"1	3	EXIT" + RECORD_SEPARATOR +
+				"5	6	ENTRY" + RECORD_SEPARATOR +
+				"5	7	EXIT" + RECORD_SEPARATOR +
+				"5	8	PARENT_OF" + RECORD_SEPARATOR +
+				"5	9	PARENT_OF" + RECORD_SEPARATOR +
+				"5	10	somerandomtype" + RECORD_SEPARATOR +
+				"5	11	PARENT_OF" + RECORD_SEPARATOR +
+				"4	5	PARENT_OF" + RECORD_SEPARATOR +
+				"1	4	PARENT_OF" + RECORD_SEPARATOR +
+				"0	1	FILE_OF" + RECORD_SEPARATOR;
 		
 		this.nodeReader = new StringReader(nodeStr);
 		this.edgeReader = new StringReader(edgeStr);

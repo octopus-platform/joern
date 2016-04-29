@@ -1,29 +1,29 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",4,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_CLASS,,2,,0,2,,"",4,Foo,
-7,NULL,,2,,0,2,Foo,"",,,
-8,NULL,,2,,1,2,Foo,"",,,
-9,AST_TOPLEVEL,TOPLEVEL_CLASS,2,,2,2,,"",4,"Foo",
-10,CFG_FUNC_ENTRY,,,,,9,,,,"Foo",
-11,CFG_FUNC_EXIT,,,,,9,,,,"Foo",
-12,AST_STMT_LIST,,2,,0,9,Foo,"",,,
-13,AST_PROP_DECL,MODIFIER_PUBLIC,3,,0,9,Foo,"",,,
-14,AST_PROP_ELEM,,3,,0,9,Foo,"",,,
-15,string,,3,"foo",0,9,Foo,"",,,
-16,NULL,,3,,1,9,Foo,"",,,
-17,AST_PROP_ELEM,,3,,1,9,Foo,"",,,
-18,string,,3,"bar",0,9,Foo,"",,,
-19,integer,,3,3,1,9,Foo,"",,,
-20,AST_PROP_ELEM,,3,,2,9,Foo,"",,,
-21,string,,3,"buz",0,9,Foo,"",,,
-22,string,,3,"bonjour",1,9,Foo,"",,,
-23,AST_PROP_ELEM,,3,,3,9,Foo,"",,,
-24,string,,3,"qux",0,9,Foo,"",,,
-25,AST_CONST,,3,,1,9,Foo,"",,,
-26,AST_NAME,NAME_NOT_FQ,3,,0,9,Foo,"",,,
-27,string,,3,"SOMECONSTANT",0,9,Foo,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	4	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_CLASS		2		0	2		""	4	Foo	
+7	NULL		2		0	2	Foo	""			
+8	NULL		2		1	2	Foo	""			
+9	AST_TOPLEVEL	TOPLEVEL_CLASS	2		2	2		""	4	"Foo"	
+10	CFG_FUNC_ENTRY					9				"Foo"	
+11	CFG_FUNC_EXIT					9				"Foo"	
+12	AST_STMT_LIST		2		0	9	Foo	""			
+13	AST_PROP_DECL	MODIFIER_PUBLIC	3		0	9	Foo	""			
+14	AST_PROP_ELEM		3		0	9	Foo	""			
+15	string		3	"foo"	0	9	Foo	""			
+16	NULL		3		1	9	Foo	""			
+17	AST_PROP_ELEM		3		1	9	Foo	""			
+18	string		3	"bar"	0	9	Foo	""			
+19	integer		3	3	1	9	Foo	""			
+20	AST_PROP_ELEM		3		2	9	Foo	""			
+21	string		3	"buz"	0	9	Foo	""			
+22	string		3	"bonjour"	1	9	Foo	""			
+23	AST_PROP_ELEM		3		3	9	Foo	""			
+24	string		3	"qux"	0	9	Foo	""			
+25	AST_CONST		3		1	9	Foo	""			
+26	AST_NAME	NAME_NOT_FQ	3		0	9	Foo	""			
+27	string		3	"SOMECONSTANT"	0	9	Foo	""			

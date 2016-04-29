@@ -25,8 +25,8 @@ public class TestKeyedCSVReader
 	@Test
 	public void testSimpleHeaderParsing() throws IOException
 	{
-		String csvStr = "foo,bar\n";
-		csvStr += "1,2";
+		String csvStr = "foo\tbar\n";
+		csvStr += "1\t2";
 		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		CSVKey[] keys = csvReader.getKeys();
 		assertEquals(keys.length, 2);
@@ -37,8 +37,8 @@ public class TestKeyedCSVReader
 	@Test
 	public void testHeaderWithTypeParsing() throws IOException
 	{
-		String csvStr = "foo:type,bar\n";
-		csvStr += "1,2";
+		String csvStr = "foo:type\tbar\n";
+		csvStr += "1\t2";
 		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		CSVKey[] keys = csvReader.getKeys();
 		assertEquals("foo", keys[0].getName());
@@ -50,8 +50,8 @@ public class TestKeyedCSVReader
 	@Test
 	public void testFieldRetrieval() throws IOException
 	{
-		String csvStr = "foo,bar:int,:unnamedtype\n";
-		csvStr += "1,2,3";
+		String csvStr = "foo\tbar:int\t:unnamedtype\n";
+		csvStr += "1\t2\t3";
 		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();
 
@@ -78,8 +78,8 @@ public class TestKeyedCSVReader
 	@Test
 	public void testQuoting() throws IOException
 	{
-		String csvStr = "foo,bar\n";
-		csvStr += "\"1\",2";
+		String csvStr = "foo\tbar\n";
+		csvStr += "\"1\"\t2";
 
 		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();
@@ -89,8 +89,8 @@ public class TestKeyedCSVReader
 	@Test
 	public void testQuoteInQuote() throws IOException
 	{
-		String csvStr = "foo,bar\n";
-		csvStr += "\"\\\"1\",2";
+		String csvStr = "foo\tbar\n";
+		csvStr += "\"\\\"1\"\t2";
 		
 		KeyedCSVReader csvReader = initReaderWithString(csvStr);
 		KeyedCSVRow row = csvReader.getNextRow();

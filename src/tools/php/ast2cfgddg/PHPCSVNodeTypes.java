@@ -9,11 +9,11 @@ public class PHPCSVNodeTypes
 {
 	/* node row keys */
 	
-	public static final CSVKey NODE_ID = new CSVKey("id","ID");
+	public static final CSVKey NODE_ID = new CSVKey("id","int");
 	// node properties shared by all nodes (cf. ast\Node specification
 	// in {@link https://github.com/nikic/php-ast})
 	public static final CSVKey TYPE = new CSVKey("type");
-	public static final CSVKey FLAGS = new CSVKey("flags","string[]");
+	public static final CSVKey FLAGS = new CSVKey("flags","string_array");
 	public static final CSVKey LINENO = new CSVKey("lineno","int");
 	// node properties for declaration nodes  (cf. ast\Node\Decl specification
 	// in {@link https://github.com/nikic/php-ast}

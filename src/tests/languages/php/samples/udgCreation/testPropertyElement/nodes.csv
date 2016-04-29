@@ -1,25 +1,25 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",5,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_CLASS,,3,,0,2,,"",5,Foo,
-7,NULL,,3,,0,2,Foo,"",,,
-8,NULL,,3,,1,2,Foo,"",,,
-9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,2,,"",5,"Foo",
-10,CFG_FUNC_ENTRY,,,,,9,,,,"Foo",
-11,CFG_FUNC_EXIT,,,,,9,,,,"Foo",
-12,AST_STMT_LIST,,3,,0,9,Foo,"",,,
-13,AST_PROP_DECL,MODIFIER_PUBLIC,4,,0,9,Foo,"",,,
-14,AST_PROP_ELEM,,4,,0,9,Foo,"",,,
-15,string,,4,"foo",0,9,Foo,"",,,
-16,AST_VAR,,4,,1,9,Foo,"",,,
-17,string,,4,"bar",0,9,Foo,"",,,
-18,AST_PROP_ELEM,,4,,1,9,Foo,"",,,
-19,string,,4,"buz",0,9,Foo,"",,,
-20,AST_PROP,,4,,1,9,Foo,"",,,
-21,AST_VAR,,4,,0,9,Foo,"",,,
-22,string,,4,"qux",0,9,Foo,"",,,
-23,string,,4,"norf",1,9,Foo,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	5	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_CLASS		3		0	2		""	5	Foo	
+7	NULL		3		0	2	Foo	""			
+8	NULL		3		1	2	Foo	""			
+9	AST_TOPLEVEL	TOPLEVEL_CLASS	3		2	2		""	5	"Foo"	
+10	CFG_FUNC_ENTRY					9				"Foo"	
+11	CFG_FUNC_EXIT					9				"Foo"	
+12	AST_STMT_LIST		3		0	9	Foo	""			
+13	AST_PROP_DECL	MODIFIER_PUBLIC	4		0	9	Foo	""			
+14	AST_PROP_ELEM		4		0	9	Foo	""			
+15	string		4	"foo"	0	9	Foo	""			
+16	AST_VAR		4		1	9	Foo	""			
+17	string		4	"bar"	0	9	Foo	""			
+18	AST_PROP_ELEM		4		1	9	Foo	""			
+19	string		4	"buz"	0	9	Foo	""			
+20	AST_PROP		4		1	9	Foo	""			
+21	AST_VAR		4		0	9	Foo	""			
+22	string		4	"qux"	0	9	Foo	""			
+23	string		4	"norf"	1	9	Foo	""			

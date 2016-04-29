@@ -18,7 +18,7 @@ public class KeyedCSVReader
 
 	public void init(Reader reader) throws IOException
 	{
-		parser = CSVFormat.DEFAULT.withEscape('\\').parse(reader);
+		parser = CSVFormat.TDF.withEscape('\\').parse(reader);
 		initKeys();
 		currentLineNumber = 0;
 	}

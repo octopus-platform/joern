@@ -1,21 +1,21 @@
-id:ID,type,flags:string[],lineno:int,code,childnum:int,funcid:int,classname,namespace,endlineno:int,name,doccomment
-0,Directory,,,,,,,,,".",
-1,File,,,,,,,,,"foo.php",
-2,AST_TOPLEVEL,TOPLEVEL_FILE,1,,,,,"",5,"./foo.php",
-3,CFG_FUNC_ENTRY,,,,,2,,,,"./foo.php",
-4,CFG_FUNC_EXIT,,,,,2,,,,"./foo.php",
-5,AST_STMT_LIST,,1,,0,2,,"",,,
-6,AST_CLASS,CLASS_ABSTRACT,3,,0,2,,"",5,bar,
-7,NULL,,3,,0,2,bar,"",,,
-8,NULL,,3,,1,2,bar,"",,,
-9,AST_TOPLEVEL,TOPLEVEL_CLASS,3,,2,2,,"",5,"bar",
-10,CFG_FUNC_ENTRY,,,,,9,,,,"bar",
-11,CFG_FUNC_EXIT,,,,,9,,,,"bar",
-12,AST_STMT_LIST,,3,,0,9,bar,"",,,
-13,AST_METHOD,MODIFIER_PUBLIC,4,,0,9,bar,"",4,foo,
-14,CFG_FUNC_ENTRY,,,,,13,bar,"",,"foo",
-15,CFG_FUNC_EXIT,,,,,13,bar,"",,"foo",
-16,AST_PARAM_LIST,,4,,0,13,bar,"",,,
-17,NULL,,4,,1,13,bar,"",,,
-18,NULL,,4,,2,13,bar,"",,,
-19,NULL,,4,,3,13,bar,"",,,
+id:int	type	flags:string_array	lineno:int	code	childnum:int	funcid:int	classname	namespace	endlineno:int	name	doccomment
+0	Directory									"."	
+1	File									"foo.php"	
+2	AST_TOPLEVEL	TOPLEVEL_FILE	1					""	5	"./foo.php"	
+3	CFG_FUNC_ENTRY					2				"./foo.php"	
+4	CFG_FUNC_EXIT					2				"./foo.php"	
+5	AST_STMT_LIST		1		0	2		""			
+6	AST_CLASS	CLASS_ABSTRACT	3		0	2		""	5	bar	
+7	NULL		3		0	2	bar	""			
+8	NULL		3		1	2	bar	""			
+9	AST_TOPLEVEL	TOPLEVEL_CLASS	3		2	2		""	5	"bar"	
+10	CFG_FUNC_ENTRY					9				"bar"	
+11	CFG_FUNC_EXIT					9				"bar"	
+12	AST_STMT_LIST		3		0	9	bar	""			
+13	AST_METHOD	MODIFIER_PUBLIC	4		0	9	bar	""	4	foo	
+14	CFG_FUNC_ENTRY					13	bar	""		"foo"	
+15	CFG_FUNC_EXIT					13	bar	""		"foo"	
+16	AST_PARAM_LIST		4		0	13	bar	""			
+17	NULL		4		1	13	bar	""			
+18	NULL		4		2	13	bar	""			
+19	NULL		4		3	13	bar	""			

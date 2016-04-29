@@ -7,7 +7,7 @@ parsePHP() {
   echo "$1"
   cd "$1"
   # start parsing---let's hear error messages only:
-  $PHPJOERN/parser -n nodes.csv -r edges.csv . >/dev/null
+  $PHPJOERN/parser -f jexp -n nodes.csv -r edges.csv . >/dev/null
 }
 
 export PHPJOERN

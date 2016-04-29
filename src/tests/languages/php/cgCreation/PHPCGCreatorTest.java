@@ -189,7 +189,7 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * 
      * include_once "bar.php";
      * 
-     * function foo() { echo "i am foo", PHP_EOL; }
+     * function foo() {}
      * 
      * \D\E\F\bar(); // absolute reference - works
      * F\bar(); // translated to D\E\F\bar(); - works
@@ -209,7 +209,7 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * 
      * include_once "foo.php";
      * 
-     * function bar() { echo "i am bar", PHP_EOL; }
+     * function bar() {}
      * 
      * \A\B\C\foo(); // absolute reference - works
      * G\foo(); // translated to A\B\C\foo(); - works
