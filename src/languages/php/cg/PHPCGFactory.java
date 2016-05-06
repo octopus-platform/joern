@@ -64,6 +64,9 @@ public class PHPCGFactory {
 		createConstructorCallEdges(cg);
 		createNonStaticMethodCallEdges(cg);
 
+		System.err.println("There were " + blacklistedMethodNames.size() + " duplicate method definitions " +
+							"and " + nonStaticMethodDefs.size() + " unique ones.");
+		
 		reset();
 		
 		return cg;
@@ -306,7 +309,7 @@ public class PHPCGFactory {
 			
 			if( constructorDefs.containsKey(constructorKey)) {
 				System.err.println("Constructor definition for '" + constructorKey + "' ambiguous: There are at least two known " +
-						" constructor definitions (id " + staticMethodDefs.get(constructorKey).getNodeId() +
+						" constructor definitions (id " + constructorDefs.get(constructorKey).getNodeId() +
 						" and id " + functionDef.getNodeId() + ")");
 			}
 			
@@ -319,7 +322,7 @@ public class PHPCGFactory {
 			// note that we only deal with unique method names, and that the enclosing namespace
 			// of a non-static method call is irrelevant here
 			String methodKey = ((Method)functionDef).getName();
-			
+
 			if( nonStaticMethodDefs.containsKey(methodKey) || blacklistedMethodNames.contains(methodKey)) {
 				// we do not output an error message here; non-unique non-static method names
 				// should not be that uncommon. in this case we do not know which one is referenced,

@@ -797,7 +797,7 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
      * include_once "foo.php";
      * 
      * class ClassTwo {
-     *   public function foo() {}
+     *   public function bar() {}
      * }
      * 
      * $classone = new \A\ClassOne();

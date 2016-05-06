@@ -111,7 +111,7 @@ public class CSVFunctionExtractor
 		{
 			
 			KeyedCSVRow currNodeRow = nodeReader.getNextRow();
-			System.out.println(currNodeRow);
+			//System.out.println(currNodeRow);
 			String currType = currNodeRow.getFieldForKey(PHPCSVNodeTypes.TYPE);
 
 			// ignore dir nodes
@@ -201,7 +201,7 @@ public class CSVFunctionExtractor
 		while( edgeReader.hasNextRow())
 		{		
 			KeyedCSVRow currEdgeRow = edgeReader.getNextRow();
-			System.out.println(currEdgeRow);
+			//System.out.println(currEdgeRow);
 			String currType = currEdgeRow.getFieldForKey(PHPCSVEdgeTypes.TYPE);
 
 			// ignore dir edges
