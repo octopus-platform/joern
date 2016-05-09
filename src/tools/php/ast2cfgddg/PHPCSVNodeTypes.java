@@ -10,6 +10,8 @@ public class PHPCSVNodeTypes
 	/* node row keys */
 	
 	public static final CSVKey NODE_ID = new CSVKey("id","int");
+	// node labels (either Filesystem, AST or Artificial)
+	public static final CSVKey LABEL = new CSVKey("labels","label");
 	// node properties shared by all nodes (cf. ast\Node specification
 	// in {@link https://github.com/nikic/php-ast})
 	public static final CSVKey TYPE = new CSVKey("type");
@@ -27,6 +29,12 @@ public class PHPCSVNodeTypes
 	public static final CSVKey CLASSNAME = new CSVKey("classname");
 	public static final CSVKey NAMESPACE = new CSVKey("namespace");
 
+	
+	/* node labels */
+	public static final String LABEL_FS = "Filesystem";
+	public static final String LABEL_AST = "AST";
+	public static final String LABEL_ART = "Artificial";
+	
 	
 	/* node types */
 	
