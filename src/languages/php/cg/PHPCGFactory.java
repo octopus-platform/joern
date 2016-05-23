@@ -63,9 +63,6 @@ public class PHPCGFactory {
 		createStaticMethodCallEdges(cg);
 		createConstructorCallEdges(cg);
 		createNonStaticMethodCallEdges(cg);
-
-		System.err.println("There were " + blacklistedMethodNames.size() + " duplicate method definitions " +
-							"and " + nonStaticMethodDefs.size() + " unique ones.");
 		
 		reset();
 		
@@ -204,6 +201,9 @@ public class PHPCGFactory {
 	
 	private static void createNonStaticMethodCallEdges(CG cg) {
 		
+		int successfullyMapped = 0;
+		int ambiguousNotMapped = 0;
+		
 		for( MethodCallExpression methodCall : nonStaticMethodCalls) {
 			
 			// make sure the call target is statically known
@@ -211,11 +211,26 @@ public class PHPCGFactory {
 				
 				StringExpression methodName = (StringExpression)methodCall.getTargetFunc();
 				String methodKey = methodName.getEscapedCodeStr();
-				addCallEdgeIfDefinitionKnown(cg, nonStaticMethodDefs, methodCall, methodKey);
+				// let's count the dynamic methods that could be mapped, and those that cannot
+				if( nonStaticMethodDefs.containsKey(methodKey)) {
+					addCallEdgeIfDefinitionKnown(cg, nonStaticMethodDefs, methodCall, methodKey);
+					successfullyMapped++;
+				}
+				else if( blacklistedMethodNames.contains(methodKey)) {
+					ambiguousNotMapped++;
+				}
 			}
 			else
 				System.err.println("Statically unknown non-static method call at node id " + methodCall.getNodeId() + "!");
 		}
+		
+		System.err.println("Summary dynamic method call construction");
+		System.err.println("----------------------------------------");
+		System.err.println();
+		System.err.println("Successfully mapped unique dynamic method calls: " + successfullyMapped);
+		System.err.println("Ambiguous non-mapped dynamic method calls: " + ambiguousNotMapped);
+		System.err.println("There were " + blacklistedMethodNames.size() + " duplicate method definitions " +
+				"and " + nonStaticMethodDefs.size() + " unique ones.");
 	}
 	
 	/**
