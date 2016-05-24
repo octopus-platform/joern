@@ -61,7 +61,7 @@ public class Main {
 
 		// initialize writers
 		CSVWriterImpl csvWriter = new CSVWriterImpl();
-		csvWriter.openEdgeFile( ".", "cfg_ddg_edges.csv");
+		csvWriter.openEdgeFile( ".", "cpc_edges.csv");
 		Writer.setWriterImpl( csvWriter);
 
 		// let's go...
