@@ -1,13 +1,14 @@
 package languages.php.cg;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 import ast.expressions.CallExpression;
 import ast.expressions.Identifier;
 import ast.expressions.NewExpression;
 import ast.expressions.StringExpression;
+import ast.expressions.Variable;
 import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
@@ -17,33 +18,34 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import cg.CG;
 import cg.CGEdge;
 import cg.CGNode;
+import misc.MultiHashMap;
 import tools.php.ast2cfgddg.PHPCSVNodeTypes;
 
 public class PHPCGFactory {
 
-	// maintains a map of known function names
+	// maintains a map of known function names (e.g., "B\foo" -> function foo() in namespace B)
 	private static HashMap<String,PHPFunctionDef> functionDefs = new HashMap<String,PHPFunctionDef>();
 	// maintains a list of function calls
 	private static LinkedList<CallExpression> functionCalls = new LinkedList<CallExpression>();
 	
-	// maintains a map of known static method names
+	// maintains a map of known static method names (e.g., "B\A::foo" -> static function foo() in class A in namespace B)
 	private static HashMap<String,Method> staticMethodDefs = new HashMap<String,Method>();
 	// maintains a list of static method calls
 	private static LinkedList<StaticCallExpression> staticMethodCalls = new LinkedList<StaticCallExpression>();
 	
-	// maintains a map of known constructors
+	// maintains a map of known constructors (e.g., "B\A" -> static function __construct() in class A in namespace B)
 	private static HashMap<String,Method> constructorDefs = new HashMap<String,Method>();
 	// maintains a list of static method calls
 	private static LinkedList<NewExpression> constructorCalls = new LinkedList<NewExpression>();
 	
-	// maintains a map of known non-static method names
-	private static HashMap<String,Method> nonStaticMethodDefs = new HashMap<String,Method>();
+	// maintains a map of known non-static method names (e.g., "foo" -> {function foo() in class A, function foo() in class C}
+	// this is a MultiHashMap, as these names are not necessarily unique; we could in theory use a similar
+	// mapping as for static method defs (e.g., "A->foo -> function foo() in class A, B->foo -> function foo() in class B),
+	// however that would make it inefficient to lookup the methods when inspecting the method calls
+	private static MultiHashMap<String,Method> nonStaticMethodDefs = new MultiHashMap<String,Method>();
 	// maintains a list of non-static method calls
 	private static LinkedList<MethodCallExpression> nonStaticMethodCalls = new LinkedList<MethodCallExpression>();
-	// maintains a set of blacklisted non-static method names
-	// (these are non-static method names that not unique, and so we do not construct any 
-	// call edges pointing to them)
-	private static HashSet<String> blacklistedMethodNames = new HashSet<String>();
+
 	
 	/**
 	 * Creates a new CG instance based on the lists of known function definitions and function calls.
@@ -213,24 +215,63 @@ public class PHPCGFactory {
 				String methodKey = methodName.getEscapedCodeStr();
 				// let's count the dynamic methods that could be mapped, and those that cannot
 				if( nonStaticMethodDefs.containsKey(methodKey)) {
-					addCallEdgeIfDefinitionKnown(cg, nonStaticMethodDefs, methodCall, methodKey);
-					successfullyMapped++;
-				}
-				else if( blacklistedMethodNames.contains(methodKey)) {
-					ambiguousNotMapped++;
+						
+					// check whether there is only one matching function definition
+					if( nonStaticMethodDefs.get(methodKey).size() == 1) {
+						addCallEdge( cg, methodCall, nonStaticMethodDefs.get(methodKey).get(0));
+						successfullyMapped++;
+					}
+					else { // there is more than one matching function definition
+						// we can still map $this->foo(), though, because we know what $this is
+						if( methodCall.getTargetObject() instanceof Variable
+							&& ((Variable)methodCall.getTargetObject()).getNameExpression() instanceof StringExpression
+							&& ((StringExpression)((Variable)methodCall.getTargetObject()).getNameExpression()).getEscapedCodeStr().equals("this")) {
+							
+							String enclosingClass = methodCall.getEnclosingClass();
+							for( Method methodDef : nonStaticMethodDefs.get(methodKey)) {
+								if( enclosingClass.equals(methodDef.getEnclosingClass())) {
+									addCallEdge( cg, methodCall, methodDef);
+									successfullyMapped++;
+									break;
+								}
+							}							
+						}
+						else
+							ambiguousNotMapped++;
+					}
 				}
 			}
 			else
 				System.err.println("Statically unknown non-static method call at node id " + methodCall.getNodeId() + "!");
 		}
 		
+		System.err.println();
 		System.err.println("Summary dynamic method call construction");
 		System.err.println("----------------------------------------");
 		System.err.println();
-		System.err.println("Successfully mapped unique dynamic method calls: " + successfullyMapped);
+		
+		/* Statistics on method calls */
+		System.err.println("Successfully mapped dynamic method calls: " + successfullyMapped);
 		System.err.println("Ambiguous non-mapped dynamic method calls: " + ambiguousNotMapped);
-		System.err.println("There were " + blacklistedMethodNames.size() + " duplicate method definitions " +
-				"and " + nonStaticMethodDefs.size() + " unique ones.");
+		float mappedMethodCallsPercent = (successfullyMapped + ambiguousNotMapped) == 0 ? 100 :
+			((float)successfullyMapped/((float)successfullyMapped+(float)ambiguousNotMapped)) * 100;
+		System.err.println( "=> " + mappedMethodCallsPercent + "% " +
+				"of non-static method calls could be successfully mapped.");
+		System.err.println();
+
+		/* Statistics on method defs */
+		int uniqueDefs = 0, ambiguousDefs = 0;
+		for( List<Method> methodList : nonStaticMethodDefs.values()) {
+			if( methodList.size() == 1)
+				uniqueDefs++;
+			else
+				ambiguousDefs++;
+		}
+		System.err.println("Unique method names: " + uniqueDefs);
+		System.err.println("Duplicate method names: " + ambiguousDefs);
+		float uniqueMethodNamesPercent = (uniqueDefs + ambiguousDefs) == 0 ? 100 :
+			((float)uniqueDefs/((float)uniqueDefs+(float)ambiguousDefs)) * 100;
+		System.err.println( "=> " + uniqueMethodNamesPercent + "% of all method names were unique.");
 	}
 	
 	/**
@@ -244,17 +285,29 @@ public class PHPCGFactory {
 		boolean ret = false;
 		
 		// check whether we know the called function
-		if( defSet.containsKey(functionKey)) {
-			
-			CGNode caller = new CGNode(functionCall);
-			CGNode callee = new CGNode(defSet.get(functionKey));
-			ret = cg.addVertex(caller);
-			// note that adding a callee node many times is perfectly fine:
-			// CGNode overrides the equals() and hashCode() methods,
-			// so it will actually only be added the first time
-			cg.addVertex(callee);
-			cg.addEdge(new CGEdge(caller, callee));
-		}
+		if( defSet.containsKey(functionKey))		
+			ret = addCallEdge( cg, functionCall, defSet.get(functionKey));
+		
+		return ret;
+	}
+	
+	/**
+	 * Adds an edge to a given call graph.
+	 * 
+	 * @return true if an edge was added, false otherwise
+	 */
+	private static boolean addCallEdge(CG cg, CallExpression functionCall, PHPFunctionDef functionDef) {
+		
+		boolean ret = false;
+		
+		CGNode caller = new CGNode(functionCall);
+		CGNode callee = new CGNode(functionDef);
+		ret = cg.addVertex(caller);
+		// note that adding a callee node many times is perfectly fine:
+		// CGNode overrides the equals() and hashCode() methods,
+		// so it will actually only be added the first time
+		cg.addVertex(callee);
+		cg.addEdge(new CGEdge(caller, callee));
 		
 		return ret;
 	}
@@ -272,7 +325,6 @@ public class PHPCGFactory {
 		
 		nonStaticMethodDefs.clear();
 		nonStaticMethodCalls.clear();
-		blacklistedMethodNames.clear();
 	}
 	
 	/**
@@ -282,7 +334,8 @@ public class PHPCGFactory {
 	 *                    name was previously added, then the new function definition will
 	 *                    be used for that name and the old function definition will be returned.
 	 * @return If there already exists a PHP function definition with the same name,
-	 *         then returns that function definition. Otherwise, returns null.
+	 *         then returns that function definition. Otherwise, returns null. For non-static method
+	 *         definitions, always returns null.
 	 */
 	public static PHPFunctionDef addFunctionDef( PHPFunctionDef functionDef) {
 
@@ -292,6 +345,11 @@ public class PHPCGFactory {
 		
 		// we also ignore closures as they do not have a statically known reference
 		else if( functionDef instanceof Closure)
+			return null;
+		
+		// finally, abstract methods cannot be called either
+		else if( functionDef instanceof Method
+				&& functionDef.getFlags().contains(PHPCSVNodeTypes.FLAG_MODIFIER_ABSTRACT))
 			return null;
 		
 		// it's a static method
@@ -333,20 +391,21 @@ public class PHPCGFactory {
 		
 		// other methods than the above are non-static methods
 		else if( functionDef instanceof Method) {
-			// use foo as key for a static method foo in any class in any namespace;
-			// note that we only deal with unique method names, and that the enclosing namespace
-			// of a non-static method call is irrelevant here
+			// use foo as key for a non-static method foo in any class in any namespace;
+			// note that the enclosing namespace of a non-static method definition is irrelevant here,
+			// as that is usually not known at the call site (neither is the class name, except
+			// when the keyword $this is used)
 			String methodKey = ((Method)functionDef).getName();
 
-			if( nonStaticMethodDefs.containsKey(methodKey) || blacklistedMethodNames.contains(methodKey)) {
-				// we do not output an error message here; non-unique non-static method names
-				// should not be that uncommon. in this case we do not know which one is referenced,
-				// and we blacklist it
-				blacklistedMethodNames.add(methodKey);
-				return nonStaticMethodDefs.remove(methodKey);
+			if( nonStaticMethodDefs.containsKey(methodKey)) {
+				System.err.println("Method definition for '" + methodKey + "' ambiguous: " +
+						" already known method definitions are " + nonStaticMethodDefs.get(methodKey) +
+						", now adding " + functionDef + ")");
 			}
 			
-			return nonStaticMethodDefs.put( methodKey, (Method)functionDef);
+			nonStaticMethodDefs.add( methodKey, (Method)functionDef);
+			
+			return null;
 		}
 		
 		// it's a function (i.e., not inside a class)

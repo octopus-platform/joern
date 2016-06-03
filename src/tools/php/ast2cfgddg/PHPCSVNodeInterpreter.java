@@ -2374,6 +2374,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
 		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
 		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
+		String classname = row.getFieldForKey(PHPCSVNodeTypes.CLASSNAME);
 
 		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
 		newNode.setFlags(flags);
@@ -2381,6 +2382,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		codeloc.startLine = Integer.parseInt(lineno);
 		newNode.setLocation(codeloc);
 		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
+		newNode.setEnclosingClass(classname);
 
 		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
 		ast.addNodeWithId(newNode, id);

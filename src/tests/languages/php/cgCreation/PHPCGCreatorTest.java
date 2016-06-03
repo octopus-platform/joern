@@ -731,8 +731,17 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	{
 		CG cg = getCGForCSVFiles( "testSimpleNonStaticCallsWithNameCollision");
 
-		// the non-static method names are not unique, hence our call graph is empty
-		assertEquals(0, cg.size());
+		// the non-static method names are not unique,
+		// hence we only construct call edges for $this->... calls
+		// 4 nodes: 2 calls and 2 definitions
+		assertEquals(4, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(2, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 19, 13));
+		assertTrue( edgeExists( cg, 67, 45));
 	}
 	
 	/**
@@ -935,5 +944,39 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		assertTrue( edgeExists( cg, 159, 37));
 		assertTrue( edgeExists( cg, 166, 124)); // the same call within the global namespace is found, though
 		assertTrue( edgeExists( cg, 173, 124));
+	}
+	
+	/**
+	 * interface A {
+	 *   abstract public function foo();
+	 * }
+	 * 
+	 * class B implements A {
+	 *   public function foo() {
+	 *     $this->foo();
+	 *   }
+	 * }
+	 * 
+	 * $b =  new B();
+	 * $b->foo();
+	 */
+	@Test
+	public void testAbstractMethodImplementationCall() throws IOException, InvalidCSVFile
+	{
+		CG cg = getCGForCSVFiles( "testAbstractMethodImplementationCall");
+		
+		// 3 nodes: 2 calls to the *unique* method foo() and 1 method definition with a *unique* name;
+		// note that we do not count abstract methods since these cannot be called in the first place
+		assertEquals(3, cg.size());
+		assertEquals(2, cg.numberOfCallers());
+		assertEquals(1, cg.numberOfCallees());
+		
+		assertEquals(cg.numberOfEdges(), cg.numberOfCallers());
+
+		assertTrue( edgeExists( cg, 35, 29));
+		assertTrue( edgeExists( cg, 48, 29));
+		// there should be no edges to the abstract method:
+		assertFalse( edgeExists( cg, 35, 13));
+		assertFalse( edgeExists( cg, 48, 13));
 	}
 }
