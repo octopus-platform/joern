@@ -733,9 +733,10 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	public void testForEach() throws IOException, InvalidCSVFile
 	{
 		// TODO This is temporary.
-		// Until there is no solution for 'foreach' nodes in CFG creation,
-		// we cannot really know which nodes should be analyzed in this context,
-		// and how to tackle them.
+		// Currently CFG generation ignores the defined key/value pairs and
+		// considers only the iterated object as condition. This should be
+		// improved by introducing an explicit ForEachCondition object in the
+		// AST that can then be tested here instead of the whole ForEachStatement.
 		
 		handleCSVFiles( "testForEach");
 

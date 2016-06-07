@@ -6,52 +6,57 @@ import ast.walking.ASTNodeVisitor;
 
 public class ForEachStatement extends BlockStarter
 {
-	private Expression iteratedObject = null;
-	private Expression key = null;
-	private Expression value = null;
+	// a ForEachStatement has four children: three in its predicate, and a statement list
+	// the three children in its predicate are saved in a ForEachCondition container for technical reasons
+	// (for CFG generation, such that we can treat ForEachStatement's exactly as we treat WhileStatement's)
+	private ForEachCondition condition = new ForEachCondition();
 
 	@Override
-	public Expression getCondition()
+	public ForEachCondition getCondition()
 	{
-		throw new RuntimeException("A condition does not exist for a ForEachStatement!");
+		return (ForEachCondition)this.condition;
 	}
 
 	@Override
 	public void setCondition(Expression expression)
 	{
-		throw new RuntimeException("A condition does not exist for a ForEachStatement!");
+		if( ! (expression instanceof ForEachCondition))
+			throw new RuntimeException("The condition of a ForEachStatement must be a ForEachCondition!");
+		else {
+			this.condition = (ForEachCondition)expression;
+		}
 	}
 
 	public Expression getIteratedObject()
 	{
-		return this.iteratedObject;
+		return this.condition.getIteratedObject();
 	}
 
 	public void setIteratedObject(Expression expression)
 	{
-		this.iteratedObject = expression;
+		this.condition.setIteratedObject(expression);
 		super.addChild(expression);
 	}
 
 	public Expression getValueExpression()
 	{
-		return this.value;
+		return this.condition.getValueExpression();
 	}
 
 	public void setValueExpression(Expression value)
 	{
-		this.value = value;
+		this.condition.setValueExpression(value);
 		super.addChild(value);
 	}
 
 	public Expression getKeyExpression()
 	{
-		return this.key;
+		return this.condition.getKeyExpression();
 	}
 
 	public void setKeyExpression(Expression key)
 	{
-		this.key = key;
+		this.condition.setKeyExpression(key);
 		super.addChild(key);
 	}
 

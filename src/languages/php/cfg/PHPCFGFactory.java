@@ -111,11 +111,36 @@ public class PHPCFGFactory extends CFGFactory {
 		return block;
 	}
 
-	public static CFG newInstance(ForEachStatement forEach)
+	public static CFG newInstance(ForEachStatement forEachStatement)
 	{
-		CFG block = new CFG();
-		// TODO: implement me.
-		return block;
+		try
+		{
+			CFG forEachBlock = new CFG();
+			// for now, let's consider the iterated object as the condition only
+			// TODO actually, it would be nicer to have the ForEachCondition explicitly
+			// be a part of the AST
+			CFGNode conditionContainer = new ASTNodeContainer(
+					forEachStatement.getCondition().getIteratedObject());
+			forEachBlock.addVertex(conditionContainer);
+			forEachBlock.addEdge(forEachBlock.getEntryNode(), conditionContainer);
+
+			CFG forEachBody = convert(forEachStatement.getStatement());
+
+			forEachBlock.mountCFG(conditionContainer, conditionContainer,
+					forEachBody, CFGEdge.NEXT_LABEL);
+			forEachBlock.addEdge(conditionContainer, forEachBlock.getExitNode(),
+					CFGEdge.COMPLETE_LABEL);
+
+			fixBreakStatements(forEachBlock, forEachBlock.getExitNode());
+			fixContinueStatement(forEachBlock, conditionContainer);
+
+			return forEachBlock;
+		}
+		catch (Exception e)
+		{
+			// e.printStackTrace();
+			return newErrorInstance();
+		}
 	}
 
 	public static CFG newInstance(TryStatement tryStatement)

@@ -8,13 +8,18 @@ import graphutils.Edge;
 
 public class CFGEdge extends Edge<CFGNode>
 {
-
+	// standard edges
 	public static final String EMPTY_LABEL = "";
 	public static final String TRUE_LABEL = "True";
 	public static final String FALSE_LABEL = "False";
+	// for exception handling
 	public static final String EXCEPT_LABEL = "except";
 	public static final String HANDLED_EXCEPT_LABEL = "catch";
 	public static final String UNHANDLED_EXCEPT_LABEL = "unhandled";
+	// for foreach-statements: like while statements, but with "next" as "true" and "complete" as "false"
+	public static final String NEXT_LABEL = "next";
+	public static final String COMPLETE_LABEL = "complete";
+
 
 	private String label;
 	private Map<String, Object> properties;

@@ -212,12 +212,26 @@ public class TrickyCFGTests extends PHPCSVFunctionConverterBasedTest {
 	@Test
 	public void testTrickyForEach() throws IOException, InvalidCSVFile
 	{
-		@SuppressWarnings("unused")
 		CFG cfg = getTopCFGForCSVFiles( "testTrickyForEach");
 
 		// TODO
-		// not even treated as a normal statement, the foreach node completely
-		// disappears as if it had never been there in the first place; can we do better?
+		// we should consider the entire guard of the foreach-statement, i.e.,
+		// the ForEachCondition, as integral part of the AST and a distinguished
+		// CFG node. Currently, we only consider the iterated object as condition
+		// and ignore the defined key/value pair.
+		assertEquals( 6, cfg.getVertices().size());
+		assertEquals( 6, cfg.getEdges().size());
+		
+		assertEquals( 4, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		assertTrue( edgeExists(cfg, cfg.getEntryNode(), 6, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 6, 11, CFGEdge.EMPTY_LABEL));
+		
+		assertTrue( edgeExists(cfg, 11, 17, CFGEdge.NEXT_LABEL));
+		assertTrue( edgeExists(cfg, 11, 21, CFGEdge.COMPLETE_LABEL));
+		assertTrue( edgeExists(cfg, 17, 11, CFGEdge.EMPTY_LABEL));
+		
+		assertTrue( edgeExists(cfg, 21, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
 	}
 
 	/**

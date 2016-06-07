@@ -191,10 +191,28 @@ public class StructuredFlowTests extends PHPCSVFunctionConverterBasedTest {
 	@Test
 	public void testForEach() throws IOException, InvalidCSVFile
 	{
-		@SuppressWarnings("unused")
 		CFG cfg = getTopCFGForCSVFiles( "testForEach");
 		
-		// TODO treat foreach blocks, they are completely ignored for now
+		assertEquals( 5, cfg.getVertices().size());
+		assertEquals( 7, cfg.getEdges().size());
+		
+		assertEquals( 3, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		// TODO currently, we regard the iterated object as the condition and
+		// completely ignore the defined key/value pair. This should be improved
+		// by explicitly considering a ForEachCondition as the condition. For this,
+		// we have to
+		// (1) modify the parser to actually generate a ForEachCondition AST node,
+		//     so that this condition has an explicit node id
+		// (2) modify the def/use analysis to cope with ForEachConditions (which "use"
+		//     the iterated object and "define" the key and the value)
+		assertTrue( edgeExists( cfg, cfg.getEntryNode(), 7, CFGEdge.EMPTY_LABEL));;
+		assertTrue( edgeExists( cfg, 7, 7, CFGEdge.NEXT_LABEL));
+		assertTrue( edgeExists( cfg, 7, 14, CFGEdge.COMPLETE_LABEL));
+		assertTrue( edgeExists( cfg, 14, 14, CFGEdge.NEXT_LABEL));
+		assertTrue( edgeExists( cfg, 14, 24, CFGEdge.COMPLETE_LABEL));
+		assertTrue( edgeExists( cfg, 24, 24, CFGEdge.NEXT_LABEL));
+		assertTrue( edgeExists( cfg, 24, cfg.getExitNode(), CFGEdge.COMPLETE_LABEL));
 	}
 
 }
