@@ -1,0 +1,5 @@
+include 'projects:joern-common'
+include 'projects:joern-fuzzyc'
+include 'projects:joern-php'
+
+
