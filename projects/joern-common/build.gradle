@@ -1,0 +1,5 @@
+
+test{
+	exclude 'tests/languages/php/**'
+	exclude 'tests/CodebaseWalkerTest*'
+}
