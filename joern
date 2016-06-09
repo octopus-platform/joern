@@ -1,6 +1,5 @@
 #!/bin/bash
 
 BASEDIR=$(dirname "$0")
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 java -cp "$BASEDIR/build/libs/joern.jar:$BASEDIR/jars/*" tools.parser.ParserMain $@
