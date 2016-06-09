@@ -18,6 +18,11 @@ dependencies{
 
 }
 
+test{
+	exclude 'tests/languages/php/**'
+	exclude 'tests/CodebaseWalkerTest*'
+}
+
 task copyToLib(type: Copy) {
     into "jars"
     from configurations.runtime
