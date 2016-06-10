@@ -28,6 +28,13 @@ task copyToLib(type: Copy) {
 }
 
 
+task buildTestDatabase << {
+     println './rebuildTestDB.sh'.execute().text
+}
+
+buildTestDatabase.dependsOn subprojects.build
+build.dependsOn buildTestDatabase
+
 build.dependsOn subprojects.build
 
 copyToLib.dependsOn compileJava
