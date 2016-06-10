@@ -21,6 +21,7 @@ public class PHPFunctionDef extends FunctionDef
 		setProperty(ASTNodeProperties.NAMESPACE, namespace);
 	}
 	
+	@Override
 	public String getName() {
 		return getProperty(ASTNodeProperties.NAME);
 	}
@@ -130,11 +131,5 @@ public class PHPFunctionDef extends FunctionDef
 				retval += getReturnType().getNameChild().getEscapedCodeStr();
 		}
 		return retval;
-	}
-	
-	@Override
-	public Identifier getIdentifier()
-	{
-		throw new RuntimeException("An Identifier is not used for PHP function names, use getName() instead!");
 	}
 }
