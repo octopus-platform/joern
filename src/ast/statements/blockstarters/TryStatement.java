@@ -1,5 +1,6 @@
 package ast.statements.blockstarters;
 
+import ast.ASTNode;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
@@ -47,5 +48,18 @@ public class TryStatement extends BlockStarter
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
+	}
+	
+	@Override
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof CompoundStatement && getChildCount() == 0)
+			setContent( (CompoundStatement)node);
+		else if (node instanceof CatchList)
+			setCatchList( (CatchList)node);
+		else if (node instanceof CompoundStatement && getChildCount() == 2)
+			setFinallyContent( (CompoundStatement)node);
+		else
+			super.addChild(node);
 	}
 }

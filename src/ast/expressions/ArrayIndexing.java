@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import ast.ASTNode;
+
 public class ArrayIndexing extends Expression
 {
 	private Expression array = null;
@@ -25,5 +27,16 @@ public class ArrayIndexing extends Expression
 	{
 		this.index = index;
 		super.addChild(index);
+	}
+	
+	@Override
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof Expression && getChildCount() == 0)
+			setArrayExpression( (Expression)node);
+		else if (node instanceof Expression && getChildCount() == 1)
+			setIndexExpression( (Expression)node);
+		else
+			super.addChild(node);
 	}
 }

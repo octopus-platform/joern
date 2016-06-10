@@ -1,5 +1,6 @@
 package ast.statements.jump;
 
+import ast.ASTNode;
 import ast.expressions.Expression;
 import ast.logical.statements.JumpStatement;
 import ast.walking.ASTNodeVisitor;
@@ -22,5 +23,14 @@ public class ThrowStatement extends JumpStatement
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
+	}
+	
+	@Override
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof Expression)
+			setThrowExpression((Expression) node);
+		else
+			super.addChild(node);
 	}
 }

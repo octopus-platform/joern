@@ -1,5 +1,6 @@
 package ast.logical.statements;
 
+import ast.ASTNode;
 import ast.expressions.StringExpression;
 import ast.walking.ASTNodeVisitor;
 
@@ -29,5 +30,14 @@ public class Label extends Statement
 
 		String codeStr = getEscapedCodeStr();
 		return codeStr.substring(0, codeStr.length() - 2);
+	}
+	
+	@Override
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof StringExpression)
+			setNameChild((StringExpression) node);
+		else
+			super.addChild(node);
 	}
 }
