@@ -6,7 +6,7 @@ import org.apache.commons.cli.ParseException;
 
 import tools.CommonCommandLineInterface;
 
-public class ImporterCmdLineInterface extends CommonCommandLineInterface
+public class ParserCmdLineInterface extends CommonCommandLineInterface
 {
 
 	private String[] filenames;
@@ -29,7 +29,7 @@ public class ImporterCmdLineInterface extends CommonCommandLineInterface
 		return outputFormat;
 	}
 
-	public ImporterCmdLineInterface()
+	public ParserCmdLineInterface()
 	{
 		super();
 	}

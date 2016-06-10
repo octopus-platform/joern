@@ -5,6 +5,7 @@ import ast.functionDef.FunctionDef;
 import cfg.CFG;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
+import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 
 public abstract class FunctionExporter extends ASTNodeExporter
 {
@@ -23,6 +24,7 @@ public abstract class FunctionExporter extends ASTNodeExporter
 	protected abstract void linkFunctionToFileNode(
 			FunctionDatabaseNode function, FileDatabaseNode fileNode);
 
+	@Override
 	public void addToDatabaseSafe(ASTNode node)
 	{
 		try
@@ -30,6 +32,7 @@ public abstract class FunctionExporter extends ASTNodeExporter
 			FunctionDatabaseNode function = new FunctionDatabaseNode();
 			// this actually constructs all other representations of
 			// the function.
+			function.setASTDefUseAnalyzer(new CASTDefUseAnalyzer());
 			function.initialize(node);
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);

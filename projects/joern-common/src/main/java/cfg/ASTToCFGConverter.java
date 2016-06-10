@@ -1,19 +1,17 @@
 package cfg;
 
 import ast.functionDef.FunctionDef;
-import languages.c.cfg.CCFGFactory;
-import languages.php.cfg.PHPCFGFactory;
 
 public class ASTToCFGConverter
 {
 
-	CFGFactory factory = new CCFGFactory();
+	CFGFactory factory;
 
-	public void setLanguage(String language)
+	public void setFactory(CFGFactory factory)
 	{
-		if(language.equals("PHP"))
-			factory = new PHPCFGFactory();
+		this.factory = factory;
 	}
+
 
 	public CFG convert(FunctionDef node)
 	{

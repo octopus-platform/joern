@@ -15,6 +15,7 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.BatchInserterFactory;
 import ddg.DefUseCFG.DefUseCFG;
+import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import neo4j.traversals.batchInserter.Elementary;
 import neo4j.traversals.batchInserter.Function;
 import tests.TestDBTestsBatchInserter;
@@ -57,7 +58,7 @@ public class testDDGCreator extends TestDBTestsBatchInserter
 
 		CFGCreator cfgCreator = new CFGCreator();
 		CFGToUDGConverter converter = new CFGToUDGConverter();
-		converter.setLanguage("C");
+		converter.setASTDefUseAnalyzer(new CASTDefUseAnalyzer());
 		CFGAndUDGToDefUseCFG converter2 = new CFGAndUDGToDefUseCFG();
 
 		CFG cfg = cfgCreator.getCFGForCode("f(){ int x = 0; foo(x);}");

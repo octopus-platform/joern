@@ -18,7 +18,7 @@ import outputModules.neo4j.ParserNeo4JOutput;
 public class ParserMain
 {
 
-	private static ImporterCmdLineInterface cmd = new ImporterCmdLineInterface();
+	private static ParserCmdLineInterface cmd = new ParserCmdLineInterface();
 	// private static SourceFileWalker sourceFileWalker = new UnorderedWalker();
 	private static SourceFileWalker sourceFileWalker = new OrderedWalker();
 

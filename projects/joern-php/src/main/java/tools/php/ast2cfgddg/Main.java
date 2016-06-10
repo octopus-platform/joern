@@ -15,7 +15,9 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
+import languages.php.cfg.PHPCFGFactory;
 import languages.php.cg.PHPCGFactory;
+import languages.php.udg.useDefAnalysis.PHPASTDefUseAnalyzer;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
 import outputModules.csv.exporters.CSVCFGExporter;
@@ -25,7 +27,7 @@ import udg.CFGToUDGConverter;
 import udg.useDefGraph.UseDefGraph;
 
 public class Main {
-	
+
 	// command line interface
 	static CommandLineInterface cmdLine = new CommandLineInterface();
 
@@ -43,7 +45,7 @@ public class Main {
 	static CSVCGExporter csvCGExporter = new CSVCGExporter();
 
 	public static void main(String[] args) throws InvalidCSVFile, IOException {
-		
+
 		// parse command line
 		parseCommandLine(args);
 
@@ -56,8 +58,8 @@ public class Main {
 		// initialize converters
 		extractor.setLanguage("PHP");
 		extractor.initialize(nodeFileReader, edgeFileReader);
-		ast2cfgConverter.setLanguage("PHP");
-		cfgToUDG.setLanguage("PHP");
+		ast2cfgConverter.setFactory(new PHPCFGFactory());
+		cfgToUDG.setASTDefUseAnalyzer(new PHPASTDefUseAnalyzer());
 
 		// initialize writers
 		CSVWriterImpl csvWriter = new CSVWriterImpl();
@@ -67,9 +69,9 @@ public class Main {
 		// let's go...
 		PHPFunctionDef rootnode;
 		while ((rootnode = (PHPFunctionDef)extractor.getNextFunction()) != null) {
-			
+
 			PHPCGFactory.addFunctionDef( rootnode);
-			
+
 			CFG cfg = ast2cfgConverter.convert(rootnode);
 			csvCFGExporter.writeCFGEdges(cfg);
 
@@ -78,7 +80,7 @@ public class Main {
 			DDG ddg = ddgCreator.createForDefUseCFG(defUseCFG);
 			csvDDGExporter.writeDDGEdges(ddg);
 		}
-		
+
 		// now that we wrapped up all functions, let's finish off with the call graph
 		CG cg = PHPCGFactory.newInstance();
 		csvCGExporter.writeCGEdges(cg);
@@ -87,7 +89,7 @@ public class Main {
 	}
 
 	private static void parseCommandLine(String[] args)	{
-		
+
 		try {
 			cmdLine.parseCommandLine(args);
 		}
@@ -97,7 +99,7 @@ public class Main {
 	}
 
 	private static void printHelpAndTerminate(Exception e) {
-		
+
 		System.err.println(e.getMessage());
 		cmdLine.printHelp();
 		System.exit(0);

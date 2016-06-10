@@ -17,6 +17,7 @@ import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
 import dom.DominatorTree;
 import udg.CFGToUDGConverter;
+import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 
 // Note: we currently use the FunctionDatabaseNode
@@ -42,6 +43,11 @@ public class FunctionDatabaseNode extends DatabaseNode
 	DDGCreator ddgCreator = new DDGCreator();
 	CDGCreator cdgCreator = new CDGCreator();
 
+	public void setASTDefUseAnalyzer(ASTDefUseAnalyzer analyzer)
+	{
+		cfgToUDG.setASTDefUseAnalyzer(analyzer);
+	}
+
 	@Override
 	public void initialize(Object node)
 	{
@@ -49,7 +55,6 @@ public class FunctionDatabaseNode extends DatabaseNode
 		cfg = astToCFG.convert(astRoot);
 		dom = DominatorTree.newDominatorTree(cfg);
 		postDom = DominatorTree.newPostDominatorTree(cfg);
-		cfgToUDG.setLanguage("C");
 		udg = cfgToUDG.convert(cfg);
 		DefUseCFG defUseCFG = udgAndCfgToDefUseCFG.convert(cfg, udg);
 		ddg = ddgCreator.createForDefUseCFG(defUseCFG);

@@ -44,7 +44,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	{
 		astToCFG = new ASTToCFGConverter();
 		cfgToUDG = new CFGToUDGConverter();
-		cfgToUDG.setLanguage("C");
+		cfgToUDG.setASTDefUseAnalyzer(new CASTDefUseAnalyzer());
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		String code = functionMap.get("udg_test_def_tainted_call");
 		CFG cfg = getCFGForCode(code);
 		CFGToUDGConverter myCFGToUDG = new CFGToUDGConverter();
-		myCFGToUDG.setLanguage("C");
+		myCFGToUDG.setASTDefUseAnalyzer(new CASTDefUseAnalyzer());
 		((CASTDefUseAnalyzer)myCFGToUDG.getASTDefUseAnalyzer()).addTaintSource("foo", 0);
 		UseDefGraph useDefGraph = myCFGToUDG.convert(cfg);
 
