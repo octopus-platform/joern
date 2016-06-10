@@ -32,10 +32,14 @@ task buildTestDatabase << {
      println './rebuildTestDB.sh'.execute().text
 }
 
+copyToLib.dependsOn subprojects.build
+
 buildTestDatabase.dependsOn subprojects.build
+buildTestDatabase.dependsOn copyToLib
+
 build.dependsOn buildTestDatabase
-
 build.dependsOn subprojects.build
-
-copyToLib.dependsOn compileJava
 build.dependsOn copyToLib
+
+
+
