@@ -1,10 +1,13 @@
 #!/bin/bash
 
+BASEDIR=$(dirname "$0")
+
 rm -rf .testDB
-java -jar bin/joern.jar testCode -outdir .testDB
 
-# Taint sources 
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/joern-common/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.parser.ParserMain testCode -outdir .testDB
 
-java -jar bin/argumentTainter.jar -dbdir .testDB taint_source 1
-java -jar bin/argumentTainter.jar -dbdir .testDB second_taint_source 0
-java -jar bin/argumentTainter.jar -dbdir .testDB interproc_callee 0
+# Taint sources
+
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/joern-common/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB taint_source 1
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/joern-common/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB second_taint_source 0
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/joern-common/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB interproc_callee 0
