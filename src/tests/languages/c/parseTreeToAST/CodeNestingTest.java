@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.expressions.Argument;
@@ -17,7 +18,6 @@ import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
 import languages.c.antlr.FunctionParser.StatementsContext;
 
 public class CodeNestingTest
@@ -70,7 +70,7 @@ public class CodeNestingTest
 		String input = "if(foo){bar();}else{ while(foo1){ if(bar2){} } }";
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
+		CIfStatement ifItem = (CIfStatement) contentItem.getStatements().get(0);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class CodeNestingTest
 		String input = "if (A){ if (B){ } if (C){ } } else { }";
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
+		CIfStatement ifItem = (CIfStatement) contentItem.getStatements().get(0);
 		assertTrue(ifItem.getElseNode() != null);
 	}
 

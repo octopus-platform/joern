@@ -3,6 +3,8 @@ package languages.c.parsing.Functions.builder;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
+import ast.c.statements.blockstarters.CElseStatement;
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.expressions.Expression;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
@@ -10,8 +12,6 @@ import ast.statements.ExpressionHolder;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
-import ast.statements.blockstarters.ElseStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
 import languages.c.parsing.ASTNodeFactory;
@@ -81,11 +81,11 @@ public class NestingReconstructor
 				curBlockStarter.addChild(node);
 				node = curBlockStarter;
 
-				if (curBlockStarter instanceof IfStatement)
+				if (curBlockStarter instanceof CIfStatement)
 				{
 
 					if (stack.size() > 0
-							&& stack.peek() instanceof ElseStatement)
+							&& stack.peek() instanceof CElseStatement)
 					{
 						// This is an if inside an else, e.g., 'else if'
 						// handling
@@ -93,24 +93,24 @@ public class NestingReconstructor
 						BlockStarter elseItem = (BlockStarter) stack.pop();
 						elseItem.addChild(curBlockStarter);
 
-						IfStatement lastIf = (IfStatement) stack
+						CIfStatement lastIf = (CIfStatement) stack
 								.getIfInElseCase();
 						if (lastIf != null)
 						{
-							lastIf.setElseNode((ElseStatement) elseItem);
+							lastIf.setElseNode((CElseStatement) elseItem);
 						}
 
 						return;
 					}
 
-				} else if (curBlockStarter instanceof ElseStatement)
+				} else if (curBlockStarter instanceof CElseStatement)
 				{
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
 
-					IfStatement lastIf = (IfStatement) stack.getIf();
+					CIfStatement lastIf = (CIfStatement) stack.getIf();
 					if (lastIf != null)
-						lastIf.setElseNode((ElseStatement) curBlockStarter);
+						lastIf.setElseNode((CElseStatement) curBlockStarter);
 					else
 						throw new RuntimeException(
 								"Warning: cannot find if for else");

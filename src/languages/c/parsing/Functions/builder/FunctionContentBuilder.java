@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
+import ast.c.statements.blockstarters.CElseStatement;
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.declarations.IdentifierDeclType;
@@ -28,12 +30,12 @@ import ast.expressions.Expression;
 import ast.expressions.ForInit;
 import ast.expressions.Identifier;
 import ast.expressions.IncDec;
-import ast.expressions.PostIncDecOperationExpression;
 import ast.expressions.InclusiveOrExpression;
 import ast.expressions.InitializerList;
 import ast.expressions.MemberAccess;
 import ast.expressions.MultiplicativeExpression;
 import ast.expressions.OrExpression;
+import ast.expressions.PostIncDecOperationExpression;
 import ast.expressions.PrimaryExpression;
 import ast.expressions.PtrMemberAccess;
 import ast.expressions.RelationalExpression;
@@ -54,9 +56,7 @@ import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
-import ast.statements.blockstarters.ElseStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -191,7 +191,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterIf(If_statementContext ctx)
 	{
-		replaceTopOfStack(new IfStatement(), ctx);
+		replaceTopOfStack(new CIfStatement(), ctx);
 	}
 
 	public void enterFor(For_statementContext ctx)
@@ -211,7 +211,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterElse(Else_statementContext ctx)
 	{
-		replaceTopOfStack(new ElseStatement(), ctx);
+		replaceTopOfStack(new CElseStatement(), ctx);
 	}
 
 	public void exitStatement(StatementContext ctx)
