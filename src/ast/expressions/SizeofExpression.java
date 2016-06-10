@@ -2,7 +2,7 @@ package ast.expressions;
 
 import ast.walking.ASTNodeVisitor;
 
-public class SizeofExpr extends Expression
+public class SizeofExpression extends Expression
 {
 	public void accept(ASTNodeVisitor visitor)
 	{

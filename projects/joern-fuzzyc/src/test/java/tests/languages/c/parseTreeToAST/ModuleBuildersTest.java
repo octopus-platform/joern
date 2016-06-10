@@ -8,12 +8,11 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
 import ast.ASTNode;
+import ast.c.functionDef.CParameterType;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
-import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
-import ast.functionDef.ParameterType;
 import ast.statements.IdentifierDeclStatement;
 import languages.c.antlr.ModuleLexer;
 import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
@@ -73,7 +72,7 @@ public class ModuleBuildersTest
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		FunctionDef funcItem = (FunctionDef) codeItem.content.getStatements()
 				.get(0);
-		assertTrue(funcItem.getIdentifier().getEscapedCodeStr().equals("bar"));
+		assertTrue(funcItem.getName().equals("bar"));
 	}
 
 	@Test
@@ -123,7 +122,7 @@ public class ModuleBuildersTest
 		String input = "void foo(){};";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		assertTrue(codeItem.getIdentifier().getEscapedCodeStr().equals("foo"));
+		assertTrue(codeItem.getName().equals("foo"));
 	}
 
 	@Test
@@ -177,8 +176,8 @@ public class ModuleBuildersTest
 		String input = "int foo(myType myParam){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		Identifier name = codeItem.getParameterList().getParameter(0).getIdentifier();
-		assertTrue(name.getEscapedCodeStr().equals("myParam"));
+		String name = codeItem.getParameterList().getParameter(0).getName();
+		assertTrue(name.equals("myParam"));
 	}
 
 	@Test
@@ -187,7 +186,7 @@ public class ModuleBuildersTest
 		String input = "int foo(char *myParam){}";
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
-		ParameterType type = (ParameterType)codeItem.getParameterList().getParameter(0).getType();
+		CParameterType type = (CParameterType)codeItem.getParameterList().getParameter(0).getType();
 		System.out.println(type.getEscapedCodeStr());
 		assertTrue(type.getEscapedCodeStr().equals("char *"));
 	}
@@ -199,7 +198,7 @@ public class ModuleBuildersTest
 		List<ASTNode> codeItems = parseInput(input);
 		FunctionDef codeItem = (FunctionDef) codeItems.get(0);
 		System.out.println(codeItem.getEscapedCodeStr());
-		assertTrue(codeItem.getIdentifier().getEscapedCodeStr().equals("foo"));
+		assertTrue(codeItem.getName().equals("foo"));
 	}
 
 	@Test

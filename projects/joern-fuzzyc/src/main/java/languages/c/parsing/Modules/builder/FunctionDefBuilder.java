@@ -5,8 +5,8 @@ import java.util.Stack;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNodeBuilder;
+import ast.c.functionDef.CFunctionDef;
 import ast.expressions.Identifier;
-import ast.functionDef.FunctionDef;
 import ast.functionDef.ReturnType;
 import ast.logical.statements.CompoundStatement;
 import languages.c.antlr.ModuleParser.Function_nameContext;
@@ -20,15 +20,15 @@ import parsing.ParseTreeUtils;
 public class FunctionDefBuilder extends ASTNodeBuilder
 {
 
-	FunctionDef thisItem;
+	CFunctionDef thisItem;
 	ParameterListBuilder paramListBuilder = new ParameterListBuilder();
 
 	@Override
 	public void createNew(ParserRuleContext ctx)
 	{
-		item = new FunctionDef();
+		item = new CFunctionDef();
 		ASTNodeFactory.initializeFromContext(item, ctx);
-		thisItem = (FunctionDef) item;
+		thisItem = (CFunctionDef) item;
 	}
 
 	public void setName(Function_nameContext ctx,

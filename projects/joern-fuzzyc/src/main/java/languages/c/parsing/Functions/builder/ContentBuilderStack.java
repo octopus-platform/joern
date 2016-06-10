@@ -3,8 +3,8 @@ package languages.c.parsing.Functions.builder;
 import java.util.Stack;
 
 import ast.ASTNode;
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.statements.blockstarters.DoStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.TryStatement;
 
 public class ContentBuilderStack
@@ -34,12 +34,12 @@ public class ContentBuilderStack
 		return itemStack.peek();
 	}
 
-	public IfStatement getIfInElseCase()
+	public CIfStatement getIfInElseCase()
 	{
 		return shadowStack.getIfInElseCase();
 	}
 
-	public IfStatement getIf()
+	public CIfStatement getIf()
 	{
 		return shadowStack.getIf();
 	}

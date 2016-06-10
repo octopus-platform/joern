@@ -56,10 +56,10 @@ public class CASTDefUseAnalyzer extends ASTDefUseAnalyzer
 		case "PostIncDecOperationExpression":
 			return new IncDecEnvironment();
 		case "IdentifierDecl":
-		case "Parameter":
+		case "CParameter":
 			return new DeclEnvironment();
 
-		case "CallExpression":
+		case "CCallExpression":
 			return createCallEnvironment(astProvider);
 
 		case "Argument":

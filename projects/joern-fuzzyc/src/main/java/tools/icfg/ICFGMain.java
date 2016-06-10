@@ -21,7 +21,7 @@ public class ICFGMain extends GraphDbWalker
 
 		initializeDatabase();
 
-		walker.setType("CallExpression");
+		walker.setType("CCallExpression");
 		walker.addListener(listener);
 		walker.walk();
 

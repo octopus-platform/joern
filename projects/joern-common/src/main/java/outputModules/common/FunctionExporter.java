@@ -48,7 +48,7 @@ public abstract class FunctionExporter extends ASTNodeExporter
 		{
 			ex.printStackTrace();
 			System.err.println("Error adding function to database: "
-					+ ((FunctionDef) node).getIdentifier().getEscapedCodeStr());
+					+ ((FunctionDef) node).getName());
 			return;
 		}
 	}

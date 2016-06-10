@@ -7,6 +7,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
+import ast.c.expressions.CCallExpression;
+import ast.c.statements.blockstarters.CElseStatement;
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.declarations.IdentifierDeclType;
@@ -17,7 +20,6 @@ import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.BitAndExpression;
-import ast.expressions.CallExpression;
 import ast.expressions.Callee;
 import ast.expressions.CastExpression;
 import ast.expressions.CastTarget;
@@ -28,18 +30,18 @@ import ast.expressions.Expression;
 import ast.expressions.ForInit;
 import ast.expressions.Identifier;
 import ast.expressions.IncDec;
-import ast.expressions.PostIncDecOperationExpression;
 import ast.expressions.InclusiveOrExpression;
 import ast.expressions.InitializerList;
 import ast.expressions.MemberAccess;
 import ast.expressions.MultiplicativeExpression;
 import ast.expressions.OrExpression;
+import ast.expressions.PostIncDecOperationExpression;
 import ast.expressions.PrimaryExpression;
 import ast.expressions.PtrMemberAccess;
 import ast.expressions.RelationalExpression;
 import ast.expressions.ShiftExpression;
 import ast.expressions.Sizeof;
-import ast.expressions.SizeofExpr;
+import ast.expressions.SizeofExpression;
 import ast.expressions.SizeofOperand;
 import ast.expressions.UnaryExpression;
 import ast.expressions.UnaryOperationExpression;
@@ -54,9 +56,7 @@ import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
-import ast.statements.blockstarters.ElseStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -191,7 +191,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterIf(If_statementContext ctx)
 	{
-		replaceTopOfStack(new IfStatement(), ctx);
+		replaceTopOfStack(new CIfStatement(), ctx);
 	}
 
 	public void enterFor(For_statementContext ctx)
@@ -211,7 +211,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterElse(Else_statementContext ctx)
 	{
-		replaceTopOfStack(new ElseStatement(), ctx);
+		replaceTopOfStack(new CElseStatement(), ctx);
 	}
 
 	public void exitStatement(StatementContext ctx)
@@ -432,7 +432,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterFuncCall(FuncCallContext ctx)
 	{
-		CallExpression expr = new CallExpression();
+		CCallExpression expr = new CCallExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
@@ -457,10 +457,10 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	private void introduceCalleeNode()
 	{
-		CallExpression expr;
+		CCallExpression expr;
 		try
 		{
-			expr = (CallExpression) stack.peek();
+			expr = (CCallExpression) stack.peek();
 		} catch (EmptyStackException ex)
 		{
 			return;
@@ -834,7 +834,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterSizeofExpr(Sizeof_expressionContext ctx)
 	{
-		SizeofExpr expr = new SizeofExpr();
+		SizeofExpression expr = new SizeofExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}

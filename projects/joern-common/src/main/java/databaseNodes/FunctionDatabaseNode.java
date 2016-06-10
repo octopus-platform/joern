@@ -82,7 +82,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 
 	public String getName()
 	{
-		return astRoot.getIdentifier().getEscapedCodeStr();
+		return astRoot.getName();
 	}
 
 	public ASTNode getASTRoot()

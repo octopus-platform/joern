@@ -1,5 +1,6 @@
 package languages.c.cfg;
 
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.statements.blockstarters.IfStatement;
 import cfg.CFG;
 import cfg.CFGEdge;
@@ -19,10 +20,12 @@ public class CCFGFactory extends CFGFactory
 		structuredFlowVisitior = new CStructuredFlowVisitor();
 	}
 
-	public static CFG newInstance(IfStatement ifStatement)
+	public static CFG newInstance(IfStatement ifStmt)
 	{
 		try
 		{
+			CIfStatement ifStatement = (CIfStatement)ifStmt;
+			
 			CFG block = new CFG();
 			CFGNode conditionContainer = new ASTNodeContainer(
 					ifStatement.getCondition());

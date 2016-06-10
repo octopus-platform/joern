@@ -1,5 +1,6 @@
 package ast.expressions;
 
+import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
 public class UnaryExpression extends Expression
@@ -20,5 +21,14 @@ public class UnaryExpression extends Expression
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
+	}
+	
+	@Override
+	public void addChild(ASTNode node)
+	{
+		if (node instanceof Expression)
+			setExpression((Expression) node);
+		else
+			super.addChild(node);
 	}
 }

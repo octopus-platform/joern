@@ -4,9 +4,9 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 import ast.ASTNode;
+import ast.c.statements.blockstarters.CIfStatement;
 import ast.logical.statements.CompoundStatement;
 import ast.statements.blockstarters.DoStatement;
-import ast.statements.blockstarters.IfStatement;
 import ast.statements.blockstarters.TryStatement;
 
 public class ShadowStack
@@ -36,7 +36,7 @@ public class ShadowStack
 
 	public void push(ASTNode statementItem)
 	{
-		if (statementItem instanceof IfStatement
+		if (statementItem instanceof CIfStatement
 				|| statementItem instanceof DoStatement
 				|| statementItem instanceof TryStatement)
 		{
@@ -57,7 +57,7 @@ public class ShadowStack
 		}
 	}
 
-	public IfStatement getIfInElseCase()
+	public CIfStatement getIfInElseCase()
 	{
 		if (stack.size() < 2)
 			return null;
@@ -65,18 +65,18 @@ public class ShadowStack
 		StackItem topItem = stack.pop();
 		StackItem returnItem = stack.pop();
 		stack.push(topItem);
-		return (IfStatement) returnItem.ifOrDoOrTry;
+		return (CIfStatement) returnItem.ifOrDoOrTry;
 	}
 
-	public IfStatement getIf()
+	public CIfStatement getIf()
 	{
-		IfStatement retval;
+		CIfStatement retval;
 		StackItem item = null;
 
 		try
 		{
 			item = stack.pop();
-			retval = (IfStatement) item.ifOrDoOrTry;
+			retval = (CIfStatement) item.ifOrDoOrTry;
 		} catch (EmptyStackException ex)
 		{
 			return null;
