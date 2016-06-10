@@ -18,12 +18,16 @@ public class PHPParameter extends Parameter
 		return this.type;
 	}
 	
-	@Override
 	public void setType(ASTNode type)
 	{
 		if( type instanceof Identifier)
 			this.type = (Identifier)type;
 		super.addChild(type);
+	}
+	
+	@Override
+	public String getName() {
+		return getNameChild().getEscapedCodeStr();
 	}
 	
 	public StringExpression getNameChild()

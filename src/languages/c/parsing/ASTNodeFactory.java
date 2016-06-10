@@ -3,12 +3,12 @@ package languages.c.parsing;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
+import ast.c.functionDef.CParameter;
+import ast.c.functionDef.CParameterType;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
 import ast.expressions.Identifier;
-import ast.functionDef.Parameter;
-import ast.functionDef.ParameterType;
 import ast.logical.statements.Statement;
 import languages.c.antlr.FunctionParser.InitDeclWithAssignContext;
 import languages.c.antlr.FunctionParser.StatementContext;
@@ -61,15 +61,15 @@ public class ASTNodeFactory
 		return assign;
 	}
 
-	public static Parameter create(Parameter_declContext ctx)
+	public static CParameter create(Parameter_declContext ctx)
 	{
-		Parameter param = new Parameter();
+		CParameter param = new CParameter();
 
 		Parameter_declContext paramCtx = (Parameter_declContext) ctx;
 		Parameter_nameContext paramName = getNameOfParameter(paramCtx);
 
 		Identifier name = new Identifier();
-		ParameterType type = new ParameterType();
+		CParameterType type = new CParameterType();
 		initializeFromContext(type, ctx);
 		initializeFromContext(name, paramName);
 		initializeFromContext(param, ctx);
