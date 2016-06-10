@@ -5,13 +5,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import ast.c.expressions.CCallExpression;
 import ast.c.statements.blockstarters.CIfStatement;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.expressions.Argument;
 import ast.expressions.ArgumentList;
 import ast.expressions.AssignmentExpression;
-import ast.expressions.CallExpression;
 import ast.logical.statements.Condition;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
@@ -180,7 +180,7 @@ public class CodeNestingTest
 				.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		CallExpression expr = (CallExpression) stmt.getChild(0);
+		CCallExpression expr = (CCallExpression) stmt.getChild(0);
 		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 		ArgumentList argList = (ArgumentList) expr.getChild(1);
 		Argument arg = (Argument) argList.getChild(0);
@@ -194,7 +194,7 @@ public class CodeNestingTest
 				.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		CallExpression expr = (CallExpression) stmt.getChild(0);
+		CCallExpression expr = (CCallExpression) stmt.getChild(0);
 		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 	}
 

@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
+import ast.c.expressions.CCallExpression;
 import ast.c.statements.blockstarters.CElseStatement;
 import ast.c.statements.blockstarters.CIfStatement;
 import ast.declarations.ClassDefStatement;
@@ -19,7 +20,6 @@ import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.BitAndExpression;
-import ast.expressions.CallExpression;
 import ast.expressions.Callee;
 import ast.expressions.CastExpression;
 import ast.expressions.CastTarget;
@@ -432,7 +432,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterFuncCall(FuncCallContext ctx)
 	{
-		CallExpression expr = new CallExpression();
+		CCallExpression expr = new CCallExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
@@ -457,10 +457,10 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	private void introduceCalleeNode()
 	{
-		CallExpression expr;
+		CCallExpression expr;
 		try
 		{
-			expr = (CallExpression) stack.peek();
+			expr = (CCallExpression) stack.peek();
 		} catch (EmptyStackException ex)
 		{
 			return;
