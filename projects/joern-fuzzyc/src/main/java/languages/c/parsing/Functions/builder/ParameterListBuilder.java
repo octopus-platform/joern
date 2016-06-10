@@ -29,7 +29,7 @@ public class ParameterListBuilder extends ASTNodeBuilder
 	public void addParameter(Parameter_declContext aCtx,
 			Stack<ASTNodeBuilder> itemStack)
 	{
-		Parameter_declContext ctx = (Parameter_declContext) aCtx;
+		Parameter_declContext ctx = aCtx;
 		Parameter_idContext parameter_id = ctx.parameter_id();
 		Parameter param = ASTNodeFactory.create(ctx);
 

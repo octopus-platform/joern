@@ -134,7 +134,7 @@ import languages.c.parsing.Shared.builders.IdentifierDeclBuilder;
  * The FunctionContentBuilder is invoked while walking the parse tree to create
  * ASTs for the contents of functions, i.e., the first-level compound statements
  * of functions.
- * 
+ *
  * Since the fuzzy parser avoids using nested grammar rules as these rules often
  * require reading all tokens of a file only to realize that the default rule
  * must be taken, the most difficult task this code fulfills is to produce a

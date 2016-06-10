@@ -25,7 +25,7 @@ public class CCFGFactory extends CFGFactory
 		try
 		{
 			CIfStatement ifStatement = (CIfStatement)ifStmt;
-			
+
 			CFG block = new CFG();
 			CFGNode conditionContainer = new ASTNodeContainer(
 					ifStatement.getCondition());

@@ -65,7 +65,7 @@ public class ASTNodeFactory
 	{
 		CParameter param = new CParameter();
 
-		Parameter_declContext paramCtx = (Parameter_declContext) ctx;
+		Parameter_declContext paramCtx = ctx;
 		Parameter_nameContext paramName = getNameOfParameter(paramCtx);
 
 		Identifier name = new Identifier();

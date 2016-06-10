@@ -130,7 +130,7 @@ public class NestingReconstructor
 					}
 				} else if (curBlockStarter instanceof CatchStatement)
 				{
-					TryStatement tryStatement = (TryStatement) stack.getTry();
+					TryStatement tryStatement = stack.getTry();
 					if (tryStatement != null)
 					{
 						CatchList catchList = tryStatement.getCatchList();
