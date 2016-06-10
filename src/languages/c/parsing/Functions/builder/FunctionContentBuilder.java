@@ -41,7 +41,7 @@ import ast.expressions.PtrMemberAccess;
 import ast.expressions.RelationalExpression;
 import ast.expressions.ShiftExpression;
 import ast.expressions.Sizeof;
-import ast.expressions.SizeofExpr;
+import ast.expressions.SizeofExpression;
 import ast.expressions.SizeofOperand;
 import ast.expressions.UnaryExpression;
 import ast.expressions.UnaryOperationExpression;
@@ -834,7 +834,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterSizeofExpr(Sizeof_expressionContext ctx)
 	{
-		SizeofExpr expr = new SizeofExpr();
+		SizeofExpression expr = new SizeofExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
