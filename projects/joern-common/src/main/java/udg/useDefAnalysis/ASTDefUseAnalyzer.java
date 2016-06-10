@@ -19,24 +19,25 @@ public abstract class ASTDefUseAnalyzer
 {
 	protected Stack<UseDefEnvironment> environmentStack = new Stack<UseDefEnvironment>();
 	protected HashSet<UseOrDef> useDefsOfBlock = new HashSet<UseOrDef>();
-	
+
 	/**
 	 * Analyze an AST to determine the symbols used and defined by each AST
 	 * node.
 	 */
 	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider)
 	{
-		reset();
+		environmentStack.clear();
+		useDefsOfBlock.clear();
 		traverseAST(astProvider);
 		return useDefsOfBlock;
 	}
-	
-	private void reset()
+
+	public void reset()
 	{
 		environmentStack.clear();
 		useDefsOfBlock.clear();
 	}
-	
+
 	/**
 	 * Recurses through the given AST and emit uses or defs symbols.
 	 */
@@ -60,20 +61,20 @@ public abstract class ASTDefUseAnalyzer
 
 		reportUpstream(env);
 	}
-	
+
 	/**
 	 * Creates a UseDefEnvironment for a given AST node.
 	 * This is language-specific and should be implemented by inheriting classes.
 	 */
 	protected abstract UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider);
-	
+
 	/**
 	 * Gets upstream symbols from environment and passes them to
 	 * parent-environment by calling addChildSymbols on the parent. Asks
 	 * parent-environment to generate useOrDefs and emit them.
 	 */
 	private void reportUpstream(UseDefEnvironment env)
-	{		
+	{
 		LinkedList<String> symbols = env.upstreamSymbols();
 		ASTProvider astProvider = env.getASTProvider();
 

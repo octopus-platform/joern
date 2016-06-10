@@ -4,9 +4,11 @@ import java.util.Map;
 
 import neo4j.batchInserter.ConfigurationGenerator;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import tools.parser.Parser;
+import outputModules.neo4j.Neo4JDirectoryTreeImporter;
+import outputModules.parser.Parser;
 
-public class ParserNeo4JOutput extends Parser
+
+public abstract class ParserNeo4JOutput extends Parser
 {
 
 	@Override

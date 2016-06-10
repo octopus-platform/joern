@@ -12,7 +12,6 @@ import outputModules.common.ASTNodeExporter;
 import outputModules.common.OutModASTNodeVisitor;
 import outputModules.neo4j.exporters.Neo4JClassDefExporter;
 import outputModules.neo4j.exporters.Neo4JDeclStmtExporter;
-import outputModules.neo4j.exporters.Neo4JFunctionExporter;
 
 // Stays alive during the lifetime of the program
 

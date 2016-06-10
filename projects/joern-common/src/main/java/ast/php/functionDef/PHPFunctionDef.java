@@ -7,7 +7,7 @@ import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.php.expressions.PHPTypeHint;
-import tools.php.ast2cfgddg.PHPCSVNodeTypes;
+import tools.PHPCSVNodeTypes;
 
 public class PHPFunctionDef extends FunctionDef
 {
@@ -16,23 +16,23 @@ public class PHPFunctionDef extends FunctionDef
 	public String getEnclosingNamespace() {
 		return getProperty(ASTNodeProperties.NAMESPACE);
 	}
-	
+
 	public void setEnclosingNamespace(String namespace) {
 		setProperty(ASTNodeProperties.NAMESPACE, namespace);
 	}
-	
+
 	public String getName() {
 		return getProperty(ASTNodeProperties.NAME);
 	}
-	
+
 	public void setName(String name) {
 		setProperty(ASTNodeProperties.NAME, name);
 	}
-	
+
 	public String getDocComment() {
 		return getProperty(ASTNodeProperties.DOCCOMMENT);
 	}
-	
+
 	public void setDocComment(String doccomment) {
 		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
 	}
@@ -41,13 +41,13 @@ public class PHPFunctionDef extends FunctionDef
 	{
 		return this.returnType;
 	}
-	
+
 	public void setReturnType(Identifier returnType)
 	{
 		this.returnType = returnType;
 		super.addChild(returnType);
 	}
-	
+
 	@Override
 	public String getFunctionSignature()
 	{
@@ -61,11 +61,11 @@ public class PHPFunctionDef extends FunctionDef
 	}
 
 	protected String getParamListString() {
-		
+
 		// this should not happen:
 		if( null == getParameterList())
 			return "(ERROR)";
-		
+
 		String retval = "(";
 		Iterator<Parameter> it = getParameterList().iterator();
 		while( it.hasNext()) {
@@ -111,7 +111,7 @@ public class PHPFunctionDef extends FunctionDef
 		retval += phpparam.getNameChild().getEscapedCodeStr();
 		return retval;
 	}
-	
+
 	protected String getReturnTypeString() {
 		String retval = "";
 		if( null != getReturnType()) {
@@ -131,7 +131,7 @@ public class PHPFunctionDef extends FunctionDef
 		}
 		return retval;
 	}
-	
+
 	@Override
 	public Identifier getIdentifier()
 	{

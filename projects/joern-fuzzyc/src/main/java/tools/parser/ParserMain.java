@@ -6,8 +6,7 @@ import org.apache.commons.cli.ParseException;
 
 import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
-import outputModules.csv.ParserCSVOutput;
-import outputModules.neo4j.ParserNeo4JOutput;
+import outputModules.parser.Parser;
 
 /**
  * Main Class for the parser: This class processes command line arguments and
@@ -19,10 +18,9 @@ public class ParserMain
 {
 
 	private static ParserCmdLineInterface cmd = new ParserCmdLineInterface();
-	// private static SourceFileWalker sourceFileWalker = new UnorderedWalker();
 	private static SourceFileWalker sourceFileWalker = new OrderedWalker();
 
-	private static Parser indexer;
+	private static Parser parser;
 
 	public static void main(String[] args)
 	{
@@ -60,16 +58,16 @@ public class ParserMain
 
 		String outputFormat = cmd.getOutputFormat();
 		if (outputFormat.equals("neo4j"))
-			indexer = new ParserNeo4JOutput();
+			parser = new CParserNeo4JOuput();
 		else if (outputFormat.equals("csv"))
-			indexer = new ParserCSVOutput();
+			parser = new CParserCSVOutput();
 		else
 			throw new RuntimeException("unknown output format");
 
 		String outputDir = cmd.getOutputDir();
-		indexer.setOutputDir(outputDir);
-		indexer.initialize();
-		sourceFileWalker.addListener(indexer);
+		parser.setOutputDir(outputDir);
+		parser.initialize();
+		sourceFileWalker.addListener(parser);
 	}
 
 	private static void walkCodebase(String[] fileAndDirNames)
@@ -83,7 +81,7 @@ public class ParserMain
 					.println("Error walking source files: " + err.getMessage());
 		} finally
 		{
-			indexer.shutdown();
+			parser.shutdown();
 		}
 	}
 }

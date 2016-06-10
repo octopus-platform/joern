@@ -25,6 +25,12 @@ public class CASTDefUseAnalyzer extends ASTDefUseAnalyzer
 
 	TaintSources taintSources = new TaintSources();
 
+	public void reset()
+	{
+		super.reset();
+		taintSources = new TaintSources();
+	}
+
 	/**
 	 * Inform the ASTAnalyzer about (callee, argNum)-pairs that define their
 	 * arguments. For example, 'recv' defines its first argument.
@@ -37,6 +43,7 @@ public class CASTDefUseAnalyzer extends ASTDefUseAnalyzer
 	/**
 	 * Creates a UseDefEnvironment for a given AST node.
 	 */
+	@Override
 	protected UseDefEnvironment createUseDefEnvironment(ASTProvider astProvider)
 	{
 

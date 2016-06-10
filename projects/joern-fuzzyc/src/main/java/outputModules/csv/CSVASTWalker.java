@@ -1,6 +1,6 @@
 package outputModules.csv;
 
-import tools.parser.ParserASTWalker;
+import outputModules.parser.ParserASTWalker;
 
 public class CSVASTWalker extends ParserASTWalker
 {

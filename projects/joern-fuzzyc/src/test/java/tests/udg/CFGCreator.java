@@ -11,6 +11,7 @@ import ast.walking.ASTNodeVisitor;
 import ast.walking.ASTWalker;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import languages.c.cfg.CCFGFactory;
 import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
 import parsing.ModuleParser;
 
@@ -22,6 +23,12 @@ public class CFGCreator
 		private CFG cfg;
 		private ASTToCFGConverter astToCFG = new ASTToCFGConverter();
 
+		public NodeVisitor()
+		{
+			astToCFG.setFactory(new CCFGFactory());
+		}
+
+		@Override
 		public void visit(FunctionDef node)
 		{
 			cfg = astToCFG.convert(node);

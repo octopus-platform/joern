@@ -56,7 +56,9 @@ public class Main {
 		FileReader edgeFileReader = new FileReader(edgeFilename);
 
 		// initialize converters
-		extractor.setLanguage("PHP");
+
+		extractor.setInterpreters(new PHPCSVNodeInterpreter(), new PHPCSVEdgeInterpreter());
+
 		extractor.initialize(nodeFileReader, edgeFileReader);
 		ast2cfgConverter.setFactory(new PHPCFGFactory());
 		cfgToUDG.setASTDefUseAnalyzer(new PHPASTDefUseAnalyzer());

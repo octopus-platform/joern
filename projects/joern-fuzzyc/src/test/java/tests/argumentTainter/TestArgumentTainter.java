@@ -1,5 +1,6 @@
 package tests.argumentTainter;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -38,18 +39,12 @@ public class TestArgumentTainter extends TestDBTestReadWriteDB
 		Collection<DefUseLink> defUseLinksToAdd = defUseCFGPatcher
 				.getDefUseLinksToAdd();
 
-		assertTrue(defUseLinksToAdd.size() == 4);
+		assertEquals(defUseLinksToAdd.size(), 4);
 
 		for (DefUseLink a : defUseLinksToAdd)
 		{
 			assertTrue(a.symbol.contains("myVar"));
 		}
-
-	}
-
-	@Test
-	public void testDDGPatcher()
-	{
 
 	}
 

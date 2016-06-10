@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import languages.c.cfg.CCFGFactory;
 import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import tests.TestDBTestsBatchInserter;
 import udg.CFGToUDGConverter;
@@ -43,6 +44,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 	public void init()
 	{
 		astToCFG = new ASTToCFGConverter();
+		astToCFG.setFactory(new CCFGFactory());
 		cfgToUDG = new CFGToUDGConverter();
 		cfgToUDG.setASTDefUseAnalyzer(new CASTDefUseAnalyzer());
 	}

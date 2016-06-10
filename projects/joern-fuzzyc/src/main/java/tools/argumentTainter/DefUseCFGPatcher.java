@@ -137,7 +137,7 @@ public class DefUseCFGPatcher
 				properties.put("code", link.symbol);
 
 				Node symbolNode = Neo4JDBInterface.addNode(properties);
-				toId = (Long) symbolNode.getId();
+				toId = symbolNode.getId();
 			}
 
 			RelationshipType relType = DynamicRelationshipType

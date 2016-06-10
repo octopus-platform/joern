@@ -3,9 +3,10 @@ package outputModules.csv;
 import java.io.File;
 
 import outputModules.common.Writer;
-import tools.parser.Parser;
+import outputModules.parser.Parser;
 
-public class ParserCSVOutput extends Parser
+
+public abstract class ParserCSVOutput extends Parser
 {
 
 	@Override

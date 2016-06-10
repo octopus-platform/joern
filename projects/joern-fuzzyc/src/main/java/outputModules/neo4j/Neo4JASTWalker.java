@@ -1,6 +1,6 @@
 package outputModules.neo4j;
 
-import tools.parser.ParserASTWalker;
+import outputModules.parser.ParserASTWalker;
 
 public class Neo4JASTWalker extends ParserASTWalker
 {

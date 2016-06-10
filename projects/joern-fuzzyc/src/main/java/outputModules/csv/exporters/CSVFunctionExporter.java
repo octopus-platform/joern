@@ -9,6 +9,8 @@ import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
+import languages.c.cfg.CCFGFactory;
+import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import outputModules.common.FunctionExporter;
 import outputModules.common.Writer;
 
@@ -23,6 +25,8 @@ public class CSVFunctionExporter extends FunctionExporter
 		ddgImporter = new CSVDDGExporter();
 		cdgImporter = new CSVCDGExporter();
 		domExporter = new CSVDOMExporter();
+		analyzer = new CASTDefUseAnalyzer();
+		cfgFactory = new CCFGFactory();
 	}
 
 	@Override

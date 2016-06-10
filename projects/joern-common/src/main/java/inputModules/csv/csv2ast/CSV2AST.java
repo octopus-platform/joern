@@ -10,10 +10,7 @@ import ast.functionDef.FunctionDef;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import inputModules.csv.csvFuncExtractor.CSVAST;
-import tools.php.ast2cfgddg.PHPCSVEdgeInterpreter;
-import tools.php.ast2cfgddg.PHPCSVNodeInterpreter;
-import tools.php.ast2cfgddg.PHPCSVNodeTypes;
+
 
 public class CSV2AST
 {
@@ -36,13 +33,13 @@ public class CSV2AST
 		KeyedCSVReader edgeReader = new KeyedCSVReader();
 		nodeReader.init(nodeStrReader);
 		edgeReader.init(edgeStrReader);
-	
+
 		CSVAST csvAST = new CSVAST();
 		while( nodeReader.hasNextRow())
 			csvAST.addNodeRow(nodeReader.getNextRow());
 		while( edgeReader.hasNextRow())
 			csvAST.addEdgeRow(edgeReader.getNextRow());
-		
+
 		return convert(csvAST);
 	}
 
@@ -53,7 +50,7 @@ public class CSV2AST
 
 		createASTNodes(csvAST, ast);
 		createASTEdges(csvAST, ast);
-		
+
 		return ast.getRootNode();
 	}
 
@@ -61,7 +58,7 @@ public class CSV2AST
 	{
 		Iterator<KeyedCSVRow> nodeRows = csvAST.nodeIterator();
 		KeyedCSVRow keyedRow;
-		
+
 		try {
 			keyedRow = nodeRows.next();
 		}
@@ -71,9 +68,9 @@ public class CSV2AST
 
 		// first row must be a function type;
 		// otherwise we cannot create a function node
-		if( !PHPCSVNodeTypes.funcTypes.contains(keyedRow.getFieldForKey(PHPCSVNodeTypes.TYPE)))
-			throw new InvalidCSVFile( "Type of first row is not a function declaration.");
-		
+		// if( !PHPCSVNodeTypes.funcTypes.contains(keyedRow.getFieldForKey(PHPCSVNodeTypes.TYPE)))
+		//	throw new InvalidCSVFile( "Type of first row is not a function declaration.");
+
 		FunctionDef root = (FunctionDef) ast.getNodeById( nodeInterpreter.handle(keyedRow, ast));
 		ast.setRootNode(root);
 
@@ -88,7 +85,7 @@ public class CSV2AST
 	{
 		Iterator<KeyedCSVRow> edgeRows = csvAST.edgeIterator();
 		KeyedCSVRow keyedRow;
-		
+
 		while (edgeRows.hasNext())
 		{
 			keyedRow = edgeRows.next();
@@ -96,13 +93,10 @@ public class CSV2AST
 		}
 	}
 
-	public void setLanguage(String language)
+	public void setInterpreters(CSVRowInterpreter nodeInterpreter, CSVRowInterpreter edgeInterpreter)
 	{
-		if (language.equals("PHP"))
-		{
-			nodeInterpreter = new PHPCSVNodeInterpreter();
-			edgeInterpreter = new PHPCSVEdgeInterpreter();
-		}
+		this.nodeInterpreter = nodeInterpreter;
+		this.edgeInterpreter = edgeInterpreter;
 	}
 
 }

@@ -10,6 +10,7 @@ import cdg.CDG;
 import cdg.CDGCreator;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import cfg.CFGFactory;
 import cfg.nodes.CFGNode;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
@@ -42,6 +43,11 @@ public class FunctionDatabaseNode extends DatabaseNode
 	CFGAndUDGToDefUseCFG udgAndCfgToDefUseCFG = new CFGAndUDGToDefUseCFG();
 	DDGCreator ddgCreator = new DDGCreator();
 	CDGCreator cdgCreator = new CDGCreator();
+
+	public void setCFGFactory(CFGFactory factory)
+	{
+		astToCFG.setFactory(factory);
+	}
 
 	public void setASTDefUseAnalyzer(ASTDefUseAnalyzer analyzer)
 	{

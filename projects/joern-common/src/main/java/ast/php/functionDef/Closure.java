@@ -2,7 +2,7 @@ package ast.php.functionDef;
 
 import java.util.Iterator;
 
-import tools.php.ast2cfgddg.PHPCSVNodeTypes;
+import tools.PHPCSVNodeTypes;
 
 public class Closure extends PHPFunctionDef
 {
@@ -18,7 +18,7 @@ public class Closure extends PHPFunctionDef
 		this.closureUses = closureUses;
 		super.addChild(closureUses);
 	}
-	
+
 	@Override
 	public String getFunctionSignature()
 	{
@@ -28,7 +28,7 @@ public class Closure extends PHPFunctionDef
 		retval += getReturnTypeString();
 		return retval;
 	}
-	
+
 	private String getClosureUsesString() {
 		if( null == getClosureUses())
 			return "";
@@ -43,7 +43,7 @@ public class Closure extends PHPFunctionDef
 		retval += ")";
 		return retval;
 	}
-	
+
 	private String getClosureVarNameString(ClosureVar use) {
 		String retval = "";
 		if( use.getProperty(PHPCSVNodeTypes.FLAGS.getName()).contains(PHPCSVNodeTypes.FLAG_BY_REFERENCE))
