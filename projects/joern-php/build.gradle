@@ -3,6 +3,3 @@ dependencies{
 	compile project(':projects:joern-common')
 }
 
-test{
-	exclude 'tests/languages/php/**'
-}
