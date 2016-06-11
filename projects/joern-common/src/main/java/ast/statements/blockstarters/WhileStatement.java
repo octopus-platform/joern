@@ -1,9 +1,9 @@
 package ast.statements.blockstarters;
 
-import ast.logical.statements.BlockStarter;
+import ast.logical.statements.BlockStarterWithStmtAndCnd;
 import ast.walking.ASTNodeVisitor;
 
-public class WhileStatement extends BlockStarter
+public class WhileStatement extends BlockStarterWithStmtAndCnd
 {
 	@Override
 	public void accept(ASTNodeVisitor visitor)

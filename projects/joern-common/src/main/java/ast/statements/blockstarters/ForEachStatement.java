@@ -1,10 +1,10 @@
-package ast.php.statements.blockstarters;
+package ast.statements.blockstarters;
 
 import ast.expressions.Expression;
-import ast.logical.statements.BlockStarter;
+import ast.logical.statements.BlockStarterWithStmtAndCnd;
 import ast.walking.ASTNodeVisitor;
 
-public class ForEachStatement extends BlockStarter
+public class ForEachStatement extends BlockStarterWithStmtAndCnd
 {
 	// a ForEachStatement has four children: three in its predicate, and a statement list
 	// the three children in its predicate are saved in a ForEachCondition container for technical reasons
@@ -14,7 +14,7 @@ public class ForEachStatement extends BlockStarter
 	@Override
 	public ForEachCondition getCondition()
 	{
-		return (ForEachCondition)this.condition;
+		return this.condition;
 	}
 
 	@Override

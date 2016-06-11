@@ -1,4 +1,4 @@
-package ast.php.statements.blockstarters;
+package ast.statements.blockstarters;
 
 import ast.expressions.Expression;
 
