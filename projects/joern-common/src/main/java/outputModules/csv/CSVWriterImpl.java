@@ -26,8 +26,11 @@ public class CSVWriterImpl implements WriterImpl
 	PrintWriter nodeWriter;
 	PrintWriter edgeWriter;
 
+	@Override
 	public long writeNode(Object node, Map<String, Object> properties)
 	{
+		nodeWriter.write("ANR");
+		nodeWriter.write(SEPARATOR);
 		nodeWriter.write((new Long(lastNodeId)).toString());
 		for (String property : nodeProperties)
 		{
@@ -81,7 +84,7 @@ public class CSVWriterImpl implements WriterImpl
 
 	private void writeNodePropertyNames()
 	{
-		String joined = "id" + SEPARATOR
+		String joined = "command" + SEPARATOR + "key" + SEPARATOR
 				+ StringUtils.join(nodeProperties, SEPARATOR);
 		nodeWriter.println(joined);
 	}
@@ -97,7 +100,7 @@ public class CSVWriterImpl implements WriterImpl
 	{
 		openEdgeFile(outDir, "edges.csv");
 	}
-	
+
 	public void openEdgeFile(String outDir, String fileName)
 	{
 		String path = outDir + File.separator + fileName;
