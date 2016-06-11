@@ -26,5 +26,4 @@ class CParserNeo4JOuput extends ParserNeo4JOutput
 		parser.addObserver(astWalker);
 	}
 
-
 }
