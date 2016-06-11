@@ -120,9 +120,9 @@ import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
+import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVBasedTest;
-import tools.PHPCSVNodeTypes;
 
 public class PHPASTCreatorTest extends PHPCSVBasedTest
 {

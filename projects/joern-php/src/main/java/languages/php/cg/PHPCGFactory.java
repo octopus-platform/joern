@@ -18,8 +18,8 @@ import ast.php.functionDef.TopLevelFunctionDef;
 import cg.CG;
 import cg.CGEdge;
 import cg.CGNode;
+import inputModules.csv.PHPCSVNodeTypes;
 import misc.MultiHashMap;
-import tools.PHPCSVNodeTypes;
 
 public class PHPCGFactory {
 

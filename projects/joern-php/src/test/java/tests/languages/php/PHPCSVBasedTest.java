@@ -8,12 +8,12 @@ import java.io.StringReader;
 
 import org.junit.Before;
 
+import inputModules.csv.PHPCSVEdgeTypes;
+import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
-import tools.PHPCSVEdgeTypes;
-import tools.PHPCSVNodeTypes;
 import tools.php.ast2cfgddg.PHPCSVEdgeInterpreter;
 import tools.php.ast2cfgddg.PHPCSVNodeInterpreter;
 

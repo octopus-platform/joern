@@ -7,10 +7,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import ast.functionDef.FunctionDef;
+import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import tools.PHPCSVNodeTypes;
 
 
 public class CSV2AST
