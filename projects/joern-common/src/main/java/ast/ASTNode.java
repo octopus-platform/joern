@@ -17,9 +17,9 @@ public class ASTNode
 	protected LinkedList<ASTNode> children;
 	protected int childNumber;
 
-	
+
 	/* constructors */
-	
+
 	public ASTNode()
 	{
 	}
@@ -29,8 +29,8 @@ public class ASTNode
 		copyAttributes(otherNode);
 		copyChildren(otherNode);
 	}
-	
-	
+
+
 	/* private helper methods */
 
 	private void copyAttributes(ASTNode otherNode)
@@ -53,9 +53,9 @@ public class ASTNode
 		}
 	}
 
-	
+
 	/* methods for handling children */
-	
+
 	public void addChild(ASTNode node)
 	{
 		if (children == null)
@@ -75,7 +75,7 @@ public class ASTNode
 	{
 		return (children.size() == 0);
 	}
-	
+
 	public ASTNode getChild(int i)
 	{
 		if (children == null)
@@ -96,8 +96,8 @@ public class ASTNode
 	{
 		return children.removeLast();
 	}
-	
-	
+
+
 	/* getters and setters */
 
 	public String getProperty(String key)
@@ -110,7 +110,7 @@ public class ASTNode
 			return null;
 		return retval;
 	}
-	
+
 	public void setProperty(String key, String val)
 	{
 		if (properties == null)
@@ -122,7 +122,7 @@ public class ASTNode
 	public String getFlags() {
 		return getProperty(ASTNodeProperties.FLAGS);
 	}
-	
+
 	public void setFlags(String flags) {
 		setProperty(ASTNodeProperties.FLAGS, flags);
 	}
@@ -131,8 +131,8 @@ public class ASTNode
 	{
 		return this.childNumber;
 	}
-	
-	private void setChildNumber(int num)
+
+	public void setChildNumber(int num)
 	{
 		this.childNumber = num;
 	}
@@ -146,7 +146,7 @@ public class ASTNode
 	{
 		return getProperty(ASTNodeProperties.CODE);
 	}
-	
+
 	public void setCodeStr(String aCodeStr)
 	{
 		setProperty(ASTNodeProperties.CODE, aCodeStr);
@@ -165,11 +165,11 @@ public class ASTNode
 		}
 		return id;
 	}
-	
+
 	public void setNodeId(Long id) {
 		setProperty(ASTNodeProperties.NODE_ID, Long.toString(id));
 	}
-	
+
 	public String getLocationString()
 	{
 		return this.location.toString();
@@ -179,25 +179,25 @@ public class ASTNode
 	{
 		return this.location;
 	}
-	
+
 	public void setLocation(CodeLocation location)
 	{
 		this.location = location;
 	}
-	
+
 	public String getTypeAsString()
 	{
 		return this.getClass().getSimpleName();
 	}
-	
+
 	public String getFullTypeName()
 	{
 		return this.getClass().getName();
 	}
-	
-	
+
+
 	/* special methods */
-	
+
 	public String getOperatorCode()
 	{
 		if (Expression.class.isAssignableFrom(this.getClass()))
@@ -206,7 +206,7 @@ public class ASTNode
 		}
 		return null;
 	}
-		
+
 	public void accept(ASTNodeVisitor visitor)
 	{
 		visitor.visit(this);
@@ -224,7 +224,7 @@ public class ASTNode
 
 
 	/* overrides */
-	
+
 	@Override
 	public String toString() {
 		if( null != getEscapedCodeStr() && null != getProperty(ASTNodeProperties.NODE_ID))
@@ -233,7 +233,7 @@ public class ASTNode
 			return "[" + getEscapedCodeStr() + "]";
 		if( null != getProperty(ASTNodeProperties.NODE_ID))
 			return "[(" + getNodeId() + ") " + getTypeAsString() + "]";
-		
+
 		return super.toString();
 	}
 }

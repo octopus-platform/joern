@@ -7,7 +7,7 @@ import ast.expressions.Identifier;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.php.expressions.PHPTypeHint;
-import tools.PHPCSVNodeTypes;
+import inputModules.csv.PHPCSVNodeTypes;
 
 public class PHPFunctionDef extends FunctionDef
 {

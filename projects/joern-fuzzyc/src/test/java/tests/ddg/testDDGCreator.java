@@ -10,10 +10,10 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import cfg.CFG;
 import ddg.CFGAndUDGToDefUseCFG;
-import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.BatchInserterFactory;
+import ddg.DefUseCFG.DatabaseDDGCreator;
 import ddg.DefUseCFG.DefUseCFG;
 import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import neo4j.traversals.batchInserter.Elementary;
@@ -31,7 +31,7 @@ public class testDDGCreator extends TestDBTestsBatchInserter
 	{
 		IndexHits<Long> hits = Function.getFunctionsByName("ddg_simplest_test");
 		long functionId = hits.next();
-		DDGCreator ddgCreator = new DDGCreator();
+		DatabaseDDGCreator ddgCreator = new DatabaseDDGCreator();
 		DDG ddg = ddgCreator.createForFunctionById(functionId);
 
 		Set<DefUseRelation> reachesLinks = ddg.getDefUseEdges();

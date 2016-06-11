@@ -1,7 +1,10 @@
 package ast.c.statements.blockstarters;
 
-import ast.logical.statements.BlockStarter;
+import ast.logical.statements.BlockStarterWithStmtAndCnd;
 
-public class CElseStatement extends BlockStarter
+public class CElseStatement extends BlockStarterWithStmtAndCnd
 {
+
+
+
 }

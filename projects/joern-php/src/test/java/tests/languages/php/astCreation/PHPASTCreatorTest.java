@@ -92,8 +92,6 @@ import ast.php.statements.PHPUnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
-import ast.php.statements.blockstarters.ForEachStatement;
-import ast.php.statements.blockstarters.MethodReference;
 import ast.php.statements.blockstarters.PHPDeclareStatement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
@@ -111,7 +109,9 @@ import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.DoStatement;
+import ast.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.ForStatement;
+import ast.statements.blockstarters.MethodReference;
 import ast.statements.blockstarters.NamespaceStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -120,9 +120,9 @@ import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
+import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVBasedTest;
-import tools.PHPCSVNodeTypes;
 
 public class PHPASTCreatorTest extends PHPCSVBasedTest
 {

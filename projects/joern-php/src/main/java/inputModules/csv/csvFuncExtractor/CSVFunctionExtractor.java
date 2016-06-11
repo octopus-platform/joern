@@ -11,14 +11,14 @@ import java.util.Set;
 import java.util.Stack;
 
 import ast.functionDef.FunctionDef;
+import inputModules.csv.PHPCSVEdgeTypes;
+import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
 import inputModules.csv.csv2ast.CSVAST;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
-import tools.PHPCSVEdgeTypes;
-import tools.PHPCSVNodeTypes;
 
 public class CSVFunctionExtractor
 {

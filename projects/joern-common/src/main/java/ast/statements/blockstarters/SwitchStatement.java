@@ -1,9 +1,9 @@
 package ast.statements.blockstarters;
 
-import ast.logical.statements.BlockStarter;
+import ast.logical.statements.BlockStarterWithStmtAndCnd;
 import ast.walking.ASTNodeVisitor;
 
-public class SwitchStatement extends BlockStarter
+public class SwitchStatement extends BlockStarterWithStmtAndCnd
 {
 	public void accept(ASTNodeVisitor visitor)
 	{

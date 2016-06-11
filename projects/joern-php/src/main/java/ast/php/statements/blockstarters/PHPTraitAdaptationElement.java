@@ -1,6 +1,7 @@
 package ast.php.statements.blockstarters;
 
 import ast.logical.statements.Statement;
+import ast.statements.blockstarters.MethodReference;
 
 public class PHPTraitAdaptationElement extends Statement
 {
