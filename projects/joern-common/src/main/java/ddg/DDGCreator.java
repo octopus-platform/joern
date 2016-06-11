@@ -5,16 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import ddg.DataDependenceGraph.DDG;
-import ddg.DefUseCFG.BatchInserterFactory;
 import ddg.DefUseCFG.DefUseCFG;
-import ddg.DefUseCFG.DefUseCFGFactory;
 import misc.HashMapOfSets;
 
 public class DDGCreator
 {
 
 	DefUseCFG cfg;
-	DefUseCFGFactory cfgFactory = new BatchInserterFactory();
 
 	HashMapOfSets in = new HashMapOfSets();
 	HashMapOfSets out = new HashMapOfSets();
@@ -33,16 +30,6 @@ public class DDGCreator
 		public String identifier;
 	};
 
-	public void setFactory(DefUseCFGFactory aFactory)
-	{
-		cfgFactory = aFactory;
-	}
-
-	public DDG createForFunctionById(Long funcId)
-	{
-		DefUseCFG cfg = cfgFactory.create(funcId);
-		return createForDefUseCFG(cfg);
-	}
 
 	public DDG createForDefUseCFG(DefUseCFG aCfg)
 	{
