@@ -21,16 +21,18 @@ public class PHPCSVBasedTest {
 
 	// directory where the samples are stored
 	private static final String sampleRootDir = "src" + File.separator +
+												"test" + File.separator +
+												"java" + File.separator +
 												"tests" + File.separator +
 												"languages" + File.separator +
 												"php" + File.separator +
 												"samples";
 	private String sampleDir = sampleRootDir;
-	
+
 	// standard names for nodes and edges files
 	protected static final String nodesFile = "nodes.csv";
 	protected static final String edgesFile = "edges.csv";
-	
+
 	private PHPCSVNodeInterpreter nodeInterpreter = new PHPCSVNodeInterpreter();
 	private PHPCSVEdgeInterpreter edgeInterpreter = new PHPCSVEdgeInterpreter();
 
@@ -48,14 +50,14 @@ public class PHPCSVBasedTest {
 	protected void setSampleDir( String sampleDir) {
 		this.sampleDir = sampleRootDir + File.separator + sampleDir;
 	}
-	
+
 	protected String getSampleDir() {
 		return this.sampleDir;
 	}
-	
+
 	protected void handleCSVFiles(String testDir)
 			throws IOException, InvalidCSVFile {
-		
+
 	    BufferedReader nodeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + nodesFile));
 	    BufferedReader edgeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + edgesFile));
 
@@ -81,13 +83,13 @@ public class PHPCSVBasedTest {
 	/**
 	 * Takes two CSV strings, hands them directly to the node and edge interpreters and builds an AST.
 	 * We now prefer to read CSV strings directly from files.
-	 * 
+	 *
 	 * @see handleCSVFiles(String)
 	 */
 	@Deprecated
 	protected void handleCSVLines(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile {
-		
+
 		this.nodeReader.init(new StringReader(nodeStr));
 		this.edgeReader.init(new StringReader(edgeStr));
 

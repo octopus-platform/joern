@@ -1544,7 +1544,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				else
 					startNode.setTargetClass((Expression)endNode);
 				break;
-				
+
 			case 1: // args child: ArgumentList node
 				startNode.setArgumentList((ArgumentList)endNode);
 				break;
@@ -2354,30 +2354,30 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		return 0;
 	}
-	
+
 	/* Helper methods */
-	
+
 	/**
 	 * Creates an ExpressionStatement wrapper around an Expression node.
 	 */
 	private ExpressionStatement createExpressionStatement(Expression expression) {
-		
+
 		ExpressionStatement expressionStatement = new ExpressionStatement();
 		expressionStatement.setExpression(expression);
-		
+
 		// the ExpressionStatement gets the same NODE_ID as the Expression, this way CFG creation
 		// can handle the ExpressionStatement, but the end node that we reference when writing
 		// out edges is actually the Expression
 		copyProperty( expression, expressionStatement, PHPCSVNodeTypes.NODE_ID.getName());
-		
+
 		return expressionStatement;
 	}
-	
+
 	/**
 	 * Creates a ClosureExpression wrapper around a Closure node.
 	 */
 	private ClosureExpression createClosureExpression(Closure closure) {
-		
+
 		ClosureExpression closureExpression = new ClosureExpression();
 		closureExpression.setClosure(closure);
 
@@ -2388,12 +2388,12 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 		return closureExpression;
 	}
-	
+
 	/**
 	 * Creates a ClassExpression wrapper around a PHPClassDef node (for anonymous classes.)
 	 */
 	private ClassExpression createClassExpression(PHPClassDef classDef) {
-		
+
 		ClassExpression classExpression = new ClassExpression();
 		classExpression.setClassDef(classDef);
 
@@ -2409,7 +2409,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	 * Copies a given property from one ASTNode to another.
 	 */
 	private void copyProperty( ASTNode from, ASTNode to, String property) {
-		
+
 		to.setProperty( property, from.getProperty( property));
 	}
 }
