@@ -1,4 +1,4 @@
-package tools;
+package tools.icfg;
 
 import java.util.Map;
 

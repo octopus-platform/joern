@@ -8,6 +8,6 @@ java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/pr
 
 # Taint sources
 
-java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB taint_source 1
-java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB second_taint_source 0
-java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB interproc_callee 0
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/jpanlib.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB taint_source 1
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/jpanlib.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB second_taint_source 0
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/jpanlib.jar:$BASEDIR/jars/*" tools.argumentTainter.ArgumentTainterMain -dbdir .testDB interproc_callee 0

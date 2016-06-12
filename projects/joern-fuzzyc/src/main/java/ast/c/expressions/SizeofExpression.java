@@ -1,5 +1,6 @@
-package ast.expressions;
+package ast.c.expressions;
 
+import ast.expressions.Expression;
 import ast.walking.ASTNodeVisitor;
 
 public class SizeofExpression extends Expression
