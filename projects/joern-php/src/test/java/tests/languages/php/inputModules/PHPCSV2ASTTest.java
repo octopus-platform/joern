@@ -14,6 +14,7 @@ import ast.logical.statements.CompoundStatement;
 import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
+import inputModules.csv.csv2ast.PHPCSV2AST;
 import tools.php.ast2cfgddg.PHPCSVEdgeInterpreter;
 import tools.php.ast2cfgddg.PHPCSVNodeInterpreter;
 
@@ -42,7 +43,7 @@ public class PHPCSV2ASTTest
 	public static PHPFunctionDef createASTFromStrings(String nodeStr, String edgeStr)
 			throws IOException, InvalidCSVFile
 	{
-		CSV2AST csv2AST = new CSV2AST();
+		CSV2AST csv2AST = new PHPCSV2AST();
 		StringReader nodeReader = new StringReader(nodeStr);
 		StringReader edgeReader = new StringReader(edgeStr);
 		csv2AST.setInterpreters(new PHPCSVNodeInterpreter(), new PHPCSVEdgeInterpreter());

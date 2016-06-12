@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import antlr.FunctionParser.StatementsContext;
 import ast.c.expressions.CCallExpression;
 import ast.c.statements.blockstarters.CIfStatement;
 import ast.declarations.ClassDefStatement;
@@ -18,7 +19,6 @@ import ast.logical.statements.CompoundStatement;
 import ast.statements.ExpressionStatement;
 import ast.statements.IdentifierDeclStatement;
 import ast.statements.blockstarters.ForStatement;
-import languages.c.antlr.FunctionParser.StatementsContext;
 
 public class CodeNestingTest
 {

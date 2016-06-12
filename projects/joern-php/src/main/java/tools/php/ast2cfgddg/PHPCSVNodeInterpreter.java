@@ -105,12 +105,12 @@ import ast.statements.jump.ContinueStatement;
 import ast.statements.jump.GotoStatement;
 import ast.statements.jump.ReturnStatement;
 import ast.statements.jump.ThrowStatement;
+import cg.PHPCGFactory;
 import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.ASTUnderConstruction;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
-import languages.php.cg.PHPCGFactory;
 
 public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 {

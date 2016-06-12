@@ -2,9 +2,9 @@ package tools.parser;
 
 import java.nio.file.Path;
 
-import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
 import outputModules.csv.ParserCSVOutput;
 import parsing.ModuleParser;
+import parsing.Modules.ANTLRCModuleParserDriver;
 
 public class CParserCSVOutput extends ParserCSVOutput {
 

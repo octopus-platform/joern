@@ -19,6 +19,7 @@ import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
 import inputModules.csv.csv2ast.CSVAST;
 import inputModules.csv.csv2ast.CSVRowInterpreter;
+import inputModules.csv.csv2ast.PHPCSV2AST;
 
 public class CSVFunctionExtractor
 {
@@ -29,7 +30,7 @@ public class CSVFunctionExtractor
 	Stack<String> funcIdStack = new Stack<String>();
 	Queue<CSVAST> csvFifoQueue = new LinkedList<CSVAST>();
 	Map<CSVAST,Set<String>> csvNodeIds = new HashMap<CSVAST,Set<String>>();
-	CSV2AST csv2ast = new CSV2AST();
+	CSV2AST csv2ast = new PHPCSV2AST();
 
 	public void setInterpreters(CSVRowInterpreter nodeInterpreter, CSVRowInterpreter edgeInterpreter)
 	{

@@ -3,11 +3,11 @@ package tests.languages.c.parseTreeToAST;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import antlr.FunctionLexer;
 import ast.ASTNode;
-import languages.c.antlr.FunctionLexer;
-import languages.c.parsing.Functions.ANTLRCFunctionParserDriver;
 import parsing.FunctionParser;
 import parsing.TokenSubStream;
+import parsing.Functions.ANTLRCFunctionParserDriver;
 
 public class FunctionContentTestUtil
 {

@@ -1,9 +1,9 @@
 package tests.languages.c.cfgCreation;
 
 import ast.ASTNode;
+import cfg.CCFGFactory;
 import cfg.CFG;
 import cfg.nodes.CFGNode;
-import languages.c.cfg.CCFGFactory;
 import tests.languages.c.parseTreeToAST.FunctionContentTestUtil;
 
 public class CCFGCreatorTest

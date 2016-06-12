@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cfg.ASTToCFGConverter;
+import cfg.CCFGFactory;
 import cfg.CFG;
-import languages.c.cfg.CCFGFactory;
-import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import tests.TestDBTestsBatchInserter;
 import udg.CFGToUDGConverter;
+import udg.useDefAnalysis.CASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
 

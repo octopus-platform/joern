@@ -11,9 +11,9 @@ import org.junit.Test;
 
 import ast.ASTNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
-import languages.php.udg.useDefAnalysis.PHPASTDefUseAnalyzer;
 import tests.languages.php.PHPCSVBasedTest;
 import udg.ASTNodeASTProvider;
+import udg.useDefAnalysis.PHPASTDefUseAnalyzer;
 import udg.useDefGraph.UseOrDef;
 
 public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {

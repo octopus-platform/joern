@@ -8,22 +8,22 @@ import org.apache.commons.cli.ParseException;
 import ast.php.functionDef.PHPFunctionDef;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
+import cfg.PHPCFGFactory;
 import cg.CG;
+import cg.PHPCGFactory;
 import ddg.CFGAndUDGToDefUseCFG;
 import ddg.DDGCreator;
 import ddg.DataDependenceGraph.DDG;
 import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
-import languages.php.cfg.PHPCFGFactory;
-import languages.php.cg.PHPCGFactory;
-import languages.php.udg.useDefAnalysis.PHPASTDefUseAnalyzer;
 import outputModules.common.Writer;
 import outputModules.csv.CSVWriterImpl;
 import outputModules.csv.exporters.CSVCFGExporter;
 import outputModules.csv.exporters.CSVCGExporter;
 import outputModules.csv.exporters.CSVDDGExporter;
 import udg.CFGToUDGConverter;
+import udg.useDefAnalysis.PHPASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 
 public class Main {

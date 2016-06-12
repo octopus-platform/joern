@@ -2,9 +2,9 @@ package tools.parser;
 
 import java.nio.file.Path;
 
-import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
 import outputModules.neo4j.ParserNeo4JOutput;
 import parsing.ModuleParser;
+import parsing.Modules.ANTLRCModuleParserDriver;
 
 class CParserNeo4JOuput extends ParserNeo4JOutput
 {

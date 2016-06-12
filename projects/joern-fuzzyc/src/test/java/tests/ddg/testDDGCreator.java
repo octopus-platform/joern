@@ -15,12 +15,12 @@ import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.BatchInserterFactory;
 import ddg.DefUseCFG.DatabaseDDGCreator;
 import ddg.DefUseCFG.DefUseCFG;
-import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import neo4j.traversals.batchInserter.Elementary;
 import neo4j.traversals.batchInserter.Function;
 import tests.TestDBTestsBatchInserter;
 import tests.udg.CFGCreator;
 import udg.CFGToUDGConverter;
+import udg.useDefAnalysis.CASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 
 public class testDDGCreator extends TestDBTestsBatchInserter

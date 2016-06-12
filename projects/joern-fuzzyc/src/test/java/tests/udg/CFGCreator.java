@@ -10,10 +10,10 @@ import ast.functionDef.FunctionDef;
 import ast.walking.ASTNodeVisitor;
 import ast.walking.ASTWalker;
 import cfg.ASTToCFGConverter;
+import cfg.CCFGFactory;
 import cfg.CFG;
-import languages.c.cfg.CCFGFactory;
-import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
 import parsing.ModuleParser;
+import parsing.Modules.ANTLRCModuleParserDriver;
 
 public class CFGCreator
 {

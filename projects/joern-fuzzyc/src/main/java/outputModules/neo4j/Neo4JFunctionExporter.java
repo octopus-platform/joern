@@ -5,6 +5,7 @@ import java.util.Map;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
+import cfg.CCFGFactory;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
@@ -12,8 +13,6 @@ import databaseNodes.DatabaseNode;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
-import languages.c.cfg.CCFGFactory;
-import languages.c.udg.useDefAnalysis.CASTDefUseAnalyzer;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 import outputModules.common.FunctionExporter;
@@ -23,6 +22,7 @@ import outputModules.neo4j.exporters.Neo4JCFGExporter;
 import outputModules.neo4j.exporters.Neo4JDDGExporter;
 import outputModules.neo4j.exporters.Neo4JDOMExporter;
 import outputModules.neo4j.exporters.Neo4JUDGExporter;
+import udg.useDefAnalysis.CASTDefUseAnalyzer;
 
 // Stays alive while importing a function into
 // the database

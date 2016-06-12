@@ -7,6 +7,7 @@ import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
+import antlr.ModuleLexer;
 import ast.ASTNode;
 import ast.c.functionDef.CParameterType;
 import ast.declarations.ClassDefStatement;
@@ -14,9 +15,8 @@ import ast.declarations.IdentifierDecl;
 import ast.functionDef.FunctionDef;
 import ast.functionDef.Parameter;
 import ast.statements.IdentifierDeclStatement;
-import languages.c.antlr.ModuleLexer;
-import languages.c.parsing.Modules.ANTLRCModuleParserDriver;
 import parsing.TokenSubStream;
+import parsing.Modules.ANTLRCModuleParserDriver;
 
 public class ModuleBuildersTest
 {
