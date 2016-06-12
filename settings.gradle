@@ -1,4 +1,4 @@
-include 'projects:joern-common'
+include 'projects:jpanlib'
 include 'projects:joern-fuzzyc'
 include 'projects:joern-php'
 

@@ -1,5 +1,5 @@
 
 dependencies{
-	compile project(':projects:joern-common')
+	compile project(':projects:jpanlib')
 }
 
