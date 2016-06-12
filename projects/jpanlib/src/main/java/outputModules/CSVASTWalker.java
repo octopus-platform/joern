@@ -1,10 +1,11 @@
-package outputModules.csv;
+package outputModules;
 
+import outputModules.csv.CSVASTNodeVisitor;
 import outputModules.parser.ParserASTWalker;
 
 public class CSVASTWalker extends ParserASTWalker
 {
-	CSVASTWalker()
+	public CSVASTWalker()
 	{
 		astVisitor = new CSVASTNodeVisitor();
 	}

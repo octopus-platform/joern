@@ -2,6 +2,7 @@ package outputModules.csv;
 
 import java.io.File;
 
+import outputModules.CSVASTWalker;
 import outputModules.common.Writer;
 import outputModules.parser.Parser;
 

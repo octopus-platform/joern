@@ -2,7 +2,6 @@ package outputModules.csv.exporters;
 
 import java.util.Map;
 
-import cfg.CCFGFactory;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
@@ -12,7 +11,6 @@ import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
 import outputModules.common.FunctionExporter;
 import outputModules.common.Writer;
-import udg.useDefAnalysis.CASTDefUseAnalyzer;
 
 public class CSVFunctionExporter extends FunctionExporter
 {
@@ -25,8 +23,6 @@ public class CSVFunctionExporter extends FunctionExporter
 		ddgImporter = new CSVDDGExporter();
 		cdgImporter = new CSVCDGExporter();
 		domExporter = new CSVDOMExporter();
-		analyzer = new CASTDefUseAnalyzer();
-		cfgFactory = new CCFGFactory();
 	}
 
 	@Override
