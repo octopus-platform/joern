@@ -2,4 +2,4 @@
 
 BASEDIR=$(dirname "$0")
 
-java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/joern-common.jar:$BASEDIR/jars/*" tools.parser.ParserMain $@
+java -cp "$BASEDIR/projects/joern-fuzzyc/build/libs/joern-fuzzyc.jar:$BASEDIR/projects/jpanlib/build/libs/jpanlib.jar:$BASEDIR/jars/*" tools.parser.ParserMain $@
