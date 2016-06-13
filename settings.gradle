@@ -1,5 +1,10 @@
 include 'projects:jpanlib'
 include 'projects:joern-fuzzyc'
 include 'projects:joern-php'
+include 'projects:joern-pluginlib'
 
+include 'projects:octopus:octopus-server'
+include 'projects:octopus:orientdbimporter'
+include 'projects:octopus:octopuslib'
 
+include 'projects:joern-plugins:importer'
