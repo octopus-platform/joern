@@ -1,0 +1,3 @@
+exStep = { args ->
+	_().nodeType
+}
