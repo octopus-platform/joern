@@ -10,10 +10,18 @@ sys.path.append(OCTOPUS_PYLIB_DIR)
 
 from importer.OctopusImporter import OctopusImporter
 
+importerPluginJSON =
+
 class JoernImporter(OctopusImporter):
 
-    def executeImporterPlugin(self):
-        print('foo')
+    def __init__(self):
+        self.importerPluginJSON = """{
+        "plugin": "importer.jar",
+        "class": "joern.plugins.importer.JoernImporter",
+        "settings": {
+        "projectName": "%s",
+        }}
+        """
 
 def main(filename):
     importer = JoernImporter()
