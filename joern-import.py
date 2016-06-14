@@ -10,8 +10,6 @@ sys.path.append(OCTOPUS_PYLIB_DIR)
 
 from importer.OctopusImporter import OctopusImporter
 
-importerPluginJSON =
-
 class JoernImporter(OctopusImporter):
 
     def __init__(self):
