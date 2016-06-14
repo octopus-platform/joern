@@ -40,4 +40,7 @@ class OctopusImporter:
         response = conn.getresponse()
 
     def executeImporterPlugin(self):
-        raise NotImplementedError()
+        print('Executing importer plugin')
+        conn = self._getConnectionToServer()
+        conn.request("POST", "/executeplugin/", self.importerPluginJSON % (self.projectName))
+        response = conn.getresponse()
