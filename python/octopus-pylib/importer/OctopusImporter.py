@@ -39,5 +39,5 @@ class OctopusImporter:
         conn.request("POST", "/uploadfile/%s/binary" % (self.projectName), base64Content, headers)
         response = conn.getresponse()
 
-    def executeImporterPlugin():
+    def executeImporterPlugin(self):
         raise NotImplementedError()
