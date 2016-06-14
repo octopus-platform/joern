@@ -17,7 +17,7 @@ class JoernImporter(OctopusImporter):
 
 def main(filename):
     importer = JoernImporter()
-    importer.importTarball(filename)
+    importer.importFile(filename)
 
 def usage():
     print('%s <tarball>' % (sys.argv[0]))

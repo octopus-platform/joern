@@ -26,7 +26,7 @@ class OctopusImporter:
     def _getConnectionToServer(self):
         return http.client.HTTPConnection(SERVER_HOST + ":" + SERVER_PORT)
 
-    def uploadBinary(self):
+    def uploadFile(self):
         print('Uploading file: %s' % (self.filename))
 
         with open(self.filename, mode='rb') as file:
