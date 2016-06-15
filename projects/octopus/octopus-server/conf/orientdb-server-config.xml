@@ -160,5 +160,6 @@
 		<entry value="true" name="profiler.enabled" />
 		<entry value="info" name="log.console.level" />
 		<entry value="fine" name="log.file.level" />
+		<entry value="1000000000" name="network.http.maxLength" />
 	</properties>
 </orient-server>
