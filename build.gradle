@@ -1,11 +1,55 @@
+def reguiredGradleVersionMajor = 2
+def requiredGradleVersionMinor = 0
+def (gradleVersionMajor, gradleVersionMinor) =
+    getGradle().gradleVersion.tokenize('.').collect {it.toInteger()}
+
+if ( gradleVersionMajor < reguiredGradleVersionMajor ||
+        (gradleVersionMajor == reguiredGradleVersionMajor &&
+        gradleVersionMinor < requiredGradleVersionMinor))
+{
+    throw new GradleException("Gradle version " +
+            "$reguiredGradleVersionMajor.$requiredGradleVersionMinor and higher required.")
+}
+
+
 allprojects {
     apply plugin: 'java'
 
     repositories {
-    		 mavenCentral()
+        mavenCentral()
+    }
+}
+
+task deploy(dependsOn: build) << {
+    copy {
+        into "projects/octopus/octopus-server/plugins"
+        from fileTree("projects/joern-plugins").files
+        include '**/*.jar'
+        exclude '**/*-plain.jar'
+        includeEmptyDirs = false
+    }
+}
+
+
+configure(project(':projects:joern-plugins').subprojects) {
+    task jarWithDep(type: Jar) {
+        doFirst {
+            def pluginJars = configurations.runtime.minus(project(':projects:octopus:octopus-server').configurations.runtime).asCollection()
+            pluginJars.remove(new File(project(':projects:octopus:octopus-server').buildDir.toString() + '/libs/octopus-server.jar'))
+            pluginJars.add(new File(project.buildDir.toString() + '/libs/' + project.name + '-plain.jar'))
+            baseName = project.name
+            from { pluginJars.collect { it.isDirectory() ? it : zipTree(it) } }
+            with jar
+        }
+    }
+    jar {
+        baseName = project.name + '-plain'
     }
 
-}	
+    jarWithDep.dependsOn(jar)
+    assemble.dependsOn(jarWithDep)
+}
+
 
 dependencies{
 	compile group: 'com.tunnelvisionlabs', name: 'antlr4-runtime', version: '4.5.3'
@@ -34,6 +78,3 @@ buildTestDatabase.dependsOn copyToLib
 build.dependsOn buildTestDatabase
 build.dependsOn subprojects.build
 build.dependsOn copyToLib
-
-
-
