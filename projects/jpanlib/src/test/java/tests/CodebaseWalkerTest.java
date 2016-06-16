@@ -18,16 +18,16 @@ public class CodebaseWalkerTest
 	@Test
 	public void testRecursiveDirSearch()
 	{
-		String[] args = { "src/tests/languages/c/samples/" };
+		String[] args = { "src/test/java/tests/samples/" };
 
 		SourceFileWalker provider = new UnorderedWalker();
 
 		try
 		{
 			Set<String> expected = new HashSet<String>();
-			expected.add("src/tests/languages/c/samples/subdir/test.c");
-			expected.add("src/tests/languages/c/samples/test.c");
-			expected.add("src/tests/languages/c/samples/tiff.cpp");
+			expected.add("src/test/java/tests/samples/subdir/test.c");
+			expected.add("src/test/java/tests/samples/test.c");
+			expected.add("src/test/java/tests/samples/tiff.cpp");
 
 			FilenameAggregator listener = new FilenameAggregator();
 			provider.addListener(listener);
