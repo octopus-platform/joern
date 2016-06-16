@@ -4,11 +4,14 @@ import java.io.File;
 
 import outputModules.CSVASTWalker;
 import outputModules.common.Writer;
+import outputModules.csv.exporters.CSVFunctionExporter;
 import outputModules.parser.Parser;
 
 
 public abstract class ParserCSVOutput extends Parser
 {
+
+	private CSVFunctionExporter functionExporter;
 
 	@Override
 	public void initialize()
@@ -54,7 +57,17 @@ public abstract class ParserCSVOutput extends Parser
 	@Override
 	protected void initializeWalker()
 	{
-		astWalker = new CSVASTWalker();
+		astWalker = new CSVASTWalker(getFunctionExporter());
+	}
+
+	public CSVFunctionExporter getFunctionExporter()
+	{
+		return functionExporter;
+	}
+
+	public void setFunctionExporter(CSVFunctionExporter functionExporter)
+	{
+		this.functionExporter = functionExporter;
 	}
 
 }

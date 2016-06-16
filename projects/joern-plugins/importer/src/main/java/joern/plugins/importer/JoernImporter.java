@@ -29,7 +29,13 @@ public class JoernImporter extends JoernProjectPlugin {
 
 	private void extractCSVFilesFromSourceCode()
 	{
-		// TODO Auto-generated method stub
+		JoernProject joernProject = (JoernProject) getBjoernProjectConnector().getWrapper();
+		String parserOutputDirectory = joernProject.getParserOutputDirectory();
+		String sourceCodeDirectory = joernProject.getSourceCodeDirectory();
+
+		CParserWrapper parserWrapper = new CParserWrapper();
+		parserWrapper.initialize(parserOutputDirectory);
+		parserWrapper.walkCodebase(new String[] { sourceCodeDirectory });
 	}
 
 	private void importCSVFilesIntoDatabase()
