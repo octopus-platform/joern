@@ -46,6 +46,7 @@ public class OctopusProjectPlugin extends Plugin {
 		}
 	}
 
+	// TODO: rename to getProjectConnector
 	protected OctopusProjectConnector getBjoernProjectConnector() {
 		return projectConnector;
 	}
