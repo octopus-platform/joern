@@ -13,10 +13,13 @@ import outputModules.csv.exporters.CSVFunctionExporter;
 
 public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 {
+
+	private CSVFunctionExporter functionExporter;
+
 	@Override
 	public void visit(FunctionDef node)
 	{
-		ASTNodeExporter importer = new CSVFunctionExporter();
+		ASTNodeExporter importer = functionExporter;
 		importNode(importer, node);
 	}
 
@@ -40,6 +43,11 @@ public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 	protected void addEdgeFromClassToFunc(long dstNodeId, Long classId)
 	{
 		Writer.addEdge(classId, dstNodeId, null, EdgeTypes.IS_CLASS_OF);
+	}
+
+	public void setFunctionExporter(CSVFunctionExporter functionExporter)
+	{
+		this.functionExporter = functionExporter;
 	}
 
 }

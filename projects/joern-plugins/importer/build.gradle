@@ -3,4 +3,5 @@ dependencies {
 	     compile project(':projects:jpanlib')
 	     compile project(':projects:joern-fuzzyc')
 	     compile project(':projects:joern-pluginlib')
+	     compile group: 'org.apache.commons', name: 'commons-compress', version: '1.8'
 }
