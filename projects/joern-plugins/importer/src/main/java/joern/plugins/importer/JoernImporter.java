@@ -2,11 +2,12 @@ package joern.plugins.importer;
 
 import java.io.IOException;
 
+import fileWalker.OrderedWalker;
+import fileWalker.SourceFileListener;
 import joern.pluginlib.JoernProject;
 import joern.pluginlib.plugintypes.JoernProjectPlugin;
 
 public class JoernImporter extends JoernProjectPlugin {
-
 
 	 @Override
      public void execute() throws Exception
@@ -38,9 +39,17 @@ public class JoernImporter extends JoernProjectPlugin {
 		parserWrapper.walkCodebase(new String[] { sourceCodeDirectory });
 	}
 
-	private void importCSVFilesIntoDatabase()
+	private void importCSVFilesIntoDatabase() throws IOException
 	{
-		// TODO Auto-generated method stub
+		JoernProject joernProject = (JoernProject) getBjoernProjectConnector().getWrapper();
+		String parserOutputDirectory = joernProject.getParserOutputDirectory();
+
+		OrderedWalker walker = new OrderedWalker();
+		walker.setFilenameFilter("nodes.csv");
+		SourceFileListener listener = new ImporterListener();
+		walker.addListener(listener);
+		walker.walk(new String[] { parserOutputDirectory } );
+
 	}
 
 }

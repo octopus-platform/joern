@@ -161,5 +161,6 @@
 		<entry value="info" name="log.console.level" />
 		<entry value="fine" name="log.file.level" />
 		<entry value="1000000000" name="network.http.maxLength" />
+		<entry value="3276800" name="network.socketBufferSize" />
 	</properties>
 </orient-server>
