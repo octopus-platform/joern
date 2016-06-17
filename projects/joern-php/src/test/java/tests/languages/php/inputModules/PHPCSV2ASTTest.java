@@ -15,8 +15,8 @@ import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csv2ast.CSV2AST;
 import inputModules.csv.csv2ast.PHPCSV2AST;
-import tools.php.ast2cfgddg.PHPCSVEdgeInterpreter;
-import tools.php.ast2cfgddg.PHPCSVNodeInterpreter;
+import tools.php.ast2cpg.PHPCSVEdgeInterpreter;
+import tools.php.ast2cpg.PHPCSVNodeInterpreter;
 
 public class PHPCSV2ASTTest
 {
