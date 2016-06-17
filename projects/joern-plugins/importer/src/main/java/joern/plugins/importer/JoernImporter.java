@@ -3,7 +3,6 @@ package joern.plugins.importer;
 import java.io.IOException;
 
 import fileWalker.OrderedWalker;
-import fileWalker.SourceFileListener;
 import joern.pluginlib.JoernProject;
 import joern.pluginlib.plugintypes.JoernProjectPlugin;
 
@@ -45,8 +44,10 @@ public class JoernImporter extends JoernProjectPlugin {
 		String parserOutputDirectory = joernProject.getParserOutputDirectory();
 
 		OrderedWalker walker = new OrderedWalker();
-		walker.setFilenameFilter("nodes.csv");
-		SourceFileListener listener = new ImporterListener();
+		walker.setFilenameFilter("*nodes.csv");
+		ImporterListener listener = new ImporterListener();
+		listener.setProject(joernProject);
+
 		walker.addListener(listener);
 		walker.walk(new String[] { parserOutputDirectory } );
 
