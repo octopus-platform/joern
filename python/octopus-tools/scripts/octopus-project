@@ -1,0 +1,67 @@
+#!python
+
+import argparse
+
+from octopus.server.orientdb.orientdb_project_manager import OrientDBProjectManager
+
+parser = argparse.ArgumentParser(description="Octopus project manager.")
+parser.add_argument(
+    "-s", "--server-host",
+    type=str,
+    default="localhost",
+    help="set the hostname of the octopus server")
+
+parser.add_argument(
+    "-p", "--server-port",
+    type=int,
+    default=2480,
+    help="set the port number of the octopus server")
+
+subparsers = parser.add_subparsers(
+    title="Available commands",
+    dest='subcommand')
+
+create_parser = subparsers.add_parser(
+    "create",
+    description="Create an Octopus project.",
+    help="create a new project")
+
+create_parser.add_argument(
+    "project",
+    type=str,
+    help="create this project")
+
+delete_parser = subparsers.add_parser(
+    "delete",
+    description="Delete an Octopus project.",
+    help="delete a project")
+
+delete_parser.add_argument(
+    "project",
+    type=str,
+    help="delete this project")
+
+upload_parser = subparsers.add_parser(
+    "upload",
+    description="Upload a file into a project.",
+    help="upload a file")
+
+upload_parser.add_argument(
+    "project",
+    type=str,
+    help="upload to this project")
+
+upload_parser.add_argument(
+    "file",
+    type=argparse.FileType("rb"),
+    help="upload this file")
+
+args = parser.parse_args()
+manager = OrientDBProjectManager(args.server_host, args.server_port)
+
+if args.subcommand == 'create':
+    manager.create(args.project)
+elif args.subcommand == 'delete':
+    manager.delete(args.project)
+elif args.subcommand == 'upload':
+    manager.upload_file(args.project, args.file)
