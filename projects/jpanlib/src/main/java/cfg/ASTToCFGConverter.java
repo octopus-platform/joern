@@ -5,20 +5,21 @@ import ast.functionDef.FunctionDef;
 public class ASTToCFGConverter
 {
 
-	CFGFactory factory;
+	private CFGFactory factory;
 
 	public void setFactory(CFGFactory factory)
 	{
+		// prior to converting a function node,
+		// this method should be used to set the
+		// CFG factory for a particular language,
+		// such as a C CFG factory or a PHP CFG factory.
+		
 		this.factory = factory;
 	}
 
 
 	public CFG convert(FunctionDef node)
 	{
-		// currently, we just use the C-CFG-factory.
-		// In the future, this is where we can choose
-		// the factory based on the language.
-
 		return factory.newInstance(node);
 	}
 }
