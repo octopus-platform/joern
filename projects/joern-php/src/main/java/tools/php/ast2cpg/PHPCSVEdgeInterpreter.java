@@ -1,4 +1,4 @@
-package tools.php.ast2cfgddg;
+package tools.php.ast2cpg;
 
 import ast.ASTNode;
 import ast.NullNode;

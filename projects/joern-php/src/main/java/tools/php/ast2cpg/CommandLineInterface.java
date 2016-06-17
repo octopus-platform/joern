@@ -1,4 +1,4 @@
-package tools.php.ast2cfgddg;
+package tools.php.ast2cpg;
 
 import org.apache.commons.cli.ParseException;
 

@@ -15,8 +15,8 @@ import org.junit.Before;
 import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
-import tools.php.ast2cfgddg.PHPCSVEdgeInterpreter;
-import tools.php.ast2cfgddg.PHPCSVNodeInterpreter;
+import tools.php.ast2cpg.PHPCSVEdgeInterpreter;
+import tools.php.ast2cpg.PHPCSVNodeInterpreter;
 
 public class PHPCSVFunctionExtractorBasedTest extends PHPCSVBasedTest
 {
