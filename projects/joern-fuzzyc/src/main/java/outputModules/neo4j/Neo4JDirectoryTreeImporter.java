@@ -8,9 +8,9 @@ import org.neo4j.graphdb.RelationshipType;
 import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import neo4j.batchInserter.Neo4JBatchInserter;
-import outputModules.common.DirectoryTreeExporter;
+import outputModules.common.DirectoryTreeImporter;
 
-public class Neo4JDirectoryTreeImporter extends DirectoryTreeExporter
+public class Neo4JDirectoryTreeImporter extends DirectoryTreeImporter
 {
 
 	protected void linkWithParentDirectory(FileDatabaseNode node)

@@ -4,17 +4,23 @@ import java.io.IOException;
 
 import fileWalker.OrderedWalker;
 import fileWalker.SourceFileWalker;
-import outputModules.parser.Parser;
 import tools.parser.CParserCSVOutput;
 
 public class CParserWrapper {
 
 	private static SourceFileWalker sourceFileWalker = new OrderedWalker();
-	private static Parser parser = new CParserCSVOutput();
+	private static CParserCSVOutput parser = new CParserCSVOutput();
+	private boolean multiFileOutput = false;
+
+	public void setMultiFileOutput(boolean multiFileOutput)
+	{
+		this.multiFileOutput = multiFileOutput;
+	}
 
 	public void initialize(String outputDir)
 	{
 		parser.setOutputDir(outputDir);
+		parser.setMultiFileOutput(multiFileOutput);
 		parser.initialize();
 		sourceFileWalker.addListener(parser);
 	}

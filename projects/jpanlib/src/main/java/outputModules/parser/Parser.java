@@ -3,14 +3,14 @@ package outputModules.parser;
 import java.nio.file.Path;
 
 import fileWalker.SourceFileListener;
-import outputModules.common.DirectoryTreeExporter;
+import outputModules.common.DirectoryTreeImporter;
 
 public abstract class Parser extends SourceFileListener
 {
 
 	protected ParserState state;
 	protected ParserASTWalker astWalker;
-	protected DirectoryTreeExporter dirTreeImporter;
+	protected DirectoryTreeImporter dirTreeImporter;
 
 	protected String outputDir;
 

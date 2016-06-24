@@ -18,7 +18,7 @@ import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import outputModules.common.Writer;
-import outputModules.csv.CSVWriterImpl;
+import outputModules.csv.MultiPairCSVWriterImpl;
 import outputModules.csv.exporters.CSVCFGExporter;
 import outputModules.csv.exporters.CSVCGExporter;
 import outputModules.csv.exporters.CSVDDGExporter;
@@ -64,7 +64,7 @@ public class Main {
 		cfgToUDG.setASTDefUseAnalyzer(new PHPASTDefUseAnalyzer());
 
 		// initialize writers
-		CSVWriterImpl csvWriter = new CSVWriterImpl();
+		MultiPairCSVWriterImpl csvWriter = new MultiPairCSVWriterImpl();
 		csvWriter.openEdgeFile( ".", "cpg_edges.csv");
 		Writer.setWriterImpl( csvWriter);
 

@@ -6,7 +6,7 @@ import java.util.Stack;
 import databaseNodes.FileDatabaseNode;
 import outputModules.parser.ParserState;
 
-public abstract class DirectoryTreeExporter
+public abstract class DirectoryTreeImporter
 {
 	protected ParserState state;
 	protected Stack<FileDatabaseNode> directoryStack = new Stack<FileDatabaseNode>();

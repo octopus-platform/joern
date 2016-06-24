@@ -32,9 +32,10 @@ public class ImporterListener extends SourceFileListener {
 		String edgeFilename = basePath + File.separator + "edges.csv";
 		String dbName = joernProject.getDatabaseName();
 
+		System.out.println(nodeFilename);
+
 		ImportJob importJob = new ImportJob(nodeFilename, edgeFilename, dbName);
         (new ImportCSVRunnable(importJob)).run();
-
 	}
 
 	@Override

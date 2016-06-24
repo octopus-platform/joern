@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Map;
 
 import databaseNodes.FileDatabaseNode;
-import outputModules.common.DirectoryTreeExporter;
+import outputModules.common.DirectoryTreeImporter;
 import outputModules.common.Writer;
 
-public class CSVDirectoryTreeImporter extends DirectoryTreeExporter
+public class MultiDirCSVDirectoryTreeImporter extends DirectoryTreeImporter
 {
 
 	@Override

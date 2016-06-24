@@ -34,6 +34,7 @@ public class JoernImporter extends JoernProjectPlugin {
 		String sourceCodeDirectory = joernProject.getSourceCodeDirectory();
 
 		CParserWrapper parserWrapper = new CParserWrapper();
+		parserWrapper.setMultiFileOutput(false);
 		parserWrapper.initialize(parserOutputDirectory);
 		parserWrapper.walkCodebase(new String[] { sourceCodeDirectory });
 	}

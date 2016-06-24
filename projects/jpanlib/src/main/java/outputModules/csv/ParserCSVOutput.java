@@ -12,11 +12,21 @@ public abstract class ParserCSVOutput extends Parser
 {
 
 	private CSVFunctionExporter functionExporter;
+	boolean multiFileOutput = true;
+
+	public void setMultiFileOutput(boolean multiFileOutput)
+	{
+		this.multiFileOutput = multiFileOutput;
+	}
 
 	@Override
 	public void initialize()
 	{
-		Writer.setWriterImpl(new CSVWriterImpl());
+		if(multiFileOutput)
+			Writer.setWriterImpl(new MultiPairCSVWriterImpl());
+		else
+			Writer.setWriterImpl(new SinglePairCSVWriterImpl());
+
 		super.initialize();
 	}
 
@@ -51,7 +61,10 @@ public abstract class ParserCSVOutput extends Parser
 	@Override
 	protected void initializeDirectoryImporter()
 	{
-		dirTreeImporter = new CSVDirectoryTreeImporter();
+		if(multiFileOutput)
+			dirTreeImporter = new MultiDirCSVDirectoryTreeImporter();
+		else
+			dirTreeImporter = new SingleDirCSVDirectoryTreeImporter();
 	}
 
 	@Override

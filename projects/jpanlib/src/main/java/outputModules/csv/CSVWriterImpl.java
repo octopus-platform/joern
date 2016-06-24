@@ -11,8 +11,8 @@ import databaseNodes.EdgeKeys;
 import databaseNodes.NodeKeys;
 import outputModules.common.WriterImpl;
 
-public class CSVWriterImpl implements WriterImpl
-{
+public abstract class CSVWriterImpl implements WriterImpl {
+
 	final String SEPARATOR = "\t";
 
 	final String[] nodeProperties = { NodeKeys.TYPE, NodeKeys.CODE,
@@ -25,6 +25,9 @@ public class CSVWriterImpl implements WriterImpl
 
 	PrintWriter nodeWriter;
 	PrintWriter edgeWriter;
+
+	@Override
+	public abstract void changeOutputDir(String dirNameForFileNode);
 
 	@Override
 	public long writeNode(Object node, Map<String, Object> properties)
@@ -66,37 +69,28 @@ public class CSVWriterImpl implements WriterImpl
 
 	}
 
-	@Override
-	public void changeOutputDir(String dirNameForFileNode)
-	{
-		closeEdgeFile();
-		closeNodeFile();
-		openNodeFile(dirNameForFileNode);
-		openEdgeFile(dirNameForFileNode);
-	}
-
-	private void openNodeFile(String outDir)
+	protected void openNodeFile(String outDir)
 	{
 		String path = outDir + File.separator + "nodes.csv";
 		nodeWriter = createWriter(path);
 		writeNodePropertyNames();
 	}
 
-	private void writeNodePropertyNames()
+	protected void writeNodePropertyNames()
 	{
 		String joined = "command" + SEPARATOR + "key" + SEPARATOR
 				+ StringUtils.join(nodeProperties, SEPARATOR);
 		nodeWriter.println(joined);
 	}
 
-	private void writeEdgePropertyNames()
+	protected void writeEdgePropertyNames()
 	{
 		String joined = "start" + SEPARATOR + "end" + SEPARATOR + "type"
 				+ SEPARATOR + StringUtils.join(edgeProperties, SEPARATOR);
 		edgeWriter.println(joined);
 	}
 
-	public void openEdgeFile(String outDir)
+	protected void openEdgeFile(String outDir)
 	{
 		openEdgeFile(outDir, "edges.csv");
 	}
@@ -108,7 +102,7 @@ public class CSVWriterImpl implements WriterImpl
 		writeEdgePropertyNames();
 	}
 
-	private PrintWriter createWriter(String path)
+	protected PrintWriter createWriter(String path)
 	{
 		try
 		{
@@ -119,7 +113,7 @@ public class CSVWriterImpl implements WriterImpl
 		}
 	}
 
-	private void closeNodeFile()
+	protected void closeNodeFile()
 	{
 		if (nodeWriter != null)
 			nodeWriter.close();
@@ -130,4 +124,6 @@ public class CSVWriterImpl implements WriterImpl
 		if (edgeWriter != null)
 			edgeWriter.close();
 	}
+
+
 }
