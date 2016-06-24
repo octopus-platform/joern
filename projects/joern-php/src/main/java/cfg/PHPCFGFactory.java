@@ -10,13 +10,13 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
 import ast.php.statements.blockstarters.PHPIfElement;
 import ast.php.statements.blockstarters.PHPIfStatement;
+import ast.php.statements.blockstarters.PHPSwitchCase;
+import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
-import cfg.CFG;
-import cfg.CFGEdge;
-import cfg.CFGFactory;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGEntryNode;
 import cfg.nodes.CFGExceptionNode;
@@ -51,13 +51,13 @@ public class PHPCFGFactory extends CFGFactory {
 		return cfg;
 	}
 	
-	public static CFG newInstance(IfStatement ifStmt)
+	public static CFG newInstance(IfStatement ifStatement)
 	{
 		try
 		{
-
-			PHPIfStatement ifStatement = (PHPIfStatement) ifStmt;
-			Iterator<PHPIfElement> iterator = ifStatement.iterator();
+			PHPIfStatement phpIfStatement = (PHPIfStatement)ifStatement;
+			
+			Iterator<PHPIfElement> iterator = phpIfStatement.iterator();
 			if(!iterator.hasNext())
 				return newErrorInstance();
 
@@ -111,6 +111,63 @@ public class PHPCFGFactory extends CFGFactory {
 		return block;
 	}
 
+	public static CFG newInstance(SwitchStatement switchStatement)
+	{
+		try
+		{
+			PHPSwitchStatement phpSwitchStatement = (PHPSwitchStatement)switchStatement;
+
+			// create new CFG block
+			CFG switchBlock = new CFG();
+
+			// "head" vertex: the expression to be compared to the individual cases
+			CFGNode conditionContainer = new ASTNodeContainer(
+					phpSwitchStatement.getExpression());
+			switchBlock.addVertex(conditionContainer);
+			switchBlock.addEdge(switchBlock.getEntryNode(), conditionContainer);
+
+			// create a CFG block for each case and connect them
+			boolean defaultExists = false;
+			for( PHPSwitchCase switchCase : phpSwitchStatement.getSwitchList()) {
+				
+				// convert case block and add to main switch block
+				CFG caseBody = convert(switchCase.getStatement());
+				switchBlock.appendCFG(caseBody);
+				
+				// determine label
+				String label = switchCase.getValue() != null
+						? switchCase.getValue().getEscapedCodeStr()
+						: "default";
+				if( label.equals("default")) defaultExists = true;
+				
+				// connect condition to first statement of case
+				// if case is empty, simply connect to current exit node
+				if( !caseBody.isEmpty()) {
+					for( CFGEdge caseEntryEdge : caseBody.outgoingEdges( caseBody.getEntryNode())) {
+						switchBlock.addEdge( conditionContainer, caseEntryEdge.getDestination(), label);
+					}
+				}
+				else {
+					switchBlock.addEdge( conditionContainer, switchBlock.getExitNode(), label);
+				}
+			}
+			// default edge to exit node (if no default case is found)
+			if( !defaultExists) {
+				switchBlock.addEdge( conditionContainer, switchBlock.getExitNode(), "default");
+			}
+
+			// finally, fix break statements and rejoice, for we are done
+			fixBreakStatements( switchBlock, switchBlock.getExitNode());
+
+			return switchBlock;
+		}
+		catch (Exception e)
+		{
+			//e.printStackTrace();
+			return newErrorInstance();
+		}
+	}
+	
 	public static CFG newInstance(ForEachStatement forEachStatement)
 	{
 		try

@@ -172,23 +172,49 @@ public class TrickyCFGTests extends PHPCSVFunctionConverterBasedTest {
 	 * switch ($i) {
 	 *   case "foo":
 	 *     break;
+	 *   case "bar":
+	 *     bar();
 	 *   case 1.42:
 	 *   case 2:
+	 *     buz();
 	 *     break;
 	 *   default:
-	 *     buz();
-	 *   }
-	 * bar();
+	 *     qux();
+	 * }
+	 * norf();
 	 */
 	@Test
 	public void testTrickySwitch() throws IOException, InvalidCSVFile
 	{
-		@SuppressWarnings("unused")
 		CFG cfg = getTopCFGForCSVFiles( "testTrickySwitch");
 
-		// TODO
-		// no CFG nodes at all generated for switch statement or anything inside it;
-		// instead, an [ERROR] node is generated for the entire switch statement
+		assertEquals( 10, cfg.getVertices().size());
+		assertEquals( 13, cfg.getEdges().size());
+		
+		assertEquals( 8, getNodesOfType(cfg, "ASTNodeContainer").size());
+		
+		// from entry node to first call and from first call to switch condition
+		assertTrue( edgeExists(cfg, cfg.getEntryNode(), 6, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 6, 11, CFGEdge.EMPTY_LABEL));
+		
+		// from switch condition to cases
+		assertTrue( edgeExists(cfg, 11, 17, "foo"));
+		assertTrue( edgeExists(cfg, 11, 22, "bar"));
+		assertTrue( edgeExists(cfg, 11, 32, "1.42"));
+		assertTrue( edgeExists(cfg, 11, 32, "2"));
+		assertTrue( edgeExists(cfg, 11, 41, "default"));
+
+		// within the switch statement
+		assertTrue( edgeExists(cfg, 22, 32, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 32, 36, CFGEdge.EMPTY_LABEL));
+
+		// from break statements and last statement to call after switch statement
+		assertTrue( edgeExists(cfg, 17, 45, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 36, 45, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 41, 45, CFGEdge.EMPTY_LABEL));
+		
+		// from last statement to exit node
+		assertTrue( edgeExists(cfg, 45, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
 	}
 
 	/**

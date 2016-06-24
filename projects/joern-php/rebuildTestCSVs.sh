@@ -13,6 +13,6 @@ parsePHP() {
 export PHPJOERN
 export -f parsePHP
 
-find src/tests/languages/php/samples/ -name "*.csv" -delete
-find src/tests/languages/php/samples/ -mindepth 2 -maxdepth 2 -type d \
+find src/test/java/tests/languages/php/samples/ -name "*.csv" -delete
+find src/test/java/tests/languages/php/samples/ -mindepth 2 -maxdepth 2 -type d \
     -exec bash -c 'parsePHP "{}"' \;
