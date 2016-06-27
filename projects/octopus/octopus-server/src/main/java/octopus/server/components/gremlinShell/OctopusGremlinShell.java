@@ -1,14 +1,13 @@
 package octopus.server.components.gremlinShell;
 
-import groovy.lang.GroovyShell;
-import octopus.server.Constants;
-import octopus.server.components.gremlinShell.fileWalker.OrderedWalker;
-import octopus.server.components.gremlinShell.fileWalker.SourceFileWalker;
-
 import java.io.IOException;
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 import com.tinkerpop.gremlin.groovy.Gremlin;
+
+import groovy.lang.GroovyShell;
+import octopus.server.components.gremlinShell.fileWalker.OrderedWalker;
+import octopus.server.components.gremlinShell.fileWalker.SourceFileWalker;
 
 public class OctopusGremlinShell
 {
