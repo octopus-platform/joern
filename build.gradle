@@ -72,9 +72,5 @@ task buildTestDatabase << {
 
 copyToLib.dependsOn subprojects.build
 
-buildTestDatabase.dependsOn subprojects.build
-buildTestDatabase.dependsOn copyToLib
-
-build.dependsOn buildTestDatabase
 build.dependsOn subprojects.build
 build.dependsOn copyToLib

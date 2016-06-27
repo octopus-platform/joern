@@ -1,4 +1,3 @@
 #!/bin/sh
 
-gradle build -x test
-gradle deploy
+gradle deploy -x test
