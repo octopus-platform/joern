@@ -57,6 +57,8 @@ task copyOctopus(type:Copy) {
    from "$buildDir/libs/octopus-server.jar"
 }
 
+clean.dependsOn cleanCopyToLib
+
 compileJava.dependsOn downloadAndExtractOrientDB
 
 build.dependsOn copyToLib

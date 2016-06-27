@@ -9,85 +9,14 @@
 			</parameters>
 		</handler>
 		<handler
-			class="com.orientechnologies.orient.server.hazelcast.OHazelcastPlugin">
-			<parameters>
-				<parameter value="${distributed}" name="enabled" />
-				<parameter
-					value="${ORIENTDB_HOME}/config/default-distributed-db-config.json"
-					name="configuration.db.default" />
-				<parameter value="${ORIENTDB_HOME}/config/hazelcast.xml"
-					name="configuration.hazelcast" />
-			</parameters>
-		</handler>
-		<handler class="com.orientechnologies.orient.server.handler.OJMXPlugin">
-			<parameters>
-				<parameter value="false" name="enabled" />
-				<parameter value="true" name="profilerManaged" />
-			</parameters>
-		</handler>
-		<handler
-			class="com.orientechnologies.orient.server.handler.OAutomaticBackup">
-			<parameters>
-				<parameter value="false" name="enabled" />
-				<parameter value="4h" name="delay" />
-				<parameter value="23:00:00" name="firstTime" />
-				<parameter value="backup" name="target.directory" />
-				<parameter value="${DBNAME}-${DATE:yyyyMMddHHmmss}.zip"
-					name="target.fileName" />
-				<parameter value="9" name="compressionLevel" />
-				<parameter value="1048576" name="bufferSize" />
-				<parameter value="" name="db.include" />
-				<parameter value="" name="db.exclude" />
-			</parameters>
-		</handler>
-		<handler
 			class="com.orientechnologies.orient.server.handler.OServerSideScriptInterpreter">
 			<parameters>
 				<parameter value="true" name="enabled" />
 				<parameter value="SQL" name="allowedLanguages" />
 			</parameters>
 		</handler>
-		<handler
-			class="com.orientechnologies.orient.server.token.OrientTokenHandler">
-			<parameters>
-				<parameter value="false" name="enabled" />
-				<parameter value="" name="oAuth2Key" />
-				<parameter value="60" name="sessionLength" />
-				<parameter value="HmacSHA256" name="encryptionAlgorithm" />
-			</parameters>
-		</handler>
-		<handler
-			class="com.orientechnologies.orient.server.plugin.livequery.OLiveQueryPlugin">
-			<parameters>
-				<parameter value="false" name="enabled" />
-			</parameters>
-		</handler>
 	</handlers>
 	<network>
-		<sockets>
-			<socket
-				implementation="com.orientechnologies.orient.server.network.OServerSSLSocketFactory"
-				name="ssl">
-				<parameters>
-					<parameter value="false" name="network.ssl.clientAuth" />
-					<parameter value="config/cert/orientdb.ks" name="network.ssl.keyStore" />
-					<parameter value="password" name="network.ssl.keyStorePassword" />
-					<parameter value="config/cert/orientdb.ks" name="network.ssl.trustStore" />
-					<parameter value="password" name="network.ssl.trustStorePassword" />
-				</parameters>
-			</socket>
-			<socket
-				implementation="com.orientechnologies.orient.server.network.OServerSSLSocketFactory"
-				name="https">
-				<parameters>
-					<parameter value="false" name="network.ssl.clientAuth" />
-					<parameter value="config/cert/orientdb.ks" name="network.ssl.keyStore" />
-					<parameter value="password" name="network.ssl.keyStorePassword" />
-					<parameter value="config/cert/orientdb.ks" name="network.ssl.trustStore" />
-					<parameter value="password" name="network.ssl.trustStorePassword" />
-				</parameters>
-			</socket>
-		</sockets>
 		<protocols>
 			<protocol
 				implementation="com.orientechnologies.orient.server.network.protocol.binary.ONetworkProtocolBinary"
