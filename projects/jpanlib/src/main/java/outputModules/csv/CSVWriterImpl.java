@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import databaseNodes.EdgeKeys;
@@ -40,12 +41,17 @@ public abstract class CSVWriterImpl implements WriterImpl {
 			nodeWriter.write(SEPARATOR);
 			String propValue = (String) properties.get(property);
 			if (propValue != null)
-				nodeWriter.write(propValue);
+				nodeWriter.write(escape(propValue));
 		}
 		nodeWriter.write("\n");
 		lastNodeId++;
 		return lastNodeId - 1;
 
+	}
+
+	private static String escape(String propValue)
+	{
+		return StringEscapeUtils.escapeCsv(propValue.replace("\\", "\\\\"));
 	}
 
 	@Override
