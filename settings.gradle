@@ -4,7 +4,10 @@ include 'projects:joern-php'
 include 'projects:joern-pluginlib'
 
 include 'projects:octopus:octopus-server'
+include 'projects:octopus:octopus-lang'
 include 'projects:octopus:orientdbimporter'
 include 'projects:octopus:octopuslib'
+
+include 'projects:joern-lang'
 
 include 'projects:joern-plugins:importer'
