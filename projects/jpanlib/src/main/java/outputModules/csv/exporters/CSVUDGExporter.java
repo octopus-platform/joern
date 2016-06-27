@@ -32,7 +32,7 @@ public class CSVUDGExporter extends UDGExporter
 		long functionId = Writer.getIdForObject(currentFunction);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(NodeKeys.TYPE, "Symbol");
+		properties.put(NodeKeys.NODE_TYPE, "Symbol");
 		properties.put(NodeKeys.CODE, identifier);
 		properties.put(NodeKeys.FUNCTION_ID, String.format("%d", functionId));
 

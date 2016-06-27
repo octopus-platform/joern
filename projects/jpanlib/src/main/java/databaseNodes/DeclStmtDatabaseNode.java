@@ -23,7 +23,7 @@ public class DeclStmtDatabaseNode extends DatabaseNode
 	public Map<String, Object> createProperties()
 	{
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put(NodeKeys.TYPE, "DeclStmt");
+		map.put(NodeKeys.NODE_TYPE, "DeclStmt");
 		return map;
 	}
 

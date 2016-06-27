@@ -16,7 +16,7 @@ public class EmptyCFGDatabaseNode extends DatabaseNode
 	public Map<String, Object> createProperties()
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(NodeKeys.TYPE, "EmptyStatement");
+		properties.put(NodeKeys.NODE_TYPE, "EmptyStatement");
 		properties.put(NodeKeys.IS_CFG_NODE, "True");
 		return properties;
 	}

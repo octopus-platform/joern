@@ -28,7 +28,7 @@ public abstract class AbstractCFGNode implements CFGNode
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(NodeKeys.CODE, toString());
-		properties.put(NodeKeys.TYPE, getClass().getSimpleName());
+		properties.put(NodeKeys.NODE_TYPE, getClass().getSimpleName());
 		properties.put(NodeKeys.IS_CFG_NODE, "True");
 		return properties;
 	}

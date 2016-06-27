@@ -27,7 +27,7 @@ public class ASTDatabaseNode extends DatabaseNode
 	{
 
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(NodeKeys.TYPE, astNode.getTypeAsString());
+		properties.put(NodeKeys.NODE_TYPE, astNode.getTypeAsString());
 
 		// Only calculate and store code strings for
 		// leave-nodes and statements

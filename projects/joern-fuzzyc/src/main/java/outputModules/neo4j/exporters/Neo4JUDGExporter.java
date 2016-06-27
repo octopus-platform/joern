@@ -44,7 +44,7 @@ public class Neo4JUDGExporter extends UDGExporter
 		long functionId = nodeStore.getIdForObject(currentFunction);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(NodeKeys.TYPE, "Symbol");
+		properties.put(NodeKeys.NODE_TYPE, "Symbol");
 		properties.put(NodeKeys.CODE, identifier);
 		properties.put(NodeKeys.FUNCTION_ID, functionId);
 

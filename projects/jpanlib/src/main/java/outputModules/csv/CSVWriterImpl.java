@@ -16,7 +16,7 @@ public abstract class CSVWriterImpl implements WriterImpl {
 
 	final String SEPARATOR = "\t";
 
-	final String[] nodeProperties = { NodeKeys.TYPE, NodeKeys.CODE,
+	final String[] nodeProperties = { NodeKeys.NODE_TYPE, NodeKeys.CODE,
 			NodeKeys.LOCATION, NodeKeys.FUNCTION_ID, NodeKeys.NAME,
 			NodeKeys.FILEPATH, NodeKeys.CHILD_NUMBER };
 

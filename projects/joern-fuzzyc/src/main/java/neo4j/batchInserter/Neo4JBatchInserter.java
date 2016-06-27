@@ -134,7 +134,7 @@ public class Neo4JBatchInserter
 				MapUtil.stringMap("type", "exact"));
 
 		// TODO: Does this have an effect at all?
-		nodeIndex.setCacheCapacity(NodeKeys.TYPE, 100000);
+		nodeIndex.setCacheCapacity(NodeKeys.NODE_TYPE, 100000);
 		nodeIndex.setCacheCapacity(NodeKeys.NAME, 100000);
 		nodeIndex.setCacheCapacity(NodeKeys.CODE, 100000);
 

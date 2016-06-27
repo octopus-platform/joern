@@ -39,7 +39,7 @@ public class Elementary
 
 	public static String getNodeType(Long nodeId)
 	{
-		return getNodeProperty(nodeId, NodeKeys.TYPE);
+		return getNodeProperty(nodeId, NodeKeys.NODE_TYPE);
 	}
 
 	public static String getNodeProperty(Long nodeId, String property)
