@@ -69,7 +69,7 @@ public abstract class CSVWriterImpl implements WriterImpl {
 			edgeWriter.write(SEPARATOR);
 			String propValue = (null == properties) ? null : (String) properties.get(property);
 			if (propValue != null)
-				edgeWriter.write(propValue);
+				edgeWriter.write(escape(propValue));
 		}
 		edgeWriter.write("\n");
 
