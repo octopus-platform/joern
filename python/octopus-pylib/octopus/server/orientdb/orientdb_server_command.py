@@ -16,13 +16,13 @@ class OrientDBServerCommand(object):
     def execute_post_command(self, name, body=None, headers={}):
         self._connect()
         self._connection.request("POST", name, body, headers)
-        response = self._connection.getresponse()
+        response = self._connection.getresponse().read().decode().strip()
         self._disconnect()
         return response
 
     def execute_get_command(self, name):
         self._connect()
         self._connection.request("GET", name)
-        response = self._connection.getresponse()
+        response = self._connection.getresponse().read().decode().strip()
         self._disconnect()
         return response

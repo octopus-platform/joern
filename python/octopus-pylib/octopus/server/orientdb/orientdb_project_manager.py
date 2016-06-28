@@ -14,6 +14,9 @@ class OrientDBProjectManager(ProjectManager):
     def delete(self, project_name):
         self.command.execute_get_command("/manageprojects/delete/{}".format(project_name))
 
+    def list(self):
+        return self.command.execute_get_command("/manageprojects/list")
+
     def upload_file(self, project_name, file):
         file_content = file.read()
         content_type = "text/plain;charset=us/ascii"
