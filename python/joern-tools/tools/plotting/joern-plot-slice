@@ -1,0 +1,69 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.GraphvizTool import GraphvizTool
+from joerntools.DBInterface import DBInterface
+
+DESCRIPTION = """Highlights the program slice of the given slicing criterion
+(statement, symbol)."""
+
+SLICE_NODE_COLOR = 'lightblue4'
+
+class ProgramSlice(GraphvizTool):
+    
+    def __init__(self):
+
+        GraphvizTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument(
+                'statement',
+                help = """The id of the statement.""")
+
+        self.argParser.add_argument(
+                'symbol',
+                help = """The name of the symbol.""")
+
+        self.argParser.add_argument(
+                '-s', '--slice-type',
+                action = 'store',
+                choices = ['forward', 'backwards'],
+                default = 'forward',
+                help = """The slicing direction.""")
+
+    def processGraph(self, G):
+
+        stmt_id = self.args.statement
+        symbol = self.args.symbol
+
+        nodes = self._getSliceNodes(stmt_id, symbol)
+        self._markSliceNodes(G, nodes)
+        self._outputGraph(G, self.identifier)
+
+    def _markSliceNodes(self, G, nodes):
+
+        for node in nodes:
+            try:
+                n = G.get_node(node._id)
+                n.attr['color'] = SLICE_NODE_COLOR
+            except:
+                pass
+
+    def _getSliceNodes(self, stmt_id, symbol):
+
+        if self.args.slice_type == 'forward':
+            query = """g.v(%s).forwardSlice(['%s'])""" % (stmt_id, symbol)
+        else:
+            query = """g.v(%s).backwardSlice(['%s'])""" % (stmt_id, symbol)
+        self._connectToDatabase()
+        return self._runGremlinQuery(query)
+
+    def _connectToDatabase(self):
+        self.dbInterface = DBInterface()
+        self.dbInterface.connectToDatabase()
+    
+    def _runGremlinQuery(self, query):
+        return self.dbInterface.runGremlinQuery(query)
+    
+
+if __name__ == '__main__':
+    tool = ProgramSlice()
+    tool.run()

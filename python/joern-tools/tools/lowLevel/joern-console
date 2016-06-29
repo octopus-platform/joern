@@ -1,0 +1,69 @@
+#!/usr/bin/env python2
+#
+# Simple console for writing joern queries. It has very basic tab-completion; however, it offers
+#  all possible gremlin steps and user-defined methods instead of contextually limiting them.
+
+import sys
+import readline
+
+from joern.all import JoernSteps
+
+# TODO: Support arg parsing: -h, specifying custom steps dir, specifying repo URL.
+#  Build on top of CmdLineTool? The shell tools architecture doesn't seem to very useful here
+
+j = JoernSteps()
+j.setGraphDbURL('http://localhost:7474/db/data')
+j.connectToDatabase()
+
+class Console:
+  GREEN = '\001\033[92m\002'
+  END_CONTROL_CHAR = '\001\033[0m\002'
+
+  def __init__(self, _methods):
+    self.methods = _methods
+
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(self.completer)
+    readline.set_completer_delims(readline.get_completer_delims() + ".")
+
+  def completer(self, text, state):
+    options = [i for i in self.methods if i.startswith(text)]
+    if state < len(options):
+      return options[state]
+    else:
+      return None
+
+  def read_line(self):
+    prompt = self.GREEN + "joern> " + self.END_CONTROL_CHAR
+    return raw_input(prompt)
+    
+
+# Hacky: Get the names of all Gremlin steps and user-defined methods in Object.metaClass.
+# TODO: variables in Object.metaClass can be accessed as if they are in the local scope, but closures can't
+#  so tab completion for closures like NO_RESTRICTION are incorrect
+methods = j.runGremlinQuery('Gremlin.getStepNames().toList() + ' +
+  '(Object.metaClass.getMethods().name.toList() - Object.getMethods().name.toList())')
+
+console = Console(methods)
+
+while True:
+  try:
+    result = j.runGremlinQuery(console.read_line())
+
+    if isinstance(result, list):
+      for r in result:
+        print r
+    else:
+      print result
+
+    print
+
+  except (EOFError):
+    break
+  except (KeyboardInterrupt):
+    print
+    pass
+  except:
+    print "Error:", sys.exc_info()[1]
+    print
+    pass

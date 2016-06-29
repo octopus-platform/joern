@@ -1,0 +1,57 @@
+#!/usr/bin/env python2
+
+import sys
+from joerntools.shelltool.AccTool import AccTool
+
+DESCRIPTION = """Lookup the location of a node in the code."""
+
+class Location(AccTool):
+    
+    def __init__(self):
+        AccTool.__init__(self, DESCRIPTION)
+        
+    
+    def processBatch(self, nodeIds):
+ 
+        # Note, that since we override processLine,
+        # queryFromLine will not be called either.
+
+        # For functions, get location of function
+        # For statement, get location of statement
+        # For AST nodes, get location of statement
+        # For Symbols, get location of function
+        
+        query = """idListToNodes(%s)
+        .ifThenElse{it.type == 'Function'}{
+         it.sideEffect{loc = it.location; }.functionToFile()
+         .sideEffect{filename = it.filepath; }
+         }{
+           it.ifThenElse{it.type == 'Symbol'}
+           {
+             it.transform{ g.v(it.functionId) }.sideEffect{loc = it.location; }
+             .functionToFile()
+             .sideEffect{filename = it.filepath; }
+            }{
+             it.ifThenElse{it.isCFGNode == 'True'}{
+               it.sideEffect{loc = it.location}
+               .functions().functionToFile()
+               .sideEffect{filename = it.filepath; }
+             }{
+              // AST node
+              it.statements().sideEffect{loc = it.location; }
+              .functions()
+              .functionToFile().sideEffect{filename = it.filepath; }
+              }
+           }
+        }.transform{ filename + ':' + loc }
+        
+        """ % (nodeIds)
+
+        y = self._runGremlinQuery(query)
+        for x in y:
+            print x
+        
+
+if __name__ == '__main__':
+    tool= Location()
+    tool.run()

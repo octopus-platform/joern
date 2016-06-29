@@ -1,0 +1,70 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.JoernTool import JoernTool
+import pygraphviz as pgv
+
+DESCRIPTION = """Retrieve the AST rooted at the node with the given
+id. The default output format is graphviz's 'dot'.
+"""
+
+class AST(JoernTool):
+    
+    def __init__(self):
+        JoernTool.__init__(self, DESCRIPTION)
+    
+    # @Override
+    def processLine(self, line):
+        nodeId = int(line)
+        
+        nodes = self._getASTNodes(nodeId)
+        edges = self._getASTEdges(nodeId)
+        
+        G = self._createDotGraph(nodes, edges)
+        self._outputGraph(G, line)
+    
+    def _getASTNodes(self, nodeId):
+        query = """g.v(%d).functionToAST().astNodes()
+        """% (nodeId)
+        
+        return self._runGremlinQuery(query)
+    
+    def _getASTEdges(self, nodeId):
+        query = """g.v(%d).functionToAST()
+        .astNodes().outE('IS_AST_PARENT')
+        """% (nodeId)
+        
+        return self._runGremlinQuery(query)
+
+    def _createDotGraph(self, nodes, edges):
+        G = pgv.AGraph()
+        
+        idNodePairs = [(n._id, n) for n in nodes]
+        
+        for (nodeId, n) in idNodePairs:
+            G.add_node(nodeId)
+            node = G.get_node(nodeId)
+            node.attr['label'] = self._attributesAsString(n)
+
+        srcDstPairs = [(e.start_node._id, e.end_node._id) for e in edges]
+        
+        for (startNode, endNode) in srcDstPairs:
+            G.add_edge(startNode, endNode)
+            
+        return G
+    
+    def _attributesAsString(self, n):
+        
+        properties = n.properties
+        return '\n'.join(['%s:%s' % (k, str(v).replace('\n',' '))
+                          for (k,v) in properties.iteritems()])
+        
+
+    def _outputGraph(self, G, identifier):
+        ENDMARKER = '//###'
+        self.output('//' + identifier + '\n')
+        self.output(str(G) + '\n')
+        self.output(ENDMARKER + '\n')
+    
+if __name__ == '__main__':
+    tool = AST()
+    tool.run()

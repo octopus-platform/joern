@@ -1,0 +1,34 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.ChunkStartTool import ChunkStartTool
+
+DESCRIPTION = """Create a list of all files of the code base. The
+first field is the file's path, the second field is the id of the
+corresponding node in the database."""
+
+class ListFiles(ChunkStartTool):
+      
+      def __init__(self, DESCRIPTION):
+            ChunkStartTool.__init__(self, DESCRIPTION)
+        
+            self.argParser.add_argument('-p', '--pattern',
+                                        action = 'store', type=str,
+                                        default ="*")
+
+      def _constructIdQuery(self):
+            return """
+            queryNodeIndex('type:File AND filepath:%s').id
+            """ % (self.args.pattern)
+
+      def _constructQueryForChunk(self, chunk):
+            return """idListToNodes(%s).transform{ it.filepath + "\t" + it.id}""" % (chunk)
+
+      def _handleChunkResult(self, res, chunk):
+            for x in res:
+                  print x
+
+
+if __name__ == '__main__':
+      tool = ListFiles(DESCRIPTION)
+      tool.run()
+   

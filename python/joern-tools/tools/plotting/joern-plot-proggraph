@@ -1,0 +1,233 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.JoernTool import JoernTool
+import pygraphviz as pgv
+
+DESCRIPTION = """Retrieve a graph representation of a function with the given
+id. The default output format is graphviz's 'dot'.
+"""
+
+CFG_NODE_COLOR = 'lightblue'
+CFG_EDGE_COLOR = 'lightblue'
+DDG_EDGE_COLOR = 'lightcoral'
+CDG_EDGE_COLOR = 'khaki'
+SYMBOL_NODE_COLOR = 'lightgray'
+USE_EDGE_COLOR = 'lightgray'
+DEF_EDGE_COLOR = 'lightgray'
+
+class ProgramGraph(JoernTool):
+
+    def __init__(self):
+
+        JoernTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument('-a', '--attributes',
+                                    nargs = '+', type = str,
+                                    help = """Attributes shown in each node.""",
+                                    default = None)
+
+        self.argParser.add_argument('-cfg', '--show-control-flow',
+                                    action = 'store_true',
+                                    help = """Show control flow.""",
+                                    default = False)
+
+        self.argParser.add_argument('-dfg', '--show-data-flow',
+                                    action = 'store_true',
+                                    help = """Show data flow.""",
+                                    default = False)
+
+        self.argParser.add_argument('-ddg', '--show-data-dependences',
+                                    action = 'store_true',
+                                    help = """Show data dependences.""",
+                                    default = False)
+
+        self.argParser.add_argument('-cdg', '--show-control-dependences',
+                                    action = 'store_true',
+                                    help = """Show control dependences.""",
+                                    default = False)
+
+        self.argParser.add_argument('-dom', '--show-dominance-edges',
+                                    action = 'store_true',
+                                    help = """Show dominance edges.""",
+                                    default = False)
+
+        self.argParser.add_argument('-all', '--show-all',
+                                    action = 'store_true',
+                                    help = """Show all edge types""",
+                                    default = False)
+
+
+    # @Override
+    def processLine(self, line):
+
+        function_id = int(line)
+        
+        G = self._createDotGraph(function_id)
+        self._outputGraph(G, line)
+
+    def _getCFGNodes(self, function_id):
+
+        query = """queryNodeIndex('functionId:%s AND isCFGNode:True')""" % (function_id)
+        return self._runGremlinQuery(query)
+
+    def _getSymbolNodes(self, function_id):
+
+        if not self.args.show_data_flow and not self.args.show_all:
+            return []
+
+        query = """queryNodeIndex('functionId:%s AND type:Symbol')""" % (function_id)
+        return self._runGremlinQuery(query)
+
+    def _getEdges(self, function_id, type):
+
+        query = """queryNodeIndex('functionId:%s AND isCFGNode:True').outE('%s')""" % (function_id, type)
+        return self._runGremlinQuery(query)
+    
+    def _getCFGEdges(self, function_id):
+
+        if not self.args.show_control_flow and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_id, 'FLOWS_TO')
+    
+    def _getUseEdges(self, function_id):
+
+        if not self.args.show_data_flow and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_id, 'USE')
+
+    def _getDefEdges(self, function_id):
+
+        if not self.args.show_data_flow and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_id, 'DEF')
+
+    def _getDDGEdges(self, function_id):
+
+        if not self.args.show_data_dependences and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_id, 'REACHES')
+
+    def _getCDGEdges(self, function_id):
+
+        if not self.args.show_control_dependences and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_id, 'CONTROLS')
+
+    def _getDomEdges(self, function_id):
+
+        if not self.args.show_dominance_edges and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_id, 'POST_DOM')
+
+    def _createDotGraph(self, function_id):
+
+        G = pgv.AGraph(directed = True, strict = False)
+
+        self._addCFGNodes(G, self._getCFGNodes(function_id))
+        self._addSymbolNodes(G, self._getSymbolNodes(function_id))
+        self._addCFGEdges(G, self._getCFGEdges(function_id))
+        self._addUseEdges(G, self._getUseEdges(function_id))
+        self._addDefEdges(G, self._getDefEdges(function_id))
+        self._addDDGEdges(G, self._getDDGEdges(function_id))
+        self._addCDGEdges(G, self._getCDGEdges(function_id))
+        self._addDomEdges(G, self._getDomEdges(function_id))
+            
+        return G
+
+    def _addCFGNodes(self, G, nodes):
+
+        for node in nodes:
+            G.add_node(node._id,
+                    label = self._attributesAsString(node),
+                    style = 'filled',
+                    fontsize = 10,
+                    color = CFG_NODE_COLOR)
+
+    def _addSymbolNodes(self, G, nodes):
+
+        for node in nodes:
+            G.add_node(node._id,
+                    label = node.get_properties()['code'],
+                    style = 'filled',
+                    fontsize = 10,
+                    color = SYMBOL_NODE_COLOR)
+
+    def _addCFGEdges(self, G, edges):
+
+        for edge in edges:
+            G.add_edge(edge.start_node._id, edge.end_node._id,
+                    fontsize = 10,
+                    color = CFG_EDGE_COLOR,
+                    label = edge.get_properties()['flowLabel'])
+
+    def _addDefEdges(self, G, edges):
+
+        for edge in edges:
+            G.add_edge(edge.start_node._id, edge.end_node._id,
+                    fontsize = 10,
+                    color = DEF_EDGE_COLOR,
+                    label = 'def')
+
+    def _addUseEdges(self, G, edges):
+
+        for edge in edges:
+            G.add_edge(edge.start_node._id, edge.end_node._id,
+                    fontsize = 10,
+                    color = USE_EDGE_COLOR,
+                    label = 'use')
+
+    def _addDDGEdges(self, G, edges):
+
+        for edge in edges:
+            G.add_edge(edge.start_node._id, edge.end_node._id,
+                    fontsize = 10,
+                    color = DDG_EDGE_COLOR,
+                    label = edge.get_properties()['var'])
+
+    def _addCDGEdges(self, G, edges):
+
+        for edge in edges:
+            G.add_edge(edge.start_node._id, edge.end_node._id,
+                    fontsize = 10,
+                    color = CDG_EDGE_COLOR)
+
+    def _addDomEdges(self, G, edges):
+
+        for edge in edges:
+            G.add_edge(edge.start_node._id, edge.end_node._id)
+
+    def _attributesAsString(self, n):
+        
+        properties = n.get_properties()
+        properties['id'] = n._id
+        valid_attributes = []
+        if self.args.attributes:
+            for a in self.args.attributes:
+                if a in properties:
+                    valid_attributes.append(a)
+
+            if not valid_attributes:
+                valid_attributes.append('id')
+
+            return '\\n'.join(['%s:%s' % (k, str(properties[k]).replace('\n',' ')) 
+                    for k in valid_attributes])
+        else:
+            return '\\n'.join(['%s:%s' % (k, str(properties[k]).replace('\n',' ')) 
+                    for k in properties.keys()])
+
+    def _outputGraph(self, G, identifier):
+
+        ENDMARKER = '//###'
+        self.output('//' + identifier + '\n')
+        self.output(str(G) + '\n')
+        self.output(ENDMARKER + '\n')
+    
+if __name__ == '__main__':
+    tool = ProgramGraph()
+    tool.run()
