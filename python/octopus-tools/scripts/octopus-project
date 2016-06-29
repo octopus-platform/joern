@@ -41,6 +41,12 @@ delete_parser.add_argument(
     type=str,
     help="delete this project")
 
+list_parser = subparsers.add_parser(
+    "list",
+    description="List all Octopus projects",
+    help="list projects"
+)
+
 upload_parser = subparsers.add_parser(
     "upload",
     description="Upload a file into a project.",
@@ -65,3 +71,7 @@ elif args.subcommand == 'delete':
     manager.delete(args.project)
 elif args.subcommand == 'upload':
     manager.upload_file(args.project, args.file)
+elif args.subcommand == "list":
+    print(manager.list())
+else:
+    parser.print_usage()
