@@ -1,13 +1,11 @@
 package octopus.server.components.shellmanager;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Semaphore;
-
+import octopus.server.components.gremlinShell.OctopusGremlinShell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import octopus.server.components.gremlinShell.OctopusGremlinShell;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ShellManager
 {
@@ -18,7 +16,6 @@ public class ShellManager
 	private static final int FIRST_PORT = 6000;
 
 	static OctopusGremlinShell[] shells;
-	static Semaphore shellsMutex = new Semaphore(1);
 
 	static
 	{
@@ -26,31 +23,12 @@ public class ShellManager
 		shells = new OctopusGremlinShell[MAX_SHELLS];
 	}
 
-	/**
-	 * @return the shell's port number
-	 * @throws InterruptedException
-	 * */
-
-	public static int createNewShell(String dbName)
+	public synchronized static int createNewShell(String dbName)
 	{
-
-		try
-		{
-			shellsMutex.acquire();
-		}
-		catch (InterruptedException e)
-		{
-			// If interrupted at this point, we have not made
-			// any changes so it should be save to exit.
-			throw new RuntimeException("Interrupted during shell creation");
-		}
-
 		int port = getFirstFreePort();
 		OctopusGremlinShell shell = new OctopusGremlinShell(dbName);
 		shell.setPort(port);
 		shells[port - FIRST_PORT] = shell;
-		shellsMutex.release();
-
 		shell.initShell();
 
 		return port;

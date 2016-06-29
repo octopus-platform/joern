@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.orientechnologies.orient.server.config.OServerCommandConfiguration;
 import com.orientechnologies.orient.server.config.OServerEntryConfiguration;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpRequest;
+import com.orientechnologies.orient.server.network.protocol.http.OHttpRequestException;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpResponse;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpUtils;
 import com.orientechnologies.orient.server.network.protocol.http.command.OServerCommandAbstract;
@@ -19,9 +20,11 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 	public ManageProjectsHandler(final OServerCommandConfiguration iConfiguration)
 	{
 		readConfiguration(iConfiguration);
-		try {
+		try
+		{
 			ProjectManager.setProjectDir(projectsDir);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			throw new RuntimeException("Error opening project dir");
 		}
 	}
@@ -44,29 +47,60 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 	public boolean execute(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
 	{
 
-		String[] urlParts = checkSyntax(
-				iRequest.url,
-				3,
-				"Syntax error: manageprojects/<cmd>/<projectName>");
+		String[] urlParts = checkSyntax(iRequest.url, 2, "Syntax error: manageprojects/<cmd>/[projectName]");
 
 		String command = urlParts[1];
-		String projectName = urlParts[2];
 
-		if(command.equals("create"))
-			ProjectManager.create(projectName);
-		else if(command.equals("delete"))
-			ProjectManager.delete(projectName);
+		if (command.equals("create"))
+		{
+			return executeCreate(iRequest, iResponse);
+		} else if (command.equals("delete"))
+		{
+			return executeDelete(iRequest, iResponse);
+		} else if (command.equals("list"))
+		{
+			return executeList(iRequest, iResponse);
+		} else
+		{
+			iResponse.send(OHttpUtils.STATUS_NOTFOUND_CODE, "Not found", null, "", null);
+			return false;
+		}
 
-		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null,
-				"", null);
+	}
 
+	private boolean executeCreate(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
+	{
+		String[] urlParts = checkSyntax(iRequest.url, 3, "Syntax error: manageprojects/create/projectName");
+		ProjectManager.create(urlParts[2]);
+		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "", null);
+		return false;
+	}
+
+	private boolean executeDelete(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
+	{
+		String[] urlParts = checkSyntax(iRequest.url, 3, "Syntax error: manageprojects/delete/projectName");
+		ProjectManager.delete(urlParts[2]);
+		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "", null);
+		return false;
+	}
+
+	private boolean executeList(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
+	{
+		checkSyntax(iRequest.url, 2, "Syntax error: manageprojects/list");
+		StringBuilder sb = new StringBuilder();
+		for (String name : ProjectManager.listProjects())
+		{
+			sb.append(name);
+			sb.append('\n');
+		}
+		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, sb.toString(), null);
 		return false;
 	}
 
 	@Override
 	public String[] getNames()
 	{
-		return new String[] { "GET|manageprojects/*" };
+		return new String[]{"GET|manageprojects/*"};
 	}
 
 }

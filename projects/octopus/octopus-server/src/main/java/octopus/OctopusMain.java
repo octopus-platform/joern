@@ -9,9 +9,12 @@ import java.io.File;
 
 public class OctopusMain {
 
+    static OctopusMain main;
+    OServer server;
+
     public static void main(String[] args) throws java.lang.Exception
     {
-        OctopusMain main = new OctopusMain();
+        main = new OctopusMain();
         main.startOrientdb();
     }
 
@@ -28,8 +31,13 @@ public class OctopusMain {
         System.setProperty("orientdb.www.path",octopusHome +"/orientdb/www");
         System.setProperty("orientdb.config.file", octopusHome + "/conf/orientdb-server-config.xml");
 
-        OServer server = OServerMain.create();
+        server = OServerMain.create();
         server.startup();
         server.activate();
+    }
+
+    public void stopOrientdb()
+    {
+        server.shutdown();
     }
 }

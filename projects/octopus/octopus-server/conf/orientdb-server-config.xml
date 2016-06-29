@@ -51,10 +51,8 @@
 					</command>
 					<command implementation="octopus.server.commands.importcsv.ImportCSVHandler"
 						pattern="GET|importcsv/*" />
-					<command implementation="octopus.server.commands.shellcreate.ShellCreateHandler"
-						pattern="GET|shellcreate/*" />
-					<command implementation="octopus.server.commands.listshells.ListShellsHandler"
-						pattern="GET|listshells/*" />
+					<command implementation="octopus.server.commands.manageshells.ManageShellsHandler"
+						pattern="GET|manageshells/*" />
 					<command
 						implementation="com.orientechnologies.orient.server.network.protocol.http.command.get.OServerCommandGetStaticContent"
 						pattern="GET|www GET|studio/ GET| GET|*.htm GET|*.html GET|*.xml GET|*.jpeg GET|*.jpg GET|*.png GET|*.gif GET|*.js GET|*.css GET|*.swf GET|*.ico GET|*.txt GET|*.otf GET|*.pjs GET|*.svg GET|*.json GET|*.woff GET|*.woff2 GET|*.ttf GET|*.svgz"

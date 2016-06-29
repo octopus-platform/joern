@@ -1,66 +1,52 @@
 package octopus.server.components.gremlinShell;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import octopus.server.components.gremlinShell.io.BjoernClientReader;
 import octopus.server.components.gremlinShell.io.BjoernClientWriter;
 import octopus.server.components.shellmanager.ShellManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ShellRunnable implements Runnable
 {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ShellRunnable.class);
 
-	private String dbName;
 	private ServerSocket serverSocket;
-	private OctopusGremlinShell bjoernGremlinShell;
+	private OctopusGremlinShell shell;
 	private Socket clientSocket;
 	private BjoernClientWriter clientWriter;
 	private BjoernClientReader clientReader;
 
 	private boolean listening = true;
 
-	public void setDbName(String dbName)
+	public ShellRunnable(OctopusGremlinShell shell) throws IOException
 	{
-		this.dbName = dbName;
+		this.shell = shell;
+		createLocalListeningSocket();
 	}
 
 	@Override
 	public void run()
 	{
-		createGremlinShell();
-
 		try
 		{
-			createLocalListeningSocket();
 			processClients();
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 	}
 
-	private void createGremlinShell()
-	{
-		int port = ShellManager.createNewShell(dbName);
-		bjoernGremlinShell = ShellManager.getShellForPort(port);
-	}
 
 	private void createLocalListeningSocket() throws IOException
 	{
 		InetAddress bindAddr = InetAddress.getLoopbackAddress();
-		serverSocket = new ServerSocket(bjoernGremlinShell.getPort(), 10,
+		serverSocket = new ServerSocket(shell.getPort(), 10,
 				bindAddr);
 	}
 
@@ -72,16 +58,14 @@ public class ShellRunnable implements Runnable
 			{
 				acceptNewClient();
 				handleClient();
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				logger.warn("IOException when handling client: {}",
 						e.getMessage());
-				continue;
 			}
 
 		}
-		ShellManager.destroyShell(bjoernGremlinShell.getPort());
+		ShellManager.destroyShell(shell.getPort());
 		serverSocket.close();
 	}
 
@@ -115,16 +99,14 @@ public class ShellRunnable implements Runnable
 				listening = false;
 				clientWriter.writeMessage("bye");
 				break;
-			}
-			else
+			} else
 			{
 				Object evalResult;
 				try
 				{
-					evalResult = bjoernGremlinShell.execute(message);
+					evalResult = shell.execute(message);
 					clientWriter.writeResult(evalResult);
-				}
-				catch (Exception ex)
+				} catch (Exception ex)
 				{
 					clientWriter.writeMessage(ex.getMessage());
 				}
