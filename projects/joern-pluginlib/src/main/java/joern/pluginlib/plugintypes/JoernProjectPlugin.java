@@ -9,4 +9,10 @@ public class JoernProjectPlugin extends OctopusProjectPlugin {
 	{
 		setProjectConnector(new JoernProjectConnector());
 	}
+
+	@Override
+	public void execute() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
 }
