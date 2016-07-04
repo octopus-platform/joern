@@ -66,11 +66,11 @@ args = parser.parse_args()
 manager = OrientDBProjectManager(args.server_host, args.server_port)
 
 if args.subcommand == 'create':
-    manager.create(args.project)
+    print(manager.create(args.project))
 elif args.subcommand == 'delete':
-    manager.delete(args.project)
+    print(manager.delete(args.project))
 elif args.subcommand == 'upload':
-    manager.upload_file(args.project, args.file)
+    print(manager.upload_file(args.project, args.file))
 elif args.subcommand == "list":
     print(manager.list())
 else:

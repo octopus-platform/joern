@@ -10,4 +10,7 @@ class OrientDBPluginExecutor(object):
     def execute(self, pluginname, classname, settings=None):
         data = {"plugin": pluginname, "class": classname, "settings": settings}
         json_data = json.dumps(data)
-        self.command.execute_post_command("/executeplugin/", json_data)
+        return self.post(json_data)
+
+    def post(self, json_data):
+        return self.command.execute_post_command("/executeplugin/", json_data)

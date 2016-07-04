@@ -6,4 +6,4 @@ class OctopusPlugin(object):
         self._settings = {}
 
     def execute(self):
-        self._executer.execute(self._pluginname, self._classname, self._settings)
+        return self._executer.execute(self._pluginname, self._classname, self._settings)

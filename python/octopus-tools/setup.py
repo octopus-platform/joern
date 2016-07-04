@@ -10,5 +10,5 @@ setup(
     license='LGPLv3',
     packages=['octopus', 'octopus.server', 'octopus.server.orientdb', 'octopus.plugins', 'octopus.shell',
               'octopus.shell.completer', 'octopus.shell.onlinehelp'],
-    scripts=['scripts/octopus-project']
+    scripts=['scripts/octopus-project', 'scripts/octopus-plugin']
 )
