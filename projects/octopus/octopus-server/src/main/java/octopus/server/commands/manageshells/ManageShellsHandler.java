@@ -1,15 +1,16 @@
 package octopus.server.commands.manageshells;
 
+import java.io.IOException;
+
 import com.orientechnologies.orient.server.config.OServerCommandConfiguration;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpRequest;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpResponse;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpUtils;
 import com.orientechnologies.orient.server.network.protocol.http.command.OServerCommandAbstract;
+
 import octopus.server.components.gremlinShell.OctopusGremlinShell;
 import octopus.server.components.gremlinShell.ShellRunnable;
 import octopus.server.components.shellmanager.ShellManager;
-
-import java.io.IOException;
 
 public class ManageShellsHandler extends OServerCommandAbstract
 {
@@ -22,7 +23,7 @@ public class ManageShellsHandler extends OServerCommandAbstract
 			throws Exception
 	{
 
-		String[] urlParts = checkSyntax(iRequest.url, 2, "Syntax error: manageshells/<cmd>/[projectName]");
+		String[] urlParts = checkSyntax(iRequest.url, 2, "Syntax error: manageshells/<cmd>/[projectName]/[shellname]");
 
 		String command = urlParts[1];
 
@@ -54,8 +55,13 @@ public class ManageShellsHandler extends OServerCommandAbstract
 
 	private boolean executeCreate(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
 	{
-		String[] urlParts = checkSyntax(iRequest.url, 3, "Syntax error: manageshells/create/projectName");
-		int port = ShellManager.createNewShell(urlParts[2]);
+		String[] urlParts = checkSyntax(iRequest.url, 3, "Syntax error: manageshells/create/projectName/[shellname]");
+
+		String shellName = "(shell)";
+		if(urlParts.length > 3)
+			shellName = urlParts[3];
+
+		int port = ShellManager.createNewShell(urlParts[2], shellName);
 		OctopusGremlinShell shell = ShellManager.getShellForPort(port);
 		startShellThread(shell);
 		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, port + "\n", null);
@@ -71,7 +77,7 @@ public class ManageShellsHandler extends OServerCommandAbstract
 
 	private Object rowForShell(OctopusGremlinShell shell)
 	{
-		return String.format("%d\t%s", shell.getPort(), shell.getDbName());
+		return String.format("%d\t%s\t%s\t%s", shell.getPort(), shell.getDbName(), shell.getName(), shell.isOccupied());
 	}
 
 	@Override

@@ -15,6 +15,8 @@ public class OctopusGremlinShell
 	private GroovyShell shell;
 	private int port;
 	private final String dbName;
+	private String name;
+	private boolean occupied = false;
 
 	static
 	{
@@ -111,4 +113,30 @@ public class OctopusGremlinShell
 	{
 		return shell;
 	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getName()
+	{
+		return this.name;
+	}
+
+	public void markAsOccupied()
+	{
+		occupied = true;
+	}
+
+	public void markAsFree()
+	{
+		occupied = false;
+	}
+
+	public boolean isOccupied()
+	{
+		return occupied;
+	}
+
 }

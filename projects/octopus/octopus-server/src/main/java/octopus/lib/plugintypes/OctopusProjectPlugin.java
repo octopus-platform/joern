@@ -10,7 +10,8 @@ import octopus.lib.connectors.OctopusProjectConnector;
 import octopus.server.components.pluginInterface.Plugin;
 import orientdbimporter.Constants;
 
-public class OctopusProjectPlugin extends Plugin {
+public abstract class OctopusProjectPlugin implements Plugin
+{
 
 	private OctopusProjectConnector projectConnector;
 
@@ -31,27 +32,31 @@ public class OctopusProjectPlugin extends Plugin {
 		String dbName = getBjoernProjectConnector().getWrapper().getDatabaseName();
 
 		boolean databaseExists = doesDatabaseExist(dbName);
-		if(databaseExists)
+		if (databaseExists)
 			throw new RuntimeException("Database already exists. Skipping.");
 	}
 
 	private boolean doesDatabaseExist(String dbName)
 	{
-		try {
+		try
+		{
 			return new OServerAdmin("localhost/" + dbName).connect(
 					Constants.DB_USERNAME, Constants.DB_PASSWORD).existsDatabase();
 
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			throw new RuntimeException("Error determining whether database exists");
 		}
 	}
 
 	// TODO: rename to getProjectConnector
-	protected OctopusProjectConnector getBjoernProjectConnector() {
+	protected OctopusProjectConnector getBjoernProjectConnector()
+	{
 		return projectConnector;
 	}
 
-	protected void setBjoernProjectConnector(OctopusProjectConnector bjoernProjectConnector) {
+	protected void setBjoernProjectConnector(OctopusProjectConnector bjoernProjectConnector)
+	{
 		this.projectConnector = bjoernProjectConnector;
 	}
 

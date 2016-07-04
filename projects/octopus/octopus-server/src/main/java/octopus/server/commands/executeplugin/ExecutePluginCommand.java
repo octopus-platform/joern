@@ -47,25 +47,24 @@ public class ExecutePluginCommand extends OServerCommandAbstract
 
 	@Override
 	public boolean execute(OHttpRequest iRequest,
-			OHttpResponse iResponse) throws Exception
+						   OHttpResponse iResponse) throws Exception
 	{
 		OLogManager.instance().warn(this, "startplugin");
 
 		parseContent(iRequest.content);
 
-		long startTime = System.nanoTime();
-		executePlugin();
-		long stopTime = System.nanoTime();
-		double elapsedTime = (stopTime - startTime) / (1000000.0 * 1000);
-
-		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null,
-				String.format("Execution time: %.3fs\n", elapsedTime), null);
+		Object result = executePlugin();
+		if (result == null)
+		{
+			result = "";
+		}
+		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, result, null);
 		return false;
 	}
 
 	private void parseContent(String content)
 	{
-		if(content == null)
+		if (content == null)
 			throw new RuntimeException("Error: no content");
 
 		JSONObject data = new JSONObject(content);
@@ -74,7 +73,7 @@ public class ExecutePluginCommand extends OServerCommandAbstract
 		settings = data.getJSONObject("settings");
 	}
 
-	private void executePlugin()
+	private Object executePlugin()
 	{
 		Path path = Paths.get(pluginDir, pluginName);
 		Plugin plugin = PluginLoader.load(path, pluginClass);
@@ -90,6 +89,7 @@ public class ExecutePluginCommand extends OServerCommandAbstract
 			plugin.beforeExecution();
 			plugin.execute();
 			plugin.afterExecution();
+			return plugin.result();
 		} catch (Exception e)
 		{
 			throw new OHttpRequestException(e.getMessage());

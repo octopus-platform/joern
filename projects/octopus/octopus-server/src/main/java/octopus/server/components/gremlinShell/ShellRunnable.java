@@ -1,15 +1,20 @@
 package octopus.server.components.gremlinShell;
 
-import octopus.server.components.gremlinShell.io.BjoernClientReader;
-import octopus.server.components.gremlinShell.io.BjoernClientWriter;
-import octopus.server.components.shellmanager.ShellManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import octopus.server.components.gremlinShell.io.BjoernClientReader;
+import octopus.server.components.gremlinShell.io.BjoernClientWriter;
+import octopus.server.components.shellmanager.ShellManager;
 
 public class ShellRunnable implements Runnable
 {
@@ -57,7 +62,13 @@ public class ShellRunnable implements Runnable
 			try
 			{
 				acceptNewClient();
+				closeListeningSocket();
+
+				markShellAsOccupied();
 				handleClient();
+				markShellAsFree();
+
+				createLocalListeningSocket();
 			} catch (IOException e)
 			{
 				logger.warn("IOException when handling client: {}",
@@ -66,6 +77,22 @@ public class ShellRunnable implements Runnable
 
 		}
 		ShellManager.destroyShell(shell.getPort());
+		serverSocket.close();
+	}
+
+	private void markShellAsOccupied()
+	{
+		shell.markAsOccupied();
+	}
+
+	private void markShellAsFree()
+	{
+		shell.markAsFree();
+	}
+
+
+	private void closeListeningSocket() throws IOException
+	{
 		serverSocket.close();
 	}
 

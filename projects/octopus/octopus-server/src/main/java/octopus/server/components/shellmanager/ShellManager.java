@@ -1,11 +1,12 @@
 package octopus.server.components.shellmanager;
 
-import octopus.server.components.gremlinShell.OctopusGremlinShell;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
+import octopus.server.components.gremlinShell.OctopusGremlinShell;
 
 public class ShellManager
 {
@@ -23,11 +24,12 @@ public class ShellManager
 		shells = new OctopusGremlinShell[MAX_SHELLS];
 	}
 
-	public synchronized static int createNewShell(String dbName)
+	public synchronized static int createNewShell(String dbName, String shellName)
 	{
 		int port = getFirstFreePort();
 		OctopusGremlinShell shell = new OctopusGremlinShell(dbName);
 		shell.setPort(port);
+		shell.setName(shellName);
 		shells[port - FIRST_PORT] = shell;
 		shell.initShell();
 

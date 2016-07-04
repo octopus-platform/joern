@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import octopus.lib.connectors.OrientDBConnector;
 import octopus.server.components.pluginInterface.Plugin;
 
-public abstract class OrientGraphConnectionPlugin extends Plugin
+public abstract class OrientGraphConnectionPlugin implements Plugin
 {
 	private String databaseName;
 	protected OrientDBConnector orientConnector = new OrientDBConnector();

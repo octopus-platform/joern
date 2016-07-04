@@ -1,21 +1,24 @@
 package octopus.server.commands.manageprojects;
 
-import java.io.IOException;
-
 import com.orientechnologies.orient.server.config.OServerCommandConfiguration;
 import com.orientechnologies.orient.server.config.OServerEntryConfiguration;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpRequest;
-import com.orientechnologies.orient.server.network.protocol.http.OHttpRequestException;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpResponse;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpUtils;
 import com.orientechnologies.orient.server.network.protocol.http.command.OServerCommandAbstract;
-
 import octopus.server.components.projectmanager.ProjectManager;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 
 public class ManageProjectsHandler extends OServerCommandAbstract
 {
 
-	String projectsDir;
+	Path projectsDir;
 
 	public ManageProjectsHandler(final OServerCommandConfiguration iConfiguration)
 	{
@@ -36,7 +39,7 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 			switch (param.name)
 			{
 				case "dir":
-					projectsDir = System.getProperty("OCTOPUS_HOME") + "/" + param.value;
+					projectsDir = Paths.get(System.getProperty("OCTOPUS_HOME"), param.value);
 					break;
 			}
 		}
@@ -60,6 +63,10 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 		} else if (command.equals("list"))
 		{
 			return executeList(iRequest, iResponse);
+		} else if (command.equals("uploadfile"))
+		{
+			return executeUpload(iRequest, iResponse);
+
 		} else
 		{
 			iResponse.send(OHttpUtils.STATUS_NOTFOUND_CODE, "Not found", null, "", null);
@@ -68,19 +75,60 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 
 	}
 
+	private boolean executeUpload(OHttpRequest iRequest, OHttpResponse iResponse) throws IOException
+	{
+		String[] urlParts = checkSyntax(iRequest.url, 4,
+				"Syntax error: manageprojects/uploadfile/projectName/relativePath");
+
+		String projectName = urlParts[2];
+		String relativePath = urlParts[3];
+
+		Path pathToProject = ProjectManager.getPathToProject(projectName);
+		Path dstFilename = Paths.get(pathToProject.toString(), relativePath);
+		byte[] decodedData = Base64.getMimeDecoder().decode(iRequest.content);
+
+		writeDataToFile(dstFilename, decodedData);
+		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "", null);
+
+		return false;
+
+	}
+
+	private void writeDataToFile(Path path, byte[] data) throws IOException
+	{
+		try (OutputStream out = Files.newOutputStream(path))
+		{
+			out.write(data);
+		}
+	}
+
 	private boolean executeCreate(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
 	{
 		String[] urlParts = checkSyntax(iRequest.url, 3, "Syntax error: manageprojects/create/projectName");
-		ProjectManager.create(urlParts[2]);
-		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "", null);
+		String projectName = urlParts[2];
+		if (ProjectManager.doesProjectExist(projectName))
+		{
+			iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "Project already exists.", null);
+		} else
+		{
+			ProjectManager.create(projectName);
+			iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "Project created.", null);
+		}
 		return false;
 	}
 
 	private boolean executeDelete(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
 	{
 		String[] urlParts = checkSyntax(iRequest.url, 3, "Syntax error: manageprojects/delete/projectName");
-		ProjectManager.delete(urlParts[2]);
-		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "", null);
+		String projectName = urlParts[2];
+		if (ProjectManager.doesProjectExist(projectName))
+		{
+			ProjectManager.delete(projectName);
+			iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "Project deleted.", null);
+		} else
+		{
+			iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "Project does not exist.", null);
+		}
 		return false;
 	}
 
@@ -100,7 +148,7 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"GET|manageprojects/*"};
+		return new String[]{"GET|manageprojects/*", "POST|manageprojects/uploadfile/*"};
 	}
 
 }

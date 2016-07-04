@@ -1,24 +1,19 @@
 package octopus.server.components.pluginInterface;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class Plugin
+public interface Plugin
 {
-	private final Logger logger = LoggerFactory
-			.getLogger(getClass());
+	void configure(JSONObject settings);
 
-	public Logger getLogger()
+	void execute() throws Exception;
+
+	default void beforeExecution() throws Exception {}
+
+	default void afterExecution() throws Exception {}
+
+	default Object result()
 	{
-		return this.logger;
+		return null;
 	}
-
-    public void configure(JSONObject settings) { }
-
-    public void execute() throws Exception { }
-
-    public void beforeExecution() throws Exception { }
-
-    public void afterExecution() throws Exception { }
 }
