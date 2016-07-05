@@ -1,4 +1,3 @@
-
 from scipy.sparse import lil_matrix, dia_matrix
 import math
 
@@ -13,16 +12,16 @@ class TermDocumentMatrix():
         self.doc2Index = dict()
         self.index2Doc = dict()
         self.nterms = 0
-    
+
     def setDimensions(self, h, w):
         if (h,w) != (0,0):
             self.matrix = lil_matrix((h, w))
 
     def setDocuments(self, docs):
         self.index2Doc = docs
-        for i in xrange(len(self.index2Doc)):
+        for i in range(len(self.index2Doc)):
             self.doc2Index[self.index2Doc[i]] = i
-    
+
     def addTerm(self, term):
         self.term2Index[term] = self.nterms
         self.index2Term[self.nterms] = term
@@ -34,11 +33,11 @@ class TermDocumentMatrix():
 
     def isTermKnown(self, term):
         return term in self.term2Index
-   
+
     def tfidf(self):
-        
+
         m = self.matrix
-        
+
         if m == None:
             return
 
@@ -46,7 +45,7 @@ class TermDocumentMatrix():
         # d = [1.0/x if x != 0 else 0.0 for x in m.sum(0).tolist()[0]]
         # dia = dia_matrix((d, [0]), shape=(len(d), len(d)))
         # m = m * dia
-        
+
         # IDF
         epsilon = 10**(-50) # We want to make sure no item is completely removed
         numberOfDocuments = m.shape[1]
@@ -54,6 +53,3 @@ class TermDocumentMatrix():
         dia = dia_matrix((idf, [0]), shape=(len(idf), len(idf)))
         m = (m.T * dia).T
         self.matrix = lil_matrix(m)
-        
-        
-    

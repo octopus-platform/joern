@@ -1,4 +1,3 @@
-
 import re
 from TokenAndGapSeq import TokenAndGapSeq
 
@@ -13,16 +12,16 @@ class StringSetToRegex:
 
         self.X = X
         self.M = M
-        
+
         tokenAndGaps = TokenAndGapSeq(M)
         regex = self._refineRegex(tokenAndGaps)
         return regex
-    
+
     def _refineRegex(self, tokenAndGaps):
-        
+
         # Run the most vague regex first to determine the
         # maximum set of points this regex may cover.
-        
+
         mostVague = tokenAndGaps.mostVagueRegex()
         mostVagueRegex = mostVague.toRegex()
 
@@ -35,45 +34,45 @@ class StringSetToRegex:
         # on the strings in maxSet. If the number of matches is equal to the
         # size of C, continue. Else, merge first and second token and try
         # again until this holds.
-        
+
         regex = tokenAndGaps.toRegex()
         curFPRate = self._nFalsePositives(regex, maxSet)
-        
+
         while curFPRate != 0 and tokenAndGaps.getNGaps() != 1:
             tokenAndGaps.merge(0)
-                
+
             regex = tokenAndGaps.toRegex()
             curFPRate = self._nFalsePositives(regex, maxSet)
-            
+
             if curFPRate == 0:
                 break
 
         nGaps = tokenAndGaps.getNGaps()
-        
+
         if nGaps == 1:
             # No common tokens found
             # except for the END token
             # TODO: check this
             return tokenAndGaps.toRegex()
 
-        for i in xrange(nGaps):
-            
+        for i in range(nGaps):
+
             fillersBackup = tokenAndGaps.getGapFillers(i)
             tokenAndGaps.setWildcard(i)
-            
+
             newRegex = tokenAndGaps.toRegex()
             fpRate = self._nFalsePositives(newRegex, maxSet)
-            
+
             if fpRate == 0:
                 regex = newRegex
                 continue
-            
+
             tokenAndGaps.setGapFillers(i, fillersBackup)
-            
-            
+
+
         assert self._nFalsePositives(regex, maxSet) == 0
         return regex
-            
+
     def _nFalsePositives(self, regex, maxSet):
         matches = self._getMatchingStrings(maxSet, regex)
         return len(matches) - len(self.M)
@@ -81,5 +80,3 @@ class StringSetToRegex:
     def _getMatchingStrings(self, M, regex):
         prog = re.compile('^' + regex + '$')
         return [x.rstrip() for x in M if prog.match(x) != None]
-
-
