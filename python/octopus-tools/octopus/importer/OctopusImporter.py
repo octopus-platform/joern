@@ -36,7 +36,7 @@ class OctopusImporter:
 
         headers = {"Content-type": "text/plain;charset=us/ascii"}
         conn = self._getConnectionToServer()
-        conn.request("POST", "/uploadfile/%s/binary" % (self.projectName), base64Content, headers)
+        conn.request("POST", "/manageprojects/uploadfile/%s/binary" % (self.projectName), base64Content, headers)
         response = conn.getresponse()
 
     def executeImporterPlugin(self):

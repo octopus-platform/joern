@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:octopus-platform/octopus-tools
 	branch = master
-	commit = 9c93ad9934f39ad0b8c790c787874ac185812679
-	parent = 2f609619f18af12f6fc1d312e033e1e1590d0d9c
+	commit = 3574504dcd24445b5f4982b5eaf7fa7192005fd3
+	parent = 2859a5aa11f3c1a025b2fede1cf3f3da30cee941
 	cmdver = 0.3.0
