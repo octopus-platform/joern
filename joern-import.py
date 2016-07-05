@@ -8,7 +8,7 @@ OCTOPUS_PYLIB = 'octopus-pylib'
 OCTOPUS_PYLIB_DIR = os.path.join(BASEDIR, 'python', OCTOPUS_PYLIB)
 sys.path.append(OCTOPUS_PYLIB_DIR)
 
-from importer.OctopusImporter import OctopusImporter
+from octopus.importer.OctopusImporter import OctopusImporter
 
 class JoernImporter(OctopusImporter):
 
