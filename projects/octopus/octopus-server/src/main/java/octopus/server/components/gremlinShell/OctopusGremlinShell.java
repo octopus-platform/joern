@@ -1,13 +1,12 @@
 package octopus.server.components.gremlinShell;
 
-import java.io.IOException;
-
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 import com.tinkerpop.gremlin.groovy.Gremlin;
-
 import groovy.lang.GroovyShell;
 import octopus.server.components.gremlinShell.fileWalker.OrderedWalker;
 import octopus.server.components.gremlinShell.fileWalker.SourceFileWalker;
+
+import java.io.IOException;
 
 public class OctopusGremlinShell
 {
@@ -17,6 +16,7 @@ public class OctopusGremlinShell
 	private final String dbName;
 	private String name;
 	private boolean occupied = false;
+	private OrientGraphNoTx graph;
 
 	static
 	{
@@ -48,8 +48,7 @@ public class OctopusGremlinShell
 		try
 		{
 			loadRecursively(System.getProperty("OCTOPUS_HOME") + "/querylib/");
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -63,16 +62,16 @@ public class OctopusGremlinShell
 
 		walker.setFilenameFilter("*.groovy");
 		walker.addListener(listener);
-		walker.walk(new String[] { queryLibDir });
+		walker.walk(new String[]{queryLibDir});
 	}
 
 	private void openDatabaseConnection(String dbName)
 	{
 		// TODO: We should check whether the database exists
 
-		OrientGraphNoTx g = new OrientGraphNoTx(
+		graph = new OrientGraphNoTx(
 				"plocal:" + System.getProperty("ORIENTDB_HOME") + "/databases/" + dbName);
-		this.shell.setVariable("g", g);
+		this.shell.setVariable("g", graph);
 	}
 
 	public Object execute(String code)
@@ -86,8 +85,7 @@ public class OctopusGremlinShell
 		try
 		{
 			return shell.evaluate(code);
-		}
-		catch (Exception ex)
+		} catch (Exception ex)
 		{
 			return String.format("[%s] %s", ex.getClass().getSimpleName(),
 					ex.getMessage());
@@ -139,4 +137,13 @@ public class OctopusGremlinShell
 		return occupied;
 	}
 
+	public void activateGraphOnCurrentThread()
+	{
+		graph.getRawGraph().activateOnCurrentThread();
+	}
+
+	public void shutdownGraph()
+	{
+		graph.shutdown();
+	}
 }

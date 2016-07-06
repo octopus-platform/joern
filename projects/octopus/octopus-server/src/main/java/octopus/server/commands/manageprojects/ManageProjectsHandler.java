@@ -88,7 +88,7 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 		byte[] decodedData = Base64.getMimeDecoder().decode(iRequest.content);
 
 		writeDataToFile(dstFilename, decodedData);
-		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "", null);
+		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "File uploaded.", null);
 
 		return false;
 

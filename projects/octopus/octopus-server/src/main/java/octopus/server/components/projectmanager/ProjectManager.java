@@ -4,10 +4,8 @@ import com.orientechnologies.orient.client.remote.OServerAdmin;
 import orientdbimporter.Constants;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,10 +109,30 @@ public class ProjectManager
 
 	private static void deleteProjectWithName(String name) throws IOException
 	{
-		Path pathToProject = getPathToProject(name);
-		Files.deleteIfExists(pathToProject);
-		nameToProject.remove(name);
 		removeDatabaseIfExists(name);
+		deleteProjectFiles(name);
+		nameToProject.remove(name);
+	}
+
+	private static void deleteProjectFiles(String name) throws IOException
+	{
+		Path pathToProject = getPathToProject(name);
+		Files.walkFileTree(pathToProject, new SimpleFileVisitor<Path>()
+		{
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+			{
+				Files.delete(file);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
+			{
+				Files.delete(dir);
+				return FileVisitResult.CONTINUE;
+			}
+		});
 	}
 
 	private static void removeDatabaseIfExists(String dbName) throws IOException

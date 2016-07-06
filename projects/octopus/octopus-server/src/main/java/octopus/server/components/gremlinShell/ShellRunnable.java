@@ -1,20 +1,15 @@
 package octopus.server.components.gremlinShell;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import octopus.server.components.gremlinShell.io.BjoernClientReader;
 import octopus.server.components.gremlinShell.io.BjoernClientWriter;
 import octopus.server.components.shellmanager.ShellManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ShellRunnable implements Runnable
 {
@@ -38,6 +33,7 @@ public class ShellRunnable implements Runnable
 	@Override
 	public void run()
 	{
+		shell.activateGraphOnCurrentThread();
 		try
 		{
 			processClients();
@@ -125,6 +121,7 @@ public class ShellRunnable implements Runnable
 			{
 				listening = false;
 				clientWriter.writeMessage("bye");
+				shell.shutdownGraph();
 				break;
 			} else
 			{
