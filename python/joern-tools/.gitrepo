@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:octopus-platform/joern-tools.git
 	branch = octopusport
-	commit = 788775b330183ccacf9e8e3cb70f0009e695ac78
-	parent = 7ff4297a1fefb7ce29a85933bc04067a206ceb5c
+	commit = 88f4dc9942900b008805a83f6b44a11114999888
+	parent = bef3def1386a5c947cea8fbd0832b8606a69ff70
 	cmdver = 0.3.0
