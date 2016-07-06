@@ -1,0 +1,11 @@
+
+from joern.shelltool.JoernTag import JoernTag
+
+DESCRIPTION = """
+    Adds attributes to nodes. Lines of "nodeId \t tag-value"
+    are expected as input.
+"""
+
+if __name__ == '__main__':
+    tool = JoernTag(DESCRIPTION)
+    tool.run()

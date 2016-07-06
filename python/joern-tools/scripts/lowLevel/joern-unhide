@@ -1,0 +1,25 @@
+
+from joern.shelltool.JoernHide import JoernHide
+
+DESCRIPTION = """ Hide all nodes beneath directories"""
+
+class JoernUnhide(JoernHide):
+    
+    #@Override
+    def processLine(self, line):
+        
+        hidden = '0'
+        self._processLine(line, hidden)
+
+    #@Override
+    def _getFileIdsForDir(self, line):
+        query = """
+        queryNodeIndex("type:File AND filepath:*%s*", false).id
+        """ % (line)
+        return self._runGremlinQuery(query)
+
+if __name__ == '__main__':
+    
+    tool = JoernUnhide(DESCRIPTION)
+    tool.run()
+    
