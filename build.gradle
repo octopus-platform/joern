@@ -20,6 +20,21 @@ allprojects {
     }
 }
 
+task octopusMlutils(type: Exec) {
+    workingDir './python/octopus-mlutils'
+    commandLine 'python3', 'setup.py', 'install', '--user'
+}
+
+task octopusTools(type: Exec, dependsOn: octopusMlutils) {
+    workingDir './python/octopus-tools'
+    commandLine 'python3', 'setup.py', 'install', '--user'
+}
+
+task joernTools(type: Exec, dependsOn: octopusTools) {
+    workingDir './python/joern-tools'
+    commandLine 'python3', 'setup.py', 'install', '--user'
+}
+
 task deploy(dependsOn: build) << {
     copy {
         into "projects/octopus/octopus-server/plugins"
@@ -73,4 +88,5 @@ task buildTestDatabase << {
 copyToLib.dependsOn subprojects.build
 
 build.dependsOn subprojects.build
+build.dependsOn joernTools
 build.dependsOn copyToLib
