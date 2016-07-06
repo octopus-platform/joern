@@ -25,6 +25,10 @@ setup(
     url = "http://github.com/octopus-platform/joern-tools/",
     long_description = read('README.md'),
     packages = find_packages(),
+    package_data={
+        'joern.shell': ['data/josh_banner.txt'],
+        'joern.shell.config': ['data/josh.ini']
+    },
     scripts = getScripts(),
     install_requires = ['pygraphviz', 'chardet'],
     zip_safe = False
