@@ -3,10 +3,10 @@
 
    @param query The lucene query to run
 */
-queryNodeIndex = { luceneQuery ->
+queryNodeIndex = { def luceneQuery ->
 
-	queryStr = 'SELECT * FROM V WHERE [childNum,code,filepath,functionId,key,location,name,nodeType] LUCENE "' + luceneQuery + '"';
-	query = new com.orientechnologies.orient.core.sql.OCommandSQL(queryStr);
+	def queryStr = 'SELECT * FROM V WHERE [childNum,code,filepath,functionId,isCFGNode,key,location,name,nodeType] LUCENE "' + luceneQuery + '"';
+	def query = new com.orientechnologies.orient.core.sql.OCommandSQL(queryStr);
 	g.getRawGraph().command(query).execute().toList()._().transform{ g.v(it.getIdentity()) }
 }
 
@@ -69,7 +69,7 @@ getArguments = { name, i ->
 	getCallsTo(name).ithArguments(i)
 }
 
-getNodesWithTypeAndCode = { type, code ->
+getNodesWithTypeAndCode = { def type, def code ->
 	query = "$NODE_TYPE:$type AND $NODE_CODE:$code"
 	queryNodeIndex(query)
 }
