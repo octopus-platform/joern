@@ -14,7 +14,7 @@ class AccTool(LookupTool):
 
     def processLine(self, line):
         
-        nodeId = int(line)
+        nodeId = line
         self.nodeIds.append(nodeId)
         
         if len(self.nodeIds) == BATCH_SIZE:

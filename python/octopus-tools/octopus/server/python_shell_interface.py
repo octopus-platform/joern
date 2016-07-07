@@ -59,7 +59,8 @@ class PythonShellInterface:
 
     def _createNewShell(self):
         shellname = self._generateNameForNewShell()
-        self.shell_manager.create(self.databaseName, shellname)
+        port = self.shell_manager.create(self.databaseName, shellname)
+        return self._connectToShellWithPort(port)
 
     def _generateNameForNewShell(self):
         prefix = self._getPythonShellPrefix()
