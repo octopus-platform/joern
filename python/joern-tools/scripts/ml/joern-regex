@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import sys
+from argparse import FileType
+from joern.mlutils.regexGen.StringSetToRegex import StringSetToRegex
+from joern.shelltool.CmdLineTool import CmdLineTool
+
+
+DESCRIPTION = """Generate regular expression for a set of nodes  """
+
+class JoernRegex(CmdLineTool):
+
+    def __init__(self):
+
+        CmdLineTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument('entireSet',
+                                    type = FileType('r'), default=sys.stdin,
+                                    help='File containing the entire set of strings.')
+
+        self.argParser.add_argument('subSet',
+                                    type = FileType('r'), default=sys.stdin,
+                                    help='File containing subset of strings to match.')
+
+
+    # @Override
+    def _runImpl(self):
+
+        X = self.args.entireSet.readlines()
+        X = [s.rstrip('\n') for s in X]
+
+        M = self.args.subSet.readlines()
+        M = [s.rstrip('\n') for s in M]
+
+        converter = StringSetToRegex()
+        print(converter.convert(M, X))
+
+
+if __name__ == '__main__':
+    tool = JoernRegex()
+    tool.run()

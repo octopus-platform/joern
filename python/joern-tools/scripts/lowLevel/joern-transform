@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+from octopus.shelltool.AccTool import AccTool
+
+DESCRIPTION = """ inject lines into database query """
+
+class TransformTool(AccTool):
+
+    def __init__(self, DESCRIPTION):
+        AccTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument("fmt")
+        self.argParser.add_argument("-e", "--edge",
+                                    action='store_true', default = False)
+
+    def processBatch(self, ids):
+
+        if self.args.edge:
+            query = """ idListToEdges(%s).transform{ %s } """ % (ids, self.args.fmt)
+        else:
+            query = """ idListToNodes(%s).transform{ %s } """ % (ids, self.args.fmt)
+
+        for x in self._runGremlinQuery(query):
+            self.output(str(x) + "\n")
+
+
+if __name__ == '__main__':
+   tool = TransformTool(DESCRIPTION)
+   tool.run()

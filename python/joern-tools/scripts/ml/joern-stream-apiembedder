@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+from joern.MLDataDirCreator import MLDataDirCreator
+
+class JoernAPIEmbedder(MLDataDirCreator):
+
+    def _constructIdQuery(self):
+
+        return """queryNodeIndex('type:Function').id"""
+
+    def _constructQueryForChunk(self, chunk):
+        return """
+        idListToNodes(%s)
+        .transform{ [it.id, it.functionToAPISymbolNodes().code.toList()] }
+        """ % (str(chunk))
+
+
+if __name__ == '__main__':
+    tool = JoernAPIEmbedder()
+    tool.run()

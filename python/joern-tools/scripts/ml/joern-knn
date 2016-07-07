@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+
+import sys
+from argparse import FileType
+from joern.KNN import KNN
+from joern.shelltool.PipeTool import PipeTool
+
+
+
+DEFAULT_DIRNAME = 'embedding'
+DEFAULT_K = 10
+
+class KNNCLI(PipeTool):
+
+    def __init__(self, description):
+        PipeTool.__init__(self, description)
+
+        self.argParser.add_argument('-k', '--k', nargs='?', type=int,
+                                    help =""" number of nearest
+                                    neighbors to determine""",
+                                    default = DEFAULT_K)
+
+        self.argParser.add_argument('-d', '--dirname', nargs='?',
+                                    type = str, help="""The directory containing the embedding""",
+                                    default = DEFAULT_DIRNAME)
+
+        self.argParser.add_argument('-n', '--no-cache',
+                                    action='store_false', default=False,
+                                    help= """Cache calculated
+                                    distances on disk. """)
+
+        self.argParser.add_argument('-l', '--limit', type = FileType('r'), default=None,
+                                    help = """ Limit possible
+                                    neighbours to those specified in
+                                    the provided file.""")
+
+        self.argParser.add_argument('-s', '--svd-k', nargs='?', type=int,
+                                    default = 0,
+                                    help= """Number of dimensions for SVD. If set to 0, SVD is not used.""")
+
+        self.knn = KNN()
+
+
+    # @Override
+    def streamStart(self):
+
+        self.knn.setEmbeddingDir(self.args.dirname)
+
+        if self.args.limit == None:
+            self.knn.setLimitArray(None)
+        else:
+            self.knn.setLimitArray([int(x) for x in self.args.limit.readlines()])
+        self.knn.setK(self.args.k)
+        self.knn.setSVDk(self.args.svd_k)
+        self.knn.setNoCache(self.args.no_cache)
+
+        try:
+            self.knn.initialize()
+        except IOError:
+            sys.stderr.write('Error reading embedding.\n')
+            sys.exit()
+
+    # @Override
+    def processLine(self, line):
+
+        try:
+            neighbors = self.knn.getNeighborsFor(line)
+            for n in neighbors:
+                print(n)
+        except KeyError:
+            sys.stderr.write('Warning: no data point found for %s\n' %
+                             (line))
+
+
+if __name__ == '__main__':
+    description = """ Calculate the k nearest neighbors to a data point based on an embedding. """
+    tool = KNNCLI(description)
+    tool.run()

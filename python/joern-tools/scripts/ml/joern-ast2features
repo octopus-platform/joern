@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+from joern.shelltool.GraphvizTool import GraphvizTool
+
+DESCRIPTION = """Extracts features from an AST."""
+
+depth = 3
+
+class AST2Features(GraphvizTool):
+
+    def __init__(self):
+        GraphvizTool.__init__(self, DESCRIPTION)
+
+    # @Override
+    def processGraph(self, G):
+        self.G = G
+        for node in G: self.processNode(node)
+        self._outputFeatures()
+
+    def processNode(self, node):
+        node.attr['label'] = self._sExpression(node, 0)
+
+    def _sExpression(self, node, d):
+        nodeLabel = node.attr['label']
+        if d > depth:
+            retval = nodeLabel
+        else:
+            children = self.G.out_edges([node])
+            retval = '(%s' % nodeLabel
+            for (src,dst) in children:
+                retval += '(%s)' % (self._sExpression(dst, d + 1))
+            retval += ')'
+        return retval
+
+    def _outputFeatures(self):
+        for node in self.G:
+            row = '%s\t%s' % (self.identifier,
+                              node.attr['label'] + '\n')
+            self.output(row)
+
+
+if __name__ == '__main__':
+    tool = AST2Features()
+    tool.run()
