@@ -37,9 +37,9 @@ class Location(AccTool):
                .sideEffect{filename = it.filepath; }
              }{
               // AST node
-              it.statements().sideEffect{loc = it.location; }
+              it._().statements().sideEffect{ loc = it.location; }
               .functions()
-              .functionToFile().sideEffect{filename = it.filepath; }
+              .functionToFile().sideEffect{ filename = it.filepath; }
               }
            }
         }.transform{ filename + ':' + loc }
