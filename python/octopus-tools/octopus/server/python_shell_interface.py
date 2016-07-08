@@ -91,7 +91,12 @@ class PythonShellInterface:
         self.shell_connection = OctopusShellConnection(self.host, self.port)
 
     def runGremlinQuery(self, query):
-        return self.shell_connection.run_command(query)
+
+        while True:
+            try:
+                return self.shell_connection.run_command(query)
+            except ConnectionResetError:
+                self.shell_connection = self._getOrCreateFreeShell()
 
     """
     Create chunks from a list of ids.
