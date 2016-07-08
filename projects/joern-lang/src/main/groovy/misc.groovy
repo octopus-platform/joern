@@ -50,8 +50,7 @@ idsToEdges = {
    Create nodes from a list of node ids
 */
 
-idListToNodes = { def args ->
-  def listOfIds = args[0];
+idListToNodes = { listOfIds ->
   
   _().transform{ listOfIds }.scatter().idsToNodes()
 }
