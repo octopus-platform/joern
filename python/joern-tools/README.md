@@ -1,7 +1,7 @@
 joern-tools
 ===========
 
-Some simple code analysis tools build on top of joern.
+Some simple code analysis tools build on top of joern
 
 Installation
 ===
