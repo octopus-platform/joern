@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from joern.shelltool.PipeTool import PipeTool
+from octopus.shelltool.PipeTool import PipeTool
 from joern.view.ParseLocationString import parseLocationOrFail
 
 DESCRIPTION = """ Opens editor at the location specified by a location
