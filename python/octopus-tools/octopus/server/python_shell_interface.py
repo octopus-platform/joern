@@ -30,15 +30,23 @@ class PythonShellInterface:
         self.shell_connection = self._getOrCreateFreeShell()
 
     def _getOrCreateFreeShell(self):
-        shell = self._getExistingFreeShell()
-        if not shell: shell = self._createNewShell()
-        return shell
+
+        while True:
+            try:
+                shell = self._getExistingFreeShell()
+                if not shell:
+                    shell = self._createNewShell()
+                return shell
+            except ConnectionRefusedError:
+                pass
 
     def _getExistingFreeShell(self):
 
         self._retrieveShellsFromServer()
-        if len(self.freeShellsForDatabase) == 0: return None
+        if len(self.freeShellsForDatabase) == 0:
+            return None
         return self._connectToShellWithPort(self.freeShellsForDatabase[0][0])
+
 
     def _retrieveShellsFromServer(self):
 
