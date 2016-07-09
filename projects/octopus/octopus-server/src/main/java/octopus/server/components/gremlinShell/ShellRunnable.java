@@ -1,15 +1,20 @@
 package octopus.server.components.gremlinShell;
 
-import octopus.server.components.gremlinShell.io.BjoernClientReader;
-import octopus.server.components.gremlinShell.io.BjoernClientWriter;
-import octopus.server.components.shellmanager.ShellManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import octopus.server.components.gremlinShell.io.BjoernClientReader;
+import octopus.server.components.gremlinShell.io.BjoernClientWriter;
+import octopus.server.components.shellmanager.ShellManager;
 
 public class ShellRunnable implements Runnable
 {
@@ -132,7 +137,11 @@ public class ShellRunnable implements Runnable
 					clientWriter.writeResult(evalResult);
 				} catch (Exception ex)
 				{
-					clientWriter.writeMessage(ex.getMessage());
+					String errorMessage = ex.getMessage();
+					if(errorMessage != null)
+						clientWriter.writeMessage(errorMessage);
+					else
+						clientWriter.writeMessage(ex.toString());
 				}
 			}
 

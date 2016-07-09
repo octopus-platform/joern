@@ -8,7 +8,7 @@ locations = {
 }
 
 functions = {
-	_().functionId.idsToNodes()
+	_().functionId.keysToNodes()
 }
 
 functionToFiles = {

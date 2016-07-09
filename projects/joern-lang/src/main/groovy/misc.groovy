@@ -35,6 +35,10 @@ Out = { def args ->
 */
 
 idsToNodes = {
+	_().transform{ g.v(it) }
+}
+
+keysToNodes = {
 	_().transform{ queryNodeIndex('key:' + it).toList() }.scatter()
 }
 
@@ -53,6 +57,11 @@ idsToEdges = {
 idListToNodes = { listOfIds ->
   
   _().transform{ listOfIds }.scatter().idsToNodes()
+}
+
+keyListToNodes = { listOfKeys ->
+
+ _().transform{ listOfKeys }.scatter().keysToNodes()
 }
 
 /**
