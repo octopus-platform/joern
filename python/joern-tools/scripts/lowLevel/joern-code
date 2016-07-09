@@ -3,7 +3,7 @@
 import codecs
 import sys
 import chardet
-from joern.shelltool.PipeTool import PipeTool
+from octopus.shelltool.PipeTool import PipeTool
 from joern.view.ParseLocationString import parseLocationOrFail
 
 
@@ -22,7 +22,8 @@ class CodeTool(PipeTool):
 
         self._openFileOrFail(filename)
         content = self._extractContent(startIndex, stopIndex)
-        self.output(content.encode('utf-8') + '\n')
+        self.output(content)
+        self.output("\n")
 
     def _openFileOrFail(self, filename):
 
