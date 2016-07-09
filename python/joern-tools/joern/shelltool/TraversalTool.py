@@ -1,8 +1,7 @@
-
 from joern.shelltool.JoernTool import JoernTool
 
 class TraversalTool(JoernTool):
-    
+
     def __init__(self, DESCRIPTION):
         JoernTool.__init__(self, DESCRIPTION)
 
@@ -12,13 +11,13 @@ class TraversalTool(JoernTool):
 
         y = self._runGremlinQuery(query)
         self.outputResult(y)
-    
+
     # @Override
     def queryFromLine(self, line):
         return line
-    
+
     def outputResult(self, result):
-        
+
         if type(result) == type([]):
             for r in result:
                 self.output(str(r) + '\n')

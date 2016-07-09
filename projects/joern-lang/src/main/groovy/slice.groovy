@@ -99,11 +99,11 @@ functionToAPISymbolNodes = {
 }
 
 
-edgesInX = { def X, labels = [] ->
-	X._().transform{ queryNodeIndex('key:' + it) }.scatter()
+edgesInX = { def X, labels = [] -> 
+	 X._().transform{ g.v(it) }
 	.outE().filter{ labels == [] || labels.contains(it.label) }
 	.filter{
-		p = it._().inV().key.toList()[0]
-		X.contains(p)
-	}.key
+		def p = it._().inV().id.toList()[0]
+		X.contains(p.toString())
+	}.id
 }
