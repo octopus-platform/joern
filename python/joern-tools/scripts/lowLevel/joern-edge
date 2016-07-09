@@ -11,7 +11,7 @@ class JoernEdge(LookupTool):
 
     # @Override
     def queryFromLine(self, line):
-        nodeIds = [long(x) for x in line.split(' ')]
+        nodeIds = [int(x) for x in line.split(' ')]
         return "edgesInX(%s)" % (nodeIds)
 
     # @Override
