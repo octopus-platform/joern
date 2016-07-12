@@ -40,3 +40,34 @@ automatically download and install dependencies.
 	git clone https://github.com/octopus-platform/joern
 	cd joern
 	./build.sh
+
+Testing the server
+-------------------
+
+In the joern root directory, invoke the script
+
+.. code-block:: none
+
+	./joern-server.sh
+
+to start the server.
+
+Testing client scripts
+----------------------
+
+Client scripts are installed into the user script directory, which is
+typically `~/.local/bin`. Please make sure this directory is in your
+path, e.g., by adding the line
+
+.. code-block:: none
+
+	export PATH="$PATH:~/.local/bin"
+
+to your `~/.bashrc`, and restarting the shell. You can execute the
+script
+
+.. code-block:: none
+
+	joern-import
+
+without parameters to verify that scripts are installed correctly.

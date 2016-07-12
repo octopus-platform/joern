@@ -5,8 +5,7 @@ Populating the Database
 -----------------------
 
 Once joern has been installed, you can begin to import code into the
-database by simply pointing ``joern.jar`` to the directory containing
-the source code:
+database by executing `joern-import`.
 
 .. code-block:: none
 
@@ -20,7 +19,7 @@ or, if you want to ensure that the JVM has access to your heap memory
 
 
 where ``$SIZE`` is the maximum size of the Java Heap in GB. As an
-example, you can import ``$JOERN/testCode``. 
+example, you can import ``$JOERN/testCode``.
 
 This will create a Neo4J database directory ``.joernIndex`` in your
 current working directory. Note that if the directory already exists
@@ -66,7 +65,7 @@ To install the neo4j server, download version 2.1.8 from
 http://www.neo4j.com/download/other-releases.
 
 Once downloaded, unpack the archive into a directory of your choice,
-which we will call ``$Neo4jDir`` in the following. 
+which we will call ``$Neo4jDir`` in the following.
 
 Next, specificy the location of the database created by joern in your
 Neo4J server configuration file in
@@ -92,12 +91,12 @@ set only once.
 You can now start the database server by issuing the following command:
 
 .. code-block:: none
-	
+
 	$Neo4jDir/bin/neo4j console
-	
+
 If your installation of Neo4J is more recent than the libraries bundled
 with joern, the database might fail to start and request an upgrade of
-the stored data. This upgrade can be performed on the fly by enabling 
+the stored data. This upgrade can be performed on the fly by enabling
 ``allow_store_upgrade`` in ``neo4j.properties`` as follows:
 
 .. code-block:: none
@@ -118,4 +117,3 @@ types as well as the properties attached to nodes and edges.
 Of course, in practice, you will not want to use your browser to query
 the database. Instead, you can use python-joern to access the REST
 API using Python as described in the following section.
-
