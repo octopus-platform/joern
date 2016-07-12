@@ -10,3 +10,4 @@ include 'projects:octopus:orientdbimporter'
 include 'projects:joern-lang'
 
 include 'projects:joern-plugins:importer'
+include 'projects:joern-plugins:dummy'

@@ -19,7 +19,7 @@ public class JoernImporter extends JoernProjectPlugin {
 
 	private void uncompressArchive() throws IOException
 	{
-		JoernProject joernProject = (JoernProject) getBjoernProjectConnector().getWrapper();
+		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
 
 		String tarballFilename = joernProject.getTarballName();
 		String outputDirectory = joernProject.getSourceCodeDirectory();
@@ -29,7 +29,7 @@ public class JoernImporter extends JoernProjectPlugin {
 
 	private void extractCSVFilesFromSourceCode()
 	{
-		JoernProject joernProject = (JoernProject) getBjoernProjectConnector().getWrapper();
+		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
 		String parserOutputDirectory = joernProject.getParserOutputDirectory();
 		String sourceCodeDirectory = joernProject.getSourceCodeDirectory();
 
@@ -41,7 +41,7 @@ public class JoernImporter extends JoernProjectPlugin {
 
 	private void importCSVFilesIntoDatabase() throws IOException
 	{
-		JoernProject joernProject = (JoernProject) getBjoernProjectConnector().getWrapper();
+		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
 		String parserOutputDirectory = joernProject.getParserOutputDirectory();
 
 		OrderedWalker walker = new OrderedWalker();
