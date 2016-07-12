@@ -9,7 +9,7 @@ Joern uses the Neo4J Batch Inserter for code importing (see Chapter 35
 of the `Neo4J documentation
 <http://docs.neo4j.org/chunked/stable/batchinsert.html>`_). Therefore,
 the performance you will experience mainly depends on the amount of
-heap memory you can make available for the importer and 
+heap memory you can make available for the importer and
 how you assign it to the different caches used by the Neo4J Batch
 Inserter. You can find a detailed discussion of this topic at
 https://github.com/jexp/batch-import .
@@ -97,7 +97,7 @@ http://docs.neo4j.org/chunked/stable/configuration-io-examples.html
 	# conf/neo4j.conf
 	use_memory_mapped_buffers=true
 	cache_type=soft
-	neostore.nodestore.db.mapped_memory=500M	
+	neostore.nodestore.db.mapped_memory=500M
 	neostore.relationshipstore.db.mapped_memory=4G
 	neostore.propertystore.db.mapped_memory=1G
 	neostore.propertystore.db.strings.mapped_memory=1300M
@@ -125,34 +125,3 @@ And then specify the timeout (in millseconds) in
 .. code-block:: none
 
   org.neo4j.server.webserver.limit.executiontime=60000
-
-Chunking Traversals
---------------------
-
-Running the same traversal on a large set of start nodes often leads
-to unacceptable performance as all nodes and edges touched by the
-traversal are kept in server memory before returning results. For
-example, the query::
-	getAllStatements().astNodes().id
-
-which retrieves all astNodes that are part of statements, can already
-completely exhaust memory. 
-
-If traversals are independent, the query can be chunked to gain high
-performance. The following example code shows how this works::
-
-	from joern.all import JoernSteps
-
-	j = JoernSteps()
-	j.connectToDatabase()
-	
-	ids =  j.runGremlinQuery('getAllStatements().id')
-
-	CHUNK_SIZE = 256
-	for chunk in j.chunks(ids, CHUNK_SIZE):
-	   
-	   query = """ idListToNodes(%s).astNodes().id """ % (chunk)
-	   
-	   for r in j.runGremlinQuery(query): print r
-
-This will execute the query in batches of 256 start nodes each.
