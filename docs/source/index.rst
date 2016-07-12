@@ -42,6 +42,7 @@ Contents:
 	:maxdepth: 2
 
 	installation
+	parsing
 	import
 	access
 	performance
