@@ -1,5 +1,6 @@
 from octopus.server.orientdb.orientdb_shell_mananger import OrientDBShellManager
 from octopus.shell.octopus_shell import OctopusShellConnection
+import time
 
 DEFAULT_HOST = 'localhost'
 DEFAULT_PORT = '2480'
@@ -38,7 +39,7 @@ class PythonShellInterface:
                     shell = self._createNewShell()
                 return shell
             except ConnectionRefusedError:
-                pass
+                time.sleep(0.1)
 
     def _getExistingFreeShell(self):
 
@@ -97,6 +98,7 @@ class PythonShellInterface:
                 return self.shell_connection.run_command(query)
             except ConnectionResetError:
                 self.shell_connection = self._getOrCreateFreeShell()
+                time.sleep(0.1)
 
     """
     Create chunks from a list of ids.
