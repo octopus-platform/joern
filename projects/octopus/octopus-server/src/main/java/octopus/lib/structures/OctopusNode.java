@@ -1,9 +1,9 @@
 package octopus.lib.structures;
 
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedVertex;
+import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedElement;
 
-public class OctopusNode extends WrappedVertex
+public abstract class OctopusNode extends WrappedElement implements Vertex
 {
 
 	public OctopusNode(Vertex vertex)
@@ -11,7 +11,7 @@ public class OctopusNode extends WrappedVertex
 		super(vertex);
 		if (vertex == null)
 		{
-			throw new IllegalArgumentException("OctopusNode must not be null.");
+			throw new IllegalArgumentException("vertex must not be null.");
 		}
 	}
 
@@ -25,19 +25,8 @@ public class OctopusNode extends WrappedVertex
 		}
 	}
 
-	@Override
-	public String toString()
+	public Vertex getBaseVertex()
 	{
-		String delimiter = ", ";
-		StringBuilder builder = new StringBuilder();
-		builder.append(getProperty(OctopusNodeProperties.TYPE) + "(");
-		for (String property : getPropertyKeys())
-		{
-			builder.append(property + ":" + getProperty(property));
-			builder.append(delimiter);
-		}
-		builder.setLength(builder.length() - delimiter.length());
-		builder.append(")");
-		return builder.toString();
+		return (Vertex) getBaseElement();
 	}
 }

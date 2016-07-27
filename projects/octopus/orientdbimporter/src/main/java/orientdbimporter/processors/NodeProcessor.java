@@ -1,23 +1,26 @@
 package orientdbimporter.processors;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.opencsv.CSVReader;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 import com.tinkerpop.blueprints.util.wrappers.batch.BatchGraph;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import orientdbimporter.CSVCommands;
 import orientdbimporter.CSVImporter;
 import orientdbimporter.Constants;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 public class NodeProcessor extends CSVFileProcessor
 {
+
+	private static final Logger logger = LoggerFactory.getLogger(NodeProcessor.class);
 
 	public NodeProcessor(CSVImporter importer)
 	{
@@ -83,33 +86,39 @@ public class NodeProcessor extends CSVFileProcessor
 
 		// TODO: handling of different commands
 
-		String[] properties = new String[2 * (row.length -1)];
+		String[] properties = new String[2 * (row.length - 1)];
 		for (int i = 1; i < row.length; i++)
 		{
 			// We subtract 1 here when accessing vertex keys because
 			// the first key (command) is discarded.
-			properties[2 *(i-1)] = importer.getVertexKeys()[i - 1];
-			properties[2 *(i-1) + 1] = row[i];
+			properties[2 * (i - 1)] = importer.getVertexKeys()[i - 1];
+			properties[2 * (i - 1) + 1] = row[i];
 		}
 		Object[] props = properties;
 
-		if(command.equals(CSVCommands.ADD))
+		if (command.equals(CSVCommands.ADD))
 			addNodeToGraph(id, props);
-		else if(command.equals(CSVCommands.ADD_NO_REPLACE))
+		else if (command.equals(CSVCommands.ADD_NO_REPLACE))
 			addNodeToGraphNoReplace(id, props);
 
 	}
 
 	private void addNodeToGraph(String id, Object[] props)
 	{
-		doAddNodeToGraph(id, props, 0);
+		try
+		{
+			doAddNodeToGraph(id, props, 0);
+		} catch (RuntimeException e)
+		{
+			logger.error(e.getMessage());
+		}
 	}
 
 	private void doAddNodeToGraph(String baseId, Object[] props, int num)
 	{
 		BatchGraph<?> batchGraph = (BatchGraph<?>) importer.getGraph();
 
-		if(num == Constants.MAX_NODES_FOR_KEY)
+		if (num == Constants.MAX_NODES_FOR_KEY)
 			throw new RuntimeException("Too many nodes with the same key: " + baseId);
 
 		// The first node gets the baseId, all others will
@@ -118,14 +127,17 @@ public class NodeProcessor extends CSVFileProcessor
 
 		String completeId = createCompleteId(baseId, num);
 
-		try {
+		try
+		{
 			batchGraph.addVertex(completeId, props);
 
-			if(num != 0){
+			if (num != 0)
+			{
 				linkToPreviousNode(baseId, num);
 			}
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e)
+		{
 			doAddNodeToGraph(baseId, props, num + 1);
 		}
 	}
@@ -133,7 +145,7 @@ public class NodeProcessor extends CSVFileProcessor
 	private String createCompleteId(String baseId, int num)
 	{
 		String completeId;
-		if(num == 0)
+		if (num == 0)
 			completeId = baseId;
 		else
 			completeId = String.format("%s_%d", baseId, num);
@@ -142,7 +154,7 @@ public class NodeProcessor extends CSVFileProcessor
 
 	private void linkToPreviousNode(String baseId, int num)
 	{
-		String previousId = createCompleteId(baseId, num -1);
+		String previousId = createCompleteId(baseId, num - 1);
 		String thisId = createCompleteId(baseId, num);
 
 		Graph graph = importer.getGraph();
@@ -158,9 +170,11 @@ public class NodeProcessor extends CSVFileProcessor
 		String completeId = createCompleteId(id, 0);
 		BatchGraph<?> batchGraph = (BatchGraph<?>) importer.getGraph();
 
-		try{
+		try
+		{
 			batchGraph.addVertex(completeId, props);
-		}catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e)
+		{
 			return;
 		}
 	}
