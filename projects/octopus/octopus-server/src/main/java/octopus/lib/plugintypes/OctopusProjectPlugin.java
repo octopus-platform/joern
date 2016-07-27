@@ -24,12 +24,12 @@ public abstract class OctopusProjectPlugin implements Plugin
 	public void configure(JSONObject settings)
 	{
 		String projectName = settings.getString("projectName");
-		getBjoernProjectConnector().connect(projectName);
+		getProjectConnector().connect(projectName);
 	}
 
 	protected void raiseIfDatabaseForProjectExists()
 	{
-		String dbName = getBjoernProjectConnector().getWrapper().getDatabaseName();
+		String dbName = getProjectConnector().getWrapper().getDatabaseName();
 
 		boolean databaseExists = doesDatabaseExist(dbName);
 		if (databaseExists)
@@ -49,16 +49,9 @@ public abstract class OctopusProjectPlugin implements Plugin
 		}
 	}
 
-	// TODO: rename to getProjectConnector
-	protected OctopusProjectConnector getBjoernProjectConnector()
+	protected OctopusProjectConnector getProjectConnector()
 	{
 		return projectConnector;
 	}
-
-	protected void setBjoernProjectConnector(OctopusProjectConnector bjoernProjectConnector)
-	{
-		this.projectConnector = bjoernProjectConnector;
-	}
-
 
 }
