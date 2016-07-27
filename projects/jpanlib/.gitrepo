@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:octopus-platform/jpanlib.git
 	branch = master
-	commit = 33137f9408046fd4cfdc275aeb0cb1c5b0c0ff73
-	parent = 529b8e7a57051fbd5b875e5fad485f5f42f03f6f
+	commit = 08a829704fa66579fe6b2eba1da7d57aa9105c59
+	parent = 03206b217b9e119d2f8383cbf79f6b66d8d5b7d8
 	cmdver = 0.3.0
