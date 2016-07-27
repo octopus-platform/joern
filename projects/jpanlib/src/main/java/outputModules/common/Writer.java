@@ -22,7 +22,7 @@ public class Writer
 	{
 		return objectToId.get(o);
 	}
-	
+
 	public static void setIdForObject(Object o, Long l)
 	{
 		objectToId.put(o, l);
@@ -47,6 +47,11 @@ public class Writer
 			Map<String, Object> properties, String edgeType)
 	{
 		writerImpl.writeEdge(srcId, dstId, properties, edgeType);
+	}
+
+	public static WriterImpl getWriterImpl()
+	{
+		return writerImpl;
 	}
 
 }

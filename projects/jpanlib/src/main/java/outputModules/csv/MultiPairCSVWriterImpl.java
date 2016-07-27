@@ -11,4 +11,11 @@ public class MultiPairCSVWriterImpl extends CSVWriterImpl
 		openNodeFile(dirNameForFileNode);
 		openEdgeFile(dirNameForFileNode);
 	}
+
+	@Override
+	public void shutdown()
+	{
+		closeEdgeFile();
+		closeNodeFile();
+	}
 }

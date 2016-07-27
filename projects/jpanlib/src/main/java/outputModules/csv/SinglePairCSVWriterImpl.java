@@ -11,10 +11,19 @@ public class SinglePairCSVWriterImpl extends CSVWriterImpl {
 			return;
 
 		outputFilesOpened = true;
-		System.out.println("reached");
 
 		openNodeFile(dirNameForFileNode);
 		openEdgeFile(dirNameForFileNode);
+	}
+
+	@Override
+	public void shutdown()
+	{
+		if(!outputFilesOpened)
+			return;
+
+		closeNodeFile();
+		closeEdgeFile();
 	}
 
 }

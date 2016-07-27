@@ -55,7 +55,7 @@ public abstract class ParserCSVOutput extends Parser
 	@Override
 	protected void shutdownDatabase()
 	{
-
+		Writer.getWriterImpl().shutdown();
 	}
 
 	@Override
