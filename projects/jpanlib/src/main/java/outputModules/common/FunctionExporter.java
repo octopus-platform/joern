@@ -39,7 +39,14 @@ public abstract class FunctionExporter extends ASTNodeExporter
 			analyzer.reset();
 			function.setASTDefUseAnalyzer(analyzer);
 			function.setCFGFactory(cfgFactory);
-			function.initialize(node);
+
+			try{
+				function.initialize(node);
+			}catch(StackOverflowError err){
+				System.err.println("caught stack overflow. Skipping function.");
+				return;
+			}
+
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
 

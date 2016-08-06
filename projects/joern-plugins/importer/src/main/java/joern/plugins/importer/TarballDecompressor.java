@@ -25,6 +25,10 @@ public class TarballDecompressor {
 		while ((entry = (TarArchiveEntry) tarIn.getNextEntry()) != null)
 		{
 			String outputFilename = outputDirectory + entry.getName();
+
+			if(outputFilename.contains("pax_global_header"))
+				continue;
+
 			if (entry.isDirectory()) {
 				createOutputSubDirectory(outputFilename);
 				continue;

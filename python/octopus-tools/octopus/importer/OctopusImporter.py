@@ -1,10 +1,12 @@
 import sys, os
-import base64
 import http.client
 import urllib
 
+from ftplib import FTP
+
 SERVER_HOST = 'localhost'
 SERVER_PORT = '2480'
+FTP_PORT = 23231
 
 class OctopusImporter:
     def __init__(self):
@@ -29,19 +31,15 @@ class OctopusImporter:
     def uploadFile(self):
         print('Uploading file: %s' % (self.filename))
 
-        with open(self.filename, mode='rb') as file:
-            fileContent = file.read()
-
-        base64Content = base64.b64encode(fileContent)
-
-        headers = {"Content-type": "text/plain;charset=us/ascii"}
-        conn = self._getConnectionToServer()
-        conn.request("POST", "/manageprojects/uploadfile/%s/binary" % (self.projectName), base64Content, headers)
-        response = conn.getresponse()
+        ftp = FTP()
+        ftp.connect(SERVER_HOST, FTP_PORT)
+        ftp.login()
+        filenameToWriteTo = os.path.join(self.projectName, "binary")
+        ftp.storbinary('STOR ' + filenameToWriteTo, open(self.filename, 'rb'))
+        ftp.close()
 
     def executeImporterPlugin(self):
         print('Executing importer plugin')
         conn = self._getConnectionToServer()
         conn.request("POST", "/executeplugin/", self.importerPluginJSON % (self.projectName))
         response = conn.getresponse()
-
