@@ -20,10 +20,16 @@ installed:
 
 - **Python 3.** Joern implements a client/server architecture where
   client scripts are written in Python 3. Please note that these
-  scripts are **not compatible with Python3**.
+  scripts are **not compatible with Python2**.
 
 - **Gradle 2.x.** Joern uses the gradle build tool, and some features
   specific to Gradle 2.0 and above.
+
+- **wget.** Please make sure wget is installed, as we use it during
+  the installation process to fetch dependencies.
+
+- **Graphiviz.** Python utilities bundled with joern require graphviz
+  to be installed.
 
 The following sections offer a step-by-step guide to the installation
 of Joern, including all of its dependencies.
