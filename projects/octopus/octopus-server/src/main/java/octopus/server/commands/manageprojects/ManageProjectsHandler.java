@@ -1,19 +1,17 @@
 package octopus.server.commands.manageprojects;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import com.orientechnologies.orient.server.config.OServerCommandConfiguration;
 import com.orientechnologies.orient.server.config.OServerEntryConfiguration;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpRequest;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpResponse;
 import com.orientechnologies.orient.server.network.protocol.http.OHttpUtils;
 import com.orientechnologies.orient.server.network.protocol.http.command.OServerCommandAbstract;
-import octopus.server.components.projectmanager.ProjectManager;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
+import octopus.server.components.projectmanager.ProjectManager;
 
 public class ManageProjectsHandler extends OServerCommandAbstract
 {
@@ -63,43 +61,12 @@ public class ManageProjectsHandler extends OServerCommandAbstract
 		} else if (command.equals("list"))
 		{
 			return executeList(iRequest, iResponse);
-		} else if (command.equals("uploadfile"))
-		{
-			return executeUpload(iRequest, iResponse);
-
 		} else
 		{
 			iResponse.send(OHttpUtils.STATUS_NOTFOUND_CODE, "Not found", null, "", null);
 			return false;
 		}
 
-	}
-
-	private boolean executeUpload(OHttpRequest iRequest, OHttpResponse iResponse) throws IOException
-	{
-		String[] urlParts = checkSyntax(iRequest.url, 4,
-				"Syntax error: manageprojects/uploadfile/projectName/relativePath");
-
-		String projectName = urlParts[2];
-		String relativePath = urlParts[3];
-
-		Path pathToProject = ProjectManager.getPathToProject(projectName);
-		Path dstFilename = Paths.get(pathToProject.toString(), relativePath);
-		byte[] decodedData = Base64.getMimeDecoder().decode(iRequest.content);
-
-		writeDataToFile(dstFilename, decodedData);
-		iResponse.send(OHttpUtils.STATUS_OK_CODE, "OK", null, "File uploaded.", null);
-
-		return false;
-
-	}
-
-	private void writeDataToFile(Path path, byte[] data) throws IOException
-	{
-		try (OutputStream out = Files.newOutputStream(path))
-		{
-			out.write(data);
-		}
 	}
 
 	private boolean executeCreate(OHttpRequest iRequest, OHttpResponse iResponse) throws Exception
