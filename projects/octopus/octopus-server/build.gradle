@@ -8,9 +8,11 @@ dependencies{
   compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
   compile group: 'commons-io', name: 'commons-io', version: '2.5'
   compile group: 'org.json', name: 'json', version: '20141113'
-  compile group: 'com.orientechnologies', name: 'orientdb-graphdb', version: '2.1.5'
-  compile group: 'com.orientechnologies', name: 'orientdb-lucene', version: '2.1.5'
+  compile group: 'com.orientechnologies', name: 'orientdb-graphdb', version: '2.2.6'
+  compile group: 'com.orientechnologies', name: 'orientdb-lucene', version: '2.2.6'
   compile group: 'org.apache.ftpserver', name: 'ftpserver', version: '1.0.6'
+
+  compile group: 'com.tinkerpop.gremlin', name: 'gremlin-groovy', version: '2.6.0'
 
   compile project(':projects:octopus:orientdbimporter') 
 
@@ -30,7 +32,7 @@ task downloadAndExtractOrientDB << {
      
      if (!f.exists()){
          println 'Download OrientDB ...'
-         println "wget http://orientdb.com/download.php?file=orientdb-community-2.1.5.tar.gz&os=multi -O $ARCHIVE_FILENAME".execute().text
+         println "wget http://orientdb.com/download.php?file=orientdb-community-2.2.6.tar.gz&os=multi -O $ARCHIVE_FILENAME".execute().text
 
          f = new File(ARCHIVE_FILENAME)
          if(!f.exists()){

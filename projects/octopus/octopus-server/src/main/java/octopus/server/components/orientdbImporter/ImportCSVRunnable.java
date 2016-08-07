@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import orientdbimporter.CSVBatchImporter;
+import orientdbimporter.CSVImporter;
 
 public class ImportCSVRunnable implements Runnable
 {
@@ -24,7 +24,7 @@ public class ImportCSVRunnable implements Runnable
 	public void run()
 	{
 
-		CSVBatchImporter csvBatchImporter = new CSVBatchImporter();
+		CSVImporter csvBatchImporter = new CSVImporter();
 
 		String nodeFilename = importJob.getNodeFilename();
 		String edgeFilename = importJob.getEdgeFilename();

@@ -1,8 +1,8 @@
 
 dependencies {
-    compile group: 'com.orientechnologies', name: 'orientdb-core', version: '2.1.5'
-    compile group: 'com.orientechnologies', name: 'orientdb-client', version: '2.1.5'
-    compile group: 'com.orientechnologies', name: 'orientdb-graphdb', version: '2.1.5'
+    compile group: 'com.orientechnologies', name: 'orientdb-core', version: '2.2.6'
+    compile group: 'com.orientechnologies', name: 'orientdb-client', version: '2.2.6'
+    compile group: 'com.orientechnologies', name: 'orientdb-graphdb', version: '2.2.6'
     compile group: 'com.tinkerpop.blueprints', name: 'blueprints-core', version: '2.6.0'
     compile group: 'com.opencsv', name: 'opencsv', version: '3.5'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.13'
