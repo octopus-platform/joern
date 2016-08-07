@@ -16,13 +16,3 @@ class OrientDBProjectManager(ProjectManager):
 
     def list(self):
         return self.command.execute_get_command("/manageprojects/list")
-
-    def upload_file(self, project_name, file):
-        file_content = file.read()
-        content_type = "text/plain;charset=us/ascii"
-
-        name = "/manageprojects/uploadfile/{}/binary".format(project_name)
-        body = base64.b64encode(file_content)
-        headers = {"Content-type": content_type}
-
-        return self.command.execute_post_command(name, body, headers)
