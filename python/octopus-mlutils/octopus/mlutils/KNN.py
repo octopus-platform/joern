@@ -1,5 +1,5 @@
 
-from joern.mlutils.EmbeddingLoader import EmbeddingLoader
+from octopus.mlutils.EmbeddingLoader import EmbeddingLoader
 from sklearn.metrics.pairwise import pairwise_distances
 
 
@@ -61,7 +61,7 @@ class KNN():
             X = self.emb.x
             D = 1.0 - (X * self.emb.x[dataPointIndex, :].T).todense()
             NNI = list(D[:,0].argsort(axis=0))[:self.k]
-            return [self.emb.TOC[x] for x in NNI]
+            return [(self.emb.TOC[int(x[0])], round(1-(D[x].tolist())[0][0][0], 3)) for x in NNI]
 
     def calculateDistances(self):
         
