@@ -12,6 +12,15 @@ public abstract class CSVFileProcessor
 {
 	protected final CSVImporter importer;
 
+	// Child classes need to implement one function that
+	// handles the first row, and one that handles any
+	// other row.
+
+	protected abstract void processFirstRow(CSVReader csvReader, String[] row)
+			throws IOException;
+
+	protected abstract void processRow(String[] row);
+
 	public CSVFileProcessor(CSVImporter importer)
 	{
 		this.importer = importer;
@@ -32,11 +41,6 @@ public abstract class CSVFileProcessor
 			processRow(row);
 		}
 	}
-
-	protected abstract void processFirstRow(CSVReader csvReader, String[] row)
-			throws IOException;
-
-	protected abstract void processRow(String[] row);
 
 	private CSVReader getCSVReaderForFile(String filename)
 			throws FileNotFoundException

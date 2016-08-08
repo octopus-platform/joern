@@ -1,21 +1,19 @@
 package orientdbimporter.processors;
 
-import com.opencsv.CSVReader;
-import com.orientechnologies.orient.core.metadata.schema.OType;
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
-import com.tinkerpop.blueprints.util.wrappers.batch.BatchGraph;
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.opencsv.CSVReader;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.util.wrappers.batch.BatchGraph;
+
 import orientdbimporter.CSVCommands;
 import orientdbimporter.CSVImporter;
 import orientdbimporter.Constants;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class NodeProcessor extends CSVFileProcessor
 {
@@ -31,10 +29,8 @@ public class NodeProcessor extends CSVFileProcessor
 	protected void processFirstRow(CSVReader csvReader, String[] row)
 			throws IOException
 	{
-
 		initializeVertexKeys(row);
-		createPropertiesAndIndices();
-
+		importer.createPropertiesAndIndices();
 	}
 
 	private void initializeVertexKeys(String[] row)
@@ -46,34 +42,6 @@ public class NodeProcessor extends CSVFileProcessor
 		importer.setVertexKeys(keys);
 	}
 
-	private void createPropertiesAndIndices()
-	{
-
-		if (!importer.isNewDatabase())
-			return;
-
-		OrientVertexType vType = importer.getNoTx().getVertexType("V");
-
-
-		for (String key : importer.getVertexKeys())
-		{
-			vType.createProperty(key, OType.STRING);
-		}
-
-		List<String> keysToIndex = new LinkedList<String>();
-		for (String key : importer.getVertexKeys())
-		{
-			keysToIndex.add(key);
-		}
-
-		String[] indexKeys = new String[keysToIndex.size()];
-		keysToIndex.sort(null);
-		keysToIndex.toArray(indexKeys);
-
-		vType.createIndex("nodeIndex.", "FULLTEXT", null, null, "LUCENE",
-				indexKeys);
-	}
-
 	@Override
 	protected void processRow(String[] row)
 	{
@@ -83,8 +51,6 @@ public class NodeProcessor extends CSVFileProcessor
 
 		String command = row[0];
 		String id = row[1];
-
-		// TODO: handling of different commands
 
 		String[] properties = new String[2 * (row.length - 1)];
 		for (int i = 1; i < row.length; i++)
@@ -98,7 +64,7 @@ public class NodeProcessor extends CSVFileProcessor
 
 		if (command.equals(CSVCommands.ADD))
 			addNodeToGraph(id, props);
-		else if (command.equals(CSVCommands.ADD_NO_REPLACE))
+		 else if (command.equals(CSVCommands.ADD_NO_REPLACE))
 			addNodeToGraphNoReplace(id, props);
 
 	}

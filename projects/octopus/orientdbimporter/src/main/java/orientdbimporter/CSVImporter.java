@@ -1,6 +1,8 @@
 package orientdbimporter;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
+import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
+import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 import com.tinkerpop.blueprints.util.wrappers.batch.BatchGraph;
 
 import orientdbimporter.processors.EdgeProcessor;
@@ -20,14 +24,19 @@ public class CSVImporter
 	private static final Logger logger = LoggerFactory
 			.getLogger(CSVImporter.class);
 
-	protected String dbName;
-	protected Graph graph;
-	protected OrientGraphNoTx noTx;
+	String dbName;
+	Graph graph;
+	OrientGraphNoTx noTx;
 
-	protected String[] VertexKeys;
-	protected String[] EdgeKeys;
+	String[] VertexKeys;
+	String[] EdgeKeys;
 
-	protected boolean isNewDatabase;
+	boolean isNewDatabase;
+
+	public void setDbName(String dbName)
+	{
+		this.dbName = dbName;
+	}
 
 	public void importCSVFiles(String nodeFile, String edgeFile)
 			throws IOException
@@ -46,6 +55,18 @@ public class CSVImporter
 
 		openNoTxForMassiveInsert();
 		graph = BatchGraph.wrap(noTx, 1000);
+	}
+
+	protected void openNoTxForMassiveInsert()
+	{
+		OGlobalConfiguration.USE_WAL.setValue(false);
+		OGlobalConfiguration.WAL_SYNC_ON_PAGE_FLUSH.setValue(false);
+
+		String dbURL = "plocal:" + System.getProperty("ORIENTDB_HOME") + "/databases/" + dbName;
+		logger.debug("opening database: " + dbURL);
+		noTx = new OrientGraphNoTx(dbURL);
+		noTx.declareIntent(new OIntentMassiveInsert());
+		logger.debug("database opened");
 	}
 
 	protected void processNodeFile(String filename) throws IOException
@@ -69,29 +90,10 @@ public class CSVImporter
 				Constants.DB_USERNAME, Constants.DB_PASSWORD).existsDatabase();
 	}
 
-
-
 	protected void closeDatabase()
 	{
 		graph.shutdown();
 		noTx.shutdown();
-	}
-
-	protected void openNoTxForMassiveInsert()
-	{
-		OGlobalConfiguration.USE_WAL.setValue(false);
-		OGlobalConfiguration.WAL_SYNC_ON_PAGE_FLUSH.setValue(false);
-
-		String dbURL = "plocal:" + System.getProperty("ORIENTDB_HOME") + "/databases/" + dbName;
-		logger.debug("opening database: " + dbURL);
-		noTx = new OrientGraphNoTx(dbURL);
-		noTx.declareIntent(new OIntentMassiveInsert());
-		logger.debug("database opened");
-	}
-
-	public void setDbName(String dbName)
-	{
-		this.dbName = dbName;
 	}
 
 	public Graph getGraph()
@@ -124,9 +126,32 @@ public class CSVImporter
 		return isNewDatabase;
 	}
 
-	public OrientGraphNoTx getNoTx()
+	public void createPropertiesAndIndices()
 	{
-		return noTx;
+
+		if (!isNewDatabase())
+			return;
+
+		OrientVertexType vType = noTx.getVertexType("V");
+
+		for (String key : getVertexKeys())
+		{
+			vType.createProperty(key, OType.STRING);
+		}
+
+		List<String> keysToIndex = new LinkedList<String>();
+		for (String key : getVertexKeys())
+		{
+			keysToIndex.add(key);
+		}
+
+		String[] indexKeys = new String[keysToIndex.size()];
+		keysToIndex.sort(null);
+		keysToIndex.toArray(indexKeys);
+
+		vType.createIndex("nodeIndex.", "FULLTEXT", null, null, "LUCENE",
+				indexKeys);
+
 	}
 
 }
