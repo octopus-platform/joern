@@ -12,6 +12,8 @@ dependencies{
   compile group: 'com.orientechnologies', name: 'orientdb-lucene', version: '2.2.6'
   compile group: 'org.apache.ftpserver', name: 'ftpserver', version: '1.0.6'
 
+  compile "com.sparkjava:spark-core:2.5"
+
   compile group: 'com.tinkerpop.gremlin', name: 'gremlin-groovy', version: '2.6.0'
 
   compile project(':projects:octopus:orientdbimporter') 

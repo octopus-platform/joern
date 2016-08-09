@@ -4,11 +4,13 @@ import com.orientechnologies.orient.server.OServer;
 import com.orientechnologies.orient.server.OServerMain;
 
 import octopus.server.components.ftpserver.OctopusFTPServer;
+import octopus.server.components.restServer.OctopusRestServer;
 
 public class OctopusMain {
 
     static OctopusMain main;
     String octopusHome;
+
     OServer server;
     OctopusFTPServer ftpServer;
 
@@ -17,14 +19,23 @@ public class OctopusMain {
         main = new OctopusMain();
         main.startOrientdb();
         main.startFTPServer();
+        main.startRestServer();
     }
 
-    public OctopusMain()
+	public OctopusMain()
     {
-	initializeOctopusHome();
+		initializeOctopusHome();
+		tryToLoadConfigFile();
     }
 
-    private void initializeOctopusHome()
+    private void tryToLoadConfigFile()
+    {
+    	String configFilename = octopusHome + "/conf/octopus.conf";
+    	OctopusConfigFile configFile = new OctopusConfigFile(configFilename);
+    	configFile.transferToEnvironment();
+    }
+
+	private void initializeOctopusHome()
 	{
 		octopusHome = System.getProperty("OCTOPUS_HOME");
 
@@ -51,8 +62,9 @@ public class OctopusMain {
 		ftpServer.start(octopusHome);
     }
 
-    public void stopOrientdb()
+    private void startRestServer()
     {
-        server.shutdown();
-    }
+		OctopusRestServer.start();
+	}
+
 }
