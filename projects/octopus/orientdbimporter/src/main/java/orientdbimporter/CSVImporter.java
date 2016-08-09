@@ -43,6 +43,11 @@ public class CSVImporter
 		openNodeFile(nodeFilename);
 		openEdgeFile(edgeFilename);
 
+		isNewDatabase = !databaseExists(dbName);
+
+		if (!isNewDatabase())
+			return;
+
 		openDatabaseForBatchInsert();
 		initializeDatabase();
 
@@ -65,11 +70,6 @@ public class CSVImporter
 
 	public void initializeDatabase() throws IOException
 	{
-		isNewDatabase = !databaseExists(dbName);
-
-		if (!isNewDatabase())
-			return;
-
 		DatabaseInitializer initializer = new DatabaseInitializer();
 
 		initializer.setVertexKeys(nodeFile.getKeys());

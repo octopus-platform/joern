@@ -19,6 +19,7 @@ public class DatabaseInitializer {
 
 	public void initialize(OrientGraph tx)
 	{
+		this.tx = tx;
 		createNodeProperties();
 		createIndices();
 	}
