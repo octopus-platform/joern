@@ -94,7 +94,7 @@ public class CSVImporter
 		tx.declareIntent(new OIntentMassiveInsert());
 		logger.debug("database opened");
 
-		graph = new BatchGraph(tx, VertexIDType.STRING, 1000);
+		graph = new BatchGraph<OrientGraph>(tx, VertexIDType.STRING, 1000);
 	}
 
 	protected void importNodes() throws IOException
