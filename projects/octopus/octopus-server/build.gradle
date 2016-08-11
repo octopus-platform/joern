@@ -22,37 +22,10 @@ dependencies{
   runtime group: 'ch.qos.logback', name: 'logback-core', version: '1.1.3'
   runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.3'
 
-}
+  runtime group: "com.thinkaurelius.titan", name: "titan-berkeleyje", version: '1.0.0'
 
-task downloadAndExtractOrientDB << {
-     println 'Download OrientDB with wget.'
+  runtime group: "com.thinkaurelius.titan", name: "titan-lucene", version: '1.0.0'
 
-     def OCTOPUS_PATH = "$project.projectDir"
-     def ARCHIVE_FILENAME = "$OCTOPUS_PATH/orientdb.tar.gz"
-     def f = new File(ARCHIVE_FILENAME) 
-     
-     if (!f.exists()){
-         println 'Download OrientDB ...'
-         println "wget http://orientdb.com/download.php?file=orientdb-community-2.2.6.tar.gz&os=multi -O $ARCHIVE_FILENAME".execute().text
-
-         f = new File(ARCHIVE_FILENAME)
-         if(!f.exists()){
-             throw new RuntimeException("Error downloading OrientDB.")
-         }
-     }
-     else {
-         println 'OrientDB already downloaded.';
-     }
-
-     f = new File("$OCTOPUS_PATH/orientdb/readme.txt")
-     if (!f.exists()) {
-         println "mkdir $OCTOPUS_PATH/orientdb".execute().text
-         println "tar xfzv $ARCHIVE_FILENAME -C $OCTOPUS_PATH/orientdb --strip-components 1".execute().text
-     }
-    else {
-         println 'OrientDB already extracted.'
-     }
-     
 }
 
 task copyToLib(type: Copy) {     
@@ -67,7 +40,6 @@ task copyOctopus(type:Copy) {
 
 clean.dependsOn cleanCopyToLib
 
-compileJava.dependsOn downloadAndExtractOrientDB
 
 build.dependsOn copyToLib
 build.dependsOn copyOctopus
