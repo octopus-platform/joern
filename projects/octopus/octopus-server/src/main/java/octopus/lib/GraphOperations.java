@@ -1,12 +1,13 @@
 package octopus.lib;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
+import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import octopus.lib.structures.OctopusNode;
 
@@ -22,15 +23,19 @@ public class GraphOperations
 	 */
 	public static void addEdge(Graph graph, OctopusNode src, OctopusNode dst, String edgeType)
 	{
-		for (Edge edge : src.getBaseVertex().getEdges(Direction.OUT,
-				edgeType))
-		{
-			if (edge.getVertex(Direction.IN).equals(dst.getBaseVertex()))
+		Iterator<Edge> it = src.edges(Direction.OUT, edgeType);
+
+		while(it.hasNext()){
+			Edge edge = it.next();
+
+			if (edge.inVertex().equals(dst))
 			{
 				return;
 			}
+
 		}
-		graph.addEdge(0, src.getBaseVertex(), dst.getBaseVertex(), edgeType);
+
+		src.addEdge(edgeType, dst);
 	}
 
 	public static Vertex addNode(Graph graph, Map<String, String> properties)
@@ -39,7 +44,7 @@ public class GraphOperations
 
 		for (Entry<String, String> entrySet : properties.entrySet())
 		{
-			newVertex.setProperty(entrySet.getKey(), entrySet.getValue());
+			newVertex.property(entrySet.getKey(), entrySet.getValue());
 		}
 		return newVertex;
 	}

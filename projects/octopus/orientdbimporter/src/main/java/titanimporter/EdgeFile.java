@@ -1,11 +1,10 @@
-package orientdbimporter;
+package titanimporter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class NodeFile extends CSVFile {
-
-	private String[] keys;
+public class EdgeFile extends CSVFile
+{
+	String [] keys;
 
 	@Override
 	public void openFile(String filename) throws IOException
@@ -21,13 +20,12 @@ public class NodeFile extends CSVFile {
 			throw new RuntimeException("File does not contain a complete line");
 
 		keys = row;
-		// remove first key, it's the command
-		keys = Arrays.copyOfRange(keys, 1, keys.length);
 	}
 
 	public String[] getKeys()
 	{
 		return keys;
 	}
+
 
 }

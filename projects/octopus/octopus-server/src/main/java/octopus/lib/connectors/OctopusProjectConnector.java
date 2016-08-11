@@ -1,8 +1,8 @@
 package octopus.lib.connectors;
 
-import octopus.lib.OctopusProjectWrapper;
-import octopus.server.components.projectmanager.OctopusProject;
-import octopus.server.components.projectmanager.ProjectManager;
+import octopus.lib.projects.OctopusProject;
+import octopus.lib.projects.OctopusProjectWrapper;
+import octopus.server.components.projectmanager.OctopusProjectManager;
 
 public abstract class OctopusProjectConnector {
 
@@ -15,7 +15,7 @@ public abstract class OctopusProjectConnector {
 
 	protected OctopusProjectWrapper openProject(String projectName)
 	{
-		OctopusProject oProject = ProjectManager.getProjectByName(projectName);
+		OctopusProject oProject = OctopusProjectManager.getProjectByName(projectName);
 		if(oProject == null)
 			throw new RuntimeException("Error: project does not exist");
 

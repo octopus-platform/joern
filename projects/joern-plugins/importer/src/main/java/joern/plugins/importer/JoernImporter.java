@@ -2,13 +2,13 @@ package joern.plugins.importer;
 
 import java.io.IOException;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fileWalker.OrderedWalker;
 import joern.pluginlib.JoernProject;
 import joern.pluginlib.plugintypes.JoernProjectPlugin;
-import org.json.JSONObject;
 
 public class JoernImporter extends JoernProjectPlugin {
 
@@ -29,7 +29,6 @@ public class JoernImporter extends JoernProjectPlugin {
      public void execute() throws Exception
 	 {
 		 if(this.importCSVDirectory.isEmpty()) {
-			 raiseIfDatabaseForProjectExists();
 			 uncompressArchive();
 			 extractCSVFilesFromSourceCode();
 		 }

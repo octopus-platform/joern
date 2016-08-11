@@ -1,16 +1,16 @@
-package octopus.server.components.orientdbImporter;
+package octopus.lib.csvImporter;
 
 public class ImportJob
 {
 	private final String nodeFilename;
 	private final String edgeFilename;
-	private final String dbName;
+	private final String projectName;
 
-	public ImportJob(String nodeFilename, String edgeFilename, String dbName)
+	public ImportJob(String nodeFilename, String edgeFilename, String projectName)
 	{
 		this.nodeFilename = nodeFilename;
 		this.edgeFilename = edgeFilename;
-		this.dbName = dbName;
+		this.projectName = projectName;
 	}
 
 	public String getNodeFilename()
@@ -23,10 +23,9 @@ public class ImportJob
 		return edgeFilename;
 	}
 
-
-	public String getDbName()
+	public String getProjectName()
 	{
-		return dbName;
+		return projectName;
 	}
 
 }

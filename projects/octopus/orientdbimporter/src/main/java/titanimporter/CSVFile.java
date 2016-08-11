@@ -1,4 +1,4 @@
-package orientdbimporter;
+package titanimporter;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

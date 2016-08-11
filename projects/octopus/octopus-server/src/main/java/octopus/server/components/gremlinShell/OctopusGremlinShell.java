@@ -1,31 +1,37 @@
 package octopus.server.components.gremlinShell;
 
-import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
-import com.tinkerpop.gremlin.groovy.Gremlin;
+import java.io.IOException;
+
+import org.apache.tinkerpop.gremlin.structure.Graph;
+
 import groovy.lang.GroovyShell;
+import octopus.lib.database.Database;
+import octopus.lib.projects.OctopusProject;
+import octopus.lib.projects.ProjectManager;
 import octopus.server.components.gremlinShell.fileWalker.OrderedWalker;
 import octopus.server.components.gremlinShell.fileWalker.SourceFileWalker;
-
-import java.io.IOException;
 
 public class OctopusGremlinShell
 {
 
 	private GroovyShell shell;
 	private int port;
-	private final String dbName;
+	Database database;
 	private String name;
 	private boolean occupied = false;
-	private OrientGraphNoTx graph;
+	private Graph graph;
+	private String projectName;
 
 	static
 	{
-		Gremlin.load();
+		// Gremlin.load();
 	}
 
-	public OctopusGremlinShell(String dbName)
+	public OctopusGremlinShell(String projectName)
 	{
-		this.dbName = dbName;
+		this.projectName = projectName;
+		OctopusProject project = new ProjectManager().getProjectByName(projectName);
+		database = project.getDatabase();
 	}
 
 	private void registerMethodMissingHandler()
@@ -38,7 +44,7 @@ public class OctopusGremlinShell
 	public void initShell()
 	{
 		this.shell = new GroovyShell(new OctopusCompilerConfiguration());
-		openDatabaseConnection(dbName);
+		openDatabaseConnection(projectName);
 		loadStandardQueryLibrary();
 		registerMethodMissingHandler();
 	}
@@ -65,12 +71,13 @@ public class OctopusGremlinShell
 		walker.walk(new String[]{queryLibDir});
 	}
 
-	private void openDatabaseConnection(String dbName)
+	private void openDatabaseConnection(String projectName)
 	{
-		// TODO: We should check whether the database exists
+		OctopusProject project = new ProjectManager().getProjectByName(projectName);
+		database = project.getDatabase();
+		this.projectName = projectName;
 
-		graph = new OrientGraphNoTx(
-				"plocal:" + System.getProperty("ORIENTDB_HOME") + "/databases/" + dbName);
+		graph = database.getGraph();
 		this.shell.setVariable("g", graph);
 	}
 
@@ -100,11 +107,6 @@ public class OctopusGremlinShell
 	public void setPort(int port)
 	{
 		this.port = port;
-	}
-
-	public String getDbName()
-	{
-		return dbName;
 	}
 
 	public GroovyShell getShell()
@@ -137,13 +139,19 @@ public class OctopusGremlinShell
 		return occupied;
 	}
 
-	public void activateGraphOnCurrentThread()
-	{
-		graph.getRawGraph().activateOnCurrentThread();
-	}
-
 	public void shutdownGraph()
 	{
-		graph.shutdown();
+		try {
+			graph.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+
+	public String getProjectName()
+	{
+		return projectName;
+	}
+
 }

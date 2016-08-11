@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import octopus.server.components.gremlinShell.io.BjoernClientReader;
 import octopus.server.components.gremlinShell.io.BjoernClientWriter;
-import octopus.server.components.shellmanager.ShellManager;
+import octopus.server.components.shellmanager.OctopusShellManager;
 
 public class ShellRunnable implements Runnable
 {
@@ -38,7 +38,7 @@ public class ShellRunnable implements Runnable
 	@Override
 	public void run()
 	{
-		shell.activateGraphOnCurrentThread();
+
 		try
 		{
 			processClients();
@@ -77,7 +77,7 @@ public class ShellRunnable implements Runnable
 			}
 
 		}
-		ShellManager.destroyShell(shell.getPort());
+		OctopusShellManager.destroyShell(shell.getPort());
 		serverSocket.close();
 	}
 

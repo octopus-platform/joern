@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import octopus.server.components.gremlinShell.OctopusGremlinShell;
 
-public class ShellManager
+public class OctopusShellManager
 {
 	private static final Logger logger = LoggerFactory
-			.getLogger(ShellManager.class);
+			.getLogger(OctopusShellManager.class);
 
 	private static final int MAX_SHELLS = 1024;
 	private static final int FIRST_PORT = 6000;
@@ -24,10 +24,10 @@ public class ShellManager
 		shells = new OctopusGremlinShell[MAX_SHELLS];
 	}
 
-	public synchronized static int createNewShell(String dbName, String shellName)
+	public synchronized static int createNewShell(String projectName, String shellName)
 	{
 		int port = getFirstFreePort();
-		OctopusGremlinShell shell = new OctopusGremlinShell(dbName);
+		OctopusGremlinShell shell = new OctopusGremlinShell(projectName);
 		shell.setPort(port);
 		shell.setName(shellName);
 		shells[port - FIRST_PORT] = shell;

@@ -6,8 +6,6 @@ import java.util.List;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
-import com.tinkerpop.gremlin.Imports;
-
 public class OctopusCompilerConfiguration extends CompilerConfiguration
 {
 
@@ -26,7 +24,7 @@ class BjoernImportCustomizer extends ImportCustomizer
 
 	static
 	{
-		imports.addAll(Imports.getImports());
+		// imports.addAll(Imports.getImports());
 		imports.add("com.tinkerpop.gremlin.Tokens.T");
 		imports.add("com.tinkerpop.gremlin.groovy.*");
 		imports.add("groovy.grape.Grape");

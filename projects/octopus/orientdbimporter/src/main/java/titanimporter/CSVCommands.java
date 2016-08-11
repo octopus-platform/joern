@@ -1,4 +1,4 @@
-package orientdbimporter;
+package titanimporter;
 
 public class CSVCommands {
 

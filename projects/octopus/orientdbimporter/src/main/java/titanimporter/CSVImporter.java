@@ -1,19 +1,12 @@
-package orientdbimporter;
+package titanimporter;
 
 import java.io.IOException;
 
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.orientechnologies.orient.client.remote.OServerAdmin;
-import com.orientechnologies.orient.core.config.OGlobalConfiguration;
-import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.util.wrappers.batch.BatchGraph;
-import com.tinkerpop.blueprints.util.wrappers.batch.VertexIDType;
 
 public class CSVImporter
 {
@@ -22,7 +15,6 @@ public class CSVImporter
 
 	String dbName;
 	Graph graph;
-	OrientGraph tx;
 
 	String[] VertexKeys;
 	String[] EdgeKeys;
@@ -43,14 +35,6 @@ public class CSVImporter
 		openNodeFile(nodeFilename);
 		openEdgeFile(edgeFilename);
 
-		isNewDatabase = !databaseExists(dbName);
-
-		if (!isNewDatabase())
-			return;
-
-		openDatabaseForBatchInsert();
-		initializeDatabase();
-
 		importNodes();
 		importEdges();
 		closeDatabase();
@@ -66,35 +50,6 @@ public class CSVImporter
 	{
 		edgeFile = new EdgeFile();
 		edgeFile.openFile(edgeFilename);
-	}
-
-	public void initializeDatabase() throws IOException
-	{
-		DatabaseInitializer initializer = new DatabaseInitializer();
-
-		initializer.setVertexKeys(nodeFile.getKeys());
-		initializer.initialize(tx);
-
-	}
-
-	private boolean databaseExists(String dbName) throws IOException
-	{
-		return new OServerAdmin("localhost/" + dbName).connect(
-				Constants.DB_USERNAME, Constants.DB_PASSWORD).existsDatabase();
-	}
-
-	private void openDatabaseForBatchInsert() throws IOException
-	{
-		OGlobalConfiguration.USE_WAL.setValue(false);
-		OGlobalConfiguration.WAL_SYNC_ON_PAGE_FLUSH.setValue(false);
-
-		String dbURL = "plocal:" + System.getProperty("ORIENTDB_HOME") + "/databases/" + dbName;
-		logger.debug("opening database: " + dbURL);
-		tx = new OrientGraph(dbURL);
-		tx.declareIntent(new OIntentMassiveInsert());
-		logger.debug("database opened");
-
-		graph = new BatchGraph<OrientGraph>(tx, VertexIDType.STRING, 1000);
 	}
 
 	protected void importNodes() throws IOException
@@ -146,7 +101,6 @@ public class CSVImporter
 
 	private void doAddNodeToGraph(String baseId, Object[] props, int num)
 	{
-		BatchGraph<?> batchGraph = (BatchGraph<?>) graph;
 
 		if (num == Constants.MAX_NODES_FOR_KEY)
 			throw new RuntimeException("Too many nodes with the same key: " + baseId);
@@ -159,7 +113,7 @@ public class CSVImporter
 
 		try
 		{
-			batchGraph.addVertex(completeId, props);
+			graph.addVertex(completeId, props);
 
 			if (num != 0)
 			{
@@ -187,20 +141,19 @@ public class CSVImporter
 		String previousId = createCompleteId(baseId, num - 1);
 		String thisId = createCompleteId(baseId, num);
 
-		Vertex fromNode = graph.getVertex(previousId);
-		Vertex toNode = graph.getVertex(thisId);
+		Vertex fromNode = graph.vertices(previousId).next();
+		Vertex toNode = graph.vertices(thisId).next();
 
-		graph.addEdge(0, fromNode, toNode, "foo");
+		fromNode.addEdge("foo", toNode);
 	}
 
 	private void addNodeToGraphNoReplace(String id, Object[] props)
 	{
 		String completeId = createCompleteId(id, 0);
-		BatchGraph<?> batchGraph = (BatchGraph<?>) graph;
 
 		try
 		{
-			batchGraph.addVertex(completeId, props);
+			graph.addVertex(completeId, props);
 		} catch (IllegalArgumentException e)
 		{
 			return;
@@ -244,29 +197,38 @@ public class CSVImporter
 			return;
 		}
 
-		Edge edge = graph.addEdge(0, outVertex, inVertex, label);
+		Edge edge = outVertex.addEdge(label, inVertex);
 
 		for (int i = 3; i < row.length; i++)
 		{
-			edge.setProperty(edgeFile.getKeys()[i], row[i]);
+			edge.property(edgeFile.getKeys()[i], row[i]);
 		}
 
 	}
 
-	protected Vertex lookupVertex(String id, Graph batchGraph)
+	protected Vertex lookupVertex(String id, Graph graph)
 	{
-		return batchGraph.getVertex(id);
+		return graph.vertices(id).next();
 	}
 
 	public void closeDatabase()
 	{
-		graph.shutdown();
-		tx.shutdown();
+		try {
+			graph.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public boolean isNewDatabase()
 	{
 		return isNewDatabase;
+	}
+
+	public void setGraph(Graph graph)
+	{
+		this.graph = graph;
 	}
 
 }

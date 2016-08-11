@@ -1,11 +1,13 @@
-package octopus.server.components.orientdbImporter;
+package octopus.lib.csvImporter;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import orientdbimporter.CSVImporter;
+import octopus.lib.projects.OctopusProject;
+import octopus.lib.projects.ProjectManager;
+import titanimporter.CSVImporter;
 
 public class ImportCSVRunnable implements Runnable
 {
@@ -28,12 +30,16 @@ public class ImportCSVRunnable implements Runnable
 
 		String nodeFilename = importJob.getNodeFilename();
 		String edgeFilename = importJob.getEdgeFilename();
+		String projectName = importJob.getProjectName();
 
-		String dbName = importJob.getDbName();
+		ProjectManager projectManager = new ProjectManager();
+		OctopusProject project = projectManager.getProjectByName(projectName);
+		if(project == null)
+			throw new RuntimeException("Error: project dos not exist");
 
 		try
 		{
-			csvBatchImporter.setDbName(dbName);
+			csvBatchImporter.setGraph(project.getDatabase().getGraph());
 			csvBatchImporter.importCSVFiles(nodeFilename, edgeFilename);
 		}
 		catch (IOException e)

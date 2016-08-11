@@ -1,19 +1,37 @@
 package octopus.server.components.projectmanager;
 
-import com.orientechnologies.orient.client.remote.OServerAdmin;
-import orientdbimporter.Constants;
-
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProjectManager
+import octopus.lib.database.Database;
+import octopus.lib.database.titan.TitanLocalDatabaseManager;
+import octopus.lib.projects.OctopusProject;
+import octopus.lib.projects.ProjectManager;
+
+public class OctopusProjectManager
 {
 
 	private static Path projectsDir;
 	private static Map<String, OctopusProject> nameToProject = new HashMap<String, OctopusProject>();
+
+	private static boolean initialized = false;
+
+	public static void initialize(Path projectDir) throws IOException
+	{
+		if(initialized)
+			return;
+
+		setProjectDir(projectDir);
+		initialized = true;
+	}
 
 	public static void setProjectDir(Path newProjectsDir) throws IOException
 	{
@@ -103,7 +121,7 @@ public class ProjectManager
 		Path pathToProject = getPathToProject(name);
 		Files.createDirectories(pathToProject);
 
-		OctopusProject newProject = new OctopusProject(pathToProject.toString(), name);
+		OctopusProject newProject = new OctopusProject(name, pathToProject.toString());
 		return newProject;
 	}
 
@@ -135,15 +153,11 @@ public class ProjectManager
 		});
 	}
 
-	private static void removeDatabaseIfExists(String dbName) throws IOException
+	private static void removeDatabaseIfExists(String name) throws IOException
 	{
-		OServerAdmin admin;
-		admin = new OServerAdmin("localhost/" + dbName).connect(
-				Constants.DB_USERNAME, Constants.DB_PASSWORD);
-		if (admin.existsDatabase())
-		{
-			admin.dropDatabase("plocal");
-		}
+		OctopusProject project = new ProjectManager().getProjectByName(name);
+		Database database = project.getDatabase();
+		new TitanLocalDatabaseManager().deleteDatabase(database);
 	}
 
 }

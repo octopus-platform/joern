@@ -5,8 +5,8 @@ import java.nio.file.Path;
 
 import fileWalker.SourceFileListener;
 import joern.pluginlib.JoernProject;
-import octopus.server.components.orientdbImporter.ImportCSVRunnable;
-import octopus.server.components.orientdbImporter.ImportJob;
+import octopus.lib.csvImporter.ImportCSVRunnable;
+import octopus.lib.csvImporter.ImportJob;
 
 public class ImporterListener extends SourceFileListener {
 
@@ -30,11 +30,12 @@ public class ImporterListener extends SourceFileListener {
 		String basePath = filename.getParent().toString();
 		String nodeFilename = basePath + File.separator + "nodes.csv";
 		String edgeFilename = basePath + File.separator + "edges.csv";
-		String dbName = joernProject.getDatabaseName();
 
 		System.out.println(nodeFilename);
 
-		ImportJob importJob = new ImportJob(nodeFilename, edgeFilename, dbName);
+		String name = joernProject.getName();
+
+		ImportJob importJob = new ImportJob(nodeFilename, edgeFilename, name);
         (new ImportCSVRunnable(importJob)).run();
 	}
 

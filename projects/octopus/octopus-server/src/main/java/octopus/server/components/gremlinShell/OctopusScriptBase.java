@@ -1,17 +1,18 @@
 package octopus.server.components.gremlinShell;
 
-import groovy.lang.Script;
-
+import java.util.HashSet;
 import java.util.Set;
 
-import com.tinkerpop.gremlin.groovy.Gremlin;
+import groovy.lang.Script;
+
 
 public abstract class OctopusScriptBase extends Script
 {
 
 	public Set<String> listSteps()
 	{
-		return Gremlin.getStepNames();
+		return new HashSet<String>();
+		// return Gremlin.getStepNames();
 	}
 
 	public Set<String> listSteps(String prefix)

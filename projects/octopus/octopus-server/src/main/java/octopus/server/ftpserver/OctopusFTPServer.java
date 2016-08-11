@@ -1,4 +1,4 @@
-package octopus.server.components.ftpserver;
+package octopus.server.ftpserver;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

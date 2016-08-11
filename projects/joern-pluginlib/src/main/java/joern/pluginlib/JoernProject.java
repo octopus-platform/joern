@@ -2,7 +2,7 @@ package joern.pluginlib;
 
 import java.io.File;
 
-import octopus.lib.OctopusProjectWrapper;
+import octopus.lib.projects.OctopusProjectWrapper;
 
 public class JoernProject extends OctopusProjectWrapper {
 

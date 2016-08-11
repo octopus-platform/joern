@@ -1,6 +1,6 @@
-package octopus.lib;
+package octopus.lib.projects;
 
-import octopus.server.components.projectmanager.OctopusProject;
+import octopus.lib.database.Database;
 
 public class OctopusProjectWrapper {
 
@@ -16,9 +16,14 @@ public class OctopusProjectWrapper {
              return oProject.getPathToProjectDir();
      }
 
-     public String getDatabaseName()
+     public Database getDatabase()
      {
-             return oProject.getDatabaseName();
+    	 return oProject.getDatabase();
      }
+
+     public String getName()
+     {
+    	 return oProject.getName();
+ 	}
 
 }
