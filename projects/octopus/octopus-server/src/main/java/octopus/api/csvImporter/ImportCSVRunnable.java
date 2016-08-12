@@ -39,7 +39,7 @@ public class ImportCSVRunnable implements Runnable
 
 		try
 		{
-			csvBatchImporter.setGraph(project.getDatabase().getGraph());
+			csvBatchImporter.setGraph(project.getNewDatabaseInstance().getGraph());
 			csvBatchImporter.importCSVFiles(nodeFilename, edgeFilename);
 		}
 		catch (IOException e)

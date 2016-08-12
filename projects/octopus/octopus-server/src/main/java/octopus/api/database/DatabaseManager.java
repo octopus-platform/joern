@@ -6,7 +6,8 @@ import octopus.api.projects.OctopusProject;
 
 public interface DatabaseManager {
 
-	public Database loadOrCreateForProject(OctopusProject project) throws IOException;
-	public void deleteDatabase(Database database);
+	public void initializeDatabaseForProject(OctopusProject project) throws IOException;
+	public Database getDatabaseInstanceForProject(OctopusProject project);
+	public void deleteDatabaseForProject(OctopusProject project);
 
 }

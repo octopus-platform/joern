@@ -14,7 +14,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import octopus.api.database.Database;
 import octopus.api.database.titan.TitanLocalDatabaseManager;
 import octopus.api.projects.OctopusProject;
 import octopus.api.projects.ProjectManager;
@@ -87,23 +86,9 @@ public class OctopusProjectManager
 
 	public static OctopusProject getProjectByName(String name)
 	{
-		if(name == null){
-			System.out.println(getStackTrace());
-		}
 		logger.debug("requesting project: " + name);
 		return nameToProject.get(name);
 	}
-
-	private static String getStackTrace() {
-	    StringBuffer sb = new StringBuffer(500);
-	    StackTraceElement[] st = Thread.currentThread().getStackTrace();
-	    for (int i = 0; i < st.length; i++) {
-	      sb.append("\t at " + st[i].toString() + "\n");
-	    }
-	    return sb.toString();
-
-	}
-
 
 	public static Path getPathToProject(String name)
 	{
@@ -122,6 +107,7 @@ public class OctopusProjectManager
 			throw new RuntimeException("Project already exists");
 
 		OctopusProject project = createOctopusProjectForName(name);
+		logger.debug("Adding project to map: " + name);
 		nameToProject.put(name, project);
 	}
 
@@ -140,10 +126,13 @@ public class OctopusProjectManager
 
 	private static OctopusProject createOctopusProjectForName(String name) throws IOException
 	{
+
 		Path pathToProject = getPathToProject(name);
 		Files.createDirectories(pathToProject);
 
 		OctopusProject newProject = new OctopusProject(name, pathToProject.toString());
+		TitanLocalDatabaseManager databaseManager = new TitanLocalDatabaseManager();
+		databaseManager.initializeDatabaseForProject(newProject);
 		return newProject;
 	}
 
@@ -178,8 +167,9 @@ public class OctopusProjectManager
 	private static void removeDatabaseIfExists(String name) throws IOException
 	{
 		OctopusProject project = new ProjectManager().getProjectByName(name);
-		Database database = project.getDatabase();
-		new TitanLocalDatabaseManager().deleteDatabase(database);
+
+		TitanLocalDatabaseManager dbManager = new TitanLocalDatabaseManager();
+		dbManager.deleteDatabaseForProject(project);
 	}
 
 }

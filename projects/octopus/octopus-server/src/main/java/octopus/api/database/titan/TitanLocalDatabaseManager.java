@@ -17,11 +17,12 @@ import octopus.api.projects.OctopusProject;
 public class TitanLocalDatabaseManager implements DatabaseManager {
 
 	@Override
-	public Database loadOrCreateForProject(OctopusProject project) throws IOException
+	public void initializeDatabaseForProject(OctopusProject project) throws IOException
 	{
 		String pathToProject = project.getPathToProjectDir();
-		String dbConfigFile = createConfigurationFile(pathToProject);
-		return createDatabaseFromConfigFile(dbConfigFile);
+		String configFile = createConfigurationFile(pathToProject);
+		// TitanGraph graph = TitanFactory.open(configFile);
+		// graph.close();
 	}
 
 	private String createConfigurationFile(String pathToProject) throws IOException
@@ -40,18 +41,20 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 		return dbConfigFile;
 	}
 
-	private Database createDatabaseFromConfigFile(String dbConfigFile)
+	@Override
+	public Database getDatabaseInstanceForProject(OctopusProject project)
 	{
 		TitanLocalDatabase database = new TitanLocalDatabase();
-		System.out.println(dbConfigFile);
+		String dbConfigFile = project.getDBConfigFile();
 		TitanGraph graph = TitanFactory.open(dbConfigFile);
 		database.setGraph(graph);
 		return database;
 	}
 
 	@Override
-	public void deleteDatabase(Database database)
+	public void deleteDatabaseForProject(OctopusProject project)
 	{
+		Database database = getDatabaseInstanceForProject(project);
 		TitanLocalDatabase titanDatabase = (TitanLocalDatabase) database;
 		String dbPathName = titanDatabase.getPathToDatabase();
 		String indexPathName = titanDatabase.getPathToIndex();

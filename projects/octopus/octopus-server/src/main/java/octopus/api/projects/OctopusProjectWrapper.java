@@ -16,9 +16,9 @@ public class OctopusProjectWrapper {
              return oProject.getPathToProjectDir();
      }
 
-     public Database getDatabase()
+     public Database getNewDatabaseInstance()
      {
-    	 return oProject.getDatabase();
+    	 return oProject.getNewDatabaseInstance();
      }
 
      public String getName()

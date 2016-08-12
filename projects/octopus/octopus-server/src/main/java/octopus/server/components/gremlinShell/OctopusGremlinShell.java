@@ -31,7 +31,6 @@ public class OctopusGremlinShell
 	{
 		this.projectName = projectName;
 		OctopusProject project = new ProjectManager().getProjectByName(projectName);
-		database = project.getDatabase();
 	}
 
 	private void registerMethodMissingHandler()
@@ -74,7 +73,7 @@ public class OctopusGremlinShell
 	private void openDatabaseConnection(String projectName)
 	{
 		OctopusProject project = new ProjectManager().getProjectByName(projectName);
-		database = project.getDatabase();
+		database =  project.getNewDatabaseInstance();
 		this.projectName = projectName;
 
 		graph = database.getGraph();

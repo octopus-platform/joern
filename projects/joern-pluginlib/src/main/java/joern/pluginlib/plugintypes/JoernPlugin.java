@@ -17,7 +17,7 @@ public class JoernPlugin extends JoernProjectPlugin {
 
 	 private void connectToProjectDatabase()
      {
-		 database = getProject().getDatabase();
+		 database = getProject().getNewDatabaseInstance();
      }
 
 	 protected JoernProject getProject()

@@ -3,6 +3,9 @@ package joern.plugins.importer;
 import java.io.File;
 import java.nio.file.Path;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fileWalker.SourceFileListener;
 import joern.pluginlib.JoernProject;
 import octopus.api.csvImporter.ImportCSVRunnable;
@@ -11,6 +14,9 @@ import octopus.api.csvImporter.ImportJob;
 public class ImporterListener extends SourceFileListener {
 
 	private JoernProject joernProject;
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(ImporterListener.class);
 
 	@Override
 	public void initialize() {
@@ -32,6 +38,8 @@ public class ImporterListener extends SourceFileListener {
 		String edgeFilename = basePath + File.separator + "edges.csv";
 
 		String name = joernProject.getName();
+
+		logger.debug("Importing " + nodeFilename + " " + edgeFilename + " into " + name);
 
 		ImportJob importJob = new ImportJob(nodeFilename, edgeFilename, name);
         (new ImportCSVRunnable(importJob)).run();

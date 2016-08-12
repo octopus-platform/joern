@@ -36,7 +36,8 @@ public class CSVImporter
 		openEdgeFile(edgeFilename);
 
 		importNodes();
-		importEdges();
+		// importEdges();
+
 		closeDatabase();
 	}
 
@@ -185,14 +186,14 @@ public class CSVImporter
 
 		if (outVertex == null)
 		{
-			logger.info("Cannot resolve source node {} for {} -> {}", srcId,
+			logger.debug("Cannot resolve source node {} for {} -> {}", srcId,
 					srcId, dstId);
 			return;
 		}
 
 		if (inVertex == null)
 		{
-			logger.info("Cannot resolve destination node {} for {} -> {}",
+			logger.debug("Cannot resolve destination node {} for {} -> {}",
 					dstId, srcId, dstId);
 			return;
 		}
