@@ -1,7 +1,7 @@
-package octopus.lib.connectors;
+package octopus.api.connectors;
 
-import octopus.lib.projects.OctopusProject;
-import octopus.lib.projects.OctopusProjectWrapper;
+import octopus.api.projects.OctopusProject;
+import octopus.api.projects.OctopusProjectWrapper;
 import octopus.server.components.projectmanager.OctopusProjectManager;
 
 public abstract class OctopusProjectConnector {

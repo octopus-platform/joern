@@ -1,6 +1,6 @@
-package octopus.lib.projects;
+package octopus.api.projects;
 
-import octopus.lib.database.Database;
+import octopus.api.database.Database;
 
 public class OctopusProjectWrapper {
 

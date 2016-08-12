@@ -1,8 +1,8 @@
-package octopus.lib.database;
+package octopus.api.database;
 
 import java.io.IOException;
 
-import octopus.lib.projects.OctopusProject;
+import octopus.api.projects.OctopusProject;
 
 public interface DatabaseManager {
 

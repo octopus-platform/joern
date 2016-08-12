@@ -1,4 +1,4 @@
-package octopus.lib.csvImporter;
+package octopus.api.csvImporter;
 
 public class ImportJob
 {

@@ -1,4 +1,4 @@
-package octopus.lib.database.titan;
+package octopus.api.database.titan;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,9 +10,9 @@ import org.apache.commons.io.FileUtils;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 
-import octopus.lib.database.Database;
-import octopus.lib.database.DatabaseManager;
-import octopus.lib.projects.OctopusProject;
+import octopus.api.database.Database;
+import octopus.api.database.DatabaseManager;
+import octopus.api.projects.OctopusProject;
 
 public class TitanLocalDatabaseManager implements DatabaseManager {
 

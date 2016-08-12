@@ -1,4 +1,4 @@
-package octopus.lib.structures;
+package octopus.api.structures;
 
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 

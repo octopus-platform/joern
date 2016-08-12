@@ -1,4 +1,4 @@
-package octopus.lib.database;
+package octopus.api.database;
 
 import org.apache.tinkerpop.gremlin.structure.Graph;
 

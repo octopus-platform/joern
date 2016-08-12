@@ -1,9 +1,9 @@
 package joern.pluginlib.connectors;
 
 import joern.pluginlib.JoernProject;
-import octopus.lib.connectors.OctopusProjectConnector;
-import octopus.lib.projects.OctopusProject;
-import octopus.lib.projects.OctopusProjectWrapper;
+import octopus.api.connectors.OctopusProjectConnector;
+import octopus.api.projects.OctopusProject;
+import octopus.api.projects.OctopusProjectWrapper;
 
 public class JoernProjectConnector extends OctopusProjectConnector {
 

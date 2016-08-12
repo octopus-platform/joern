@@ -1,4 +1,4 @@
-package octopus.lib;
+package octopus.api;
 
 import java.io.IOException;
 import java.util.List;

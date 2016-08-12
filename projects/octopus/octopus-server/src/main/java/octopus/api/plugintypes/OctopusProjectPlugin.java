@@ -1,8 +1,8 @@
-package octopus.lib.plugintypes;
+package octopus.api.plugintypes;
 
 import org.json.JSONObject;
 
-import octopus.lib.connectors.OctopusProjectConnector;
+import octopus.api.connectors.OctopusProjectConnector;
 import octopus.server.components.pluginInterface.Plugin;
 
 public abstract class OctopusProjectPlugin implements Plugin

@@ -1,4 +1,4 @@
-package octopus.lib.projects;
+package octopus.api.projects;
 
 import java.io.IOException;
 import java.nio.file.Path;

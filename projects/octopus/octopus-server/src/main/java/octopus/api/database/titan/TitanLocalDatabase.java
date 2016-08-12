@@ -1,9 +1,9 @@
-package octopus.lib.database.titan;
+package octopus.api.database.titan;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
-import octopus.lib.database.Database;
+import octopus.api.database.Database;
 
 public class TitanLocalDatabase implements Database {
 

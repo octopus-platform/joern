@@ -22,7 +22,7 @@ public class OctopusRestServer {
 		port(REST_PORT);
 
 
-		post("executeplugin", (req, res) -> {
+		post("executeplugin/", (req, res) -> {
 			return new ExecutePluginHandler().handle(req, res); });
 
 		get("importcsv/:nodeFilename/:edgeFilename/:projectName", (req, res) -> {

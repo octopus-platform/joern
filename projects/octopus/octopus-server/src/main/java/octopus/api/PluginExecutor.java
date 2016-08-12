@@ -1,4 +1,4 @@
-package octopus.lib;
+package octopus.api;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +14,8 @@ public class PluginExecutor {
 
 	public PluginExecutor()
 	{
-		pluginDir = System.getProperty("octopus.plugindir");
+		pluginDir = Paths.get(System.getProperty("OCTOPUS_HOME"),
+				System.getProperty("octopus.plugindir")).toString();
 	}
 
 	public Object executePlugin(String pluginName, String pluginClass)
@@ -24,7 +25,7 @@ public class PluginExecutor {
 
 	public Object executePlugin(String pluginName, String pluginClass, JSONObject settings)
 	{
-		Path path = Paths.get(pluginDir, pluginName);
+		Path path = Paths.get(pluginDir, pluginName).toAbsolutePath();
 		Plugin plugin = PluginLoader.load(path, pluginClass);
 
 		if (plugin == null)
@@ -38,9 +39,11 @@ public class PluginExecutor {
 			plugin.beforeExecution();
 			plugin.execute();
 			plugin.afterExecution();
+			System.out.println("reached1");
 			return plugin.result();
 		} catch (Exception e)
 		{
+			System.out.println(e.getMessage());
 			throw new RuntimeException(e.getMessage());
 		}
 	}

@@ -1,9 +1,9 @@
-package octopus.lib.projects;
+package octopus.api.projects;
 
 import java.io.IOException;
 
-import octopus.lib.database.Database;
-import octopus.lib.database.titan.TitanLocalDatabaseManager;
+import octopus.api.database.Database;
+import octopus.api.database.titan.TitanLocalDatabaseManager;
 
 public class OctopusProject
 {
@@ -15,6 +15,7 @@ public class OctopusProject
 	public OctopusProject(String name, String pathToProjectDir) throws IOException
 	{
 		this.pathToProjectDir = pathToProjectDir;
+		this.name = name;
 
 		// TODO: The DatabaseManager to use should be configurable from the outside
 		TitanLocalDatabaseManager manager = new TitanLocalDatabaseManager();

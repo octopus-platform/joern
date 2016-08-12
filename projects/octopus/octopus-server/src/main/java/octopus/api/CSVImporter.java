@@ -1,7 +1,7 @@
-package octopus.lib;
+package octopus.api;
 
-import octopus.lib.csvImporter.ImportCSVRunnable;
-import octopus.lib.csvImporter.ImportJob;
+import octopus.api.csvImporter.ImportCSVRunnable;
+import octopus.api.csvImporter.ImportJob;
 
 public class CSVImporter {
 

@@ -1,4 +1,4 @@
-package octopus.lib;
+package octopus.api;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
-import octopus.lib.structures.OctopusNode;
+import octopus.api.structures.OctopusNode;
 
 public class GraphOperations
 {

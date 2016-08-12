@@ -1,12 +1,12 @@
-package octopus.lib.csvImporter;
+package octopus.api.csvImporter;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import octopus.lib.projects.OctopusProject;
-import octopus.lib.projects.ProjectManager;
+import octopus.api.projects.OctopusProject;
+import octopus.api.projects.ProjectManager;
 import titanimporter.CSVImporter;
 
 public class ImportCSVRunnable implements Runnable

@@ -1,7 +1,7 @@
 package joern.pluginlib.plugintypes;
 
 import joern.pluginlib.JoernProject;
-import octopus.lib.database.Database;
+import octopus.api.database.Database;
 
 public class JoernPlugin extends JoernProjectPlugin {
 

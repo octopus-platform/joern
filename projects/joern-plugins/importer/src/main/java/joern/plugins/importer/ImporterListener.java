@@ -5,8 +5,8 @@ import java.nio.file.Path;
 
 import fileWalker.SourceFileListener;
 import joern.pluginlib.JoernProject;
-import octopus.lib.csvImporter.ImportCSVRunnable;
-import octopus.lib.csvImporter.ImportJob;
+import octopus.api.csvImporter.ImportCSVRunnable;
+import octopus.api.csvImporter.ImportJob;
 
 public class ImporterListener extends SourceFileListener {
 
@@ -30,8 +30,6 @@ public class ImporterListener extends SourceFileListener {
 		String basePath = filename.getParent().toString();
 		String nodeFilename = basePath + File.separator + "nodes.csv";
 		String edgeFilename = basePath + File.separator + "edges.csv";
-
-		System.out.println(nodeFilename);
 
 		String name = joernProject.getName();
 

@@ -1,6 +1,6 @@
 package octopus.server.restServer.handlers;
 
-import octopus.lib.projects.ProjectManager;
+import octopus.api.projects.ProjectManager;
 import octopus.server.restServer.OctopusRestHandler;
 import spark.Request;
 import spark.Response;

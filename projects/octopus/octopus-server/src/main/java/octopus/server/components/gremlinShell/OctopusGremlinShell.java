@@ -5,9 +5,9 @@ import java.io.IOException;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
 import groovy.lang.GroovyShell;
-import octopus.lib.database.Database;
-import octopus.lib.projects.OctopusProject;
-import octopus.lib.projects.ProjectManager;
+import octopus.api.database.Database;
+import octopus.api.projects.OctopusProject;
+import octopus.api.projects.ProjectManager;
 import octopus.server.components.gremlinShell.fileWalker.OrderedWalker;
 import octopus.server.components.gremlinShell.fileWalker.SourceFileWalker;
 

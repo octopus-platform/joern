@@ -11,16 +11,22 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import octopus.lib.database.Database;
-import octopus.lib.database.titan.TitanLocalDatabaseManager;
-import octopus.lib.projects.OctopusProject;
-import octopus.lib.projects.ProjectManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import octopus.api.database.Database;
+import octopus.api.database.titan.TitanLocalDatabaseManager;
+import octopus.api.projects.OctopusProject;
+import octopus.api.projects.ProjectManager;
 
 public class OctopusProjectManager
 {
 
 	private static Path projectsDir;
 	private static Map<String, OctopusProject> nameToProject = new HashMap<String, OctopusProject>();
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(OctopusProjectManager.class);
 
 	private static boolean initialized = false;
 
@@ -70,6 +76,7 @@ public class OctopusProjectManager
 	{
 		String projectName = projectDir.getFileName().toString();
 		OctopusProject newProject = createOctopusProjectForName(projectName);
+		logger.debug("Adding project to map: " + projectName);
 		nameToProject.put(projectName, newProject);
 	}
 
@@ -80,8 +87,23 @@ public class OctopusProjectManager
 
 	public static OctopusProject getProjectByName(String name)
 	{
+		if(name == null){
+			System.out.println(getStackTrace());
+		}
+		logger.debug("requesting project: " + name);
 		return nameToProject.get(name);
 	}
+
+	private static String getStackTrace() {
+	    StringBuffer sb = new StringBuffer(500);
+	    StackTraceElement[] st = Thread.currentThread().getStackTrace();
+	    for (int i = 0; i < st.length; i++) {
+	      sb.append("\t at " + st[i].toString() + "\n");
+	    }
+	    return sb.toString();
+
+	}
+
 
 	public static Path getPathToProject(String name)
 	{
