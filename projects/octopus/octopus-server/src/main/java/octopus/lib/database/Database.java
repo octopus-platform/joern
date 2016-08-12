@@ -1,0 +1,14 @@
+package octopus.lib.database;
+
+import org.apache.tinkerpop.gremlin.structure.Graph;
+
+public interface Database {
+
+
+	/**
+	 * Return a tinkerpop3 graph instance
+	 * */
+
+	public Graph getGraph();
+
+}
