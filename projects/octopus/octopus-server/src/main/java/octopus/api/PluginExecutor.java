@@ -39,7 +39,6 @@ public class PluginExecutor {
 			plugin.beforeExecution();
 			plugin.execute();
 			plugin.afterExecution();
-			System.out.println("reached1");
 			return plugin.result();
 		} catch (Exception e)
 		{

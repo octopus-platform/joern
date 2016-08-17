@@ -8,6 +8,8 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.thinkaurelius.titan.core.SchemaViolationException;
+
 public class CSVImporter
 {
 	private static final Logger logger = LoggerFactory
@@ -36,7 +38,7 @@ public class CSVImporter
 		openEdgeFile(edgeFilename);
 
 		importNodes();
-		importEdges();
+		// importEdges();
 
 		closeDatabase();
 	}
@@ -72,35 +74,27 @@ public class CSVImporter
 		String command = row[0];
 		String id = row[1];
 
-		String[] properties = new String[2 * (row.length - 1)];
-		for (int i = 1; i < row.length; i++)
-		{
-			// We subtract 1 here when accessing vertex keys because
-			// the first key (command) is discarded.
-			properties[2 * (i - 1)] = nodeFile.getKeys()[i - 1];
-			properties[2 * (i - 1) + 1] = row[i];
-		}
-		Object[] props = properties;
+		String[] keys = nodeFile.getKeys();
 
 		if (command.equals(CSVCommands.ADD))
-			addNodeToGraph(id, props);
+			addNodeToGraph(id, row, keys);
 		else if (command.equals(CSVCommands.ADD_NO_REPLACE))
-			addNodeToGraphNoReplace(id, props);
+			addNodeToGraphNoReplace(id, row, keys);
 
 	}
 
-	private void addNodeToGraph(String id, Object[] props)
+	private void addNodeToGraph(String id, String[] row, String[] keys)
 	{
 		try
 		{
-			doAddNodeToGraph(id, props, 0);
+			doAddNodeToGraph(id, row, keys, 0);
 		} catch (RuntimeException e)
 		{
 			logger.error(e.getMessage());
 		}
 	}
 
-	private void doAddNodeToGraph(String baseId, Object[] props, int num)
+	private void doAddNodeToGraph(String baseId, String[] row, String[] keys, int num)
 	{
 
 		if (num == Constants.MAX_NODES_FOR_KEY)
@@ -114,7 +108,8 @@ public class CSVImporter
 
 		try
 		{
-			graph.addVertex(completeId, props);
+			Vertex vertex = graph.addVertex("_key", completeId);
+			setPropertiesOnVertex(vertex, row, keys);
 
 			if (num != 0)
 			{
@@ -123,7 +118,7 @@ public class CSVImporter
 
 		} catch (IllegalArgumentException e)
 		{
-			doAddNodeToGraph(baseId, props, num + 1);
+			doAddNodeToGraph(baseId, row, keys, num + 1);
 		}
 	}
 
@@ -148,16 +143,26 @@ public class CSVImporter
 		fromNode.addEdge("foo", toNode);
 	}
 
-	private void addNodeToGraphNoReplace(String id, Object[] props)
+	private void addNodeToGraphNoReplace(String id, String[] row, String[] keys)
 	{
 		String completeId = createCompleteId(id, 0);
+		Vertex vertex;
 
-		try
-		{
-			graph.addVertex(completeId, props);
-		} catch (IllegalArgumentException e)
+		try{
+			vertex = graph.addVertex("_key", completeId);
+		}catch(SchemaViolationException ex)
 		{
 			return;
+		}
+
+		setPropertiesOnVertex(vertex, row, keys);
+
+	}
+
+	private void setPropertiesOnVertex(Vertex vertex, String[] row, String[] keys)
+	{
+		for(int i = 2; i < row.length; i++){
+			vertex.property(keys[i-1], row[i]);
 		}
 	}
 
