@@ -14,9 +14,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import octopus.api.database.titan.TitanLocalDatabaseManager;
 import octopus.api.projects.OctopusProject;
 import octopus.api.projects.ProjectManager;
+import octopus.server.components.database.titan.TitanLocalDatabaseManager;
 
 public class OctopusProjectManager
 {

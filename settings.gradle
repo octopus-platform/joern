@@ -5,7 +5,7 @@ include 'projects:joern-pluginlib'
 
 include 'projects:octopus:octopus-server'
 include 'projects:octopus:octopus-lang'
-include 'projects:octopus:orientdbimporter'
+include 'projects:octopus:titanimporter'
 
 include 'projects:joern-lang'
 

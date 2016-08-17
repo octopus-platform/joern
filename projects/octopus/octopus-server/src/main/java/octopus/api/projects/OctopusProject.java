@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import octopus.api.database.Database;
-import octopus.api.database.titan.TitanLocalDatabaseManager;
+import octopus.server.components.database.titan.TitanLocalDatabaseManager;
 
 public class OctopusProject
 {
