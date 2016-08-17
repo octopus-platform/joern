@@ -2,7 +2,7 @@
    Retrieve nodes from index using a Lucene query.
 
    @param query The lucene query to run
-*/
+
 queryNodeIndex = { def luceneQuery ->
 
 	def queryStr = 'SELECT * FROM V WHERE [childNum,code,filepath,functionId,isCFGNode,key,location,name,nodeType] LUCENE "' + luceneQuery + '"';
@@ -11,6 +11,7 @@ queryNodeIndex = { def luceneQuery ->
 	db.activateOnCurrentThread();
 	db.command(query).execute().toList()._().transform{ g.v(it.getIdentity()) }
 }
+*/
 
 /**
    Retrieve functions by name.

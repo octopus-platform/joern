@@ -24,9 +24,10 @@ class BjoernImportCustomizer extends ImportCustomizer
 
 	static
 	{
+		// TODO
 		// imports.addAll(Imports.getImports());
-		imports.add("com.tinkerpop.gremlin.Tokens.T");
-		imports.add("com.tinkerpop.gremlin.groovy.*");
+		// imports.add("com.tinkerpop.gremlin.Tokens.T");
+		// imports.add("com.tinkerpop.gremlin.groovy.*");
 		imports.add("groovy.grape.Grape");
 	}
 
