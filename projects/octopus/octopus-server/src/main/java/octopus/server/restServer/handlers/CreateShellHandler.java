@@ -10,7 +10,7 @@ import spark.Response;
 public class CreateShellHandler implements OctopusRestHandler {
 
 	String projectName;
-	String shellName = "(shell)";
+	String shellName;
 
 	@Override
 	public Object handle(Request req, Response resp) {
@@ -23,10 +23,7 @@ public class CreateShellHandler implements OctopusRestHandler {
 	private void extractParameters(Request req)
 	{
 		projectName = req.params(":projectName");
-		String[] splat = req.splat();
-
-		if(splat.length > 0)
-			shellName = splat[0];
+		shellName = req.params(":shellname");
 	}
 
 	private int createNewShell()

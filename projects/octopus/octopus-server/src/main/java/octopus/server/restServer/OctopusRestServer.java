@@ -45,7 +45,7 @@ public class OctopusRestServer {
 			return new ListShellsHandler().handle(req, res);
 		});
 
-		get("manageshells/create/:projectName/*/", (req, res) -> {
+		get("manageshells/create/:projectName/:shellName", (req, res) -> {
 			return new CreateShellHandler().handle(req,res);
 		});
 

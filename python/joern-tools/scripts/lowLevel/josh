@@ -5,7 +5,7 @@ import sys
 
 from joern.shell.joern_console import JoernInteractiveConsole
 from joern.shell.config.config import config
-from octopus.server.impl.shell_mananger import ShellManager
+from octopus.server.shell_manager import ShellManager
 from octopus.shell.octopus_shell import OctopusShellConnection
 
 
