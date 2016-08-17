@@ -134,13 +134,12 @@ public class CSVImporter
 
 	private void linkToPreviousNode(String baseId, int num)
 	{
-		// TODO: Fix this.
 
 		String previousId = createCompleteId(baseId, num - 1);
 		String thisId = createCompleteId(baseId, num);
 
-		Vertex fromNode = graph.vertices(previousId).next();
-		Vertex toNode = graph.vertices(thisId).next();
+		Vertex fromNode = lookupVertex(previousId);
+		Vertex toNode = lookupVertex(thisId);
 
 		fromNode.addEdge("foo", toNode);
 	}
@@ -188,8 +187,8 @@ public class CSVImporter
 		String dstId = row[1];
 		String label = row[2];
 
-		Vertex outVertex = lookupVertex(srcId, graph);
-		Vertex inVertex = lookupVertex(dstId, graph);
+		Vertex outVertex = lookupVertex(srcId);
+		Vertex inVertex = lookupVertex(dstId);
 
 		if (outVertex == null)
 		{
@@ -215,7 +214,7 @@ public class CSVImporter
 
 	}
 
-	protected Vertex lookupVertex(String id, Graph graph)
+	protected Vertex lookupVertex(String id)
 	{
 		return graph.traversal().V().has("_key", id).next();
 	}
