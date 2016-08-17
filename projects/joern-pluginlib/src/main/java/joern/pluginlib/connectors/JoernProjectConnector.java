@@ -8,7 +8,7 @@ import octopus.api.projects.OctopusProjectWrapper;
 public class JoernProjectConnector extends OctopusProjectConnector {
 
 	@Override
-	protected OctopusProjectWrapper createNewProject(OctopusProject oProject)
+	protected OctopusProjectWrapper wrapNewProject(OctopusProject oProject)
 	{
 		JoernProject project = new JoernProject();
 		project.setWrappedProject(oProject);

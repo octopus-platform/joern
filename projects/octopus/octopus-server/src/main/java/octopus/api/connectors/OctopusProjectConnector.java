@@ -19,10 +19,10 @@ public abstract class OctopusProjectConnector {
 		if(oProject == null)
 			throw new RuntimeException("Error: project does not exist");
 
-		return createNewProject(oProject);
+		return wrapNewProject(oProject);
 	}
 
-	protected abstract OctopusProjectWrapper createNewProject(OctopusProject oProject);
+	protected abstract OctopusProjectWrapper wrapNewProject(OctopusProject oProject);
 
 	public void disconnect()
 	{

@@ -11,4 +11,6 @@ public interface Database {
 
 	public Graph getGraph();
 
+	public void closeInstance();
+
 }

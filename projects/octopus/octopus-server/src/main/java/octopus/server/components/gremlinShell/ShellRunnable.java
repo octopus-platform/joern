@@ -126,7 +126,7 @@ public class ShellRunnable implements Runnable
 			{
 				listening = false;
 				clientWriter.writeMessage("bye");
-				shell.shutdownGraph();
+				shell.shutdownDBInstance();
 				break;
 			} else
 			{

@@ -31,4 +31,14 @@ public class TitanLocalDatabase implements Database {
 		return conf.getString("index.search.directory");
 	}
 
+	@Override
+	public void closeInstance()
+	{
+		try {
+			graph.close();
+		} catch (Exception e) {
+			throw new RuntimeException("Error closing database instance");
+		}
+	}
+
 }

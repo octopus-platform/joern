@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import octopus.api.database.Database;
 import octopus.api.projects.OctopusProject;
 import octopus.api.projects.ProjectManager;
 import titanimporter.CSVImporter;
@@ -39,8 +40,10 @@ public class ImportCSVRunnable implements Runnable
 
 		try
 		{
-			csvBatchImporter.setGraph(project.getNewDatabaseInstance().getGraph());
+			Database database = project.getNewDatabaseInstance();
+			csvBatchImporter.setGraph(database.getGraph());
 			csvBatchImporter.importCSVFiles(nodeFilename, edgeFilename);
+			database.closeInstance();
 		}
 		catch (IOException e)
 		{

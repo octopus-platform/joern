@@ -138,14 +138,9 @@ public class OctopusGremlinShell
 		return occupied;
 	}
 
-	public void shutdownGraph()
+	public void shutdownDBInstance()
 	{
-		try {
-			graph.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		database.closeInstance();
 	}
 
 	public String getProjectName()

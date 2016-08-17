@@ -6,9 +6,12 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 
+import com.thinkaurelius.titan.core.PropertyKey;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.schema.TitanManagement;
 
 import octopus.api.database.Database;
 import octopus.api.database.DatabaseManager;
@@ -20,9 +23,8 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 	public void initializeDatabaseForProject(OctopusProject project) throws IOException
 	{
 		String pathToProject = project.getPathToProjectDir();
-		String configFile = createConfigurationFile(pathToProject);
-		// TitanGraph graph = TitanFactory.open(configFile);
-		// graph.close();
+		String configFilename = createConfigurationFile(pathToProject);
+		initializeDatabaseSchema(configFilename);
 	}
 
 	private String createConfigurationFile(String pathToProject) throws IOException
@@ -39,6 +41,15 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 		writer.println(String.format("index.search.directory=%s", indexPath));
 		writer.close();
 		return dbConfigFile;
+	}
+
+	private void initializeDatabaseSchema(String configFilename)
+	{
+		TitanGraph graph = TitanFactory.open(configFilename);
+		TitanManagement schema = graph.openManagement();
+		PropertyKey extIdKey = schema.makePropertyKey("extId").dataType(String.class).make();
+		schema.buildIndex("byId", Vertex.class).addKey(extIdKey).unique().buildCompositeIndex();
+		graph.close();
 	}
 
 	@Override
@@ -64,7 +75,10 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 			FileUtils.deleteDirectory(new File(indexPathName));
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally{
+			database.closeInstance();
 		}
+
 	}
 
 }

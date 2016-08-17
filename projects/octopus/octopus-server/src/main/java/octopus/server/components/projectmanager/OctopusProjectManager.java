@@ -29,6 +29,17 @@ public class OctopusProjectManager
 
 	private static boolean initialized = false;
 
+	static
+	{
+		String projectDir = System.getProperty("octopus.projectdir");
+		Path path = Paths.get(System.getProperty("OCTOPUS_HOME"), projectDir);
+		try {
+			initialize(path);
+		} catch (IOException e) {
+			throw new RuntimeException("Error initializing OctopusProjectManager");
+		}
+	}
+
 	public static void initialize(Path projectDir) throws IOException
 	{
 		if(initialized)

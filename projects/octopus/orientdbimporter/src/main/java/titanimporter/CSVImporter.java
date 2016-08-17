@@ -36,7 +36,7 @@ public class CSVImporter
 		openEdgeFile(edgeFilename);
 
 		importNodes();
-		// importEdges();
+		importEdges();
 
 		closeDatabase();
 	}
@@ -209,6 +209,8 @@ public class CSVImporter
 
 	protected Vertex lookupVertex(String id, Graph graph)
 	{
+		// Problem is: id is an external id
+
 		return graph.vertices(id).next();
 	}
 
