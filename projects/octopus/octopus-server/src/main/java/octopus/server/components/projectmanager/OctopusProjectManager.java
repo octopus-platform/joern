@@ -118,6 +118,8 @@ public class OctopusProjectManager
 			throw new RuntimeException("Project already exists");
 
 		OctopusProject project = createOctopusProjectForName(name);
+		TitanLocalDatabaseManager databaseManager = new TitanLocalDatabaseManager();
+		databaseManager.initializeDatabaseForProject(project);
 		logger.debug("Adding project to map: " + name);
 		nameToProject.put(name, project);
 	}
@@ -137,13 +139,11 @@ public class OctopusProjectManager
 
 	private static OctopusProject createOctopusProjectForName(String name) throws IOException
 	{
-
 		Path pathToProject = getPathToProject(name);
 		Files.createDirectories(pathToProject);
 
 		OctopusProject newProject = new OctopusProject(name, pathToProject.toString());
-		TitanLocalDatabaseManager databaseManager = new TitanLocalDatabaseManager();
-		databaseManager.initializeDatabaseForProject(newProject);
+
 		return newProject;
 	}
 

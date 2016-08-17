@@ -5,7 +5,7 @@ import sys
 
 from joern.shell.joern_console import JoernInteractiveConsole
 from joern.shell.config.config import config
-from octopus.server.orientdb.orientdb_shell_mananger import OrientDBShellManager
+from octopus.server.impl.shell_mananger import ShellManager
 from octopus.shell.octopus_shell import OctopusShellConnection
 
 
@@ -116,7 +116,7 @@ create_parser.add_argument(
 
 args = parser.parse_args()
 
-shell_manager = OrientDBShellManager(args.server, args.port)
+shell_manager = ShellManager(args.server, args.port)
 
 if args.subcommand in ['connect', 'co']:
     shells = list(shell_manager.list(project_name=args.dbname, shell_port=args.shellport, filter_occupied=True))

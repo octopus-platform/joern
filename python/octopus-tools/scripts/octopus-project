@@ -2,7 +2,7 @@
 
 import argparse
 
-from octopus.server.orientdb.orientdb_project_manager import OrientDBProjectManager
+from octopus.server.project_manager import ProjectManager
 
 parser = argparse.ArgumentParser(description="Octopus project manager.")
 parser.add_argument(
@@ -63,7 +63,7 @@ upload_parser.add_argument(
     help="upload this file")
 
 args = parser.parse_args()
-manager = OrientDBProjectManager(args.server_host, args.server_port)
+manager = ProjectManager(args.server_host, args.server_port)
 
 if args.subcommand == 'create':
     print(manager.create(args.project))

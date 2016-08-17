@@ -1,11 +1,11 @@
 import json
 
-from octopus.server.orientdb.orientdb_server_command import OrientDBServerCommand
+from octopus.server.server_command import ServerCommand
 
 
-class OrientDBPluginExecutor(object):
+class PluginExecutor(object):
     def __init__(self, server_host, server_port):
-        self.command = OrientDBServerCommand(server_host, server_port)
+        self.command = ServerCommand(server_host, server_port)
 
     def execute(self, pluginname, classname, settings=None):
         data = {"plugin": pluginname, "class": classname, "settings": settings}

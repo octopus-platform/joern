@@ -1,7 +1,7 @@
 import http.client
 
 
-class OrientDBServerCommand(object):
+class ServerCommand(object):
     def __init__(self, server_host="localhost", server_port="2480"):
         self._server_host = server_host
         self._server_port = server_port
