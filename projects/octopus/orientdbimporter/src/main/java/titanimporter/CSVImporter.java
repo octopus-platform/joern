@@ -38,7 +38,7 @@ public class CSVImporter
 		openEdgeFile(edgeFilename);
 
 		importNodes();
-		// importEdges();
+		importEdges();
 
 		closeDatabase();
 	}
@@ -134,6 +134,8 @@ public class CSVImporter
 
 	private void linkToPreviousNode(String baseId, int num)
 	{
+		// TODO: Fix this.
+
 		String previousId = createCompleteId(baseId, num - 1);
 		String thisId = createCompleteId(baseId, num);
 
@@ -203,6 +205,7 @@ public class CSVImporter
 			return;
 		}
 
+
 		Edge edge = outVertex.addEdge(label, inVertex);
 
 		for (int i = 3; i < row.length; i++)
@@ -214,9 +217,7 @@ public class CSVImporter
 
 	protected Vertex lookupVertex(String id, Graph graph)
 	{
-		// Problem is: id is an external id
-
-		return graph.vertices(id).next();
+		return graph.traversal().V().has("_key", id).next();
 	}
 
 	public void closeDatabase()

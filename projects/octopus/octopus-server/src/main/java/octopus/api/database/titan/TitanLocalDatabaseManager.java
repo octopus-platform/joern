@@ -47,7 +47,7 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 	{
 		TitanGraph graph = TitanFactory.open(configFilename);
 		TitanManagement schema = graph.openManagement();
-		PropertyKey extIdKey = schema.makePropertyKey("extId").dataType(String.class).make();
+		PropertyKey extIdKey = schema.makePropertyKey("_key").dataType(String.class).make();
 		schema.buildIndex("byId", Vertex.class).addKey(extIdKey).unique().buildCompositeIndex();
 		graph.close();
 	}
