@@ -15,6 +15,8 @@ public class CSVImporter
 	private static final Logger logger = LoggerFactory
 			.getLogger(CSVImporter.class);
 
+	static final int NELEMS_PER_TRANSACTION = 1000;
+
 	String dbName;
 	Graph graph;
 
@@ -25,6 +27,8 @@ public class CSVImporter
 
 	NodeFile nodeFile;
 	EdgeFile edgeFile;
+
+	int nElemsInTransaction = 0;
 
 	public void setDbName(String dbName)
 	{
@@ -62,6 +66,7 @@ public class CSVImporter
 		while((row = nodeFile.getNextRow()) != null)
 		{
 			importNodeRow(row);
+			possiblyFinishTransaction();
 		}
 	}
 
@@ -80,7 +85,15 @@ public class CSVImporter
 			addNodeToGraph(id, row, keys);
 		else if (command.equals(CSVCommands.ADD_NO_REPLACE))
 			addNodeToGraphNoReplace(id, row, keys);
+	}
 
+	private void possiblyFinishTransaction()
+	{
+		nElemsInTransaction++;
+		if(nElemsInTransaction >= NELEMS_PER_TRANSACTION){
+			graph.tx().commit();
+			nElemsInTransaction = 0;
+		}
 	}
 
 	private void addNodeToGraph(String id, String[] row, String[] keys)
@@ -174,6 +187,7 @@ public class CSVImporter
 		while((row = edgeFile.getNextRow()) != null)
 		{
 			importEdgeRow(row);
+			possiblyFinishTransaction();
 		}
 	}
 
