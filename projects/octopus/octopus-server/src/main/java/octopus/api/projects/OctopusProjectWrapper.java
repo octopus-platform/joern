@@ -11,6 +11,11 @@ public class OctopusProjectWrapper {
 		oProject = project;
 	}
 
+	public OctopusProject unwrap()
+	{
+		return oProject;
+	}
+
 	 public String getPathToProjectDir()
      {
              return oProject.getPathToProjectDir();

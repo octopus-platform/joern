@@ -12,6 +12,8 @@ import octopus.server.restServer.handlers.ExecutePluginHandler;
 import octopus.server.restServer.handlers.ImportCSVHandler;
 import octopus.server.restServer.handlers.ListProjectsHandler;
 import octopus.server.restServer.handlers.ListShellsHandler;
+import octopus.server.restServer.handlers.ResetDatabaseHandler;
+
 
 public class OctopusRestServer {
 
@@ -21,13 +23,24 @@ public class OctopusRestServer {
 	{
 		port(REST_PORT);
 
+		/*
+		 * This is a complete list of all REST commands. If you want to
+		 * add a command, please stick to the following RULES:
+		 *
+		 * - If you need optional parameters, create multiple routes
+		 *   but do NOT use slack. This will ensure that all ways of
+		 *   executing commands remain visible in this file.
+		 *
+		 * - Try to place your command into one of the existing
+		 * 	 groups first. Only if none exists that matches, create
+		 *   your own group.
+		 *
+		 * - Choose a group name that describes functionality, not
+		 *   code origin.
+		 **/
 
 		post("executeplugin/", (req, res) -> {
 			return new ExecutePluginHandler().handle(req, res); });
-
-		get("importcsv/:nodeFilename/:edgeFilename/:projectName", (req, res) -> {
-			return new ImportCSVHandler().handle(req, res);
-		});
 
 		get("manageprojects/create/:projectName", (req, res) -> {
 			return new CreateProjectHandler().handle(req, res);
@@ -39,6 +52,18 @@ public class OctopusRestServer {
 
 		get("manageprojects/list", (req, res) -> {
 			return new ListProjectsHandler().handle(req, res);
+		});
+
+		get("database/importcsv/:projectName", (req, res) -> {
+			return new ImportCSVHandler().handle(req, res);
+		});
+
+		get("database/importcsv/:projectName/:nodeFilename/:edgeFilename", (req, res) -> {
+			return new ImportCSVHandler().handle(req, res);
+		});
+
+		get("database/reset/:projectName", (req, res) -> {
+			return new ResetDatabaseHandler().handle(req, res);
 		});
 
 		get("manageshells/list", (req, res) -> {

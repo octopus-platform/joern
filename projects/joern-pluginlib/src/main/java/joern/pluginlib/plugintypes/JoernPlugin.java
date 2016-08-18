@@ -1,5 +1,7 @@
 package joern.pluginlib.plugintypes;
 
+import org.apache.tinkerpop.gremlin.structure.Graph;
+
 import joern.pluginlib.JoernProject;
 import octopus.api.database.Database;
 
@@ -28,6 +30,11 @@ public class JoernPlugin extends JoernProjectPlugin {
      protected void setProject(JoernProject project)
      {
              this.project = project;
+     }
+
+     public Graph getGraph()
+     {
+    	 return database.getGraph();
      }
 
 }

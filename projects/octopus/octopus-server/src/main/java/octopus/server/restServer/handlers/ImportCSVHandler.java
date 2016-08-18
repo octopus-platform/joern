@@ -22,6 +22,11 @@ public class ImportCSVHandler implements OctopusRestHandler {
 		String edgeFilename = req.params(":edgeFilename");
 		String projectName = req.params(":projectName");
 
+		if(nodeFilename == null)
+			nodeFilename = "nodes.csv";
+		if(edgeFilename == null)
+			edgeFilename = "edges.csv";
+
 		return new ImportJob(nodeFilename, edgeFilename, projectName);
 	}
 

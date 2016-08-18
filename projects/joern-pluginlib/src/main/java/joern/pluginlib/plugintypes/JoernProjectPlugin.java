@@ -11,8 +11,8 @@ public class JoernProjectPlugin extends OctopusProjectPlugin {
 	}
 
 	@Override
-	public void execute() throws Exception {
-		// TODO Auto-generated method stub
+	public void execute() throws Exception
+	{
 
 	}
 }

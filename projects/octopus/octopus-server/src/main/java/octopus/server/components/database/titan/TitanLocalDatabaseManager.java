@@ -6,12 +6,14 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
 import com.thinkaurelius.titan.core.PropertyKey;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.schema.TitanManagement;
+import com.thinkaurelius.titan.core.util.TitanCleanup;
 
 import octopus.api.database.Database;
 import octopus.api.database.DatabaseManager;
@@ -79,6 +81,21 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 			database.closeInstance();
 		}
 
+	}
+
+	@Override
+	public void resetDatabase(OctopusProject project)
+	{
+		Database database = getDatabaseInstanceForProject(project);
+		Graph graph = database.getGraph();
+		try {
+			graph.close();
+			TitanCleanup.clear((TitanGraph) graph);
+			initializeDatabaseForProject(project);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
