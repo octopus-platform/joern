@@ -2,6 +2,7 @@ package joern.plugins.importer;
 
 import java.io.IOException;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,12 +16,31 @@ public class JoernImporter extends JoernProjectPlugin {
 	private static final Logger logger = LoggerFactory
 			.getLogger(JoernImporter.class);
 
+	private boolean uncompress = true;
+	private boolean extractcsv = true;
+	private boolean importcsv = true;
+
+
+	@Override
+	public void configure(JSONObject settings)
+	{
+		super.configure(settings);
+
+		if(settings.getString("nouncompress") != null)
+			uncompress = false;
+		if(settings.getString("noextractcsv") != null)
+			extractcsv = false;
+		if(settings.getString("noimportcsv") != null)
+			importcsv = false;
+	}
+
+
 	 @Override
      public void execute() throws Exception
 	 {
-		uncompressArchive();
-		extractCSVFilesFromSourceCode();
-		importCSVFilesIntoDatabase();
+		if(uncompress) uncompressArchive();
+		if(extractcsv) extractCSVFilesFromSourceCode();
+		if(importcsv) importCSVFilesIntoDatabase();
 	 }
 
 	private void uncompressArchive() throws IOException
