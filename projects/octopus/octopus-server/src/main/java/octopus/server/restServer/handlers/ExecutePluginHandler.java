@@ -2,7 +2,7 @@ package octopus.server.restServer.handlers;
 
 import org.json.JSONObject;
 
-import octopus.api.PluginExecutor;
+import octopus.api.plugin.PluginExecutor;
 import octopus.server.restServer.OctopusRestHandler;
 import spark.Request;
 import spark.Response;

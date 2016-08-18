@@ -1,11 +1,10 @@
-package octopus.api;
+package octopus.api.plugin;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.json.JSONObject;
 
-import octopus.api.plugin.Plugin;
 import octopus.server.pluginInterface.PluginLoader;
 
 public class PluginExecutor {

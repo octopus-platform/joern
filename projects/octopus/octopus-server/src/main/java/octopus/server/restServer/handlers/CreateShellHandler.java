@@ -2,7 +2,7 @@ package octopus.server.restServer.handlers;
 
 import java.io.IOException;
 
-import octopus.api.ShellManager;
+import octopus.api.shell.ShellManager;
 import octopus.server.restServer.OctopusRestHandler;
 import spark.Request;
 import spark.Response;

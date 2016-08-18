@@ -8,13 +8,12 @@ import org.slf4j.LoggerFactory;
 import fileWalker.OrderedWalker;
 import joern.pluginlib.JoernProject;
 import joern.pluginlib.plugintypes.JoernProjectPlugin;
-import octopus.server.decompressor.TarballDecompressor;
+import octopus.api.decompressor.Decompressor;
 
 public class JoernImporter extends JoernProjectPlugin {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(JoernImporter.class);
-
 
 	 @Override
      public void execute() throws Exception
@@ -35,7 +34,7 @@ public class JoernImporter extends JoernProjectPlugin {
 		logger.debug("uncompressing archive: " + tarballFilename);
 		logger.debug("output directory: " + outputDirectory);
 
-		new TarballDecompressor().decompress(tarballFilename, outputDirectory);
+		new Decompressor().decompressTarball(tarballFilename, outputDirectory);
 
 		logger.debug("decompression successful");
 	}

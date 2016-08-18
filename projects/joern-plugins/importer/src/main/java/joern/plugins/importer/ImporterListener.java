@@ -19,18 +19,6 @@ public class ImporterListener extends SourceFileListener {
 			.getLogger(ImporterListener.class);
 
 	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void shutdown() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void visitFile(Path filename)
 	{
 		String basePath = filename.getParent().toString();
@@ -46,21 +34,14 @@ public class ImporterListener extends SourceFileListener {
 		(new CSVImporter()).importCSV(importJob);
 	}
 
-	@Override
-	public void preVisitDirectory(Path dir) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void postVisitDirectory(Path dir) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void setProject(JoernProject project)
 	{
 		this.joernProject = project;
 	}
+
+	@Override public void initialize() { }
+	@Override public void shutdown() { }
+	@Override public void preVisitDirectory(Path dir) { }
+	@Override public void postVisitDirectory(Path dir) { }
 
 }

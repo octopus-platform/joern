@@ -1,6 +1,6 @@
 package octopus.server.restServer.handlers;
 
-import octopus.api.ShellManager;
+import octopus.api.shell.ShellManager;
 import octopus.server.gremlinShell.OctopusGremlinShell;
 import octopus.server.restServer.OctopusRestHandler;
 import spark.Request;
