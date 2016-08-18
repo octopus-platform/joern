@@ -1,7 +1,7 @@
 package octopus.server.restServer.handlers;
 
-import octopus.api.CSVImporter;
-import octopus.api.csvImporter.ImportJob;
+import octopus.api.csvImporter.CSVImporter;
+import octopus.server.csvimporter.ImportJob;
 import octopus.server.restServer.OctopusRestHandler;
 import spark.Request;
 import spark.Response;

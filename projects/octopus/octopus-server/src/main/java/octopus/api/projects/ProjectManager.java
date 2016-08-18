@@ -2,7 +2,7 @@ package octopus.api.projects;
 
 import java.io.IOException;
 
-import octopus.server.components.projectmanager.OctopusProjectManager;
+import octopus.server.projectmanager.OctopusProjectManager;
 
 public class ProjectManager {
 

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import fileWalker.SourceFileListener;
 import joern.pluginlib.JoernProject;
-import octopus.api.csvImporter.ImportCSVRunnable;
-import octopus.api.csvImporter.ImportJob;
+import octopus.api.csvImporter.CSVImporter;
+import octopus.server.csvimporter.ImportJob;
 
 public class ImporterListener extends SourceFileListener {
 
@@ -42,7 +42,8 @@ public class ImporterListener extends SourceFileListener {
 		logger.debug("Importing " + nodeFilename + " " + edgeFilename + " into " + name);
 
 		ImportJob importJob = new ImportJob(nodeFilename, edgeFilename, name);
-        (new ImportCSVRunnable(importJob)).run();
+
+		(new CSVImporter()).importCSV(importJob);
 	}
 
 	@Override

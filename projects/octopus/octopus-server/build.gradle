@@ -12,6 +12,7 @@ dependencies{
   compile group: 'org.apache.ftpserver', name: 'ftpserver', version: '1.0.6'
 
   compile "com.sparkjava:spark-core:2.5"
+  compile group: 'org.apache.commons', name: 'commons-compress', version: '1.8'
 
   compile group: "com.thinkaurelius.titan", name: "titan-core", version: '1.0.0'
     

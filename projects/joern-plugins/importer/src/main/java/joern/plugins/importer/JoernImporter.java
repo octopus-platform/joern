@@ -2,37 +2,26 @@ package joern.plugins.importer;
 
 import java.io.IOException;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fileWalker.OrderedWalker;
 import joern.pluginlib.JoernProject;
 import joern.pluginlib.plugintypes.JoernProjectPlugin;
+import octopus.server.decompressor.TarballDecompressor;
 
 public class JoernImporter extends JoernProjectPlugin {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(JoernImporter.class);
 
-	private String importCSVDirectory = "";
-
-	@Override
-	public void configure(JSONObject settings)
-	{
-		super.configure(settings);
-		if(settings.has("importCSVDirectory"))
-			this.importCSVDirectory = settings.getString("importCSVDirectory");
-	}
 
 	 @Override
      public void execute() throws Exception
 	 {
-		 if(this.importCSVDirectory.isEmpty()) {
-			 uncompressArchive();
-			 extractCSVFilesFromSourceCode();
-		 }
-		 importCSVFilesIntoDatabase();
+		uncompressArchive();
+		extractCSVFilesFromSourceCode();
+		importCSVFilesIntoDatabase();
 	 }
 
 	private void uncompressArchive() throws IOException
@@ -72,8 +61,7 @@ public class JoernImporter extends JoernProjectPlugin {
 		logger.debug("Importing graph");
 
 		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
-		String parserOutputDirectory =
-				this.importCSVDirectory.isEmpty() ? joernProject.getParserOutputDirectory() : this.importCSVDirectory;
+		String parserOutputDirectory = joernProject.getParserOutputDirectory();
 
 		OrderedWalker walker = new OrderedWalker();
 		walker.setFilenameFilter("*nodes.csv");

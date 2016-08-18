@@ -1,7 +1,7 @@
 package joern.pluginlib.plugintypes;
 
 import joern.pluginlib.connectors.JoernProjectConnector;
-import octopus.api.plugintypes.OctopusProjectPlugin;
+import octopus.api.plugin.types.OctopusProjectPlugin;
 
 public class JoernProjectPlugin extends OctopusProjectPlugin {
 

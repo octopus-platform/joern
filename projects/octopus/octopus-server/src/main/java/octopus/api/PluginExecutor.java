@@ -5,8 +5,8 @@ import java.nio.file.Paths;
 
 import org.json.JSONObject;
 
-import octopus.server.components.pluginInterface.Plugin;
-import octopus.server.components.pluginInterface.PluginLoader;
+import octopus.api.plugin.Plugin;
+import octopus.server.pluginInterface.PluginLoader;
 
 public class PluginExecutor {
 

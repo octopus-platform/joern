@@ -3,9 +3,9 @@ package octopus.api;
 import java.io.IOException;
 import java.util.List;
 
-import octopus.server.components.gremlinShell.OctopusGremlinShell;
-import octopus.server.components.gremlinShell.ShellRunnable;
-import octopus.server.components.shellmanager.OctopusShellManager;
+import octopus.server.gremlinShell.OctopusGremlinShell;
+import octopus.server.gremlinShell.ShellRunnable;
+import octopus.server.shellmanager.OctopusShellManager;
 
 public class ShellManager {
 
