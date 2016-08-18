@@ -24,6 +24,7 @@ class OctopusImporter:
 
         conn = self._getConnectionToServer()
         conn.request("GET", "/manageprojects/create/%s" % (self.projectName))
+        response = conn.getresponse()
 
     def _getConnectionToServer(self):
         return http.client.HTTPConnection(SERVER_HOST + ":" + SERVER_PORT)
