@@ -26,11 +26,11 @@ public class JoernImporter extends JoernProjectPlugin {
 	{
 		super.configure(settings);
 
-		if(settings.getString("nouncompress") != null)
+		if(settings.has("nouncompress"))
 			uncompress = false;
-		if(settings.getString("noextractcsv") != null)
+		if(settings.has("noextractcsv"))
 			extractcsv = false;
-		if(settings.getString("noimportcsv") != null)
+		if(settings.has("noimportcsv"))
 			importcsv = false;
 	}
 
