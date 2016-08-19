@@ -2,6 +2,7 @@ package octopus.server.gremlinShell;
 
 import java.io.IOException;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
 import groovy.lang.GroovyShell;
@@ -21,6 +22,7 @@ public class OctopusGremlinShell
 	private boolean occupied = false;
 	private Graph graph;
 	private String projectName;
+	private GraphTraversalSource g;
 
 	static
 	{
@@ -77,9 +79,10 @@ public class OctopusGremlinShell
 		this.projectName = projectName;
 
 		graph = database.getGraph();
-		this.shell.setVariable("g", graph);
+		g = graph.traversal();
+		this.shell.setVariable("graph", graph);
+		this.shell.setVariable("g", g);
 	}
-
 	public Object execute(String code)
 	{
 		if (code.equals("querylib_reload"))
