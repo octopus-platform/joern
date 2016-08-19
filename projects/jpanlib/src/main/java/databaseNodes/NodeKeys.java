@@ -3,7 +3,7 @@ package databaseNodes;
 public class NodeKeys
 {
 
-	public static final String NODE_TYPE = "nodeType";
+	public static final String NODE_TYPE = "type";
 	public static final String CODE = "code";
 	public static final String IS_CFG_NODE = "isCFGNode";
 	public static final String OPERATOR = "operator";

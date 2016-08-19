@@ -27,7 +27,7 @@ select a project, connect to the server and run a Gremlin query.
    from octopus.server.DBInterface import DBInterface
 
    projectName = 'coreutils.tar.gz'
-   query = "queryNodeIndex('nodeType:Function').name"
+   query = "queryNodeIndex('type:Function').name"
 
    db = DBInterface()
    db.connectToDatabase(projectName)
@@ -43,7 +43,7 @@ Running the same traversal on a large set of start nodes often leads
 to unacceptable performance as all nodes and edges touched by the
 traversal are kept in server memory before returning results. For
 example, the query::
-	queryNodeIndex('nodeType:Function').astNodes().id
+	queryNodeIndex('type:Function').astNodes().id
 
 which retrieves all astNodes that are part of functions, can already
 completely exhaust memory.
@@ -56,7 +56,7 @@ performance. The following example code shows how this works::
 	from octopus.server.DBInterface import DBInterface
 
 	projectName = 'testCode.tar.gz'
-	query = "queryNodeIndex('nodeType:Function').id"
+	query = "queryNodeIndex('type:Function').id"
 
 	db = DBInterface()
 	db.connectToDatabase(projectName)

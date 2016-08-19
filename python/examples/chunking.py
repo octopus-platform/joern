@@ -3,7 +3,7 @@
 from octopus.server.DBInterface import DBInterface
 
 projectName = 'testCode.tar.gz'
-query = "queryNodeIndex('nodeType:Function').id"
+query = "queryNodeIndex('type:Function').id"
 
 db = DBInterface()
 db.connectToDatabase(projectName)

@@ -96,8 +96,8 @@ query:
       | | (_) \__ \ | | |
      _/ |\___/|___/_| |_|
     |__/      joern shell
-           _
-    josh> queryNodeIndex("nodeType:Function").out("IS_FUNCTION_OF_AST").out("IS_AST_PARENT").has("nodeType", "ReturnType").has("code", "int")
+	   _
+    josh> queryNodeIndex("type:Function").out("IS_FUNCTION_OF_AST").out("IS_AST_PARENT").has("type", "ReturnType").has("code", "int")
     v[#9:1186]
     v[#9:2414]
     v[#9:2714]
@@ -117,9 +117,9 @@ time and write a custom step:
 
 .. code:: bash
 
-    josh> functionToReturnType = {_().out("IS_FUNCTION_OF_AST").out("IS_AST_PARENT").has("nodeType", "ReturnType")}
+    josh> functionToReturnType = {_().out("IS_FUNCTION_OF_AST").out("IS_AST_PARENT").has("type", "ReturnType")}
     Script60$_run_closure1@220be57b
-    josh> queryNodeIndex("nodeType:Function").functionToReturnType().has("code", "int").next(3)
+    josh> queryNodeIndex("type:Function").functionToReturnType().has("code", "int").next(3)
     v[#9:1186]
     v[#9:2414]
     v[#9:2714]
@@ -129,9 +129,9 @@ It works! Now you can place the step into a file:
 .. code::
 
     functionToReturnType = {
-        _().out("IS_FUNCTION_OF_AST")
-           .out("IS_AST_PARENT")
-           .has("nodeType", "ReturnType")
+	_().out("IS_FUNCTION_OF_AST")
+	   .out("IS_AST_PARENT")
+	   .has("type", "ReturnType")
     }
 
 Loading steps
