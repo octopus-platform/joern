@@ -10,8 +10,6 @@ import org.apache.tinkerpop.gremlin.groovy.AbstractImportCustomizerProvider;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
-// TODO: Is this still required?
-
 public class OctopusCompilerConfiguration extends CompilerConfiguration
 {
 
