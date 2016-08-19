@@ -1,4 +1,4 @@
-from octopus.server.shell_mananger import ShellManager
+from octopus.server.shell_manager import ShellManager
 from octopus.shell.octopus_shell import OctopusShellConnection
 import time
 
