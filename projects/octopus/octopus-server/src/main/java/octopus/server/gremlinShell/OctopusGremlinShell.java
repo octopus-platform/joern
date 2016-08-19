@@ -3,6 +3,7 @@ package octopus.server.gremlinShell;
 import java.io.IOException;
 
 import org.apache.tinkerpop.gremlin.groovy.loaders.GremlinLoader;
+import org.apache.tinkerpop.gremlin.groovy.loaders.SugarLoader;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
@@ -28,6 +29,7 @@ public class OctopusGremlinShell
 	static
 	{
 		GremlinLoader.load();
+		SugarLoader.load();
 	}
 
 	public OctopusGremlinShell(String projectName)
