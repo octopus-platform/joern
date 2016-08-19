@@ -1,17 +1,3 @@
-/**
-   Retrieve nodes from index using a Lucene query.
-
-   @param query The lucene query to run
-
-queryNodeIndex = { def luceneQuery ->
-
-	def queryStr = 'SELECT * FROM V WHERE [childNum,code,filepath,functionId,isCFGNode,key,location,name,nodeType] LUCENE "' + luceneQuery + '"';
-	def query = new com.orientechnologies.orient.core.sql.OCommandSQL(queryStr);
-	def db = g.getRawGraph();
-	db.activateOnCurrentThread();
-	db.command(query).execute().toList()._().transform{ g.v(it.getIdentity()) }
-}
-*/
 
 /**
    Retrieve functions by name.
@@ -24,15 +10,14 @@ getFunctionsByName = { name ->
 }
 
 getFunctionsByFilename = { name ->
-	query = "$NODE_TYPE:$TYPE_FILE AND $NODE_FILEPATH:$name"
-	queryNodeIndex(query)
+       
+       g.V.has(NODE_TYPE, TYPE_FILE).filter{ it.filepath == name }
 	.out('IS_FILE_OF')
 	.filter{ it.type == TYPE_FUNCTION }
 }
 
 getNodesWithTypeAndName = { type, name ->
-	query = "$NODE_TYPE:$type AND $NODE_NAME:$name"
-	queryNodeIndex(query)
+	g.V.has(NODE_TYPE, type).filter{ it.name == name}
 }
 
 getFunctionsByFileAndName = { filename, name  ->
