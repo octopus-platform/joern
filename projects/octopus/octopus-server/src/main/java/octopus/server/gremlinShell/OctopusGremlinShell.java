@@ -32,7 +32,7 @@ public class OctopusGremlinShell
 	public OctopusGremlinShell(String projectName)
 	{
 		this.projectName = projectName;
-		OctopusProject project = new ProjectManager().getProjectByName(projectName);
+		// OctopusProject project = new ProjectManager().getProjectByName(projectName);
 	}
 
 	private void registerMethodMissingHandler()
@@ -48,6 +48,18 @@ public class OctopusGremlinShell
 		openDatabaseConnection(projectName);
 		loadStandardQueryLibrary();
 		registerMethodMissingHandler();
+	}
+
+	private void openDatabaseConnection(String projectName)
+	{
+		OctopusProject project = new ProjectManager().getProjectByName(projectName);
+		database =  project.getNewDatabaseInstance();
+		this.projectName = projectName;
+
+		graph = database.getGraph();
+		g = graph.traversal();
+		this.shell.setVariable("graph", graph);
+		this.shell.setVariable("g", g);
 	}
 
 	private void loadStandardQueryLibrary()
@@ -72,17 +84,6 @@ public class OctopusGremlinShell
 		walker.walk(new String[]{queryLibDir});
 	}
 
-	private void openDatabaseConnection(String projectName)
-	{
-		OctopusProject project = new ProjectManager().getProjectByName(projectName);
-		database =  project.getNewDatabaseInstance();
-		this.projectName = projectName;
-
-		graph = database.getGraph();
-		g = graph.traversal();
-		this.shell.setVariable("graph", graph);
-		this.shell.setVariable("g", g);
-	}
 	public Object execute(String code)
 	{
 		if (code.equals("querylib_reload"))

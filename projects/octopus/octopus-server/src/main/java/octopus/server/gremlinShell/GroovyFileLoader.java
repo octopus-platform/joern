@@ -1,14 +1,14 @@
 package octopus.server.gremlinShell;
 
-import groovy.lang.GroovyShell;
-import octopus.server.gremlinShell.fileWalker.SourceFileListener;
-
 import java.io.IOException;
 import java.nio.file.Path;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import groovy.lang.GroovyShell;
+import octopus.server.gremlinShell.fileWalker.SourceFileListener;
 
 public class GroovyFileLoader extends SourceFileListener
 {
@@ -42,24 +42,12 @@ public class GroovyFileLoader extends SourceFileListener
 		}
 	}
 
-	@Override
-	public void initialize()
-	{
-	}
+	@Override public void initialize() { }
 
-	@Override
-	public void shutdown()
-	{
-	}
+	@Override public void shutdown() { }
 
-	@Override
-	public void preVisitDirectory(Path dir)
-	{
-	}
+	@Override public void preVisitDirectory(Path dir) { }
 
-	@Override
-	public void postVisitDirectory(Path dir)
-	{
-	}
+	@Override public void postVisitDirectory(Path dir) { }
 
 }

@@ -1,10 +1,16 @@
 package octopus.server.gremlinShell;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.tinkerpop.gremlin.groovy.AbstractImportCustomizerProvider;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
+
+// TODO: Is this still required?
 
 public class OctopusCompilerConfiguration extends CompilerConfiguration
 {
@@ -12,26 +18,50 @@ public class OctopusCompilerConfiguration extends CompilerConfiguration
 	public OctopusCompilerConfiguration()
 	{
 		this.setScriptBaseClass(OctopusScriptBase.class.getName());
-		this.addCompilationCustomizers(new BjoernImportCustomizer());
+		this.addCompilationCustomizers(new OctopusImportCustomizer());
 	}
 
 }
 
-class BjoernImportCustomizer extends ImportCustomizer
+class OctopusImportCustomizerProvider extends AbstractImportCustomizerProvider
+{
+	public OctopusImportCustomizerProvider() {
+        // useful groovy bits that are good for the Console
+        // extraImports.add(Sql.class.getPackage().getName() + DOT_STAR)
+    }
+
+    public Set<String> getCombinedStaticImports()
+    {
+        final Set<String> combined = new HashSet<>();
+        combined.addAll(getStaticImports());
+        combined.addAll(extraStaticImports);
+
+        return Collections.unmodifiableSet(combined);
+    }
+
+    public Set<String> getCombinedImports()
+    {
+        final Set<String> combined = new HashSet<>();
+        combined.addAll(getImports());
+        combined.addAll(extraImports);
+
+        return Collections.unmodifiableSet(combined);
+    }
+}
+
+class OctopusImportCustomizer extends ImportCustomizer
 {
 
 	private static final List<String> imports = new ArrayList<String>();
-
 	static
 	{
-		// TODO
-		// imports.addAll(Imports.getImports());
-		// imports.add("com.tinkerpop.gremlin.Tokens.T");
-		// imports.add("com.tinkerpop.gremlin.groovy.*");
+		OctopusImportCustomizerProvider provider = new OctopusImportCustomizerProvider();
+
+		imports.addAll(provider.getAllImports());
 		imports.add("groovy.grape.Grape");
 	}
 
-	public BjoernImportCustomizer()
+	public OctopusImportCustomizer()
 	{
 		for (String s : imports)
 		{
