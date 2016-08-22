@@ -154,4 +154,9 @@ public class OctopusGremlinShell
 		return projectName;
 	}
 
+	public Graph getGraph()
+	{
+		return graph;
+	}
+
 }

@@ -114,6 +114,7 @@ public class ShellRunnable implements Runnable
 	{
 		OutputStream out = clientSocket.getOutputStream();
 		clientWriter = new OctopusClientWriter(new OutputStreamWriter(out));
+		clientWriter.setGraph(shell.getGraph());
 	}
 
 	private void handleClient() throws IOException
