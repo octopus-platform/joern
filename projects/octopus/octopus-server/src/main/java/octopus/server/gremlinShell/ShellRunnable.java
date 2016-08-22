@@ -129,7 +129,7 @@ public class ShellRunnable implements Runnable
 				break;
 			} else if(message.equals("toggle_json")){
 				clientWriter.toggleJSONOutput();
-				clientWriter.writeMessage("toggled");
+				clientWriter.writeResult("toggled");
 				continue;
 			}
 
@@ -148,15 +148,15 @@ public class ShellRunnable implements Runnable
 		{
 			String errorMessage = ex.getMessage();
 			if(errorMessage != null)
-					clientWriter.writeMessage(errorMessage);
+					clientWriter.writeResult(errorMessage);
 				else
-					clientWriter.writeMessage(ex.toString());
+					clientWriter.writeResult(ex.toString());
 		}
 	}
 
 	private void prepareForShutdown() throws IOException {
 		listening = false;
-		clientWriter.writeMessage("bye");
+		clientWriter.writeResult("bye");
 		shell.shutdownDBInstance();
 	}
 }

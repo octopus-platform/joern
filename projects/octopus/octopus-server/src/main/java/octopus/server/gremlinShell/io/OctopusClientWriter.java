@@ -105,7 +105,7 @@ public class OctopusClientWriter extends BufferedWriter
 		return sBuilder.toString();
 	}
 
-	public void writeMessage(String message) throws IOException
+	private void writeMessage(String message) throws IOException
 	{
 		write(message);
 		writeEndOfMessage();
@@ -114,15 +114,10 @@ public class OctopusClientWriter extends BufferedWriter
 
 	private String convertToJSON(Object result)
 	{
+		configureSerializer();
+
 		if(result instanceof Iterator)
 			result = IteratorUtils.toList((Iterator) result);
-
-		Map<String, Object> config = new HashMap<String, Object>();
-		config.put("useMapperFromGraph", "graph");
-
-		Map<String, Graph> graphs = new HashMap<String, Graph>();
-		graphs.put("graph", getGraph());
-		serializer.configure(config, graphs);
 
 		UUID requestId = UUID.fromString("6457272A-4018-4538-B9AE-08DD5DDC0AA1");
 		ResponseMessage.Builder responseMessageBuilder = ResponseMessage.build(requestId);
@@ -135,6 +130,15 @@ public class OctopusClientWriter extends BufferedWriter
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void configureSerializer()
+	{
+		Map<String, Object> config = new HashMap<String, Object>();
+		config.put("useMapperFromGraph", "graph");
+		Map<String, Graph> graphs = new HashMap<String, Graph>();
+		graphs.put("graph", getGraph());
+		serializer.configure(config, graphs);
 	}
 
 	public Graph getGraph() {
