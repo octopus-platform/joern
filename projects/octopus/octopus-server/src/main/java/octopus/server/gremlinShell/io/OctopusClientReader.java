@@ -3,11 +3,11 @@ package octopus.server.gremlinShell.io;
 import java.io.IOException;
 import java.io.Reader;
 
-public class BjoernClientReader extends Reader
+public class OctopusClientReader extends Reader
 {
 	private Reader in;
 
-	public BjoernClientReader(Reader in)
+	public OctopusClientReader(Reader in)
 	{
 		this.in = in;
 	}

@@ -12,8 +12,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import octopus.server.gremlinShell.io.BjoernClientReader;
-import octopus.server.gremlinShell.io.BjoernClientWriter;
+import octopus.server.gremlinShell.io.OctopusClientReader;
+import octopus.server.gremlinShell.io.OctopusClientWriter;
 import octopus.server.shellmanager.OctopusShellManager;
 
 public class ShellRunnable implements Runnable
@@ -24,8 +24,8 @@ public class ShellRunnable implements Runnable
 	private ServerSocket serverSocket;
 	private OctopusGremlinShell shell;
 	private Socket clientSocket;
-	private BjoernClientWriter clientWriter;
-	private BjoernClientReader clientReader;
+	private OctopusClientWriter clientWriter;
+	private OctopusClientReader clientReader;
 
 	private boolean listening = true;
 
@@ -107,13 +107,13 @@ public class ShellRunnable implements Runnable
 	private void initClientReader() throws IOException
 	{
 		InputStream in = clientSocket.getInputStream();
-		clientReader = new BjoernClientReader(new InputStreamReader(in));
+		clientReader = new OctopusClientReader(new InputStreamReader(in));
 	}
 
 	private void initClientWriter() throws IOException
 	{
 		OutputStream out = clientSocket.getOutputStream();
-		clientWriter = new BjoernClientWriter(new OutputStreamWriter(out));
+		clientWriter = new OctopusClientWriter(new OutputStreamWriter(out));
 	}
 
 	private void handleClient() throws IOException
@@ -124,28 +124,38 @@ public class ShellRunnable implements Runnable
 		{
 			if (message.equals("quit"))
 			{
-				listening = false;
-				clientWriter.writeMessage("bye");
-				shell.shutdownDBInstance();
+				prepareForShutdown();
 				break;
-			} else
-			{
-				Object evalResult;
-				try
-				{
-					evalResult = shell.execute(message);
-					clientWriter.writeResult(evalResult);
-				} catch (Exception ex)
-				{
-					String errorMessage = ex.getMessage();
-					if(errorMessage != null)
-						clientWriter.writeMessage(errorMessage);
-					else
-						clientWriter.writeMessage(ex.toString());
-				}
+			} else if(message.equals("toggle_json")){
+				clientWriter.toggleJSONOutput();
+				clientWriter.writeMessage("toggled");
+				continue;
 			}
 
+			evaluteOnShell(message);
 		}
 		clientSocket.close();
+	}
+
+	private void evaluteOnShell(String message) throws IOException {
+		Object evalResult;
+		try
+		{
+			evalResult = shell.execute(message);
+			clientWriter.writeResult(evalResult);
+		} catch (Exception ex)
+		{
+			String errorMessage = ex.getMessage();
+			if(errorMessage != null)
+					clientWriter.writeMessage(errorMessage);
+				else
+					clientWriter.writeMessage(ex.toString());
+		}
+	}
+
+	private void prepareForShutdown() throws IOException {
+		listening = false;
+		clientWriter.writeMessage("bye");
+		shell.shutdownDBInstance();
 	}
 }
