@@ -18,6 +18,8 @@ dependencies{
     
   compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.13'
 
+  compile group: 'org.apache.tinkerpop', name: 'gremlin-driver', version: '3.0.1-incubating'
+
   compile project(':projects:octopus:titanimporter')
 
   runtime group: 'ch.qos.logback', name: 'logback-core', version: '1.1.3'

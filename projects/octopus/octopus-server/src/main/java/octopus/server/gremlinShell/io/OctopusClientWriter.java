@@ -3,18 +3,25 @@ package octopus.server.gremlinShell.io;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.UUID;
 
-import org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper;
+import org.apache.tinkerpop.gremlin.driver.MessageSerializer;
+import org.apache.tinkerpop.gremlin.driver.message.ResponseMessage;
+import org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerGremlinV1d0;
+import org.apache.tinkerpop.gremlin.driver.ser.SerializationException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.UnpooledByteBufAllocator;
 
 public class OctopusClientWriter extends BufferedWriter
 {
 
 	private boolean outputJSON = false;
-	private ObjectMapper graphsonMapper = GraphSONMapper.build().embedTypes(false).create().createMapper();
 
+	private MessageSerializer serializer = new GraphSONMessageSerializerGremlinV1d0();
 
 	public OctopusClientWriter(Writer out)
 	{
@@ -45,12 +52,29 @@ public class OctopusClientWriter extends BufferedWriter
 
 	public void writeMessage(String message) throws IOException
 	{
-		if(outputJSON)
-			message = graphsonMapper.writeValueAsString(message);
+
+		if(outputJSON){
+		    message = convertToJSON(message);
+		}
 
 		write(message);
 		writeEndOfMessage();
 		flush();
+	}
+
+	private String convertToJSON(String message)
+	{
+		UUID requestId = UUID.fromString("6457272A-4018-4538-B9AE-08DD5DDC0AA1");
+		ResponseMessage.Builder responseMessageBuilder = ResponseMessage.build(requestId);
+		ByteBufAllocator allocator = UnpooledByteBufAllocator.DEFAULT;
+		try {
+			final ByteBuf bb = serializer.serializeResponseAsBinary(responseMessageBuilder.result(message).create(), allocator);
+			message =  bb.toString(StandardCharsets.UTF_8);
+		} catch (SerializationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return message;
 	}
 
 	private void writeIterator(Object o) throws IOException
