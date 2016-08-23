@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import ast.php.functionDef.PHPFunctionDef;
+import ast.php.functionDef.FunctionDef;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
 import cfg.PHPCFGFactory;
@@ -69,8 +69,8 @@ public class Main {
 		Writer.setWriterImpl( csvWriter);
 
 		// let's go...
-		PHPFunctionDef rootnode;
-		while ((rootnode = (PHPFunctionDef)extractor.getNextFunction()) != null) {
+		FunctionDef rootnode;
+		while ((rootnode = (FunctionDef)extractor.getNextFunction()) != null) {
 
 			PHPCGFactory.addFunctionDef( rootnode);
 

@@ -2,7 +2,7 @@ package ast.php.functionDef;
 
 import ast.ASTNodeProperties;
 
-public class Method extends PHPFunctionDef
+public class Method extends FunctionDef
 {
 	public String getEnclosingClass() {
 		return getProperty(ASTNodeProperties.CLASSNAME);

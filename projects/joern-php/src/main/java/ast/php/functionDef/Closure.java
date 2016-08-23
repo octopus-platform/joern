@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import inputModules.csv.PHPCSVNodeTypes;
 
-public class Closure extends PHPFunctionDef
+public class Closure extends FunctionDef
 {
 	private ClosureUses closureUses = null;
 

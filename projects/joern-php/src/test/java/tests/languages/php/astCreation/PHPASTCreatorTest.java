@@ -53,56 +53,56 @@ import ast.php.declarations.ClassDef;
 import ast.php.expressions.ClassExpression;
 import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
-import ast.php.expressions.ArrayElementPHP;
-import ast.php.expressions.PHPArrayExpression;
-import ast.php.expressions.PHPAssignmentByRefExpression;
-import ast.php.expressions.PHPCloneExpression;
-import ast.php.expressions.PHPCoalesceExpression;
-import ast.php.expressions.PHPEmptyExpression;
-import ast.php.expressions.PHPEncapsListExpression;
-import ast.php.expressions.PHPExitExpression;
-import ast.php.expressions.PHPIncludeOrEvalExpression;
-import ast.php.expressions.PHPIssetExpression;
-import ast.php.expressions.PHPListExpression;
-import ast.php.expressions.PHPMagicConstant;
-import ast.php.expressions.PHPPrintExpression;
-import ast.php.expressions.PHPReferenceExpression;
-import ast.php.expressions.PHPShellExecExpression;
-import ast.php.expressions.PHPSilenceExpression;
-import ast.php.expressions.PHPTypeHint;
-import ast.php.expressions.PHPUnpackExpression;
-import ast.php.expressions.PHPYieldExpression;
-import ast.php.expressions.PHPYieldFromExpression;
+import ast.php.expressions.ArrayElement;
+import ast.php.expressions.ArrayExpression;
+import ast.php.expressions.AssignmentByRefExpression;
+import ast.php.expressions.CloneExpression;
+import ast.php.expressions.CoalesceExpression;
+import ast.php.expressions.EmptyExpression;
+import ast.php.expressions.EncapsListExpression;
+import ast.php.expressions.ExitExpression;
+import ast.php.expressions.IncludeOrEvalExpression;
+import ast.php.expressions.IssetExpression;
+import ast.php.expressions.ListExpression;
+import ast.php.expressions.MagicConstant;
+import ast.php.expressions.PrintExpression;
+import ast.php.expressions.ReferenceExpression;
+import ast.php.expressions.ShellExecExpression;
+import ast.php.expressions.SilenceExpression;
+import ast.php.expressions.TypeHint;
+import ast.php.expressions.UnpackExpression;
+import ast.php.expressions.YieldExpression;
+import ast.php.expressions.YieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
-import ast.php.functionDef.PHPFunctionDef;
-import ast.php.functionDef.PHPParameter;
+import ast.php.functionDef.FunctionDef;
+import ast.php.functionDef.Parameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
-import ast.php.statements.PHPEchoStatement;
-import ast.php.statements.PHPGlobalStatement;
-import ast.php.statements.PHPGroupUseStatement;
-import ast.php.statements.PHPHaltCompilerStatement;
-import ast.php.statements.PHPUnsetStatement;
+import ast.php.statements.EchoStatement;
+import ast.php.statements.GlobalStatement;
+import ast.php.statements.GroupUseStatement;
+import ast.php.statements.HaltCompilerStatement;
+import ast.php.statements.UnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
-import ast.php.statements.blockstarters.PHPDeclareStatement;
-import ast.php.statements.blockstarters.PHPIfElement;
-import ast.php.statements.blockstarters.PHPIfStatement;
-import ast.php.statements.blockstarters.PHPSwitchCase;
-import ast.php.statements.blockstarters.PHPSwitchList;
-import ast.php.statements.blockstarters.PHPSwitchStatement;
-import ast.php.statements.blockstarters.PHPTraitAdaptationElement;
-import ast.php.statements.blockstarters.PHPTraitAdaptations;
-import ast.php.statements.blockstarters.PHPTraitAlias;
-import ast.php.statements.blockstarters.PHPTraitPrecedence;
-import ast.php.statements.blockstarters.PHPUseTrait;
+import ast.php.statements.blockstarters.DeclareStatement;
+import ast.php.statements.blockstarters.IfElement;
+import ast.php.statements.blockstarters.IfStatement;
+import ast.php.statements.blockstarters.SwitchCase;
+import ast.php.statements.blockstarters.SwitchList;
+import ast.php.statements.blockstarters.SwitchStatementPHP;
+import ast.php.statements.blockstarters.TraitAdaptationElement;
+import ast.php.statements.blockstarters.TraitAdaptations;
+import ast.php.statements.blockstarters.TraitAlias;
+import ast.php.statements.blockstarters.TraitPrecedence;
+import ast.php.statements.blockstarters.UseTrait;
 import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
@@ -288,14 +288,14 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPFunctionDef.class));
-		assertEquals( "foo", ((PHPFunctionDef)node).getName());
+		assertThat( node, instanceOf(FunctionDef.class));
+		assertEquals( "foo", ((FunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPFunctionDef)node).getParameterList());
-		assertEquals( ast.getNodeById((long)11), ((PHPFunctionDef)node).getContent());
-		assertEquals( ast.getNodeById((long)12), ((PHPFunctionDef)node).getReturnType());
-		assertEquals( ast.getNodeById((long)13), ((PHPFunctionDef)node).getReturnType().getNameChild());
-		assertEquals( "int", ((PHPFunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((FunctionDef)node).getParameterList());
+		assertEquals( ast.getNodeById((long)11), ((FunctionDef)node).getContent());
+		assertEquals( ast.getNodeById((long)12), ((FunctionDef)node).getReturnType());
+		assertEquals( ast.getNodeById((long)13), ((FunctionDef)node).getReturnType().getNameChild());
+		assertEquals( "int", ((FunctionDef)node).getReturnType().getNameChild().getEscapedCodeStr());
 	}
 
 	/**
@@ -454,37 +454,37 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node7 = ast.getNodeById((long)12);
 		ASTNode node8 = ast.getNodeById((long)13);
 
-		assertThat( node, instanceOf(PHPMagicConstant.class));
+		assertThat( node, instanceOf(MagicConstant.class));
 		assertEquals( 0, node.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_LINE, ((PHPMagicConstant)node).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_LINE, ((MagicConstant)node).getFlags());
 
-		assertThat( node2, instanceOf(PHPMagicConstant.class));
+		assertThat( node2, instanceOf(MagicConstant.class));
 		assertEquals( 0, node2.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FILE, ((PHPMagicConstant)node2).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FILE, ((MagicConstant)node2).getFlags());
 
-		assertThat( node3, instanceOf(PHPMagicConstant.class));
+		assertThat( node3, instanceOf(MagicConstant.class));
 		assertEquals( 0, node3.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_DIR, ((PHPMagicConstant)node3).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_DIR, ((MagicConstant)node3).getFlags());
 
-		assertThat( node4, instanceOf(PHPMagicConstant.class));
+		assertThat( node4, instanceOf(MagicConstant.class));
 		assertEquals( 0, node4.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_NAMESPACE, ((PHPMagicConstant)node4).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_NAMESPACE, ((MagicConstant)node4).getFlags());
 
-		assertThat( node5, instanceOf(PHPMagicConstant.class));
+		assertThat( node5, instanceOf(MagicConstant.class));
 		assertEquals( 0, node5.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FUNCTION, ((PHPMagicConstant)node5).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_FUNCTION, ((MagicConstant)node5).getFlags());
 
-		assertThat( node6, instanceOf(PHPMagicConstant.class));
+		assertThat( node6, instanceOf(MagicConstant.class));
 		assertEquals( 0, node6.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_METHOD, ((PHPMagicConstant)node6).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_METHOD, ((MagicConstant)node6).getFlags());
 
-		assertThat( node7, instanceOf(PHPMagicConstant.class));
+		assertThat( node7, instanceOf(MagicConstant.class));
 		assertEquals( 0, node7.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_CLASS, ((PHPMagicConstant)node7).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_CLASS, ((MagicConstant)node7).getFlags());
 
-		assertThat( node8, instanceOf(PHPMagicConstant.class));
+		assertThat( node8, instanceOf(MagicConstant.class));
 		assertEquals( 0, node8.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_TRAIT, ((PHPMagicConstant)node8).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_MAGIC_TRAIT, ((MagicConstant)node8).getFlags());
 	}
 
 	/**
@@ -513,17 +513,17 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node2 = ast.getNodeById((long)15);
 		ASTNode node3 = ast.getNodeById((long)20);
 
-		assertThat( node, instanceOf(PHPTypeHint.class));
+		assertThat( node, instanceOf(TypeHint.class));
 		assertEquals( 0, node.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((PHPTypeHint)node).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_ARRAY, ((TypeHint)node).getFlags());
 
-		assertThat( node2, instanceOf(PHPTypeHint.class));
+		assertThat( node2, instanceOf(TypeHint.class));
 		assertEquals( 0, node2.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((PHPTypeHint)node2).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((TypeHint)node2).getFlags());
 
-		assertThat( node3, instanceOf(PHPTypeHint.class));
+		assertThat( node3, instanceOf(TypeHint.class));
 		assertEquals( 0, node3.getChildCount());
-		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((PHPTypeHint)node3).getFlags());
+		assertEquals( PHPCSVNodeTypes.FLAG_TYPE_CALLABLE, ((TypeHint)node3).getFlags());
 	}
 
 
@@ -617,13 +617,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)10);
 		ASTNode node2 = ast.getNodeById((long)17);
 
-		assertThat( node, instanceOf(PHPUnpackExpression.class));
+		assertThat( node, instanceOf(UnpackExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPUnpackExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)11), ((UnpackExpression)node).getExpression());
 
-		assertThat( node2, instanceOf(PHPUnpackExpression.class));
+		assertThat( node2, instanceOf(UnpackExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)18), ((PHPUnpackExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)18), ((UnpackExpression)node2).getExpression());
 	}
 
 	/**
@@ -802,13 +802,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPEmptyExpression.class));
+		assertThat( node, instanceOf(EmptyExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPEmptyExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((EmptyExpression)node).getExpression());
 
-		assertThat( node2, instanceOf(PHPEmptyExpression.class));
+		assertThat( node2, instanceOf(EmptyExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPEmptyExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((EmptyExpression)node2).getExpression());
 	}
 
 	/**
@@ -830,13 +830,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPIssetExpression.class));
+		assertThat( node, instanceOf(IssetExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPIssetExpression)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((IssetExpression)node).getVariableExpression());
 
-		assertThat( node2, instanceOf(PHPIssetExpression.class));
+		assertThat( node2, instanceOf(IssetExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPIssetExpression)node2).getVariableExpression());
+		assertEquals( ast.getNodeById((long)10), ((IssetExpression)node2).getVariableExpression());
 	}
 
 	/**
@@ -860,13 +860,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)11);
 
-		assertThat( node, instanceOf(PHPSilenceExpression.class));
+		assertThat( node, instanceOf(SilenceExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPSilenceExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((SilenceExpression)node).getExpression());
 
-		assertThat( node2, instanceOf(PHPSilenceExpression.class));
+		assertThat( node2, instanceOf(SilenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPSilenceExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)12), ((SilenceExpression)node2).getExpression());
 	}
 
 	/**
@@ -890,13 +890,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)9);
 		ASTNode node2 = ast.getNodeById((long)14);
 
-		assertThat( node, instanceOf(PHPShellExecExpression.class));
+		assertThat( node, instanceOf(ShellExecExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPShellExecExpression)node).getShellCommand());
+		assertEquals( ast.getNodeById((long)10), ((ShellExecExpression)node).getShellCommand());
 
-		assertThat( node2, instanceOf(PHPShellExecExpression.class));
+		assertThat( node2, instanceOf(ShellExecExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)15), ((PHPShellExecExpression)node2).getShellCommand());
+		assertEquals( ast.getNodeById((long)15), ((ShellExecExpression)node2).getShellCommand());
 	}
 
 	/**
@@ -918,13 +918,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPCloneExpression.class));
+		assertThat( node, instanceOf(CloneExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPCloneExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((CloneExpression)node).getExpression());
 
-		assertThat( node2, instanceOf(PHPCloneExpression.class));
+		assertThat( node2, instanceOf(CloneExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPCloneExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((CloneExpression)node2).getExpression());
 	}
 
 	/**
@@ -949,13 +949,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPExitExpression.class));
+		assertThat( node, instanceOf(ExitExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPExitExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((ExitExpression)node).getExpression());
 
-		assertThat( node2, instanceOf(PHPExitExpression.class));
+		assertThat( node2, instanceOf(ExitExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPExitExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((ExitExpression)node2).getExpression());
 	}
 
 	/**
@@ -978,13 +978,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPPrintExpression.class));
+		assertThat( node, instanceOf(PrintExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPPrintExpression)node).getExpression());
+		assertEquals( ast.getNodeById((long)7), ((PrintExpression)node).getExpression());
 
-		assertThat( node2, instanceOf(PHPPrintExpression.class));
+		assertThat( node2, instanceOf(PrintExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPPrintExpression)node2).getExpression());
+		assertEquals( ast.getNodeById((long)10), ((PrintExpression)node2).getExpression());
 	}
 
 	/**
@@ -1020,30 +1020,30 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node4 = ast.getNodeById((long)16);
 		ASTNode node5 = ast.getNodeById((long)23);
 
-		assertThat( node, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertThat( node, instanceOf(IncludeOrEvalExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPIncludeOrEvalExpression)node).getIncludeOrEvalExpression());
-		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE, ((PHPIncludeOrEvalExpression)node).getFlags());
+		assertEquals( ast.getNodeById((long)7), ((IncludeOrEvalExpression)node).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE, ((IncludeOrEvalExpression)node).getFlags());
 
-		assertThat( node2, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertThat( node2, instanceOf(IncludeOrEvalExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)9), ((PHPIncludeOrEvalExpression)node2).getIncludeOrEvalExpression());
-		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE_ONCE, ((PHPIncludeOrEvalExpression)node2).getFlags());
+		assertEquals( ast.getNodeById((long)9), ((IncludeOrEvalExpression)node2).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_INCLUDE_ONCE, ((IncludeOrEvalExpression)node2).getFlags());
 
-		assertThat( node3, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertThat( node3, instanceOf(IncludeOrEvalExpression.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPIncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
-		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE, ((PHPIncludeOrEvalExpression)node3).getFlags());
+		assertEquals( ast.getNodeById((long)12), ((IncludeOrEvalExpression)node3).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE, ((IncludeOrEvalExpression)node3).getFlags());
 
-		assertThat( node4, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertThat( node4, instanceOf(IncludeOrEvalExpression.class));
 		assertEquals( 1, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)17), ((PHPIncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
-		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE_ONCE, ((PHPIncludeOrEvalExpression)node4).getFlags());
+		assertEquals( ast.getNodeById((long)17), ((IncludeOrEvalExpression)node4).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_REQUIRE_ONCE, ((IncludeOrEvalExpression)node4).getFlags());
 
-		assertThat( node5, instanceOf(PHPIncludeOrEvalExpression.class));
+		assertThat( node5, instanceOf(IncludeOrEvalExpression.class));
 		assertEquals( 1, node5.getChildCount());
-		assertEquals( ast.getNodeById((long)24), ((PHPIncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
-		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_EVAL, ((PHPIncludeOrEvalExpression)node5).getFlags());
+		assertEquals( ast.getNodeById((long)24), ((IncludeOrEvalExpression)node5).getIncludeOrEvalExpression());
+		assertEquals( PHPCSVNodeTypes.FLAG_EXEC_EVAL, ((IncludeOrEvalExpression)node5).getFlags());
 	}
 
 	/**
@@ -1188,17 +1188,17 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node2 = ast.getNodeById((long)20);
 		ASTNode node3 = ast.getNodeById((long)32);
 
-		assertThat( node, instanceOf(PHPYieldFromExpression.class));
+		assertThat( node, instanceOf(YieldFromExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PHPYieldFromExpression)node).getFromExpression());
+		assertEquals( ast.getNodeById((long)13), ((YieldFromExpression)node).getFromExpression());
 
-		assertThat( node2, instanceOf(PHPYieldFromExpression.class));
+		assertThat( node2, instanceOf(YieldFromExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((PHPYieldFromExpression)node2).getFromExpression());
+		assertEquals( ast.getNodeById((long)21), ((YieldFromExpression)node2).getFromExpression());
 
-		assertThat( node3, instanceOf(PHPYieldFromExpression.class));
+		assertThat( node3, instanceOf(YieldFromExpression.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)33), ((PHPYieldFromExpression)node3).getFromExpression());
+		assertEquals( ast.getNodeById((long)33), ((YieldFromExpression)node3).getFromExpression());
 	}
 
 	/**
@@ -1222,15 +1222,15 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)13);
 		ASTNode node2 = ast.getNodeById((long)16);
 
-		assertThat( node, instanceOf(PHPGlobalStatement.class));
+		assertThat( node, instanceOf(GlobalStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((PHPGlobalStatement)node).getVariable());
-		assertEquals( "bar", ((PHPGlobalStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((GlobalStatement)node).getVariable());
+		assertEquals( "bar", ((GlobalStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
 
-		assertThat( node2, instanceOf(PHPGlobalStatement.class));
+		assertThat( node2, instanceOf(GlobalStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)17), ((PHPGlobalStatement)node2).getVariable());
-		assertEquals( "buz", ((PHPGlobalStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)17), ((GlobalStatement)node2).getVariable());
+		assertEquals( "buz", ((GlobalStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
 	}
 
 	/**
@@ -1252,17 +1252,17 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node2 = ast.getNodeById((long)10);
 		ASTNode node3 = ast.getNodeById((long)15);
 
-		assertThat( node, instanceOf(PHPUnsetStatement.class));
+		assertThat( node, instanceOf(UnsetStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPUnsetStatement)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)8), ((UnsetStatement)node).getVariableExpression());
 
-		assertThat( node2, instanceOf(PHPUnsetStatement.class));
+		assertThat( node2, instanceOf(UnsetStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPUnsetStatement)node2).getVariableExpression());
+		assertEquals( ast.getNodeById((long)11), ((UnsetStatement)node2).getVariableExpression());
 
-		assertThat( node3, instanceOf(PHPUnsetStatement.class));
+		assertThat( node3, instanceOf(UnsetStatement.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPUnsetStatement)node3).getVariableExpression());
+		assertEquals( ast.getNodeById((long)16), ((UnsetStatement)node3).getVariableExpression());
 	}
 
 	/**
@@ -1337,16 +1337,16 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)9);
 		ASTNode node2 = ast.getNodeById((long)18);
 
-		assertThat( node, instanceOf(PHPReferenceExpression.class));
+		assertThat( node, instanceOf(ReferenceExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPReferenceExpression)node).getVariableExpression());
-		assertEquals( "someval", ((Variable)((PHPReferenceExpression)node).getVariableExpression()).getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((ReferenceExpression)node).getVariableExpression());
+		assertEquals( "someval", ((Variable)((ReferenceExpression)node).getVariableExpression()).getNameExpression().getEscapedCodeStr());
 		
-		assertThat( node2, instanceOf(PHPReferenceExpression.class));
+		assertThat( node2, instanceOf(ReferenceExpression.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((PHPReferenceExpression)node2).getVariableExpression());
-		assertEquals( "obj", ((Variable)((PropertyExpression)((PHPReferenceExpression)node2).getVariableExpression()).getObjectExpression()).getNameExpression().getEscapedCodeStr());
-		assertEquals( "someval", ((PropertyExpression)((PHPReferenceExpression)node2).getVariableExpression()).getPropertyExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)19), ((ReferenceExpression)node2).getVariableExpression());
+		assertEquals( "obj", ((Variable)((PropertyExpression)((ReferenceExpression)node2).getVariableExpression()).getObjectExpression()).getNameExpression().getEscapedCodeStr());
+		assertEquals( "someval", ((PropertyExpression)((ReferenceExpression)node2).getVariableExpression()).getPropertyExpression().getEscapedCodeStr());
 	}
 
 	/**
@@ -1371,10 +1371,10 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPHaltCompilerStatement.class));
+		assertThat( node, instanceOf(HaltCompilerStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPHaltCompilerStatement)node).getOffset());
-		assertEquals( "25", ((PHPHaltCompilerStatement)node).getOffset().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)7), ((HaltCompilerStatement)node).getOffset());
+		assertEquals( "25", ((HaltCompilerStatement)node).getOffset().getEscapedCodeStr());
 	}
 
 	/**
@@ -1401,15 +1401,15 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)7);
 		ASTNode node2 = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPEchoStatement.class));
+		assertThat( node, instanceOf(EchoStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPEchoStatement)node).getEchoExpression());
-		assertEquals( "Hello World!", ((PHPEchoStatement)node).getEchoExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)8), ((EchoStatement)node).getEchoExpression());
+		assertEquals( "Hello World!", ((EchoStatement)node).getEchoExpression().getEscapedCodeStr());
 
-		assertThat( node2, instanceOf(PHPEchoStatement.class));
+		assertThat( node2, instanceOf(EchoStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((PHPEchoStatement)node2).getEchoExpression());
-		assertEquals( "PHP_EOL", ((Constant)((PHPEchoStatement)node2).getEchoExpression()).getIdentifier().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)10), ((EchoStatement)node2).getEchoExpression());
+		assertEquals( "PHP_EOL", ((Constant)((EchoStatement)node2).getEchoExpression()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 
 	/**
@@ -1807,25 +1807,25 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node3 = ast.getNodeById((long)20);
 		ASTNode node4 = ast.getNodeById((long)30);
 
-		assertThat( node, instanceOf(PHPAssignmentByRefExpression.class));
+		assertThat( node, instanceOf(AssignmentByRefExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPAssignmentByRefExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)9), ((PHPAssignmentByRefExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((AssignmentByRefExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)9), ((AssignmentByRefExpression)node).getRight());
 
-		assertThat( node2, instanceOf(PHPAssignmentByRefExpression.class));
+		assertThat( node2, instanceOf(AssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPAssignmentByRefExpression)node2).getLeft());
-		assertEquals( ast.getNodeById((long)16), ((PHPAssignmentByRefExpression)node2).getRight());
+		assertEquals( ast.getNodeById((long)12), ((AssignmentByRefExpression)node2).getLeft());
+		assertEquals( ast.getNodeById((long)16), ((AssignmentByRefExpression)node2).getRight());
 
-		assertThat( node3, instanceOf(PHPAssignmentByRefExpression.class));
+		assertThat( node3, instanceOf(AssignmentByRefExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)21), ((PHPAssignmentByRefExpression)node3).getLeft());
-		assertEquals( ast.getNodeById((long)25), ((PHPAssignmentByRefExpression)node3).getRight());
+		assertEquals( ast.getNodeById((long)21), ((AssignmentByRefExpression)node3).getLeft());
+		assertEquals( ast.getNodeById((long)25), ((AssignmentByRefExpression)node3).getRight());
 
-		assertThat( node4, instanceOf(PHPAssignmentByRefExpression.class));
+		assertThat( node4, instanceOf(AssignmentByRefExpression.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)31), ((PHPAssignmentByRefExpression)node4).getLeft());
-		assertEquals( ast.getNodeById((long)35), ((PHPAssignmentByRefExpression)node4).getRight());
+		assertEquals( ast.getNodeById((long)31), ((AssignmentByRefExpression)node4).getLeft());
+		assertEquals( ast.getNodeById((long)35), ((AssignmentByRefExpression)node4).getRight());
 	}
 
 	/**
@@ -2170,25 +2170,25 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node3 = ast.getNodeById((long)13);
 		ASTNode node4 = ast.getNodeById((long)19);
 
-		assertThat( node, instanceOf(ArrayElementPHP.class));
+		assertThat( node, instanceOf(ArrayElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((ArrayElementPHP)node).getValue());
-		assertEquals( ast.getNodeById((long)9), ((ArrayElementPHP)node).getKey());
+		assertEquals( ast.getNodeById((long)8), ((ArrayElement)node).getValue());
+		assertEquals( ast.getNodeById((long)9), ((ArrayElement)node).getKey());
 
-		assertThat( node2, instanceOf(ArrayElementPHP.class));
+		assertThat( node2, instanceOf(ArrayElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((ArrayElementPHP)node2).getValue());
-		assertEquals( ast.getNodeById((long)12), ((ArrayElementPHP)node2).getKey());
+		assertEquals( ast.getNodeById((long)11), ((ArrayElement)node2).getValue());
+		assertEquals( ast.getNodeById((long)12), ((ArrayElement)node2).getKey());
 
-		assertThat( node3, instanceOf(ArrayElementPHP.class));
+		assertThat( node3, instanceOf(ArrayElement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((ArrayElementPHP)node3).getValue());
-		assertEquals( ast.getNodeById((long)16), ((ArrayElementPHP)node3).getKey());
+		assertEquals( ast.getNodeById((long)14), ((ArrayElement)node3).getValue());
+		assertEquals( ast.getNodeById((long)16), ((ArrayElement)node3).getKey());
 
-		assertThat( node4, instanceOf(ArrayElementPHP.class));
+		assertThat( node4, instanceOf(ArrayElement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertEquals( ast.getNodeById((long)20), ((ArrayElementPHP)node4).getValue());
-		assertNull( ((ArrayElementPHP)node4).getKey());
+		assertEquals( ast.getNodeById((long)20), ((ArrayElement)node4).getValue());
+		assertNull( ((ArrayElement)node4).getKey());
 	}
 
 	/**
@@ -2313,18 +2313,18 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)12);
 		ASTNode node2 = ast.getNodeById((long)15);
 
-		assertThat( node, instanceOf(PHPYieldExpression.class));
+		assertThat( node, instanceOf(YieldExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PHPYieldExpression)node).getValue());
-		assertEquals( "42", ((PHPYieldExpression)node).getValue().getEscapedCodeStr());
-		assertNull( ((PHPYieldExpression)node).getKey());
+		assertEquals( ast.getNodeById((long)13), ((YieldExpression)node).getValue());
+		assertEquals( "42", ((YieldExpression)node).getValue().getEscapedCodeStr());
+		assertNull( ((YieldExpression)node).getKey());
 
-		assertThat( node2, instanceOf(PHPYieldExpression.class));
+		assertThat( node2, instanceOf(YieldExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPYieldExpression)node2).getValue());
-		assertEquals( "bar", ((Identifier)((CallExpressionBase)((PHPYieldExpression)node2).getValue()).getTargetFunc()).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)20), ((PHPYieldExpression)node2).getKey());
-		assertEquals( "somekey", ((Variable)((PHPYieldExpression)node2).getKey()).getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((YieldExpression)node2).getValue());
+		assertEquals( "bar", ((Identifier)((CallExpressionBase)((YieldExpression)node2).getValue()).getTargetFunc()).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)20), ((YieldExpression)node2).getKey());
+		assertEquals( "somekey", ((Variable)((YieldExpression)node2).getKey()).getNameExpression().getEscapedCodeStr());
 	}
 
 	/**
@@ -2348,10 +2348,10 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPCoalesceExpression.class));
+		assertThat( node, instanceOf(CoalesceExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPCoalesceExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)8), ((PHPCoalesceExpression)node).getRight());
+		assertEquals( ast.getNodeById((long)7), ((CoalesceExpression)node).getLeft());
+		assertEquals( ast.getNodeById((long)8), ((CoalesceExpression)node).getRight());
 	}
 
 	/**
@@ -2525,25 +2525,25 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node3 = ast.getNodeById((long)15);
 		ASTNode node4 = ast.getNodeById((long)19);
 
-		assertThat( node, instanceOf(PHPIfElement.class));
+		assertThat( node, instanceOf(IfElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((PHPIfElement)node).getCondition());
-		assertEquals( ast.getNodeById((long)10), ((PHPIfElement)node).getStatement());
+		assertEquals( ast.getNodeById((long)8), ((IfElement)node).getCondition());
+		assertEquals( ast.getNodeById((long)10), ((IfElement)node).getStatement());
 
-		assertThat( node2, instanceOf(PHPIfElement.class));
+		assertThat( node2, instanceOf(IfElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((PHPIfElement)node2).getCondition());
-		assertEquals( ast.getNodeById((long)14), ((PHPIfElement)node2).getStatement());
+		assertEquals( ast.getNodeById((long)12), ((IfElement)node2).getCondition());
+		assertEquals( ast.getNodeById((long)14), ((IfElement)node2).getStatement());
 
-		assertThat( node3, instanceOf(PHPIfElement.class));
+		assertThat( node3, instanceOf(IfElement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPIfElement)node3).getCondition());
-		assertEquals( ast.getNodeById((long)18), ((PHPIfElement)node3).getStatement());
+		assertEquals( ast.getNodeById((long)16), ((IfElement)node3).getCondition());
+		assertEquals( ast.getNodeById((long)18), ((IfElement)node3).getStatement());
 
-		assertThat( node4, instanceOf(PHPIfElement.class));
+		assertThat( node4, instanceOf(IfElement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertNull( ((PHPIfElement)node4).getCondition());
-		assertEquals( ast.getNodeById((long)21), ((PHPIfElement)node4).getStatement());
+		assertNull( ((IfElement)node4).getCondition());
+		assertEquals( ast.getNodeById((long)21), ((IfElement)node4).getStatement());
 	}
 
 	/**
@@ -2575,12 +2575,12 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPSwitchStatement.class));
+		assertThat( node, instanceOf(SwitchStatementPHP.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPSwitchStatement)node).getExpression());
-		assertEquals( "i", ((Variable)((PHPSwitchStatement)node).getExpression()).getNameExpression().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)9), ((PHPSwitchStatement)node).getSwitchList());
-		assertEquals( 4, ((PHPSwitchStatement)node).getSwitchList().size());
+		assertEquals( ast.getNodeById((long)7), ((SwitchStatementPHP)node).getExpression());
+		assertEquals( "i", ((Variable)((SwitchStatementPHP)node).getExpression()).getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)9), ((SwitchStatementPHP)node).getSwitchList());
+		assertEquals( 4, ((SwitchStatementPHP)node).getSwitchList().size());
 	}
 
 	/**
@@ -2616,31 +2616,31 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node3 = ast.getNodeById((long)18);
 		ASTNode node4 = ast.getNodeById((long)23);
 
-		assertThat( node, instanceOf(PHPSwitchCase.class));
+		assertThat( node, instanceOf(SwitchCase.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPSwitchCase)node).getValue());
-		assertEquals( "string", ((PHPSwitchCase)node).getValue().getProperty("type"));
-		assertEquals( "foo", ((PHPSwitchCase)node).getValue().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)12), ((PHPSwitchCase)node).getStatement());
+		assertEquals( ast.getNodeById((long)11), ((SwitchCase)node).getValue());
+		assertEquals( "string", ((SwitchCase)node).getValue().getProperty("type"));
+		assertEquals( "foo", ((SwitchCase)node).getValue().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)12), ((SwitchCase)node).getStatement());
 
-		assertThat( node2, instanceOf(PHPSwitchCase.class));
+		assertThat( node2, instanceOf(SwitchCase.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPSwitchCase)node2).getValue());
-		assertEquals( "double", ((PHPSwitchCase)node2).getValue().getProperty("type"));
-		assertEquals( "1.42", ((PHPSwitchCase)node2).getValue().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)17), ((PHPSwitchCase)node2).getStatement());
+		assertEquals( ast.getNodeById((long)16), ((SwitchCase)node2).getValue());
+		assertEquals( "double", ((SwitchCase)node2).getValue().getProperty("type"));
+		assertEquals( "1.42", ((SwitchCase)node2).getValue().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)17), ((SwitchCase)node2).getStatement());
 
-		assertThat( node3, instanceOf(PHPSwitchCase.class));
+		assertThat( node3, instanceOf(SwitchCase.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((PHPSwitchCase)node3).getValue());
-		assertEquals( "integer", ((PHPSwitchCase)node3).getValue().getProperty("type"));
-		assertEquals( "2", ((PHPSwitchCase)node3).getValue().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)20), ((PHPSwitchCase)node3).getStatement());
+		assertEquals( ast.getNodeById((long)19), ((SwitchCase)node3).getValue());
+		assertEquals( "integer", ((SwitchCase)node3).getValue().getProperty("type"));
+		assertEquals( "2", ((SwitchCase)node3).getValue().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)20), ((SwitchCase)node3).getStatement());
 
-		assertThat( node4, instanceOf(PHPSwitchCase.class));
+		assertThat( node4, instanceOf(SwitchCase.class));
 		assertEquals( 2, node4.getChildCount());
-		assertNull( ((PHPSwitchCase)node4).getValue());
-		assertEquals( ast.getNodeById((long)25), ((PHPSwitchCase)node4).getStatement());
+		assertNull( ((SwitchCase)node4).getValue());
+		assertEquals( ast.getNodeById((long)25), ((SwitchCase)node4).getStatement());
 	}
 
 	/**
@@ -2668,23 +2668,23 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node2 = ast.getNodeById((long)12);
 		ASTNode node3 = ast.getNodeById((long)18);
 
-		assertThat( node, instanceOf(PHPDeclareStatement.class));
+		assertThat( node, instanceOf(DeclareStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPDeclareStatement)node).getDeclares());
-		assertEquals( ast.getNodeById((long)11), ((PHPDeclareStatement)node).getStatement());
+		assertEquals( ast.getNodeById((long)7), ((DeclareStatement)node).getDeclares());
+		assertEquals( ast.getNodeById((long)11), ((DeclareStatement)node).getStatement());
 
-		assertThat( node2, instanceOf(PHPDeclareStatement.class));
+		assertThat( node2, instanceOf(DeclareStatement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)13), ((PHPDeclareStatement)node2).getDeclares());
-		assertNull( ((PHPDeclareStatement)node2).getStatement());
+		assertEquals( ast.getNodeById((long)13), ((DeclareStatement)node2).getDeclares());
+		assertNull( ((DeclareStatement)node2).getStatement());
 		
-		assertThat( node3, instanceOf(PHPDeclareStatement.class));
+		assertThat( node3, instanceOf(DeclareStatement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)19), ((PHPDeclareStatement)node3).getDeclares());
+		assertEquals( ast.getNodeById((long)19), ((DeclareStatement)node3).getDeclares());
 		
 		// special test for the artificial ExpressionStatement node:
 
-		ASTNode node4 = ((PHPDeclareStatement)node3).getStatement();
+		ASTNode node4 = ((DeclareStatement)node3).getStatement();
 		assertThat( node4, instanceOf(ExpressionStatement.class));
 
 		ASTNode node5 = ast.getNodeById((long)24);
@@ -2813,13 +2813,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)13);
 
-		assertThat( node, instanceOf(PHPUseTrait.class));
+		assertThat( node, instanceOf(UseTrait.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((PHPUseTrait)node).getTraits());
-		assertEquals( "Foo", ((PHPUseTrait)node).getTraits().getIdentifier(0).getNameChild().getEscapedCodeStr());
-		assertEquals( "Bar", ((PHPUseTrait)node).getTraits().getIdentifier(1).getNameChild().getEscapedCodeStr());
-		assertEquals( "Buz", ((PHPUseTrait)node).getTraits().getIdentifier(2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)21), ((PHPUseTrait)node).getTraitAdaptations());
+		assertEquals( ast.getNodeById((long)14), ((UseTrait)node).getTraits());
+		assertEquals( "Foo", ((UseTrait)node).getTraits().getIdentifier(0).getNameChild().getEscapedCodeStr());
+		assertEquals( "Bar", ((UseTrait)node).getTraits().getIdentifier(1).getNameChild().getEscapedCodeStr());
+		assertEquals( "Buz", ((UseTrait)node).getTraits().getIdentifier(2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)21), ((UseTrait)node).getTraitAdaptations());
 	}
 
 	/**
@@ -2851,12 +2851,12 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)33);
 
-		assertThat( node, instanceOf(PHPTraitPrecedence.class));
+		assertThat( node, instanceOf(TraitPrecedence.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)34), ((PHPTraitPrecedence)node).getMethod());
-		assertEquals( ast.getNodeById((long)38), ((PHPTraitPrecedence)node).getInsteadOf());
-		assertEquals( "Bar", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(0).getNameChild().getEscapedCodeStr());
-		assertEquals( "Buz", ((PHPTraitPrecedence)node).getInsteadOf().getIdentifier(1).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)34), ((TraitPrecedence)node).getMethod());
+		assertEquals( ast.getNodeById((long)38), ((TraitPrecedence)node).getInsteadOf());
+		assertEquals( "Bar", ((TraitPrecedence)node).getInsteadOf().getIdentifier(0).getNameChild().getEscapedCodeStr());
+		assertEquals( "Buz", ((TraitPrecedence)node).getInsteadOf().getIdentifier(1).getNameChild().getEscapedCodeStr());
 	}
 
 	/**
@@ -3020,16 +3020,16 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)22);
 		ASTNode node2 = ast.getNodeById((long)27);
 
-		assertThat( node, instanceOf(PHPTraitAlias.class));
+		assertThat( node, instanceOf(TraitAlias.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)23), ((PHPTraitAlias)node).getMethod());
-		assertEquals( ast.getNodeById((long)26), ((PHPTraitAlias)node).getAlias());
-		assertEquals( "_qux", ((PHPTraitAlias)node).getAlias().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)23), ((TraitAlias)node).getMethod());
+		assertEquals( ast.getNodeById((long)26), ((TraitAlias)node).getAlias());
+		assertEquals( "_qux", ((TraitAlias)node).getAlias().getEscapedCodeStr());
 
-		assertThat( node2, instanceOf(PHPTraitAlias.class));
+		assertThat( node2, instanceOf(TraitAlias.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)28), ((PHPTraitAlias)node2).getMethod());
-		assertNull( ((PHPTraitAlias)node2).getAlias());
+		assertEquals( ast.getNodeById((long)28), ((TraitAlias)node2).getMethod());
+		assertNull( ((TraitAlias)node2).getAlias());
 	}
 
 	/**
@@ -3052,11 +3052,11 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPGroupUseStatement.class));
+		assertThat( node, instanceOf(GroupUseStatement.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((PHPGroupUseStatement)node).getPrefix());
-		assertEquals( "Foo", ((PHPGroupUseStatement)node).getPrefix().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)8), ((PHPGroupUseStatement)node).getUses());
+		assertEquals( ast.getNodeById((long)7), ((GroupUseStatement)node).getPrefix());
+		assertEquals( "Foo", ((GroupUseStatement)node).getPrefix().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)8), ((GroupUseStatement)node).getUses());
 	}
 
 
@@ -3266,25 +3266,25 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)10);
 		ASTNode node2 = ast.getNodeById((long)15);
 
-		assertThat( node, instanceOf(PHPParameter.class));
+		assertThat( node, instanceOf(Parameter.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((PHPParameter)node).getType());
-		assertEquals( ast.getNodeById((long)12), ((PHPParameter)node).getType().getNameChild());
-		assertEquals( "int", ((PHPParameter)node).getType().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((PHPParameter)node).getNameChild());
-		assertEquals( "bar", ((PHPParameter)node).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)14), ((PHPParameter)node).getDefault());
-		assertEquals( "3", ((PHPParameter)node).getDefault().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)11), ((Parameter)node).getType());
+		assertEquals( ast.getNodeById((long)12), ((Parameter)node).getType().getNameChild());
+		assertEquals( "int", ((Parameter)node).getType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((Parameter)node).getNameChild());
+		assertEquals( "bar", ((Parameter)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((Parameter)node).getDefault());
+		assertEquals( "3", ((Parameter)node).getDefault().getEscapedCodeStr());
 
-		assertThat( node2, instanceOf(PHPParameter.class));
+		assertThat( node2, instanceOf(Parameter.class));
 		assertEquals( 3, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((PHPParameter)node2).getType());
-		assertEquals( ast.getNodeById((long)17), ((PHPParameter)node2).getType().getNameChild());
-		assertEquals( "string", ((PHPParameter)node2).getType().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)18), ((PHPParameter)node2).getNameChild());
-		assertEquals( "buz", ((PHPParameter)node2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)19), ((PHPParameter)node2).getDefault());
-		assertEquals( "yabadabadoo", ((PHPParameter)node2).getDefault().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)16), ((Parameter)node2).getType());
+		assertEquals( ast.getNodeById((long)17), ((Parameter)node2).getType().getNameChild());
+		assertEquals( "string", ((Parameter)node2).getType().getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)18), ((Parameter)node2).getNameChild());
+		assertEquals( "buz", ((Parameter)node2).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)19), ((Parameter)node2).getDefault());
+		assertEquals( "yabadabadoo", ((Parameter)node2).getDefault().getEscapedCodeStr());
 	}
 
 
@@ -3430,21 +3430,21 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)7);
 		ASTNode node2 = ast.getNodeById((long)11);
 
-		assertThat( node, instanceOf(PHPListExpression.class));
+		assertThat( node, instanceOf(ListExpression.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( 3, ((PHPListExpression)node).size());
-		assertEquals( ast.getNodeById((long)8), ((PHPListExpression)node).getElement(0));
-		assertNull( ((PHPListExpression)node).getElement(1));
-		assertEquals( ast.getNodeById((long)11), ((PHPListExpression)node).getElement(2));
-		for( Expression element : (PHPListExpression)node)
+		assertEquals( 3, ((ListExpression)node).size());
+		assertEquals( ast.getNodeById((long)8), ((ListExpression)node).getElement(0));
+		assertNull( ((ListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)11), ((ListExpression)node).getElement(2));
+		for( Expression element : (ListExpression)node)
 			assertTrue( null == element || ast.containsValue(element));
 
-		assertThat( node2, instanceOf(PHPListExpression.class));
+		assertThat( node2, instanceOf(ListExpression.class));
 		assertEquals( 2, node2.getChildCount());
-		assertEquals( 2, ((PHPListExpression)node2).size());
-		assertEquals( ast.getNodeById((long)12), ((PHPListExpression)node2).getElement(0));
-		assertEquals( ast.getNodeById((long)14), ((PHPListExpression)node2).getElement(1));
-		for( Expression element : (PHPListExpression)node2)
+		assertEquals( 2, ((ListExpression)node2).size());
+		assertEquals( ast.getNodeById((long)12), ((ListExpression)node2).getElement(0));
+		assertEquals( ast.getNodeById((long)14), ((ListExpression)node2).getElement(1));
+		for( Expression element : (ListExpression)node2)
 			assertTrue( ast.containsValue(element));
 	}
 
@@ -3468,14 +3468,14 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPArrayExpression.class));
+		assertThat( node, instanceOf(ArrayExpression.class));
 		assertEquals( 4, node.getChildCount());
-		assertEquals( 4, ((PHPArrayExpression)node).size());
-		assertEquals( ast.getNodeById((long)7), ((PHPArrayExpression)node).getArrayElement(0));
-		assertEquals( ast.getNodeById((long)10), ((PHPArrayExpression)node).getArrayElement(1));
-		assertEquals( ast.getNodeById((long)13), ((PHPArrayExpression)node).getArrayElement(2));
-		assertEquals( ast.getNodeById((long)19), ((PHPArrayExpression)node).getArrayElement(3));
-		for( ArrayElementPHP element : (PHPArrayExpression)node)
+		assertEquals( 4, ((ArrayExpression)node).size());
+		assertEquals( ast.getNodeById((long)7), ((ArrayExpression)node).getArrayElement(0));
+		assertEquals( ast.getNodeById((long)10), ((ArrayExpression)node).getArrayElement(1));
+		assertEquals( ast.getNodeById((long)13), ((ArrayExpression)node).getArrayElement(2));
+		assertEquals( ast.getNodeById((long)19), ((ArrayExpression)node).getArrayElement(3));
+		for( ArrayElement element : (ArrayExpression)node)
 			assertTrue( ast.containsValue(element));
 	}
 
@@ -3499,17 +3499,17 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPEncapsListExpression.class));
+		assertThat( node, instanceOf(EncapsListExpression.class));
 		assertEquals( 7, node.getChildCount());
-		assertEquals( 7, ((PHPEncapsListExpression)node).size());
-		assertEquals( ast.getNodeById((long)7), ((PHPEncapsListExpression)node).getElement(0));
-		assertEquals( ast.getNodeById((long)8), ((PHPEncapsListExpression)node).getElement(1));
-		assertEquals( ast.getNodeById((long)10), ((PHPEncapsListExpression)node).getElement(2));
-		assertEquals( ast.getNodeById((long)11), ((PHPEncapsListExpression)node).getElement(3));
-		assertEquals( ast.getNodeById((long)15), ((PHPEncapsListExpression)node).getElement(4));
-		assertEquals( ast.getNodeById((long)16), ((PHPEncapsListExpression)node).getElement(5));
-		assertEquals( ast.getNodeById((long)20), ((PHPEncapsListExpression)node).getElement(6));
-		for( Expression element : (PHPEncapsListExpression)node)
+		assertEquals( 7, ((EncapsListExpression)node).size());
+		assertEquals( ast.getNodeById((long)7), ((EncapsListExpression)node).getElement(0));
+		assertEquals( ast.getNodeById((long)8), ((EncapsListExpression)node).getElement(1));
+		assertEquals( ast.getNodeById((long)10), ((EncapsListExpression)node).getElement(2));
+		assertEquals( ast.getNodeById((long)11), ((EncapsListExpression)node).getElement(3));
+		assertEquals( ast.getNodeById((long)15), ((EncapsListExpression)node).getElement(4));
+		assertEquals( ast.getNodeById((long)16), ((EncapsListExpression)node).getElement(5));
+		assertEquals( ast.getNodeById((long)20), ((EncapsListExpression)node).getElement(6));
+		for( Expression element : (EncapsListExpression)node)
 			assertTrue( ast.containsValue(element));
 	}
 
@@ -3620,13 +3620,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPIfStatement.class));
+		assertThat( node, instanceOf(IfStatement.class));
 		assertEquals( 4, node.getChildCount());
-		assertEquals( 4, ((PHPIfStatement)node).size());
-		assertEquals( ast.getNodeById((long)7), ((PHPIfStatement)node).getIfElement(0));
-		assertEquals( ast.getNodeById((long)11), ((PHPIfStatement)node).getIfElement(1));
-		assertEquals( ast.getNodeById((long)15), ((PHPIfStatement)node).getIfElement(2));
-		assertEquals( ast.getNodeById((long)19), ((PHPIfStatement)node).getIfElement(3));
+		assertEquals( 4, ((IfStatement)node).size());
+		assertEquals( ast.getNodeById((long)7), ((IfStatement)node).getIfElement(0));
+		assertEquals( ast.getNodeById((long)11), ((IfStatement)node).getIfElement(1));
+		assertEquals( ast.getNodeById((long)15), ((IfStatement)node).getIfElement(2));
+		assertEquals( ast.getNodeById((long)19), ((IfStatement)node).getIfElement(3));
 	}
 
 	/**
@@ -3658,15 +3658,15 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPSwitchList.class));
+		assertThat( node, instanceOf(SwitchList.class));
 		assertEquals( 4, node.getChildCount());
-		assertEquals( 4, ((PHPSwitchList)node).size());
+		assertEquals( 4, ((SwitchList)node).size());
 
-		assertEquals( ast.getNodeById((long)10), ((PHPSwitchList)node).getSwitchCase(0));
-		assertEquals( ast.getNodeById((long)15), ((PHPSwitchList)node).getSwitchCase(1));
-		assertEquals( ast.getNodeById((long)18), ((PHPSwitchList)node).getSwitchCase(2));
-		assertEquals( ast.getNodeById((long)23), ((PHPSwitchList)node).getSwitchCase(3));
-		for( PHPSwitchCase switchcase : (PHPSwitchList)node)
+		assertEquals( ast.getNodeById((long)10), ((SwitchList)node).getSwitchCase(0));
+		assertEquals( ast.getNodeById((long)15), ((SwitchList)node).getSwitchCase(1));
+		assertEquals( ast.getNodeById((long)18), ((SwitchList)node).getSwitchCase(2));
+		assertEquals( ast.getNodeById((long)23), ((SwitchList)node).getSwitchCase(3));
+		for( SwitchCase switchcase : (SwitchList)node)
 			assertTrue( ast.containsValue(switchcase));
 	}
 
@@ -3897,13 +3897,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)21);
 
-		assertThat( node, instanceOf(PHPTraitAdaptations.class));
+		assertThat( node, instanceOf(TraitAdaptations.class));
 		assertEquals( 3, node.getChildCount());
-		assertEquals( 3, ((PHPTraitAdaptations)node).size());
-		assertEquals( ast.getNodeById((long)22), ((PHPTraitAdaptations)node).getTraitAdaptationElement(0));
-		assertEquals( ast.getNodeById((long)27), ((PHPTraitAdaptations)node).getTraitAdaptationElement(1));
-		assertEquals( ast.getNodeById((long)33), ((PHPTraitAdaptations)node).getTraitAdaptationElement(2));
-		for( PHPTraitAdaptationElement traitAdaptation : (PHPTraitAdaptations)node)
+		assertEquals( 3, ((TraitAdaptations)node).size());
+		assertEquals( ast.getNodeById((long)22), ((TraitAdaptations)node).getTraitAdaptationElement(0));
+		assertEquals( ast.getNodeById((long)27), ((TraitAdaptations)node).getTraitAdaptationElement(1));
+		assertEquals( ast.getNodeById((long)33), ((TraitAdaptations)node).getTraitAdaptationElement(2));
+		for( TraitAdaptationElement traitAdaptation : (TraitAdaptations)node)
 			assertTrue( ast.containsValue(traitAdaptation));
 	}
 

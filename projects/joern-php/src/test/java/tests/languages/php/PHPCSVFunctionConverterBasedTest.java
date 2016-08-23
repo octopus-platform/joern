@@ -12,7 +12,7 @@ import org.junit.Before;
 import ast.ASTNode;
 import ast.expressions.CallExpressionBase;
 import ast.functionDef.FunctionDefBase;
-import ast.php.functionDef.PHPFunctionDef;
+import ast.php.functionDef.FunctionDef;
 import ast.php.functionDef.TopLevelFunctionDef;
 import cfg.ASTToCFGConverter;
 import cfg.CFG;
@@ -139,7 +139,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 
 		HashMap<String,CFG> cfgs = new HashMap<String,CFG>();
 
-		HashMap<String, PHPFunctionDef> functions = super.getAllFuncASTs(testDir);
+		HashMap<String, FunctionDef> functions = super.getAllFuncASTs(testDir);
 		for( String name : functions.keySet()) {
 
 			CFG cfg = getCFGForFuncAST(functions.get(name));
@@ -154,7 +154,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 
 		HashMap<String,UseDefGraph> udgs = new HashMap<String,UseDefGraph>();
 
-		HashMap<String, PHPFunctionDef> functions = super.getAllFuncASTs(testDir);
+		HashMap<String, FunctionDef> functions = super.getAllFuncASTs(testDir);
 		for( String name : functions.keySet()) {
 
 			CFG cfg = getCFGForFuncAST(functions.get(name));
@@ -170,7 +170,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 
 		HashMap<String,DDG> ddgs = new HashMap<String,DDG>();
 
-		HashMap<String, PHPFunctionDef> functions = super.getAllFuncASTs(testDir);
+		HashMap<String, FunctionDef> functions = super.getAllFuncASTs(testDir);
 		for( String name : functions.keySet()) {
 
 			CFG cfg = getCFGForFuncAST(functions.get(name));
@@ -188,9 +188,9 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 	 */
 	protected CG getCGForCSVFiles(String testDir) throws IOException, InvalidCSVFile {
 
-		HashSet<PHPFunctionDef> funcs = super.getAllFuncASTsUnkeyed( testDir);
+		HashSet<FunctionDef> funcs = super.getAllFuncASTsUnkeyed( testDir);
 
-		for( PHPFunctionDef func : funcs)
+		for( FunctionDef func : funcs)
 			PHPCGFactory.addFunctionDef( func);
 
 		CG cg = PHPCGFactory.newInstance();
@@ -413,7 +413,7 @@ public class PHPCSVFunctionConverterBasedTest extends PHPCSVFunctionExtractorBas
 			ASTNode dstNode = cgEdge.getDestination().getASTNode();
 
 			assert srcNode instanceof CallExpressionBase;
-			assert dstNode instanceof PHPFunctionDef;
+			assert dstNode instanceof FunctionDef;
 
 			if( srcNode.getNodeId().equals( srcid) && dstNode.getNodeId().equals( dstid))
 				return true;

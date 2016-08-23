@@ -40,55 +40,55 @@ import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.php.declarations.ClassDef;
 import ast.php.expressions.MethodCallExpression;
-import ast.php.expressions.ArrayElementPHP;
-import ast.php.expressions.PHPArrayExpression;
-import ast.php.expressions.PHPAssignmentByRefExpression;
-import ast.php.expressions.PHPCloneExpression;
-import ast.php.expressions.PHPCoalesceExpression;
-import ast.php.expressions.PHPEmptyExpression;
-import ast.php.expressions.PHPEncapsListExpression;
-import ast.php.expressions.PHPExitExpression;
-import ast.php.expressions.PHPIncludeOrEvalExpression;
-import ast.php.expressions.PHPIssetExpression;
-import ast.php.expressions.PHPListExpression;
-import ast.php.expressions.PHPMagicConstant;
-import ast.php.expressions.PHPPrintExpression;
-import ast.php.expressions.PHPReferenceExpression;
-import ast.php.expressions.PHPShellExecExpression;
-import ast.php.expressions.PHPSilenceExpression;
-import ast.php.expressions.PHPTypeHint;
-import ast.php.expressions.PHPUnpackExpression;
-import ast.php.expressions.PHPYieldExpression;
-import ast.php.expressions.PHPYieldFromExpression;
+import ast.php.expressions.ArrayElement;
+import ast.php.expressions.ArrayExpression;
+import ast.php.expressions.AssignmentByRefExpression;
+import ast.php.expressions.CloneExpression;
+import ast.php.expressions.CoalesceExpression;
+import ast.php.expressions.EmptyExpression;
+import ast.php.expressions.EncapsListExpression;
+import ast.php.expressions.ExitExpression;
+import ast.php.expressions.IncludeOrEvalExpression;
+import ast.php.expressions.IssetExpression;
+import ast.php.expressions.ListExpression;
+import ast.php.expressions.MagicConstant;
+import ast.php.expressions.PrintExpression;
+import ast.php.expressions.ReferenceExpression;
+import ast.php.expressions.ShellExecExpression;
+import ast.php.expressions.SilenceExpression;
+import ast.php.expressions.TypeHint;
+import ast.php.expressions.UnpackExpression;
+import ast.php.expressions.YieldExpression;
+import ast.php.expressions.YieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
-import ast.php.functionDef.PHPFunctionDef;
-import ast.php.functionDef.PHPParameter;
+import ast.php.functionDef.FunctionDef;
+import ast.php.functionDef.Parameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
-import ast.php.statements.PHPEchoStatement;
-import ast.php.statements.PHPGlobalStatement;
-import ast.php.statements.PHPGroupUseStatement;
-import ast.php.statements.PHPHaltCompilerStatement;
-import ast.php.statements.PHPUnsetStatement;
+import ast.php.statements.EchoStatement;
+import ast.php.statements.GlobalStatement;
+import ast.php.statements.GroupUseStatement;
+import ast.php.statements.HaltCompilerStatement;
+import ast.php.statements.UnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
-import ast.php.statements.blockstarters.PHPDeclareStatement;
-import ast.php.statements.blockstarters.PHPIfElement;
-import ast.php.statements.blockstarters.PHPIfStatement;
-import ast.php.statements.blockstarters.PHPSwitchCase;
-import ast.php.statements.blockstarters.PHPSwitchList;
-import ast.php.statements.blockstarters.PHPSwitchStatement;
-import ast.php.statements.blockstarters.PHPTraitAdaptations;
-import ast.php.statements.blockstarters.PHPTraitAlias;
-import ast.php.statements.blockstarters.PHPTraitPrecedence;
-import ast.php.statements.blockstarters.PHPUseTrait;
+import ast.php.statements.blockstarters.DeclareStatement;
+import ast.php.statements.blockstarters.IfElement;
+import ast.php.statements.blockstarters.IfStatement;
+import ast.php.statements.blockstarters.SwitchCase;
+import ast.php.statements.blockstarters.SwitchList;
+import ast.php.statements.blockstarters.SwitchStatementPHP;
+import ast.php.statements.blockstarters.TraitAdaptations;
+import ast.php.statements.blockstarters.TraitAlias;
+import ast.php.statements.blockstarters.TraitPrecedence;
+import ast.php.statements.blockstarters.UseTrait;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
 import ast.statements.blockstarters.CatchList;
@@ -682,7 +682,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private static long handleFunction(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPFunctionDef newNode = new PHPFunctionDef();
+		FunctionDef newNode = new FunctionDef();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -807,7 +807,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleMagicConst(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPMagicConstant newNode = new PHPMagicConstant();
+		MagicConstant newNode = new MagicConstant();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -830,7 +830,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleTypeHint(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPTypeHint newNode = new PHPTypeHint();
+		TypeHint newNode = new TypeHint();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -902,7 +902,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleUnpack(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPUnpackExpression newNode = new PHPUnpackExpression();
+		UnpackExpression newNode = new UnpackExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -994,7 +994,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleEmpty(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPEmptyExpression newNode = new PHPEmptyExpression();
+		EmptyExpression newNode = new EmptyExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1017,7 +1017,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleIsset(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPIssetExpression newNode = new PHPIssetExpression();
+		IssetExpression newNode = new IssetExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1040,7 +1040,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleSilence(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPSilenceExpression newNode = new PHPSilenceExpression();
+		SilenceExpression newNode = new SilenceExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1063,7 +1063,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleShellExec(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPShellExecExpression newNode = new PHPShellExecExpression();
+		ShellExecExpression newNode = new ShellExecExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1086,7 +1086,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleClone(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPCloneExpression newNode = new PHPCloneExpression();
+		CloneExpression newNode = new CloneExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1109,7 +1109,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleExit(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPExitExpression newNode = new PHPExitExpression();
+		ExitExpression newNode = new ExitExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1132,7 +1132,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handlePrint(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPPrintExpression newNode = new PHPPrintExpression();
+		PrintExpression newNode = new PrintExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1155,7 +1155,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleIncludeOrEval(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPIncludeOrEvalExpression newNode = new PHPIncludeOrEvalExpression();
+		IncludeOrEvalExpression newNode = new IncludeOrEvalExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1293,7 +1293,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleYieldFrom(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPYieldFromExpression newNode = new PHPYieldFromExpression();
+		YieldFromExpression newNode = new YieldFromExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1316,7 +1316,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleGlobal(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPGlobalStatement newNode = new PHPGlobalStatement();
+		GlobalStatement newNode = new GlobalStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1339,7 +1339,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleUnset(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPUnsetStatement newNode = new PHPUnsetStatement();
+		UnsetStatement newNode = new UnsetStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1408,7 +1408,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleReference(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPReferenceExpression newNode = new PHPReferenceExpression();
+		ReferenceExpression newNode = new ReferenceExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1431,7 +1431,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleHaltCompiler(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPHaltCompilerStatement newNode = new PHPHaltCompilerStatement();
+		HaltCompilerStatement newNode = new HaltCompilerStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1454,7 +1454,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleEcho(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPEchoStatement newNode = new PHPEchoStatement();
+		EchoStatement newNode = new EchoStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1716,7 +1716,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleAssignByRef(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPAssignmentByRefExpression newNode = new PHPAssignmentByRefExpression();
+		AssignmentByRefExpression newNode = new AssignmentByRefExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1877,7 +1877,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleArrayElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		ArrayElementPHP newNode = new ArrayElementPHP();
+		ArrayElement newNode = new ArrayElement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1952,7 +1952,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleYield(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPYieldExpression newNode = new PHPYieldExpression();
+		YieldExpression newNode = new YieldExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1975,7 +1975,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleCoalesce(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPCoalesceExpression newNode = new PHPCoalesceExpression();
+		CoalesceExpression newNode = new CoalesceExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2067,7 +2067,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleIfElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPIfElement newNode = new PHPIfElement();
+		IfElement newNode = new IfElement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2090,7 +2090,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleSwitch(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPSwitchStatement newNode = new PHPSwitchStatement();
+		SwitchStatementPHP newNode = new SwitchStatementPHP();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2113,7 +2113,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleSwitchCase(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPSwitchCase newNode = new PHPSwitchCase();
+		SwitchCase newNode = new SwitchCase();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2136,7 +2136,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleDeclare(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPDeclareStatement newNode = new PHPDeclareStatement();
+		DeclareStatement newNode = new DeclareStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2205,7 +2205,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleUseTrait(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPUseTrait newNode = new PHPUseTrait();
+		UseTrait newNode = new UseTrait();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2228,7 +2228,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleTraitPrecedence(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPTraitPrecedence newNode = new PHPTraitPrecedence();
+		TraitPrecedence newNode = new TraitPrecedence();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2320,7 +2320,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleTraitAlias(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPTraitAlias newNode = new PHPTraitAlias();
+		TraitAlias newNode = new TraitAlias();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2343,7 +2343,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleGroupUse(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPGroupUseStatement newNode = new PHPGroupUseStatement();
+		GroupUseStatement newNode = new GroupUseStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2498,7 +2498,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleParameter(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPParameter newNode = new PHPParameter();
+		Parameter newNode = new Parameter();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2596,7 +2596,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPListExpression newNode = new PHPListExpression();
+		ListExpression newNode = new ListExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2619,7 +2619,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleArray(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPArrayExpression newNode = new PHPArrayExpression();
+		ArrayExpression newNode = new ArrayExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2642,7 +2642,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleEncapsList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPEncapsListExpression newNode = new PHPEncapsListExpression();
+		EncapsListExpression newNode = new EncapsListExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2711,7 +2711,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleIf(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPIfStatement newNode = new PHPIfStatement();
+		IfStatement newNode = new IfStatement();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2734,7 +2734,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleSwitchList(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPSwitchList newNode = new PHPSwitchList();
+		SwitchList newNode = new SwitchList();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -2918,7 +2918,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleTraitAdaptations(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPTraitAdaptations newNode = new PHPTraitAdaptations();
+		TraitAdaptations newNode = new TraitAdaptations();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

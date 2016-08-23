@@ -4,7 +4,7 @@ import ast.ASTNodeProperties;
 import ast.expressions.Identifier;
 import ast.functionDef.ParameterList;
 
-public class TopLevelFunctionDef extends PHPFunctionDef
+public class TopLevelFunctionDef extends FunctionDef
 {
 	@Override
 	public ParameterList getParameterList()

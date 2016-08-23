@@ -8,10 +8,10 @@ import ast.expressions.Expression;
 import ast.functionDef.FunctionDefBase;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
-import ast.php.statements.blockstarters.PHPIfElement;
-import ast.php.statements.blockstarters.PHPIfStatement;
-import ast.php.statements.blockstarters.PHPSwitchCase;
-import ast.php.statements.blockstarters.PHPSwitchStatement;
+import ast.php.statements.blockstarters.IfElement;
+import ast.php.statements.blockstarters.IfStatement;
+import ast.php.statements.blockstarters.SwitchCase;
+import ast.php.statements.blockstarters.SwitchStatementPHP;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.IfStatementBase;
@@ -55,9 +55,9 @@ public class PHPCFGFactory extends CFGFactory {
 	{
 		try
 		{
-			PHPIfStatement phpIfStatement = (PHPIfStatement)ifStatement;
+			IfStatement phpIfStatement = (IfStatement)ifStatement;
 			
-			Iterator<PHPIfElement> iterator = phpIfStatement.iterator();
+			Iterator<IfElement> iterator = phpIfStatement.iterator();
 			if(!iterator.hasNext())
 				return newErrorInstance();
 
@@ -71,11 +71,11 @@ public class PHPCFGFactory extends CFGFactory {
 		}
 	}
 
-	private static CFG convertIfElem(Iterator<PHPIfElement> iterator)
+	private static CFG convertIfElem(Iterator<IfElement> iterator)
 	{
 		CFG block = new CFG();
 
-		PHPIfElement ifElem = iterator.next();
+		IfElement ifElem = iterator.next();
 		Expression condition = ifElem.getCondition();
 		Statement statement = ifElem.getStatement();
 		CFG ifBlock = convert(statement);
@@ -115,7 +115,7 @@ public class PHPCFGFactory extends CFGFactory {
 	{
 		try
 		{
-			PHPSwitchStatement phpSwitchStatement = (PHPSwitchStatement)switchStatement;
+			SwitchStatementPHP phpSwitchStatement = (SwitchStatementPHP)switchStatement;
 
 			// create new CFG block
 			CFG switchBlock = new CFG();
@@ -128,7 +128,7 @@ public class PHPCFGFactory extends CFGFactory {
 
 			// create a CFG block for each case and connect them
 			boolean defaultExists = false;
-			for( PHPSwitchCase switchCase : phpSwitchStatement.getSwitchList()) {
+			for( SwitchCase switchCase : phpSwitchStatement.getSwitchList()) {
 				
 				// convert case block and add to main switch block
 				CFG caseBody = convert(switchCase.getStatement());

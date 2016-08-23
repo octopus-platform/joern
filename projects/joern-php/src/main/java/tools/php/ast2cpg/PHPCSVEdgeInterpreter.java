@@ -42,54 +42,54 @@ import ast.php.declarations.ClassDef;
 import ast.php.expressions.ClassExpression;
 import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
-import ast.php.expressions.ArrayElementPHP;
-import ast.php.expressions.PHPArrayExpression;
-import ast.php.expressions.PHPAssignmentByRefExpression;
-import ast.php.expressions.PHPCloneExpression;
-import ast.php.expressions.PHPCoalesceExpression;
-import ast.php.expressions.PHPEmptyExpression;
-import ast.php.expressions.PHPEncapsListExpression;
-import ast.php.expressions.PHPExitExpression;
-import ast.php.expressions.PHPIncludeOrEvalExpression;
-import ast.php.expressions.PHPIssetExpression;
-import ast.php.expressions.PHPListExpression;
-import ast.php.expressions.PHPPrintExpression;
-import ast.php.expressions.PHPReferenceExpression;
-import ast.php.expressions.PHPShellExecExpression;
-import ast.php.expressions.PHPSilenceExpression;
-import ast.php.expressions.PHPUnpackExpression;
-import ast.php.expressions.PHPYieldExpression;
-import ast.php.expressions.PHPYieldFromExpression;
+import ast.php.expressions.ArrayElement;
+import ast.php.expressions.ArrayExpression;
+import ast.php.expressions.AssignmentByRefExpression;
+import ast.php.expressions.CloneExpression;
+import ast.php.expressions.CoalesceExpression;
+import ast.php.expressions.EmptyExpression;
+import ast.php.expressions.EncapsListExpression;
+import ast.php.expressions.ExitExpression;
+import ast.php.expressions.IncludeOrEvalExpression;
+import ast.php.expressions.IssetExpression;
+import ast.php.expressions.ListExpression;
+import ast.php.expressions.PrintExpression;
+import ast.php.expressions.ReferenceExpression;
+import ast.php.expressions.ShellExecExpression;
+import ast.php.expressions.SilenceExpression;
+import ast.php.expressions.UnpackExpression;
+import ast.php.expressions.YieldExpression;
+import ast.php.expressions.YieldFromExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.ClosureUses;
 import ast.php.functionDef.ClosureVar;
 import ast.php.functionDef.Method;
-import ast.php.functionDef.PHPFunctionDef;
-import ast.php.functionDef.PHPParameter;
+import ast.php.functionDef.FunctionDef;
+import ast.php.functionDef.Parameter;
 import ast.php.functionDef.TopLevelFunctionDef;
 import ast.php.statements.ClassConstantDeclaration;
 import ast.php.statements.ConstantDeclaration;
 import ast.php.statements.ConstantElement;
-import ast.php.statements.PHPEchoStatement;
-import ast.php.statements.PHPGlobalStatement;
-import ast.php.statements.PHPGroupUseStatement;
-import ast.php.statements.PHPHaltCompilerStatement;
-import ast.php.statements.PHPUnsetStatement;
+import ast.php.statements.EchoStatement;
+import ast.php.statements.GlobalStatement;
+import ast.php.statements.GroupUseStatement;
+import ast.php.statements.HaltCompilerStatement;
+import ast.php.statements.UnsetStatement;
 import ast.php.statements.PropertyDeclaration;
 import ast.php.statements.PropertyElement;
 import ast.php.statements.StaticVariableDeclaration;
-import ast.php.statements.blockstarters.PHPDeclareStatement;
-import ast.php.statements.blockstarters.PHPIfElement;
-import ast.php.statements.blockstarters.PHPIfStatement;
-import ast.php.statements.blockstarters.PHPSwitchCase;
-import ast.php.statements.blockstarters.PHPSwitchList;
-import ast.php.statements.blockstarters.PHPSwitchStatement;
-import ast.php.statements.blockstarters.PHPTraitAdaptationElement;
-import ast.php.statements.blockstarters.PHPTraitAdaptations;
-import ast.php.statements.blockstarters.PHPTraitAlias;
-import ast.php.statements.blockstarters.PHPTraitPrecedence;
-import ast.php.statements.blockstarters.PHPUseTrait;
+import ast.php.statements.blockstarters.DeclareStatement;
+import ast.php.statements.blockstarters.IfElement;
+import ast.php.statements.blockstarters.IfStatement;
+import ast.php.statements.blockstarters.SwitchCase;
+import ast.php.statements.blockstarters.SwitchList;
+import ast.php.statements.blockstarters.SwitchStatementPHP;
+import ast.php.statements.blockstarters.TraitAdaptationElement;
+import ast.php.statements.blockstarters.TraitAdaptations;
+import ast.php.statements.blockstarters.TraitAlias;
+import ast.php.statements.blockstarters.TraitPrecedence;
+import ast.php.statements.blockstarters.UseTrait;
 import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.UseStatement;
@@ -166,7 +166,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleTopLevelFunction((TopLevelFunctionDef)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_FUNC_DECL:
-				errno = handleFunction((PHPFunctionDef)startNode, endNode, childnum);
+				errno = handleFunction((FunctionDef)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLOSURE:
 				errno = handleClosure((Closure)startNode, endNode, childnum);
@@ -194,7 +194,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleConstant((Constant)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNPACK:
-				errno = handleUnpack((PHPUnpackExpression)startNode, endNode, childnum);
+				errno = handleUnpack((UnpackExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_PLUS:
 				errno = handleUnaryPlus((UnaryPlusExpression)startNode, endNode, childnum);
@@ -206,28 +206,28 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleCast((CastExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_EMPTY:
-				errno = handleEmpty((PHPEmptyExpression)startNode, endNode, childnum);
+				errno = handleEmpty((EmptyExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ISSET:
-				errno = handleIsset((PHPIssetExpression)startNode, endNode, childnum);
+				errno = handleIsset((IssetExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_SILENCE:
-				errno = handleSilence((PHPSilenceExpression)startNode, endNode, childnum);
+				errno = handleSilence((SilenceExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_SHELL_EXEC:
-				errno = handleShellExec((PHPShellExecExpression)startNode, endNode, childnum);
+				errno = handleShellExec((ShellExecExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLONE:
-				errno = handleClone((PHPCloneExpression)startNode, endNode, childnum);
+				errno = handleClone((CloneExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_EXIT:
-				errno = handleExit((PHPExitExpression)startNode, endNode, childnum);
+				errno = handleExit((ExitExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PRINT:
-				errno = handlePrint((PHPPrintExpression)startNode, endNode, childnum);
+				errno = handlePrint((PrintExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_INCLUDE_OR_EVAL:
-				errno = handleIncludeOrEval((PHPIncludeOrEvalExpression)startNode, endNode, childnum);
+				errno = handleIncludeOrEval((IncludeOrEvalExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNARY_OP:
 				errno = handleUnaryOperation((UnaryOperationExpression)startNode, endNode, childnum);
@@ -245,15 +245,15 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handlePostDec((PostDecOperationExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD_FROM:
-				errno = handleYieldFrom((PHPYieldFromExpression)startNode, endNode, childnum);
+				errno = handleYieldFrom((YieldFromExpression)startNode, endNode, childnum);
 				break;
 
 			// statements
 			case PHPCSVNodeTypes.TYPE_GLOBAL:
-				errno = handleGlobal((PHPGlobalStatement)startNode, endNode, childnum);
+				errno = handleGlobal((GlobalStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_UNSET:
-				errno = handleUnset((PHPUnsetStatement)startNode, endNode, childnum);
+				errno = handleUnset((UnsetStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_RETURN:
 				errno = handleReturn((ReturnStatement)startNode, endNode, childnum);
@@ -262,13 +262,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleLabel((Label)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_REF:
-				errno = handleReference((PHPReferenceExpression)startNode, endNode, childnum);
+				errno = handleReference((ReferenceExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_HALT_COMPILER:
-				errno = handleHaltCompiler((PHPHaltCompilerStatement)startNode, endNode, childnum);
+				errno = handleHaltCompiler((HaltCompilerStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ECHO:
-				errno = handleEcho((PHPEchoStatement)startNode, endNode, childnum);
+				errno = handleEcho((EchoStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_THROW:
 				errno = handleThrow((ThrowStatement)startNode, endNode, childnum);
@@ -304,7 +304,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleAssign((AssignmentExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ASSIGN_REF:
-				errno = handleAssignByRef((PHPAssignmentByRefExpression)startNode, endNode, childnum);
+				errno = handleAssignByRef((AssignmentByRefExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ASSIGN_OP:
 				errno = handleAssignWithOp((AssignmentWithOpExpression)startNode, endNode, childnum);
@@ -325,7 +325,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleOr((OrExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
-				errno = handleArrayElement((ArrayElementPHP)startNode, endNode, childnum);
+				errno = handleArrayElement((ArrayElement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_NEW:
 				errno = handleNew((NewExpression)startNode, endNode, childnum);
@@ -334,10 +334,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleInstanceof((InstanceofExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_YIELD:
-				errno = handleYield((PHPYieldExpression)startNode, endNode, childnum);
+				errno = handleYield((YieldExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_COALESCE:
-				errno = handleCoalesce((PHPCoalesceExpression)startNode, endNode, childnum);
+				errno = handleCoalesce((CoalesceExpression)startNode, endNode, childnum);
 				break;
 
 			// statements
@@ -351,28 +351,28 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleDo((DoStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_IF_ELEM:
-				errno = handleIfElement((PHPIfElement)startNode, endNode, childnum);
+				errno = handleIfElement((IfElement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_SWITCH:
-				errno = handleSwitch((PHPSwitchStatement)startNode, endNode, childnum);
+				errno = handleSwitch((SwitchStatementPHP)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_SWITCH_CASE:
-				errno = handleSwitchCase((PHPSwitchCase)startNode, endNode, childnum);
+				errno = handleSwitchCase((SwitchCase)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PROP_ELEM:
 				errno = handlePropertyElement((PropertyElement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_DECLARE:
-				errno = handleDeclare((PHPDeclareStatement)startNode, endNode, childnum);
+				errno = handleDeclare((DeclareStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CONST_ELEM:
 				errno = handleConstantElement((ConstantElement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_USE_TRAIT:
-				errno = handleUseTrait((PHPUseTrait)startNode, endNode, childnum);
+				errno = handleUseTrait((UseTrait)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_PRECEDENCE:
-				errno = handleTraitPrecedence((PHPTraitPrecedence)startNode, endNode, childnum);
+				errno = handleTraitPrecedence((TraitPrecedence)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_METHOD_REFERENCE:
 				errno = handleMethodReference((MethodReference)startNode, endNode, childnum);
@@ -384,10 +384,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleUseElement((UseElement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ALIAS:
-				errno = handleTraitAlias((PHPTraitAlias)startNode, endNode, childnum);
+				errno = handleTraitAlias((TraitAlias)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_GROUP_USE:
-				errno = handleGroupUse((PHPGroupUseStatement)startNode, endNode, childnum);
+				errno = handleGroupUse((GroupUseStatement)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 3 children
@@ -410,7 +410,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleCatch((CatchStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_PARAM:
-				errno = handleParameter((PHPParameter)startNode, endNode, childnum);
+				errno = handleParameter((Parameter)startNode, endNode, childnum);
 				break;
 
 			// nodes with exactly 4 children
@@ -427,13 +427,13 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleArgumentList((ArgumentList)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_LIST:
-				errno = handleList((PHPListExpression)startNode, endNode, childnum);
+				errno = handleList((ListExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY:
-				errno = handleArray((PHPArrayExpression)startNode, endNode, childnum);
+				errno = handleArray((ArrayExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ENCAPS_LIST:
-				errno = handleEncapsList((PHPEncapsListExpression)startNode, endNode, childnum);
+				errno = handleEncapsList((EncapsListExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_EXPR_LIST:
 				errno = handleExpressionList((ExpressionList)startNode, endNode, childnum);
@@ -442,10 +442,10 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleCompound((CompoundStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_IF:
-				errno = handleIf((PHPIfStatement)startNode, endNode, childnum);
+				errno = handleIf((IfStatement)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_SWITCH_LIST:
-				errno = handleSwitchList((PHPSwitchList)startNode, endNode, childnum);
+				errno = handleSwitchList((SwitchList)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CATCH_LIST:
 				errno = handleCatchList((CatchList)startNode, endNode, childnum);
@@ -469,7 +469,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleIdentifierList((IdentifierList)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_TRAIT_ADAPTATIONS:
-				errno = handleTraitAdaptations((PHPTraitAdaptations)startNode, endNode, childnum);
+				errno = handleTraitAdaptations((TraitAdaptations)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_USE:
 				errno = handleUseStatement((UseStatement)startNode, endNode, childnum);
@@ -558,7 +558,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleFunction( PHPFunctionDef startNode, ASTNode endNode, int childnum)
+	private int handleFunction( FunctionDef startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -717,7 +717,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleUnpack( PHPUnpackExpression startNode, ASTNode endNode, int childnum)
+	private int handleUnpack( UnpackExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -785,7 +785,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleEmpty( PHPEmptyExpression startNode, ASTNode endNode, int childnum)
+	private int handleEmpty( EmptyExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -802,7 +802,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleIsset( PHPIssetExpression startNode, ASTNode endNode, int childnum)
+	private int handleIsset( IssetExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -819,7 +819,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleSilence( PHPSilenceExpression startNode, ASTNode endNode, int childnum)
+	private int handleSilence( SilenceExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -836,7 +836,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleShellExec( PHPShellExecExpression startNode, ASTNode endNode, int childnum)
+	private int handleShellExec( ShellExecExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -853,7 +853,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleClone( PHPCloneExpression startNode, ASTNode endNode, int childnum)
+	private int handleClone( CloneExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -870,7 +870,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleExit( PHPExitExpression startNode, ASTNode endNode, int childnum)
+	private int handleExit( ExitExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -890,7 +890,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handlePrint( PHPPrintExpression startNode, ASTNode endNode, int childnum)
+	private int handlePrint( PrintExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -907,7 +907,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleIncludeOrEval( PHPIncludeOrEvalExpression startNode, ASTNode endNode, int childnum)
+	private int handleIncludeOrEval( IncludeOrEvalExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1009,7 +1009,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleYieldFrom( PHPYieldFromExpression startNode, ASTNode endNode, int childnum)
+	private int handleYieldFrom( YieldFromExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1026,7 +1026,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleGlobal( PHPGlobalStatement startNode, ASTNode endNode, int childnum)
+	private int handleGlobal( GlobalStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1043,7 +1043,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleUnset( PHPUnsetStatement startNode, ASTNode endNode, int childnum)
+	private int handleUnset( UnsetStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1097,7 +1097,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleReference( PHPReferenceExpression startNode, ASTNode endNode, int childnum)
+	private int handleReference( ReferenceExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1114,7 +1114,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleHaltCompiler( PHPHaltCompilerStatement startNode, ASTNode endNode, int childnum)
+	private int handleHaltCompiler( HaltCompilerStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1131,7 +1131,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleEcho( PHPEchoStatement startNode, ASTNode endNode, int childnum)
+	private int handleEcho( EchoStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1369,7 +1369,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleAssignByRef( PHPAssignmentByRefExpression startNode, ASTNode endNode, int childnum)
+	private int handleAssignByRef( AssignmentByRefExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1509,7 +1509,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleArrayElement( ArrayElementPHP startNode, ASTNode endNode, int childnum)
+	private int handleArrayElement( ArrayElement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1576,7 +1576,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleYield( PHPYieldExpression startNode, ASTNode endNode, int childnum)
+	private int handleYield( YieldExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1602,7 +1602,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleCoalesce( PHPCoalesceExpression startNode, ASTNode endNode, int childnum)
+	private int handleCoalesce( CoalesceExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1695,7 +1695,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleIfElement( PHPIfElement startNode, ASTNode endNode, int childnum)
+	private int handleIfElement( IfElement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1723,7 +1723,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleSwitch( PHPSwitchStatement startNode, ASTNode endNode, int childnum)
+	private int handleSwitch( SwitchStatementPHP startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1733,7 +1733,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				startNode.setExpression((Expression)endNode);
 				break;
 			case 1: // list child: PHPSwitchList node
-				startNode.setSwitchList((PHPSwitchList)endNode);
+				startNode.setSwitchList((SwitchList)endNode);
 				break;
 
 			default:
@@ -1743,7 +1743,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleSwitchCase( PHPSwitchCase startNode, ASTNode endNode, int childnum)
+	private int handleSwitchCase( SwitchCase startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1766,7 +1766,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleDeclare( PHPDeclareStatement startNode, ASTNode endNode, int childnum)
+	private int handleDeclare( DeclareStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1834,7 +1834,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleUseTrait( PHPUseTrait startNode, ASTNode endNode, int childnum)
+	private int handleUseTrait( UseTrait startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1847,7 +1847,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				if( endNode instanceof NullNode)
 					startNode.addChild(endNode);
 				else
-					startNode.setTraitAdaptations((PHPTraitAdaptations)endNode);
+					startNode.setTraitAdaptations((TraitAdaptations)endNode);
 				break;
 
 			default:
@@ -1857,7 +1857,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleTraitPrecedence( PHPTraitPrecedence startNode, ASTNode endNode, int childnum)
+	private int handleTraitPrecedence( TraitPrecedence startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1949,7 +1949,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleTraitAlias( PHPTraitAlias startNode, ASTNode endNode, int childnum)
+	private int handleTraitAlias( TraitAlias startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1972,7 +1972,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleGroupUse( PHPGroupUseStatement startNode, ASTNode endNode, int childnum)
+	private int handleGroupUse( GroupUseStatement startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -2116,7 +2116,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleParameter( PHPParameter startNode, ASTNode endNode, int childnum)
+	private int handleParameter( Parameter startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -2238,7 +2238,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return 0;
 	}
 
-	private int handleList( PHPListExpression startNode, ASTNode endNode, int childnum)
+	private int handleList( ListExpression startNode, ASTNode endNode, int childnum)
 	{
 		// This should be either a null node or an Expression:
 		// There is no closer ancestor than ASTNode itself, so we do not cast endNode
@@ -2248,14 +2248,14 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return 0;
 	}
 
-	private int handleArray( PHPArrayExpression startNode, ASTNode endNode, int childnum)
+	private int handleArray( ArrayExpression startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addArrayElement((ArrayElementPHP)endNode);
+		startNode.addArrayElement((ArrayElement)endNode);
 
 		return 0;
 	}
 
-	private int handleEncapsList( PHPEncapsListExpression startNode, ASTNode endNode, int childnum)
+	private int handleEncapsList( EncapsListExpression startNode, ASTNode endNode, int childnum)
 	{
 		startNode.addElement((Expression)endNode);
 
@@ -2278,16 +2278,16 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return 0;
 	}
 
-	private int handleIf( PHPIfStatement startNode, ASTNode endNode, int childnum)
+	private int handleIf( IfStatement startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addIfElement((PHPIfElement)endNode);
+		startNode.addIfElement((IfElement)endNode);
 
 		return 0;
 	}
 
-	private int handleSwitchList( PHPSwitchList startNode, ASTNode endNode, int childnum)
+	private int handleSwitchList( SwitchList startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addSwitchCase((PHPSwitchCase)endNode);
+		startNode.addSwitchCase((SwitchCase)endNode);
 
 		return 0;
 	}
@@ -2301,7 +2301,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	private int handleParameterList( ParameterList startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addParameter((PHPParameter)endNode);
+		startNode.addParameter((Parameter)endNode);
 
 		return 0;
 	}
@@ -2341,9 +2341,9 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return 0;
 	}
 
-	private int handleTraitAdaptations( PHPTraitAdaptations startNode, ASTNode endNode, int childnum)
+	private int handleTraitAdaptations( TraitAdaptations startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addTraitAdaptationElement((PHPTraitAdaptationElement)endNode);
+		startNode.addTraitAdaptationElement((TraitAdaptationElement)endNode);
 
 		return 0;
 	}

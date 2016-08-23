@@ -13,7 +13,7 @@ import ast.php.expressions.MethodCallExpression;
 import ast.php.expressions.StaticCallExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
-import ast.php.functionDef.PHPFunctionDef;
+import ast.php.functionDef.FunctionDef;
 import ast.php.functionDef.TopLevelFunctionDef;
 import cg.CG;
 import cg.CGEdge;
@@ -24,7 +24,7 @@ import misc.MultiHashMap;
 public class PHPCGFactory {
 
 	// maintains a map of known function names (e.g., "B\foo" -> function foo() in namespace B)
-	private static HashMap<String,PHPFunctionDef> functionDefs = new HashMap<String,PHPFunctionDef>();
+	private static HashMap<String,FunctionDef> functionDefs = new HashMap<String,FunctionDef>();
 	// maintains a list of function calls
 	private static LinkedList<CallExpressionBase> functionCalls = new LinkedList<CallExpressionBase>();
 	
@@ -280,7 +280,7 @@ public class PHPCGFactory {
 	 * 
 	 * @return true if an edge was added, false otherwise
 	 */
-	private static boolean addCallEdgeIfDefinitionKnown(CG cg, HashMap<String,? extends PHPFunctionDef> defSet, CallExpressionBase functionCall, String functionKey) {
+	private static boolean addCallEdgeIfDefinitionKnown(CG cg, HashMap<String,? extends FunctionDef> defSet, CallExpressionBase functionCall, String functionKey) {
 		
 		boolean ret = false;
 		
@@ -296,7 +296,7 @@ public class PHPCGFactory {
 	 * 
 	 * @return true if an edge was added, false otherwise
 	 */
-	private static boolean addCallEdge(CG cg, CallExpressionBase functionCall, PHPFunctionDef functionDef) {
+	private static boolean addCallEdge(CG cg, CallExpressionBase functionCall, FunctionDef functionDef) {
 		
 		boolean ret = false;
 		
@@ -337,7 +337,7 @@ public class PHPCGFactory {
 	 *         then returns that function definition. Otherwise, returns null. For non-static method
 	 *         definitions, always returns null.
 	 */
-	public static PHPFunctionDef addFunctionDef( PHPFunctionDef functionDef) {
+	public static FunctionDef addFunctionDef( FunctionDef functionDef) {
 
 		// artificial toplevel functions wrapping toplevel code cannot be called
 		if( functionDef instanceof TopLevelFunctionDef)

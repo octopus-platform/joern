@@ -12,7 +12,7 @@ import java.util.LinkedHashSet;
 
 import org.junit.Before;
 
-import ast.php.functionDef.PHPFunctionDef;
+import ast.php.functionDef.FunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import inputModules.csv.csvFuncExtractor.CSVFunctionExtractor;
 import tools.php.ast2cpg.PHPCSVEdgeInterpreter;
@@ -32,17 +32,17 @@ public class PHPCSVFunctionExtractorBasedTest extends PHPCSVBasedTest
 		this.extractor.setInterpreters(new PHPCSVNodeInterpreter(), new PHPCSVEdgeInterpreter());
 	}
 
-	protected HashMap<String,PHPFunctionDef> getAllFuncASTs( String testDir)
+	protected HashMap<String,FunctionDef> getAllFuncASTs( String testDir)
 			throws IOException, InvalidCSVFile {
 
-		HashMap<String,PHPFunctionDef> functions = new LinkedHashMap<String,PHPFunctionDef>();
+		HashMap<String,FunctionDef> functions = new LinkedHashMap<String,FunctionDef>();
 
 	    BufferedReader nodeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + nodesFile));
 	    BufferedReader edgeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + edgesFile));
 
 		this.extractor.initialize(nodeFileReader, edgeFileReader);
-		PHPFunctionDef function;
-		while( (function = (PHPFunctionDef)extractor.getNextFunction()) != null) {
+		FunctionDef function;
+		while( (function = (FunctionDef)extractor.getNextFunction()) != null) {
 
 			functions.put( function.getName(), function);
 		}
@@ -50,17 +50,17 @@ public class PHPCSVFunctionExtractorBasedTest extends PHPCSVBasedTest
 		return functions;
 	}
 
-	protected HashSet<PHPFunctionDef> getAllFuncASTsUnkeyed( String testDir)
+	protected HashSet<FunctionDef> getAllFuncASTsUnkeyed( String testDir)
 			throws IOException, InvalidCSVFile {
 
-		HashSet<PHPFunctionDef> functions = new LinkedHashSet<PHPFunctionDef>();
+		HashSet<FunctionDef> functions = new LinkedHashSet<FunctionDef>();
 
 	    BufferedReader nodeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + nodesFile));
 	    BufferedReader edgeFileReader = new BufferedReader(new FileReader(getSampleDir() + File.separator + testDir + File.separator + edgesFile));
 
 		this.extractor.initialize(nodeFileReader, edgeFileReader);
-		PHPFunctionDef function;
-		while( (function = (PHPFunctionDef)extractor.getNextFunction()) != null) {
+		FunctionDef function;
+		while( (function = (FunctionDef)extractor.getNextFunction()) != null) {
 
 			functions.add( function);
 		}

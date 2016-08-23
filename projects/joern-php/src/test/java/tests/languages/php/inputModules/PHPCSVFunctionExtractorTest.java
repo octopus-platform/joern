@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.functionDef.FunctionDefBase;
-import ast.php.functionDef.PHPFunctionDef;
+import ast.php.functionDef.FunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVFunctionExtractorBasedTest;
 
@@ -83,12 +83,12 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testSingleFunction() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testSingleFunction");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testSingleFunction");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
 		
 		assertEquals( 2, funcs.size());
 		
@@ -103,12 +103,12 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testFunctionPlusTopLevel() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testFunctionPlusTopLevel");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testFunctionPlusTopLevel");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
 		
 		assertEquals( 2, funcs.size());
 		
@@ -124,12 +124,12 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testTopLevelFuncTopLevel() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testTopLevelFuncTopLevel");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testTopLevelFuncTopLevel");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
 		
 		assertEquals( 2, funcs.size());
 		
@@ -144,13 +144,13 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testTwoFunctions() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testTwoFunctions");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testTwoFunctions");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
 		
 		assertEquals( 3, funcs.size());
 
@@ -167,13 +167,13 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testFunctionWithInnerFunction() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testFunctionWithInnerFunction");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testFunctionWithInnerFunction");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
 		
 		assertEquals( 3, funcs.size());
 
@@ -191,14 +191,14 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testTwoFunctionsAndInnerFunction() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testTwoFunctionsAndInnerFunction");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testTwoFunctionsAndInnerFunction");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
-		PHPFunctionDef function4 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
+		FunctionDef function4 = it.next();
 		
 		assertEquals( 4, funcs.size());
 
@@ -216,13 +216,13 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testFunctionWithClosure() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testFunctionWithClosure");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testFunctionWithClosure");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
 		
 		assertEquals( 3, funcs.size());
 
@@ -243,14 +243,14 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testTwoFiles() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testTwoFiles");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testTwoFiles");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
-		PHPFunctionDef function4 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
+		FunctionDef function4 = it.next();
 		
 		assertEquals( 4, funcs.size());
 
@@ -266,12 +266,12 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testSingleClass() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testSingleClass");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testSingleClass");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
 		
 		assertEquals( 2, funcs.size());
 
@@ -289,15 +289,15 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testFunctionAndTwoClassesWithMethod() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testFunctionAndTwoClassesWithMethod");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testFunctionAndTwoClassesWithMethod");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
-		PHPFunctionDef function4 = it.next();
-		PHPFunctionDef function5 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
+		FunctionDef function4 = it.next();
+		FunctionDef function5 = it.next();
 		
 		assertEquals( 5, funcs.size());
 
@@ -324,16 +324,16 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testTwoFilesWithClassesAndMethods() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testTwoFilesWithClassesAndMethods");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testTwoFilesWithClassesAndMethods");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next();
-		PHPFunctionDef function2 = it.next();
-		PHPFunctionDef function3 = it.next();
-		PHPFunctionDef function4 = it.next();
-		PHPFunctionDef function5 = it.next();
-		PHPFunctionDef function6 = it.next();
+		FunctionDef function = it.next();
+		FunctionDef function2 = it.next();
+		FunctionDef function3 = it.next();
+		FunctionDef function4 = it.next();
+		FunctionDef function5 = it.next();
+		FunctionDef function6 = it.next();
 		
 		assertEquals( 6, funcs.size());
 
@@ -443,12 +443,12 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testSingleFunctionEdges() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testSingleFunction");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testSingleFunction");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next(); // function foo()
-		PHPFunctionDef function2 = it.next(); // <./foo.php>
+		FunctionDef function = it.next(); // function foo()
+		FunctionDef function2 = it.next(); // <./foo.php>
 		
 		assertEquals( 2, funcs.size());
 		
@@ -472,14 +472,14 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	@Test
 	public void testTwoFilesEdges() throws IOException, InvalidCSVFile
 	{
-		HashMap<String,PHPFunctionDef> funcs = getAllFuncASTs( "testTwoFiles");
+		HashMap<String,FunctionDef> funcs = getAllFuncASTs( "testTwoFiles");
 
-		Iterator<PHPFunctionDef> it = funcs.values().iterator();
+		Iterator<FunctionDef> it = funcs.values().iterator();
 		
-		PHPFunctionDef function = it.next(); // function foo()
-		PHPFunctionDef function2 = it.next(); // <./foobar/foo.php>
-		PHPFunctionDef function3 = it.next(); // function bar()
-		PHPFunctionDef function4 = it.next(); // <./foobar/bar.php>
+		FunctionDef function = it.next(); // function foo()
+		FunctionDef function2 = it.next(); // <./foobar/foo.php>
+		FunctionDef function3 = it.next(); // function bar()
+		FunctionDef function4 = it.next(); // <./foobar/bar.php>
 		
 		assertEquals( 4, funcs.size());
 		

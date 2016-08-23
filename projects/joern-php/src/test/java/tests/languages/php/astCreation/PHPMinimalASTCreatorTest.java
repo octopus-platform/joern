@@ -17,19 +17,19 @@ import ast.expressions.ConditionalExpression;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.php.declarations.ClassDef;
-import ast.php.expressions.PHPArrayExpression;
-import ast.php.expressions.PHPExitExpression;
-import ast.php.expressions.PHPListExpression;
-import ast.php.expressions.PHPYieldExpression;
+import ast.php.expressions.ArrayExpression;
+import ast.php.expressions.ExitExpression;
+import ast.php.expressions.ListExpression;
+import ast.php.expressions.YieldExpression;
 import ast.php.functionDef.Closure;
 import ast.php.functionDef.Method;
-import ast.php.functionDef.PHPFunctionDef;
-import ast.php.functionDef.PHPParameter;
+import ast.php.functionDef.FunctionDef;
+import ast.php.functionDef.Parameter;
 import ast.php.functionDef.TopLevelFunctionDef;
-import ast.php.statements.blockstarters.PHPIfElement;
-import ast.php.statements.blockstarters.PHPSwitchCase;
-import ast.php.statements.blockstarters.PHPSwitchList;
-import ast.php.statements.blockstarters.PHPUseTrait;
+import ast.php.statements.blockstarters.IfElement;
+import ast.php.statements.blockstarters.SwitchCase;
+import ast.php.statements.blockstarters.SwitchList;
+import ast.php.statements.blockstarters.UseTrait;
 import ast.statements.ExpressionStatement;
 import ast.statements.UseElement;
 import ast.statements.blockstarters.CatchList;
@@ -89,9 +89,9 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPFunctionDef.class));
+		assertThat( node, instanceOf(FunctionDef.class));
 		assertEquals( 4, node.getChildCount());
-		assertNull( ((PHPFunctionDef)node).getReturnType());
+		assertNull( ((FunctionDef)node).getReturnType());
 	}
 
 	/**
@@ -157,9 +157,9 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPExitExpression.class));
+		assertThat( node, instanceOf(ExitExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertNull( ((PHPExitExpression)node).getExpression());
+		assertNull( ((ExitExpression)node).getExpression());
 	}
 
 	/**
@@ -226,10 +226,10 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)12);
 
-		assertThat( node, instanceOf(PHPYieldExpression.class));
+		assertThat( node, instanceOf(YieldExpression.class));
 		assertEquals( 2, node.getChildCount());
-		assertNull( ((PHPYieldExpression)node).getValue());
-		assertNull( ((PHPYieldExpression)node).getKey());
+		assertNull( ((YieldExpression)node).getValue());
+		assertNull( ((YieldExpression)node).getKey());
 	}
 
 	/**
@@ -298,31 +298,31 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node3 = ast.getNodeById((long)16);
 		ASTNode node4 = ast.getNodeById((long)24);
 
-		assertThat( node, instanceOf(PHPIfElement.class));
+		assertThat( node, instanceOf(IfElement.class));
 		assertEquals( 2, node.getChildCount());
-		assertNull( ((PHPIfElement)node).getStatement());
+		assertNull( ((IfElement)node).getStatement());
 
-		assertThat( node2, instanceOf(PHPIfElement.class));
+		assertThat( node2, instanceOf(IfElement.class));
 		assertEquals( 2, node2.getChildCount());
-		assertNull( ((PHPIfElement)node2).getCondition());
-		assertNull( ((PHPIfElement)node2).getStatement());
+		assertNull( ((IfElement)node2).getCondition());
+		assertNull( ((IfElement)node2).getStatement());
 
-		assertThat( node3, instanceOf(PHPIfElement.class));
+		assertThat( node3, instanceOf(IfElement.class));
 		assertEquals( 2, node3.getChildCount());
-		assertThat( ((PHPIfElement)node3).getStatement(), not(instanceOf(CompoundStatement.class)));
-		assertThat( ((PHPIfElement)node3).getStatement(), instanceOf(ExpressionStatement.class));
-		assertEquals( ast.getNodeById((long)20), ((ExpressionStatement)((PHPIfElement)node3).getStatement()).getExpression());
+		assertThat( ((IfElement)node3).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((IfElement)node3).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)20), ((ExpressionStatement)((IfElement)node3).getStatement()).getExpression());
 		// the expression wrapper should have the same node id as the expression itself
-		assertEquals( Long.valueOf(20), ((ExpressionStatement)((PHPIfElement)node3).getStatement()).getNodeId());
+		assertEquals( Long.valueOf(20), ((ExpressionStatement)((IfElement)node3).getStatement()).getNodeId());
 
-		assertThat( node4, instanceOf(PHPIfElement.class));
+		assertThat( node4, instanceOf(IfElement.class));
 		assertEquals( 2, node4.getChildCount());
-		assertNull( ((PHPIfElement)node4).getCondition());
-		assertThat( ((PHPIfElement)node4).getStatement(), not(instanceOf(CompoundStatement.class)));
-		assertThat( ((PHPIfElement)node4).getStatement(), instanceOf(ExpressionStatement.class));
-		assertEquals( ast.getNodeById((long)26), ((ExpressionStatement)((PHPIfElement)node4).getStatement()).getExpression());
+		assertNull( ((IfElement)node4).getCondition());
+		assertThat( ((IfElement)node4).getStatement(), not(instanceOf(CompoundStatement.class)));
+		assertThat( ((IfElement)node4).getStatement(), instanceOf(ExpressionStatement.class));
+		assertEquals( ast.getNodeById((long)26), ((ExpressionStatement)((IfElement)node4).getStatement()).getExpression());
 		// the expression wrapper should have the same node id as the expression itself
-		assertEquals( Long.valueOf(26), ((ExpressionStatement)((PHPIfElement)node4).getStatement()).getNodeId());
+		assertEquals( Long.valueOf(26), ((ExpressionStatement)((IfElement)node4).getStatement()).getNodeId());
 	}
 
 	/**
@@ -338,9 +338,9 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)14);
 
-		assertThat( node, instanceOf(PHPSwitchCase.class));
+		assertThat( node, instanceOf(SwitchCase.class));
 		assertEquals( 2, node.getChildCount());
-		assertNull( ((PHPSwitchCase)node).getValue());
+		assertNull( ((SwitchCase)node).getValue());
 	}
 
 	/**
@@ -355,9 +355,9 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)13);
 
-		assertThat( node, instanceOf(PHPUseTrait.class));
+		assertThat( node, instanceOf(UseTrait.class));
 		assertEquals( 2, node.getChildCount());
-		assertNull( ((PHPUseTrait)node).getTraitAdaptations());
+		assertNull( ((UseTrait)node).getTraitAdaptations());
 	}
 
 	/**
@@ -419,10 +419,10 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)10);
 
-		assertThat( node, instanceOf(PHPParameter.class));
+		assertThat( node, instanceOf(Parameter.class));
 		assertEquals( 3, node.getChildCount());
-		assertNull( ((PHPParameter)node).getType());
-		assertNull( ((PHPParameter)node).getDefault());
+		assertNull( ((Parameter)node).getType());
+		assertNull( ((Parameter)node).getDefault());
 	}
 
 
@@ -518,10 +518,10 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)7);
 
-		assertThat( node, instanceOf(PHPListExpression.class));
+		assertThat( node, instanceOf(ListExpression.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( 1, ((PHPListExpression)node).size());
-		assertNull( ((PHPListExpression)node).getElement(0));
+		assertEquals( 1, ((ListExpression)node).size());
+		assertNull( ((ListExpression)node).getElement(0));
 	}
 
 	/**
@@ -534,9 +534,9 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPArrayExpression.class));
+		assertThat( node, instanceOf(ArrayExpression.class));
 		assertEquals( 0, node.getChildCount());
-		assertEquals( 0, ((PHPArrayExpression)node).size());
+		assertEquals( 0, ((ArrayExpression)node).size());
 	}
 
 	/**
@@ -567,9 +567,9 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)9);
 
-		assertThat( node, instanceOf(PHPSwitchList.class));
+		assertThat( node, instanceOf(SwitchList.class));
 		assertEquals( 0, node.getChildCount());
-		assertEquals( 0, ((PHPSwitchList)node).size());
+		assertEquals( 0, ((SwitchList)node).size());
 	}
 
 	/**
