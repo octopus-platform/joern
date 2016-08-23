@@ -2,12 +2,12 @@ package ast.c.functionDef;
 
 import ast.ASTNode;
 import ast.expressions.Identifier;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
 
-public class CFunctionDef extends FunctionDef
+public class FunctionDef extends FunctionDefBase
 {
 	private Identifier identifier = null;
 	

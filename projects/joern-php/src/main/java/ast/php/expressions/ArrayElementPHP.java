@@ -2,7 +2,7 @@ package ast.php.expressions;
 
 import ast.expressions.Expression;
 
-public class PHPArrayElement extends Expression
+public class ArrayElementPHP extends Expression
 {
 	private Expression value = null;
 	private Expression key = null;

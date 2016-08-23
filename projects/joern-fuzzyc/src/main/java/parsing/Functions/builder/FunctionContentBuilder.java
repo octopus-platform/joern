@@ -67,10 +67,10 @@ import antlr.FunctionParser.Unary_operatorContext;
 import antlr.FunctionParser.While_statementContext;
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
-import ast.c.expressions.CCallExpression;
+import ast.c.expressions.CallExpression;
 import ast.c.expressions.SizeofExpression;
-import ast.c.statements.blockstarters.CElseStatement;
-import ast.c.statements.blockstarters.CIfStatement;
+import ast.c.statements.blockstarters.ElseStatement;
+import ast.c.statements.blockstarters.IfStatement;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.declarations.IdentifierDeclType;
@@ -191,7 +191,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterIf(If_statementContext ctx)
 	{
-		replaceTopOfStack(new CIfStatement(), ctx);
+		replaceTopOfStack(new IfStatement(), ctx);
 	}
 
 	public void enterFor(For_statementContext ctx)
@@ -211,7 +211,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterElse(Else_statementContext ctx)
 	{
-		replaceTopOfStack(new CElseStatement(), ctx);
+		replaceTopOfStack(new ElseStatement(), ctx);
 	}
 
 	public void exitStatement(StatementContext ctx)
@@ -432,7 +432,7 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	public void enterFuncCall(FuncCallContext ctx)
 	{
-		CCallExpression expr = new CCallExpression();
+		CallExpression expr = new CallExpression();
 		nodeToRuleContext.put(expr, ctx);
 		stack.push(expr);
 	}
@@ -457,10 +457,10 @@ public class FunctionContentBuilder extends ASTNodeBuilder
 
 	private void introduceCalleeNode()
 	{
-		CCallExpression expr;
+		CallExpression expr;
 		try
 		{
-			expr = (CCallExpression) stack.peek();
+			expr = (CallExpression) stack.peek();
 		} catch (EmptyStackException ex)
 		{
 			return;

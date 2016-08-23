@@ -6,13 +6,13 @@ import ast.ASTNode;
 import ast.declarations.ClassDefStatement;
 import ast.expressions.Argument;
 import ast.expressions.AssignmentExpression;
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.Identifier;
 import ast.expressions.MemberAccess;
 import ast.expressions.PrimaryExpression;
 import ast.expressions.UnaryExpression;
-import ast.functionDef.FunctionDef;
-import ast.functionDef.Parameter;
+import ast.functionDef.FunctionDefBase;
+import ast.functionDef.ParameterBase;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Condition;
@@ -22,7 +22,7 @@ import ast.statements.IdentifierDeclStatement;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForEachStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.IfStatementBase;
 import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -54,12 +54,12 @@ public abstract class ASTNodeVisitor
 		defaultHandler(item);
 	}
 
-	public void visit(Parameter item)
+	public void visit(ParameterBase item)
 	{
 		defaultHandler(item);
 	}
 
-	public void visit(FunctionDef item)
+	public void visit(FunctionDefBase item)
 	{
 		defaultHandler(item);
 	}
@@ -79,7 +79,7 @@ public abstract class ASTNodeVisitor
 		defaultHandler(statementItem);
 	}
 
-	public void visit(CallExpression expression)
+	public void visit(CallExpressionBase expression)
 	{
 		defaultHandler(expression);
 	}
@@ -144,7 +144,7 @@ public abstract class ASTNodeVisitor
 		defaultHandler(expression);
 	}
 
-	public void visit(IfStatement expression)
+	public void visit(IfStatementBase expression)
 	{
 		defaultHandler(expression);
 	}

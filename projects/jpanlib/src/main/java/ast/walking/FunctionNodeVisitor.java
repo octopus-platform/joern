@@ -1,6 +1,6 @@
 package ast.walking;
 
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.statements.IdentifierDeclStatement;
 
 public class FunctionNodeVisitor extends ASTNodeVisitor
@@ -17,7 +17,7 @@ public class FunctionNodeVisitor extends ASTNodeVisitor
 		return functionNodeVisitor;
 	}
 
-	public void visit(FunctionDef node)
+	public void visit(FunctionDefBase node)
 	{
 		node.accept(functionNodeVisitor);
 	}

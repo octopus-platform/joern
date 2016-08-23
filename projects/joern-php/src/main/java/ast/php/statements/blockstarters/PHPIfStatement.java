@@ -3,9 +3,9 @@ package ast.php.statements.blockstarters;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.IfStatementBase;
 
-public class PHPIfStatement extends IfStatement implements Iterable<PHPIfElement>
+public class PHPIfStatement extends IfStatementBase implements Iterable<PHPIfElement>
 {
 
 	private LinkedList<PHPIfElement> ifElements = new LinkedList<PHPIfElement>();

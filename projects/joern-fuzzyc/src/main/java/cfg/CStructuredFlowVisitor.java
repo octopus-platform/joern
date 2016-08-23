@@ -1,12 +1,12 @@
 package cfg;
 
 
-import ast.functionDef.Parameter;
+import ast.functionDef.ParameterBase;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.Label;
 import ast.statements.blockstarters.DoStatement;
 import ast.statements.blockstarters.ForStatement;
-import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.IfStatementBase;
 import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
 import ast.statements.blockstarters.WhileStatement;
@@ -26,7 +26,7 @@ public class CStructuredFlowVisitor extends StructuredFlowVisitor {
 		returnCFG = CCFGFactory.newInstance(paramList);
 	}
 
-	public void visit(Parameter param)
+	public void visit(ParameterBase param)
 	{
 		returnCFG = CCFGFactory.newInstance(param);
 
@@ -49,7 +49,7 @@ public class CStructuredFlowVisitor extends StructuredFlowVisitor {
 		returnCFG = CCFGFactory.newInstance(expression);
 	}
 
-	public void visit(IfStatement node)
+	public void visit(IfStatementBase node)
 	{
 		returnCFG = CCFGFactory.newInstance(node);
 	}

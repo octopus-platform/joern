@@ -1,7 +1,7 @@
 package cfg;
 
-import ast.c.statements.blockstarters.CIfStatement;
-import ast.statements.blockstarters.IfStatement;
+import ast.c.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.IfStatementBase;
 import cfg.CFG;
 import cfg.CFGEdge;
 import cfg.CFGFactory;
@@ -20,11 +20,11 @@ public class CCFGFactory extends CFGFactory
 		structuredFlowVisitior = new CStructuredFlowVisitor();
 	}
 
-	public static CFG newInstance(IfStatement ifStmt)
+	public static CFG newInstance(IfStatementBase ifStmt)
 	{
 		try
 		{
-			CIfStatement ifStatement = (CIfStatement)ifStmt;
+			IfStatement ifStatement = (IfStatement)ifStmt;
 
 			CFG block = new CFG();
 			CFGNode conditionContainer = new ASTNodeContainer(

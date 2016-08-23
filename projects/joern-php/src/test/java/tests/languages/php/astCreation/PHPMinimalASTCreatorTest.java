@@ -16,7 +16,7 @@ import ast.expressions.ArgumentList;
 import ast.expressions.ConditionalExpression;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
-import ast.php.declarations.PHPClassDef;
+import ast.php.declarations.ClassDef;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPExitExpression;
 import ast.php.expressions.PHPListExpression;
@@ -138,10 +138,10 @@ public class PHPMinimalASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 
-		assertThat( node, instanceOf(PHPClassDef.class));
+		assertThat( node, instanceOf(ClassDef.class));
 		assertEquals( 3, node.getChildCount());
-		assertNull( ((PHPClassDef)node).getExtends());
-		assertNull( ((PHPClassDef)node).getImplements());
+		assertNull( ((ClassDef)node).getExtends());
+		assertNull( ((ClassDef)node).getImplements());
 	}
 
 

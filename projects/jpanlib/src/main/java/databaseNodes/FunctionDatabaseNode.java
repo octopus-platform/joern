@@ -5,7 +5,7 @@ import java.util.Map;
 
 import ast.ASTNode;
 import ast.CodeLocation;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import cdg.CDG;
 import cdg.CDGCreator;
 import cfg.ASTToCFGConverter;
@@ -27,7 +27,7 @@ import udg.useDefGraph.UseDefGraph;
 
 public class FunctionDatabaseNode extends DatabaseNode
 {
-	FunctionDef astRoot;
+	FunctionDefBase astRoot;
 	CFG cfg;
 	UseDefGraph udg;
 	DDG ddg;
@@ -57,7 +57,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 	@Override
 	public void initialize(Object node)
 	{
-		astRoot = (FunctionDef) node;
+		astRoot = (FunctionDefBase) node;
 		cfg = astToCFG.convert(astRoot);
 		dom = DominatorTree.newDominatorTree(cfg);
 		postDom = DominatorTree.newPostDominatorTree(cfg);
@@ -135,7 +135,7 @@ public class FunctionDatabaseNode extends DatabaseNode
 		return signature;
 	}
 
-	private void setSignature(FunctionDef node)
+	private void setSignature(FunctionDefBase node)
 	{
 		signature = node.getFunctionSignature();
 	}

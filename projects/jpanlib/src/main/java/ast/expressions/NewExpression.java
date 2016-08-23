@@ -1,6 +1,6 @@
 package ast.expressions;
 
-public class NewExpression extends CallExpression
+public class NewExpression extends CallExpressionBase
 {
 	private Expression targetClass = null;
 	

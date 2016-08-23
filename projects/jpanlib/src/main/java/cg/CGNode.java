@@ -1,8 +1,8 @@
 package cg;
 
 import ast.ASTNode;
-import ast.expressions.CallExpression;
-import ast.functionDef.FunctionDef;
+import ast.expressions.CallExpressionBase;
+import ast.functionDef.FunctionDefBase;
 
 /**
  *  A CGNode is a container for either a call expression (caller) or a function definition (callee).
@@ -12,12 +12,12 @@ public class CGNode {
 	private ASTNode astNode;
 	private boolean isCallee;
 
-	public CGNode( FunctionDef node) {
+	public CGNode( FunctionDefBase node) {
 		init( node);
 		setIsCallee( true);
 	}
 	
-	public CGNode( CallExpression node) {
+	public CGNode( CallExpressionBase node) {
 		init( node);
 		setIsCallee( false);
 	}

@@ -1,6 +1,6 @@
 package ast.expressions;
 
-public class CallExpression extends PostfixExpression
+public class CallExpressionBase extends PostfixExpression
 {
 	private Expression targetFunc = null;
 	private ArgumentList argumentList = null;

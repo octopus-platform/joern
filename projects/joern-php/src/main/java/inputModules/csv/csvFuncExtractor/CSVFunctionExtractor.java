@@ -10,7 +10,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import inputModules.csv.PHPCSVEdgeTypes;
 import inputModules.csv.PHPCSVNodeTypes;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
@@ -53,7 +53,7 @@ public class CSVFunctionExtractor
 	 *
 	 * @return The next function node, or null if there are none.
 	 */
-	public FunctionDef getNextFunction()
+	public FunctionDefBase getNextFunction()
 			throws IOException, InvalidCSVFile
 	{
 		if( csvFifoQueue.isEmpty()) {
@@ -64,7 +64,7 @@ public class CSVFunctionExtractor
 			addEdgeRowsUntilNextFile();
 		}
 
-		FunctionDef function = null;
+		FunctionDefBase function = null;
 
 		if( !csvFifoQueue.isEmpty()) {
 

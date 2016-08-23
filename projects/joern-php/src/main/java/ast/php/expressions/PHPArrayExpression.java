@@ -5,28 +5,28 @@ import java.util.LinkedList;
 
 import ast.expressions.Expression;
 
-public class PHPArrayExpression extends Expression implements Iterable<PHPArrayElement>
+public class PHPArrayExpression extends Expression implements Iterable<ArrayElementPHP>
 {
 
-	private LinkedList<PHPArrayElement> arrayElements = new LinkedList<PHPArrayElement>();
+	private LinkedList<ArrayElementPHP> arrayElements = new LinkedList<ArrayElementPHP>();
 
 	public int size()
 	{
 		return this.arrayElements.size();
 	}
 	
-	public PHPArrayElement getArrayElement(int i) {
+	public ArrayElementPHP getArrayElement(int i) {
 		return this.arrayElements.get(i);
 	}
 
-	public void addArrayElement(PHPArrayElement arrayElement)
+	public void addArrayElement(ArrayElementPHP arrayElement)
 	{
 		this.arrayElements.add(arrayElement);
 		super.addChild(arrayElement);
 	}
 
 	@Override
-	public Iterator<PHPArrayElement> iterator() {
+	public Iterator<ArrayElementPHP> iterator() {
 		return this.arrayElements.iterator();
 	}
 }

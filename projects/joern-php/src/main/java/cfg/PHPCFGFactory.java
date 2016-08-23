@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ast.expressions.Expression;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Statement;
 import ast.php.statements.blockstarters.PHPIfElement;
@@ -14,7 +14,7 @@ import ast.php.statements.blockstarters.PHPSwitchCase;
 import ast.php.statements.blockstarters.PHPSwitchStatement;
 import ast.statements.blockstarters.CatchStatement;
 import ast.statements.blockstarters.ForEachStatement;
-import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.IfStatementBase;
 import ast.statements.blockstarters.SwitchStatement;
 import ast.statements.blockstarters.TryStatement;
 import cfg.nodes.ASTNodeContainer;
@@ -38,7 +38,7 @@ public class PHPCFGFactory extends CFGFactory {
 	}
 
 	@Override
-	public CFG newInstance(FunctionDef functionDefinition)
+	public CFG newInstance(FunctionDefBase functionDefinition)
 	{
 		CFG cfg = super.newInstance(functionDefinition);
 		
@@ -51,7 +51,7 @@ public class PHPCFGFactory extends CFGFactory {
 		return cfg;
 	}
 	
-	public static CFG newInstance(IfStatement ifStatement)
+	public static CFG newInstance(IfStatementBase ifStatement)
 	{
 		try
 		{

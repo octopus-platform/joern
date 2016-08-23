@@ -3,7 +3,7 @@ package ast.functionDef;
 import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
-public abstract class Parameter extends ASTNode
+public abstract class ParameterBase extends ASTNode
 {
 	public abstract ASTNode getType();
 

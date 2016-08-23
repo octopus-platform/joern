@@ -6,14 +6,14 @@ import java.util.LinkedList;
 import ast.ASTNode;
 import ast.walking.ASTNodeVisitor;
 
-public class ParameterList extends ASTNode implements Iterable<Parameter>
+public class ParameterList extends ASTNode implements Iterable<ParameterBase>
 {
-	private LinkedList<Parameter> parameters = new LinkedList<Parameter>();
+	private LinkedList<ParameterBase> parameters = new LinkedList<ParameterBase>();
 
 	public void addChild(ASTNode node)
 	{
-		if (node instanceof Parameter)
-			addParameter((Parameter) node);
+		if (node instanceof ParameterBase)
+			addParameter((ParameterBase) node);
 		else
 			super.addChild(node);
 	}
@@ -23,11 +23,11 @@ public class ParameterList extends ASTNode implements Iterable<Parameter>
 		return this.parameters.size();
 	}
 	
-	public Parameter getParameter(int i) {
+	public ParameterBase getParameter(int i) {
 		return this.parameters.get(i);
 	}
 
-	public void addParameter(Parameter parameter)
+	public void addParameter(ParameterBase parameter)
 	{
 		this.parameters.add(parameter);
 		super.addChild(parameter);
@@ -43,11 +43,11 @@ public class ParameterList extends ASTNode implements Iterable<Parameter>
 			return getCodeStr();
 		}
 
-		Iterator<Parameter> i = parameters.iterator();
+		Iterator<ParameterBase> i = parameters.iterator();
 		StringBuilder s = new StringBuilder();
 		for (; i.hasNext();)
 		{
-			Parameter param = i.next();
+			ParameterBase param = i.next();
 			s.append(param.getEscapedCodeStr() + " , ");
 		}
 
@@ -64,7 +64,7 @@ public class ParameterList extends ASTNode implements Iterable<Parameter>
 	}
 
 	@Override
-	public Iterator<Parameter> iterator() {
+	public Iterator<ParameterBase> iterator() {
 		return this.parameters.iterator();
 	}
 }

@@ -1,9 +1,9 @@
 package ast.php.expressions;
 
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.Expression;
 
-public class StaticCallExpression extends CallExpression
+public class StaticCallExpression extends CallExpressionBase
 {
 	private Expression targetClass = null;
 	

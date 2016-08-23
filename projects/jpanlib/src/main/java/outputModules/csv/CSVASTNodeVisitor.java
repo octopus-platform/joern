@@ -1,7 +1,7 @@
 package outputModules.csv;
 
 import ast.declarations.ClassDefStatement;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.statements.IdentifierDeclStatement;
 import databaseNodes.EdgeTypes;
 import outputModules.common.ASTNodeExporter;
@@ -17,7 +17,7 @@ public class CSVASTNodeVisitor extends OutModASTNodeVisitor
 	private CSVFunctionExporter functionExporter;
 
 	@Override
-	public void visit(FunctionDef node)
+	public void visit(FunctionDefBase node)
 	{
 		ASTNodeExporter importer = functionExporter;
 		importNode(importer, node);

@@ -9,7 +9,7 @@ import antlr.ModuleParser.Function_param_listContext;
 import antlr.ModuleParser.Parameter_declContext;
 import antlr.ModuleParser.Return_typeContext;
 import ast.ASTNodeBuilder;
-import ast.c.functionDef.CFunctionDef;
+import ast.c.functionDef.FunctionDef;
 import ast.expressions.Identifier;
 import ast.functionDef.ReturnType;
 import ast.logical.statements.CompoundStatement;
@@ -20,15 +20,15 @@ import parsing.Functions.builder.ParameterListBuilder;
 public class FunctionDefBuilder extends ASTNodeBuilder
 {
 
-	CFunctionDef thisItem;
+	FunctionDef thisItem;
 	ParameterListBuilder paramListBuilder = new ParameterListBuilder();
 
 	@Override
 	public void createNew(ParserRuleContext ctx)
 	{
-		item = new CFunctionDef();
+		item = new FunctionDef();
 		ASTNodeFactory.initializeFromContext(item, ctx);
-		thisItem = (CFunctionDef) item;
+		thisItem = (FunctionDef) item;
 	}
 
 	public void setName(Function_nameContext ctx,

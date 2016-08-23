@@ -9,7 +9,7 @@ import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.BinaryOperationExpression;
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
@@ -38,9 +38,9 @@ import ast.expressions.Variable;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
-import ast.php.declarations.PHPClassDef;
+import ast.php.declarations.ClassDef;
 import ast.php.expressions.MethodCallExpression;
-import ast.php.expressions.PHPArrayElement;
+import ast.php.expressions.ArrayElementPHP;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCloneExpression;
@@ -775,7 +775,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private static long handleClass(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPClassDef newNode = new PHPClassDef();
+		ClassDef newNode = new ClassDef();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1641,7 +1641,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleCall(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		CallExpression newNode = new CallExpression();
+		CallExpressionBase newNode = new CallExpressionBase();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
@@ -1877,7 +1877,7 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 
 	private long handleArrayElement(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
-		PHPArrayElement newNode = new PHPArrayElement();
+		ArrayElementPHP newNode = new ArrayElementPHP();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

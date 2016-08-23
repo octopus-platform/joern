@@ -4,7 +4,7 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 import ast.declarations.ClassDefStatement;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.statements.IdentifierDeclStatement;
 import databaseNodes.EdgeTypes;
 import neo4j.batchInserter.Neo4JBatchInserter;
@@ -18,7 +18,7 @@ import outputModules.neo4j.exporters.Neo4JDeclStmtExporter;
 public class Neo4JASTNodeVisitor extends OutModASTNodeVisitor
 {
 
-	public void visit(FunctionDef node)
+	public void visit(FunctionDefBase node)
 	{
 		ASTNodeExporter importer = new Neo4JFunctionExporter();
 		importNode(importer, node);

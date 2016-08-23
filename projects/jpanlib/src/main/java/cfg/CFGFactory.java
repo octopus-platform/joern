@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import ast.ASTNode;
-import ast.functionDef.FunctionDef;
-import ast.functionDef.Parameter;
+import ast.functionDef.FunctionDefBase;
+import ast.functionDef.ParameterBase;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.BreakOrContinueStatement;
 import ast.logical.statements.CompoundStatement;
@@ -35,7 +35,7 @@ public class CFGFactory
 {
 	protected static StructuredFlowVisitor structuredFlowVisitior;
 
-	public CFG newInstance(FunctionDef functionDefinition)
+	public CFG newInstance(FunctionDefBase functionDefinition)
 	{
 		try
 		{
@@ -362,7 +362,7 @@ public class CFGFactory
 		try
 		{
 			CFG parameterListBlock = newInstance();
-			for (Parameter parameter : paramList)
+			for (ParameterBase parameter : paramList)
 			{
 				parameterListBlock.appendCFG(convert(parameter));
 			}

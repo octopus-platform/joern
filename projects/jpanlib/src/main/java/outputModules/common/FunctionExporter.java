@@ -1,7 +1,7 @@
 package outputModules.common;
 
 import ast.ASTNode;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import cfg.CFG;
 import cfg.CFGFactory;
 import databaseNodes.FileDatabaseNode;
@@ -55,7 +55,7 @@ public abstract class FunctionExporter extends ASTNodeExporter
 		{
 			ex.printStackTrace();
 			System.err.println("Error adding function to database: "
-					+ ((FunctionDef) node).getName());
+					+ ((FunctionDefBase) node).getName());
 			return;
 		}
 	}

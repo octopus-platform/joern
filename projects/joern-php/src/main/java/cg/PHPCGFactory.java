@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.Identifier;
 import ast.expressions.NewExpression;
 import ast.expressions.StringExpression;
@@ -26,7 +26,7 @@ public class PHPCGFactory {
 	// maintains a map of known function names (e.g., "B\foo" -> function foo() in namespace B)
 	private static HashMap<String,PHPFunctionDef> functionDefs = new HashMap<String,PHPFunctionDef>();
 	// maintains a list of function calls
-	private static LinkedList<CallExpression> functionCalls = new LinkedList<CallExpression>();
+	private static LinkedList<CallExpressionBase> functionCalls = new LinkedList<CallExpressionBase>();
 	
 	// maintains a map of known static method names (e.g., "B\A::foo" -> static function foo() in class A in namespace B)
 	private static HashMap<String,Method> staticMethodDefs = new HashMap<String,Method>();
@@ -73,7 +73,7 @@ public class PHPCGFactory {
 
 	private static void createFunctionCallEdges(CG cg) {
 		
-		for( CallExpression functionCall : functionCalls) {
+		for( CallExpressionBase functionCall : functionCalls) {
 
 			// make sure the call target is statically known
 			if( functionCall.getTargetFunc() instanceof Identifier) {
@@ -280,7 +280,7 @@ public class PHPCGFactory {
 	 * 
 	 * @return true if an edge was added, false otherwise
 	 */
-	private static boolean addCallEdgeIfDefinitionKnown(CG cg, HashMap<String,? extends PHPFunctionDef> defSet, CallExpression functionCall, String functionKey) {
+	private static boolean addCallEdgeIfDefinitionKnown(CG cg, HashMap<String,? extends PHPFunctionDef> defSet, CallExpressionBase functionCall, String functionKey) {
 		
 		boolean ret = false;
 		
@@ -296,7 +296,7 @@ public class PHPCGFactory {
 	 * 
 	 * @return true if an edge was added, false otherwise
 	 */
-	private static boolean addCallEdge(CG cg, CallExpression functionCall, PHPFunctionDef functionDef) {
+	private static boolean addCallEdge(CG cg, CallExpressionBase functionCall, PHPFunctionDef functionDef) {
 		
 		boolean ret = false;
 		
@@ -432,7 +432,7 @@ public class PHPCGFactory {
 	 *                     distinguished calls to the same function/method/constructor can
 	 *                     be added.
 	 */
-	public static boolean addFunctionCall( CallExpression callExpression) {
+	public static boolean addFunctionCall( CallExpressionBase callExpression) {
 		
 		// Note: we cannot access any of the CallExpression's getter methods here
 		// because this method is called from the PHPCSVNodeInterpreter at the point

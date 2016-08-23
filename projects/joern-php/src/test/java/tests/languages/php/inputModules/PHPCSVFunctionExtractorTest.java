@@ -11,7 +11,7 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.php.functionDef.PHPFunctionDef;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVFunctionExtractorBasedTest;
@@ -71,7 +71,7 @@ public class PHPCSVFunctionExtractorTest extends PHPCSVFunctionExtractorBasedTes
 	public void testHeaderOnly() throws IOException, InvalidCSVFile
 	{
 	        super.extractor.initialize( this.nodeReader, this.edgeReader);
-	        FunctionDef function = extractor.getNextFunction();
+	        FunctionDefBase function = extractor.getNextFunction();
 
 	        assertNull(function);
 	}

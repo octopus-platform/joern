@@ -4,18 +4,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import ast.ASTNode;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 
 public class ASTUnderConstruction
 {
 	HashMap<Long, ASTNode> idToNode = new HashMap<Long, ASTNode>();
-	FunctionDef rootNode;
+	FunctionDefBase rootNode;
 
 	/**
 	 * @return The AST's root node, or null if none is set.
 	 * @see setRootNode(FunctionDef)
 	 */
-	public FunctionDef getRootNode()
+	public FunctionDefBase getRootNode()
 	{
 		return rootNode;
 	}
@@ -26,7 +26,7 @@ public class ASTUnderConstruction
 	 *
 	 * @param node The node to be considered as the AST's root node.
 	 */
-	public void setRootNode(FunctionDef node)
+	public void setRootNode(FunctionDefBase node)
 	{
 		rootNode = node;
 	}

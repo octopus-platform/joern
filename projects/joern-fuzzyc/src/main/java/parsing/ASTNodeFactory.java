@@ -8,8 +8,8 @@ import antlr.ModuleParser.Parameter_declContext;
 import antlr.ModuleParser.Parameter_idContext;
 import antlr.ModuleParser.Parameter_nameContext;
 import ast.ASTNode;
-import ast.c.functionDef.CParameter;
-import ast.c.functionDef.CParameterType;
+import ast.c.functionDef.Parameter;
+import ast.c.functionDef.ParameterType;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.BinaryExpression;
 import ast.expressions.Expression;
@@ -60,15 +60,15 @@ public class ASTNodeFactory
 		return assign;
 	}
 
-	public static CParameter create(Parameter_declContext ctx)
+	public static Parameter create(Parameter_declContext ctx)
 	{
-		CParameter param = new CParameter();
+		Parameter param = new Parameter();
 
 		Parameter_declContext paramCtx = ctx;
 		Parameter_nameContext paramName = getNameOfParameter(paramCtx);
 
 		Identifier name = new Identifier();
-		CParameterType type = new CParameterType();
+		ParameterType type = new ParameterType();
 		initializeFromContext(type, ctx);
 		initializeFromContext(name, paramName);
 		initializeFromContext(param, ctx);

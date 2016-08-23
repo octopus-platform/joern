@@ -2,10 +2,10 @@ package ast.c.expressions;
 
 import ast.ASTNode;
 import ast.expressions.ArgumentList;
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.Identifier;
 
-public class CCallExpression extends CallExpression
+public class CallExpression extends CallExpressionBase
 {
 	@Override
 	public void addChild(ASTNode node)

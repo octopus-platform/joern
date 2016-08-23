@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import ast.c.statements.blockstarters.CIfStatement;
+import ast.c.statements.blockstarters.IfStatement;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Condition;
 import ast.statements.blockstarters.DoStatement;
@@ -66,7 +66,7 @@ public class DoWhileTests
 
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		CIfStatement ifStatement = (CIfStatement) contentItem.getStatements()
+		IfStatement ifStatement = (IfStatement) contentItem.getStatements()
 				.get(0);
 		DoStatement doItem = (DoStatement) ifStatement.getStatement();
 

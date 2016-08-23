@@ -1,7 +1,7 @@
 
 /**
    Retrieve functions by name.
-   
+
    @param name name of the function
 */
 
@@ -10,10 +10,11 @@ getFunctionsByName = { name ->
 }
 
 getFunctionsByFilename = { name ->
-       
-       g.V.has(NODE_TYPE, TYPE_FILE).filter{ it.filepath == name }
-	.out('IS_FILE_OF')
-	.filter{ it.type == TYPE_FUNCTION }
+
+     g.V.has(NODE_TYPE, TYPE_FILE)
+	 .filter{ it.filepath == name }
+	 .out('IS_FILE_OF')
+	 .filter{ it.type == TYPE_FUNCTION }
 }
 
 getNodesWithTypeAndName = { type, name ->

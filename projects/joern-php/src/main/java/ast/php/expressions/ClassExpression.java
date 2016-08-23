@@ -1,18 +1,18 @@
 package ast.php.expressions;
 
 import ast.expressions.Expression;
-import ast.php.declarations.PHPClassDef;
+import ast.php.declarations.ClassDef;
 
 public class ClassExpression extends Expression
 {
-	private PHPClassDef classDef = null;
+	private ClassDef classDef = null;
 
-	public PHPClassDef getClassDef()
+	public ClassDef getClassDef()
 	{
 		return this.classDef;
 	}
 	
-	public void setClassDef(PHPClassDef classDef)
+	public void setClassDef(ClassDef classDef)
 	{	
 		this.classDef = classDef;
 		super.addChild(classDef);

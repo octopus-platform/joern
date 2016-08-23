@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import ast.c.expressions.CCallExpression;
+import ast.c.expressions.CallExpression;
 import ast.declarations.IdentifierDecl;
 import ast.expressions.AdditiveExpression;
 import ast.expressions.AndExpression;
@@ -231,7 +231,7 @@ public class ExpressionParsingTest
 				.parseAndWalk(input);
 		BlockStarter starter = (BlockStarter) contentItem.getStatements()
 				.get(0);
-		CCallExpression expr = (CCallExpression) ((Condition)starter.getCondition())
+		CallExpression expr = (CallExpression) ((Condition)starter.getCondition())
 				.getExpression();
 		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 	}

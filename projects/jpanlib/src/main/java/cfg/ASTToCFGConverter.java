@@ -1,6 +1,6 @@
 package cfg;
 
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 
 public class ASTToCFGConverter
 {
@@ -18,7 +18,7 @@ public class ASTToCFGConverter
 	}
 
 
-	public CFG convert(FunctionDef node)
+	public CFG convert(FunctionDefBase node)
 	{
 		return factory.newInstance(node);
 	}

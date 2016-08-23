@@ -3,8 +3,8 @@ package parsing.Functions.builder;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
-import ast.c.statements.blockstarters.CElseStatement;
-import ast.c.statements.blockstarters.CIfStatement;
+import ast.c.statements.blockstarters.ElseStatement;
+import ast.c.statements.blockstarters.IfStatement;
 import ast.expressions.Expression;
 import ast.logical.statements.BlockStarter;
 import ast.logical.statements.CompoundStatement;
@@ -81,11 +81,11 @@ public class NestingReconstructor
 				curBlockStarter.addChild(node);
 				node = curBlockStarter;
 
-				if (curBlockStarter instanceof CIfStatement)
+				if (curBlockStarter instanceof IfStatement)
 				{
 
 					if (stack.size() > 0
-							&& stack.peek() instanceof CElseStatement)
+							&& stack.peek() instanceof ElseStatement)
 					{
 						// This is an if inside an else, e.g., 'else if'
 						// handling
@@ -93,24 +93,24 @@ public class NestingReconstructor
 						BlockStarter elseItem = (BlockStarter) stack.pop();
 						elseItem.addChild(curBlockStarter);
 
-						CIfStatement lastIf = (CIfStatement) stack
+						IfStatement lastIf = (IfStatement) stack
 								.getIfInElseCase();
 						if (lastIf != null)
 						{
-							lastIf.setElseNode((CElseStatement) elseItem);
+							lastIf.setElseNode((ElseStatement) elseItem);
 						}
 
 						return;
 					}
 
-				} else if (curBlockStarter instanceof CElseStatement)
+				} else if (curBlockStarter instanceof ElseStatement)
 				{
 					// add else statement to the previous if-statement,
 					// which has already been consolidated so we can return
 
-					CIfStatement lastIf = (CIfStatement) stack.getIf();
+					IfStatement lastIf = (IfStatement) stack.getIf();
 					if (lastIf != null)
-						lastIf.setElseNode((CElseStatement) curBlockStarter);
+						lastIf.setElseNode((ElseStatement) curBlockStarter);
 					else
 						throw new RuntimeException(
 								"Warning: cannot find if for else");

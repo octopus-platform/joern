@@ -6,7 +6,7 @@ import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.php.functionDef.TopLevelFunctionDef;
 
-public class PHPClassDef extends ClassDefStatement
+public class ClassDef extends ClassDefStatement
 {
 
 	private Identifier parent = null;

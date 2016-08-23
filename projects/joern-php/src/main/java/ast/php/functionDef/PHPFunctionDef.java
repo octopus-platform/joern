@@ -4,12 +4,12 @@ import java.util.Iterator;
 
 import ast.ASTNodeProperties;
 import ast.expressions.Identifier;
-import ast.functionDef.FunctionDef;
-import ast.functionDef.Parameter;
+import ast.functionDef.FunctionDefBase;
+import ast.functionDef.ParameterBase;
 import ast.php.expressions.PHPTypeHint;
 import inputModules.csv.PHPCSVNodeTypes;
 
-public class PHPFunctionDef extends FunctionDef
+public class PHPFunctionDef extends FunctionDefBase
 {
 	protected Identifier returnType = null;
 
@@ -67,7 +67,7 @@ public class PHPFunctionDef extends FunctionDef
 			return "(ERROR)";
 		
 		String retval = "(";
-		Iterator<Parameter> it = getParameterList().iterator();
+		Iterator<ParameterBase> it = getParameterList().iterator();
 		while( it.hasNext()) {
 			PHPParameter phpparam = (PHPParameter)it.next();
 			retval += getParamTypeString(phpparam);

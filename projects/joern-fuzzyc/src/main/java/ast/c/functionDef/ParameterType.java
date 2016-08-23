@@ -2,7 +2,7 @@ package ast.c.functionDef;
 
 import ast.ASTNode;
 
-public class CParameterType extends ASTNode
+public class ParameterType extends ASTNode
 {
 	String completeType = "";
 	String baseType = "";

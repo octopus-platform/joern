@@ -8,7 +8,7 @@ import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
 import ast.expressions.AssignmentWithOpExpression;
 import ast.expressions.BinaryOperationExpression;
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.CastExpression;
 import ast.expressions.ClassConstantExpression;
 import ast.expressions.ConditionalExpression;
@@ -38,11 +38,11 @@ import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
 import ast.logical.statements.Label;
 import ast.logical.statements.Statement;
-import ast.php.declarations.PHPClassDef;
+import ast.php.declarations.ClassDef;
 import ast.php.expressions.ClassExpression;
 import ast.php.expressions.ClosureExpression;
 import ast.php.expressions.MethodCallExpression;
-import ast.php.expressions.PHPArrayElement;
+import ast.php.expressions.ArrayElementPHP;
 import ast.php.expressions.PHPArrayExpression;
 import ast.php.expressions.PHPAssignmentByRefExpression;
 import ast.php.expressions.PHPCloneExpression;
@@ -175,7 +175,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleMethod((Method)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLASS:
-				errno = handleClass((PHPClassDef)startNode, endNode, childnum);
+				errno = handleClass((ClassDef)startNode, endNode, childnum);
 				break;
 
 			// nodes without children (leafs)
@@ -295,7 +295,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleStaticProperty((StaticPropertyExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CALL:
-				errno = handleCall((CallExpression)startNode, endNode, childnum);
+				errno = handleCall((CallExpressionBase)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_CLASS_CONST:
 				errno = handleClassConstant((ClassConstantExpression)startNode, endNode, childnum);
@@ -325,7 +325,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				errno = handleOr((OrExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
-				errno = handleArrayElement((PHPArrayElement)startNode, endNode, childnum);
+				errno = handleArrayElement((ArrayElementPHP)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_NEW:
 				errno = handleNew((NewExpression)startNode, endNode, childnum);
@@ -651,7 +651,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleClass( PHPClassDef startNode, ASTNode endNode, int childnum)
+	private int handleClass( ClassDef startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1309,7 +1309,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleCall( CallExpression startNode, ASTNode endNode, int childnum)
+	private int handleCall( CallExpressionBase startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1509,7 +1509,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		return errno;
 	}
 
-	private int handleArrayElement( PHPArrayElement startNode, ASTNode endNode, int childnum)
+	private int handleArrayElement( ArrayElementPHP startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 
@@ -1539,8 +1539,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // class child: ClassDef or Expression node
-				if( endNode instanceof PHPClassDef) // the child is a class used as an expression
-					startNode.setTargetClass(createClassExpression((PHPClassDef)endNode));
+				if( endNode instanceof ClassDef) // the child is a class used as an expression
+					startNode.setTargetClass(createClassExpression((ClassDef)endNode));
 				else
 					startNode.setTargetClass((Expression)endNode);
 				break;
@@ -2250,7 +2250,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 
 	private int handleArray( PHPArrayExpression startNode, ASTNode endNode, int childnum)
 	{
-		startNode.addArrayElement((PHPArrayElement)endNode);
+		startNode.addArrayElement((ArrayElementPHP)endNode);
 
 		return 0;
 	}
@@ -2392,7 +2392,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	/**
 	 * Creates a ClassExpression wrapper around a PHPClassDef node (for anonymous classes.)
 	 */
-	private ClassExpression createClassExpression(PHPClassDef classDef) {
+	private ClassExpression createClassExpression(ClassDef classDef) {
 
 		ClassExpression classExpression = new ClassExpression();
 		classExpression.setClassDef(classDef);

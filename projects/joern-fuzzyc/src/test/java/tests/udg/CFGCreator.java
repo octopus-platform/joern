@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import ast.ASTNode;
 import ast.ASTNodeBuilder;
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import ast.walking.ASTNodeVisitor;
 import ast.walking.ASTWalker;
 import cfg.ASTToCFGConverter;
@@ -29,7 +29,7 @@ public class CFGCreator
 		}
 
 		@Override
-		public void visit(FunctionDef node)
+		public void visit(FunctionDefBase node)
 		{
 			cfg = astToCFG.convert(node);
 		}

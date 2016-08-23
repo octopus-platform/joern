@@ -6,7 +6,7 @@ import java.util.Map;
 import ast.ASTNode;
 import ast.CodeLocation;
 import ast.expressions.Expression;
-import ast.functionDef.Parameter;
+import ast.functionDef.ParameterBase;
 import ast.functionDef.ReturnType;
 import ast.logical.statements.CompoundStatement;
 
@@ -66,7 +66,7 @@ public class ASTDatabaseNode extends DatabaseNode
 		CodeLocation funcLocation = currentFunction.getContentLocation();
 		CodeLocation location = astNode.getLocation();
 
-		if (!(astNode instanceof Parameter) || (astNode instanceof ReturnType))
+		if (!(astNode instanceof ParameterBase) || (astNode instanceof ReturnType))
 		{
 			location.startIndex += funcLocation.startIndex + 1;
 			location.startLine += funcLocation.startLine - 1;

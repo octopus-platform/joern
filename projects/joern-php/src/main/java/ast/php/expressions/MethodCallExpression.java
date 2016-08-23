@@ -1,10 +1,10 @@
 package ast.php.expressions;
 
 import ast.ASTNodeProperties;
-import ast.expressions.CallExpression;
+import ast.expressions.CallExpressionBase;
 import ast.expressions.Expression;
 
-public class MethodCallExpression extends CallExpression
+public class MethodCallExpression extends CallExpressionBase
 {
 	private Expression targetObject = null;
 	

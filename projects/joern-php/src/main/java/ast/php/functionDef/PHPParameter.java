@@ -4,9 +4,9 @@ import ast.ASTNode;
 import ast.expressions.Expression;
 import ast.expressions.Identifier;
 import ast.expressions.StringExpression;
-import ast.functionDef.Parameter;
+import ast.functionDef.ParameterBase;
 
-public class PHPParameter extends Parameter
+public class PHPParameter extends ParameterBase
 {
 	private Identifier type = null;
 	private StringExpression name = null;

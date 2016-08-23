@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import antlr.FunctionParser.StatementsContext;
-import ast.c.expressions.CCallExpression;
-import ast.c.statements.blockstarters.CIfStatement;
+import ast.c.expressions.CallExpression;
+import ast.c.statements.blockstarters.IfStatement;
 import ast.declarations.ClassDefStatement;
 import ast.declarations.IdentifierDecl;
 import ast.expressions.Argument;
@@ -70,7 +70,7 @@ public class CodeNestingTest
 		String input = "if(foo){bar();}else{ while(foo1){ if(bar2){} } }";
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		CIfStatement ifItem = (CIfStatement) contentItem.getStatements().get(0);
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class CodeNestingTest
 		String input = "if (A){ if (B){ } if (C){ } } else { }";
 		CompoundStatement contentItem = (CompoundStatement) FunctionContentTestUtil
 				.parseAndWalk(input);
-		CIfStatement ifItem = (CIfStatement) contentItem.getStatements().get(0);
+		IfStatement ifItem = (IfStatement) contentItem.getStatements().get(0);
 		assertTrue(ifItem.getElseNode() != null);
 	}
 
@@ -180,7 +180,7 @@ public class CodeNestingTest
 				.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		CCallExpression expr = (CCallExpression) stmt.getChild(0);
+		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 		ArgumentList argList = (ArgumentList) expr.getChild(1);
 		Argument arg = (Argument) argList.getChild(0);
@@ -194,7 +194,7 @@ public class CodeNestingTest
 				.parseAndWalk(input);
 		ExpressionStatement stmt = (ExpressionStatement) contentItem
 				.getStatements().get(0);
-		CCallExpression expr = (CCallExpression) stmt.getChild(0);
+		CallExpression expr = (CallExpression) stmt.getChild(0);
 		assertTrue(expr.getTargetFunc().getEscapedCodeStr().equals("foo"));
 	}
 

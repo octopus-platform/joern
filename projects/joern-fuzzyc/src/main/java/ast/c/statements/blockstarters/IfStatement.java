@@ -1,12 +1,12 @@
 package ast.c.statements.blockstarters;
 
 import ast.ASTNode;
-import ast.statements.blockstarters.IfStatement;
+import ast.statements.blockstarters.IfStatementBase;
 import ast.walking.ASTNodeVisitor;
 
-public class CIfStatement extends IfStatement
+public class IfStatement extends IfStatementBase
 {
-	private CElseStatement elseNode = null;
+	private ElseStatement elseNode = null;
 
 	public int getChildCount()
 	{
@@ -28,12 +28,12 @@ public class CIfStatement extends IfStatement
 		throw new RuntimeException("Invalid IfItem");
 	}
 
-	public CElseStatement getElseNode()
+	public ElseStatement getElseNode()
 	{
 		return elseNode;
 	}
 
-	public void setElseNode(CElseStatement elseNode)
+	public void setElseNode(ElseStatement elseNode)
 	{
 		this.elseNode = elseNode;
 	}

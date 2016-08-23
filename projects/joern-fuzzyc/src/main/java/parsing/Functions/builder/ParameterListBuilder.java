@@ -7,8 +7,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import antlr.ModuleParser.Parameter_declContext;
 import antlr.ModuleParser.Parameter_idContext;
 import ast.ASTNodeBuilder;
-import ast.c.functionDef.CParameterType;
-import ast.functionDef.Parameter;
+import ast.c.functionDef.ParameterType;
+import ast.functionDef.ParameterBase;
 import ast.functionDef.ParameterList;
 import parsing.ASTNodeFactory;
 import parsing.ParseTreeUtils;
@@ -31,14 +31,14 @@ public class ParameterListBuilder extends ASTNodeBuilder
 	{
 		Parameter_declContext ctx = aCtx;
 		Parameter_idContext parameter_id = ctx.parameter_id();
-		Parameter param = ASTNodeFactory.create(ctx);
+		ParameterBase param = ASTNodeFactory.create(ctx);
 
 		String baseType = ParseTreeUtils
 				.childTokenString(ctx.param_decl_specifiers());
 		String completeType = determineCompleteType(parameter_id, baseType);
 
-		((CParameterType)param.getType()).setBaseType(baseType);
-		((CParameterType)param.getType()).setCompleteType(completeType);
+		((ParameterType)param.getType()).setBaseType(baseType);
+		((ParameterType)param.getType()).setCompleteType(completeType);
 
 		thisItem.addChild(param);
 	}

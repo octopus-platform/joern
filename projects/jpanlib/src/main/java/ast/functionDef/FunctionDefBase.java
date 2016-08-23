@@ -3,7 +3,7 @@ package ast.functionDef;
 import ast.ASTNode;
 import ast.logical.statements.CompoundStatement;
 
-public abstract class FunctionDef extends ASTNode
+public abstract class FunctionDefBase extends ASTNode
 {
 	protected ParameterList parameterList = null;
 	protected CompoundStatement content = null;

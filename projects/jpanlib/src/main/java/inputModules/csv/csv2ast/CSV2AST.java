@@ -6,7 +6,7 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import ast.functionDef.FunctionDef;
+import ast.functionDef.FunctionDefBase;
 import inputModules.csv.KeyedCSV.KeyedCSVReader;
 import inputModules.csv.KeyedCSV.KeyedCSVRow;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
@@ -17,7 +17,7 @@ public class CSV2AST
 	CSVRowInterpreter nodeInterpreter;
 	CSVRowInterpreter edgeInterpreter;
 
-	public FunctionDef convert(String nodeFilename, String edgeFilename)
+	public FunctionDefBase convert(String nodeFilename, String edgeFilename)
 			throws IOException, InvalidCSVFile
 	{
 		FileReader nodeStrReader = new FileReader(nodeFilename);
@@ -26,7 +26,7 @@ public class CSV2AST
 		return convert(nodeStrReader, edgeStrReader);
 	}
 
-	public FunctionDef convert(Reader nodeStrReader, Reader edgeStrReader)
+	public FunctionDefBase convert(Reader nodeStrReader, Reader edgeStrReader)
 			throws IOException, InvalidCSVFile
 	{
 		KeyedCSVReader nodeReader = new KeyedCSVReader();
@@ -43,7 +43,7 @@ public class CSV2AST
 		return convert(csvAST);
 	}
 
-	public FunctionDef convert(CSVAST csvAST)
+	public FunctionDefBase convert(CSVAST csvAST)
 			throws IOException, InvalidCSVFile
 	{
 		ASTUnderConstruction ast = new ASTUnderConstruction();
@@ -74,7 +74,7 @@ public class CSV2AST
 	protected void createASTForFunction(ASTUnderConstruction ast, Iterator<KeyedCSVRow> nodeRows, KeyedCSVRow keyedRow)
 			throws InvalidCSVFile
 	{
-		FunctionDef root = (FunctionDef) ast.getNodeById( nodeInterpreter.handle(keyedRow, ast));
+		FunctionDefBase root = (FunctionDefBase) ast.getNodeById( nodeInterpreter.handle(keyedRow, ast));
 		ast.setRootNode(root);
 
 		while (nodeRows.hasNext())

@@ -2,22 +2,22 @@ package ast.c.functionDef;
 
 import ast.ASTNode;
 import ast.expressions.Identifier;
-import ast.functionDef.Parameter;
+import ast.functionDef.ParameterBase;
 
-public class CParameter extends Parameter
+public class Parameter extends ParameterBase
 {
-	private CParameterType type = new CParameterType();
+	private ParameterType type = new ParameterType();
 	private Identifier identifier = new Identifier();
 
-	public CParameterType getType()
+	public ParameterType getType()
 	{
 		return type;
 	}
 
 	public void setType(ASTNode type)
 	{
-		if( type instanceof CParameterType)
-			this.type = (CParameterType)type;
+		if( type instanceof ParameterType)
+			this.type = (ParameterType)type;
 		super.addChild(type);
 	}
 	
@@ -39,8 +39,8 @@ public class CParameter extends Parameter
 	
 	public void addChild(ASTNode node)
 	{
-		if (node instanceof CParameterType)
-			setType((CParameterType) node);
+		if (node instanceof ParameterType)
+			setType((ParameterType) node);
 		else if (node instanceof Identifier)
 			setIdentifier((Identifier) node);
 		else
