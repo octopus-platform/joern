@@ -16,6 +16,7 @@ public class CSVImporter
 			.getLogger(CSVImporter.class);
 
 	static final int NELEMS_PER_TRANSACTION = 1000;
+	static final String KEY = "_key";
 
 	String dbName;
 	Graph graph;
@@ -121,7 +122,7 @@ public class CSVImporter
 
 		try
 		{
-			Vertex vertex = graph.addVertex("_key", completeId);
+			Vertex vertex = graph.addVertex(KEY, completeId);
 			setPropertiesOnVertex(vertex, row, keys);
 
 			if (num != 0)
@@ -163,7 +164,7 @@ public class CSVImporter
 		Vertex vertex;
 
 		try{
-			vertex = graph.addVertex("_key", completeId);
+			vertex = graph.addVertex(KEY, completeId);
 		}catch(SchemaViolationException ex)
 		{
 			return;
@@ -230,7 +231,7 @@ public class CSVImporter
 
 	protected Vertex lookupVertex(String id)
 	{
-		return graph.traversal().V().has("_key", id).next();
+		return graph.traversal().V().has(KEY, id).next();
 	}
 
 	public void closeDatabase()

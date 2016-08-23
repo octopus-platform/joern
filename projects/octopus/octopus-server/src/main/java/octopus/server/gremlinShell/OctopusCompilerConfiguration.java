@@ -23,10 +23,6 @@ public class OctopusCompilerConfiguration extends CompilerConfiguration
 
 class OctopusImportCustomizerProvider extends AbstractImportCustomizerProvider
 {
-	public OctopusImportCustomizerProvider() {
-        // useful groovy bits that are good for the Console
-        // extraImports.add(Sql.class.getPackage().getName() + DOT_STAR)
-    }
 
     public Set<String> getCombinedStaticImports()
     {
@@ -56,6 +52,7 @@ class OctopusImportCustomizer extends ImportCustomizer
 		OctopusImportCustomizerProvider provider = new OctopusImportCustomizerProvider();
 
 		imports.addAll(provider.getAllImports());
+		imports.add("static com.thinkaurelius.titan.core.attribute.Text.*");
 		imports.add("groovy.grape.Grape");
 	}
 
