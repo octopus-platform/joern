@@ -20,6 +20,8 @@ public class JoernImporter extends JoernProjectPlugin {
 	private boolean extractcsv = true;
 	private boolean importcsv = true;
 
+	private JoernProject joernProject;
+
 
 	@Override
 	public void configure(JSONObject settings)
@@ -38,16 +40,21 @@ public class JoernImporter extends JoernProjectPlugin {
 	 @Override
      public void execute() throws Exception
 	 {
+		openProject();
+
 		if(uncompress) uncompressArchive();
 		if(extractcsv) extractCSVFilesFromSourceCode();
 		if(importcsv) importCSVFilesIntoDatabase();
 	 }
 
+	private void openProject()
+	{
+		joernProject = (JoernProject) getProjectConnector().getWrapper();
+	}
+
+
 	private void uncompressArchive() throws IOException
 	{
-
-		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
-
 		String tarballFilename = joernProject.getTarballName();
 		String outputDirectory = joernProject.getSourceCodeDirectory();
 
@@ -63,7 +70,6 @@ public class JoernImporter extends JoernProjectPlugin {
 	{
 		logger.debug("Parsing code");
 
-		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
 		String parserOutputDirectory = joernProject.getParserOutputDirectory();
 		String sourceCodeDirectory = joernProject.getSourceCodeDirectory();
 
@@ -79,7 +85,6 @@ public class JoernImporter extends JoernProjectPlugin {
 	{
 		logger.debug("Importing graph");
 
-		JoernProject joernProject = (JoernProject) getProjectConnector().getWrapper();
 		String parserOutputDirectory = joernProject.getParserOutputDirectory();
 
 		OrderedWalker walker = new OrderedWalker();

@@ -12,7 +12,6 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
 import com.thinkaurelius.titan.core.PropertyKey;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.schema.Mapping;
 import com.thinkaurelius.titan.core.schema.TitanManagement;
 import com.thinkaurelius.titan.core.util.TitanCleanup;
 
@@ -57,8 +56,11 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 
 		schema.buildIndex("byKey", Vertex.class).addKey(extIdKey).unique().buildCompositeIndex();
 
-		schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey, Mapping.STRING.asParameter()).
-		addKey(valueKey, Mapping.STRING.asParameter()).buildMixedIndex("search");
+		// schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey, Mapping.STRING.asParameter()).
+		// addKey(valueKey, Mapping.STRING.asParameter()).buildMixedIndex("search");
+
+		schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey).
+		addKey(valueKey).buildMixedIndex("search");
 
 		schema.commit();
 		graph.close();

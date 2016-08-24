@@ -1,4 +1,9 @@
 
+
+queryNodeIndex = { query ->
+   __.inject(*graph.indexQuery('byTypeAndValue', query).vertices()*.getElement())
+}
+
 /**
    Retrieve functions by name.
 
