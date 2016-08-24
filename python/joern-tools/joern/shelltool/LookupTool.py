@@ -3,25 +3,25 @@
 from joern.shelltool.TraversalTool import TraversalTool
 
 class LookupTool(TraversalTool):
-    
+
     # @Override
 
     def __init__(self, DESCRIPTION):
         TraversalTool.__init__(self, DESCRIPTION)
-        
+
         self.argParser.add_argument('-c', '--complete',
                                     action='store_true',
                                     default=False,
                                     help = """ Output the complete
                                     node, not just its ID.""")
-        
+
         self.argParser.add_argument('-g', '--gremlin',
                                     action='store_true',
                                     default=False, help = """query is
                                     a gremlin traversal as opposed to a lucene
                                     query""")
 
-        
+
         self.argParser.add_argument('-a', '--attributes',
                                     nargs='+', type = str,
                                     help="""Attributes of interest""",
@@ -29,19 +29,15 @@ class LookupTool(TraversalTool):
 
     # @Override
     def queryFromLine(self, line):
-        
+
         if self.args.gremlin:
             return line
-        
+
         luceneQuery = line
-        if luceneQuery.startswith('id:'):
-            id = luceneQuery.split(':')[1]
-            query = 'g.v(%s)' % (id)
-        else:
-            query = """queryNodeIndex('%s')""" % (luceneQuery)
-        
+        query = """queryNodeIndex('%s')""" % (luceneQuery)
+
         return self.addOutputTransformation(query)
-        
+
 
     def addOutputTransformation(self, query):
         """
@@ -50,17 +46,17 @@ class LookupTool(TraversalTool):
         """
 
         if self.args.complete:
-            return query + '.transform{ [it.id, it]}'
+            return query + '.map{ [it._key, it]}'
         elif self.args.attributes != []:
-            term = '.transform{ [it.id, ['
+            term = '.map{ [it._key, ['
             for attr in self.args.attributes:
                 term += 'it.%s,' % (attr)
             term = term[:-1]
             term += ']]}'
             return query + term
         else:
-            return query + '.transform{[it.id, []]}'
-    
+            return query + '.map{[it._key, []]}'
+
 
     # @Override
 
@@ -68,15 +64,15 @@ class LookupTool(TraversalTool):
         for r in result:
             self._outputRecord(r)
 
-    
+
     def _outputRecord(self, record):
-        
+
         if self.args.gremlin:
             self.output(str(record) + '\n')
             return
 
         id, node = record
-        
+
         if type(node) == list:
             keys = self.args.attributes
             keyValPairs = [(keys[i] + ':' + str(node[i])) for i in range(len(keys))]
@@ -85,9 +81,7 @@ class LookupTool(TraversalTool):
             keys = [k for k in node]
             keyValPairs = [str(k) + ':' + str(node[k]) for k in keys]
             keyValPairs.sort()
-        
+
         keyValPairs = [k.replace('\t', '') for k in keyValPairs]
-        
+
         self.output('%s\t%s\n' % (id, '\t'.join(keyValPairs)))
-    
-    

@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.tinkerpop.gremlin.driver.MessageSerializer;
 import org.apache.tinkerpop.gremlin.driver.message.ResponseMessage;
-import org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerGremlinV1d0;
+import org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerV1d0;
 import org.apache.tinkerpop.gremlin.driver.ser.SerializationException;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
@@ -25,7 +25,7 @@ public class OctopusClientWriter extends BufferedWriter
 
 	private boolean outputJSON = false;
 
-	private MessageSerializer serializer = new GraphSONMessageSerializerGremlinV1d0();
+	private MessageSerializer serializer = new GraphSONMessageSerializerV1d0();
 
 	private Graph graph;
 
