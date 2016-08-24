@@ -34,4 +34,10 @@ if __name__ == '__main__':
         usage()
         exit()
 
-    main(sys.argv[1])
+    filename = sys.argv[1]
+
+    if not os.path.exists(filename):
+        print('no such file or directory: %s' % (filename))
+        exit()
+
+    main(filename)
