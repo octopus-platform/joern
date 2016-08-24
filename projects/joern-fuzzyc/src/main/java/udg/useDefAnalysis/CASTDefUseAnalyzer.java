@@ -3,7 +3,6 @@ package udg.useDefAnalysis;
 import java.util.List;
 
 import udg.ASTProvider;
-import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefAnalysis.environments.ArgumentEnvironment;
 import udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
 import udg.useDefAnalysis.environments.AssignmentEnvironment;
@@ -25,6 +24,7 @@ public class CASTDefUseAnalyzer extends ASTDefUseAnalyzer
 
 	TaintSources taintSources = new TaintSources();
 
+	@Override
 	public void reset()
 	{
 		super.reset();
@@ -56,10 +56,10 @@ public class CASTDefUseAnalyzer extends ASTDefUseAnalyzer
 		case "PostIncDecOperationExpression":
 			return new IncDecEnvironment();
 		case "IdentifierDecl":
-		case "CParameter":
+		case "Parameter":
 			return new DeclEnvironment();
 
-		case "CCallExpression":
+		case "CallExpression":
 			return createCallEnvironment(astProvider);
 
 		case "Argument":
