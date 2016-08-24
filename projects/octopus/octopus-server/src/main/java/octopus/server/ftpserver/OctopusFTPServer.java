@@ -29,16 +29,7 @@ public class OctopusFTPServer {
 	ListenerFactory factory = new ListenerFactory();
 	ConnectionConfigFactory connectionConfigFactory = new ConnectionConfigFactory();
 
-	public void start(String octopusHome)
-	{
-		try {
-			startServer(octopusHome);
-		} catch (FtpException e) {
-			logger.debug("Cannot start FTP Server");
-		}
-	}
-
-	private void startServer(String octopusHome) throws FtpException
+	public void start(String octopusHome) throws FtpException
 	{
 		factory.setPort(FTP_SERVER_PORT);
 		factory.setServerAddress(FTP_SERVER_HOST);

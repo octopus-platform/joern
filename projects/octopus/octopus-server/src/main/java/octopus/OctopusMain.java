@@ -1,5 +1,8 @@
 package octopus;
 
+import org.apache.ftpserver.FtpServerConfigurationException;
+import org.apache.ftpserver.ftplet.FtpException;
+
 import octopus.server.ftpserver.OctopusFTPServer;
 import octopus.server.restServer.OctopusRestServer;
 
@@ -43,8 +46,14 @@ public class OctopusMain {
     private void startFTPServer()
     {
 		ftpServer = new OctopusFTPServer();
-		ftpServer.start(octopusHome);
-    }
+		try {
+			ftpServer.start(octopusHome);
+		} catch (FtpException| FtpServerConfigurationException e) {
+			System.out.println("Error starting Octopus");
+			System.out.println(e.getMessage());
+			System.exit(-1);
+		}
+	}
 
     private void startRestServer()
     {
