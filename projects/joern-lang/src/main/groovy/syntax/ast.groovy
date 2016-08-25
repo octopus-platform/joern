@@ -11,12 +11,7 @@
 
 
 astNodes = {
-
-_().transform{
-	 def x = [] as Set;
-	it._().children().loop(1){true}{true}
-	.store(x).optional(2).transform{x+it}.scatter()
-	}.scatter()
+	delegate.repeat(_children()).until(noMoreChildren())
 }
 
 /**
@@ -24,7 +19,7 @@ _().transform{
 */
 
 parents = {
-	_().in(AST_EDGE)
+	delegate.in(AST_EDGE)
 }
 
 /**
@@ -32,7 +27,11 @@ parents = {
 */
 
 children = {
-	_().out(AST_EDGE)
+	delegate.out(AST_EDGE)
+}
+
+noMoreChildren = {
+	outE(AST_EDGE).count().is(0)
 }
 
 /**

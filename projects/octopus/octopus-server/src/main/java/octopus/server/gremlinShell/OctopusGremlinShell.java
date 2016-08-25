@@ -41,6 +41,8 @@ public class OctopusGremlinShell
 
 		String cmd = "GremlinLoader.load();\n";
 
+		cmd += "Object.metaClass.methodMissing = { String name, args -> def x = name.substring(1); if(name.startsWith('_') && binding.variables.get(x)){ __.start().\"$x\"(args); } else \n throw new MissingMethodException(x, delegate, args)} \n";
+
 		cmd += "Traverser.metaClass.getProperty = { final String key ->" +
 				"SugarLoader.TraverserCategory.get((Traverser) delegate, key); }\n";
 
@@ -69,15 +71,15 @@ public class OctopusGremlinShell
         cmd += "Edge.metaClass.mixin(SugarLoader.ElementCategory.class);\n";
         cmd += "VertexProperty.metaClass.mixin(SugarLoader.ElementCategory.class);\n";
 
-        System.out.println(execute(cmd));
+        execute(cmd);
 	}
 
 	public void initShell()
 	{
 		this.shell = new GroovyShell(new OctopusCompilerConfiguration());
 		openDatabaseConnection(projectName);
-		loadStandardQueryLibrary();
 		octopusSugarLoad();
+		loadStandardQueryLibrary();
 	}
 
 	private void openDatabaseConnection(String projectName)

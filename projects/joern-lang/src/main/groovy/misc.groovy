@@ -1,6 +1,4 @@
 
-_ = { delegate }
-
 In = { def args ->
 
  def edgeType = args[0];
