@@ -2,7 +2,6 @@ package octopus.server.gremlinShell;
 
 import java.io.IOException;
 
-import org.apache.tinkerpop.gremlin.groovy.loaders.GremlinLoader;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
@@ -27,7 +26,7 @@ public class OctopusGremlinShell
 
 	static
 	{
-		GremlinLoader.load();
+
 	}
 
 	public OctopusGremlinShell(String projectName)
@@ -40,7 +39,9 @@ public class OctopusGremlinShell
 		// Hooking methodMissing after executing SugarLoader.load() fails for some reason,
 		// so, instead, we use our own SugarLoader.
 
-		String cmd = "Traverser.metaClass.getProperty = { final String key ->" +
+		String cmd = "GremlinLoader.load();\n";
+
+		cmd += "Traverser.metaClass.getProperty = { final String key ->" +
 				"SugarLoader.TraverserCategory.get((Traverser) delegate, key); }\n";
 
 		cmd += "Traverser.metaClass.methodMissing = { final String name, final def args ->"

@@ -1,12 +1,14 @@
 
+_ = { delegate }
+
 In = { def args ->
 
  def edgeType = args[0];
  def key = args[1];
  def vals = args[2];
-	
+
 	if(Collection.isAssignableFrom(vals.getClass())){
-		filterExpr = { it.getProperty(key) in vals }		
+		filterExpr = { it.getProperty(key) in vals }
 	}else{
 		filterExpr = {it.getProperty(key) == vals}
 	}
@@ -19,9 +21,9 @@ Out = { def args ->
   def edgeType = args[0];
   def key = args[1];
   def vals = args[2];
-	
+
 	if(Collection.isAssignableFrom(vals.getClass())){
-		filterExpr = { it.getProperty(key) in vals }		
+		filterExpr = { it.getProperty(key) in vals }
 	}else{
 		filterExpr = {it.getProperty(key) == vals}
 	}
@@ -101,7 +103,7 @@ flattenByOne = { def args -> lst = args[0];
 
 
 _or = { def args -> Object [] closures = args[0];
-	
+
 	_().transform{
 		def ret = []
 		closures.each{ cl ->
