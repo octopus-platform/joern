@@ -7,7 +7,13 @@ class ShellManager(object):
 
     def create(self, project_name, shellname = 'noname'):
         response = self.command.execute_get_command("/manageshells/create/{}/{}".format(project_name, shellname))
-        port = int(response)
+
+        try:
+            port = int(response)
+        except:
+            print(response)
+            raise Exception("Error creating shell. Does the project exist?")
+
         return port
 
     def list(self, project_name=None, shell_port=None, filter_occupied=False):

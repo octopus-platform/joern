@@ -55,8 +55,9 @@ idsToEdges = {
 */
 
 idListToNodes = { listOfIds ->
-  
-  _().transform{ listOfIds }.scatter().idsToNodes()
+
+  g.V(*listOfIds)
+
 }
 
 keyListToNodes = { listOfKeys ->

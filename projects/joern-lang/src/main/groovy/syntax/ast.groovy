@@ -11,7 +11,8 @@
 
 
 astNodes = {
-	_().transform{
+
+_().transform{
 	 def x = [] as Set;
 	it._().children().loop(1){true}{true}
 	.store(x).optional(2).transform{x+it}.scatter()

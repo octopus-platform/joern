@@ -3,7 +3,6 @@ package octopus.server.gremlinShell;
 import java.io.IOException;
 
 import org.apache.tinkerpop.gremlin.groovy.loaders.GremlinLoader;
-import org.apache.tinkerpop.gremlin.groovy.loaders.SugarLoader;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 
@@ -29,7 +28,6 @@ public class OctopusGremlinShell
 	static
 	{
 		GremlinLoader.load();
-		SugarLoader.load();
 	}
 
 	public OctopusGremlinShell(String projectName)
@@ -37,11 +35,40 @@ public class OctopusGremlinShell
 		this.projectName = projectName;
 	}
 
-	private void registerMethodMissingHandler()
+	private void octopusSugarLoad()
 	{
-		String cmd = "GremlinGroovyPipeline.metaClass.methodMissing =";
-		cmd += "{String name, args -> Gremlin.compose(delegate, \"$name\"(args))}";
-		execute(cmd);
+		// Hooking methodMissing after executing SugarLoader.load() fails for some reason,
+		// so, instead, we use our own SugarLoader.
+
+		String cmd = "Traverser.metaClass.getProperty = { final String key ->" +
+				"SugarLoader.TraverserCategory.get((Traverser) delegate, key); }\n";
+
+		cmd += "Traverser.metaClass.methodMissing = { final String name, final def args ->"
+				+ "((Traverser) delegate).get().\"$name\"(*args); }\n";
+
+		cmd += "GraphTraversal.metaClass.methodMissing = { final String name, final def args ->"
+				//////////////////////////////////
+				// This is the relevant addition
+				+ "if(binding.variables.containsKey(name)){ def closure = binding.variables.get(name); closure.delegate = delegate; return \"$name\"(args); }\n"
+				/////////////////////////////////
+				+ "return ((GraphTraversal) delegate).values(name); }\n";
+
+		cmd += "GraphTraversalSource.metaClass.getProperty = { final String key ->" +
+				"SugarLoader.GraphTraversalSourceCategory.get((GraphTraversalSource) delegate, key); }\n";
+
+        cmd += "__.metaClass.static.propertyMissing = { final String name ->" +
+        		"return null != __.metaClass.getMetaMethod(name) ? __.\"$name\"() : __.values(name);}\n";
+
+        cmd += "__.metaClass.static.getName = { return __.values(NAME); }\n";
+
+        cmd += "Traverser.metaClass.mixin(SugarLoader.TraverserCategory.class);\n";
+        cmd += "GraphTraversalSource.metaClass.mixin(SugarLoader.GraphTraversalSourceCategory.class);\n";
+        cmd += "GraphTraversal.metaClass.mixin(SugarLoader.GraphTraversalCategory.class);\n";
+        cmd += "Vertex.metaClass.mixin(SugarLoader.VertexCategory.class);\n";
+        cmd += "Edge.metaClass.mixin(SugarLoader.ElementCategory.class);\n";
+        cmd += "VertexProperty.metaClass.mixin(SugarLoader.ElementCategory.class);\n";
+
+        System.out.println(execute(cmd));
 	}
 
 	public void initShell()
@@ -49,7 +76,7 @@ public class OctopusGremlinShell
 		this.shell = new GroovyShell(new OctopusCompilerConfiguration());
 		openDatabaseConnection(projectName);
 		loadStandardQueryLibrary();
-		registerMethodMissingHandler();
+		octopusSugarLoad();
 	}
 
 	private void openDatabaseConnection(String projectName)

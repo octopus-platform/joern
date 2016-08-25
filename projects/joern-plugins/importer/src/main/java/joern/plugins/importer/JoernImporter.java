@@ -17,7 +17,7 @@ public class JoernImporter extends JoernProjectPlugin {
 			.getLogger(JoernImporter.class);
 
 	private boolean uncompress = true;
-	private boolean extractcsv = true;
+	private boolean parsecode = true;
 	private boolean importcsv = true;
 
 	private JoernProject joernProject;
@@ -30,8 +30,8 @@ public class JoernImporter extends JoernProjectPlugin {
 
 		if(settings.has("nouncompress"))
 			uncompress = false;
-		if(settings.has("noextractcsv"))
-			extractcsv = false;
+		if(settings.has("noparsecode"))
+			parsecode = false;
 		if(settings.has("noimportcsv"))
 			importcsv = false;
 	}
@@ -43,7 +43,7 @@ public class JoernImporter extends JoernProjectPlugin {
 		openProject();
 
 		if(uncompress) uncompressArchive();
-		if(extractcsv) extractCSVFilesFromSourceCode();
+		if(parsecode) parseSourceCode();
 		if(importcsv) importCSVFilesIntoDatabase();
 	 }
 
@@ -66,7 +66,7 @@ public class JoernImporter extends JoernProjectPlugin {
 		logger.debug("decompression successful");
 	}
 
-	private void extractCSVFilesFromSourceCode()
+	private void parseSourceCode()
 	{
 		logger.debug("Parsing code");
 
