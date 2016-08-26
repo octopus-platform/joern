@@ -14,48 +14,48 @@ public class ClassDef extends ClassDefStatement
 	private TopLevelFunctionDef toplevelfunc = null;
 
 	public String getName() {
-		return getProperty(ASTNodeProperties.NAME);
+		return getProperty(ASTNodeProperties.CODE);
 	}
-	
+
 	public void setName(String name) {
-		setProperty(ASTNodeProperties.NAME, name);
+		setProperty(ASTNodeProperties.CODE, name);
 	}
-	
+
 	public String getDocComment() {
 		return getProperty(ASTNodeProperties.DOCCOMMENT);
 	}
-	
+
 	public void setDocComment(String doccomment) {
 		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
 	}
-	
+
 	public Identifier getExtends()
 	{
 		return this.parent;
 	}
-	
+
 	public void setExtends(Identifier parent)
 	{
 		this.parent = parent;
 		super.addChild(parent);
 	}
-	
+
 	public IdentifierList getImplements()
 	{
 		return this.interfaces;
 	}
-	
+
 	public void setImplements(IdentifierList interfaces)
 	{
 		this.interfaces = interfaces;
 		super.addChild(interfaces);
 	}
-	
+
 	public TopLevelFunctionDef getTopLevelFunc()
 	{
 		return this.toplevelfunc;
 	}
-	
+
 	public void setTopLevelFunc(TopLevelFunctionDef toplevelfunc)
 	{
 		this.toplevelfunc = toplevelfunc;

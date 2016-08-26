@@ -12,7 +12,7 @@ public class Function
 	public static IndexHits<Long> getFunctionsByName(String functionName)
 	{
 		return Neo4JBatchInserter
-				.queryIndex(NodeKeys.NAME + ":" + functionName);
+				.queryIndex(NodeKeys.CODE + ":" + functionName);
 	}
 
 	public static long getCFGForFunction(Long funcId)

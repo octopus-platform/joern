@@ -16,23 +16,24 @@ public class FunctionDef extends FunctionDefBase
 	public String getEnclosingNamespace() {
 		return getProperty(ASTNodeProperties.NAMESPACE);
 	}
-	
+
 	public void setEnclosingNamespace(String namespace) {
 		setProperty(ASTNodeProperties.NAMESPACE, namespace);
 	}
-	
+
+	@Override
 	public String getName() {
-		return getProperty(ASTNodeProperties.NAME);
+		return getProperty(ASTNodeProperties.CODE);
 	}
-	
+
 	public void setName(String name) {
-		setProperty(ASTNodeProperties.NAME, name);
+		setProperty(ASTNodeProperties.CODE, name);
 	}
-	
+
 	public String getDocComment() {
 		return getProperty(ASTNodeProperties.DOCCOMMENT);
 	}
-	
+
 	public void setDocComment(String doccomment) {
 		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
 	}
@@ -41,13 +42,13 @@ public class FunctionDef extends FunctionDefBase
 	{
 		return this.returnType;
 	}
-	
+
 	public void setReturnType(Identifier returnType)
 	{
 		this.returnType = returnType;
 		super.addChild(returnType);
 	}
-	
+
 	@Override
 	public String getFunctionSignature()
 	{
@@ -61,11 +62,11 @@ public class FunctionDef extends FunctionDefBase
 	}
 
 	protected String getParamListString() {
-		
+
 		// this should not happen:
 		if( null == getParameterList())
 			return "(ERROR)";
-		
+
 		String retval = "(";
 		Iterator<ParameterBase> it = getParameterList().iterator();
 		while( it.hasNext()) {
@@ -111,7 +112,7 @@ public class FunctionDef extends FunctionDefBase
 		retval += phpparam.getNameChild().getEscapedCodeStr();
 		return retval;
 	}
-	
+
 	protected String getReturnTypeString() {
 		String retval = "";
 		if( null != getReturnType()) {

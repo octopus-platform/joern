@@ -135,7 +135,6 @@ public class Neo4JBatchInserter
 
 		// TODO: Does this have an effect at all?
 		nodeIndex.setCacheCapacity(NodeKeys.NODE_TYPE, 100000);
-		nodeIndex.setCacheCapacity(NodeKeys.NAME, 100000);
 		nodeIndex.setCacheCapacity(NodeKeys.CODE, 100000);
 
 	}

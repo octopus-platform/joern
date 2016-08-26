@@ -43,7 +43,7 @@ public class FileDatabaseNode extends DatabaseNode
 	{
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(NodeKeys.NODE_TYPE, type);
-		properties.put(NodeKeys.FILEPATH, pathString);
+		properties.put(NodeKeys.CODE, pathString);
 		return properties;
 	}
 
