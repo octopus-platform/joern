@@ -28,78 +28,49 @@ Importing the Code
 As an example, we will analyze the VLC media player, a medium sized
 code base containing code for both Windows and Linux/BSD. It is
 assumed that you have successfully installed joern into the directory
-``$JOERN`` and Neo4J into ``$NEO4J`` as described in
-:doc:`../installation`. To begin, you can download and import the code
-as follows:
-   
+``$JOERN`` as described in :doc:`../installation`. To begin, you can
+download and import the code as follows:
+
 .. code-block:: none
 
 	cd $JOERN
 	mkdir tutorial; cd tutorial
 	wget http://download.videolan.org/pub/videolan/vlc/2.1.4/vlc-2.1.4.tar.xz
 	tar xfJ vlc-2.1.4.tar.xz
+	tar zcf vlc-2.1.4.tar.gz vlc-2.1.4/
 	cd ..
-	./joern tutorial/vlc-2.1.4/
 
-Next, you need to point Neo4J to the generated data in ``.joernIndex``. 
-You can do this by editing the configuration file 
-``org.neo4j.server.database.location`` in the directory ``$NEO4J/conf``
-as follows 
+Next, start the joern-server:
 
 .. code-block:: none
 
-	# neo4j-server.properties
-	org.neo4j.server.database.location=$JOERN/.joernIndex/
+	./joern-server
 
-Finally, please start the database server in a second terminal:
+Open a new terminal and import the code:
 
 .. code-block:: none
 
-	$NEO4J/bin/neo4j console
+	cd $JOERN
+	joern-import tutorial/vlc-2.1.4.tar.gz
 
-We will now take a brief look at how the code base has been stored in
-the database and then move on to joern-tools.
+
 
 
 Exploring Database Contents
 ---------------------------
 
-The Neo4J Rest API
-""""""""""""""""""
-
-Before we start using ``joern-tools``, let's take a quick look at the
-way the code base has been stored in the database and how it can be
-accessed. ``joern-tools`` uses the web-based API to Neo4J (REST API)
-via the library ``python-joern`` that in turn wraps ``py2neo``. When
-working with ``joern-tools``, this will typically not be visible to
-you. However, to get an idea of what happens underneath, point your
-browser to:
-
-.. code-block:: none
-
-    http://localhost:7474/db/data/node/0
-    
-This is the *reference node*, which is the root node of the graph
-database. Starting from this node, the entire database contents can be
-accessed using your browser. In particular, you can get an overview of
-all existing edge types as well as the properties attached to nodes
-and edges. Of course, in practice, even for custom database queries,
-you will not want to use your browser to query the database. Instead,
-you can use the utility ``joern-lookup`` as illustrated in the next
-section. 
-
 
 Inspecting node and edge properties
 """"""""""""""""""""""""""""""""""""
 
-To send custom queries to thedatabase, you can use the tool
+To send custom queries to the database, you can use the tool
 ``joern-lookup``. By default, ``joern-lookup`` will perform node index
 lookups (see `Fast lookups using the Node Index`_). For Gremlin
 queries, the ``-g`` flag can be specified. Let's begin by retrieving
 all nodes directly connected to the root node using a Gremlin query:
 
 .. code-block:: none
-	
+
 	echo 'g.v(0).out()' | joern-lookup -g
 
 	(1 {"type":"Directory","filepath":"tutorial/vlc-2.1.4"})
@@ -121,7 +92,7 @@ Let's see where we can get by expanding outgoing edges:
 	# .outE(): outgoing Edges
 
 	echo 'g.v(0).out().outE()' | joern-lookup -g | sort | uniq -c
-	
+
 	14 IS_PARENT_DIR_OF
 
 This shows that, while the directory node only contains its path in
@@ -134,7 +105,7 @@ enumerate all files it contains and filter them by name. For example,
 the following query returns all files in the directory 'demux':
 
 .. code-block:: none
-	
+
 	# Syntax
 	# .filter(closure): allows you to filter incoming objects using the
 	# supplied closure, e.g., the anonymous function { it.type ==
@@ -161,7 +132,7 @@ make use of the full Lucene query language to retrieve nodes. Let's
 see some examples.
 
 .. code-block:: none
-	
+
 	echo "type:File AND filepath:*demux*" | joern-lookup -c
 
 .. code-block:: none
@@ -185,7 +156,7 @@ database and visualize them using *graphviz*.
 
 .. code-block:: none
 
-	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | joern-location 
+	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | joern-location
 
 	/home/fabs/targets/vlc-2.1.4/modules/codec/mpeg_audio.c:526:0:19045:19685
 	/home/fabs/targets/vlc-2.1.4/modules/codec/dts.c:400:0:13847:14459
@@ -251,7 +222,7 @@ Lookup functions by name
 Use Wildcards:
 
 .. code-block:: none
-	
+
 	echo 'type:Function AND name:*write*' | joern-lookup
 
 Output all fields:
@@ -298,7 +269,7 @@ Shorthand:
 .. code-block:: none
 
 	echo "getFunctionsByParameter('*len*').id" | joern-lookup -g
-	
+
 From function-ids to locations: joern-location
 
 .. code-block:: none
@@ -333,10 +304,10 @@ List calls expressions:
 .. code-block:: none
 
 	echo "getCallsTo('memcpy').code" | joern-lookup -g
-	
+
 
 List arguments:
-	
+
 .. code-block:: none
 
 	echo "getCallsTo('memcpy').ithArguments('2').code" | joern-lookup -g

@@ -14,19 +14,20 @@ class ListFuncs(ChunkStartTool):
 
             self.argParser.add_argument('-p', '--pattern',
                                         action = 'store', type=str,
-                                        default ="*")
+                                        default =".*")
 
       def _constructIdQuery(self):
             return """
-            queryNodeIndex('type:Function AND name:%s').id
+            queryNodeIndex('v.type:Function').has('name', textRegex('%s')).id
             """ % (self.args.pattern)
 
       def _constructQueryForChunk(self, chunk):
-            return """idListToNodes(%s).transform{ it.name + "\t" + it.id + "\t" + it.functionToFile().filepath.toList()[0] }""" % (chunk)
+            return """idListToNodes(%s).as('func').functionToFile().as('file').select('func','file')
+            .map{ it['func'].id + '\t' + it['func'].name + '\t' + it['file'].filepath }""" % (chunk)
 
       def _handleChunkResult(self, res, chunk):
             for x in res:
-                  print x
+                  print(x)
 
 
 if __name__ == '__main__':

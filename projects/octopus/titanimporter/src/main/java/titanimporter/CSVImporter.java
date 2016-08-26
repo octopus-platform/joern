@@ -15,7 +15,7 @@ public class CSVImporter
 	private static final Logger logger = LoggerFactory
 			.getLogger(CSVImporter.class);
 
-	static final int NELEMS_PER_TRANSACTION = 1000;
+	static final int NELEMS_PER_TRANSACTION = 100000;
 	static final String KEY = "_key";
 
 	String dbName;

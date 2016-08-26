@@ -6,15 +6,25 @@ class DBInterface:
 
     def __init__(self):
         self.transformer = ResultTransformer()
+        self.jsonEnabled = True;
+
+    def disable_json(self):
+        self.jsonEnabled = False;
 
     def connectToDatabase(self, databaseName = 'octopusDB'):
         self.j = PythonShellInterface()
         self.j.setDatabaseName(databaseName)
         self.j.connectToDatabase()
-        self.j.runGremlinQuery('toggle_json')
+
+        if self.jsonEnabled:
+            self.j.runGremlinQuery('toggle_json')
 
     def runGremlinQuery(self, query):
         result = self.j.runGremlinQuery(query)
+
+        if not self.jsonEnabled:
+            return result
+
         return self.transformer.transform(result)
 
     def chunks(self, ids, chunkSize):
