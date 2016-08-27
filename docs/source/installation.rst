@@ -22,19 +22,34 @@ installed:
   client scripts are written in Python 3. Please note that these
   scripts are **not compatible with Python2**.
 
+- **Python3-setuptools and python3-dev.** Client scripts are installed
+  using setuptools. Moreover, some of the python libraries client
+  tools depend on are written in C and require header files from
+  python3-dev to be present.
+
+- **Graphviz-dev.** Plotting tools require Graphviz and its
+  development files to be installed.
+  
 - **Gradle 2.x.** Joern uses the gradle build tool, and some features
   specific to Gradle 2.0 and above.
 
-- **wget.** Please make sure wget is installed, as we use it during
-  the installation process to fetch dependencies.
+If you are on a Debian-based system, try the following to download the
+necessary dependencies:
 
-- **Graphiviz.** Python utilities bundled with joern require graphviz
-  to be installed.
+.. code-block:: none
 
+	sudo apt-get install openjdk8 gradle python3 python3-setuptools python3-dev graphviz graphviz-dev
+		
+
+Please note, however, that Debian stable (¨Jessie¨) currently does not
+include openjdk8 nor gradle 2 by default, so for Joern to work on
+Debian stable, please make use of Debian backports.
+	
 The following sections offer a step-by-step guide to the installation
 of Joern, including all of its dependencies.
 
 Building joern
+
 --------------
 
 **Please make sure Gradle 2.x is installed.** Then clone the repository
