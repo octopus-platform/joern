@@ -40,8 +40,9 @@ noMoreChildren = {
    @param i The child index
 */
 
-ithChildren = { i ->
-	_().children().filter{ it.childNum == i}
+ithChildren = { args ->
+ i = args[0];
+ delegate.children().has(NODE_CHILDNUM, i)	
 }
 
 isStatement = { it ->

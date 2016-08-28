@@ -5,6 +5,7 @@ Object.metaClass.NODE_INDEX = 'nodeIndex'
 Object.metaClass.NODE_TYPE = 'type'
 Object.metaClass.NODE_NAME = 'name'
 Object.metaClass.NODE_CODE = 'code'
+Object.metaClass.NODE_CHILDNUM = 'childNum'
 
 // Node Values
 
