@@ -52,15 +52,22 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 
 		PropertyKey extIdKey = schema.makePropertyKey("_key").dataType(String.class).make();
 		PropertyKey typeKey = schema.makePropertyKey("type").dataType(String.class).make();
-		PropertyKey valueKey = schema.makePropertyKey("value").dataType(String.class).make();
+
+		// At import, we only create separate composite indices for key and type.
+		// Additional indices should be built by plugins.
 
 		schema.buildIndex("byKey", Vertex.class).addKey(extIdKey).unique().buildCompositeIndex();
+		schema.buildIndex("byType", Vertex.class).addKey(typeKey).buildCompositeIndex();
 
+		// Lucene indices can be built as follows:
+		// This would be how to build a STRING index
+		// PropertyKey valueKey = schema.makePropertyKey("value").dataType(String.class).make();
 		// schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey, Mapping.STRING.asParameter()).
 		// addKey(valueKey, Mapping.STRING.asParameter()).buildMixedIndex("search");
 
-		schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey).
-		addKey(valueKey).buildMixedIndex("search");
+		// And this is how to build a TEXT index
+		// schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey).
+		// addKey(valueKey).buildMixedIndex("search");
 
 		schema.commit();
 		graph.close();
