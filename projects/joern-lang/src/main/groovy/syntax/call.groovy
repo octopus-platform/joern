@@ -3,26 +3,30 @@
 */
 
 callToArguments = {
-	 _().children().filter{it.nodeType == TYPE_ARGLIST}
+	 delegate.children()
+	 .has(NODE_TYPE, TYPE_ARGLIST)
 	 .children()
 }
 
 ithArguments = { def args -> 
-	 _().callToArguments()
-	.filter{ it.childNum == args[0] }
+	 delegate.callToArguments()
+	 .has(NODE_CHILDNUM, args[0])
 }
 
 argToCall = {
-	_().in(AST_EDGE).in(AST_EDGE)
+	delegate.in(AST_EDGE).in(AST_EDGE)
 }
 
 calleeToCall = {
-	_().in(AST_EDGE)
+	delegate.in(AST_EDGE)
 }
 
 callToCallee = {
-	_().out(AST_EDGE).filter{it.type == 'Callee'}
+	delegate.out(AST_EDGE)
+	.has(NODE_TYPE, TYPE_CALLEE)
 }
+
+// FIXME
 
 callToAssigns = {
 	_().matchParents{it.type == 'AssignmentExpr'}

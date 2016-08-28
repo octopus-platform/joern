@@ -50,12 +50,13 @@ getFilesByName = { filename ->
 getCallsTo = { callee ->
 
   getNodesWithTypeAndCode(TYPE_CALLEE, callee)
-  .parents()
+  .calleeToCall()
 
 }
 
 getCallsToRegex = { regex ->
  g.V.has(NODE_TYPE, TYPE_CALLEE).has(NODE_CODE, textRegex(regex))
+ .calleeToCall()
 }
 
 /**

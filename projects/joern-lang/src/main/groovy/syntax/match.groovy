@@ -10,7 +10,7 @@
 */
 
 _match = { def args -> def p = args[0];
-  _().astNodes().filter(p)
+  delegate.astNodes().filter(p)
 }
 
 matchChildren = { def args -> def p = args[0]; def q={false}; if(args.size() > 1) q = args[1];
