@@ -12,7 +12,7 @@ class JoernTool(PipeTool):
     # @Override
     def streamStart(self):
         self.dbInterface = DBInterface()
-        self.disable_json()
+        self.dbInterface.disable_json()
         self.dbInterface.connectToDatabase(self.args.project)
 
     def _runGremlinQuery(self, query):

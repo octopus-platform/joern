@@ -54,8 +54,6 @@ Open a new terminal and import the code:
 	joern-import tutorial/vlc-2.1.4.tar.gz
 
 
-
-
 Exploring Database Contents
 ---------------------------
 
@@ -63,15 +61,12 @@ Exploring Database Contents
 Inspecting node and edge properties
 """"""""""""""""""""""""""""""""""""
 
-To send custom queries to the database, you can use the tool
-``joern-lookup``. By default, ``joern-lookup`` will perform node index
-lookups (see `Fast lookups using the Node Index`_). For Gremlin
-queries, the ``-g`` flag can be specified. Let's begin by retrieving
-all nodes directly connected to the root node using a Gremlin query:
+To send custom queries to the database via the shell, you can use the tool
+``joern-lookup``.
 
 .. code-block:: none
 
-	echo 'g.v(0).out()' | joern-lookup -g
+	echo 'g.V.has('_key', '0').out' | joern-lookup -g
 
 	(1 {"type":"Directory","filepath":"tutorial/vlc-2.1.4"})
 
