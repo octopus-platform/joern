@@ -13,10 +13,6 @@ _match = { def args -> def p = args[0];
   delegate.astNodes().filter(p)
 }
 
-matchChildren = { def args -> def p = args[0];
-  delegate.astNodes().filter(p)
-}
-
 /**
  Walk the tree into the direction of the root
  stopping at the enclosing statement and output
@@ -44,6 +40,5 @@ arg = { def args -> def f = args[0]; def i = args[1];
 
 param = { def args -> def x = args[0];
   p = { it.type == 'Parameter' && it.code.matches(x) } 
-  _()._match(p)
-  
+  delegate._match(p)
 }
