@@ -8,8 +8,10 @@ locations = {
 }
 
 functions = {
-	_().functionId.keysToNodes()
+
+	delegate.functionId.map{ g.V.has('_key', it).toList()[0] }
 }
+
 
 functionToFiles = {
 	_().in(FILE_TO_FUNCTION_EDGE)

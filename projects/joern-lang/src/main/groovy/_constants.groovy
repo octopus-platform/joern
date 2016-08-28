@@ -18,6 +18,7 @@ Object.metaClass.TYPE_FILE = 'File'
 
 Object.metaClass.TYPE_IDENTIFIER_DECL_STMT = 'IdentifierDeclStatement'
 Object.metaClass.TYPE_PARAMETER = 'Parameter'
+Object.metaClass.TYPE_SYMBOL = 'Symbol'
 
 // Edge types
 

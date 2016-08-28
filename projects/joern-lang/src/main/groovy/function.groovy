@@ -1,4 +1,11 @@
 
+functionToLocationStr = {
+  delegate.as('func')
+  .functionToFile().as('file')
+  .select('func', 'file')
+  .map { it['file'].code + ':' +  it['func'].location }  
+}
+
 /**
    (Optimized) match-traversals for functions.
 */

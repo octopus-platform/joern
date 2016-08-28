@@ -74,17 +74,13 @@ see some examples.
 
 .. code-block:: none
 
-	echo "type:File AND filepath:*demux*" | joern-lookup -c
-
-.. code-block:: none
-
-	echo 'queryNodeIndex("type:File AND filepath:*demux*")' | joern-lookup -g
+	echo 'g.V.has("type", "File").hasRegex("code", ".*demux.*").code' | joern-lookup vlc-2.1.4.tar.gz
 
 Advantage:
 
 .. code-block:: none
 
-	echo 'queryNodeIndex("type:File AND filepath:*demux*").out().filter{it.type == "Function"}.name' | joern-lookup -g
+	echo 'g.V.has("type", "File").hasRegex("code", ".*demux.*").out().has("type", "Function").code' | joern-lookup vlc-2.1.4.tar.gz
 
 Plotting Database Content
 -------------------------
@@ -97,7 +93,7 @@ database and visualize them using *graphviz*.
 
 .. code-block:: none
 
-	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup -g | joern-location
+	echo 'getFunctionsByName("GetAoutBuffer").id' | joern-lookup vlc-2.1.4.tar.gz | joern-location
 
 	/home/fabs/targets/vlc-2.1.4/modules/codec/mpeg_audio.c:526:0:19045:19685
 	/home/fabs/targets/vlc-2.1.4/modules/codec/dts.c:400:0:13847:14459

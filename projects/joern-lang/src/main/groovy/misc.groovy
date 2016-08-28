@@ -45,7 +45,7 @@ idsToNodes = {
 }
 
 keysToNodes = {
-	_().transform{ queryNodeIndex('key:' + it).toList() }.scatter()
+	delegate.map{ g.V.has('_key', it).toList()[0] }
 }
 
 /**

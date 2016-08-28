@@ -21,29 +21,21 @@ class Location(AccTool):
         # For Symbols, get location of function
 
         query = """idListToNodes(%s)
-        .ifThenElse{it.nodeType == 'Function'}{
-         it.sideEffect{ loc = it.location; }.functionToFile()
-         .sideEffect{ filename = it.filepath; }
-         }{
-           it.ifThenElse{it.nodeType == 'Symbol'}
-           {
-             it.transform{ g.v(it.functionId) }.sideEffect{loc = it.location; }
-             .functionToFile()
-             .sideEffect{filename = it.filepath; }
-            }{
-             it.ifThenElse{it.isCFGNode == 'True'}{
-               it.sideEffect{loc = it.location}
-               .functions().functionToFile()
-               .sideEffect{filename = it.filepath; }
-             }{
-              // AST node
-              it._().statements().sideEffect{ loc = it.location; }
-              .functions()
-              .functionToFile().sideEffect{ filename = it.filepath; }
-              }
-           }
-        }.transform{ filename + ':' + loc }
 
+        .choose(values(NODE_TYPE))
+        .option(TYPE_FUNCTION,
+          __.start().functionToLocationStr)
+        .option("Symbol",
+          _functions().functionToLocationStr)
+        .option(Pick.none,
+        __.start().choose(has(NODE_ISCFGNODE, 'True'),
+            __.start().as('astnode'),
+            __.start().statements().as('astnode')
+        )
+        .functions().functionToFile().as('file')
+        .select('astnode', 'file')
+        .map { it['file'].code + ':' +  it['astnode'].location }
+        )
         """ % (nodeIds)
 
         y = self._runGremlinQuery(query)
