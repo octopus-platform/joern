@@ -61,60 +61,6 @@ Exploring Database Contents
 Inspecting node and edge properties
 """"""""""""""""""""""""""""""""""""
 
-To send custom queries to the database via the shell, you can use the tool
-``joern-lookup``.
-
-.. code-block:: none
-
-	echo 'g.V.has('_key', '0').out' | joern-lookup -g
-
-	(1 {"type":"Directory","filepath":"tutorial/vlc-2.1.4"})
-
-If this works, you have successfully injected a Gremlin script into
-the Neo4J database using the REST API via ``joern-tools``
-. Congratulations, btw. As you can see from the output, the reference
-node has a single child node. This node has two *attributes*: "type"
-and "filepath". In the joern database, each node has a "type"
-attribute, in this case "Directory". Directory nodes in particular
-have a second attribute, "filepath", which stores the complete path to
-the directory represented by this node.
-
-Let's see where we can get by expanding outgoing edges:
-
-.. code-block:: none
-
-	# Syntax
-	# .outE(): outgoing Edges
-
-	echo 'g.v(0).out().outE()' | joern-lookup -g | sort | uniq -c
-
-	14 IS_PARENT_DIR_OF
-
-This shows that, while the directory node only contains its path in
-the *filepath* attribute, it is connected to its sub-directories by
-edges of type *IS_PARENT_DIR_OF*, and thus its position in the
-directory hierarchy is encoded in the graph structure.
-
-**Filtering.** Starting from a directory node, we can recursively
-enumerate all files it contains and filter them by name. For example,
-the following query returns all files in the directory 'demux':
-
-.. code-block:: none
-
-	# Syntax
-	# .filter(closure): allows you to filter incoming objects using the
-	# supplied closure, e.g., the anonymous function { it.type ==
-	# 'File'}. 'it' is the incoming pipe, which means you can treat it
-	# just like you would treat the return-value of out().
-	# loop(1){true}{true}: perform the preceeding traversal
-	# exhaustively and emit each node visited
-
-	echo 'g.v(0).out("IS_PARENT_DIR_OF").loop(1){true}{true}.filter{ it.filepath.contains("/demux/") }' | joern-lookup -g
-
-File nodes are linked to all definitions they contain, i.e., type,
-variable and function definitions. Before we look into functions,
-let's quickly take a look at the *node index*.
-
 Fast lookups using the Node Index
 """""""""""""""""""""""""""""""""
 
