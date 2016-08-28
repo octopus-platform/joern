@@ -44,7 +44,7 @@ Contents:
 
 	installation
 	import
-	access
+	pythonAccess
 	databaseOverview
 	querying
 	joerntools
