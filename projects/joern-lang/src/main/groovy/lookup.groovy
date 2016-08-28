@@ -1,8 +1,11 @@
 
+/**
+ This is how you _would_ directly query the index, but don't ever do that.
+*/
 
-queryNodeIndex = { query ->
-   __.inject(*graph.indexQuery('byTypeAndValue', query).vertices()*.getElement())
-}
+// queryNodeIndex = { query ->
+//   __.inject(*graph.indexQuery('byTypeAndValue', query).vertices()*.getElement())
+// }
 
 /**
    Retrieve functions by name.
@@ -11,19 +14,21 @@ queryNodeIndex = { query ->
 */
 
 getFunctionsByName = { name ->
-	getNodesWithTypeAndName(TYPE_FUNCTION, name)
+	getNodesWithTypeAndCode(TYPE_FUNCTION, name)
 }
 
 getFunctionsByFilename = { name ->
 
      g.V.has(NODE_TYPE, TYPE_FILE)
-	 .filter{ it.filepath == name }
-	 .out('IS_FILE_OF')
-	 .filter{ it.type == TYPE_FUNCTION }
+     	.has(NODE_CODE, name)
+	.out(FILE_TO_FUNCTION_EDGE)
+	.has(NODE_TYPE, TYPE_FUNCTION)
 }
 
-getNodesWithTypeAndName = { type, name ->
-	g.V.has(NODE_TYPE, type).filter{ it.name == name}
+getNodesWithTypeAndCode = { type, code ->
+
+	g.V.has(NODE_TYPE, type)
+	   .has(NODE_CODE, code)
 }
 
 getFunctionsByFileAndName = { filename, name  ->
@@ -31,9 +36,8 @@ getFunctionsByFileAndName = { filename, name  ->
 	.filter{ it.name == name }
 }
 
-getFilesByName = { filename ->
-	query = "$NODE_TYPE:$TYPE_FILE AND $NODE_FILEPATH:$filename"
-	queryNodeIndex(query)
+getFilesByName = { filename ->	
+	g.V.has(NODE_TYPE, TYPE_FILE).has(NODE_CODE, filename)
 }
 
 /**
@@ -50,6 +54,10 @@ getCallsTo = { callee ->
 
 }
 
+getCallsToRegex = { regex ->
+ g.V.has(NODE_TYPE, TYPE_CALLEE).has(NODE_CODE, textRegex(regex))
+}
+
 /**
    Retrieve arguments to functions. Corresponds to the traversal
    'ARG' from the paper.
@@ -63,7 +71,3 @@ getArguments = { name, i ->
 	getCallsTo(name).ithArguments(i)
 }
 
-getNodesWithTypeAndCode = { def type, def code ->
-	query = "$NODE_TYPE:$type AND $NODE_CODE:$code"
-	queryNodeIndex(query)
-}

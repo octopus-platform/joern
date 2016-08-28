@@ -39,6 +39,9 @@ select a project, connect to the server and run a Gremlin query.
 Chunking Traversals
 --------------------
 
+*Note*: It is not clear whether this optimization is still necessary
+now that the code has been ported to Tinkerpop3.
+
 Running the same traversal on a large set of start nodes often leads
 to unacceptable performance as all nodes and edges touched by the
 traversal are kept in server memory before returning results. For
