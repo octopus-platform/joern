@@ -11,7 +11,7 @@
 
 
 astNodes = {
-	delegate.repeat(_children()).until(noMoreChildren())
+	delegate.repeat(_children()).until(noMoreChildren()).emit{true}
 }
 
 /**

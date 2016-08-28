@@ -4,9 +4,9 @@
 */
 
 lval = {
-	_().out(AST_EDGE).filter{ it.childNum == "0" }
+	delegate.out(AST_EDGE).has(TYPE_CHILDNUM, '0')
 }
 
 rval = {
-	_().out(AST_EDGE).filter{ it.childNum == "1" }
+	delegate.out(AST_EDGE).has(TYPE_CHILDNUM, '1')
 }

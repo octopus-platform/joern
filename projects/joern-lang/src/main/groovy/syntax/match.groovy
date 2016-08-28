@@ -13,8 +13,8 @@ _match = { def args -> def p = args[0];
   delegate.astNodes().filter(p)
 }
 
-matchChildren = { def args -> def p = args[0]; def q={false}; if(args.size() > 1) q = args[1];
-  _().children().loop(1){ !q(it.object) }{ p(it.object) }
+matchChildren = { def args -> def p = args[0];
+  delegate.astNodes().filter(p)
 }
 
 /**

@@ -152,7 +152,8 @@ expressions inside first arguments to ``malloc`` simply becomes:
 .. code-block:: none
 
 	getCallsTo('malloc').ithArguments('0')
-	.astNodes().filter{ it.type == 'MultiplicativeExpression'}
+	.astNodes()
+	.hasRegex(NODE_TYPE, '.*Mul.*')
 
 
 Syntax-Only Descriptions

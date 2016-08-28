@@ -1,4 +1,3 @@
-Object.metaClass.NODE_INDEX = 'nodeIndex'
 
 // Node Keys
 
@@ -15,11 +14,10 @@ Object.metaClass.TYPE_CALLEE = 'Callee'
 Object.metaClass.TYPE_FUNCTION = 'Function'
 Object.metaClass.TYPE_ARGLIST = 'ArgumentList'
 Object.metaClass.TYPE_ASSIGNMENT = 'AssignmentExpr'
+Object.metaClass.TYPE_FILE = 'File'
 
 Object.metaClass.TYPE_IDENTIFIER_DECL_STMT = 'IdentifierDeclStatement'
 Object.metaClass.TYPE_PARAMETER = 'Parameter'
-
-TYPE_FILE = 'File'
 
 // Edge types
 
