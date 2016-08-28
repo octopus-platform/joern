@@ -6,6 +6,7 @@ Object.metaClass.NODE_TYPE = 'type'
 Object.metaClass.NODE_NAME = 'name'
 Object.metaClass.NODE_CODE = 'code'
 Object.metaClass.NODE_CHILDNUM = 'childNum'
+Object.metaClass.NODE_ISCFGNODE = 'isCFGNode'
 
 // Node Values
 

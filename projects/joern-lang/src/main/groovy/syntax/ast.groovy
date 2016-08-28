@@ -66,9 +66,7 @@ siblings = {
 */
 
 statements = {
-	   _().ifThenElse{isStatement(it)}
-      	   { it }
-      	   { it.in(AST_EDGE).loop(1){it.object.isCFGNode != 'True'} }
+  delegate.until(has(NODE_ISCFGNODE, 'True')).repeat(_parents())
 }
 
 /**
