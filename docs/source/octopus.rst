@@ -5,13 +5,24 @@ The Octopus Server is a generic server for collaborative code analysis
 that can be extended to support analysis of particular programming
 languages, hosting of domain specific languages, and the
 implementation of code analysis algorithms via plugins and database
-queries.
+queries. In principle, it is not limited to the analysis of code,
+however, it has been developed with this application in mind.
 
 Both the source code analysis tool Joern and the binary analysis tool
 Bjoern are implemented as extensions to Octopus.
 
+Utilities
+---------
+
+While the extensions Joern and Bjoern come with their own set of shell
+utilities for user interacting, the Octopus server itself also
+provides shell utilities to carry out basic server operations. These
+utilities are particularly valuable during the process of extension
+development. 
+
+
 Utility: octopus-project
-------------------------
+""""""""""""""""""""""""
 
 An octopus server can host multiple projects, e.g., a project for each
 of the code bases under analysis. To manage projects, you can make use
@@ -32,7 +43,7 @@ Example session:
 	$ octopus-project delete myNewProject
 
 Utility: octopus-plugin
------------------------
+"""""""""""""""""""""""
 
 The `octopus-plugin` utility allows server-side plugins to be
 invoked. This utility is only interesting during plugin development as
