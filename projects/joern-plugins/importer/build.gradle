@@ -1,6 +1,0 @@
-
-dependencies {
-	     compile project(':projects:jpanlib')
-	     compile project(':projects:joern-fuzzyc')
-	     compile project(':projects:joern')
-}

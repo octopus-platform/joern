@@ -37,16 +37,25 @@ task joernTools(type: Exec, dependsOn: octopusTools) {
     commandLine 'python3', 'setup.py', 'install', '--user'
 }
 
-// Copy joern-plugins into Octopus plugin directory
+// Copy extensions and plugins into Octopus plugin directory
 
 task deploy(dependsOn: build) << {
     copy {
         into "projects/octopus/plugins"
-        from fileTree("projects/joern-plugins").files
+        from fileTree("projects/plugins").files
         include '**/*.jar'
         exclude '**/*-plain.jar'
         includeEmptyDirs = false
     }
+
+    copy {
+        into "projects/octopus/extensions"
+        from fileTree("projects/extensions").files
+        include '**/*.jar'
+        exclude '**/*-plain.jar'
+        includeEmptyDirs = false
+    }
+
 }
 
 dependencies{
@@ -58,7 +67,7 @@ dependencies{
 	compile group: 'junit', name: 'junit', version: '4.12'
 }
 
-task copyToLib(type: Copy) {
+task copyToLib2(type: Copy) {
     into "projects/octopus/lib"
     from configurations.runtime
 }
@@ -68,8 +77,8 @@ task buildTestDatabase << {
      println './rebuildTestDB.sh'.execute().text
 }
 
-copyToLib.dependsOn subprojects.build
+copyToLib2.dependsOn subprojects.build
 
 build.dependsOn subprojects.build
 build.dependsOn joernTools
-build.dependsOn copyToLib
+build.dependsOn copyToLib2

@@ -1,6 +1,6 @@
 
 dependencies{
-	compile project(':projects:jpanlib')
+	compile project(':projects:extensions:jpanlib')
 
 	compile group: 'com.tunnelvisionlabs', name: 'antlr4-annotations', version: '4.5.3'
 	compile group: 'com.tunnelvisionlabs', name: 'antlr4-runtime', version: '4.5.3'
