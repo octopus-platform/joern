@@ -1,8 +1,0 @@
-
-dependencies {
-
-    compile group: "com.thinkaurelius.titan", name: "titan-core", version: '1.0.0'	     
-
-    compile group: 'com.opencsv', name: 'opencsv', version: '3.5'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.13'
-}
