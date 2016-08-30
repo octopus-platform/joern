@@ -64,6 +64,7 @@ upload_parser.add_argument(
 
 args = parser.parse_args()
 manager = ProjectManager(args.server_host, args.server_port)
+manager.connect()
 
 if args.subcommand == 'create':
     print(manager.create(args.project))
