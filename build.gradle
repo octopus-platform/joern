@@ -73,10 +73,6 @@ task copyToLib2(type: Copy) {
 }
 
 
-task buildTestDatabase << {
-     println './rebuildTestDB.sh'.execute().text
-}
-
 copyToLib2.dependsOn subprojects.build
 
 build.dependsOn subprojects.build

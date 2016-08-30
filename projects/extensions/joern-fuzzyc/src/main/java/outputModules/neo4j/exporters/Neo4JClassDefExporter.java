@@ -2,13 +2,10 @@ package outputModules.neo4j.exporters;
 
 import java.util.Map;
 
+import databaseNodes.*;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
-import databaseNodes.ClassDefDatabaseNode;
-import databaseNodes.DatabaseNode;
-import databaseNodes.EdgeTypes;
-import databaseNodes.FileDatabaseNode;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 import outputModules.common.ClassDefExporter;
@@ -41,7 +38,7 @@ public class Neo4JClassDefExporter extends ClassDefExporter
 		nodeStore.addNeo4jNode(dbNode, properties);
 
 		mainNodeId = nodeStore.getIdForObject(dbNode);
-		properties.remove("location");
+		properties.remove(NodeKeys.LOCATION);
 		nodeStore.indexNode(dbNode, properties);
 	}
 
