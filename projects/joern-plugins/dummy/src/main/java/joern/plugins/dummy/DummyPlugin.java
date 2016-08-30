@@ -1,6 +1,6 @@
 package joern.plugins.dummy;
 
-import joern.pluginlib.plugintypes.JoernPlugin;
+import joern.api.plugintypes.JoernPlugin;
 
 public class DummyPlugin extends JoernPlugin
 {

@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fileWalker.OrderedWalker;
-import joern.pluginlib.JoernProject;
-import joern.pluginlib.plugintypes.JoernProjectPlugin;
+import joern.api.JoernProject;
+import joern.api.plugintypes.JoernProjectPlugin;
 import octopus.api.decompressor.Decompressor;
 
 public class JoernImporter extends JoernProjectPlugin {

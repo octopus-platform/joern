@@ -3,13 +3,14 @@ package joern.plugins.importer;
 import java.io.File;
 import java.nio.file.Path;
 
+import octopus.api.csvImporter.CSVImporter;
+import octopus.server.importer.csv.ImportJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fileWalker.SourceFileListener;
-import joern.pluginlib.JoernProject;
-import octopus.api.csvImporter.CSVImporter;
-import octopus.server.csvimporter.ImportJob;
+import joern.api.JoernProject;
+
 
 public class ImporterListener extends SourceFileListener {
 

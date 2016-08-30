@@ -1,13 +1,12 @@
+
+include 'projects:octopus'
+
+include 'projects:joern'
 include 'projects:jpanlib'
 include 'projects:joern-fuzzyc'
 include 'projects:joern-php'
-include 'projects:joern-pluginlib'
-
-include 'projects:octopus:octopus-server'
-include 'projects:octopus:octopus-lang'
-include 'projects:octopus:titanimporter'
-
 include 'projects:joern-lang'
 
 include 'projects:joern-plugins:importer'
 include 'projects:joern-plugins:dummy'
+
