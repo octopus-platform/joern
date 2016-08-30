@@ -37,3 +37,4 @@ class ProjectManager(object):
         filename_to_write_to = os.path.join(project_name, dst_filename)
         ftp.storbinary('STOR ' + filename_to_write_to, open(filename, 'rb'))
         ftp.close()
+        return "uploaded"
