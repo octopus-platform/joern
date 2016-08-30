@@ -11,6 +11,30 @@ however, it has been developed with this application in mind.
 Both the source code analysis tool Joern and the binary analysis tool
 Bjoern are implemented as extensions to Octopus.
 
+Configuration & Startup
+========================
+
+By default, Octopus server will use up to 3GB for the Java Heap. The
+more heap memory you can spare, the better performance will be. You
+can tell Octopus how much heap to use by setting the environment
+variable `OCTOPUS_SERVER_MAXHEAP`, e.g.,
+
+.. code-block:: none
+
+	export OCTOPUS_SERVER_MAXHEAP=16G
+
+will allow a heap of up to 16GB.
+
+To start a bare-bones octopus-server without any extensions loaded,
+you, invoke the startup script:
+
+.. code-block:: none
+
+	$ ./octopus-server
+
+The server can now be remoted controlled via a REST API on port 2480,
+and an anonymous FTP Server on port 23231.
+
 Utilities
 ---------
 
