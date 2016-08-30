@@ -1,3 +1,3 @@
 exStep = { args ->
-	_().nodeType
+	delegate.nodeType
 }
