@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 
+import com.thinkaurelius.titan.core.schema.Mapping;
 import org.apache.commons.io.FileUtils;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -61,9 +62,9 @@ public class TitanLocalDatabaseManager implements DatabaseManager {
 
 		// Lucene indices can be built as follows:
 		// This would be how to build a STRING index
-		// PropertyKey valueKey = schema.makePropertyKey("value").dataType(String.class).make();
-		// schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey, Mapping.STRING.asParameter()).
-		// addKey(valueKey, Mapping.STRING.asParameter()).buildMixedIndex("search");
+		PropertyKey codeKey = schema.makePropertyKey("code").dataType(String.class).make();
+		schema.buildIndex("byValue", Vertex.class)
+				.addKey(codeKey, Mapping.STRING.asParameter()).buildMixedIndex("search");
 
 		// And this is how to build a TEXT index
 		// schema.buildIndex("byTypeAndValue", Vertex.class).addKey(typeKey).
