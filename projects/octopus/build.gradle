@@ -1,0 +1,50 @@
+
+// Check gradle version.
+
+def reguiredGradleVersionMajor = 2
+def requiredGradleVersionMinor = 0
+def (gradleVersionMajor, gradleVersionMinor) =
+    getGradle().gradleVersion.tokenize('.').collect {it.toInteger()}
+
+if ( gradleVersionMajor < reguiredGradleVersionMajor ||
+        (gradleVersionMajor == reguiredGradleVersionMajor &&
+        gradleVersionMinor < requiredGradleVersionMinor))
+{
+    throw new GradleException("Gradle version " +
+            "$reguiredGradleVersionMajor.$requiredGradleVersionMinor and higher required.")
+}
+
+apply plugin: 'java'
+
+repositories { mavenCentral() }
+
+configurations {
+  runtime.exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
+dependencies{
+
+  compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
+  compile group: 'commons-io', name: 'commons-io', version: '2.5'
+  compile group: 'org.json', name: 'json', version: '20141113'
+  compile group: 'org.apache.ftpserver', name: 'ftpserver', version: '1.0.6'
+  compile "com.sparkjava:spark-core:2.5"
+  compile group: 'org.apache.commons', name: 'commons-compress', version: '1.8'
+  compile group: "com.thinkaurelius.titan", name: "titan-core", version: '1.0.0'
+  compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.13'
+  compile group: 'org.apache.tinkerpop', name: 'gremlin-driver', version: '3.0.1-incubating'
+  compile group: 'com.opencsv', name: 'opencsv', version: '3.5'
+
+  runtime group: 'ch.qos.logback', name: 'logback-core', version: '1.1.3'
+  runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.3'
+  runtime group: "com.thinkaurelius.titan", name: "titan-berkeleyje", version: '1.0.0'
+  runtime group: "com.thinkaurelius.titan", name: "titan-lucene", version: '1.0.0'
+
+}
+
+task copyToLib(type: Copy) {
+    into "lib"
+    from configurations.runtime
+}
+
+build.dependsOn copyToLib

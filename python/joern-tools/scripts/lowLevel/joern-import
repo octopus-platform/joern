@@ -13,13 +13,10 @@ from octopus.importer.OctopusImporter import OctopusImporter
 class JoernImporter(OctopusImporter):
 
     def __init__(self):
-        self.importerPluginJSON = """{
-        "plugin": "importer.jar",
-        "class": "joern.plugins.importer.JoernImporter",
-        "settings": {
-        "projectName": "%s",
-        }}
-        """
+
+        self.pluginName = "importer.jar"
+        self.pluginClass = "joern.plugins.importer.JoernImporter"
+
 
 def main(filename):
     importer = JoernImporter()

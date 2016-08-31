@@ -59,18 +59,19 @@ upload_parser.add_argument(
 
 upload_parser.add_argument(
     "file",
-    type=argparse.FileType("rb"),
+    type=str,
     help="upload this file")
 
 args = parser.parse_args()
 manager = ProjectManager(args.server_host, args.server_port)
+manager.connect()
 
 if args.subcommand == 'create':
     print(manager.create(args.project))
 elif args.subcommand == 'delete':
     print(manager.delete(args.project))
 elif args.subcommand == 'upload':
-    print(manager.upload_file(args.project, args.file))
+    print(manager.upload(args.project, args.file))
 elif args.subcommand == "list":
     print(manager.list())
 else:

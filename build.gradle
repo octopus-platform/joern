@@ -1,3 +1,6 @@
+
+// Check gradle version
+
 def reguiredGradleVersionMajor = 2
 def requiredGradleVersionMinor = 0
 def (gradleVersionMajor, gradleVersionMinor) =
@@ -14,11 +17,10 @@ if ( gradleVersionMajor < reguiredGradleVersionMajor ||
 
 allprojects {
     apply plugin: 'java'
-
-    repositories {
-        mavenCentral()
-    }
+    repositories { mavenCentral() }
 }
+
+// Python utilities
 
 task octopusMlutils(type: Exec) {
     workingDir './python/octopus-mlutils'
@@ -35,36 +37,26 @@ task joernTools(type: Exec, dependsOn: octopusTools) {
     commandLine 'python3', 'setup.py', 'install', '--user'
 }
 
+// Copy extensions and plugins into Octopus plugin directory
+
 task deploy(dependsOn: build) << {
     copy {
-        into "projects/octopus/octopus-server/plugins"
-        from fileTree("projects/joern-plugins").files
+        into "projects/octopus/plugins"
+        from fileTree("projects/plugins").files
         include '**/*.jar'
         exclude '**/*-plain.jar'
         includeEmptyDirs = false
     }
-}
 
-
-configure(project(':projects:joern-plugins').subprojects) {
-    task jarWithDep(type: Jar) {
-        doFirst {
-            def pluginJars = configurations.runtime.minus(project(':projects:octopus:octopus-server').configurations.runtime).asCollection()
-            pluginJars.remove(new File(project(':projects:octopus:octopus-server').buildDir.toString() + '/libs/octopus-server.jar'))
-            pluginJars.add(new File(project.buildDir.toString() + '/libs/' + project.name + '-plain.jar'))
-            baseName = project.name
-            from { pluginJars.collect { it.isDirectory() ? it : zipTree(it) } }
-            with jar
-        }
-    }
-    jar {
-        baseName = project.name + '-plain'
+    copy {
+        into "projects/octopus/extensions"
+        from fileTree("projects/extensions").files
+        include '**/*.jar'
+        exclude '**/*-plain.jar'
+        includeEmptyDirs = false
     }
 
-    jarWithDep.dependsOn(jar)
-    assemble.dependsOn(jarWithDep)
 }
-
 
 dependencies{
 	compile group: 'com.tunnelvisionlabs', name: 'antlr4-runtime', version: '4.5.3'
@@ -75,8 +67,8 @@ dependencies{
 	compile group: 'junit', name: 'junit', version: '4.12'
 }
 
-task copyToLib(type: Copy) {
-    into "jars"
+task copyToLib2(type: Copy) {
+    into "projects/octopus/lib"
     from configurations.runtime
 }
 
@@ -85,8 +77,8 @@ task buildTestDatabase << {
      println './rebuildTestDB.sh'.execute().text
 }
 
-copyToLib.dependsOn subprojects.build
+copyToLib2.dependsOn subprojects.build
 
 build.dependsOn subprojects.build
 build.dependsOn joernTools
-build.dependsOn copyToLib
+build.dependsOn copyToLib2

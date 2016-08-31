@@ -2,11 +2,8 @@ import sys, os
 import http.client
 import urllib
 
-from ftplib import FTP
-
-SERVER_HOST = 'localhost'
-SERVER_PORT = '2480'
-FTP_PORT = 23231
+from octopus.server.project_manager import ProjectManager
+from octopus.server.plugin_executor import PluginExecutor
 
 class OctopusImporter:
     def __init__(self):
@@ -14,33 +11,31 @@ class OctopusImporter:
 
     def importFile(self, filename):
         self.filename = filename
+
+        self.initProjectManager()
+        self.initPluginExecutor()
+
         self.createProject()
         self.uploadFile()
         self.executeImporterPlugin()
 
+    def initProjectManager(self):
+        self.projectManager = ProjectManager()
+        self.projectManager.connect()
+
+    def initPluginExecutor(self):
+        self.pluginExecutor = PluginExecutor()
+
     def createProject(self):
         self.projectName = os.path.split(self.filename)[-1]
         print('Creating project: %s' % (self.projectName))
-
-        conn = self._getConnectionToServer()
-        conn.request("GET", "/manageprojects/create/%s" % (self.projectName))
-        response = conn.getresponse()
-
-    def _getConnectionToServer(self):
-        return http.client.HTTPConnection(SERVER_HOST + ":" + SERVER_PORT)
+        print(self.projectManager.create(self.projectName))
 
     def uploadFile(self):
         print('Uploading file: %s' % (self.filename))
-
-        ftp = FTP()
-        ftp.connect(SERVER_HOST, FTP_PORT)
-        ftp.login()
-        filenameToWriteTo = os.path.join(self.projectName, "binary")
-        ftp.storbinary('STOR ' + filenameToWriteTo, open(self.filename, 'rb'))
-        ftp.close()
+        self.projectManager.upload(self.projectName, self.filename, "binary")
 
     def executeImporterPlugin(self):
         print('Executing importer plugin')
-        conn = self._getConnectionToServer()
-        conn.request("POST", "/executeplugin/", self.importerPluginJSON % (self.projectName))
-        response = conn.getresponse()
+        pluginSettings = { 'projectName' : self.projectName }
+        print(self.pluginExecutor.execute(self.pluginName, self.pluginClass, pluginSettings))
