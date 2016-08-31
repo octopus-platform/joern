@@ -22,17 +22,7 @@ allprojects {
 
 // Python utilities
 
-task octopusMlutils(type: Exec) {
-    workingDir './python/octopus-mlutils'
-    commandLine 'python3', 'setup.py', 'install', '--user'
-}
-
-task octopusTools(type: Exec, dependsOn: octopusMlutils) {
-    workingDir './python/octopus-tools'
-    commandLine 'python3', 'setup.py', 'install', '--user'
-}
-
-task joernTools(type: Exec, dependsOn: octopusTools) {
+task joernTools(type: Exec) {
     workingDir './python/joern-tools'
     commandLine 'python3', 'setup.py', 'install', '--user'
 }
