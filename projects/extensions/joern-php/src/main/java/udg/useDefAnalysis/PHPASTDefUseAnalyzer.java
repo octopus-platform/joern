@@ -2,6 +2,7 @@ package udg.useDefAnalysis;
 
 import java.util.Collection;
 
+import ast.expressions.*;
 import udg.ASTProvider;
 import udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
 import udg.useDefAnalysis.environments.AssignmentEnvironment;
@@ -39,13 +40,14 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 	@Override
 	public Collection<UseOrDef> analyzeAST(ASTProvider astProvider)
 	{
+
 		String nodeType = astProvider.getTypeAsString();
-		if( nodeType.equals("Variable") ||
-			nodeType.equals("Constant") ||
-			nodeType.equals("PropertyExpression") ||
-			nodeType.equals("StaticPropertyExpression") ||
-			nodeType.equals("ClassConstantExpression") ||
-			nodeType.equals("ArrayIndexing"))
+		if( nodeType.equals(Variable.class.getSimpleName()) ||
+			nodeType.equals(Constant.class.getSimpleName()) ||
+			nodeType.equals(PropertyExpression.class.getSimpleName()) ||
+			nodeType.equals(StaticPropertyExpression.class.getSimpleName()) ||
+			nodeType.equals(ClassConstantExpression.class.getSimpleName()) ||
+			nodeType.equals(ArrayIndexing.class.getSimpleName()))
 			this.analyzingPredicate = true;
 
 		Collection<UseOrDef> retval = super.analyzeAST(astProvider);
@@ -94,7 +96,7 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "DoStatement":
 				return new DoEnvironment();
 
-			case "PHPIfElement":
+			case "IfElement":
 				return new IfElementEnvironment();
 
 			case "ForStatement":
@@ -105,7 +107,7 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			// Until there is no solution for 'switch' nodes in CFG creation,
 			// we cannot really know which nodes should be analyzed in this context,
 			// and how to tackle them.
-			case "PHPSwitchStatement":
+			case "SwitchStatementPHP":
 				return new SwitchEnvironment();
 
 			// TODO This is temporary.
@@ -147,7 +149,7 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			// (1) assume DEFs *and* USEs for all variables in a function call (over-approximation -> more false positives)
 			// (2) assume *only* USEs for all variables in a function call (under-approximation -> more false negatives)
 			// Here we go for (2).
-			case "CallExpression":
+			case "CallExpressionBase":
 			case "NewExpression":
 			case "MethodCallExpression":
 			case "StaticCallExpression":
@@ -182,7 +184,7 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			/* COMMENTED OUT: Actually, these will never be CFG nodes, so these
 			 * environments are useless. We use the ParameterEnvironment instead,
 			 * now that parameters are CFG nodes too.
-			case "PHPFunctionDef":
+			case "FunctionDef":
 			case "Closure":
 			case "Method":
 				return new FunctionDefEnvironment();
