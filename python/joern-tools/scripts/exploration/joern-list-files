@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from octopus.shelltool.ChunkStartTool import ChunkStartTool
+import fnmatch
+import re
 
 DESCRIPTION = """Create a list of all files of the code base. The
 first field is the file's path, the second field is the id of the
@@ -16,12 +18,18 @@ class ListFiles(ChunkStartTool):
                                         default ="*")
 
       def _constructIdQuery(self):
+            # Translate glob pattern to regex
+            fnregex = fnmatch.translate(self.args.pattern)
+            # Translate Python generated regex to something that Groovy can understand
+            fnregex = re.sub(r'\\Z.*$','',fnregex)
             return """
-            queryNodeIndex('type:File AND filepath:%s').id
-            """ % (self.args.pattern)
+            g.V.has(NODE_TYPE, TYPE_FILE)
+     	    .has(NODE_CODE, textRegex('%s'))
+     	    .id
+            """ % (fnregex)
 
       def _constructQueryForChunk(self, chunk):
-            return """idListToNodes(%s).transform{ it.filepath + "\t" + it.id}""" % (chunk)
+            return """idListToNodes(%s).map{ it.code + "\t" + it.id}""" % (chunk)
 
       def _handleChunkResult(self, res, chunk):
             for x in res:
