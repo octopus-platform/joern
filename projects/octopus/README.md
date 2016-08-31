@@ -11,6 +11,21 @@ however, it has been developed with this application in mind.
 Both the source code analysis tool Joern and the binary analysis tool
 Bjoern are implemented as extensions to Octopus.
 
+## Installation
+
+Octopus should run on recent Linux distributions. It currently only
+depends on:
+
+* Java 8 (tested with OpenJDK-8)
+* Gradle 2.X
+
+With these dependencies installed, you can build Octopus as follows:
+
+```
+git clone https://github.com/octopus-platform/octopus/
+gradle build
+```
+
 ## Configuration & Startup
 
 
@@ -31,13 +46,13 @@ you, invoke the startup script:
 
 
 ```
-$ ./octopus-server.sh
+./octopus-server.sh
 ```
 
 The server can now be remoted controlled via a REST API on port 2480,
 and an anonymous FTP Server on port 23231.
 
-## Utilities
+## Shell Utilities
 
 
 While the extensions Joern and Bjoern come with their own set of shell
@@ -80,11 +95,12 @@ extension for the project `testCode.tar.gz` via `octopus-plugin` as follows:
 
 
 ```
-$ echo '{ "plugin": "importer.jar", "class": "joern.plugins.importer.JoernImporter","settings": { "projectName": "testCode.tar.gz", }} > foo.json
-$ octopus-plugin foo.json
+echo '{ "plugin": "importer.jar", "class": "joern.plugins.importer.JoernImporter","settings": { "projectName": "testCode.tar.gz", }} > foo.json
+octopus-plugin foo.json
 ```
 
 This is handy during plugin development and for unit testing. However,
 for the end user, please consider providing a utility script to
 simplify usage. As an example, you can take a look at the
 `joern-import` script for the joern import plugin.
+
