@@ -11,7 +11,8 @@ public class TestDBTestsBatchInserter
 	@BeforeClass
 	public static void loadTestDatabase()
 	{
-		Neo4JBatchInserter.setIndexDirectoryName("../../.testDB");
+		System.out.println(System.getProperty("user.dir"));
+		Neo4JBatchInserter.setIndexDirectoryName(".testDB");
 		Neo4JBatchInserter.openDatabase();
 	}
 

@@ -11,8 +11,10 @@ public class Function
 
 	public static IndexHits<Long> getFunctionsByName(String functionName)
 	{
+		String query = String.format("%s:%s AND %s:Function", NodeKeys.CODE, functionName, NodeKeys.NODE_TYPE);
+		System.out.println(query);
 		return Neo4JBatchInserter
-				.queryIndex(NodeKeys.CODE + ":" + functionName);
+				.queryIndex(query);
 	}
 
 	public static long getCFGForFunction(Long funcId)

@@ -18,12 +18,16 @@ class ListFuncs(ChunkStartTool):
 
       def _constructIdQuery(self):
             return """
-            queryNodeIndex('v.type:Function').has('name', textRegex('%s')).id
+            g.V.has(NODE_TYPE,TYPE_FUNCTION)
+            .has(NODE_CODE, textRegex('%s')).id
             """ % (self.args.pattern)
 
       def _constructQueryForChunk(self, chunk):
-            return """idListToNodes(%s).as('func').functionToFile().as('file').select('func','file')
-            .map{ it['func'].id + '\t' + it['func'].name + '\t' + it['file'].filepath }""" % (chunk)
+            return """idListToNodes(%s).as('func')
+            .functionToFile().as('file')
+            .select('func','file')
+            .map{ it['func'].id + '\t' + it['func'].code + '\t' + it['file'].code }
+            """ % (chunk)
 
       def _handleChunkResult(self, res, chunk):
             for x in res:

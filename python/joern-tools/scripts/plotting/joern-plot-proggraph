@@ -2,6 +2,7 @@
 
 import pygraphviz as pgv
 from joern.shelltool.JoernTool import JoernTool
+from octopus.server.DBInterface import DBInterface
 
 
 DESCRIPTION = """Retrieve a graph representation of a function with the given
@@ -66,9 +67,17 @@ class ProgramGraph(JoernTool):
         G = self._createDotGraph(function_id)
         self._outputGraph(G, line)
 
+    def streamStart(self):
+        self.dbInterface = DBInterface()
+        # self.dbInterface.disable_json()
+        self.dbInterface.connectToDatabase(self.args.project)
+
     def _getCFGNodes(self, function_id):
 
-        query = """queryNodeIndex('functionId:%s AND isCFGNode:True')""" % (function_id)
+        query = """
+        g.V().has('functionId','%s').has('isCFGNode','True')
+        // queryNodeIndex('functionId:%%s AND isCFGNode:True')
+        """ % (function_id)
         return self._runGremlinQuery(query)
 
     def _getSymbolNodes(self, function_id):
@@ -76,13 +85,24 @@ class ProgramGraph(JoernTool):
         if not self.args.show_data_flow and not self.args.show_all:
             return []
 
-        query = """queryNodeIndex('functionId:%s AND type:Symbol')""" % (function_id)
-        return self._runGremlinQuery(query)
+        query = """
+        g.V().has('functionId','%s').has('type','Symbol')
+        // queryNodeIndex('functionId:%%s AND type:Symbol')
+        """ % (function_id)
+        r = self._runGremlinQuery(query)
+        print(r)
+        return r
 
     def _getEdges(self, function_id, type):
 
-        query = """queryNodeIndex('functionId:%s AND isCFGNode:True').outE('%s')""" % (function_id, type)
-        return self._runGremlinQuery(query)
+        query = """
+        g.V().has('functionId','%s').has('isCFGNode','True')
+        // queryNodeIndex('functionId:%%s AND isCFGNode:True')
+        .outE('%s')
+        """ % (function_id, type)
+        r = self._runGremlinQuery(query)
+        print(r)
+        return r
 
     def _getCFGEdges(self, function_id):
 
@@ -144,7 +164,7 @@ class ProgramGraph(JoernTool):
     def _addCFGNodes(self, G, nodes):
 
         for node in nodes:
-            G.add_node(node._id,
+            G.add_node(node['id'],
                     label = self._attributesAsString(node),
                     style = 'filled',
                     fontsize = 10,
@@ -153,7 +173,7 @@ class ProgramGraph(JoernTool):
     def _addSymbolNodes(self, G, nodes):
 
         for node in nodes:
-            G.add_node(node._id,
+            G.add_node(node['id'],
                     label = node.get_properties()['code'],
                     style = 'filled',
                     fontsize = 10,
@@ -162,7 +182,7 @@ class ProgramGraph(JoernTool):
     def _addCFGEdges(self, G, edges):
 
         for edge in edges:
-            G.add_edge(edge.start_node._id, edge.end_node._id,
+            G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = CFG_EDGE_COLOR,
                     label = edge.get_properties()['flowLabel'])
@@ -170,7 +190,7 @@ class ProgramGraph(JoernTool):
     def _addDefEdges(self, G, edges):
 
         for edge in edges:
-            G.add_edge(edge.start_node._id, edge.end_node._id,
+            G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = DEF_EDGE_COLOR,
                     label = 'def')
@@ -178,7 +198,7 @@ class ProgramGraph(JoernTool):
     def _addUseEdges(self, G, edges):
 
         for edge in edges:
-            G.add_edge(edge.start_node._id, edge.end_node._id,
+            G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = USE_EDGE_COLOR,
                     label = 'use')
@@ -186,7 +206,7 @@ class ProgramGraph(JoernTool):
     def _addDDGEdges(self, G, edges):
 
         for edge in edges:
-            G.add_edge(edge.start_node._id, edge.end_node._id,
+            G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = DDG_EDGE_COLOR,
                     label = edge.get_properties()['var'])
@@ -194,19 +214,19 @@ class ProgramGraph(JoernTool):
     def _addCDGEdges(self, G, edges):
 
         for edge in edges:
-            G.add_edge(edge.start_node._id, edge.end_node._id,
+            G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = CDG_EDGE_COLOR)
 
     def _addDomEdges(self, G, edges):
 
         for edge in edges:
-            G.add_edge(edge.start_node._id, edge.end_node._id)
+            G.add_edge(edge['outV'], edge['inV'])
 
     def _attributesAsString(self, n):
 
         properties = n.get_properties()
-        properties['id'] = n._id
+        properties['id'] = n['id']
         valid_attributes = []
         if self.args.attributes:
             for a in self.args.attributes:

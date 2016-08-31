@@ -1164,7 +1164,7 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 
 		ASTNode node = ast.getNodeById((long)6);
 		Collection<UseOrDef> useOrDefs = analyze(node);
-		
+
 		assertEquals( 1, useOrDefs.size());
 		assertTrue( containsUseSymbol( useOrDefs, node, "bar"));
 		

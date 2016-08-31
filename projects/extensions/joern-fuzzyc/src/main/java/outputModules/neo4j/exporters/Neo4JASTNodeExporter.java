@@ -4,6 +4,7 @@ import java.util.Map;
 
 import ast.ASTNode;
 import databaseNodes.DatabaseNode;
+import databaseNodes.NodeKeys;
 import neo4j.batchInserter.GraphNodeStore;
 import outputModules.common.ASTNodeExporter;
 
@@ -30,7 +31,7 @@ public abstract class Neo4JASTNodeExporter extends ASTNodeExporter
 		// mainNodeId));
 
 		// index, but do not index location
-		properties.remove("location");
+		properties.remove(NodeKeys.LOCATION);
 		nodeStore.indexNode(dbNode, properties);
 
 	}

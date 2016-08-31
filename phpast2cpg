@@ -2,4 +2,4 @@
 
 BASEDIR=$(dirname "$0")
 
-java -cp "$BASEDIR/projects/joern-php/build/libs/joern-php.jar:$BASEDIR/projects/jpanlib/build/libs/jpanlib.jar:$BASEDIR/jars/*" tools.php.ast2cpg.Main $@
+java -cp "$BASEDIR/projects/extensions/joern-php/build/libs/joern-php.jar:$BASEDIR/projects/extensions/jpanlib/build/libs/jpanlib.jar:$BASEDIR/projects/octopus/lib/*" tools.php.ast2cpg.Main $@

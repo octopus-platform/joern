@@ -42,9 +42,22 @@ dependencies{
 
 }
 
+// Python utilities
+
+task octopusMlutils(type: Exec) {
+    workingDir './python/octopus-mlutils'
+    commandLine 'python3', 'setup.py', 'install', '--user'
+}
+
+task octopusTools(type: Exec, dependsOn: octopusMlutils) {
+    workingDir './python/octopus-tools'
+    commandLine 'python3', 'setup.py', 'install', '--user'
+}
+
 task copyToLib(type: Copy) {
     into "lib"
     from configurations.runtime
 }
 
 build.dependsOn copyToLib
+build.dependsOn octopusTools
