@@ -2,6 +2,7 @@
 
 import pygraphviz as pgv
 from joern.shelltool.JoernTool import JoernTool
+from octopus.server.DBInterface import DBInterface
 
 
 DESCRIPTION = """Retrieve the AST rooted at the node with the given
@@ -23,14 +24,19 @@ class AST(JoernTool):
         G = self._createDotGraph(nodes, edges)
         self._outputGraph(G, line)
 
+    def streamStart(self):
+        self.dbInterface = DBInterface()
+        # self.dbInterface.disable_json()
+        self.dbInterface.connectToDatabase(self.args.project)
+
     def _getASTNodes(self, nodeId):
-        query = """g.v(%d).functionToAST().astNodes()
+        query = """g.V(%d).functionToAST().astNodes()
         """% (nodeId)
 
         return self._runGremlinQuery(query)
 
     def _getASTEdges(self, nodeId):
-        query = """g.v(%d).functionToAST()
+        query = """g.V(%d).functionToAST()
         .astNodes().outE('IS_AST_PARENT')
         """% (nodeId)
 
@@ -39,14 +45,14 @@ class AST(JoernTool):
     def _createDotGraph(self, nodes, edges):
         G = pgv.AGraph()
 
-        idNodePairs = [(n._id, n) for n in nodes]
+        idNodePairs = [(n['id'], n) for n in nodes]
 
         for (nodeId, n) in idNodePairs:
             G.add_node(nodeId)
             node = G.get_node(nodeId)
             node.attr['label'] = self._attributesAsString(n)
 
-        srcDstPairs = [(e.start_node._id, e.end_node._id) for e in edges]
+        srcDstPairs = [(e['outV'], e['inV']) for e in edges]
 
         for (startNode, endNode) in srcDstPairs:
             G.add_edge(startNode, endNode)
@@ -55,9 +61,9 @@ class AST(JoernTool):
 
     def _attributesAsString(self, n):
 
-        properties = n.properties
+        properties = n['properties']
         return '\n'.join(['%s:%s' % (k, str(v).replace('\n',' '))
-                          for (k,v) in properties.iteritems()])
+                          for (k,v) in properties.items()])
 
 
     def _outputGraph(self, G, identifier):

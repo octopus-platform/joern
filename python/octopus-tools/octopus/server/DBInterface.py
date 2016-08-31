@@ -42,4 +42,19 @@ class ResultTransformer(object):
         resultData = o['result']['data']
         if not isinstance(resultData, list):
             resultData = [resultData]
-        return resultData
+        return [ self.cleanResultData(d) for d in resultData ]
+
+    @staticmethod
+    def cleanResultData(data):
+        if isinstance(data,dict):
+            for k,v in data.items():
+                if isinstance(v,list):
+                    if len(v) == 1 and isinstance(v[0],dict) and \
+                        set(v[0].keys()) == set(['id','value']):
+                        data[k] = v[0]['value']
+                    else:
+                        data[k] = [ __class__.cleanResultData(x) for x in v ]
+                else:
+                    x = __class__.cleanResultData(v)
+                    data[k] = x
+        return data
