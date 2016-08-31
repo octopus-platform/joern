@@ -2,6 +2,7 @@ package outputModules.neo4j;
 
 import java.util.Map;
 
+import databaseNodes.*;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -9,10 +10,6 @@ import cfg.CCFGFactory;
 import cfg.CFG;
 import cfg.nodes.ASTNodeContainer;
 import cfg.nodes.CFGNode;
-import databaseNodes.DatabaseNode;
-import databaseNodes.EdgeTypes;
-import databaseNodes.FileDatabaseNode;
-import databaseNodes.FunctionDatabaseNode;
 import neo4j.batchInserter.GraphNodeStore;
 import neo4j.batchInserter.Neo4JBatchInserter;
 import outputModules.common.FunctionExporter;
@@ -105,7 +102,7 @@ public class Neo4JFunctionExporter extends FunctionExporter
 
 		mainNodeId = nodeStore.getIdForObject(dbNode);
 
-		properties.remove("location");
+		properties.remove(NodeKeys.LOCATION);
 		nodeStore.indexNode(dbNode, properties);
 	}
 

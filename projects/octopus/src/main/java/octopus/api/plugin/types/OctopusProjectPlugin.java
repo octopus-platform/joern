@@ -35,4 +35,14 @@ public abstract class OctopusProjectPlugin implements Plugin
 		return projectConnector;
 	}
 
+	protected String getProjectName()
+	{
+		return projectConnector.getWrapper().getName();
+	}
+
+	protected String getPathToProjectDir()
+	{
+		return projectConnector.getWrapper().getPathToProjectDir();
+	}
+
 }

@@ -1,0 +1,29 @@
+#!python
+
+import argparse
+
+from octopus.server.plugin_executor import PluginExecutor
+
+parser = argparse.ArgumentParser(description="Generic plugin executor.")
+
+parser.add_argument(
+    "-s", "--server-host",
+    type=str,
+    default="localhost",
+    help="set the hostname of the octopus server")
+
+parser.add_argument(
+    "-p", "--server-port",
+    type=int,
+    default=2480,
+    help="set the port number of the octopus server")
+
+parser.add_argument(
+    "configuration",
+    type=argparse.FileType("r"),
+    help="use this configuration file")
+
+args = parser.parse_args()
+
+executor = PluginExecutor(args.server_host, args.server_port)
+print(executor.post(args.configuration))

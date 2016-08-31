@@ -11,7 +11,8 @@ public class TestDBTestReadWriteDB
 	@BeforeClass
 	public static void loadTestDatabase()
 	{
-		Neo4JDBInterface.setDatabaseDir("../../.testDB");
+		System.out.println(System.getProperty("user.dir"));
+		Neo4JDBInterface.setDatabaseDir(".testDB");
 		Neo4JDBInterface.openDatabase();
 	}
 

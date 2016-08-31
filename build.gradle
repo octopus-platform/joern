@@ -22,17 +22,7 @@ allprojects {
 
 // Python utilities
 
-task octopusMlutils(type: Exec) {
-    workingDir './python/octopus-mlutils'
-    commandLine 'python3', 'setup.py', 'install', '--user'
-}
-
-task octopusTools(type: Exec, dependsOn: octopusMlutils) {
-    workingDir './python/octopus-tools'
-    commandLine 'python3', 'setup.py', 'install', '--user'
-}
-
-task joernTools(type: Exec, dependsOn: octopusTools) {
+task joernTools(type: Exec) {
     workingDir './python/joern-tools'
     commandLine 'python3', 'setup.py', 'install', '--user'
 }
@@ -52,7 +42,8 @@ task deploy(dependsOn: build) << {
         into "projects/octopus/extensions"
         from fileTree("projects/extensions").files
         include '**/*.jar'
-        exclude '**/*-plain.jar'
+	exclude '**/lucene-core-3.6.2.jar'
+	exclude '**/*-plain.jar'
         includeEmptyDirs = false
     }
 
@@ -63,7 +54,6 @@ dependencies{
 	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
 	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.2'
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'	
-	compile group: 'org.neo4j', name: 'neo4j', version: '2.1.8'
 	compile group: 'junit', name: 'junit', version: '4.12'
 }
 
@@ -72,10 +62,6 @@ task copyToLib2(type: Copy) {
     from configurations.runtime
 }
 
-
-task buildTestDatabase << {
-     println './rebuildTestDB.sh'.execute().text
-}
 
 copyToLib2.dependsOn subprojects.build
 
