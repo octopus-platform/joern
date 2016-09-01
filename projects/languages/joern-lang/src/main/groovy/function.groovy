@@ -14,6 +14,12 @@ GraphTraversal.metaClass.functionToAST = {
 	delegate.out(FUNCTION_TO_AST_EDGE)
 }
 
+
+GraphTraversal.metaClass.functionToCFG = {
+	delegate.out(FUNCTION_TO_CFG_EDGE)
+}
+
+
 GraphTraversal.metaClass.functionToASTNodes = {
 	delegate.functionToAST().astNodes()
 }
