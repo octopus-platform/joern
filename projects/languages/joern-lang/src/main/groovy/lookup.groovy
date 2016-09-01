@@ -19,7 +19,7 @@ getFunctionsByName = { name ->
 
 getFunctionsByFilename = { name ->
 
-     g.V.has(NODE_TYPE, TYPE_FILE)
+     g.V().has(NODE_TYPE, TYPE_FILE)
      	.has(NODE_CODE, name)
 	.out(FILE_TO_FUNCTION_EDGE)
 	.has(NODE_TYPE, TYPE_FUNCTION)
@@ -27,17 +27,17 @@ getFunctionsByFilename = { name ->
 
 getNodesWithTypeAndCode = { type, code ->
 
-	g.V.has(NODE_TYPE, type)
+	g.V().has(NODE_TYPE, type)
 	   .has(NODE_CODE, code)
 }
 
 getFunctionsByFileAndName = { filename, name  ->
 	getFunctionsByFilename(filename)
-	.filter{ it.name == name }
+	.has(NODE_CODE, name)
 }
 
 getFilesByName = { filename ->	
-	g.V.has(NODE_TYPE, TYPE_FILE).has(NODE_CODE, filename)
+	g.V().has(NODE_TYPE, TYPE_FILE).has(NODE_CODE, filename)
 }
 
 /**
@@ -55,7 +55,7 @@ getCallsTo = { callee ->
 }
 
 getCallsToRegex = { regex ->
- g.V.has(NODE_TYPE, TYPE_CALLEE).has(NODE_CODE, textRegex(regex))
+ g.V().has(NODE_TYPE, TYPE_CALLEE).has(NODE_CODE, textRegex(regex))
  .calleeToCall()
 }
 

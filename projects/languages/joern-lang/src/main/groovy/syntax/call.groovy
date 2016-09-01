@@ -2,26 +2,26 @@
    (Optimized) Match-traversals for Calls.
 */
 
-callToArguments = {
+GraphTraversal.metaClass.callToArguments = {
 	 delegate.children()
 	 .has(NODE_TYPE, TYPE_ARGLIST)
 	 .children()
 }
 
-ithArguments = { def args -> 
+GraphTraversal.metaClass.ithArguments = { def args -> 
 	 delegate.callToArguments()
 	 .has(NODE_CHILDNUM, args[0])
 }
 
-argToCall = {
+GraphTraversal.metaClass.argToCall = {
 	delegate.in(AST_EDGE).in(AST_EDGE)
 }
 
-calleeToCall = {
+GraphTraversal.metaClass.calleeToCall = {
 	delegate.in(AST_EDGE)
 }
 
-callToCallee = {
+GraphTraversal.metaClass.callToCallee = {
 	delegate.out(AST_EDGE)
 	.has(NODE_TYPE, TYPE_CALLEE)
 }

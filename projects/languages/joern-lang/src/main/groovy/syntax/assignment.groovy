@@ -3,10 +3,10 @@
    (Optimized) Match-traversals for assignments
 */
 
-lval = {
+GraphTraversal.metaClass.lval = {
 	delegate.out(AST_EDGE).has(TYPE_CHILDNUM, '0')
 }
 
-rval = {
+GraphTraversal.metaClass.rval = {
 	delegate.out(AST_EDGE).has(TYPE_CHILDNUM, '1')
 }

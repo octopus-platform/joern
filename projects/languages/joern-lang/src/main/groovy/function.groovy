@@ -1,5 +1,5 @@
 
-functionToLocationStr = {
+GraphTraversal.metaClass.functionToLocationStr = {
   delegate.as('func')
   .functionToFile().as('file')
   .select('func', 'file')
@@ -10,25 +10,25 @@ functionToLocationStr = {
    (Optimized) match-traversals for functions.
 */
 
-functionToAST = {
+GraphTraversal.metaClass.functionToAST = {
 	delegate.out(FUNCTION_TO_AST_EDGE)
 }
 
-functionToASTNodes = {
+GraphTraversal.metaClass.functionToASTNodes = {
 	delegate.functionToAST().astNodes()
 }
 
-functionToStatements = {
+GraphTraversal.metaClass.functionToStatements = {
 	delegate.transform{ queryNodeIndex('isCFGNode:True AND functionId:' + it.id) }
 	 .scatter()
 }
 
-functionsToASTNodesOfType = { def args; def type = args[0];
+GraphTraversal.metaClass.functionsToASTNodesOfType = { def args; def type = args[0];
 	delegate.transform{ queryNodeIndex('functionId:' + it.id + " AND $NODE_TYPE:$type") }
 	 .scatter()
 }
 
-functionToFile = {
+GraphTraversal.metaClass.functionToFile = {
 	delegate.in(FILE_TO_FUNCTION_EDGE)
 }
 
@@ -36,7 +36,7 @@ functionToFile = {
  * For a function node, get callers using `name` property.
  **/
 
-functionToCallers = {
+GraphTraversal.metaClass.functionToCallers = {
 	_().transform{
 
 		funcName = it.name

@@ -9,7 +9,7 @@
     
 */
 
-_match = { def args -> def p = args[0];
+GraphTraversal.metaClass._match = { def args -> def p = args[0];
   delegate.astNodes().filter(p)
 }
 

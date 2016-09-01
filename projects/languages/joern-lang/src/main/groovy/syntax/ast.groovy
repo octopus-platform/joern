@@ -10,7 +10,7 @@
 */
 
 
-astNodes = {
+GraphTraversal.metaClass.astNodes = {
 	delegate.repeat(_children()).until(noMoreChildren()).emit{true}
 }
 
@@ -18,7 +18,7 @@ astNodes = {
    Traverse to parent-nodes of AST nodes.
 */
 
-parents = {
+GraphTraversal.metaClass.parents = {
 	delegate.in(AST_EDGE)
 }
 
@@ -26,11 +26,11 @@ parents = {
    Traverse to child-nodes of AST nodes.
 */
 
-children = {
+GraphTraversal.metaClass.children = {
 	delegate.out(AST_EDGE)
 }
 
-noMoreChildren = {
+GraphTraversal.metaClass.noMoreChildren = {
 	outE(AST_EDGE).count().is(0)
 }
 
@@ -40,7 +40,7 @@ noMoreChildren = {
    @param i The child index
 */
 
-ithChildren = { args ->
+GraphTraversal.metaClass.ithChildren = { args ->
  i = args[0];
  delegate.children().has(NODE_CHILDNUM, i)	
 }
@@ -53,7 +53,7 @@ isStatement = { it ->
 /**
  * Traverse to siblings.
  */
-siblings = {
+GraphTraversal.metaClass.siblings = {
 	_().sideEffect{ nodeId = it.id }
 	.parents()
 	.children()
@@ -65,7 +65,7 @@ siblings = {
    the node itself.
 */
 
-statements = {
+GraphTraversal.metaClass.statements = {
   delegate.until(has(NODE_ISCFGNODE, 'True')).repeat(_parents())
 }
 
