@@ -11,7 +11,7 @@
 
 
 GraphTraversal.metaClass.astNodes = {
-	delegate.repeat(_children()).until(noMoreChildren()).emit{true}
+	delegate.repeat(__.start().children()).until(noMoreChildren()).emit{true}
 }
 
 /**
@@ -30,8 +30,8 @@ GraphTraversal.metaClass.children = {
 	delegate.out(AST_EDGE)
 }
 
-GraphTraversal.metaClass.noMoreChildren = {
-	outE(AST_EDGE).count().is(0)
+noMoreChildren = {
+	__.start().outE(AST_EDGE).count().is(0)
 }
 
 /**
