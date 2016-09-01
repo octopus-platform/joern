@@ -14,6 +14,10 @@ functionToAST = {
 	delegate.out(FUNCTION_TO_AST_EDGE)
 }
 
+functionToCFG = {
+	delegate.out(FUNCTION_TO_CFG_EDGE)
+}
+
 functionToASTNodes = {
 	delegate.functionToAST().astNodes()
 }
