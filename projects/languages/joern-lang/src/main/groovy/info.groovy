@@ -9,7 +9,7 @@ GraphTraversal.metaClass.locations = {
 
 GraphTraversal.metaClass.functions = {
 
-	delegate.functionId.map{ g.V.has('_key', it).toList()[0] }
+	delegate.values('functionId').map{ g.V().has('_key', it).toList()[0] }
 }
 
 
