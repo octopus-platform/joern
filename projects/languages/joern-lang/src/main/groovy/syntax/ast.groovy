@@ -66,7 +66,7 @@ GraphTraversal.metaClass.siblings = {
 */
 
 GraphTraversal.metaClass.statements = {
-  delegate.until(has(NODE_ISCFGNODE, 'True')).repeat(_parents())
+  delegate.until(__.start().has(NODE_ISCFGNODE, 'True')).repeat(__.start().parents())
 }
 
 /**
