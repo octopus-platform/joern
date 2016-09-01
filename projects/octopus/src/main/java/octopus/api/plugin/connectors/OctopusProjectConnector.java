@@ -1,10 +1,11 @@
 package octopus.api.plugin.connectors;
 
+import octopus.api.OctopusPlainProject;
 import octopus.api.projects.OctopusProject;
 import octopus.api.projects.OctopusProjectWrapper;
 import octopus.server.projectmanager.OctopusProjectManager;
 
-public abstract class OctopusProjectConnector {
+public class OctopusProjectConnector {
 
 	OctopusProjectWrapper wrapper;
 
@@ -22,7 +23,13 @@ public abstract class OctopusProjectConnector {
 		return wrapNewProject(oProject);
 	}
 
-	protected abstract OctopusProjectWrapper wrapNewProject(OctopusProject oProject);
+	protected OctopusProjectWrapper wrapNewProject(OctopusProject oProject)
+	{
+		OctopusPlainProject project = new OctopusPlainProject();
+        project.setWrappedProject(oProject);
+        return project;
+
+	}
 
 	public void disconnect()
 	{

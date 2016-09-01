@@ -17,9 +17,15 @@ public class PluginExecutor {
 
 	public Object executePlugin(String pluginName, String pluginClass, JSONObject settings)
 	{
-		String pluginDir = OctopusEnvironment.PLUGINS_DIR.toString();
-		Path path = Paths.get(pluginDir, pluginName).toAbsolutePath();
-		Plugin plugin = PluginLoader.load(path, pluginClass);
+		Plugin plugin;
+
+		if(!pluginName.equals("")){
+			String pluginDir = OctopusEnvironment.PLUGINS_DIR.toString();
+			Path pathToJar = Paths.get(pluginDir, pluginName).toAbsolutePath();
+			plugin = PluginLoader.load(pathToJar, pluginClass);
+		}else{
+			plugin = PluginLoader.load(pluginClass);
+		}
 
 		if (plugin == null)
 			throw new RuntimeException(

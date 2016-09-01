@@ -13,15 +13,27 @@ public class PluginLoader
 		PluginClassLoader classLoader = new PluginClassLoader(
 				parentClassLoader);
 		classLoader.setJarFilename(pathToJar.toString());
-		// It would be cleaner to put the name of the class implementing the
-		// plugin somewhere in the jar.
-		Class<?> myObjectClass = classLoader.loadClass(pluginClass);
+
+		return createPluginInstance(classLoader, pluginClass);
+	}
+
+	public static Plugin load(String pluginClass)
+	{
+		ClassLoader parentClassLoader = PluginClassLoader.class
+				.getClassLoader();
+		return createPluginInstance(parentClassLoader, pluginClass);
+	}
+
+	private static Plugin createPluginInstance(ClassLoader classLoader, String pluginClass)
+	{
 		try
 		{
+			Class<?> myObjectClass = classLoader.loadClass(pluginClass);
 			return (Plugin) myObjectClass.newInstance();
 		} catch (Exception e)
 		{
-			return null;
+				return null;
 		}
 	}
+
 }

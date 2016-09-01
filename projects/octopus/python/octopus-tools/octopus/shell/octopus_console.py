@@ -4,11 +4,16 @@ import readline
 import sys
 
 from octopus.shell.completer.octopus_rlcompleter import OctopusShellCompleter
+from octopus.shell.config.config import config
+from octopus.shell.octopus_shell_utils import reload as _reload
 
 
 class OctopusInteractiveConsole(code.InteractiveConsole):
     def __init__(self, octopus_shell, locals=None):
-        super().__init__(locals=locals, filename="<console>")
+        def reload(path=config["steps"]["dir"]):
+            _reload(octopus_shell, path)
+
+        super().__init__(locals={"reload": reload}, filename="<console>")
         self.octopus_shell = octopus_shell
 
     def runsource(self, source, filename="<input>", symbol="single"):
@@ -17,16 +22,6 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
 
         if source[0] == '!':
             return super().runsource(source[1:], filename, symbol)
-        if source[-1] == '?':
-            tail = source[:-1].rsplit('.', 1)[-1]
-            help_record = self.help.get_help_for_step(tail) if self.help else None
-            if help_record:
-                self.write(str(help_record))
-            else:
-                self.write("No help found for '{}'.".format(tail))
-            self.write('\n')
-            return False
-
         try:
             response = self.octopus_shell.run_command(source)
             if source == "quit":
@@ -58,10 +53,23 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
         self._save_history()
 
     def init_file(self):
-        return None
+        return config['readline']['init']
 
     def hist_file(self):
-        return None
+        return config['readline']['hist']
+
+    def _load_banner(self):
+        base = os.path.dirname(__file__)
+        path = "data/banner.txt"
+        fname = os.path.join(base, path)
+        try:
+            with open(fname, 'r') as f:
+                self.banner = f.read()
+        except:
+            self.banner = "octopus shell\n"
+
+    def _load_prompt(self):
+        sys.ps1 = "> "
 
     def _init_readline(self):
         readline.parse_and_bind("tab: complete")
@@ -85,9 +93,3 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
         hist_file = self.hist_file()
         if hist_file:
             readline.write_history_file(os.path.expanduser(hist_file))
-
-    def _load_banner(self):
-        self.banner = None
-
-    def _load_prompt(self):
-        pass

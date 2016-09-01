@@ -33,7 +33,6 @@ public class ExecutePluginHandler implements OctopusRestHandler {
 	}
 
 	private Object executePluginAndRespond() {
-
 		Object result = new PluginExecutor().executePlugin(pluginName, pluginClass, settings);
 		if (result == null) result = "";
 		return result.toString();

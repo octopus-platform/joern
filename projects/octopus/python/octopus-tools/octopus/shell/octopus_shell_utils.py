@@ -1,30 +1,6 @@
 import os
 
 
-def get_stepnames(self):
-    try:
-        steps = self.connection.run_command("listSteps()")
-        return steps
-    except:
-        return []
-
-
-def get_variables(shell):
-    try:
-        variables = shell.run_command("listVariables()")
-        return variables
-    except:
-        return []
-
-
-def get_object_methods(shell, command):
-    try:
-        methods = shell.run_command("{}.getClass().getMethods().name.unique()".format(command))
-        return methods
-    except:
-        return []
-
-
 def reload(shell, path):
     if os.path.isdir(path):
         reload_dir(shell, path)

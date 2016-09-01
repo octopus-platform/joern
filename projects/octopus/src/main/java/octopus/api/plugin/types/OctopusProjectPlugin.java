@@ -4,7 +4,6 @@ import org.json.JSONObject;
 
 import octopus.api.plugin.Plugin;
 import octopus.api.plugin.connectors.OctopusProjectConnector;
-import octopus.api.projects.OctopusProjectWrapper;
 
 /**
  * A plugin that is associated with an Octopus Project.
@@ -15,6 +14,11 @@ public abstract class OctopusProjectPlugin implements Plugin
 {
 
 	private OctopusProjectConnector projectConnector;
+
+	public OctopusProjectPlugin()
+	{
+		setProjectConnector(new OctopusProjectConnector());
+	}
 
 	@Override
 	public void configure(JSONObject settings)
@@ -30,8 +34,6 @@ public abstract class OctopusProjectPlugin implements Plugin
 
 	protected OctopusProjectConnector getProjectConnector()
 	{
-		OctopusProjectWrapper wrapper = projectConnector.getWrapper();
-
 		return projectConnector;
 	}
 

@@ -1,3 +1,1 @@
-exStep = { args ->
-	delegate.nodeType
-}
+GraphTraversal.metaClass.exStep = { delegate.values("nodeType") }
