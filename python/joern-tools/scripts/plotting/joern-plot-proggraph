@@ -58,13 +58,14 @@ class ProgramGraph(JoernTool):
                                     help = """Show all edge types""",
                                     default = False)
 
+        self.functionId = None
 
     # @Override
     def processLine(self, line):
 
-        function_id = int(line)
+        function_node_id = int(line)
 
-        G = self._createDotGraph(function_id)
+        G = self._createDotGraph(function_node_id)
         self._outputGraph(G, line)
 
     def streamStart(self):
@@ -72,98 +73,105 @@ class ProgramGraph(JoernTool):
         # self.dbInterface.disable_json()
         self.dbInterface.connectToDatabase(self.args.project)
 
-    def _getCFGNodes(self, function_id):
+    def _getFunctionId(self,function_node_id):
+        if self.functionId == None:
+            query = """
+            g.V(%d).functionToCFG().values('functionId')
+            """ % function_node_id
+            r = self._runGremlinQuery(query)
+            if len(r) > 0:
+                self.functionId = r[0]
+        return self.functionId
 
+    def _getCFGNodes(self, function_node_id):
+
+        self._getFunctionId(function_node_id)
         query = """
         g.V().has('functionId','%s').has('isCFGNode','True')
-        // queryNodeIndex('functionId:%%s AND isCFGNode:True')
-        """ % (function_id)
+        """ % (self.functionId)
         return self._runGremlinQuery(query)
 
-    def _getSymbolNodes(self, function_id):
+    def _getSymbolNodes(self, function_node_id):
 
         if not self.args.show_data_flow and not self.args.show_all:
             return []
 
+        self._getFunctionId(function_node_id)
         query = """
         g.V().has('functionId','%s').has('type','Symbol')
-        // queryNodeIndex('functionId:%%s AND type:Symbol')
-        """ % (function_id)
-        r = self._runGremlinQuery(query)
-        print(r)
-        return r
+        """ % (self.functionId)
+        return self._runGremlinQuery(query)
 
-    def _getEdges(self, function_id, type):
+    def _getEdges(self, function_node_id, type):
 
+        self._getFunctionId(function_node_id)
         query = """
         g.V().has('functionId','%s').has('isCFGNode','True')
-        // queryNodeIndex('functionId:%%s AND isCFGNode:True')
         .outE('%s')
-        """ % (function_id, type)
-        r = self._runGremlinQuery(query)
-        print(r)
-        return r
+        """ % (self.functionId, type)
+        return self._runGremlinQuery(query)
 
-    def _getCFGEdges(self, function_id):
+    def _getCFGEdges(self, function_node_id):
 
         if not self.args.show_control_flow and not self.args.show_all:
             return []
 
-        return self._getEdges(function_id, 'FLOWS_TO')
+        return self._getEdges(function_node_id, 'FLOWS_TO')
 
-    def _getUseEdges(self, function_id):
-
-        if not self.args.show_data_flow and not self.args.show_all:
-            return []
-
-        return self._getEdges(function_id, 'USE')
-
-    def _getDefEdges(self, function_id):
+    def _getUseEdges(self, function_node_id):
 
         if not self.args.show_data_flow and not self.args.show_all:
             return []
 
-        return self._getEdges(function_id, 'DEF')
+        return self._getEdges(function_node_id, 'USE')
 
-    def _getDDGEdges(self, function_id):
+    def _getDefEdges(self, function_node_id):
+
+        if not self.args.show_data_flow and not self.args.show_all:
+            return []
+
+        return self._getEdges(function_node_id, 'DEF')
+
+    def _getDDGEdges(self, function_node_id):
 
         if not self.args.show_data_dependences and not self.args.show_all:
             return []
 
-        return self._getEdges(function_id, 'REACHES')
+        return self._getEdges(function_node_id, 'REACHES')
 
-    def _getCDGEdges(self, function_id):
+    def _getCDGEdges(self, function_node_id):
 
         if not self.args.show_control_dependences and not self.args.show_all:
             return []
 
-        return self._getEdges(function_id, 'CONTROLS')
+        return self._getEdges(function_node_id, 'CONTROLS')
 
-    def _getDomEdges(self, function_id):
+    def _getDomEdges(self, function_node_id):
 
         if not self.args.show_dominance_edges and not self.args.show_all:
             return []
 
-        return self._getEdges(function_id, 'POST_DOM')
+        return self._getEdges(function_node_id, 'POST_DOM')
 
-    def _createDotGraph(self, function_id):
+    def _createDotGraph(self, function_node_id):
 
         G = pgv.AGraph(directed = True, strict = False)
 
-        self._addCFGNodes(G, self._getCFGNodes(function_id))
-        self._addSymbolNodes(G, self._getSymbolNodes(function_id))
-        self._addCFGEdges(G, self._getCFGEdges(function_id))
-        self._addUseEdges(G, self._getUseEdges(function_id))
-        self._addDefEdges(G, self._getDefEdges(function_id))
-        self._addDDGEdges(G, self._getDDGEdges(function_id))
-        self._addCDGEdges(G, self._getCDGEdges(function_id))
-        self._addDomEdges(G, self._getDomEdges(function_id))
+        self._addCFGNodes(G, self._getCFGNodes(function_node_id))
+        self._addSymbolNodes(G, self._getSymbolNodes(function_node_id))
+        self._addCFGEdges(G, self._getCFGEdges(function_node_id))
+        self._addUseEdges(G, self._getUseEdges(function_node_id))
+        self._addDefEdges(G, self._getDefEdges(function_node_id))
+        self._addDDGEdges(G, self._getDDGEdges(function_node_id))
+        self._addCDGEdges(G, self._getCDGEdges(function_node_id))
+        self._addDomEdges(G, self._getDomEdges(function_node_id))
 
         return G
 
     def _addCFGNodes(self, G, nodes):
 
         for node in nodes:
+            del node['properties']['isCFGNode']
             G.add_node(node['id'],
                     label = self._attributesAsString(node),
                     style = 'filled',
@@ -174,7 +182,7 @@ class ProgramGraph(JoernTool):
 
         for node in nodes:
             G.add_node(node['id'],
-                    label = node.get_properties()['code'],
+                    label = node.get('properties')['code'],
                     style = 'filled',
                     fontsize = 10,
                     color = SYMBOL_NODE_COLOR)
@@ -185,7 +193,7 @@ class ProgramGraph(JoernTool):
             G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = CFG_EDGE_COLOR,
-                    label = edge.get_properties()['flowLabel'])
+                    label = edge['label'])
 
     def _addDefEdges(self, G, edges):
 
@@ -209,7 +217,7 @@ class ProgramGraph(JoernTool):
             G.add_edge(edge['outV'], edge['inV'],
                     fontsize = 10,
                     color = DDG_EDGE_COLOR,
-                    label = edge.get_properties()['var'])
+                    label = edge.get('properties')['var'])
 
     def _addCDGEdges(self, G, edges):
 
@@ -225,7 +233,7 @@ class ProgramGraph(JoernTool):
 
     def _attributesAsString(self, n):
 
-        properties = n.get_properties()
+        properties = n.get('properties')
         properties['id'] = n['id']
         valid_attributes = []
         if self.args.attributes:
