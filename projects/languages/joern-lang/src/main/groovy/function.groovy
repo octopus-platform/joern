@@ -27,6 +27,15 @@ GraphTraversal.metaClass.functionToASTNodes = {
 GraphTraversal.metaClass.functionToStatements = {
 	delegate.transform{ queryNodeIndex('isCFGNode:True AND functionId:' + it.id) }
 	 .scatter()
+    /*
+	System.out.println(delegate);
+	func_id = g.V(delegate.id).functionToCFG().values('functionId').next()
+	System.out.println(func_id);
+	delegate.has('functionId',func_id).has('isCFGNode',true)
+	*/
+	// g.V().has('functionId',func_id).has('isCFGNode','True')
+	// delegate.transform{ queryNodeIndex('isCFGNode:True AND functionId:' + it.id) }
+	// .scatter()
 }
 
 GraphTraversal.metaClass.functionsToASTNodesOfType = { def args; def type = args[0];
