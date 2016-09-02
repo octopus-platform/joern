@@ -24,9 +24,9 @@ class Location(AccTool):
 
         .choose(values(NODE_TYPE))
         .option(TYPE_FUNCTION,
-          __.start().functionToLocationStr)
+          __.start().functionToLocationStr())
         .option("Symbol",
-          _functions().functionToLocationStr)
+          __.start().functions().functionToLocationStr())
         .option(Pick.none,
         __.start().choose(has(NODE_ISCFGNODE, 'True'),
             __.start().as('astnode'),
@@ -34,7 +34,7 @@ class Location(AccTool):
         )
         .functions().functionToFile().as('file')
         .select('astnode', 'file')
-        .map { it['file'].code + ':' +  it['astnode'].location }
+        .map { it.get('file').values('code').next() + ':' +  it.get('astnode').values('location').next() }
         )
         """ % (nodeIds)
 

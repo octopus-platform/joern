@@ -3,7 +3,7 @@ GraphTraversal.metaClass.functionToLocationStr = {
   delegate.as('func')
   .functionToFile().as('file')
   .select('func', 'file')
-  .map { it['file'].code + ':' +  it['func'].location }  
+  .map { it.get()['file'].values('code').next() + ':' +  it.get()['func'].values('location').next() }  
 }
 
 /**
