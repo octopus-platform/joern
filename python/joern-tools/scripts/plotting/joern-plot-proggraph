@@ -73,6 +73,18 @@ class ProgramGraph(JoernTool):
         # self.dbInterface.disable_json()
         self.dbInterface.connectToDatabase(self.args.project)
 
+    def _runGremlinQuery(self, query):
+        resultData = self.dbInterface.runGremlinQuery(query)
+        return [ self.cleanResultData(d) for d in resultData ]
+
+    @staticmethod
+    def cleanResultData(data):
+        if isinstance(data,dict) and "properties" in data:
+            for k,v in data["properties"].items():
+                if isinstance(v,list):
+                    data["properties"][k]=v[0]["value"]
+        return data
+
     def _getFunctionId(self,function_node_id):
         if self.functionId == None:
             query = """
