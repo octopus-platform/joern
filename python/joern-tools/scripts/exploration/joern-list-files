@@ -22,14 +22,20 @@ class ListFiles(ChunkStartTool):
             fnregex = fnmatch.translate(self.args.pattern)
             # Translate Python generated regex to something that Groovy can understand
             fnregex = re.sub(r'\\Z.*$','',fnregex)
-            return """
-            g.V.has(NODE_TYPE, TYPE_FILE)
+            q = """
+            g.V()
+            .has(NODE_TYPE, TYPE_FILE)
      	    .has(NODE_CODE, textRegex('%s'))
-     	    .id
+     	    .id()
             """ % (fnregex)
+            return q
 
       def _constructQueryForChunk(self, chunk):
-            return """idListToNodes(%s).map{ it.code + "\t" + it.id}""" % (chunk)
+            return """
+            idListToNodes(%s)
+            .map{ it.get().value('code') + "\t" + it.get().id() }
+            """ % (chunk)
+
 
       def _handleChunkResult(self, res, chunk):
             for x in res:
