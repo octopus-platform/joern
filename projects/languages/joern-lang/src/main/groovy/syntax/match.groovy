@@ -9,9 +9,9 @@
     
 */
 
-GraphTraversal.metaClass._match = { def args -> def p = args[0];
-  delegate.astNodes().filter(p)
-}
+addStep('_match', { def args -> def p = args[0];
+ delegate.astNodes().filter(p)
+})
 
 /**
  Walk the tree into the direction of the root
