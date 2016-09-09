@@ -24,9 +24,37 @@ GraphTraversal.metaClass.functionToASTNodes = {
 	delegate.functionToAST().astNodes()
 }
 
-GraphTraversal.metaClass.functionToStatements = {
-	delegate.transform{ queryNodeIndex('isCFGNode:True AND functionId:' + it.id) }
-	.scatter()
+/**
+	functionToStatements, implemented as a CFG traversal. This does not benefit from
+ 	potential index lookups, but is lazy, Order is preserved in a depth first traversal.
+ */
+addStep('functionToStatementsTraverse', {
+	delegate
+		.functionToCFG()
+		.emit()
+		.repeat(
+			__
+			.out(CFG_EDGE)
+			.simplePath()
+		)
+		.dedup()
+})
+
+/**
+	functionToStatements, implemented with a potential lookup. This may benefit from potential
+	index lookups, but is no longer lazy, Order is not preserved.
+ */
+addStep('functionToStatementsLookup', {
+	fids = delegate
+			.functionToCFG()
+			.values('functionId').collect()
+	g.V()
+			.has('functionId',P.within(fids))
+			.has('isCFGNode','True')
+})
+
+addStep('functionToStatements', {
+	delegate.functionToStatementsTraverse()
 }
 
 GraphTraversal.metaClass.functionsToASTNodesOfType = { def args; def type = args[0];
