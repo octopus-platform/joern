@@ -1,39 +1,44 @@
 #!/usr/bin/env python3
-
-from octopus.shelltool.ChunkStartTool import ChunkStartTool
+from octopus.server.DBInterface import DBInterface
+from octopus.shelltool.CmdLineTool import CmdLineTool
 
 DESCRIPTION = """Create a list of all functions of the code base. The
 first field is the function's name, the second field is the id of the
 corresponding node in the database, and the third is the file it is
 contained in"""
 
-class ListFuncs(ChunkStartTool):
 
-      def __init__(self, DESCRIPTION):
-            ChunkStartTool.__init__(self, DESCRIPTION)
+class ListFuncs(CmdLineTool):
+    def __init__(self, DESCRIPTION):
+        CmdLineTool.__init__(self, DESCRIPTION)
 
-            self.argParser.add_argument('-p', '--pattern',
-                                        action = 'store', type=str,
-                                        default =".*")
+        self.argParser.add_argument('project')
+        self.argParser.add_argument('-p', '--pattern',
+                                    help="emit only function that match this pattern",
+                                    action='store', type=str,
+                                    default=None)
 
-      def _constructIdQuery(self):
-            return """
-            g.V.has(NODE_TYPE,TYPE_FUNCTION)
-            .has(NODE_CODE, textRegex('%s')).id
-            """ % (self.args.pattern)
+    def _runImpl(self):
+        self.dbInterface = DBInterface()
+        self.dbInterface.connectToDatabase(self.args.project)
 
-      def _constructQueryForChunk(self, chunk):
-            return """idListToNodes(%s).as('func')
-            .functionToFile().as('file')
-            .select('func','file')
-            .map{ it['func'].id + '\t' + it['func'].code + '\t' + it['file'].code }
-            """ % (chunk)
+        if self.args.pattern:
+            query = "g.V().has('type', 'Function').has('code', textRegex('{}')).as('func').functionToFile().as(" \
+                    "'file').select('func', 'file')".format(
+                self.args.pattern)
+        else:
+            query = "g.V().has('type', 'Function').as('func').functionToFile().as('file').select('func', " \
+                    "'file')".format(
+                self.args.pattern)
 
-      def _handleChunkResult(self, res, chunk):
-            for x in res:
-                  print(x)
+        res = self.dbInterface.runGremlinQuery(query)
+        for x in res:
+            functionId = x['func']['id']
+            functionName = x['func']['properties']['code']
+            filepath = x['file']['properties']['code']
+            print(','.join([str(functionId), functionName, filepath]))
 
 
 if __name__ == '__main__':
-      tool = ListFuncs(DESCRIPTION)
-      tool.run()
+    tool = ListFuncs(DESCRIPTION)
+    tool.run()
