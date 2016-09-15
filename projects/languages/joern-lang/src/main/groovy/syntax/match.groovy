@@ -32,10 +32,13 @@ addStep('matchParents', { def args -> def p = args[0];
    
 */
 
-arg = { def args -> def f = args[0]; def i = args[1];
-  _().astNodes().filter{ it.type == 'CallExpression' && it.code.startsWith(f)}
-  .out(AST_EDGE).filter{ it.childNum == '1' }.out(AST_EDGE).filter{ it.childNum == i}
-}
+addStep('arg', { def args -> def f = args[0]; def i = args[1];
+    delegate.astNodes()
+    .has('type','CallExpression')
+    .where( out(AST_EDGE).has('type','Callee').values('code').is(P.eq(f)))
+    .out(AST_EDGE).has('type','ArgumentList')
+    .ithChildren(i)
+})
 
 /**
    
