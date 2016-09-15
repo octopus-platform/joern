@@ -3,10 +3,10 @@
    (Optimized) Match-traversals for assignments
 */
 
-GraphTraversal.metaClass.lval = {
+addStep("lval", {
 	delegate.out(AST_EDGE).has(NODE_CHILDNUM, '0')
-}
+})
 
-GraphTraversal.metaClass.rval = {
+addStep("rval", {
 	delegate.out(AST_EDGE).has(NODE_CHILDNUM, '1')
-}
+})
