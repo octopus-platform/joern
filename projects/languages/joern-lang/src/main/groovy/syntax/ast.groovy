@@ -9,10 +9,12 @@
     column ;)
 */
 
-
-GraphTraversal.metaClass.astNodes = {
-	delegate.repeat(__.start().children()).until(noMoreChildren()).emit{true}
-}
+addStep("astNodes", {
+	delegate
+	.emit()
+	.repeat( out(AST_EDGE) )
+	.unfold()
+})
 
 /**
    Traverse to parent-nodes of AST nodes.
