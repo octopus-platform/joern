@@ -55,7 +55,7 @@ addStep('functionToStatementsLookup', {
 
 addStep('functionToStatements', {
 	delegate.functionToStatementsTraverse()
-}
+})
 
 GraphTraversal.metaClass.functionsToASTNodesOfType = { def args; def type = args[0];
 	delegate.transform{ queryNodeIndex('functionId:' + it.id + " AND $NODE_TYPE:$type") }
