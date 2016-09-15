@@ -27,7 +27,7 @@ addStep("callToCallee", {
 })
 
 addStep("callToAssigns", {
-	delegate.repeat( __.start().in(AST_EDGE) )
+	delegate.repeat( __.in(AST_EDGE) )
 	.emit( has('type','AssignmentExpression') )
 	.unfold()
 })

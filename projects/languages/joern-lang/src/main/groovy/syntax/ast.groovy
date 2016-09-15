@@ -70,7 +70,7 @@ addStep("siblings", {
 
 addStep("statements", {
 	delegate
-	.until(__.start().has(NODE_ISCFGNODE, 'True'))
+	.until(has(NODE_ISCFGNODE, 'True'))
     .repeat(__.start().parents())
 })
 
