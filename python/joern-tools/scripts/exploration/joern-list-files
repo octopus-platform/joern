@@ -1,48 +1,36 @@
 #!/usr/bin/env python3
-
-from octopus.shelltool.ChunkStartTool import ChunkStartTool
-import fnmatch
-import re
+from octopus.server.DBInterface import DBInterface
+from octopus.shelltool.CmdLineTool import CmdLineTool
 
 DESCRIPTION = """Create a list of all files of the code base. The
 first field is the file's path, the second field is the id of the
 corresponding node in the database."""
 
-class ListFiles(ChunkStartTool):
-      
-      def __init__(self, DESCRIPTION):
-            ChunkStartTool.__init__(self, DESCRIPTION)
-        
-            self.argParser.add_argument('-p', '--pattern',
-                                        action = 'store', type=str,
-                                        default ="*")
+class ListFiles(CmdLineTool):
+    def __init__(self, DESCRIPTION):
+        CmdLineTool.__init__(self, DESCRIPTION)
 
-      def _constructIdQuery(self):
-            # Translate glob pattern to regex
-            fnregex = fnmatch.translate(self.args.pattern)
-            # Translate Python generated regex to something that Groovy can understand
-            fnregex = re.sub(r'\\Z.*$','',fnregex)
-            q = """
-            g.V()
-            .has(NODE_TYPE, TYPE_FILE)
-     	    .has(NODE_CODE, textRegex('%s'))
-     	    .id()
-            """ % (fnregex)
-            return q
+        self.argParser.add_argument('project')
+        self.argParser.add_argument('-p', '--pattern',
+                                    help="emit only files that match this pattern",
+                                    action='store', type=str,
+                                    default=None)
 
-      def _constructQueryForChunk(self, chunk):
-            return """
-            idListToNodes(%s)
-            .map{ it.get().value('code') + "\t" + it.get().id() }
-            """ % (chunk)
+    def _runImpl(self):
+        self.dbInterface = DBInterface()
+        self.dbInterface.connectToDatabase(self.args.project)
 
-
-      def _handleChunkResult(self, res, chunk):
-            for x in res:
-                  print(x)
+        if self.args.pattern:
+            query = "g.V().has('type', 'File').has('code', textRegex('{}'))".format(self.args.pattern)
+        else:
+            query = "g.V().has('type', 'File')".format(self.args.pattern)
+        files = self.dbInterface.runGremlinQuery(query)
+        for file in files:
+            fileId = file['id']
+            filepath = file['properties']['code']
+            print(','.join([str(fileId), filepath]))
 
 
 if __name__ == '__main__':
-      tool = ListFiles(DESCRIPTION)
-      tool.run()
-   
+    tool = ListFiles(DESCRIPTION)
+    tool.run()

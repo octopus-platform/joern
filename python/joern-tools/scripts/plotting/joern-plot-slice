@@ -3,33 +3,32 @@
 from octopus.server.DBInterface import DBInterface
 from octopus.shelltool.GraphvizTool import GraphvizTool
 
-
-
 DESCRIPTION = """Highlights the program slice of the given slicing criterion
 (statement, symbol)."""
 
 SLICE_NODE_COLOR = 'lightblue4'
 
-class ProgramSlice(GraphvizTool):
 
+class ProgramSlice(GraphvizTool):
     def __init__(self):
 
         GraphvizTool.__init__(self, DESCRIPTION)
 
+        self.argParser.add_argument('project')
         self.argParser.add_argument(
-                'statement',
-                help = """The id of the statement.""")
+            'statement',
+            help="""The id of the statement.""")
 
         self.argParser.add_argument(
-                'symbol',
-                help = """The name of the symbol.""")
+            'symbol',
+            help="""The name of the symbol.""")
 
         self.argParser.add_argument(
-                '-s', '--slice-type',
-                action = 'store',
-                choices = ['forward', 'backwards'],
-                default = 'forward',
-                help = """The slicing direction.""")
+            '-s', '--slice-type',
+            action='store',
+            choices=['forward', 'backwards'],
+            default='forward',
+            help="""The slicing direction.""")
 
     def processGraph(self, G):
 
@@ -44,23 +43,29 @@ class ProgramSlice(GraphvizTool):
 
         for node in nodes:
             try:
-                n = G.get_node(node._id)
-                n.attr['color'] = SLICE_NODE_COLOR
+                n = G.get_node(node['id'])
+                n.attr['style'] = 'filled'
+                n.attr['fillcolor'] = SLICE_NODE_COLOR
             except:
                 pass
 
     def _getSliceNodes(self, stmt_id, symbol):
 
         if self.args.slice_type == 'forward':
-            query = """g.v(%s).forwardSlice(['%s'])""" % (stmt_id, symbol)
+            query = "g.V({}).outE('REACHES', 'CONTROLS').or(has('var', '{}'), hasLabel('CONTROLS')).subgraph(" \
+                    "'slice').inV().repeat(outE('REACHES', 'CONTROLS').subgraph('slice').inV().simplePath()).cap(" \
+                    "'slice').next().traversal().V()"
         else:
-            query = """g.v(%s).backwardSlice(['%s'])""" % (stmt_id, symbol)
+            query = "g.V({}).inE('REACHES', 'CONTROLS').or(has('var', '{}'), hasLabel('CONTROLS')).subgraph(" \
+                    "'slice').outV().repeat(outE('REACHES', 'CONTROLS').subgraph('slice').inV().simplePath()).cap(" \
+                    "'slice').next().traversal().V()"
+        query = query.format(stmt_id, symbol)
         self._connectToDatabase()
         return self._runGremlinQuery(query)
 
     def _connectToDatabase(self):
         self.dbInterface = DBInterface()
-        self.dbInterface.connectToDatabase()
+        self.dbInterface.connectToDatabase(self.args.project)
 
     def _runGremlinQuery(self, query):
         return self.dbInterface.runGremlinQuery(query)

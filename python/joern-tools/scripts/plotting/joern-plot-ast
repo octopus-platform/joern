@@ -1,76 +1,79 @@
 #!/usr/bin/env python3
 
 import pygraphviz as pgv
-from joern.shelltool.JoernTool import JoernTool
 from octopus.server.DBInterface import DBInterface
 
+from joern.shelltool.JoernTool import JoernTool
 
 DESCRIPTION = """Retrieve the AST rooted at the node with the given
 id. The default output format is graphviz's 'dot'.
 """
 
-class AST(JoernTool):
 
+class AST(JoernTool):
     def __init__(self):
         JoernTool.__init__(self, DESCRIPTION)
 
+        self.argParser.add_argument('-a', '--attributes',
+                                    nargs='+', type=str,
+                                    help="""Attributes shown in each node.""",
+                                    default=[])
+
     # @Override
     def processLine(self, line):
-        nodeId = int(line)
+        nodes = self._getNodes(int(line))
+        edges = self._getEdges(int(line))
 
-        nodes = self._getASTNodes(nodeId)
-        edges = self._getASTEdges(nodeId)
+        G = pgv.AGraph(directed=True, strict=False)
+        self._addNodes(G, nodes)
+        self._addEdges(G, edges)
 
-        G = self._createDotGraph(nodes, edges)
         self._outputGraph(G, line)
 
     def streamStart(self):
         self.dbInterface = DBInterface()
-        # self.dbInterface.disable_json()
         self.dbInterface.connectToDatabase(self.args.project)
 
-    def _getASTNodes(self, nodeId):
-        query = """g.V(%d).functionToAST().astNodes()
-        """% (nodeId)
+    def _addNodes(self, G, nodes):
+        for v in nodes:
+            label = self._createNodeLabel(v['properties'])
+            if label:
+                v['label'] = label
+            G.add_node(v['id'], **v)
 
-        return self._runGremlinQuery(query)
+    def _addEdges(self, G, edges):
+        for e in edges:
+            del e['label']
+            G.add_edge(e['outV'], e['inV'], key=e['id'], **e)
 
-    def _getASTEdges(self, nodeId):
-        query = """g.V(%d).functionToAST()
-        .astNodes().outE('IS_AST_PARENT')
-        """% (nodeId)
-
-        return self._runGremlinQuery(query)
-
-    def _createDotGraph(self, nodes, edges):
-        G = pgv.AGraph()
-
-        idNodePairs = [(n['id'], n) for n in nodes]
-
-        for (nodeId, n) in idNodePairs:
-            G.add_node(nodeId)
-            node = G.get_node(nodeId)
-            node.attr['label'] = self._attributesAsString(n)
-
-        srcDstPairs = [(e['outV'], e['inV']) for e in edges]
-
-        for (startNode, endNode) in srcDstPairs:
-            G.add_edge(startNode, endNode)
-
-        return G
-
-    def _attributesAsString(self, n):
-
-        properties = n['properties']
-        return '\n'.join(['%s:%s' % (k, str(v).replace('\n',' '))
-                          for (k,v) in properties.items()])
-
+    def _createNodeLabel(self, nodeProperties):
+        labels = []
+        for attribute in self.args.attributes:
+            try:
+                labels.append(nodeProperties[attribute])
+            except KeyError:
+                pass
+        labels = filter(None, labels)
+        return '\n'.join(labels)
 
     def _outputGraph(self, G, identifier):
         ENDMARKER = '//###'
         self.output('//' + identifier + '\n')
         self.output(str(G) + '\n')
         self.output(ENDMARKER + '\n')
+
+    def _getNodes(self, functionId):
+        query = "g.V({}).out('IS_FUNCTION_OF_AST').repeat(outE('IS_AST_PARENT').subgraph('ast').inV().simplePath(" \
+                ")).cap('ast').next().traversal().V()".format(
+            functionId)
+        return self._runGremlinQuery(query)
+
+    def _getEdges(self, functionId):
+        query = "g.V({}).out('IS_FUNCTION_OF_AST').repeat(outE('IS_AST_PARENT').subgraph('ast').inV().simplePath(" \
+                ")).cap('ast').next().traversal().E()".format(
+            functionId)
+        return self._runGremlinQuery(query)
+
 
 if __name__ == '__main__':
     tool = AST()

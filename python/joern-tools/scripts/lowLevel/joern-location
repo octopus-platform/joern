@@ -34,7 +34,7 @@ class Location(AccTool):
         )
         .functions().functionToFile().as('file')
         .select('astnode', 'file')
-        .map { it.get('file').values('code').next() + ':' +  it.get('astnode').values('location').next() }
+        .map { it.get()['file'].values('code').next() + ':' +  it.get()['astnode'].values('location').next() }
         )
         """ % (nodeIds)
 

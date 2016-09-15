@@ -3,8 +3,8 @@ GraphTraversal.metaClass.locations = {
 	delegate
 	.statements().sideEffect{code = it.code }
 	.functions().sideEffect{ name = it.name; }
-	.functionToFiles().sideEffect{ filename = it.filepath; }
-	.transform{ [code, name, filename] }
+	.functionToFiles().sideEffect{ filename = it.code; }
+	.map{ [code, name, filename] }
 }
 
 GraphTraversal.metaClass.functions = {
