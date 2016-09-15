@@ -20,10 +20,13 @@ addStep('_match', { def args -> def p = args[0];
  include the enclosing statement node.
 */
 
-matchParents = { def args -> def p = args[0]; def q={false}; if(args.size() > 1) q = args[1];
-  _().parents().loop(1){it.object.isCFGNode != 'True' && !q(it.object) }{ p(it.object) }
-}
-
+addStep('matchParents', { def args -> def p = args[0];
+    delegate.until(__.start().has(NODE_ISCFGNODE, 'True'))
+            .emit() // no filtering here, because we filter at the end
+            .repeat(__.start().parents())
+            .unfold()
+            .filter(p) // must filter here, because enclosing statement node is implicitly emitted.
+})
 
 /**
    
