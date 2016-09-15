@@ -26,8 +26,8 @@ addStep("callToCallee", {
 	.has(NODE_TYPE, TYPE_CALLEE)
 })
 
-// FIXME
-
-callToAssigns = {
-	_().matchParents{it.type == 'AssignmentExpr'}
-}
+addStep("callToAssigns", {
+	delegate.repeat( __.start().in(AST_EDGE) )
+	.emit( has('type','AssignmentExpression') )
+	.unfold()
+})
