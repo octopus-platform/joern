@@ -44,7 +44,6 @@ addStep('arg', { def args -> def f = args[0]; def i = args[1];
    
 */
 
-param = { def args -> def x = args[0];
-  p = { it.type == 'Parameter' && it.code.matches(x) } 
-  delegate._match(p)
-}
+addStep('param', { def args -> def x = args[0];
+    delegate.astNodes().has('type','Parameter').has('code',textRegex(x))
+})
