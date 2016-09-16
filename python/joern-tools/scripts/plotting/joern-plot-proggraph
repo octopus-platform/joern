@@ -93,6 +93,9 @@ class ProgramGraph(JoernTool):
         self.argParser.add_argument('-P','--id-property',action='store_true', default=False,
                                     help="use functionId property value to identify function")
 
+        self.argParser.add_argument('-k','--show-keys',action='store_true', default=False,
+                                    help="show both property keys and values instead of just values")
+
     # @Override
     def processLine(self, line):
         labels = self._getLabels()
@@ -132,7 +135,12 @@ class ProgramGraph(JoernTool):
             attrs = self.args.attributes
         for attribute in attrs:
             try:
-                labels.append(attribute+":"+str(nodeProperties[attribute]))
+                if self.args.show_keys:
+                    lab = attribute+":"
+                else:
+                    lab = ""
+                lab += str(nodeProperties[attribute])
+                labels.append(lab)
             except KeyError:
                 pass
         labels = filter(None, labels)
