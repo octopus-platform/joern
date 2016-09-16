@@ -4,10 +4,61 @@ import pygraphviz as pgv
 from octopus.server.DBInterface import DBInterface
 
 from joern.shelltool.JoernTool import JoernTool
+from octopus.shelltool.ResultProcessor import BaseResultProcessor
 
 DESCRIPTION = """Retrieve a graph representation of a function with the given
 id. The default output format is graphviz's 'dot'.
 """
+
+class NodeResult(BaseResultProcessor):
+    def getId(self):
+        return self.result['id']
+    def getNodeProperties(self):
+        props = self.properties()
+        props['id'] = self.getId()
+        return props
+    def getPlotProperties(self):
+        props = {
+            "shape" : "rectangle",
+            'style' : 'filled',
+            'fillcolor' : 'lightcyan'
+        }
+        if self.value(self.result,'type') == 'CFGEntryNode':
+            props['fillcolor'] = "slategrey"
+            props['fontcolor'] = "white"
+        if self.value(self.result,'type') == 'CFGExitNode':
+            props['fillcolor'] = "black"
+            props['fontcolor'] = "white"
+        return props
+
+class EdgeResult(BaseResultProcessor):
+    def getDest(self):
+        return self.result['outV']
+    def getSrc(self):
+        return self.result['inV']
+    def getKey(self):
+        return self.result['id']
+    def getLabel(self):
+        return self.result['label']
+    def getPlotProperties(self):
+        props = { }
+        if self.result['label'] == 'FLOWS_TO':
+            props['color'] = 'black'
+            props['fontcolor'] = 'black'
+        elif self.result['label'] == 'CONTROLS':
+            props['color'] = 'slategrey'
+            props['fontcolor'] = 'slategrey'
+        elif self.result['label'] == 'DOM':
+            props['color'] = 'sandybrown'
+            props['fontcolor'] = 'sandybrown'
+        elif self.result['label'] == 'POST_DOM':
+            props['color'] = 'tomato'
+            props['fontcolor'] = 'tomato'
+        elif self.result['label'] == 'REACHES':
+            props['color'] = 'darkviolet'
+            props['fontcolor'] = 'darkviolet'
+        return props
+
 
 
 class ProgramGraph(JoernTool):
@@ -39,6 +90,9 @@ class ProgramGraph(JoernTool):
                                     help="""Show all edge types""",
                                     default=False)
 
+        self.argParser.add_argument('-P','--id-property',action='store_true', default=False,
+                                    help="use functionId property value to identify function")
+
     # @Override
     def processLine(self, line):
         labels = self._getLabels()
@@ -56,20 +110,29 @@ class ProgramGraph(JoernTool):
 
     def _addNodes(self, G, nodes):
         for v in nodes:
-            label = self._createNodeLabel(v['properties'])
+            nr = NodeResult(v)
+            label = self._createNodeLabel(nr.getNodeProperties())
+            plotproperties = nr.getPlotProperties()
             if label:
-                v['label'] = label
-            G.add_node(v['id'], **v)
+                plotproperties['label'] = label
+            G.add_node(nr.getId(), **plotproperties)
 
     def _addEdges(self, G, edges):
         for e in edges:
-            G.add_edge(e['outV'], e['inV'], key=e['id'], **e)
+            er = EdgeResult(e)
+            plot_properties = er.getPlotProperties()
+            plot_properties['label'] = er.getLabel()
+            G.add_edge(er.getDest(), er.getSrc(), er.getKey(), **plot_properties)
 
     def _createNodeLabel(self, nodeProperties):
         labels = []
-        for attribute in self.args.attributes:
+        if self.args.attributes == []:
+            attrs = nodeProperties.keys()
+        else:
+            attrs = self.args.attributes
+        for attribute in attrs:
             try:
-                labels.append(nodeProperties[attribute])
+                labels.append(attribute+":"+str(nodeProperties[attribute]))
             except KeyError:
                 pass
         labels = filter(None, labels)
@@ -97,16 +160,23 @@ class ProgramGraph(JoernTool):
 
         return labels
 
+    def _getStartNode(self,functionId):
+        if self.args.id_property:
+            startnode = """g.V().has('functionId','{}').has('type','CFGEntryNode')""".format(functionId)
+        else:
+            startnode = """g.V({}).out('IS_FUNCTION_OF_CFG')""".format(functionId)
+        return startnode
+
     def _getNodes(self, functionId, labels):
-        query = "g.V({}).out('IS_FUNCTION_OF_CFG').repeat(outE({}).subgraph('sg').inV().simplePath()).cap(" \
-                "'sg').next().traversal().V()".format(
-            functionId, ','.join(map(lambda x: "'{}'".format(x), labels)))
+        query = """
+            {}.repeat(outE({}).subgraph('sg').inV().simplePath()).cap('sg').next().traversal().V()
+            """.format( self._getStartNode(functionId), ','.join(map(lambda x: "'{}'".format(x), labels)))
         return self._runGremlinQuery(query)
 
     def _getEdges(self, functionId, labels):
-        query = "g.V({}).out('IS_FUNCTION_OF_CFG').repeat(outE({}).subgraph('sg').inV().simplePath()).cap(" \
-                "'sg').next().traversal().E()".format(
-            functionId, ','.join(map(lambda x: "'{}'".format(x), labels)))
+        query = """
+            {}.repeat(outE({}).subgraph('sg').inV().simplePath()).cap('sg').next().traversal().E()
+            """.format( self._getStartNode(functionId), ','.join(map(lambda x: "'{}'".format(x), labels)))
         return self._runGremlinQuery(query)
 
 
