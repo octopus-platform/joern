@@ -27,7 +27,7 @@ class ListFiles(CmdLineTool):
         files = self.dbInterface.runGremlinQuery(query)
         for file in files:
             fileId = file['id']
-            filepath = file['properties']['code']
+            filepath = file['properties']['code'][0]['value']
             print(','.join([str(fileId), filepath]))
 
 

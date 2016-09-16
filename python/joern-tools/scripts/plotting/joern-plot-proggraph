@@ -69,7 +69,7 @@ class ProgramGraph(JoernTool):
         labels = []
         for attribute in self.args.attributes:
             try:
-                labels.append(nodeProperties[attribute])
+                labels.append(nodeProperties[attribute][0]['value'])
             except KeyError:
                 pass
         labels = filter(None, labels)

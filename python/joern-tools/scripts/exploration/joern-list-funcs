@@ -34,8 +34,8 @@ class ListFuncs(CmdLineTool):
         res = self.dbInterface.runGremlinQuery(query)
         for x in res:
             functionId = x['func']['id']
-            functionName = x['func']['properties']['code']
-            filepath = x['file']['properties']['code']
+            functionName = x['func']['properties']['code'][0]['value']
+            filepath = x['file']['properties']['code'][0]['value']
             print(','.join([str(functionId), functionName, filepath]))
 
 
