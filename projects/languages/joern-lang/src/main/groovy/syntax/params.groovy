@@ -1,8 +1,8 @@
 
-GraphTraversal.metaClass.paramsToNames = {
-	delegate.children().filter{ it.type != 'ParameterType'}
-}
+addStep("paramsToNames", {
+	delegate.children().not(has('type','ParameterType'))
+})
 
-GraphTraversal.metaClass.paramsToTypes = {
-	delegate.children().filter{ it.type == 'ParameterType'}
-}
+addStep("paramsToTypes", {
+	delegate.children().has('type','ParameterType')
+})
