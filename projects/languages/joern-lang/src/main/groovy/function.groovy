@@ -1,10 +1,10 @@
 
-GraphTraversal.metaClass.functionToLocationStr = {
+addStep("functionToLocationStr", {
   delegate.as('func')
   .functionToFile().as('file')
   .select('func', 'file')
-  .map { it.get()['file'].values('code').next() + ':' +  it.get()['func'].values('location').next() }  
-}
+  .map { it.get()['file'].values('code').next() + ':' +  it.get()['func'].values('location').next() }
+})
 
 /**
    (Optimized) match-traversals for functions.
