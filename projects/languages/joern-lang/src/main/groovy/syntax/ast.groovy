@@ -9,26 +9,28 @@
     column ;)
 */
 
-
-GraphTraversal.metaClass.astNodes = {
-	delegate.repeat(__.start().children()).until(noMoreChildren()).emit{true}
-}
+addStep("astNodes", {
+	delegate
+	.emit()
+	.repeat( out(AST_EDGE) )
+	.unfold()
+})
 
 /**
    Traverse to parent-nodes of AST nodes.
 */
 
-GraphTraversal.metaClass.parents = {
+addStep("parents", {
 	delegate.in(AST_EDGE)
-}
+})
 
 /**
    Traverse to child-nodes of AST nodes.
 */
 
-GraphTraversal.metaClass.children = {
+addStep("children", {
 	delegate.out(AST_EDGE)
-}
+})
 
 noMoreChildren = {
 	__.start().outE(AST_EDGE).count().is(0)
@@ -40,10 +42,10 @@ noMoreChildren = {
    @param i The child index
 */
 
-GraphTraversal.metaClass.ithChildren = { args ->
- i = args[0];
- delegate.children().has(NODE_CHILDNUM, i)	
-}
+addStep("ithChildren", { args ->
+	i = args[0];
+	delegate.children().has(NODE_CHILDNUM, i)
+})
 
 isStatement = { it ->
   it.isCFGNode == 'True'
@@ -53,21 +55,24 @@ isStatement = { it ->
 /**
  * Traverse to siblings.
  */
-GraphTraversal.metaClass.siblings = {
-	_().sideEffect{ nodeId = it.id }
+addStep("siblings", {
+	delegate
+	.as('node')
 	.parents()
 	.children()
-	.filter{ it.id != nodeId }
-}
+	.where(P.neq('node'))
+})
 
 /**
    Traverse to statements enclosing supplied AST nodes. This may be
    the node itself.
 */
 
-GraphTraversal.metaClass.statements = {
-  delegate.until(__.start().has(NODE_ISCFGNODE, 'True')).repeat(__.start().parents())
-}
+addStep("statements", {
+	delegate
+	.until(has(NODE_ISCFGNODE, 'True'))
+    .repeat(__.start().parents())
+})
 
 /**
    Get number of children of an AST node.

@@ -3,11 +3,12 @@
    For an AST node, traverse to the exit-node
    of the function
 */
-
-toExitNode = {
-	_().transform{ queryNodeIndex('functionId:' + it.functionId + " AND type:CFGExitNode ") }
-	.scatter()
-}
+addStep("toExitNode", {
+  delegate.flatMap{
+    functionId = it.get().value('functionId')
+    g.V().has('type','CFGExitNode').has('functionId',functionId)
+  }
+})
 
 /**
    Search the CFG breadth-first so that we can keep track of all nodes we've visited in

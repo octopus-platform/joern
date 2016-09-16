@@ -20,25 +20,30 @@ addStep('_match', { def args -> def p = args[0];
  include the enclosing statement node.
 */
 
-matchParents = { def args -> def p = args[0]; def q={false}; if(args.size() > 1) q = args[1];
-  _().parents().loop(1){it.object.isCFGNode != 'True' && !q(it.object) }{ p(it.object) }
-}
-
-
-/**
-   
-*/
-
-arg = { def args -> def f = args[0]; def i = args[1];
-  _().astNodes().filter{ it.type == 'CallExpression' && it.code.startsWith(f)}
-  .out(AST_EDGE).filter{ it.childNum == '1' }.out(AST_EDGE).filter{ it.childNum == i}
-}
+addStep('matchParents', { def args -> def p = args[0];
+    delegate.until(__.start().has(NODE_ISCFGNODE, 'True'))
+            .emit() // no filtering here, because we filter at the end
+            .repeat(__.start().parents())
+            .unfold()
+            .filter(p) // must filter here, because enclosing statement node is implicitly emitted.
+})
 
 /**
    
 */
 
-param = { def args -> def x = args[0];
-  p = { it.type == 'Parameter' && it.code.matches(x) } 
-  delegate._match(p)
-}
+addStep('arg', { def args -> def f = args[0]; def i = args[1];
+    delegate.astNodes()
+    .has('type','CallExpression')
+    .where( out(AST_EDGE).has('type','Callee').values('code').is(P.eq(f)))
+    .out(AST_EDGE).has('type','ArgumentList')
+    .ithChildren(i)
+})
+
+/**
+   
+*/
+
+addStep('param', { def args -> def x = args[0];
+    delegate.astNodes().has('type','Parameter').has('code',textRegex(x))
+})

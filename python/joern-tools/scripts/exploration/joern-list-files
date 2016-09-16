@@ -6,7 +6,6 @@ DESCRIPTION = """Create a list of all files of the code base. The
 first field is the file's path, the second field is the id of the
 corresponding node in the database."""
 
-
 class ListFiles(CmdLineTool):
     def __init__(self, DESCRIPTION):
         CmdLineTool.__init__(self, DESCRIPTION)
