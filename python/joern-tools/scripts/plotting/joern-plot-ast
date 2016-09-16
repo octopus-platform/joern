@@ -33,6 +33,8 @@ class EdgeResult(BaseResultProcessor):
         return self.result['inV']
     def getKey(self):
         return self.result['id']
+    def getLabel(self):
+        return self.result['label']
     def getPlotProperties(self):
         return {}
 
