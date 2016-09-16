@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 from octopus.server.DBInterface import DBInterface
 from octopus.shelltool.CmdLineTool import CmdLineTool
+from octopus.shelltool.ResultProcessor import BaseResultProcessor
 
 DESCRIPTION = """Create a list of all files of the code base. The
 first field is the file's path, the second field is the id of the
 corresponding node in the database."""
+
+class ListFilesResult(BaseResultProcessor):
+    def getFileId(self):
+        return str(self.id(self.result))
+    def getFilePath(self):
+        return self.value(self.result,'code')
 
 class ListFiles(CmdLineTool):
     def __init__(self, DESCRIPTION):
@@ -15,6 +22,7 @@ class ListFiles(CmdLineTool):
                                     help="emit only files that match this pattern",
                                     action='store', type=str,
                                     default=None)
+        self.argParser.add_argument('-F','--field-separator',default=',')
 
     def _runImpl(self):
         self.dbInterface = DBInterface()
@@ -25,10 +33,9 @@ class ListFiles(CmdLineTool):
         else:
             query = "g.V().has('type', 'File')".format(self.args.pattern)
         files = self.dbInterface.runGremlinQuery(query)
-        for file in files:
-            fileId = file['id']
-            filepath = file['properties']['code']
-            print(','.join([str(fileId), filepath]))
+        for f in files:
+            r = ListFilesResult(f)
+            print(self.args.field_separator.join([r.getFileId(), r.getFilePath()]))
 
 
 if __name__ == '__main__':
