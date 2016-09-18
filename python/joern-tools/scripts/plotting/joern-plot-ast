@@ -87,6 +87,7 @@ class AST(JoernTool):
             attrs = self.args.attributes
         for attribute in attrs:
             try:
+<<<<<<< HEAD
                 if self.args.show_keys:
                     lab = attribute+":"
                 else:
