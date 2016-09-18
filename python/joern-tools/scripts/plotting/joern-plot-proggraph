@@ -7,6 +7,7 @@ from joern.shelltool.JoernTool import JoernTool
 from octopus.shelltool.ResultProcessor import BaseResultProcessor
 from joern.shelltool.PlotConfiguration import PlotConfiguration
 from joern.shelltool.PlotResult import NodeResult,EdgeResult
+import os
 
 DESCRIPTION = """Retrieve a graph representation of a function with the given
 id. The default output format is graphviz's 'dot'.
@@ -54,15 +55,16 @@ class ProgramGraph(JoernTool):
         self.argParser.add_argument('-P','--id-property',action='store_true', default=False,
                                     help="use functionId property value to identify function")
 
-        # TODO: add default file
-        self.argParser.add_argument('-c','--plot-config',help="use plot configuration from file")
+        self.argParser.add_argument('-c','--plot-config',
+                    default=os.path.join(os.path.dirname(__file__), 'data', 'plotconfig.cfg'),
+                    help="use plot configuration from file")
 
     # @Override
     def processLine(self, line):
+
         self.plot_configuration = PlotConfiguration()
-        if self.args.plot_config:
-            f = open(self.args.plot_config,"r")
-            self.plot_configuration.parse(f)
+        f = open(self.args.plot_config,"r")
+        self.plot_configuration.parse(f)
 
         labels = self._getLabels()
         nodes = self._getNodes(int(line), labels)
