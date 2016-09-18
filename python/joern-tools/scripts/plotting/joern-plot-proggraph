@@ -16,11 +16,6 @@ class ProgramGraph(JoernTool):
     def __init__(self):
         JoernTool.__init__(self, DESCRIPTION)
 
-        self.argParser.add_argument('-a', '--attributes',
-                                    nargs='+', type=str,
-                                    help="""Attributes shown in each node.""",
-                                    default=[])
-
         self.argParser.add_argument('-ast', '--show-ast',
                                     action='store_true',
                                     help="""Show AST in CFG nodes.""",
@@ -58,9 +53,6 @@ class ProgramGraph(JoernTool):
 
         self.argParser.add_argument('-P','--id-property',action='store_true', default=False,
                                     help="use functionId property value to identify function")
-
-        self.argParser.add_argument('-k','--show-keys',action='store_true', default=False,
-                                    help="show both property keys and values instead of just values")
 
         # TODO: add default file
         self.argParser.add_argument('-c','--plot-config',help="use plot configuration from file")
