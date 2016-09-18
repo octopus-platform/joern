@@ -5,76 +5,12 @@ from octopus.server.DBInterface import DBInterface
 
 from joern.shelltool.JoernTool import JoernTool
 from octopus.shelltool.ResultProcessor import BaseResultProcessor
+from joern.shelltool.PlotConfiguration import PlotConfiguration
+from joern.shelltool.PlotResult import NodeResult,EdgeResult
 
 DESCRIPTION = """Retrieve a graph representation of a function with the given
 id. The default output format is graphviz's 'dot'.
 """
-
-class NodeResult(BaseResultProcessor):
-    def getId(self):
-        return self.result['id']
-    def getNodeProperties(self):
-        props = self.properties()
-        props['id'] = self.getId()
-        return props
-    def getPlotProperties(self):
-        props = {
-            "shape" : "rectangle",
-            'style' : 'filled',
-            'fillcolor' : 'white'
-        }
-        if self.value(self.result,'isCFGNode') == "True":
-            props['fillcolor'] = "lightcyan"
-        if self.value(self.result,'type') == 'CFGEntryNode':
-            props['fillcolor'] = "slategrey"
-            props['fontcolor'] = "white"
-        elif self.value(self.result,'type') == 'CFGExitNode':
-            props['fillcolor'] = "black"
-            props['fontcolor'] = "white"
-        elif self.value(self.result,'type') == 'Symbol':
-            props['fillcolor'] = "wheat"
-            props['shape'] = "ellipse"
-
-        return props
-
-class EdgeResult(BaseResultProcessor):
-    def getDest(self):
-        return self.result['outV']
-    def getSrc(self):
-        return self.result['inV']
-    def getKey(self):
-        return self.result['id']
-    def getLabel(self):
-        return self.result['label']
-    def getPlotProperties(self):
-        props = { }
-        if self.result['label'] == 'FLOWS_TO':
-            props['color'] = 'black'
-            props['fontcolor'] = 'black'
-        elif self.result['label'] == 'CONTROLS':
-            props['color'] = 'slategrey'
-            props['fontcolor'] = 'slategrey'
-        elif self.result['label'] == 'DOM':
-            props['color'] = 'sandybrown'
-            props['fontcolor'] = 'sandybrown'
-        elif self.result['label'] == 'POST_DOM':
-            props['color'] = 'tomato'
-            props['fontcolor'] = 'tomato'
-        elif self.result['label'] == 'REACHES':
-            props['color'] = 'darkviolet'
-            props['fontcolor'] = 'darkviolet'
-        elif self.result['label'] == 'USE':
-            props['color'] = 'lightgrey'
-            props['fontcolor'] = 'lightgrey'
-        elif self.result['label'] == 'DEF':
-            props['color'] = 'lightpink'
-            props['fontcolor'] = 'lightpink'
-        elif self.result['label'] == 'IS_AST_PARENT':
-            props['color'] = 'darkseagreen'
-            props['fontcolor'] = 'darkseagreen'
-        return props
-
-
 
 class ProgramGraph(JoernTool):
     def __init__(self):
@@ -126,8 +62,16 @@ class ProgramGraph(JoernTool):
         self.argParser.add_argument('-k','--show-keys',action='store_true', default=False,
                                     help="show both property keys and values instead of just values")
 
+        # TODO: add default file
+        self.argParser.add_argument('-c','--plot-config',help="use plot configuration from file")
+
     # @Override
     def processLine(self, line):
+        self.plot_configuration = PlotConfiguration()
+        if self.args.plot_config:
+            f = open(self.args.plot_config,"r")
+            self.plot_configuration.parse(f)
+
         labels = self._getLabels()
         nodes = self._getNodes(int(line), labels)
         edges = self._getEdges(int(line), labels)
@@ -144,40 +88,25 @@ class ProgramGraph(JoernTool):
     def _addNodes(self, G, nodes):
         for v in nodes:
             nr = NodeResult(v)
-            label = self._createNodeLabel(nr.getNodeProperties())
-            plotproperties = nr.getPlotProperties()
+
+            label = self._createGraphElementLabel(self.plot_configuration.getElementDisplayItems(nr))
+            plot_properties = self.plot_configuration.getElementLayout(nr)
             if label:
-                plotproperties['label'] = label
-            G.add_node(nr.getId(), **plotproperties)
+                plot_properties['label'] = label
+            G.add_node(nr.getId(), **plot_properties)
 
     def _addEdges(self, G, edges):
         for e in edges:
             er = EdgeResult(e)
-            plot_properties = er.getPlotProperties()
-            plot_properties['label'] = er.getLabel()
+            label = self._createGraphElementLabel(self.plot_configuration.getElementDisplayItems(er))
+            plot_properties = self.plot_configuration.getElementLayout(er)
+            plot_properties['label'] = label
             G.add_edge(er.getDest(), er.getSrc(), er.getKey(), **plot_properties)
 
-    def _createNodeLabel(self, nodeProperties):
-        labels = []
-        if self.args.attributes == []:
-            attrs = nodeProperties.keys()
-        else:
-            attrs = self.args.attributes
-        for attribute in attrs:
-            try:
-                if self.args.show_keys:
-                    lab = attribute+":"
-                else:
-                    lab = ""
-                lab += str(nodeProperties[attribute])
-                labels.append(lab)
-            except KeyError:
-                pass
-        labels = filter(None, labels)
-        return '\n'.join(labels)
+    def _createGraphElementLabel(self,labeldata):
+        return "\n".join([ ":".join([str(e) for e in d]) for d in labeldata ])
 
     def _outputGraph(self, G, identifier):
-
         ENDMARKER = '//###'
         self.output('//' + identifier + '\n')
         self.output(str(G) + '\n')
