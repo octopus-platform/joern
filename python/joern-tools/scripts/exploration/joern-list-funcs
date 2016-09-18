@@ -59,7 +59,6 @@ class ListFuncs(CmdLineTool):
 
         res = self.dbInterface.runGremlinQuery(query)
         for x in res:
-<<<<<<< HEAD
             r = ListFuncsResult(x)
             if self.args.id_property:
                 fid = r.getFunctionIdProperty()

@@ -91,7 +91,6 @@ class ProgramGraph(JoernTool):
 
     def _addEdges(self, G, edges):
         for e in edges:
-<<<<<<< HEAD
             er = EdgeResult(e)
             label = self._createGraphElementLabel(self.plot_configuration.getElementDisplayItems(er))
             plot_properties = self.plot_configuration.getElementLayout(er)
