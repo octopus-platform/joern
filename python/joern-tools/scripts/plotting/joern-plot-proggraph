@@ -128,9 +128,12 @@ class ProgramGraph(JoernTool):
 
     def _getStartNode(self,functionId):
         if self.args.id_property:
-            startnode = """g.V().has('functionId','{}').has('type','CFGEntryNode')""".format(functionId)
+            startnode = """
+            def vid=g.V().has('functionId','{}').has('type','CFGEntryNode').in('IS_FUNCTION_OF_CFG').id().next();
+            g.V(vid)""".format(functionId)
         else:
-            startnode = """g.V({}).out('IS_FUNCTION_OF_CFG')""".format(functionId)
+            startnode = """g.V({})""".format(functionId)
+        startnode += """.union( out('IS_FUNCTION_OF_CFG'), out('IS_FUNCTION_OF_AST') )"""
         return startnode
 
     def _getNodes(self, functionId, labels):
