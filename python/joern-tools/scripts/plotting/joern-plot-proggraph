@@ -4,7 +4,6 @@ import pygraphviz as pgv
 from octopus.server.DBInterface import DBInterface
 
 from joern.shelltool.JoernTool import JoernTool
-from octopus.shelltool.ResultProcessor import BaseResultProcessor
 from joern.shelltool.PlotConfiguration import PlotConfiguration
 from joern.shelltool.PlotResult import NodeResult,EdgeResult
 import os
