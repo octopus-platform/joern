@@ -21,14 +21,20 @@ class NodeResult(BaseResultProcessor):
         props = {
             "shape" : "rectangle",
             'style' : 'filled',
-            'fillcolor' : 'lightcyan'
+            'fillcolor' : 'white'
         }
+        if self.value(self.result,'isCFGNode') == "True":
+            props['fillcolor'] = "lightcyan"
         if self.value(self.result,'type') == 'CFGEntryNode':
             props['fillcolor'] = "slategrey"
             props['fontcolor'] = "white"
-        if self.value(self.result,'type') == 'CFGExitNode':
+        elif self.value(self.result,'type') == 'CFGExitNode':
             props['fillcolor'] = "black"
             props['fontcolor'] = "white"
+        elif self.value(self.result,'type') == 'Symbol':
+            props['fillcolor'] = "wheat"
+            props['shape'] = "ellipse"
+
         return props
 
 class EdgeResult(BaseResultProcessor):
@@ -57,6 +63,15 @@ class EdgeResult(BaseResultProcessor):
         elif self.result['label'] == 'REACHES':
             props['color'] = 'darkviolet'
             props['fontcolor'] = 'darkviolet'
+        elif self.result['label'] == 'USE':
+            props['color'] = 'lightgrey'
+            props['fontcolor'] = 'lightgrey'
+        elif self.result['label'] == 'DEF':
+            props['color'] = 'lightpink'
+            props['fontcolor'] = 'lightpink'
+        elif self.result['label'] == 'IS_AST_PARENT':
+            props['color'] = 'darkseagreen'
+            props['fontcolor'] = 'darkseagreen'
         return props
 
 
@@ -69,6 +84,21 @@ class ProgramGraph(JoernTool):
                                     nargs='+', type=str,
                                     help="""Attributes shown in each node.""",
                                     default=[])
+
+        self.argParser.add_argument('-ast', '--show-ast',
+                                    action='store_true',
+                                    help="""Show AST in CFG nodes.""",
+                                    default=False)
+
+        self.argParser.add_argument('-cfg', '--show-control-flow',
+                                    action='store_true',
+                                    help="""Show control flow.""",
+                                    default=False)
+
+        self.argParser.add_argument('-dfg', '--show-data-flow',
+                                    action='store_true',
+                                    help="""Show data flow.""",
+                                    default=False)
 
         self.argParser.add_argument('-ddg', '--show-data-dependences',
                                     action='store_true',
@@ -154,10 +184,12 @@ class ProgramGraph(JoernTool):
         self.output(ENDMARKER + '\n')
 
     def _getLabels(self):
-        labels = ["FLOWS_TO", "REACHES", "CONTROLS", "DOM", "POST_DOM"]
+        labels = ["FLOWS_TO", "REACHES", "CONTROLS", "DOM", "POST_DOM", "USE", "DEF","IS_AST_PARENT"]
         if self.args.show_all:
             return labels
 
+        if not self.args.show_control_flow:
+            labels.remove("FLOWS_TO")
         if not self.args.show_data_dependences:
             labels.remove("REACHES")
         if not self.args.show_control_dependences:
@@ -165,6 +197,11 @@ class ProgramGraph(JoernTool):
         if not self.args.show_dominance_edges:
             labels.remove("DOM")
             labels.remove("POST_DOM")
+        if not self.args.show_data_flow:
+            labels.remove("USE")
+            labels.remove("DEF")
+        if not self.args.show_ast:
+            labels.remove("IS_AST_PARENT")
 
         return labels
 
