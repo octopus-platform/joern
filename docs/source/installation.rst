@@ -38,7 +38,7 @@ necessary dependencies:
 
 .. code-block:: none
 
-	sudo apt-get install openjdk8 gradle python3 python3-setuptools python3-dev graphviz graphviz-dev
+	sudo apt-get install openjdk-8-jdk gradle python3 python3-setuptools python3-dev graphviz graphviz-dev
 		
 
 Please note, however, that Debian stable (¨Jessie¨) currently does not
