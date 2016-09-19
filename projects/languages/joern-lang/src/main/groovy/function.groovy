@@ -1,28 +1,28 @@
 
-GraphTraversal.metaClass.functionToLocationStr = {
+addStep("functionToLocationStr", {
   delegate.as('func')
   .functionToFile().as('file')
   .select('func', 'file')
-  .map { it.get()['file'].values('code').next() + ':' +  it.get()['func'].values('location').next() }  
-}
+  .map { it.get()['file'].values('code').next() + ':' +  it.get()['func'].values('location').next() }
+})
 
 /**
    (Optimized) match-traversals for functions.
 */
 
-GraphTraversal.metaClass.functionToAST = {
+addStep("functionToAST", {
 	delegate.out(FUNCTION_TO_AST_EDGE)
-}
+})
 
 
-GraphTraversal.metaClass.functionToCFG = {
+addStep("functionToCFG", {
 	delegate.out(FUNCTION_TO_CFG_EDGE)
-}
+})
 
 
-GraphTraversal.metaClass.functionToASTNodes = {
+addStep("functionToASTNodes", {
 	delegate.functionToAST().astNodes()
-}
+})
 
 /**
 	functionToStatements, implemented as a CFG traversal. This does not benefit from

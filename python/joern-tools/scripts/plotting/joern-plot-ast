@@ -4,11 +4,39 @@ import pygraphviz as pgv
 from octopus.server.DBInterface import DBInterface
 
 from joern.shelltool.JoernTool import JoernTool
+from octopus.shelltool.ResultProcessor import BaseResultProcessor
 
 DESCRIPTION = """Retrieve the AST rooted at the node with the given
 id. The default output format is graphviz's 'dot'.
 """
 
+class NodeResult(BaseResultProcessor):
+    def getId(self):
+        return self.result['id']
+    def getNodeProperties(self):
+        props = self.properties()
+        props['id'] = self.getId()
+        return props
+    def getPlotProperties(self):
+        props = {
+            "shape" : "rectangle"
+        }
+        if self.value(self.result,'isCFGNode') == "True":
+            props['style'] = 'filled'
+            props['fillcolor'] = 'lightcyan'
+        return props
+
+class EdgeResult(BaseResultProcessor):
+    def getDest(self):
+        return self.result['outV']
+    def getSrc(self):
+        return self.result['inV']
+    def getKey(self):
+        return self.result['id']
+    def getLabel(self):
+        return self.result['label']
+    def getPlotProperties(self):
+        return {}
 
 class AST(JoernTool):
     def __init__(self):
@@ -18,6 +46,10 @@ class AST(JoernTool):
                                     nargs='+', type=str,
                                     help="""Attributes shown in each node.""",
                                     default=[])
+        self.argParser.add_argument('-P','--id-property',action='store_true', default=False,
+                                    help="use functionId property value to identify function")
+        self.argParser.add_argument('-k','--show-keys',action='store_true', default=False,
+                                    help="show both property keys and values instead of just values")
 
     # @Override
     def processLine(self, line):
@@ -36,21 +68,32 @@ class AST(JoernTool):
 
     def _addNodes(self, G, nodes):
         for v in nodes:
-            label = self._createNodeLabel(v['properties'])
-            if label:
-                v['label'] = label
-            G.add_node(v['id'], **v)
+            nr = NodeResult(v)
+            plotproperties = nr.getPlotProperties()
+            plotproperties['label'] = self._createNodeLabel(nr.getNodeProperties())
+            G.add_node(nr.getId(), **plotproperties)
 
     def _addEdges(self, G, edges):
         for e in edges:
-            del e['label']
-            G.add_edge(e['outV'], e['inV'], key=e['id'], **e)
+            er = EdgeResult(e)
+            plotproperties = er.getPlotProperties()
+            G.add_edge(er.getDest(),er.getSrc(),er.getKey(),**plotproperties)
 
     def _createNodeLabel(self, nodeProperties):
         labels = []
-        for attribute in self.args.attributes:
+        if self.args.attributes == []:
+            attrs = nodeProperties.keys()
+        else:
+            attrs = self.args.attributes
+        for attribute in attrs:
             try:
-                labels.append(nodeProperties[attribute][0]['value'])
+<<<<<<< HEAD
+                if self.args.show_keys:
+                    lab = attribute+":"
+                else:
+                    lab = ""
+                lab += str(nodeProperties[attribute])
+                labels.append(lab)
             except KeyError:
                 pass
         labels = filter(None, labels)
@@ -62,17 +105,29 @@ class AST(JoernTool):
         self.output(str(G) + '\n')
         self.output(ENDMARKER + '\n')
 
+    def _getStartNode(self,functionId):
+        if self.args.id_property:
+            startnode = """g.V().has('functionId','{}').has('type','FunctionDef')""".format(functionId)
+        else:
+            startnode = """g.V({}).out('IS_FUNCTION_OF_AST')""".format(functionId)
+        return startnode
+
     def _getNodes(self, functionId):
-        query = "g.V({}).out('IS_FUNCTION_OF_AST').repeat(outE('IS_AST_PARENT').subgraph('ast').inV().simplePath(" \
-                ")).cap('ast').next().traversal().V()".format(
-            functionId)
-        return self._runGremlinQuery(query)
+        query = """{}
+            .repeat(outE('IS_AST_PARENT').subgraph('ast').inV().simplePath())
+            .cap('ast').next().traversal().V()
+            """.format(self._getStartNode(functionId))
+        results= self._runGremlinQuery(query)
+        return results
 
     def _getEdges(self, functionId):
-        query = "g.V({}).out('IS_FUNCTION_OF_AST').repeat(outE('IS_AST_PARENT').subgraph('ast').inV().simplePath(" \
-                ")).cap('ast').next().traversal().E()".format(
-            functionId)
-        return self._runGremlinQuery(query)
+        query = """
+            {}
+            .repeat(outE('IS_AST_PARENT').subgraph('ast').inV().simplePath())
+            .cap('ast').next().traversal().E()
+            """.format(self._getStartNode(functionId))
+        results= self._runGremlinQuery(query)
+        return results
 
 
 if __name__ == '__main__':
