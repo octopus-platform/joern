@@ -56,8 +56,10 @@ rule_type:
     ``display`` to tell which properties are shown in the graph, ``layout`` to determine graphviz layout options.
 
 pattern:
-    ``*`` : matches any element
-     *prop* ``.`` *val* : matches if the property prop has value val. If value is * then any value of the field results in a match.
+    ``*`` :
+        matches any element
+    *prop* ``.`` *val* :
+        matches if the property prop has value val. If value is * then any value of the field results in a match.
 
 if the property or parameter list starts with a ``+``, the result will be added to the result of previous matching rules. If ``+`` is omitted, the current result will be replaced.
 
