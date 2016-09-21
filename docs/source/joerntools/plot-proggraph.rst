@@ -21,13 +21,16 @@ OPTIONS
 -------
 
 positional arguments:
+~~~~~~~~~~~~~~~~~~~~
+
   project
 
-optional arguments:
+optional arguments
+~~~~~~~~~~~~~~~~~~
 
 -h, --help                       show this help message and exit
--f [FILE], --file [FILE]         read input from the provided file
--o [OUT], --out [OUT]            write output to provided file
+-f FILE, --file FILE             read input from the provided file
+-o OUT, --out OUT                write output to provided file
 -ast, --show-ast                 Show AST in CFG nodes.
 -cfg, --show-control-flow        Show control flow.
 -dfg, --show-data-flow           Show data flow.
@@ -36,8 +39,7 @@ optional arguments:
 -dom, --show-dominance-edges     Show dominance edges.
 -all, --show-all                 Show all edge types
 -P, --id-property                use functionId property value to identify function
--c PLOT_CONFIG,
---plot-config PLOT_CONFIG        use plot configuration from file
+-c PLOT_CONFIG, --plot-config PLOT_CONFIG  use plot configuration from file
 
 PLOT CONFIGURATION
 ------------------
