@@ -5,14 +5,14 @@ joern-plot-proggraph
 SYNOPSIS
 ---------
 
-joern-plot-proggraph [-h] [-f [FILE]] [-o [OUT]] [-ast] [-cfg] [-dfg]
-                            [-ddg] [-cdg] [-dom] [-all] [-P] [-c PLOT_CONFIG]
-                            *project*
+``joern-plot-proggraph`` [ ``-h`` ] [ ``-f`` FILE ] [ ``-o`` OUT ] [ ``-ast`` ] [ ``-cfg`` ]
+   [ ``-dfg`` ] [ ``-ddg`` ] [ ``-cdg`` ] [``-dom`` ] [ ``-all`` ] [ ``-P`` ] [ ``-c`` PLOT_CONFIG ]
+   *project*
 
 DESCRIPTION
 -----------
 
-joern-plot-proggraph lets you plot various program graphs, but restricted to one plot per function.
+``joern-plot-proggraph`` lets you plot various program graphs, but restricted to one plot per function.
 Retrieves a graph representation of a function with the given id. The default output format is
 graphviz's 'dot'.
 
@@ -23,22 +23,22 @@ OPTIONS
 positional arguments:
 ~~~~~~~~~~~~~~~~~~~~
 
-  project
+*project*, the name of the Joern project.
 
 optional arguments
 ~~~~~~~~~~~~~~~~~~
 
--h, --help                       show this help message and exit
--f FILE, --file FILE             read input from the provided file
--o OUT, --out OUT                write output to provided file
--ast, --show-ast                 Show AST in CFG nodes.
--cfg, --show-control-flow        Show control flow.
--dfg, --show-data-flow           Show data flow.
--ddg, --show-data-dependences    Show data dependences.
--cdg, --show-control-dependences Show control dependences.
--dom, --show-dominance-edges     Show dominance edges.
--all, --show-all                 Show all edge types
--P, --id-property                use functionId property value to identify function
+-h, --help                        show this help message and exit
+-f FILE, --file FILE              read input from the provided file
+-o OUT, --out OUT                 write output to provided file
+-ast, --show-ast                  Show AST in CFG nodes.
+-cfg, --show-control-flow         Show control flow.
+-dfg, --show-data-flow            Show data flow.
+-ddg, --show-data-dependences     Show data dependences.
+-cdg, --show-control-dependences  Show control dependences.
+-dom, --show-dominance-edges      Show dominance edges.
+-all, --show-all                  Show all edge types
+-P, --id-property                 use functionId property value to identify function
 -c PLOT_CONFIG, --plot-config PLOT_CONFIG  use plot configuration from file
 
 PLOT CONFIGURATION
