@@ -137,7 +137,7 @@ class ProgramGraph(JoernTool):
 
     def _getNodes(self, functionId, labels):
         query = """
-            {}.repeat(outE({}).subgraph('sg').inV().simplePath()).cap('sg').next().traversal().V()
+            {}.repeat(outE({}).subgraph('sg').inV().dedup().simplePath()).cap('sg').next().traversal().V()
             """.format( self._getStartNode(functionId), ','.join(map(lambda x: "'{}'".format(x), labels)))
         return self._runGremlinQuery(query)
 
