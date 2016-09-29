@@ -7,7 +7,7 @@ from io import StringIO
 
 class ANodeResult:
     def __init__(self):
-        self.data = {}
+        self.data = { 'properties' : {} }
     def get(self):
         return NodeResult(self.data)
     def withId(self,i):
@@ -19,10 +19,10 @@ class ANodeResult:
 
 class AnEdgeResult:
     def __init__(self):
-        self.data = {}
+        self.data = {'properties' : {} }
     def get(self):
         return EdgeResult(self.data)
-    def withKey(self,key):
+    def withId(self,key):
         self.data['id'] = key
         return self
     def withSrc(self,src):
@@ -33,6 +33,9 @@ class AnEdgeResult:
         return self
     def withLabel(self,label):
         self.data['label'] = label
+        return self
+    def withProperty(self,key,value):
+        self.data.setdefault('properties',{})[key]= value
         return self
 
 class TestPlotConfiguration(unittest.TestCase):
@@ -154,19 +157,19 @@ node.layout=isCFGNode.True:+
     def testConfigurationForEdges(self):
         cfg = PlotConfiguration()
         self.readConfigFromString(cfg,"""
-edge.display=*:&*,-key
+edge.display=*:&*,-id
 edge.layout=label.USE:color=red,fontcolor=blue
 """)
-        er = AnEdgeResult().withKey(123).withLabel("USE").get()
+        er = AnEdgeResult().withId(123).withLabel("USE").get()
         self.assertCountEqual( cfg.getElementDisplayItems(er), [["label","USE"]] )
         self.assertCountEqual( cfg.getElementLayout(er), {"color":"red","fontcolor":"blue" } )
     def testConfigurationWithComments(self):
         cfg = PlotConfiguration()
         self.readConfigFromString(cfg,"""
-# edge.display=*:&*,-key
+# edge.display=*:&*,-id
 # edge.layout=label.USE:color=red,fontcolor=blue
 """)
-        er = AnEdgeResult().withKey(123).withLabel("USE").get()
+        er = AnEdgeResult().withId(123).withLabel("USE").get()
         self.assertCountEqual( cfg.getElementDisplayItems(er), [] )
         self.assertCountEqual( cfg.getElementLayout(er), {} )
 if __name__=="__main__":

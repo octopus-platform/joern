@@ -94,7 +94,7 @@ class ProgramGraph(JoernTool):
             label = self._createGraphElementLabel(self.plot_configuration.getElementDisplayItems(er))
             plot_properties = self.plot_configuration.getElementLayout(er)
             plot_properties['label'] = label
-            G.add_edge(er.getDest(), er.getSrc(), er.getKey(), **plot_properties)
+            G.add_edge(er.getDest(), er.getSrc(), er.getId(), **plot_properties)
 
     def _createGraphElementLabel(self,labeldata):
         return "\n".join([ ":".join([str(e) for e in d]) for d in labeldata ])

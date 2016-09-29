@@ -13,6 +13,10 @@ class BaseResultProcessor:
     def id(element):
         return element['id']
     def properties(self):
+        return self.result['properties']
+
+class NodeResultPropertyCleaner(BaseResultProcessor):
+    def properties(self):
         pd = {}
         for k,v in self.result['properties'].items():
             l = [ x['value'] for x in v ]
@@ -21,3 +25,4 @@ class BaseResultProcessor:
             else:
                 pd[k] = l
         return pd
+
