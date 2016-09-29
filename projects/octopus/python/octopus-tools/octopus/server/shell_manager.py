@@ -21,10 +21,10 @@ class ShellManager(object):
         if not response:
             return
         for shell in response.split('\n'):
-            port, dbName, name, occupied = shell.split('\t')
+            port, project, name, occupied = shell.split('\t')
             port = int(port)
             occupied = True if occupied == 'true' else False
-            if (not project_name or name == project_name) \
+            if (not project_name or project == project_name) \
                     and (not shell_port or port == shell_port) \
                     and (not filter_occupied or not occupied):
-                yield port, dbName, name, ('occupied' if occupied else 'free')
+                yield port, project, name, ('occupied' if occupied else 'free')

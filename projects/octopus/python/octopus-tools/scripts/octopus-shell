@@ -58,14 +58,14 @@ subparsers = parser.add_subparsers(
 connect_parser = subparsers.add_parser(
     "connect",
     aliases=["co"],
-    description=("Connect to a gremlin shell on an octopus server. "
-                 "If a port is specified, octopus-shell directly connects to that port. "
-                 "If a database name is specified, octopus-shell connects to the "
-                 "corresponding port only if it is unique. "
-                 "Otherwise all open ports for that database are shown. "
-                 "If no port and no database name is specified and only a "
-                 "single port is open, octopus-shell connects to that port. "
-                 "Otherwise all open ports are shown."),
+    description=("Connect to a shell. "
+                 "If shellport is specified, octopus-shell directly connects to the shell associated with that port. "
+                 "If a database name is specified, octopus-shell connects to the shell associated with that database "
+                 "if it is unique. If no shell is available one will be created first. "
+                 "Otherwise all available shells for that database are shown. "
+                 "If neither a port nor database name is specified and only a single shell is available, octopus-shell "
+                 "directly connects to that shell. "
+                 "Otherwise all available shells are shown."),
     help="connect to shell")
 
 group = connect_parser.add_mutually_exclusive_group()
@@ -74,13 +74,13 @@ group.add_argument(
     "-d", "--dbname",
     type=str,
     default=None,
-    help="connect to this database")
+    help="connect to a shell associated with this database")
 
 group.add_argument(
     "-q", "--shellport",
     type=int,
     default=None,
-    help="directly connect to this port")
+    help="connect to the shell associated with this port")
 
 connect_parser.add_argument(
     "script",
@@ -92,19 +92,19 @@ connect_parser.add_argument(
 list_parser = subparsers.add_parser(
     "list",
     aliases=["ls"],
-    description="List all open shells on the server.",
+    description="List all available shells.",
     help="list open shells")
 
 list_parser.add_argument(
     "-d", "--dbname",
     type=str,
     default=None,
-    help="list only shells connected to this database")
+    help="list only shells associated with this database")
 
 create_parser = subparsers.add_parser(
     "create",
     aliases=["cr"],
-    description=("Open a new gremlin shell at the octopus server. "
+    description=("Create a new shell. "
                  "If no database name is specified, octopus-shell reads the default "
                  "database name from the configuration file."),
     help="create new shell")
@@ -112,7 +112,7 @@ create_parser = subparsers.add_parser(
 create_parser.add_argument(
     "dbname",
     type=str,
-    help="create shell for this database")
+    help="create a new shell for this database")
 
 create_parser.add_argument(
     "-n", "--name",

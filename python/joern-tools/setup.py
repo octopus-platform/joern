@@ -26,10 +26,6 @@ setup(
     url = "http://github.com/octopus-platform/joern-tools/",
     long_description = read('README.md'),
     packages = find_packages(),
-    package_data={
-        'joern.shell': ['data/josh_banner.txt'],
-        'joern.shell.config': ['data/josh.ini']
-    },
     data_files=[ ('EGG-INFO/scripts/data', ['scripts/plotting/data/plotconfig.cfg'])],
     scripts = getScripts(),
     install_requires = ['pygraphviz', 'chardet'],

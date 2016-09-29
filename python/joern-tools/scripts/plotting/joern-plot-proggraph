@@ -129,9 +129,7 @@ class ProgramGraph(JoernTool):
 
     def _getStartNode(self,functionId):
         if self.args.id_property:
-            startnode = """
-            def vid=g.V().has('functionId','{}').has('type','CFGEntryNode').in('IS_FUNCTION_OF_CFG').id().next();
-            g.V(vid)""".format(functionId)
+            startnode = """g.V().has('type', 'Function').has('_key', {})""".format(functionId)
         else:
             startnode = """g.V({})""".format(functionId)
         startnode += """.union( out('IS_FUNCTION_OF_CFG'), out('IS_FUNCTION_OF_AST') )"""
@@ -139,7 +137,7 @@ class ProgramGraph(JoernTool):
 
     def _getNodes(self, functionId, labels):
         query = """
-            {}.repeat(outE({}).subgraph('sg').inV().simplePath()).cap('sg').next().traversal().V()
+            {}.repeat(outE({}).subgraph('sg').inV().dedup().simplePath()).cap('sg').next().traversal().V()
             """.format( self._getStartNode(functionId), ','.join(map(lambda x: "'{}'".format(x), labels)))
         return self._runGremlinQuery(query)
 
