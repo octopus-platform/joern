@@ -98,12 +98,6 @@ connect_parser.add_argument(
     help="destroy the shell at the end of the session.")
 
 connect_parser.add_argument(
-    "-r", "--runscript",
-    action='store_true',
-    default=False,
-    help="interpret special script commands in input.")
-
-connect_parser.add_argument(
     "script",
     type=argparse.FileType('r'),
     nargs="?",
