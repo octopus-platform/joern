@@ -13,8 +13,7 @@ DESCRIPTION
 -----------
 
 ``joern-plot-proggraph`` lets you plot various program graphs, but restricted to one plot per function.
-Retrieves a graph representation of a function with the given id. The default output format is
-graphviz's 'dot'.
+Retrieves a graph representation of a function with the given id. The default output format is graphviz's 'dot'.
 
 
 OPTIONS
