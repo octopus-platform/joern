@@ -16,9 +16,9 @@ class EdgeResult(BaseResultProcessor):
     def getElementType(self):
         return 'edge'
     def getDest(self):
-        return self.result['outV']
-    def getSrc(self):
         return self.result['inV']
+    def getSrc(self):
+        return self.result['outV']
     def getId(self):
         return self.result['id']
     def getKey(self):
