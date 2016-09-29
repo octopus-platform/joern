@@ -9,7 +9,7 @@ from octopus.shell.octopus_console import OctopusInteractiveConsole
 from octopus.shell.octopus_shell import OctopusShellConnection
 
 
-def connect(host, port, script=None):
+def connect(host, port, script=None, quit=False):
     try:
         octopus_shell = OctopusShellConnection(host, port)
         octopus_shell.connect()
@@ -21,6 +21,8 @@ def connect(host, port, script=None):
             else:
                 console = OctopusInteractiveConsole(octopus_shell)
                 console.interact()
+            if quit:
+                console.runsource("quit")
         except SystemExit:
             pass
 
@@ -62,6 +64,7 @@ connect_parser = subparsers.add_parser(
                  "If shellport is specified, octopus-shell directly connects to the shell associated with that port. "
                  "If a database name is specified, octopus-shell connects to the shell associated with that database "
                  "if it is unique. If no shell is available one will be created first. "
+                 "If told to always create a new shell, a new shell will be created. "
                  "Otherwise all available shells for that database are shown. "
                  "If neither a port nor database name is specified and only a single shell is available, octopus-shell "
                  "directly connects to that shell. "
@@ -76,11 +79,29 @@ group.add_argument(
     default=None,
     help="connect to a shell associated with this database")
 
-group.add_argument(
+connect_parser.add_argument(
+    "-n", "--newshell",
+    action='store_true',
+    default=False,
+    help="always create a new shell (requires -d|--dbname)")
+
+connect_parser.add_argument(
     "-q", "--shellport",
     type=int,
     default=None,
     help="connect to the shell associated with this port")
+
+connect_parser.add_argument(
+    "-x", "--exitshell",
+    action='store_true',
+    default=False,
+    help="destroy the shell at the end of the session.")
+
+connect_parser.add_argument(
+    "-r", "--runscript",
+    action='store_true',
+    default=False,
+    help="interpret special script commands in input.")
 
 connect_parser.add_argument(
     "script",
@@ -129,14 +150,14 @@ if args.subcommand in ['connect', 'co']:
 
     if len(shells) == 0 and not args.dbname:
         print("No matching shells found.", file=sys.stderr)
-    elif len(shells) == 0 and args.dbname:
+    elif args.dbname and  ( len(shells) == 0 or args.newshell ):
         shellport = shell_manager.create(args.dbname)
         print("Connecting to database '{}' on port {}.".format(args.dbname, shellport), file=sys.stderr)
-        connect(args.server, shellport, args.script)
+        connect(args.server, shellport, args.script, args.exitshell)
     elif len(shells) == 1:
         shellport, dbname, name, occupied = shells[0]
         print("Connecting to database '{}' on port {}.".format(dbname, shellport), file=sys.stderr)
-        connect(args.server, shellport, args.script)
+        connect(args.server, shellport, args.script, args.exitshell)
     else:
         print("Found {} shells.".format(len(shells)), file=sys.stderr)
         printshells(shells, sys.stderr)
