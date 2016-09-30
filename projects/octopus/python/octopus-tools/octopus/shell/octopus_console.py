@@ -7,16 +7,59 @@ from octopus.shell.completer.octopus_rlcompleter import OctopusShellCompleter
 from octopus.shell.config.config import config
 from octopus.shell.octopus_shell_utils import reload as _reload
 
+class ScriptInputProvider:
+    def __init__(self):
+        self.lines = []
+    def pushText(self,text):
+        self.pushLines(text.splitlines())
+    def pushLines(self,lines):
+        self.lines = lines + self.lines
+    def next(self):
+        return self.lines.pop(0)
+    def empty(self):
+        return self.lines == []
+    def iterate(self):
+        while not self.empty():
+            yield self.next()
+
 
 class OctopusInteractiveConsole(code.InteractiveConsole):
     def __init__(self, octopus_shell, locals=None):
         def reload(path=config["steps"]["dir"]):
             _reload(octopus_shell, path)
+        def include(path):
+            f = open(path,'r')
+            self.input_lines.pushText(f.read())
+            f.close()
 
-        super().__init__(locals={"reload": reload}, filename="<console>")
+        super().__init__(locals={"reload": reload, "include": include }, filename="<console>")
         self.octopus_shell = octopus_shell
 
+    def _preprocess(self,source, filename, symbol):
+        self.input_lines = ScriptInputProvider()
+        self.input_lines.pushText(source)
+        lines = source.splitlines()
+        scriptlines = []
+        codeblock = []
+        line_no = 0
+        for l in self.input_lines.iterate():
+            if len(l)>0 and l[0] == '!':
+                codeblock.append(l[1:])
+            else:
+                if len(codeblock)>0:
+                    c = code.compile_command("\n".join(codeblock),filename,'exec')
+                    codeblock = []
+                    if c == None:
+                        raise Exception("Incomplete command in block ending at line {}".format(line_no))
+                    super().runcode(c)
+                scriptlines.append(l)
+            line_no += 1
+        return "\n".join(scriptlines)
+
     def runsource(self, source, filename="<input>", symbol="single"):
+
+        source = self._preprocess(source,filename,symbol)
+
         if not source:
             return False
 
