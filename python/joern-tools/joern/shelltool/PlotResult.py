@@ -21,8 +21,6 @@ class EdgeResult(BaseResultProcessor):
         return self.result['outV']
     def getId(self):
         return self.result['id']
-    def getKey(self):
-        return self.result['id']
     def getLabel(self):
         return self.result['label']
     def getProperties(self):
