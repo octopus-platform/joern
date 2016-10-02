@@ -2,10 +2,12 @@ import code
 import os
 import readline
 import sys
+import json
 
 from octopus.shell.completer.octopus_rlcompleter import OctopusShellCompleter
 from octopus.shell.config.config import config
 from octopus.shell.octopus_shell_utils import reload as _reload
+from octopus.server.DBInterface import ResultTransformer
 
 class ScriptInputProvider:
     def __init__(self):
@@ -34,6 +36,7 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
 
         super().__init__(locals={"reload": reload, "include": include }, filename="<console>")
         self.octopus_shell = octopus_shell
+        self.json_enabled = False
 
     def _preprocess(self,source, filename, symbol):
         self.input_lines = ScriptInputProvider()
@@ -55,6 +58,14 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
                 scriptlines.append(l)
             line_no += 1
         return "\n".join(scriptlines)
+
+    def toggleJSON(self):
+        """Show raw data structures in JSON format. Only works in scripted mode."""
+        # Output from commands like toggle_json on the interactive console return
+        # response data that cannot be serialized in JSON format, that is why this
+        # only works in non-interactive mode.
+        self.octopus_shell.run_command("toggle_json")
+        self.json_enabled = True
 
     def runsource(self, source, filename="<input>", symbol="single"):
 
@@ -79,9 +90,14 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
         if not response:
             return False
 
+        if self.json_enabled:
+            response = ResultTransformer().transform(response)
+            response = [ json.dumps(result, sort_keys=True) for result in response ]
+
         for line in response:
             self.write(line)
             self.write('\n')
+
         return False
 
     def write(self, data):

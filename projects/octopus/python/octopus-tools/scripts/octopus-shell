@@ -9,7 +9,7 @@ from octopus.shell.octopus_console import OctopusInteractiveConsole
 from octopus.shell.octopus_shell import OctopusShellConnection
 
 
-def connect(host, port, script=None, quit=False):
+def connect(host, port, script=None, quit=False, raw_output=False):
     try:
         octopus_shell = OctopusShellConnection(host, port)
         octopus_shell.connect()
@@ -17,6 +17,8 @@ def connect(host, port, script=None, quit=False):
         try:
             if script:
                 console = OctopusInteractiveConsole(octopus_shell)
+                if raw_output:
+                    console.toggleJSON()
                 console.runsource(script.read())
             else:
                 console = OctopusInteractiveConsole(octopus_shell)
@@ -98,6 +100,12 @@ connect_parser.add_argument(
     help="destroy the shell at the end of the session.")
 
 connect_parser.add_argument(
+    "-r", "--raw-output",
+    action='store_true',
+    default=False,
+    help="Display output as raw JSON data structure instead of string representation (script mode only).")
+
+connect_parser.add_argument(
     "script",
     type=argparse.FileType('r'),
     nargs="?",
@@ -147,11 +155,11 @@ if args.subcommand in ['connect', 'co']:
     elif args.dbname and  ( len(shells) == 0 or args.newshell ):
         shellport = shell_manager.create(args.dbname)
         print("Connecting to database '{}' on port {}.".format(args.dbname, shellport), file=sys.stderr)
-        connect(args.server, shellport, args.script, args.exitshell)
+        connect(args.server, shellport, args.script, args.exitshell, args.raw_output)
     elif len(shells) == 1:
         shellport, dbname, name, occupied = shells[0]
         print("Connecting to database '{}' on port {}.".format(dbname, shellport), file=sys.stderr)
-        connect(args.server, shellport, args.script, args.exitshell)
+        connect(args.server, shellport, args.script, args.exitshell, args.raw_output)
     else:
         print("Found {} shells.".format(len(shells)), file=sys.stderr)
         printshells(shells, sys.stderr)
