@@ -66,14 +66,6 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
             line_no += 1
         return "\n".join(scriptlines)
 
-    def toggleJSON(self):
-        """Show raw data structures in JSON format. Only works in scripted mode."""
-        # Output from commands like toggle_json on the interactive console return
-        # response data that cannot be serialized in JSON format, that is why this
-        # only works in non-interactive mode.
-        self.octopus_shell.toggle_json()
-        self.json_enabled = True
-
     def runsource(self, source, filename="<input>", symbol="single"):
 
         source = self._preprocess(source, filename, symbol)
