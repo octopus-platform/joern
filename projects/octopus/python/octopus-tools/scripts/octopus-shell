@@ -72,13 +72,15 @@ connect_parser = subparsers.add_parser(
                  "Otherwise all available shells are shown."),
     help="connect to shell")
 
-connect_parser.add_argument(
+group = connect_parser.add_mutually_exclusive_group()
+
+group.add_argument(
     "-d", "--dbname",
     type=str,
     default=None,
     help="connect to a shell associated with this database")
 
-connect_parser.add_argument(
+group.add_argument(
     "-q", "--shellport",
     type=int,
     default=None,
@@ -99,12 +101,6 @@ script_parser.add_argument(
     "script",
     type=argparse.FileType('r'),
     help="execute this script")
-
-# connect_parser.add_argument(
-#     "-n", "--newshell",
-#     action='store_true',
-#     default=False,
-#     help="always create a new shell (requires -d|--dbname)")
 
 script_parser.add_argument(
     "-r", "--raw-output",
