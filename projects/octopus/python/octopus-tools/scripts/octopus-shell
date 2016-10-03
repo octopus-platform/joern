@@ -9,22 +9,21 @@ from octopus.shell.octopus_console import OctopusInteractiveConsole
 from octopus.shell.octopus_shell import OctopusShellConnection
 
 
-def connect(host, port, script=None, quit=False, raw_output=False):
+def connect(host, port, script=None, raw_output=False):
     try:
         octopus_shell = OctopusShellConnection(host, port)
         octopus_shell.connect()
 
         try:
             if script:
-                console = OctopusInteractiveConsole(octopus_shell)
                 if raw_output:
-                    console.toggleJSON()
+                    octopus_shell.toggle_json()
+                console = OctopusInteractiveConsole(octopus_shell)
                 console.runsource(script.read())
+                console.runsource("quit")
             else:
                 console = OctopusInteractiveConsole(octopus_shell)
                 console.interact()
-            if quit:
-                console.runsource("quit")
         except SystemExit:
             pass
 
@@ -158,7 +157,6 @@ if args.subcommand in ['connect', 'co']:
             host=args.server,
             port=shellport,
             script=False,
-            quit=False,
             raw_output=False)
     elif len(shells) == 1:
         shellport, dbname, name, occupied = shells[0]
@@ -167,18 +165,17 @@ if args.subcommand in ['connect', 'co']:
             host=args.server,
             port=shellport,
             script=False,
-            quit=False,
             raw_output=False)
     else:
         print("Found {} shells.".format(len(shells)), file=sys.stderr)
         printshells(shells, sys.stderr)
 elif args.subcommand in ['execute', 'exec']:
     shellport = shell_manager.create(args.dbname)
+
     connect(
         host=args.server,
         port=shellport,
         script=args.script,
-        quit=True,
         raw_output=args.raw_output)
 elif args.subcommand in ['list', 'ls']:
     printshells(shell_manager.list(args.dbname))
