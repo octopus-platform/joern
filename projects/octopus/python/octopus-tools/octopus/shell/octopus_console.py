@@ -92,7 +92,7 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
 
         if self.json_enabled:
             response = ResultTransformer().transform(response)
-            response = [ json.dumps(result, sort_keys=True) for result in response ]
+            response = [ json.dumps(response, sort_keys=True) ]
 
         for line in response:
             self.write(line)
