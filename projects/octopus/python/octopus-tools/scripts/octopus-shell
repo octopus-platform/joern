@@ -152,7 +152,7 @@ if args.subcommand in ['connect', 'co']:
 
     if len(shells) == 0 and not args.dbname:
         print("No matching shells found.", file=sys.stderr)
-    elif args.dbname and  ( len(shells) == 0 or args.newshell ):
+    elif args.dbname and (len(shells) == 0 or args.newshell):
         shellport = shell_manager.create(args.dbname)
         print("Connecting to database '{}' on port {}.".format(args.dbname, shellport), file=sys.stderr)
         connect(args.server, shellport, args.script, args.exitshell, args.raw_output)

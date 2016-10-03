@@ -1,25 +1,31 @@
 import code
+import json
 import os
 import readline
 import sys
-import json
 
+from octopus.server.DBInterface import ResultTransformer
 from octopus.shell.completer.octopus_rlcompleter import OctopusShellCompleter
 from octopus.shell.config.config import config
 from octopus.shell.octopus_shell_utils import reload as _reload
-from octopus.server.DBInterface import ResultTransformer
+
 
 class ScriptInputProvider:
     def __init__(self):
         self.lines = []
-    def pushText(self,text):
+
+    def pushText(self, text):
         self.pushLines(text.splitlines())
-    def pushLines(self,lines):
+
+    def pushLines(self, lines):
         self.lines = lines + self.lines
+
     def next(self):
         return self.lines.pop(0)
+
     def empty(self):
         return self.lines == []
+
     def iterate(self):
         while not self.empty():
             yield self.next()
@@ -29,16 +35,17 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
     def __init__(self, octopus_shell, locals=None):
         def reload(path=config["steps"]["dir"]):
             _reload(octopus_shell, path)
+
         def include(path):
-            f = open(path,'r')
+            f = open(path, 'r')
             self.input_lines.pushText(f.read())
             f.close()
 
-        super().__init__(locals={"reload": reload, "include": include }, filename="<console>")
+        super().__init__(locals={"reload": reload, "include": include}, filename="<console>")
         self.octopus_shell = octopus_shell
         self.json_enabled = False
 
-    def _preprocess(self,source, filename, symbol):
+    def _preprocess(self, source, filename, symbol):
         self.input_lines = ScriptInputProvider()
         self.input_lines.pushText(source)
         lines = source.splitlines()
@@ -46,11 +53,11 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
         codeblock = []
         line_no = 0
         for l in self.input_lines.iterate():
-            if len(l)>0 and l[0] == '!':
+            if len(l) > 0 and l[0] == '!':
                 codeblock.append(l[1:])
             else:
-                if len(codeblock)>0:
-                    c = code.compile_command("\n".join(codeblock),filename,'exec')
+                if len(codeblock) > 0:
+                    c = code.compile_command("\n".join(codeblock), filename, 'exec')
                     codeblock = []
                     if c == None:
                         raise Exception("Incomplete command in block ending at line {}".format(line_no))
@@ -64,12 +71,12 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
         # Output from commands like toggle_json on the interactive console return
         # response data that cannot be serialized in JSON format, that is why this
         # only works in non-interactive mode.
-        self.octopus_shell.run_command("toggle_json")
+        self.octopus_shell.toggle_json()
         self.json_enabled = True
 
     def runsource(self, source, filename="<input>", symbol="single"):
 
-        source = self._preprocess(source,filename,symbol)
+        source = self._preprocess(source, filename, symbol)
 
         if not source:
             return False
@@ -77,10 +84,14 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
         if source[0] == '!':
             return super().runsource(source[1:], filename, symbol)
         try:
-            response = self.octopus_shell.run_command(source)
             if source == "quit":
                 self._save_history()
+                # terminate shell at server side
+                self.octopus_shell.quit()
+                # terminate shell at client side
                 return super().runsource("exit()", filename, symbol)
+            else:
+                response = self.octopus_shell.run_command(source)
         except Exception as e:
             if "[MultipleCompilationErrorsException]" in str(e):
                 # incomplete input
@@ -92,7 +103,7 @@ class OctopusInteractiveConsole(code.InteractiveConsole):
 
         if self.json_enabled:
             response = ResultTransformer().transform(response)
-            response = [ json.dumps(response, sort_keys=True) ]
+            response = [json.dumps(response, sort_keys=True)]
 
         for line in response:
             self.write(line)

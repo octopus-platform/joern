@@ -37,6 +37,12 @@ class OctopusShellConnection(object):
             raise RuntimeError(response)
         return response.split('\n')
 
+    def quit(self):
+        self.run_command("quit")
+
+    def toggle_json(self):
+        self.run_command("toggle_json")
+
     def close(self):
         self._socket.close()
 
