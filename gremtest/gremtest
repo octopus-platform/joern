@@ -31,7 +31,7 @@ run_testcase ()
 	[ -n "$import" ] && \
 		"$rootdir"/import_testcode.sh "$TESTDATADIR"
 
-	octopus-shell co -xn -d "$dbname" "$1"
+	octopus-shell exec "$dbname" "$1"
 }
 
 run_suite ()
@@ -46,7 +46,7 @@ run_suite ()
 
 	for t in "$TESTSCRIPTDIR"/*.groovy
 	do
-		octopus-shell co -xn -d "$dbname" "$t"
+		octopus-shell exec "$dbname" "$t"
 	done
 }
 

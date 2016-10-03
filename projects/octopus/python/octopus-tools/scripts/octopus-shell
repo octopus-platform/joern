@@ -66,26 +66,17 @@ connect_parser = subparsers.add_parser(
                  "If shellport is specified, octopus-shell directly connects to the shell associated with that port. "
                  "If a database name is specified, octopus-shell connects to the shell associated with that database "
                  "if it is unique. If no shell is available one will be created first. "
-                 "If told to always create a new shell, a new shell will be created. "
                  "Otherwise all available shells for that database are shown. "
                  "If neither a port nor database name is specified and only a single shell is available, octopus-shell "
                  "directly connects to that shell. "
                  "Otherwise all available shells are shown."),
     help="connect to shell")
 
-group = connect_parser.add_mutually_exclusive_group()
-
-group.add_argument(
+connect_parser.add_argument(
     "-d", "--dbname",
     type=str,
     default=None,
     help="connect to a shell associated with this database")
-
-connect_parser.add_argument(
-    "-n", "--newshell",
-    action='store_true',
-    default=False,
-    help="always create a new shell (requires -d|--dbname)")
 
 connect_parser.add_argument(
     "-q", "--shellport",
@@ -93,24 +84,33 @@ connect_parser.add_argument(
     default=None,
     help="connect to the shell associated with this port")
 
-connect_parser.add_argument(
-    "-x", "--exitshell",
-    action='store_true',
-    default=False,
-    help="destroy the shell at the end of the session.")
+script_parser = subparsers.add_parser(
+    "execute",
+    aliases=["exec"],
+    description="Execute a script.",
+    help="execute script")
 
-connect_parser.add_argument(
+script_parser.add_argument(
+    "dbname",
+    type=str,
+    help="execute script against this database")
+
+script_parser.add_argument(
+    "script",
+    type=argparse.FileType('r'),
+    help="execute this script")
+
+# connect_parser.add_argument(
+#     "-n", "--newshell",
+#     action='store_true',
+#     default=False,
+#     help="always create a new shell (requires -d|--dbname)")
+
+script_parser.add_argument(
     "-r", "--raw-output",
     action='store_true',
     default=False,
-    help="Display output as raw JSON data structure instead of string representation (script mode only).")
-
-connect_parser.add_argument(
-    "script",
-    type=argparse.FileType('r'),
-    nargs="?",
-    default=None,
-    help="read and execute script from this file")
+    help="display output as raw JSON data structure instead of string representation.")
 
 list_parser = subparsers.add_parser(
     "list",
@@ -148,21 +148,42 @@ args = parser.parse_args()
 shell_manager = ShellManager(args.server, args.port)
 
 if args.subcommand in ['connect', 'co']:
-    shells = list(shell_manager.list(project_name=args.dbname, shell_port=args.shellport, filter_occupied=True))
+    shells = list(shell_manager.list(
+        project_name=args.dbname,
+        shell_port=args.shellport,
+        filter_occupied=True))
 
     if len(shells) == 0 and not args.dbname:
         print("No matching shells found.", file=sys.stderr)
-    elif args.dbname and (len(shells) == 0 or args.newshell):
+    elif args.dbname and len(shells) == 0:
         shellport = shell_manager.create(args.dbname)
         print("Connecting to database '{}' on port {}.".format(args.dbname, shellport), file=sys.stderr)
-        connect(args.server, shellport, args.script, args.exitshell, args.raw_output)
+        connect(
+            host=args.server,
+            port=shellport,
+            script=False,
+            quit=False,
+            raw_output=False)
     elif len(shells) == 1:
         shellport, dbname, name, occupied = shells[0]
         print("Connecting to database '{}' on port {}.".format(dbname, shellport), file=sys.stderr)
-        connect(args.server, shellport, args.script, args.exitshell, args.raw_output)
+        connect(
+            host=args.server,
+            port=shellport,
+            script=False,
+            quit=False,
+            raw_output=False)
     else:
         print("Found {} shells.".format(len(shells)), file=sys.stderr)
         printshells(shells, sys.stderr)
+elif args.subcommand in ['execute', 'exec']:
+    shellport = shell_manager.create(args.dbname)
+    connect(
+        host=args.server,
+        port=shellport,
+        script=args.script,
+        quit=True,
+        raw_output=args.raw_output)
 elif args.subcommand in ['list', 'ls']:
     printshells(shell_manager.list(args.dbname))
 elif args.subcommand in ['create', 'cr']:
