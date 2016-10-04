@@ -6,7 +6,7 @@ from octopus.shelltool.GraphvizTool import GraphvizTool
 DESCRIPTION = """Highlights the program slice of the given slicing criterion
 (statement, symbol)."""
 
-SLICE_NODE_COLOR = 'lightblue4'
+SLICE_NODE_COLOR = 'red'
 
 
 class ProgramSlice(GraphvizTool):
@@ -44,7 +44,6 @@ class ProgramSlice(GraphvizTool):
         for node in nodes:
             try:
                 n = G.get_node(node['id'])
-                n.attr['style'] = 'filled'
                 n.attr['fillcolor'] = SLICE_NODE_COLOR
             except:
                 pass
@@ -57,7 +56,7 @@ class ProgramSlice(GraphvizTool):
                     "'slice').next().traversal().V()"
         else:
             query = "g.V({}).inE('REACHES', 'CONTROLS').or(has('var', '{}'), hasLabel('CONTROLS')).subgraph(" \
-                    "'slice').outV().repeat(outE('REACHES', 'CONTROLS').subgraph('slice').inV().simplePath()).cap(" \
+                    "'slice').outV().repeat(inE('REACHES', 'CONTROLS').subgraph('slice').outV().simplePath()).cap(" \
                     "'slice').next().traversal().V()"
         query = query.format(stmt_id, symbol)
         self._connectToDatabase()
