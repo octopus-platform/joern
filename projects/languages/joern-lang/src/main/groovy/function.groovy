@@ -31,13 +31,13 @@ addStep("functionToASTNodes", {
 addStep('functionToStatementsTraverse', {
 	delegate
 		.functionToCFG()
+		.sideEffect{ it.sideEffects('functionsToStatementsTraverse_seen',[]) }
 		.emit()
 		.repeat(
-			__
+			aggregate('functionsToStatementsTraverse_seen')
 			.out(CFG_EDGE)
-			.simplePath()
+			.where(P.without('functionsToStatementsTraverse_seen'))
 		)
-		.dedup()
 })
 
 /**
