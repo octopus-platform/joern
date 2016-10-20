@@ -38,6 +38,7 @@ addStep('functionToStatementsTraverse', {
 			.out(CFG_EDGE)
 			.where(P.without('functionsToStatementsTraverse_seen'))
 		)
+		.unfold()
 })
 
 /**
