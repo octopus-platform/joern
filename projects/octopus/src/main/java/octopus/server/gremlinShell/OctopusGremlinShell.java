@@ -99,7 +99,7 @@ public class OctopusGremlinShell
 			return shell.evaluate(code);
 		} catch (Exception ex)
 		{
-			return String.format("[%s] %s\n%s", ex.getClass().getSimpleName(), ex.getMessage());
+			return String.format("[%s] %s\n", ex.getClass().getSimpleName(), ex.getMessage());
 		}
 	}
 
