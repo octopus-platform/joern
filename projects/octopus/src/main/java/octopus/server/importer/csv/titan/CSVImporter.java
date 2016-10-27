@@ -225,7 +225,8 @@ public class CSVImporter
 
 		for (int i = 3; i < row.length; i++)
 		{
-			edge.property(edgeFile.getKeys()[i], row[i]);
+			if (!row[i].equals(""))
+				edge.property(edgeFile.getKeys()[i], row[i]);
 		}
 
 	}
