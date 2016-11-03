@@ -2,6 +2,7 @@ package outputModules.csv;
 
 import java.util.Map;
 
+import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import outputModules.common.DirectoryTreeImporter;
 import outputModules.common.Writer;
@@ -21,8 +22,9 @@ public class SingleDirCSVDirectoryTreeImporter extends DirectoryTreeImporter {
 
 	@Override
 	protected void linkWithParentDirectory(FileDatabaseNode node) {
-		// TODO Auto-generated method stub
-
+		long srcId = getSourceIdFromStack();
+		long dstId = node.getId();
+		Writer.addEdge(srcId, dstId, null, EdgeTypes.IS_PARENT_DIR_OF);
 	}
 
 }
