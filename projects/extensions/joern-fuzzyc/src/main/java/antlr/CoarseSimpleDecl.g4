@@ -1,3 +1,5 @@
+// Encompasses declarations in the module scope, e.g. variable declarations in C++ classes
+
 grammar CoarseSimpleDecl;
 
 import SimpleDecl;
@@ -5,8 +7,8 @@ import SimpleDecl;
 // The following two contain 'water'-rules for expressions
 
 init_declarator : declarator (('(' expr? ')') | ('=' assign_expr_w_))?;
-declarator: ptrs? identifier type_suffix?;
-
+declarator: ptrs? identifier type_suffix? |
+            ptrs? '(' func_ptrs identifier ')' type_suffix;
 
 type_suffix : ('[' constant_expr_w_ ']') | param_type_list;
 

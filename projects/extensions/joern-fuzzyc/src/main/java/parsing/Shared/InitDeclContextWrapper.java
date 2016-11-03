@@ -62,6 +62,18 @@ public class InitDeclContextWrapper
 		return null;
 	}
 
+	public ParserRuleContext func_ptrs()
+	{
+		switch (contextInUse)
+		{
+		case 0:
+			return ctxCodeSensor.func_ptrs();
+		case 2:
+			return ctxFine.func_ptrs();
+		}
+		return null;
+	}
+
 	public ParserRuleContext type_suffix()
 	{
 		switch (contextInUse)
