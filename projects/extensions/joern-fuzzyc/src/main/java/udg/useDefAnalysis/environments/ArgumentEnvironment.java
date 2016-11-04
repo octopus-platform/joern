@@ -3,6 +3,7 @@ package udg.useDefAnalysis.environments;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.CUseDefExpression;
 import udg.useDefAnalysis.environments.EmitDefAndUseEnvironment;
 
 public class ArgumentEnvironment extends EmitDefAndUseEnvironment
@@ -15,20 +16,15 @@ public class ArgumentEnvironment extends EmitDefAndUseEnvironment
 	{
 		if (isDef(child))
 		{
-			// For tainted arguments, add "* symbol" instead of symbol
-			// to defined symbols. Make an exception if symbol starts with '& '
-
 			LinkedList<String> derefChildSymbols = new LinkedList<String>();
 			for (String symbol : childSymbols)
 			{
-
+				derefChildSymbols.add(CUseDefExpression.simplify("* " + symbol));
 				if (!symbol.startsWith("& "))
 				{
-					derefChildSymbols.add("* " + symbol);
 					// !patch to see if we can detect macro-sources!
 					derefChildSymbols.add(symbol);
-				} else
-					derefChildSymbols.add(symbol.substring(2));
+				}
 			}
 
 			defSymbols.addAll(derefChildSymbols);

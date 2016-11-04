@@ -1,5 +1,6 @@
 package tests.udg;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		aMap.put("plusEqualsUse", "int f(){ x += y; }");
 		aMap.put("ddg_test_struct",
 				"int ddg_test_struct(){ struct my_struct foo; foo.bar = 10; copy_somehwere(foo); }");
+		aMap.put("udg_simplify_expressions", "int test() { func(&a[0]); }");
 
 		functionMap = aMap;
 	}
@@ -87,6 +89,16 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		assertOnlyUseForXFound(useDefGraph, "z");
 	}
 
+	// Test that expressions are simplified, e.g. lack of an "& * a" element
+	@Test
+	public void test_simplified_expression()
+	{
+		UseDefGraph useDefGraph = createUDGForFunction("udg_simplify_expressions");
+		assertEquals(useDefGraph.keySet().size(), 1);
+		assertTrue(useDefGraph.keySet().contains("a"));
+	}
+
+
 	private UseDefGraph createUDGForFunction(String functionName)
 	{
 		String code = functionMap.get(functionName);
@@ -107,7 +119,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 		assertTrue(usesAndDefs != null);
 		assertTrue(usesAndDefs.size() > 0);
 
-		// make sure only 'uses' of x exist
+		// make sure only 'definitions' of x exist
 		for (UseOrDefRecord r : usesAndDefs)
 		{
 			assertTrue(r.isDef());
@@ -139,7 +151,7 @@ public class testUseDefGraphCreator extends TestDBTestsBatchInserter
 
 		boolean isDefined = false, isUsed = false;
 
-		// make sure only 'definitions' of x exist
+		// make sure 'definitions' and 'uses' of x exist
 		for (UseOrDefRecord r : usesAndDefs)
 		{
 			if (r.isDef())
