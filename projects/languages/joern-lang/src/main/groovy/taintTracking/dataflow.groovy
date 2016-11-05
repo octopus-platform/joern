@@ -135,13 +135,13 @@ _cfgPaths = {symbol, sanitizer, curNode, dst, visited, path ->
     
   // `h` in the paper is inlined here
   
-  def children = curNode._().out(CFG_EDGE).toList()
+  def children = g.V(curNode).out(CFG_EDGE).toList()
   def X = [] as Set
   def x;
 
   for(child in children){
       
-    def curNodeId = curNode.id;
+    def curNodeId = curNode.id();
     
     x = _cfgPaths(symbol, sanitizer, child, dst,
 		  visited + [ (curNodeId) : (visited.get(curNodeId, 0) + 1)],
@@ -174,9 +174,9 @@ _cfgPaths = {symbol, sanitizer, curNode, dst, visited, path ->
 
 isTerminationNode = { symbol, sanitizer, curNode, visited ->
   
-  def curNodeId = curNode.id
+  def curNodeId = curNode.id()
   
   sanitizer(curNode, symbol).toList() != [] ||
-  (curNode.defines().filter{ it.code == symbol}.toList() != []) ||
-  (visited.get(curNodeId) == 2)
+    (g.V(curNode).out(DEFINES_EDGE).has('code', symbol).toList() != []) ||
+    (visited.get(curNodeId) == 2)
 }
