@@ -410,6 +410,36 @@ test("paramsToNamesDeclarationOnly", {
 	assertEquals(paramnames_found, paramnames_expected)
 })
 
+test("unfold_bug_on_ast_nodes", {
+	identifier_and_nodes = g.V()
+	.has('type','Function').has('code','popa_ex_2_5')
+	.functionToAST()
+	.astNodes()
+	.identity()
+	.as('astnode')
+	.emit{ it.get().value('type') == 'Identifier' }
+	.repeat(out(AST_EDGE))
+	.as('identifier')
+	.select('astnode','identifier')
+	.collect{ it['astnode'] }
+
+	assertNotEquals(identifier_and_nodes[-1].getClass(), [].getClass())
+})
+
+test("statements_followed_by_astnodes", {
+	leafnode =
+		g.V().has('type','Function').has('code','test_astnodes')
+		.functionToAST()
+		.astNodes()
+		.has('type','Identifier')
+		.collect()[-1]
+	cfgnode = __.inject(leafnode).statements().next()
+	astnodes_expected = __.inject(cfgnode).astNodes().collect() as Set;
+
+	astnodes_found = __.inject(leafnode).statements().astNodes().collect() as Set;
+	assertEquals(astnodes_found, astnodes_expected);
+})
+
 
 
 run_tests()
