@@ -64,5 +64,8 @@ def assertEquals(found,expected) {
 	assert found == expected
 }
 
+def assertNotEquals(found,expected) {
+	assert found != expected
+}
 
 
