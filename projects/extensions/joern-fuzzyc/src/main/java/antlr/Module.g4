@@ -19,7 +19,7 @@ import ModuleLex, Expressions, Common, FunctionDef, CoarseSimpleDecl;
 */
 
 @header{
-	package antlr.C;
+	package antlr;
 }
 
 code : (function_def | simple_decl | using_directive | water)*;

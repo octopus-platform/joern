@@ -1,5 +1,6 @@
 package tests.languages.c.parseTreeToAST;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -63,6 +64,21 @@ public class ModuleBuildersTest
 		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
 		assertTrue(codeItem.content != null);
 	}
+
+	@Test
+	public void testStructFunctionPointer()
+	{
+		String input = "struct foo{ int*** (**bar)(long*); };";
+		List<ASTNode> codeItems = parseInput(input);
+		ClassDefStatement codeItem = (ClassDefStatement) codeItems.get(0);
+		IdentifierDeclStatement ptrStatement =
+				(IdentifierDeclStatement) codeItem.content.getStatements().get(0);
+		IdentifierDecl ptrItem =
+				(IdentifierDecl) ptrStatement.getIdentifierDeclList().get(0);
+
+		assertEquals(ptrItem.getType().completeType, "int * * * ( * * ) ( long * )");
+	}
+
 
 	@Test
 	public void testFunctionInClass()
