@@ -352,7 +352,7 @@ public class CFGFactory
 			// references the childs labels.
 			switchBlock.setLabels(nonCaseLabels);
 
-			for (CFGEdge edge : switchBody.ingoingEdges(switchBody
+			for (CFGEdge edge : switchBody.incomingEdges(switchBody
 					.getExitNode()))
 			{
 				switchBlock.addEdge(edge.getSource(),
