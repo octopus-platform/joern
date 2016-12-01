@@ -1,5 +1,6 @@
 package cfg.C;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -354,9 +355,17 @@ public class CCFGFactory extends CFGFactory
 
 			boolean defaultLabel = false;
 
+			HashMap<String, CFGNode> nonCaseLabels = new HashMap<>();
 			for (Entry<String, CFGNode> block : switchBody.getLabels()
 					.entrySet())
 			{
+				// Skip labels that aren't for switch statements.
+				if (!block.getKey().matches("^(case|default).*"))
+				{
+					nonCaseLabels.put(block.getKey(), block.getValue());
+					continue;
+				}
+
 				if (block.getKey().equals("default"))
 				{
 					defaultLabel = true;
@@ -364,6 +373,13 @@ public class CCFGFactory extends CFGFactory
 				switchBlock.addEdge(conditionContainer, block.getValue(),
 						block.getKey());
 			}
+
+			// Hide case/default labels from upstream CFG analysis, they can't
+			// reference internal labels anyway and this prevents bugs with
+			// nested switch statements where the parent switch statement
+			// references the childs labels.
+			switchBlock.setLabels(nonCaseLabels);
+
 			for (CFGEdge edge : switchBody.ingoingEdges(switchBody
 					.getExitNode()))
 			{
