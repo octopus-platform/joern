@@ -3,6 +3,7 @@ package udg.useDefAnalysis.environments;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.CUseDefExpression;
 import udg.useDefAnalysis.environments.EmitUseEnvironment;
 
 public class UnaryOpEnvironment extends EmitUseEnvironment
@@ -18,8 +19,9 @@ public class UnaryOpEnvironment extends EmitUseEnvironment
 		{
 			for (String symbol : childSymbols)
 			{
-				symbols.add("& " + symbol);
+				symbols.add(CUseDefExpression.simplify("& " + symbol));
 			}
+
 			return;
 		}
 
@@ -36,7 +38,7 @@ public class UnaryOpEnvironment extends EmitUseEnvironment
 		LinkedList<String> derefedChildren = new LinkedList<String>();
 		for (String c : childSymbols)
 		{
-			derefedChildren.add("* " + c);
+			derefedChildren.add(CUseDefExpression.simplify("* " + c));
 		}
 
 		retval.addAll(derefedChildren);

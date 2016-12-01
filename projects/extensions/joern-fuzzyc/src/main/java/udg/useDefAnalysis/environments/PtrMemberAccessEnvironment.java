@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.CUseDefExpression;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.useDefGraph.UseOrDef;
 
@@ -20,7 +21,7 @@ public class PtrMemberAccessEnvironment extends UseDefEnvironment
 		LinkedList<String> derefedChildren = new LinkedList<String>();
 		for (String c : symbols)
 		{
-			derefedChildren.add("* " + c);
+			derefedChildren.add(CUseDefExpression.simplify("* " + c));
 		}
 
 		retval.addAll(derefedChildren);

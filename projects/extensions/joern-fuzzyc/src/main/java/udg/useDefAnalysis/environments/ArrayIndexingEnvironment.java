@@ -3,6 +3,7 @@ package udg.useDefAnalysis.environments;
 import java.util.LinkedList;
 
 import udg.ASTProvider;
+import udg.useDefAnalysis.CUseDefExpression;
 import udg.useDefAnalysis.environments.EmitUseEnvironment;
 
 public class ArrayIndexingEnvironment extends EmitUseEnvironment
@@ -15,7 +16,7 @@ public class ArrayIndexingEnvironment extends EmitUseEnvironment
 		LinkedList<String> derefedChildren = new LinkedList<String>();
 		for (String c : childSymbols)
 		{
-			derefedChildren.add("* " + c);
+			derefedChildren.add(CUseDefExpression.simplify("* " + c));
 		}
 
 		symbols.addAll(derefedChildren);
