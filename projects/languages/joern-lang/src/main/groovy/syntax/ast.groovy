@@ -11,6 +11,7 @@
 
 addStep("astNodes", {
 	delegate
+	.identity()
 	.emit()
 	.repeat( out(AST_EDGE) )
 	.unfold()
@@ -70,8 +71,10 @@ addStep("siblings", {
 
 addStep("statements", {
 	delegate
+	.identity()
 	.until(has(NODE_ISCFGNODE, 'True'))
     .repeat(__.start().parents())
+	.identity()
 })
 
 /**
