@@ -18,7 +18,9 @@ public abstract class CSVWriterImpl implements WriterImpl {
 
 	final String[] nodeProperties = { NodeKeys.NODE_TYPE, NodeKeys.CODE,
 			NodeKeys.LOCATION, NodeKeys.FUNCTION_ID,
-			NodeKeys.CHILD_NUMBER, NodeKeys.IS_CFG_NODE };
+			NodeKeys.CHILD_NUMBER, NodeKeys.IS_CFG_NODE , NodeKeys.OPERATOR,
+			NodeKeys.BASE_TYPE, NodeKeys.COMPLETE_TYPE, NodeKeys.IDENTIFIER
+	};
 
 	final String[] edgeProperties = { EdgeKeys.VAR };
 

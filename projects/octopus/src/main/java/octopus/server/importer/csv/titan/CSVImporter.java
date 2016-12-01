@@ -176,8 +176,9 @@ public class CSVImporter
 
 	private void setPropertiesOnVertex(Vertex vertex, String[] row, String[] keys)
 	{
-		for(int i = 2; i < row.length; i++){
-			vertex.property(keys[i-1], row[i]);
+		for(int i = 2; i < row.length; i++) {
+			if (!row[i].equals(""))
+					vertex.property(keys[i - 1], row[i]);
 		}
 	}
 
@@ -224,7 +225,8 @@ public class CSVImporter
 
 		for (int i = 3; i < row.length; i++)
 		{
-			edge.property(edgeFile.getKeys()[i], row[i]);
+			if (!row[i].equals(""))
+				edge.property(edgeFile.getKeys()[i], row[i]);
 		}
 
 	}
