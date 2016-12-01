@@ -1,0 +1,185 @@
+#!python
+
+import argparse
+import sys
+
+from octopus.server.shell_manager import ShellManager
+from octopus.shell.config.config import config
+from octopus.shell.octopus_console import OctopusInteractiveConsole
+from octopus.shell.octopus_shell import OctopusShellConnection
+
+
+def connect(host, port, script=None, raw_output=False):
+    try:
+        octopus_shell = OctopusShellConnection(host, port)
+        octopus_shell.connect()
+
+        try:
+            if script:
+                if raw_output:
+                    octopus_shell.toggle_json()
+                console = OctopusInteractiveConsole(octopus_shell)
+                console.runsource(script.read())
+                console.runsource("quit")
+            else:
+                console = OctopusInteractiveConsole(octopus_shell)
+                console.interact()
+        except SystemExit:
+            pass
+
+        octopus_shell.close()
+    except ConnectionRefusedError:
+        print("Connection refused", file=sys.stderr)
+
+
+def printshells(shells, file=sys.stdout):
+    for port, dbname, name, occupied in shells:
+        print(port, dbname, name, occupied, file=file)
+
+
+parser = argparse.ArgumentParser(
+    description=("octopus-shell -- an interactive shell for octopus. "
+                 "octopus-shell can create, list, and connect to shells on the server."))
+
+parser.add_argument(
+    "-s", "--server",
+    default=config['octopus']['host'],
+    help="the host name of the server")
+
+parser.add_argument(
+    "-p", "--port",
+    type=int,
+    default=config['octopus']['port'],
+    help="the port number of the server")
+
+subparsers = parser.add_subparsers(
+    title="available commands",
+    description=("octopus-shell's functionality is split into multiple commands. "
+                 "Use 'octopus-shell <command> --help' to read about a specific command."),
+    dest='subcommand')
+
+connect_parser = subparsers.add_parser(
+    "connect",
+    aliases=["co"],
+    description=("Connect to a shell. "
+                 "If shellport is specified, octopus-shell directly connects to the shell associated with that port. "
+                 "If a database name is specified, octopus-shell connects to the shell associated with that database "
+                 "if it is unique. If no shell is available one will be created first. "
+                 "Otherwise all available shells for that database are shown. "
+                 "If neither a port nor database name is specified and only a single shell is available, octopus-shell "
+                 "directly connects to that shell. "
+                 "Otherwise all available shells are shown."),
+    help="connect to shell")
+
+group = connect_parser.add_mutually_exclusive_group()
+
+group.add_argument(
+    "-d", "--dbname",
+    type=str,
+    default=None,
+    help="connect to a shell associated with this database")
+
+group.add_argument(
+    "-q", "--shellport",
+    type=int,
+    default=None,
+    help="connect to the shell associated with this port")
+
+script_parser = subparsers.add_parser(
+    "execute",
+    aliases=["exec"],
+    description="Execute a script.",
+    help="execute script")
+
+script_parser.add_argument(
+    "dbname",
+    type=str,
+    help="execute script against this database")
+
+script_parser.add_argument(
+    "script",
+    type=argparse.FileType('r'),
+    help="execute this script")
+
+script_parser.add_argument(
+    "-r", "--raw-output",
+    action='store_true',
+    default=False,
+    help="display output as raw JSON data structure instead of string representation.")
+
+list_parser = subparsers.add_parser(
+    "list",
+    aliases=["ls"],
+    description="List all available shells.",
+    help="list open shells")
+
+list_parser.add_argument(
+    "-d", "--dbname",
+    type=str,
+    default=None,
+    help="list only shells associated with this database")
+
+create_parser = subparsers.add_parser(
+    "create",
+    aliases=["cr"],
+    description=("Create a new shell. "
+                 "If no database name is specified, octopus-shell reads the default "
+                 "database name from the configuration file."),
+    help="create new shell")
+
+create_parser.add_argument(
+    "dbname",
+    type=str,
+    help="create a new shell for this database")
+
+create_parser.add_argument(
+    "-n", "--name",
+    type=str,
+    default=None,
+    help="name the shell")
+
+args = parser.parse_args()
+
+shell_manager = ShellManager(args.server, args.port)
+
+if args.subcommand in ['connect', 'co']:
+    shells = list(shell_manager.list(
+        project_name=args.dbname,
+        shell_port=args.shellport,
+        filter_occupied=True))
+
+    if len(shells) == 0 and not args.dbname:
+        print("No matching shells found.", file=sys.stderr)
+    elif args.dbname and len(shells) == 0:
+        shellport = shell_manager.create(args.dbname)
+        print("Connecting to database '{}' on port {}.".format(args.dbname, shellport), file=sys.stderr)
+        connect(
+            host=args.server,
+            port=shellport,
+            script=False,
+            raw_output=False)
+    elif len(shells) == 1:
+        shellport, dbname, name, occupied = shells[0]
+        print("Connecting to database '{}' on port {}.".format(dbname, shellport), file=sys.stderr)
+        connect(
+            host=args.server,
+            port=shellport,
+            script=False,
+            raw_output=False)
+    else:
+        print("Found {} shells.".format(len(shells)), file=sys.stderr)
+        printshells(shells, sys.stderr)
+elif args.subcommand in ['execute', 'exec']:
+    shellport = shell_manager.create(args.dbname)
+
+    connect(
+        host=args.server,
+        port=shellport,
+        script=args.script,
+        raw_output=args.raw_output)
+elif args.subcommand in ['list', 'ls']:
+    printshells(shell_manager.list(args.dbname))
+elif args.subcommand in ['create', 'cr']:
+    shell_manager.create(args.dbname, args.name)
+else:
+    parser.print_usage()

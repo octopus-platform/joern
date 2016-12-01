@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+import codecs
+import sys
+import chardet
+from octopus.shelltool.PipeTool import PipeTool
+from joern.view.ParseLocationString import parseLocationOrFail
+
+
+DESCRIPTION = """Read filename:startLine:startPos:startIndex:stopIndex
+from standard input and output the respective code."""
+
+class CodeTool(PipeTool):
+
+    def __init__(self):
+        PipeTool.__init__(self, DESCRIPTION)
+
+    # @Override
+    def processLine(self, line):
+        (filename, startLine, startPos, startIndex, stopIndex)\
+            = parseLocationOrFail(line)
+
+        self._openFileOrFail(filename)
+        content = self._extractContent(startIndex, stopIndex)
+        self.output(content)
+        self.output("\n")
+
+    def _openFileOrFail(self, filename):
+
+        try:
+            f = codecs.open(filename, 'r', 'utf-8')
+            self.fileContent = ''.join(f.readlines())
+        except IOError:
+            sys.stderr.write('Error: %s: no such file or directory\n'
+                             % filename)
+            sys.exit()
+        except:
+            g = open(filename, "r")
+            rawdata = ''.join(g.readlines())
+            g.close()
+            result = chardet.detect(rawdata)
+            charenc = result['encoding']
+            f = codecs.open(filename, 'r', charenc)
+            self.fileContent = ''.join(f.readlines())
+
+        f.close()
+
+    def _extractContent(self, startIndex, stopIndex):
+
+        content = self.fileContent[startIndex:stopIndex+1]
+        return content
+
+if __name__ == '__main__':
+    tool = CodeTool()
+    tool.run()

@@ -1,0 +1,70 @@
+
+// Check gradle version
+
+def reguiredGradleVersionMajor = 2
+def requiredGradleVersionMinor = 0
+def (gradleVersionMajor, gradleVersionMinor) =
+    getGradle().gradleVersion.tokenize('.').collect {it.toInteger()}
+
+if ( gradleVersionMajor < reguiredGradleVersionMajor ||
+        (gradleVersionMajor == reguiredGradleVersionMajor &&
+        gradleVersionMinor < requiredGradleVersionMinor))
+{
+    throw new GradleException("Gradle version " +
+            "$reguiredGradleVersionMajor.$requiredGradleVersionMinor and higher required.")
+}
+
+
+allprojects {
+    apply plugin: 'java'
+    repositories { mavenCentral() }
+}
+
+// Python utilities
+
+task joernTools(type: Exec) {
+    workingDir './python/joern-tools'
+    commandLine 'python3', 'setup.py', 'install', '--user'
+}
+
+// Copy extensions and plugins into Octopus plugin directory
+
+task deploy(dependsOn: build) << {
+    copy {
+        into "projects/octopus/plugins"
+        from fileTree("projects/plugins").files
+        include '**/*.jar'
+        exclude '**/*-plain.jar'
+        includeEmptyDirs = false
+    }
+
+    copy {
+        into "projects/octopus/extensions"
+        from fileTree("projects/extensions").files
+        include '**/*.jar'
+	exclude '**/lucene-core-3.6.2.jar'
+	exclude '**/*-plain.jar'
+        includeEmptyDirs = false
+    }
+
+}
+
+dependencies{
+	compile group: 'com.tunnelvisionlabs', name: 'antlr4-runtime', version: '4.5.3'
+	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
+	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.2'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'	
+	compile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task copyToLib2(type: Copy) {
+    into "projects/octopus/lib"
+    from configurations.runtime
+}
+
+
+copyToLib2.dependsOn subprojects.build
+
+build.dependsOn subprojects.build
+build.dependsOn joernTools
+build.dependsOn copyToLib2

@@ -1,0 +1,27 @@
+# How to take a bunch of PHP files, calculate ASTs, CFGs, PDGs and CGs
+# and get them into a Neo4J database.
+######################################################################
+
+# Let
+# $PHPJOERN = the directory of your phpjoern parser installation
+# $PHPINPUT = the file/directory of the PHP code you wish to analyze
+# $JEXP_HOME = the directory of your batch-import installation
+# $JOERN = the directory your joern installation
+
+# Generate node and edge files using phpjoern parser.
+
+$PHPJOERN/php2ast -f jexp -n nodes.csv -r edges.csv $PHPINPUT
+
+# Use Joern to generate CFG, PDG and CG edges and export them
+
+cd $JOERN; ./build.sh
+$JOERN/phpast2cpg nodes.csv edges.csv
+
+# Joern generates the file cfg_ddg_edges.csv in the current
+# directory. We thus now have one nodes file and two edges files,
+# and we can import them into a Neo4J database.
+
+java -classpath "$JEXP_HOME/lib/*" -Dfile.encoding=UTF-8 org.neo4j.batchimport.Importer $PHPJOERN/conf/batch.properties graph.db nodes.csv edges.csv,cpg_edges.csv
+
+# Point your Neo4J 2.1.8 installation with the neo4j-contrib Gremlin plugin
+# to the database you just created, start the server, and rejoice! :-)

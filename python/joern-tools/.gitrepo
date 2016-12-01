@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:octopus-platform/joern-tools.git
+	branch = octopusport
+	commit = f615e818bebfbb1715968ca9d302099b2ede4986
+	parent = fc1643ac6011d34d9843f0dd5f0a6c1ccae78cba
+	cmdver = 0.3.0

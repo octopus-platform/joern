@@ -1,0 +1,3 @@
+<?php
+
+list() = array();

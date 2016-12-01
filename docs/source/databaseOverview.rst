@@ -84,11 +84,3 @@ of global variables are saved in declaration statement nodes and
 connected to the source file they are contained in using
 ``IS_FILE_OF`` edges.
 
-The Node Index
----------------
-
-In addition to the graphs stored in the Neo4J database, Joern makes an
-Apache Lucene Index available that allows nodes to be quickly
-retrieved based on their properties. This is particularly useful to
-select start nodes for graph database traversals. For examples of node
-index usage, refer to :doc:`querying`.

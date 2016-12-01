@@ -1,0 +1,10 @@
+
+from joern.shelltool.JoernHide import JoernHide
+
+DESCRIPTION = """ Hide all nodes beneath directories"""
+
+if __name__ == '__main__':
+    
+    tool = JoernHide(DESCRIPTION)
+    tool.run()
+    

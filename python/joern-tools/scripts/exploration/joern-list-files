@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+from octopus.server.DBInterface import DBInterface
+from octopus.shelltool.CmdLineTool import CmdLineTool
+from octopus.shelltool.ResultProcessor import BaseResultProcessor
+
+DESCRIPTION = """Create a list of all files of the code base. The
+first field is the file's path, the second field is the id of the
+corresponding node in the database."""
+
+class ListFilesResult(BaseResultProcessor):
+    def getFileId(self):
+        return str(self.id(self.result))
+    def getFilePath(self):
+        return self.value(self.result,'code')
+
+class ListFiles(CmdLineTool):
+    def __init__(self, DESCRIPTION):
+        CmdLineTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument('project')
+        self.argParser.add_argument('-p', '--pattern',
+                                    help="emit only files that match this pattern",
+                                    action='store', type=str,
+                                    default=None)
+        self.argParser.add_argument('-F','--field-separator',default=',')
+
+    def _runImpl(self):
+        self.dbInterface = DBInterface()
+        self.dbInterface.connectToDatabase(self.args.project)
+
+        if self.args.pattern:
+            query = "g.V().has('type', 'File').has('code', textRegex('{}'))".format(self.args.pattern)
+        else:
+            query = "g.V().has('type', 'File')".format(self.args.pattern)
+        files = self.dbInterface.runGremlinQuery(query)
+        for f in files:
+            r = ListFilesResult(f)
+            print(self.args.field_separator.join([r.getFileId(), r.getFilePath()]))
+
+
+if __name__ == '__main__':
+    tool = ListFiles(DESCRIPTION)
+    tool.run()

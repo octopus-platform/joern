@@ -1,0 +1,78 @@
+#!python
+
+import argparse
+
+from octopus.server.project_manager import ProjectManager
+
+parser = argparse.ArgumentParser(description="Octopus project manager.")
+parser.add_argument(
+    "-s", "--server-host",
+    type=str,
+    default="localhost",
+    help="set the hostname of the octopus server")
+
+parser.add_argument(
+    "-p", "--server-port",
+    type=int,
+    default=2480,
+    help="set the port number of the octopus server")
+
+subparsers = parser.add_subparsers(
+    title="Available commands",
+    dest='subcommand')
+
+create_parser = subparsers.add_parser(
+    "create",
+    description="Create an Octopus project.",
+    help="create a new project")
+
+create_parser.add_argument(
+    "project",
+    type=str,
+    help="create this project")
+
+delete_parser = subparsers.add_parser(
+    "delete",
+    description="Delete an Octopus project.",
+    help="delete a project")
+
+delete_parser.add_argument(
+    "project",
+    type=str,
+    help="delete this project")
+
+list_parser = subparsers.add_parser(
+    "list",
+    description="List all Octopus projects",
+    help="list projects"
+)
+
+upload_parser = subparsers.add_parser(
+    "upload",
+    description="Upload a file into a project.",
+    help="upload a file")
+
+upload_parser.add_argument(
+    "project",
+    type=str,
+    help="upload to this project")
+
+upload_parser.add_argument(
+    "file",
+    type=str,
+    help="upload this file")
+
+args = parser.parse_args()
+manager = ProjectManager(args.server_host, args.server_port)
+manager.connect()
+
+if args.subcommand == 'create':
+    print(manager.create(args.project))
+elif args.subcommand == 'delete':
+    print(manager.delete(args.project))
+elif args.subcommand == 'upload':
+    print(manager.upload(args.project, args.file))
+elif args.subcommand == "list":
+    print(manager.list())
+else:
+    parser.print_usage()

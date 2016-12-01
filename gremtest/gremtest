@@ -1,0 +1,117 @@
+#!/bin/sh
+#
+# Imports testdata from $TESTDATADIR and runs test scripts from $TESTSCRIPTDIR.
+#
+
+usage ()
+{
+	cat <<EOF;
+Usage:
+	$0 [ -s | -t ] [ -n ] test(suite) ...
+
+	-s | --suite : run specified testsuites. If no testsuites are
+		specified, run all available testsuites. This is the
+		default mode.
+	-t | --test : run specified testcases.
+	-n | --no-import : do not load the test data in the Octopus server.
+		Saves execution time, but may let tests fail because the
+		correct test data is not loaded. Be careful using it.
+
+EOF
+}
+
+rootdir=`dirname "$0"`
+
+run_testcase ()
+{
+	TESTSUITE=`dirname "$1"`/..
+	TESTDATADIR="$TESTSUITE"/testdata
+	dbname=`basename "$TESTDATADIR"`.tar.gz
+
+	[ -n "$import" ] && \
+		"$rootdir"/import_testcode.sh "$TESTDATADIR"
+
+	octopus-shell exec "$dbname" "$1"
+}
+
+run_suite ()
+{
+	TESTSUITE="$1"
+	TESTDATADIR="$rootdir"/"$TESTSUITE"/testdata
+	TESTSCRIPTDIR="$rootdir"/"$TESTSUITE"/tests
+	dbname=`basename "$TESTDATADIR"`.tar.gz
+
+	[ -n "$import" ] && \
+		"$rootdir"/import_testcode.sh "$TESTDATADIR"
+
+	for t in "$TESTSCRIPTDIR"/*.groovy
+	do
+		octopus-shell exec "$dbname" "$t"
+	done
+}
+
+mode=suites
+import=1
+
+while [ "$1" != "" ]
+do
+	case $1 in
+		-h | --help)
+			usage
+			exit
+			;;
+		-s | --suite)
+			mode=suites
+			;;
+		-t | --test)
+			mode=tests
+			;;
+		-n | --no-import)
+			import=""
+			;;
+		-*)
+			echo "Unknown option \"$1\""
+			usage
+			exit 1
+			;;
+		*)
+			# start of positional arguments, stop parsing
+			break
+			;;
+	esac
+	shift
+done
+
+TESTS="$@"
+
+if [ -z "$TESTS" -a $mode = "suites" ]
+then
+	TESTS="$rootdir/test_*"
+fi
+
+if [ -z "$TESTS" ]
+then
+	echo "Error: no tests specified"
+	exit 1
+fi
+
+case $mode in
+	suites)
+		echo $TESTS
+		for test in $TESTS
+		do
+			echo "==> Running $test..."
+			run_suite "$test"
+		done
+		break
+		;;
+	tests)
+		for test in $TESTS
+		do
+			echo "==> Running $test..."
+			run_testcase "$test"
+		done
+		break
+		;;
+esac
+

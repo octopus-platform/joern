@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+from joern.MLDataDirCreator import MLDataDirCreator
+from octopus.mlutils.pythonEmbedder.PythonEmbedder import Embedder
+
+class JoernStmtEmbedder(MLDataDirCreator):
+
+    def _constructIdQuery(self):
+
+        if self.args.filename == None:
+            return """queryNodeIndex('isCFGNode:True').id"""
+
+        # This is a little weird: We push the list into the
+        # database just to get it back.
+
+        X = [int(x) for x in self.args.filename.readlines()]
+        return """ idListToNodes(%s).id """ % (X)
+
+
+    def _constructQueryForChunk(self, chunk):
+
+        return """
+        idListToNodes(%s)
+        .transform{ labels = NH(NH(NHGraph(it)))[1]; [it.id, labels.values() ] }
+        """ % (str(chunk))
+
+    def _stop(self):
+        self.dataDir.finalize()
+        self.embedder = Embedder()
+        self.embedder.embed(self.args.dirname, tfidf=False)
+
+if __name__ == '__main__':
+    tool = JoernStmtEmbedder()
+    tool.run()

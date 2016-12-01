@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import os
+from octopus.shelltool.PipeTool import PipeTool
+from joern.view.ParseLocationString import parseLocationOrFail
+
+DESCRIPTION = """ Opens editor at the location specified by a location
+string """
+
+class EmOpen(PipeTool):
+    def __init__(self):
+        PipeTool.__init__(self, DESCRIPTION)
+
+    # @Override
+    def processLine(self, line):
+        (filename, startLine, startPos, b, c) = parseLocationOrFail(line)
+        try:
+            editor = os.environ['EDITOR']
+        except KeyError:
+            editor = 'emacs'
+
+        if editor is 'emacs':
+            os.system('%s %s --eval "(goto-line %s)"' % (editor, filename, startLine))
+        elif editor.find('vi') != -1:   # vi, vim, gvim
+            os.system('%s +%s %s' % (editor, startLine, filename))
+        elif editor.find('subl') != -1: # sublime_text, subl3
+            os.system('%s %s:%s:%s' % (editor, filename, startLine, startPos))
+        else:
+            os.system('%s %s' % (editor, filename))
+
+
+if __name__ == '__main__':
+    tool = EmOpen()
+    tool.run()

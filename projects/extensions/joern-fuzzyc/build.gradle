@@ -1,0 +1,17 @@
+
+task copyToLib3(type: Copy) {
+    into "lib"
+    from configurations.runtime
+}
+
+dependencies{
+	compile project(':projects:extensions:jpanlib')
+
+	compile group: 'com.tunnelvisionlabs', name: 'antlr4-annotations', version: '4.5.3'
+	compile group: 'com.tunnelvisionlabs', name: 'antlr4-runtime', version: '4.5.3'
+	compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
+	compile group: 'org.neo4j', name: 'neo4j', version: '2.1.8'
+	compile group: 'junit', name: 'junit', version: '4.12'
+}
+
+build.dependsOn copyToLib3

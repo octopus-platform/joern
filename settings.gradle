@@ -1,0 +1,12 @@
+
+include 'projects:octopus'
+
+include 'projects:extensions:joern'
+include 'projects:extensions:jpanlib'
+include 'projects:extensions:joern-fuzzyc'
+include 'projects:extensions:joern-php'
+
+include 'projects:plugins:importer'
+include 'projects:plugins:dummy'
+
+include 'projects:languages:joern-lang'

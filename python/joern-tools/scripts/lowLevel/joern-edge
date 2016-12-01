@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+from joern.shelltool.LookupTool import LookupTool
+
+DESCRIPTION = """For a set of nodes X, return all edges from nodes in X to nodes in X."""
+
+class JoernEdge(LookupTool):
+
+    def __init__(self):
+        LookupTool.__init__(self, DESCRIPTION)
+
+    # @Override
+    def queryFromLine(self, line):
+        nodeIds = [x for x in line.split(' ')]
+        return "edgesInX(%s)" % (nodeIds)
+
+    # @Override
+    def outputResult(self, res):
+        self.output(' '.join([str(r) for r in res]) + '\n')
+
+if __name__ == '__main__':
+    tool = JoernEdge()
+    tool.run()

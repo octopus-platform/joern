@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+from joern.shelltool.AccTool import AccTool
+
+DESCRIPTION = """Lookup the location of a node in the code."""
+
+class Location(AccTool):
+
+    def __init__(self):
+        AccTool.__init__(self, DESCRIPTION)
+
+
+    def processBatch(self, nodeIds):
+
+        # Note, that since we override processLine,
+        # queryFromLine will not be called either.
+
+        # For functions, get location of function
+        # For statement, get location of statement
+        # For AST nodes, get location of statement
+        # For Symbols, get location of function
+
+        query = """idListToNodes(%s)
+
+        .choose(values(NODE_TYPE))
+        .option(TYPE_FUNCTION,
+          __.start().functionToLocationStr())
+        .option("Symbol",
+          __.start().functions().functionToLocationStr())
+        .option(Pick.none,
+        __.start().choose(has(NODE_ISCFGNODE, 'True'),
+            __.start().as('astnode'),
+            __.start().statements().as('astnode')
+        )
+        .functions().functionToFile().as('file')
+        .select('astnode', 'file')
+        .map { it.get()['file'].values('code').next() + ':' +  it.get()['astnode'].values('location').next() }
+        )
+        """ % (nodeIds)
+
+        y = self._runGremlinQuery(query)
+        for x in y:
+            print(x)
+
+
+if __name__ == '__main__':
+    tool= Location()
+    tool.run()

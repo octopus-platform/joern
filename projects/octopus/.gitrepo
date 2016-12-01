@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:octopus-platform/octopus.git
+	branch = master
+	commit = beb124eb72df6c2a1a142b89ee9d04f1913e7a2f
+	parent = f59279852be62e1a2bf4ceac2577aa4d71be0c55
+	cmdver = 0.3.0

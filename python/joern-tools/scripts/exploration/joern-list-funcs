@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+from octopus.server.DBInterface import DBInterface
+from octopus.shelltool.CmdLineTool import CmdLineTool
+from octopus.shelltool.ResultProcessor import BaseResultProcessor
+
+DESCRIPTION = """Create a list of all functions of the code base. The
+first field is the function's name, the second field is the id of the
+corresponding node in the database, and the third is the file it is
+contained in"""
+
+
+class ListFuncsResult(BaseResultProcessor):
+        def getElementId(self):
+            return str(self.id(self.result['func']))
+        def getFunctionIdProperty(self):
+            return self.value(self.result['func'],'functionId')
+        def getFunctionId(self):
+            # interpretation 1: node id
+            return str(self.id(self.result['func']))
+            # interpretation 2: functionId property
+            return self.value(self.result['func'],'functionId')
+        def getFunctionName(self):
+            return self.value(self.result['func'],'code')
+        def getFilepath(self):
+            return self.value(self.result['file'],'code')
+
+class ListFuncs(CmdLineTool):
+    def __init__(self, DESCRIPTION):
+        CmdLineTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument('project')
+        self.argParser.add_argument('-p', '--pattern',
+                                    help="emit only function that match this pattern",
+                                    action='store', type=str,
+                                    default=None)
+        self.argParser.add_argument('-F','--field-separator',default=',')
+        self.argParser.add_argument('-P','--id-property',action='store_true', default=False,
+                                    help="output functionId property value to identify function")
+
+    def _runImpl(self):
+        self.dbInterface = DBInterface()
+        self.dbInterface.connectToDatabase(self.args.project)
+
+
+        if self.args.pattern:
+            match_pattern = """.has('code', textRegex('{}'))""".format( self.args.pattern)
+        else:
+            match_pattern = ""
+
+        if self.args.id_property:
+            search_id_property = """.as('node').functionToAST().as('func').select('node')"""
+        else:
+            search_id_property = ".as('func')"
+
+        query = """
+            g.V().has('type', 'Function'){}{}
+            .functionToFile().as('file').select('func', 'file')
+        """.format(match_pattern, search_id_property)
+
+        res = self.dbInterface.runGremlinQuery(query)
+        for x in res:
+            r = ListFuncsResult(x)
+            if self.args.id_property:
+                fid = r.getFunctionIdProperty()
+            else:
+                fid = r.getElementId()
+            print(self.args.field_separator.join([fid, r.getFunctionName(), r.getFilepath()]))
+
+
+if __name__ == '__main__':
+    tool = ListFuncs(DESCRIPTION)
+    tool.run()
