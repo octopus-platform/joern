@@ -74,13 +74,13 @@ see some examples.
 
 .. code-block:: none
 
-	echo 'g.V.has("type", "File").hasRegex("code", ".*demux.*").code' | joern-lookup vlc-2.1.4.tar.gz
+	echo 'g.V().has("type", "File").hasRegex("code", ".*demux.*").code' | joern-lookup vlc-2.1.4.tar.gz
 
 Advantage:
 
 .. code-block:: none
 
-	echo 'g.V.has("type", "File").hasRegex("code", ".*demux.*").out().has("type", "Function").code' | joern-lookup vlc-2.1.4.tar.gz
+	echo 'g.V().has("type", "File").hasRegex("code", ".*demux.*").out().has("type", "Function").code' | joern-lookup vlc-2.1.4.tar.gz
 
 Plotting Database Content
 -------------------------
