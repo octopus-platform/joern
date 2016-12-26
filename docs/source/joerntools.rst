@@ -7,6 +7,5 @@ Joern-tools
 	joerntools/slice
 	joerntools/apiEmbedder
 	joerntools/knn
-        joerntools/plot-proggraph
 
 	

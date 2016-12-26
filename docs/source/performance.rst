@@ -9,7 +9,7 @@ Joern uses the Neo4J Batch Inserter for code importing (see Chapter 35
 of the `Neo4J documentation
 <http://docs.neo4j.org/chunked/stable/batchinsert.html>`_). Therefore,
 the performance you will experience mainly depends on the amount of
-heap memory you can make available for the importer and
+heap memory you can make available for the importer and 
 how you assign it to the different caches used by the Neo4J Batch
 Inserter. You can find a detailed discussion of this topic at
 https://github.com/jexp/batch-import .
@@ -90,14 +90,14 @@ database can be kept in RAM and do not have to be loaded from disk
 (see
 http://docs.neo4j.org/chunked/stable/configuration-io-examples.html
 ). For example, for a machine with 8GB RAM the following
-``neo4j.properties`` configuration has been tested to work well:
+``neo4j.conf`` configuration has been tested to work well:
 
 .. code-block:: none
 
 	# conf/neo4j.conf
 	use_memory_mapped_buffers=true
 	cache_type=soft
-	neostore.nodestore.db.mapped_memory=500M
+	neostore.nodestore.db.mapped_memory=500M	
 	neostore.relationshipstore.db.mapped_memory=4G
 	neostore.propertystore.db.mapped_memory=1G
 	neostore.propertystore.db.strings.mapped_memory=1300M
@@ -106,22 +106,33 @@ http://docs.neo4j.org/chunked/stable/configuration-io-examples.html
 	neostore.propertystore.db.index.mapped_memory=200M
 	keep_logical_logs=true
 
-Automatically Killing Runaway Queries
--------------------------------------
+Chunking Traversals
+--------------------
 
-Inefficient graph traversals can consume unbounded amounts of
-resources.  Currently, Neo4j does not support killing active queries,
-instead it offers an execution guard that will kill queries running
-beyond a specified amount of time. It's recommended you enable it by
-adding the following to ``neo4j.properties``:
+Running the same traversal on a large set of start nodes often leads
+to unacceptable performance as all nodes and edges touched by the
+traversal are kept in server memory before returning results. For
+example, the query::
+	getAllStatements().astNodes().id
 
-.. code-block:: none
+which retrieves all astNodes that are part of statements, can already
+completely exhaust memory. 
 
-  execution_guard_enabled=true
+If traversals are independent, the query can be chunked to gain high
+performance. The following example code shows how this works::
 
-And then specify the timeout (in millseconds) in
-``neo4j-server.properties`` as below:
+	from joern.all import JoernSteps
 
-.. code-block:: none
+	j = JoernSteps()
+	j.connectToDatabase()
+	
+	ids =  j.runGremlinQuery('getAllStatements.id')
 
-  org.neo4j.server.webserver.limit.executiontime=60000
+	CHUNK_SIZE = 256
+	for chunk in j.chunks(ids, CHUNK_SIZE):
+	   
+	   query = """ idListToNodes(%s).astNodes().id """ % (chunk)
+	   
+	   for r in j.runGremlinQuery(query): print r
+
+This will execute the query in batches of 256 start nodes each.

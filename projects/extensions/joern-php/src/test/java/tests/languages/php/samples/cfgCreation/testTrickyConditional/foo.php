@@ -1,3 +1,0 @@
-<?php
-
-true ? "foo" : "bar";

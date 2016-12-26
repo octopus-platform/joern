@@ -1,0 +1,13 @@
+#!/usr/bin/env python2
+
+import os
+import ConfigParser
+
+config = ConfigParser.RawConfigParser()
+JOERN_DIR = os.path.split(os.path.realpath(__file__))[0]
+CONF_FILE = os.path.join(JOERN_DIR, 'joern.conf')
+config.read(CONF_FILE)
+
+NEO4J = os.path.join(JOERN_DIR, config.get('neo4j', 'exec'))
+
+os.system('%s stop' % (NEO4J))

@@ -1,4 +1,0 @@
-<?php
-
-FOO;
-\BAR\BUZ;

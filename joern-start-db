@@ -1,0 +1,47 @@
+#!/usr/bin/env python2
+
+import ConfigParser
+import sys, os
+
+config = ConfigParser.RawConfigParser()
+JOERN_DIR = os.path.split(os.path.realpath(__file__))[0]
+CONF_FILE = os.path.join(JOERN_DIR, 'joern.conf')
+config.read(CONF_FILE)
+
+NEO4J = os.path.join(JOERN_DIR, config.get('neo4j', 'exec'))
+JOERN_INDEX = os.path.join(JOERN_DIR, config.get('joern', 'index'))
+JOERN_INDEX = os.path.abspath(JOERN_INDEX)
+
+if len(sys.argv) > 1:
+    
+    exists = os.path.lexists(JOERN_INDEX)
+    isLink = os.path.islink(JOERN_INDEX)
+
+    dbPath = sys.argv[1]
+    newTarget = os.path.abspath(dbPath)
+    
+    if not os.path.exists(newTarget):
+        print 'Error: target database does not exist: %s' % (newTarget)
+        sys.exit()
+        
+    if exists and not isLink:
+        print 'Error: .joernIndex exists and is NOT a symbolic link'
+        print 'Bailing out.'
+        sys.exit()
+    elif exists and isLink:
+        
+        oldTarget = os.path.abspath(os.path.realpath(JOERN_INDEX))
+        
+        if oldTarget == newTarget:
+            print 'Database unchanged.'
+        else:
+            print 'Removing old symbolic link'
+            os.remove(JOERN_INDEX)
+            print 'Creating new symbolic link to: %s' % (newTarget)
+            os.symlink(newTarget, JOERN_INDEX)
+    else:
+        # Symbolic link does not exist
+        print 'Creating new symbolic link to: %s' % (newTarget)
+        os.symlink(newTarget, JOERN_INDEX)
+    
+os.system('%s start' % (NEO4J))

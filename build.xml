@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project name="Joern" default="jar" basedir=".">
+  
+  <property name="src.dir" location="src" />
+  <property name="build.dir" location="bin" />
+  <property name="lib.dir" location="lib" />
+  <property name="test.dir" location="src" />
+  <property name="test.report.dir" location="testreport" />
+
+  <!-- Junit class path -->
+  <path id="junit.class.path">
+    <pathelement location="lib/junit.jar" />
+    <pathelement location="${build.dir}" />
+  </path>
+  
+  <!-- Add jars to the classpath -->
+  <path id="joern.classpath">
+        <pathelement location="bin"/>
+        <path refid="junit.class.path"/>
+        <pathelement location="${lib.dir}/antlr4-runtime-4.2.1-SNAPSHOT.jar"/>
+	<pathelement location="${lib.dir}/antlr4-annotations-4.2.1-SNAPSHOT.jar"/>
+	<pathelement location="${lib.dir}/commons-cli-1.2.jar"/>
+        <pathelement location="${lib.dir}/lucene-core-3.6.2.jar"/>
+        <pathelement location="${lib.dir}/neo4j-kernel-2.1.5.jar"/>
+        <pathelement location="${lib.dir}/neo4j-lucene-index-2.1.5.jar"/>
+	<pathelement location="${lib.dir}/neo4j-primitive-collections-2.1.5.jar"/>
+    </path>
+	  
+  <target name="clean">
+    <delete dir="${build.dir}" />
+    <delete dir="${test.report.dir}" />
+  </target>
+
+  <target name="makedir">
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${test.report.dir}" />
+  </target>
+
+  <target name="compile">
+    <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+	<src path="src"/> 
+	<classpath refid="joern.classpath"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="clean,makedir,compile">
+    <jar destfile="${build.dir}/joern.jar"
+         basedir="${build.dir}"
+         includes="**/*.class">
+      <manifest>
+        <attribute name="Main-Class" value="tools.index.IndexMain" />
+      </manifest>
+    <fileset dir="${build.dir}" includes="**/*.class" />
+    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+
+  <target name="tools" depends="icfg,argumentTainter">
+  </target>
+
+  <target name="icfg" depends="compile">
+    <jar destfile="${build.dir}/icfg.jar"
+         basedir="${build.dir}"
+         includes="**/*.class">
+      <manifest>
+        <attribute name="Main-Class" value="tools.icfg.ICFGMain" />
+      </manifest>
+    <fileset dir="${build.dir}" includes="**/*.class" />
+    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+  
+  <target name="argumentTainter" depends="compile">
+    <jar destfile="${build.dir}/argumentTainter.jar"
+         basedir="${build.dir}"
+         includes="**/*.class">
+      <manifest>
+        <attribute name="Main-Class" value="tools.argumentTainter.ArgumentTainterMain" />
+      </manifest>
+    <fileset dir="${build.dir}" includes="**/*.class" />
+    <zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+
+
+</project>
