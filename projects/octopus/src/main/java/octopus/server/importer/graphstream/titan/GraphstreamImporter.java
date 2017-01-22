@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 public class GraphstreamImporter extends SinkAdapter {
 
+	static final String KEY = "_key";
+
 	Graph graph;
 
 	private static final Logger logger = LoggerFactory
@@ -38,7 +40,6 @@ public class GraphstreamImporter extends SinkAdapter {
 		closeDatabase();
 	}
 
-
 	public void setGraph(Graph graph)
 	{
 		this.graph = graph;
@@ -52,6 +53,17 @@ public class GraphstreamImporter extends SinkAdapter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void nodeAdded(String sourceId, long timeId, String nodeId) {
+	    System.out.println("DGS: add node {} from source {}".format(nodeId,sourceId));
+		Vertex vertex = graph.addVertex(KEY, nodeId);
+	}
+
+	public void nodeAttributeAdded(String sourceId, long timeId, String nodeId) {
+		System.out.println("DGS: add node attribute nodeid={} sourceid={}".format(nodeId,sourceId));
+		// vertex.property(keys[i - 1], row[i]);
 	}
 
 }
