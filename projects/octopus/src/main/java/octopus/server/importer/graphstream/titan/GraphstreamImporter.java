@@ -5,24 +5,35 @@ import java.io.IOException;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.graphstream.stream.SinkAdapter;
+import org.graphstream.stream.file.FileSource;
+import org.graphstream.stream.file.FileSourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class GraphstreamImporter {
+public class GraphstreamImporter extends SinkAdapter {
 
 	Graph graph;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(GraphstreamImporter.class);
 
-	public void importGraphstreamFiles(String nodeFilename)
+	public void importGraphstreamFiles(String streamFilename)
 			throws IOException
 	{
 		// create graphstream sink (implement one that adds elements to octopus)
 		// create a file source
+		FileSource fs = FileSourceFactory.sourceFor(streamFilename);
 		// connect the two
-		// fs.readAll(path)
+		fs.addSink(this);
+		try {
+			fs.readAll(streamFilename);
+		} catch (IOException e) {
+			// ...
+		} finally {
+			fs.removeSink(this);
+		}
 
 		closeDatabase();
 	}
