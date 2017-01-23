@@ -2,12 +2,10 @@ package octopus.server.importer.graphstream.titan;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.Iterator;
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.structure.Graph;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.VertexProperty;
+import org.apache.tinkerpop.gremlin.structure.*;
 import org.graphstream.stream.SinkAdapter;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceFactory;
@@ -21,7 +19,9 @@ public class GraphstreamImporter extends SinkAdapter {
 	static final String KEY = "_key";
 
 	class EdgeInfoFormatException extends Exception {
-		public EdgeInfoFormatException(String message) { super(message); }
+	}
+
+	class EdgeInfoNodeNotFoundException extends Exception {
 	}
 
 	class EdgeInfo {
@@ -37,7 +37,7 @@ public class GraphstreamImporter extends SinkAdapter {
 				fromNodeId = parts[1];
 				toNodeId = parts[2];
 			} catch (ArrayIndexOutOfBoundsException e) {
-				throw new EdgeInfoFormatException("Invalid edge-id format");
+				throw new EdgeInfoFormatException();
 			}
 		}
 
@@ -45,6 +45,16 @@ public class GraphstreamImporter extends SinkAdapter {
 			return label;
 		}
 
+		public String getFromNodeId() {
+			return fromNodeId;
+		}
+
+		public String getToNodeId() {
+			return toNodeId;
+		}
+	}
+
+	class GraphEdgeNotFoundException extends Exception {
 	}
 
 	Graph graph;
@@ -97,6 +107,48 @@ public class GraphstreamImporter extends SinkAdapter {
 		}
 	}
 
+	protected Vertex findVertexWithKey(String key) {
+	    GraphTraversal traversal = graph.traversal().V().has(KEY,key);
+        if (traversal.hasNext()) {
+        	return (Vertex) traversal.next();
+		}
+		return null;
+	}
+
+	protected Vertex getEdgeVertexFrom(EdgeInfo edge_info) throws EdgeInfoNodeNotFoundException {
+		Vertex fromVertex = findVertexWithKey(edge_info.getFromNodeId());
+		if (fromVertex == null) {
+			throw new EdgeInfoNodeNotFoundException();
+		}
+		return fromVertex;
+	}
+
+	protected Vertex getEdgeVertexTo(EdgeInfo edge_info) throws EdgeInfoNodeNotFoundException {
+		Vertex toVertex = findVertexWithKey(edge_info.getToNodeId());
+		if (toVertex == null) {
+			throw new EdgeInfoNodeNotFoundException();
+		}
+		return toVertex;
+	}
+
+	protected Edge findEdge(EdgeInfo edge_info) throws EdgeInfoNodeNotFoundException, GraphEdgeNotFoundException {
+	    Vertex fromVertex = getEdgeVertexFrom(edge_info);
+		Vertex toVertex = getEdgeVertexTo(edge_info);
+        Iterator<Edge> edges = fromVertex.edges(Direction.OUT, edge_info.getLabel());
+		Edge edge_found = null;
+		while (edges.hasNext()) {
+			Edge edge = edges.next();
+			if (edge.inVertex() == toVertex) {
+				edge_found = edge;
+				break;
+			}
+		}
+		if (edge_found == null) {
+			throw new GraphEdgeNotFoundException();
+		}
+		return edge_found;
+	}
+
 	@Override
 	public void edgeAttributeAdded(String sourceId, long timeId, String edgeId,
 			String attribute, Object value) {
@@ -106,8 +158,20 @@ public class GraphstreamImporter extends SinkAdapter {
 	@Override
 	public void edgeAttributeChanged(String sourceId, long timeId,
 			String edgeId, String attribute, Object oldValue, Object newValue) {
-		logger.warn("edgeAttributeChanged not implemented");
-        logger.warn("edgeId {}", edgeId);
+		try {
+			EdgeInfo edge_info = new EdgeInfo(edgeId);
+            Edge edge = findEdge(edge_info);
+            edge.property(attribute,newValue);
+		} catch (EdgeInfoFormatException e) {
+			logger.error("edgeAttributeChanged: invalid edge-id format {}", edgeId);
+		} catch (EdgeInfoNodeNotFoundException e) {
+			logger.error("edgeAttributeChanged: could not find source node for {}", edgeId);
+		} catch (GraphEdgeNotFoundException e) {
+			logger.error("edgeAttributeChanged: could not find edge {}", edgeId);
+		} catch (java.lang.IllegalArgumentException e) {
+		    // only simple values are allowed as edge attributes
+			logger.error("edgeAttributeChanged: could not add value {}", newValue.toString());
+		}
 	}
 
 	@Override
@@ -151,14 +215,6 @@ public class GraphstreamImporter extends SinkAdapter {
 		return sb.toString();
 	}
 
-	protected Vertex findVertexWithKey(String key) {
-		GraphTraversalSource g = graph.traversal();
-		GraphTraversal traversal = g.V().has(KEY,key);
-        if (traversal.hasNext()) {
-			return (Vertex) traversal.next();
-		}
-		return null;
-	}
 
 	@Override
 	public void nodeAttributeChanged(String sourceId, long timeId,
@@ -170,7 +226,7 @@ public class GraphstreamImporter extends SinkAdapter {
                 try {
 					v.property(VertexProperty.Cardinality.list, attribute, newValue);
 				} catch (com.thinkaurelius.titan.core.SchemaViolationException e) {
-					logger.warn("nodeAttributeChanged on node {}: list properties are not supported.", nodeId);
+					logger.error("nodeAttributeChanged on node {}: list properties are not supported.", nodeId);
 				}
 			} else {
 				v.property(attribute, newValue);
@@ -205,7 +261,7 @@ public class GraphstreamImporter extends SinkAdapter {
 				EdgeInfo edge_info = new EdgeInfo(edgeId);
 				fromVertex.addEdge(edge_info.getLabel(), toVertex);
 			} catch (EdgeInfoFormatException e) {
-				logger.error("edgeAdded: invalid edge-id format");
+				logger.error("edgeAdded: invalid edge-id format {}", edgeId);
 			}
 		}
 	}
