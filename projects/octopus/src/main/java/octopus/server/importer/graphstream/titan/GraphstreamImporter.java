@@ -20,6 +20,33 @@ public class GraphstreamImporter extends SinkAdapter {
 	static final int NELEMS_PER_TRANSACTION = 100000;
 	static final String KEY = "_key";
 
+	class EdgeInfoFormatException extends Exception {
+		public EdgeInfoFormatException(String message) { super(message); }
+	}
+
+	class EdgeInfo {
+		private String label;
+		private String fromNodeId;
+		private String toNodeId;
+        static final String SEPARATOR = ":";
+
+		public EdgeInfo(String edgeId) throws EdgeInfoFormatException {
+			try {
+				String[] parts = edgeId.split(SEPARATOR, 3);
+				label = parts[0];
+				fromNodeId = parts[1];
+				toNodeId = parts[2];
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new EdgeInfoFormatException("Invalid edge-id format");
+			}
+		}
+
+		public String getLabel() {
+			return label;
+		}
+
+	}
+
 	Graph graph;
 	int transaction_element_count = 0;
 
@@ -80,6 +107,7 @@ public class GraphstreamImporter extends SinkAdapter {
 	public void edgeAttributeChanged(String sourceId, long timeId,
 			String edgeId, String attribute, Object oldValue, Object newValue) {
 		logger.warn("edgeAttributeChanged not implemented");
+        logger.warn("edgeId {}", edgeId);
 	}
 
 	@Override
@@ -161,7 +189,25 @@ public class GraphstreamImporter extends SinkAdapter {
 	@Override
 	public void edgeAdded(String sourceId, long timeId, String edgeId,
 			String fromNodeId, String toNodeId, boolean directed) {
-		logger.warn("edgeAdded not implemented");
+        Vertex fromVertex = findVertexWithKey(fromNodeId);
+		Vertex toVertex = findVertexWithKey(toNodeId);
+		// the nodes need to have been defined and created before we can add the edge
+		if (fromVertex == null) {
+			logger.error("edgeAdded: could not find source node {}", fromNodeId);
+		}
+		if (toVertex == null) {
+			logger.error("edgeAdded: could not find destination node {}", toNodeId);
+		}
+		if ((fromVertex != null) && (toVertex != null)) {
+			// we assume edgeId has a certain format, so that we do not have to defer
+			// the creation of edges to the end of the file.
+			try {
+				EdgeInfo edge_info = new EdgeInfo(edgeId);
+				fromVertex.addEdge(edge_info.getLabel(), toVertex);
+			} catch (EdgeInfoFormatException e) {
+				logger.error("edgeAdded: invalid edge-id format");
+			}
+		}
 	}
 
 	@Override
