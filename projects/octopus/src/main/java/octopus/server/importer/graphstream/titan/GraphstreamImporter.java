@@ -142,13 +142,13 @@ public class GraphstreamImporter extends SinkAdapter {
                 try {
 					v.property(VertexProperty.Cardinality.list, attribute, newValue);
 				} catch (com.thinkaurelius.titan.core.SchemaViolationException e) {
-					logger.warn("set property on node {}: list properties are not supported.", nodeId);
+					logger.warn("nodeAttributeChanged on node {}: list properties are not supported.", nodeId);
 				}
 			} else {
 				v.property(attribute, newValue);
 			}
 		} else {
-			logger.warn("set property on node {}: could not find node", nodeId);
+			logger.error("nodeAttributeChanged: could not find node {}", nodeId);
 		}
 	}
 
