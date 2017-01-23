@@ -123,7 +123,7 @@ public class GraphstreamImporter extends SinkAdapter {
 		return sb.toString();
 	}
 
-	protected Vertex findNodeWithKey(String key) {
+	protected Vertex findVertexWithKey(String key) {
 		GraphTraversalSource g = graph.traversal();
 		GraphTraversal traversal = g.V().has(KEY,key);
         if (traversal.hasNext()) {
@@ -135,7 +135,7 @@ public class GraphstreamImporter extends SinkAdapter {
 	@Override
 	public void nodeAttributeChanged(String sourceId, long timeId,
 			String nodeId, String attribute, Object oldValue, Object newValue) {
-        Vertex v = findNodeWithKey(nodeId);
+        Vertex v = findVertexWithKey(nodeId);
 		if (v != null) {
             if (newValue.getClass().isArray()) {
             	// Cardinality.list is not supported by default in TitanDB, but we can always try
