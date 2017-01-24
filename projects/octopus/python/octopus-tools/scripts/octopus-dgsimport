@@ -1,0 +1,31 @@
+#!python
+
+import argparse
+
+from octopus.server.plugin_executor import PluginExecutor
+
+parser = argparse.ArgumentParser(description="Generic Graphstream Importer")
+
+parser.add_argument(
+    "-s", "--server-host",
+    type=str,
+    default="localhost",
+    help="set the hostname of the octopus server")
+
+parser.add_argument(
+    "-p", "--server-port",
+    type=int,
+    default=2480,
+    help="set the port number of the octopus server")
+
+parser.add_argument(
+    "project",
+    type=str,
+    help="The project to import into.")
+
+args = parser.parse_args()
+
+executor = PluginExecutor(args.server_host, args.server_port)
+
+settings = { 'projectName' : args.project}
+executor.execute("", "octopus.plugins.graphstreamimporter.GraphstreamImporterPlugin", settings)

@@ -37,5 +37,6 @@ class OctopusImporter:
 
     def executeImporterPlugin(self):
         print('Executing importer plugin')
+        print('plugin name: %s\n' % self.pluginName)
         pluginSettings = { 'projectName' : self.projectName }
         print(self.pluginExecutor.execute(self.pluginName, self.pluginClass, pluginSettings))

@@ -5,14 +5,7 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 
-import octopus.server.restServer.handlers.CreateProjectHandler;
-import octopus.server.restServer.handlers.CreateShellHandler;
-import octopus.server.restServer.handlers.DeleteProjectHandler;
-import octopus.server.restServer.handlers.ExecutePluginHandler;
-import octopus.server.restServer.handlers.ImportCSVHandler;
-import octopus.server.restServer.handlers.ListProjectsHandler;
-import octopus.server.restServer.handlers.ListShellsHandler;
-import octopus.server.restServer.handlers.ResetDatabaseHandler;
+import octopus.server.restServer.handlers.*;
 
 
 public class OctopusRestServer {
@@ -60,6 +53,14 @@ public class OctopusRestServer {
 
 		get("database/importcsv/:projectName/:nodeFilename/:edgeFilename", (req, res) -> {
 			return new ImportCSVHandler().handle(req, res);
+		});
+
+		get("database/importdgs/:projectName", (req, res) -> {
+			return new ImportGraphstreamHandler().handle(req, res);
+		});
+
+		get("database/importdgs/:projectName/:streamFilename", (req, res) -> {
+			return new ImportGraphstreamHandler().handle(req, res);
 		});
 
 		get("database/reset/:projectName", (req, res) -> {
