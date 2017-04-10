@@ -23,7 +23,7 @@ import outputModules.csv.exporters.CSVCFGExporter;
 import outputModules.csv.exporters.CSVCGExporter;
 import outputModules.csv.exporters.CSVDDGExporter;
 import udg.CFGToUDGConverter;
-import udg.useDefAnalysis.PHPASTDefUseAnalyzer;
+import udg.php.useDefAnalysis.PHPASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 
 public class Main {

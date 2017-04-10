@@ -31,7 +31,7 @@ import ddg.DataDependenceGraph.DefUseRelation;
 import ddg.DefUseCFG.DefUseCFG;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import udg.CFGToUDGConverter;
-import udg.useDefAnalysis.PHPASTDefUseAnalyzer;
+import udg.php.useDefAnalysis.PHPASTDefUseAnalyzer;
 import udg.useDefGraph.UseDefGraph;
 import udg.useDefGraph.UseOrDefRecord;
 

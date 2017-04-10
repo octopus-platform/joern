@@ -1,27 +1,28 @@
-package udg.useDefAnalysis;
+package udg.php.useDefAnalysis;
 
 import java.util.Collection;
 
 import ast.expressions.*;
 import udg.ASTProvider;
-import udg.useDefAnalysis.environments.ArrayIndexingEnvironment;
-import udg.useDefAnalysis.environments.AssignmentEnvironment;
-import udg.useDefAnalysis.environments.AssignmentWithOpEnvironment;
-import udg.useDefAnalysis.environments.CatchEnvironment;
-import udg.useDefAnalysis.environments.ClassConstantEnvironment;
-import udg.useDefAnalysis.environments.ClosureVarEnvironment;
-import udg.useDefAnalysis.environments.ConstantEnvironment;
+import udg.php.useDefAnalysis.environments.ArrayIndexingEnvironment;
+import udg.php.useDefAnalysis.environments.AssignmentEnvironment;
+import udg.php.useDefAnalysis.environments.AssignmentWithOpEnvironment;
+import udg.php.useDefAnalysis.environments.CatchEnvironment;
+import udg.php.useDefAnalysis.environments.ClassConstantEnvironment;
+import udg.php.useDefAnalysis.environments.ClosureVarEnvironment;
+import udg.php.useDefAnalysis.environments.ConstantEnvironment;
+import udg.useDefAnalysis.ASTDefUseAnalyzer;
 import udg.useDefAnalysis.environments.EmitDefEnvironment;
 import udg.useDefAnalysis.environments.EmitUseEnvironment;
-import udg.useDefAnalysis.environments.FieldDeclarationEnvironment;
-import udg.useDefAnalysis.environments.ForEachEnvironment;
-import udg.useDefAnalysis.environments.IncDecEnvironment;
-import udg.useDefAnalysis.environments.ParameterEnvironment;
-import udg.useDefAnalysis.environments.PropertyEnvironment;
-import udg.useDefAnalysis.environments.StaticPropertyEnvironment;
-import udg.useDefAnalysis.environments.SwitchEnvironment;
+import udg.php.useDefAnalysis.environments.FieldDeclarationEnvironment;
+import udg.php.useDefAnalysis.environments.ForEachEnvironment;
+import udg.php.useDefAnalysis.environments.IncDecEnvironment;
+import udg.php.useDefAnalysis.environments.ParameterEnvironment;
+import udg.php.useDefAnalysis.environments.PropertyEnvironment;
+import udg.php.useDefAnalysis.environments.StaticPropertyEnvironment;
+import udg.php.useDefAnalysis.environments.SwitchEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
-import udg.useDefAnalysis.environments.VariableEnvironment;
+import udg.php.useDefAnalysis.environments.VariableEnvironment;
 import udg.useDefGraph.UseOrDef;
 
 /**

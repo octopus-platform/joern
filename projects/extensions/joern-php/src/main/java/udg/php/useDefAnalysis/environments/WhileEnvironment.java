@@ -1,4 +1,4 @@
-package udg.useDefAnalysis.environments;
+package udg.php.useDefAnalysis.environments;
 
 import udg.ASTProvider;
 import udg.useDefAnalysis.environments.EmitUseEnvironment;

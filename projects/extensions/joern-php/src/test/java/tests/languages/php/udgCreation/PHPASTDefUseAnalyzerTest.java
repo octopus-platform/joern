@@ -13,7 +13,7 @@ import ast.ASTNode;
 import inputModules.csv.KeyedCSV.exceptions.InvalidCSVFile;
 import tests.languages.php.PHPCSVBasedTest;
 import udg.ASTNodeASTProvider;
-import udg.useDefAnalysis.PHPASTDefUseAnalyzer;
+import udg.php.useDefAnalysis.PHPASTDefUseAnalyzer;
 import udg.useDefGraph.UseOrDef;
 
 public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
