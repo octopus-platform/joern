@@ -1,5 +1,6 @@
 package ast.php.statements;
 
+import ast.ASTNodeProperties;
 import ast.expressions.Expression;
 import ast.expressions.StringExpression;
 import ast.logical.statements.Statement;
@@ -29,5 +30,13 @@ public class PropertyElement extends Statement
 	{
 		this.defaultvalue = defaultvalue;
 		super.addChild(defaultvalue);
+	}
+	
+	public String getDocComment() {
+		return getProperty(ASTNodeProperties.DOCCOMMENT);
+	}
+
+	public void setDocComment(String doccomment) {
+		setProperty(ASTNodeProperties.DOCCOMMENT, doccomment);
 	}
 }
