@@ -16,7 +16,7 @@ id:int	labels:label	type	flags:string_array	lineno:int	code	childnum:int	funcid:
 14	AST	string		4	"buz"	0	2		""			
 15	AST	AST_ARG_LIST		4		1	2		""			
 16	AST	AST_NEW		5		2	2		""			
-17	AST	AST_CLASS	"[WARNING] Unexpected flags for kind: kind=69 and flags=256"	5		0	2		""	5		
+17	AST	AST_CLASS	CLASS_ANONYMOUS	5		0	2		""	5		
 18	AST	AST_NAME	NAME_NOT_FQ	5		0	2		""			
 19	AST	string		5	"A"	0	2		""			
 20	AST	AST_NAME_LIST		5		1	2		""			

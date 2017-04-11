@@ -278,19 +278,19 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_BINARY_SPACESHIP = "BINARY_SPACESHIP";
 	
 	// flags for TYPE_MAGIC_CONST nodes (exclusive)
-	public static final String FLAG_MAGIC_LINE = "T_LINE";
-	public static final String FLAG_MAGIC_FILE = "T_FILE";
-	public static final String FLAG_MAGIC_DIR = "T_DIR";
-	public static final String FLAG_MAGIC_NAMESPACE = "T_NS_C";
-	public static final String FLAG_MAGIC_FUNCTION = "T_FUNC_C";
-	public static final String FLAG_MAGIC_METHOD = "T_METHOD_C";
-	public static final String FLAG_MAGIC_CLASS = "T_CLASS_C";
-	public static final String FLAG_MAGIC_TRAIT = "T_TRAIT_C";
+	public static final String FLAG_MAGIC_LINE = "MAGIC_LINE";
+	public static final String FLAG_MAGIC_FILE = "MAGIC_FILE";
+	public static final String FLAG_MAGIC_DIR = "MAGIC_DIR";
+	public static final String FLAG_MAGIC_NAMESPACE = "MAGIC_NAMESPACE";
+	public static final String FLAG_MAGIC_FUNCTION = "MAGIC_FUNCTION";
+	public static final String FLAG_MAGIC_METHOD = "MAGIC_METHOD";
+	public static final String FLAG_MAGIC_CLASS = "MAGIC_CLASS";
+	public static final String FLAG_MAGIC_TRAIT = "MAGIC_TRAIT";
 
 	// flags for TYPE_USE, TYPE_GROUP_USE and TYPE_USE_ELEM nodes (exclusive)
-	public static final String FLAG_USE_NORMAL = "T_CLASS";
-	public static final String FLAG_USE_FUNCTION = "T_FUNCTION";
-	public static final String FLAG_USE_CONST = "T_CONST";
+	public static final String FLAG_USE_NORMAL = "USE_NORMAL";
+	public static final String FLAG_USE_FUNCTION = "USE_FUNCTION";
+	public static final String FLAG_USE_CONST = "USE_CONST";
 
 	// flags for TYPE_INCLUDE_OR_EVAL nodes (exclusive)
 	public static final String FLAG_EXEC_EVAL = "EXEC_EVAL";
