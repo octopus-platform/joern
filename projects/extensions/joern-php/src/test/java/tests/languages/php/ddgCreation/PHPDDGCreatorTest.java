@@ -60,26 +60,26 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	}
 	
 	/**
-	 * const MAX = 10;           ( 3) ConstantDeclaration; (4) ConstantElement
+	 * const MAX = 10;           ( 6) ConstantDeclaration; (7) ConstantElement
 	 * 
-	 * function foo() {          ( 7)
-	 *   $x = source();          (11)
-	 *   if( $x < MAX) {         (20)
-	 *     $y = 2*$x;            (27) AssignmentExpression; (30) BinaryOperationExpression
-	 *     sink($y);             (34)
+	 * function foo() {          (10)
+	 *   $x = source();          (16)
+	 *   if( $x < MAX) {         (25)
+	 *     $y = 2*$x;            (32) AssignmentExpression; (35) BinaryOperationExpression
+	 *     sink($y);             (39)
 	 *   }
 	 * }
 	 * 
-	 * function source() {       (41)
-	 *   global $argv;           (46)
-	 *   return $argv[1];        (49)
+	 * function source() {       (46)
+	 *   global $argv;           (52)
+	 *   return $argv[1];        (55)
 	 * }
 	 * 
-	 * function sink($arg) {     (55) PHPFunctionDef; (57) PHPParameter
-	 *   echo $arg, PHP_EOL;     (64) PHPEchoStatement; (67) PHPEchoStatement
+	 * function sink($arg) {     (61) PHPFunctionDef; (65) PHPParameter
+	 *   echo $arg, PHP_EOL;     (71) PHPEchoStatement; (74) PHPEchoStatement
 	 * }
 	 * 
-	 * foo();                    (72)
+	 * foo();                    (79)
 	 */
 	@Test
 	public void testSimpleCompleteProgram() throws IOException, InvalidCSVFile
@@ -100,14 +100,14 @@ public class PHPDDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		DDG sourceDDG = ddgs.get( "source");
 
 		assertEquals( 1, sourceDDG.getDefUseEdges().size());
-		assertTrue( edgeExists( sourceDDG, "argv", 53, 56));
+		assertTrue( edgeExists( sourceDDG, "argv", 52, 55));
 		
 		
 		// Testing DDG of sink($arg)
 		DDG sinkDDG = ddgs.get( "sink");
 
 		assertEquals( 1, sinkDDG.getDefUseEdges().size());
-		assertTrue( edgeExists( sinkDDG, "arg", 66, 73));
+		assertTrue( edgeExists( sinkDDG, "arg", 65, 71));
 
 		
 		// Testing DDG of top-level function

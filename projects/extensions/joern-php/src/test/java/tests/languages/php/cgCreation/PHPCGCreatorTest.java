@@ -927,23 +927,24 @@ public class PHPCGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 		// i.e., we do not have any edges to nodes 16 or 103 because
 		// both represent a method called foo, though in different classes
 		
-		assertFalse( edgeExists( cg, 51, 16));
-		assertFalse( edgeExists( cg, 58, 103));
-		assertFalse( edgeExists( cg, 65, 16));
-		assertTrue( edgeExists( cg, 72, 37));
-		assertTrue( edgeExists( cg, 79, 124)); // the "not found" call is *there*!
+		assertFalse( edgeExists( cg, 49, 16)); // we can't find it because of the "double" definition
+		assertFalse( edgeExists( cg, 56, 101)); // we can't find it because of the "double" definition
+		assertFalse( edgeExists( cg, 63, 16)); // we can't find it because of the "double" definition
+		assertTrue( edgeExists( cg, 70, 36));
+		assertTrue( edgeExists( cg, 77, 121)); // the "not found" call is *there*!
 		// this is because its method name is unique, so we construct the edge even
 		// though the class cannot be found in namespace \A\B
 		// it doesn't hurt us to build this edge, because in practice this call
 		// would lead to a fatal PHP error as the class cannot be found, and we
 		// are only interested in sensible code that actually works
-		assertTrue( edgeExists( cg, 86, 124));
-		assertFalse( edgeExists( cg, 138, 103));
-		assertFalse( edgeExists( cg, 145, 103));
-		assertFalse( edgeExists( cg, 152, 16));
-		assertTrue( edgeExists( cg, 159, 37));
-		assertTrue( edgeExists( cg, 166, 124)); // the same call within the global namespace is found, though
-		assertTrue( edgeExists( cg, 173, 124));
+		assertTrue( edgeExists( cg, 84, 121));
+		assertFalse( edgeExists( cg, 134, 101)); // we can't find it because of the "double" definition
+		assertFalse( edgeExists( cg, 141, 101)); // we can't find it because of the "double" definition
+		assertFalse( edgeExists( cg, 148, 16)); // we can't find it because of the "double" definition
+		assertTrue( edgeExists( cg, 155, 36));
+		assertTrue( edgeExists( cg, 162, 121)); // the same call as the "not found" call discussed above
+		                                        // within the global namespace is (and should be) found
+		assertTrue( edgeExists( cg, 169, 121));
 	}
 	
 	/**

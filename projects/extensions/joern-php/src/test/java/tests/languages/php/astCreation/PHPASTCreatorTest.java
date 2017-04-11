@@ -1156,17 +1156,17 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	{
 		handleCSVFiles( "testGlobal");
 
-		ASTNode node = ast.getNodeById((long)13);
-		ASTNode node2 = ast.getNodeById((long)16);
+		ASTNode node = ast.getNodeById((long)12);
+		ASTNode node2 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(GlobalStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((GlobalStatement)node).getVariable());
+		assertEquals( ast.getNodeById((long)13), ((GlobalStatement)node).getVariable());
 		assertEquals( "bar", ((GlobalStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(GlobalStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)17), ((GlobalStatement)node2).getVariable());
+		assertEquals( ast.getNodeById((long)16), ((GlobalStatement)node2).getVariable());
 		assertEquals( "buz", ((GlobalStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
 	}
 
@@ -1185,21 +1185,21 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	{
 		handleCSVFiles( "testUnset");
 
-		ASTNode node = ast.getNodeById((long)7);
-		ASTNode node2 = ast.getNodeById((long)10);
-		ASTNode node3 = ast.getNodeById((long)15);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)14);
 
 		assertThat( node, instanceOf(UnsetStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((UnsetStatement)node).getVariableExpression());
+		assertEquals( ast.getNodeById((long)7), ((UnsetStatement)node).getVariableExpression());
 
 		assertThat( node2, instanceOf(UnsetStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)11), ((UnsetStatement)node2).getVariableExpression());
+		assertEquals( ast.getNodeById((long)10), ((UnsetStatement)node2).getVariableExpression());
 
 		assertThat( node3, instanceOf(UnsetStatement.class));
 		assertEquals( 1, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)16), ((UnsetStatement)node3).getVariableExpression());
+		assertEquals( ast.getNodeById((long)15), ((UnsetStatement)node3).getVariableExpression());
 	}
 
 	/**
@@ -1335,17 +1335,17 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	{
 		handleCSVFiles( "testEcho");
 
-		ASTNode node = ast.getNodeById((long)7);
-		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node = ast.getNodeById((long)6);
+		ASTNode node2 = ast.getNodeById((long)8);
 
 		assertThat( node, instanceOf(EchoStatement.class));
 		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)8), ((EchoStatement)node).getEchoExpression());
+		assertEquals( ast.getNodeById((long)7), ((EchoStatement)node).getEchoExpression());
 		assertEquals( "Hello World!", ((EchoStatement)node).getEchoExpression().getEscapedCodeStr());
 
 		assertThat( node2, instanceOf(EchoStatement.class));
 		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)10), ((EchoStatement)node2).getEchoExpression());
+		assertEquals( ast.getNodeById((long)9), ((EchoStatement)node2).getEchoExpression());
 		assertEquals( "PHP_EOL", ((Constant)((EchoStatement)node2).getEchoExpression()).getIdentifier().getNameChild().getEscapedCodeStr());
 	}
 

@@ -84,26 +84,26 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 	}
 	
 	/**
-	 * const MAX = 10;           ( 3) ConstantDeclaration; (4) ConstantElement
+	 * const MAX = 10;           ( 6) ConstantDeclaration; (7) ConstantElement
 	 * 
-	 * function foo() {          ( 7)
-	 *   $x = source();          (11)
-	 *   if( $x < MAX) {         (20)
-	 *     $y = 2*$x;            (27) AssignmentExpression; (30) BinaryOperationExpression
-	 *     sink($y);             (34)
+	 * function foo() {          (10)
+	 *   $x = source();          (16)
+	 *   if( $x < MAX) {         (25)
+	 *     $y = 2*$x;            (32) AssignmentExpression; (35) BinaryOperationExpression
+	 *     sink($y);             (39)
 	 *   }
 	 * }
 	 * 
-	 * function source() {       (41)
-	 *   global $argv;           (46)
-	 *   return $argv[1];        (49)
+	 * function source() {       (46)
+	 *   global $argv;           (52)
+	 *   return $argv[1];        (55)
 	 * }
 	 * 
-	 * function sink($arg) {     (55) PHPFunctionDef; (57) PHPParameter
-	 *   echo $arg, PHP_EOL;     (64) PHPEchoStatement; (67) PHPEchoStatement
+	 * function sink($arg) {     (61) PHPFunctionDef; (65) PHPParameter
+	 *   echo $arg, PHP_EOL;     (71) PHPEchoStatement; (74) PHPEchoStatement
 	 * }
 	 * 
-	 * foo();                    (72)
+	 * foo();                    (79)
 	 */
 	@Test
 	public void testSimpleCompleteProgram() throws IOException, InvalidCSVFile
@@ -137,8 +137,8 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 
 		assertEquals( 1, numberOfDefsForSymbol( sourceUDG, "argv"));
 		assertEquals( 1, numberOfUsesForSymbol( sourceUDG, "argv"));
-		assertTrue( containsDef( sourceUDG, "argv", 53));
-		assertTrue( containsUse( sourceUDG, "argv", 56));
+		assertTrue( containsDef( sourceUDG, "argv", 52));
+		assertTrue( containsUse( sourceUDG, "argv", 55));
 		
 		
 		// Testing UDG of sink($arg)
@@ -146,12 +146,12 @@ public class PHPUDGCreatorTest extends PHPCSVFunctionConverterBasedTest {
 
 		assertEquals( 1, numberOfDefsForSymbol( sinkUDG, "arg"));
 		assertEquals( 1, numberOfUsesForSymbol( sinkUDG, "arg"));
-		assertTrue( containsDef( sinkUDG, "arg", 66));
-		assertTrue( containsUse( sinkUDG, "arg", 73));
+		assertTrue( containsDef( sinkUDG, "arg", 65));
+		assertTrue( containsUse( sinkUDG, "arg", 71));
 
 		assertEquals( 0, numberOfDefsForSymbol( sinkUDG, "PHP_EOL"));
 		assertEquals( 1, numberOfUsesForSymbol( sinkUDG, "PHP_EOL"));
-		assertTrue( containsUse( sinkUDG, "PHP_EOL", 76));
+		assertTrue( containsUse( sinkUDG, "PHP_EOL", 74));
 		
 		
 		// Testing UDG of top-level function
