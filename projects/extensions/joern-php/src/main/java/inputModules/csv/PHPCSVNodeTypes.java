@@ -276,20 +276,6 @@ public class PHPCSVNodeTypes
 	public static final String FLAG_BINARY_IS_GREATER = "BINARY_IS_GREATER"; // since version 20 of php-ast
 	public static final String FLAG_BINARY_IS_GREATER_OR_EQUAL = "BINARY_IS_GREATER_OR_EQUAL"; // since version 20 of php-ast
 	public static final String FLAG_BINARY_SPACESHIP = "BINARY_SPACESHIP";
-
-	// flags for TYPE_ASSIGN_OP in versions before 20 (exclusive)
-	public static final String FLAG_ASSIGN_BITWISE_OR = "ASSIGN_BITWISE_OR";
-	public static final String FLAG_ASSIGN_BITWISE_AND = "ASSIGN_BITWISE_AND";
-	public static final String FLAG_ASSIGN_BITWISE_XOR = "ASSIGN_BITWISE_XOR";
-	public static final String FLAG_ASSIGN_CONCAT = "ASSIGN_CONCAT";
-	public static final String FLAG_ASSIGN_ADD = "ASSIGN_ADD";
-	public static final String FLAG_ASSIGN_SUB = "ASSIGN_SUB";
-	public static final String FLAG_ASSIGN_MUL = "ASSIGN_MUL";
-	public static final String FLAG_ASSIGN_DIV = "ASSIGN_DIV";
-	public static final String FLAG_ASSIGN_MOD = "ASSIGN_MOD";
-	public static final String FLAG_ASSIGN_POW = "ASSIGN_POW";
-	public static final String FLAG_ASSIGN_SHIFT_LEFT = "ASSIGN_SHIFT_LEFT";
-	public static final String FLAG_ASSIGN_SHIFT_RIGHT = "ASSIGN_SHIFT_RIGHT";
 	
 	// flags for TYPE_MAGIC_CONST nodes (exclusive)
 	public static final String FLAG_MAGIC_LINE = "T_LINE";
