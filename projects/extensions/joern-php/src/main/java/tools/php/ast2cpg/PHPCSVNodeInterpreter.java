@@ -27,9 +27,7 @@ import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.StringExpression;
-import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
-import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
 import ast.functionDef.ParameterList;
 import ast.logical.statements.CompoundStatement;
@@ -51,7 +49,6 @@ import ast.php.expressions.MagicConstant;
 import ast.php.expressions.PrintExpression;
 import ast.php.expressions.ReferenceExpression;
 import ast.php.expressions.ShellExecExpression;
-import ast.php.expressions.SilenceExpression;
 import ast.php.expressions.TypeHint;
 import ast.php.expressions.UnpackExpression;
 import ast.php.expressions.YieldExpression;
@@ -180,12 +177,6 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 			case PHPCSVNodeTypes.TYPE_UNPACK:
 				retval = handleUnpack(row, ast);
 				break;
-			case PHPCSVNodeTypes.TYPE_UNARY_PLUS:
-				retval = handleUnaryPlus(row, ast);
-				break;
-			case PHPCSVNodeTypes.TYPE_UNARY_MINUS:
-				retval = handleUnaryMinus(row, ast);
-				break;
 			case PHPCSVNodeTypes.TYPE_CAST:
 				retval = handleCast(row, ast);
 				break;
@@ -194,9 +185,6 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_ISSET:
 				retval = handleIsset(row, ast);
-				break;
-			case PHPCSVNodeTypes.TYPE_SILENCE:
-				retval = handleSilence(row, ast);
 				break;
 			case PHPCSVNodeTypes.TYPE_SHELL_EXEC:
 				retval = handleShellExec(row, ast);
@@ -907,52 +895,6 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 		return id;
 	}
 
-	private long handleUnaryPlus(KeyedCSVRow row, ASTUnderConstruction ast)
-	{
-		UnaryPlusExpression newNode = new UnaryPlusExpression();
-
-		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
-		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
-
-		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
-		newNode.setFlags(flags);
-		CodeLocation codeloc = new CodeLocation();
-		codeloc.startLine = Integer.parseInt(lineno);
-		newNode.setLocation(codeloc);
-		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
-
-		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
-		ast.addNodeWithId(newNode, id);
-		newNode.setNodeId(id);
-
-		return id;
-	}
-
-	private long handleUnaryMinus(KeyedCSVRow row, ASTUnderConstruction ast)
-	{
-		UnaryMinusExpression newNode = new UnaryMinusExpression();
-
-		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
-		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
-
-		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
-		newNode.setFlags(flags);
-		CodeLocation codeloc = new CodeLocation();
-		codeloc.startLine = Integer.parseInt(lineno);
-		newNode.setLocation(codeloc);
-		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
-
-		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
-		ast.addNodeWithId(newNode, id);
-		newNode.setNodeId(id);
-
-		return id;
-	}
-
 	private long handleCast(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		CastExpression newNode = new CastExpression();
@@ -1002,29 +944,6 @@ public class PHPCSVNodeInterpreter implements CSVRowInterpreter
 	private long handleIsset(KeyedCSVRow row, ASTUnderConstruction ast)
 	{
 		IssetExpression newNode = new IssetExpression();
-
-		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
-		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);
-		String lineno = row.getFieldForKey(PHPCSVNodeTypes.LINENO);
-		String childnum = row.getFieldForKey(PHPCSVNodeTypes.CHILDNUM);
-
-		newNode.setProperty(PHPCSVNodeTypes.TYPE.getName(), type);
-		newNode.setFlags(flags);
-		CodeLocation codeloc = new CodeLocation();
-		codeloc.startLine = Integer.parseInt(lineno);
-		newNode.setLocation(codeloc);
-		newNode.setProperty(PHPCSVNodeTypes.CHILDNUM.getName(), childnum);
-
-		long id = Long.parseLong(row.getFieldForKey(PHPCSVNodeTypes.NODE_ID));
-		ast.addNodeWithId(newNode, id);
-		newNode.setNodeId(id);
-
-		return id;
-	}
-
-	private long handleSilence(KeyedCSVRow row, ASTUnderConstruction ast)
-	{
-		SilenceExpression newNode = new SilenceExpression();
 
 		String type = row.getFieldForKey(PHPCSVNodeTypes.TYPE);
 		String flags = row.getFieldForKey(PHPCSVNodeTypes.FLAGS);

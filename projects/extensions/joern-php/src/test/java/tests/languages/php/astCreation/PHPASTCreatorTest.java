@@ -37,9 +37,7 @@ import ast.expressions.PreIncOperationExpression;
 import ast.expressions.PropertyExpression;
 import ast.expressions.StaticPropertyExpression;
 import ast.expressions.StringExpression;
-import ast.expressions.UnaryMinusExpression;
 import ast.expressions.UnaryOperationExpression;
-import ast.expressions.UnaryPlusExpression;
 import ast.expressions.Variable;
 import ast.functionDef.ParameterBase;
 import ast.functionDef.ParameterList;
@@ -64,7 +62,6 @@ import ast.php.expressions.MagicConstant;
 import ast.php.expressions.PrintExpression;
 import ast.php.expressions.ReferenceExpression;
 import ast.php.expressions.ShellExecExpression;
-import ast.php.expressions.SilenceExpression;
 import ast.php.expressions.TypeHint;
 import ast.php.expressions.UnpackExpression;
 import ast.php.expressions.YieldExpression;
@@ -623,52 +620,6 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	}
 
 	/**
-	 * AST_UNARY_PLUS nodes are used to denote 'unary plus' operation expressions.
-	 *
-	 * Any AST_UNARY_PLUS node has exactly exactly one child, representing the expression for which
-	 * the operation is to be performed.
-	 *
-	 * This test checks a unary plus operation expression's children in the following PHP code:
-	 *
-	 * // arithmetic operators
-	 * +$x;
-	 */
-	@Test
-	public void testUnaryPlusCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testUnaryPlus");
-
-		ASTNode node = ast.getNodeById((long)6);
-
-		assertThat( node, instanceOf(UnaryPlusExpression.class));
-		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((UnaryPlusExpression)node).getExpression());
-	}
-
-	/**
-	 * AST_UNARY_MINUS nodes are used to denote 'unary minus' operation expressions.
-	 *
-	 * Any AST_UNARY_MINUS node has exactly exactly one child, representing the expression for which
-	 * the operation is to be performed.
-	 *
-	 * This test checks a unary minus operation expression's children in the following PHP code:
-	 *
-	 * // arithmetic operators
-	 * -$x;
-	 */
-	@Test
-	public void testUnaryMinusCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testUnaryMinus");
-
-		ASTNode node = ast.getNodeById((long)6);
-
-		assertThat( node, instanceOf(UnaryMinusExpression.class));
-		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((UnaryMinusExpression)node).getExpression());
-	}
-
-	/**
 	 * AST_CAST nodes are used to denote cast expressions.
 	 *
 	 * Any AST_CAST node has exactly exactly one child, representing the expression whose evaluation
@@ -833,36 +784,6 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		assertThat( node2, instanceOf(IssetExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((IssetExpression)node2).getVariableExpression());
-	}
-
-	/**
-	 * AST_SILENCE nodes are used to denote 'silence' operation expressions.
-	 *
-	 * Any AST_SILENCE node has exactly exactly one child, representing the expression for which
-	 * error messages should be ignored.
-	 * See http://php.net/manual/en/language.operators.errorcontrol.php
-	 *
-	 * This test checks a few silence operation expressions' children in the following PHP code:
-	 *
-	 * // error control operators
-	 * @foo();
-	 * @$bar[42];
-	 */
-	@Test
-	public void testSilenceCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testSilence");
-
-		ASTNode node = ast.getNodeById((long)6);
-		ASTNode node2 = ast.getNodeById((long)11);
-
-		assertThat( node, instanceOf(SilenceExpression.class));
-		assertEquals( 1, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((SilenceExpression)node).getExpression());
-
-		assertThat( node2, instanceOf(SilenceExpression.class));
-		assertEquals( 1, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)12), ((SilenceExpression)node2).getExpression());
 	}
 
 	/**
@@ -1052,8 +973,13 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	 *
 	 * // bit operators
 	 * ~$foo;
+	 * // arithmetic operators
+	 * +$x;
+	 * -$x;
 	 * // boolean operators
 	 * !$foo;
+	 * // error control operators
+	 * @foo();
 	 */
 	@Test
 	public void testUnaryOperationCreation() throws IOException, InvalidCSVFile
@@ -1062,6 +988,9 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 
 		ASTNode node = ast.getNodeById((long)6);
 		ASTNode node2 = ast.getNodeById((long)9);
+		ASTNode node3 = ast.getNodeById((long)12);
+		ASTNode node4 = ast.getNodeById((long)15);
+		ASTNode node5 = ast.getNodeById((long)18);
 
 		assertThat( node, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node.getChildCount());
@@ -1070,6 +999,18 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		assertThat( node2, instanceOf(UnaryOperationExpression.class));
 		assertEquals( 1, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((UnaryOperationExpression)node2).getExpression());
+		
+		assertThat( node3, instanceOf(UnaryOperationExpression.class));
+		assertEquals( 1, node3.getChildCount());
+		assertEquals( ast.getNodeById((long)13), ((UnaryOperationExpression)node3).getExpression());
+		
+		assertThat( node4, instanceOf(UnaryOperationExpression.class));
+		assertEquals( 1, node4.getChildCount());
+		assertEquals( ast.getNodeById((long)16), ((UnaryOperationExpression)node4).getExpression());
+		
+		assertThat( node5, instanceOf(UnaryOperationExpression.class));
+		assertEquals( 1, node5.getChildCount());
+		assertEquals( ast.getNodeById((long)19), ((UnaryOperationExpression)node5).getExpression());
 	}
 
 	/**

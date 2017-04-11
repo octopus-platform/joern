@@ -157,8 +157,6 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			// the following environments should also emit USEs, as they could
 			// be used as standalone expressions as a predicate, i.e., within
 			// the guard of some if/while/etc. statement
-			case "UnaryPlusExpression":
-			case "UnaryMinusExpression":
 			case "UnaryOperationExpression":
 			case "BinaryOperationExpression":
 			case "InstanceofExpression":

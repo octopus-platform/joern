@@ -1,4 +1,0 @@
-<?php
-
-// arithmetic operators
--$x;
