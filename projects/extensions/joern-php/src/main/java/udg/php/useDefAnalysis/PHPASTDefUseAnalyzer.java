@@ -160,10 +160,6 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 			case "UnaryPlusExpression":
 			case "UnaryMinusExpression":
 			case "UnaryOperationExpression":
-			case "GreaterExpression":
-			case "GreaterOrEqualExpression":
-			case "AndExpression":
-			case "OrExpression":
 			case "BinaryOperationExpression":
 			case "InstanceofExpression":
 				return new EmitUseEnvironment();

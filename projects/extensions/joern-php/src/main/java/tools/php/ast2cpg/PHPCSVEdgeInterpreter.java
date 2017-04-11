@@ -2,7 +2,6 @@ package tools.php.ast2cpg;
 
 import ast.ASTNode;
 import ast.NullNode;
-import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
@@ -15,14 +14,11 @@ import ast.expressions.ConditionalExpression;
 import ast.expressions.Constant;
 import ast.expressions.Expression;
 import ast.expressions.ExpressionList;
-import ast.expressions.GreaterExpression;
-import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
 import ast.expressions.IntegerExpression;
 import ast.expressions.NewExpression;
-import ast.expressions.OrExpression;
 import ast.expressions.PostDecOperationExpression;
 import ast.expressions.PostIncOperationExpression;
 import ast.expressions.PreDecOperationExpression;
@@ -311,18 +307,6 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 				break;
 			case PHPCSVNodeTypes.TYPE_BINARY_OP:
 				errno = handleBinaryOperation((BinaryOperationExpression)startNode, endNode, childnum);
-				break;
-			case PHPCSVNodeTypes.TYPE_GREATER:
-				errno = handleGreater((GreaterExpression)startNode, endNode, childnum);
-				break;
-			case PHPCSVNodeTypes.TYPE_GREATER_EQUAL:
-				errno = handleGreaterOrEqual((GreaterOrEqualExpression)startNode, endNode, childnum);
-				break;
-			case PHPCSVNodeTypes.TYPE_AND:
-				errno = handleAnd((AndExpression)startNode, endNode, childnum);
-				break;
-			case PHPCSVNodeTypes.TYPE_OR:
-				errno = handleOr((OrExpression)startNode, endNode, childnum);
 				break;
 			case PHPCSVNodeTypes.TYPE_ARRAY_ELEM:
 				errno = handleArrayElement((ArrayElement)startNode, endNode, childnum);
@@ -1410,86 +1394,6 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 	}
 
 	private int handleBinaryOperation( BinaryOperationExpression startNode, ASTNode endNode, int childnum)
-	{
-		int errno = 0;
-
-		switch (childnum)
-		{
-			case 0: // left child: Expression node
-				startNode.setLeft((Expression)endNode);
-				break;
-			case 1: // right child: Expression node
-				startNode.setRight((Expression)endNode);
-				break;
-
-			default:
-				errno = 1;
-		}
-
-		return errno;
-	}
-
-	private int handleGreater( GreaterExpression startNode, ASTNode endNode, int childnum)
-	{
-		int errno = 0;
-
-		switch (childnum)
-		{
-			case 0: // left child: Expression node
-				startNode.setLeft((Expression)endNode);
-				break;
-			case 1: // right child: Expression node
-				startNode.setRight((Expression)endNode);
-				break;
-
-			default:
-				errno = 1;
-		}
-
-		return errno;
-	}
-
-	private int handleGreaterOrEqual( GreaterOrEqualExpression startNode, ASTNode endNode, int childnum)
-	{
-		int errno = 0;
-
-		switch (childnum)
-		{
-			case 0: // left child: Expression node
-				startNode.setLeft((Expression)endNode);
-				break;
-			case 1: // right child: Expression node
-				startNode.setRight((Expression)endNode);
-				break;
-
-			default:
-				errno = 1;
-		}
-
-		return errno;
-	}
-
-	private int handleAnd( AndExpression startNode, ASTNode endNode, int childnum)
-	{
-		int errno = 0;
-
-		switch (childnum)
-		{
-			case 0: // left child: Expression node
-				startNode.setLeft((Expression)endNode);
-				break;
-			case 1: // right child: Expression node
-				startNode.setRight((Expression)endNode);
-				break;
-
-			default:
-				errno = 1;
-		}
-
-		return errno;
-	}
-
-	private int handleOr( OrExpression startNode, ASTNode endNode, int childnum)
 	{
 		int errno = 0;
 

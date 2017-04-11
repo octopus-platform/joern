@@ -17,6 +17,8 @@ $x % $y;
 $x ** $y;
 // boolean operators
 $x xor $y;
+$x && $y;
+$x || $y;
 // comparison operators
 $x === $y;
 $x !== $y;
@@ -25,3 +27,5 @@ $x != $y;
 $x < $y;
 $x <= $y;
 $x <=> $y;
+$x > $y;
+$x >= $y;

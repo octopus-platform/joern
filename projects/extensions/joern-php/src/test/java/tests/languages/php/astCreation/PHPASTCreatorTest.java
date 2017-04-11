@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ast.ASTNode;
-import ast.expressions.AndExpression;
 import ast.expressions.ArgumentList;
 import ast.expressions.ArrayIndexing;
 import ast.expressions.AssignmentExpression;
@@ -26,14 +25,11 @@ import ast.expressions.Constant;
 import ast.expressions.DoubleExpression;
 import ast.expressions.Expression;
 import ast.expressions.ExpressionList;
-import ast.expressions.GreaterExpression;
-import ast.expressions.GreaterOrEqualExpression;
 import ast.expressions.Identifier;
 import ast.expressions.IdentifierList;
 import ast.expressions.InstanceofExpression;
 import ast.expressions.IntegerExpression;
 import ast.expressions.NewExpression;
-import ast.expressions.OrExpression;
 import ast.expressions.PostDecOperationExpression;
 import ast.expressions.PostIncOperationExpression;
 import ast.expressions.PreDecOperationExpression;
@@ -1895,6 +1891,8 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	 * $x ** $y;
 	 * // boolean operators
 	 * $x xor $y;
+	 * $x && $y;
+	 * $x || $y;
 	 * // comparison operators
 	 * $x === $y;
 	 * $x !== $y;
@@ -1903,6 +1901,8 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	 * $x < $y;
 	 * $x <= $y;
 	 * $x <=> $y;
+	 * $x > $y;
+	 * $x >= $y;
 	 */
 	@Test
 	public void testBinaryOperationCreation() throws IOException, InvalidCSVFile
@@ -1929,6 +1929,10 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node18 = ast.getNodeById((long)91);
 		ASTNode node19 = ast.getNodeById((long)96);
 		ASTNode node20 = ast.getNodeById((long)101);
+		ASTNode node21 = ast.getNodeById((long)106);
+		ASTNode node22 = ast.getNodeById((long)111);
+		ASTNode node23 = ast.getNodeById((long)116);
+		ASTNode node24 = ast.getNodeById((long)121);
 
 		assertThat( node, instanceOf(BinaryOperationExpression.class));
 		assertEquals( 2, node.getChildCount());
@@ -2029,118 +2033,26 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		assertEquals( 2, node20.getChildCount());
 		assertEquals( ast.getNodeById((long)102), ((BinaryOperationExpression)node20).getLeft());
 		assertEquals( ast.getNodeById((long)104), ((BinaryOperationExpression)node20).getRight());
-	}
+		
+		assertThat( node21, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node21.getChildCount());
+		assertEquals( ast.getNodeById((long)107), ((BinaryOperationExpression)node21).getLeft());
+		assertEquals( ast.getNodeById((long)109), ((BinaryOperationExpression)node21).getRight());
+		
+		assertThat( node22, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node22.getChildCount());
+		assertEquals( ast.getNodeById((long)112), ((BinaryOperationExpression)node22).getLeft());
+		assertEquals( ast.getNodeById((long)114), ((BinaryOperationExpression)node22).getRight());		
+		
+		assertThat( node23, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node23.getChildCount());
+		assertEquals( ast.getNodeById((long)117), ((BinaryOperationExpression)node23).getLeft());
+		assertEquals( ast.getNodeById((long)119), ((BinaryOperationExpression)node23).getRight());		
 
-	/**
-	 * AST_GREATER nodes are used to denote binary operation "greater than" expressions.
-	 *
-	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
-	 * this a normal AST_BINARY_OP node.
-	 *
-	 * Any AST_GREATER node has exactly two children:
-	 * 1) an expression on the left-hand side
-	 * 2) an expression on the right-hand side
-	 *
-	 * This test checks a "greater than" expression's children in the following PHP code:
-	 *
-	 * // comparison operators
-	 * $x > $y;
-	 */
-	@Test
-	public void testGreaterCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testGreater");
-
-		ASTNode node = ast.getNodeById((long)6);
-
-		assertThat( node, instanceOf(GreaterExpression.class));
-		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((GreaterExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)9), ((GreaterExpression)node).getRight());
-	}
-
-	/**
-	 * AST_GREATER_EQUAL nodes are used to denote binary operation "greater or equal than" expressions.
-	 *
-	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
-	 * this a normal AST_BINARY_OP node.
-	 *
-	 * Any AST_GREATER_EQUAL node has exactly two children:
-	 * 1) an expression on the left-hand side
-	 * 2) an expression on the right-hand side
-	 *
-	 * This test checks a "greater or equal than" expression's children in the following PHP code:
-	 *
-	 * // comparison operators
-	 * $x >= $y;
-	 */
-	@Test
-	public void testGreaterOrEqualCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testGreaterOrEqual");
-
-		ASTNode node = ast.getNodeById((long)6);
-
-		assertThat( node, instanceOf(GreaterOrEqualExpression.class));
-		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((GreaterOrEqualExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)9), ((GreaterOrEqualExpression)node).getRight());
-	}
-
-	/**
-	 * AST_AND nodes are used to denote binary operation "boolean and" expressions.
-	 *
-	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
-	 * this a normal AST_BINARY_OP node.
-	 *
-	 * Any AST_AND node has exactly two children:
-	 * 1) an expression on the left-hand side
-	 * 2) an expression on the right-hand side
-	 *
-	 * This test checks a "boolean and" expression's children in the following PHP code:
-	 *
-	 * // boolean operators
-	 * $x && $y;
-	 */
-	@Test
-	public void testAndCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testAnd");
-
-		ASTNode node = ast.getNodeById((long)6);
-
-		assertThat( node, instanceOf(AndExpression.class));
-		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((AndExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)9), ((AndExpression)node).getRight());
-	}
-
-	/**
-	 * AST_OR nodes are used to denote binary operation "boolean or" expressions.
-	 *
-	 * TODO once version 20 of Niki's php-ast extension is stable, update phpjoern parser and make
-	 * this a normal AST_BINARY_OP node.
-	 *
-	 * Any AST_OR node has exactly two children:
-	 * 1) an expression on the left-hand side
-	 * 2) an expression on the right-hand side
-	 *
-	 * This test checks a "boolean or" expression's children in the following PHP code:
-	 *
-	 * // boolean operators
-	 * $x || $y;
-	 */
-	@Test
-	public void testOrCreation() throws IOException, InvalidCSVFile
-	{
-		handleCSVFiles( "testOr");
-
-		ASTNode node = ast.getNodeById((long)6);
-
-		assertThat( node, instanceOf(OrExpression.class));
-		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)7), ((OrExpression)node).getLeft());
-		assertEquals( ast.getNodeById((long)9), ((OrExpression)node).getRight());
+		assertThat( node24, instanceOf(BinaryOperationExpression.class));
+		assertEquals( 2, node24.getChildCount());
+		assertEquals( ast.getNodeById((long)122), ((BinaryOperationExpression)node24).getLeft());
+		assertEquals( ast.getNodeById((long)124), ((BinaryOperationExpression)node24).getRight());
 	}
 
 	/**
