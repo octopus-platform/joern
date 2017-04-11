@@ -1,20 +1,20 @@
 package ast.php.statements;
 
 import ast.expressions.Expression;
-import ast.expressions.StringExpression;
+import ast.expressions.Variable;
 import ast.logical.statements.Statement;
 
 public class StaticVariableDeclaration extends Statement
 {
-	private StringExpression name = null;
+	private Variable name = null;
 	private Expression defaultvalue = null;
 
-	public StringExpression getNameChild()
+	public Variable getNameChild()
 	{
 		return this.name;
 	}
 	
-	public void setNameChild(StringExpression name)
+	public void setNameChild(Variable name)
 	{
 		this.name = name;
 		super.addChild(name);

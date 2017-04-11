@@ -1470,7 +1470,7 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 		switch (childnum)
 		{
 			case 0: // name child: StringExpression node
-				startNode.setNameChild((StringExpression)endNode);
+				startNode.setNameChild((Variable)endNode);
 				break;
 			case 1: // default child: Expression or null node
 				if( endNode instanceof NullNode)

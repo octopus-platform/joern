@@ -513,7 +513,7 @@ public class PHPASTDefUseAnalyzerTest extends PHPCSVBasedTest {
 	{
 		handleCSVFiles( "testStaticVariable");
 
-		ASTNode node = ast.getNodeById((long)13);
+		ASTNode node = ast.getNodeById((long)12);
 		Collection<UseOrDef> useOrDefs = analyze(node);
 			
 		assertEquals( 2, useOrDefs.size());

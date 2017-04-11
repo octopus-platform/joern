@@ -2212,7 +2212,7 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	 * See http://php.net/manual/en/language.variables.scope.php#language.variables.scope.static
 	 *
 	 * Any AST_STATIC node has exactly two children:
-	 * 1) string, indicating the static variable's name
+	 * 1) AST_VAR, containing the static variable's name
 	 * 2) various possible child types, representing the default value
 	 *    (e.g., node type could be "NULL", "string", "integer", but also AST_CONST, etc.)
 	 *
@@ -2227,28 +2227,28 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 	{
 		handleCSVFiles( "testStatic");
 
-		ASTNode node = ast.getNodeById((long)13);
+		ASTNode node = ast.getNodeById((long)12);
 		ASTNode node2 = ast.getNodeById((long)16);
-		ASTNode node3 = ast.getNodeById((long)19);
+		ASTNode node3 = ast.getNodeById((long)20);
 
 		assertThat( node, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node.getChildCount());
-		assertEquals( ast.getNodeById((long)14), ((StaticVariableDeclaration)node).getNameChild());
-		assertEquals( "bar", ((StaticVariableDeclaration)node).getNameChild().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)13), ((StaticVariableDeclaration)node).getNameChild());
+		assertEquals( "bar", ((StaticVariableDeclaration)node).getNameChild().getNameExpression().getEscapedCodeStr());
 		assertNull( ((StaticVariableDeclaration)node).getDefault());
 
 		assertThat( node2, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node2.getChildCount());
 		assertEquals( ast.getNodeById((long)17), ((StaticVariableDeclaration)node2).getNameChild());
-		assertEquals( "buz", ((StaticVariableDeclaration)node2).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)18), ((StaticVariableDeclaration)node2).getDefault());
+		assertEquals( "buz", ((StaticVariableDeclaration)node2).getNameChild().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)19), ((StaticVariableDeclaration)node2).getDefault());
 		assertEquals( "42", ((StaticVariableDeclaration)node2).getDefault().getEscapedCodeStr());
 
 		assertThat( node3, instanceOf(StaticVariableDeclaration.class));
 		assertEquals( 2, node3.getChildCount());
-		assertEquals( ast.getNodeById((long)20), ((StaticVariableDeclaration)node3).getNameChild());
-		assertEquals( "qux", ((StaticVariableDeclaration)node3).getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)21), ((StaticVariableDeclaration)node3).getDefault());
+		assertEquals( ast.getNodeById((long)21), ((StaticVariableDeclaration)node3).getNameChild());
+		assertEquals( "qux", ((StaticVariableDeclaration)node3).getNameChild().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)23), ((StaticVariableDeclaration)node3).getDefault());
 		assertEquals( "norf", ((Identifier)((CallExpressionBase)((StaticVariableDeclaration)node3).getDefault()).getTargetFunc()).getNameChild().getEscapedCodeStr());
 	}
 

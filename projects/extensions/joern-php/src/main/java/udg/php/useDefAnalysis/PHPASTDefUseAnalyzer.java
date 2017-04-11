@@ -20,6 +20,7 @@ import udg.php.useDefAnalysis.environments.IncDecEnvironment;
 import udg.php.useDefAnalysis.environments.ParameterEnvironment;
 import udg.php.useDefAnalysis.environments.PropertyEnvironment;
 import udg.php.useDefAnalysis.environments.StaticPropertyEnvironment;
+import udg.php.useDefAnalysis.environments.StaticVariableDeclarationEnvironment;
 import udg.php.useDefAnalysis.environments.SwitchEnvironment;
 import udg.useDefAnalysis.environments.UseDefEnvironment;
 import udg.php.useDefAnalysis.environments.VariableEnvironment;
@@ -80,6 +81,8 @@ public class PHPASTDefUseAnalyzer extends ASTDefUseAnalyzer
 				return new AssignmentWithOpEnvironment();
 
 			case "StaticVariableDeclaration":
+				return new StaticVariableDeclarationEnvironment();
+
 			case "PropertyElement":
 			case "ConstantElement":
 				return new FieldDeclarationEnvironment();
