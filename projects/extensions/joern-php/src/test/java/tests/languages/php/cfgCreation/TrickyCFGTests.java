@@ -51,17 +51,17 @@ public class TrickyCFGTests extends PHPCSVFunctionConverterBasedTest {
 		
 		assertTrue( edgeExists(cfg, cfg.getEntryNode(), 8, CFGEdge.EMPTY_LABEL));
 		assertTrue( edgeExists(cfg, 8, 12, CFGEdge.EMPTY_LABEL));
-		assertTrue( edgeExists(cfg, 12, 36, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 12, 38, CFGEdge.EMPTY_LABEL));
 		assertTrue( edgeExists(cfg, 8, cfg.getExceptionNode(), CFGEdge.EXCEPT_LABEL));
 		assertTrue( edgeExists(cfg, 12, cfg.getExceptionNode(), CFGEdge.EXCEPT_LABEL));
 
-		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), 22, CFGEdge.HANDLED_EXCEPT_LABEL));
-		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), 31, CFGEdge.HANDLED_EXCEPT_LABEL));
+		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), 23, CFGEdge.HANDLED_EXCEPT_LABEL));
+		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), 33, CFGEdge.HANDLED_EXCEPT_LABEL));
 		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), cfg.getExitNode(), CFGEdge.UNHANDLED_EXCEPT_LABEL));
 
-		assertTrue( edgeExists(cfg, 22, 36, CFGEdge.EMPTY_LABEL));
-		assertTrue( edgeExists(cfg, 31, 36, CFGEdge.EMPTY_LABEL));
-		assertTrue( edgeExists(cfg, 36, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 23, 38, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 33, 38, CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 38, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
 	}
 
 	/**

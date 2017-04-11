@@ -3053,7 +3053,7 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)7), ((TryStatement)node).getContent());
 		assertEquals( ast.getNodeById((long)8), ((TryStatement)node).getCatchList());
-		assertEquals( ast.getNodeById((long)19), ((TryStatement)node).getFinallyContent());
+		assertEquals( ast.getNodeById((long)21), ((TryStatement)node).getFinallyContent());
 	}
 
 	/**
@@ -3077,25 +3077,27 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		handleCSVFiles( "testTry");
 
 		ASTNode node = ast.getNodeById((long)9);
-		ASTNode node2 = ast.getNodeById((long)14);
+		ASTNode node2 = ast.getNodeById((long)15);
 
 		assertThat( node, instanceOf(CatchStatement.class));
 		assertEquals( 3, node.getChildCount());
 		assertEquals( ast.getNodeById((long)10), ((CatchStatement)node).getExceptionIdentifier());
 		assertEquals( ast.getNodeById((long)11), ((CatchStatement)node).getExceptionIdentifier().getNameChild());
 		assertEquals( "FooException", ((CatchStatement)node).getExceptionIdentifier().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)12), ((CatchStatement)node).getVariableName());
-		assertEquals( "f", ((CatchStatement)node).getVariableName().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)13), ((CatchStatement)node).getContent());
+		assertEquals( ast.getNodeById((long)12), ((CatchStatement)node).getVariable());
+		assertEquals( ast.getNodeById((long)13), ((CatchStatement)node).getVariable().getNameExpression());
+		assertEquals( "f", ((CatchStatement)node).getVariable().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)14), ((CatchStatement)node).getContent());
 
 		assertThat( node2, instanceOf(CatchStatement.class));
 		assertEquals( 3, node2.getChildCount());
-		assertEquals( ast.getNodeById((long)15), ((CatchStatement)node2).getExceptionIdentifier());
-		assertEquals( ast.getNodeById((long)16), ((CatchStatement)node2).getExceptionIdentifier().getNameChild());
+		assertEquals( ast.getNodeById((long)16), ((CatchStatement)node2).getExceptionIdentifier());
+		assertEquals( ast.getNodeById((long)17), ((CatchStatement)node2).getExceptionIdentifier().getNameChild());
 		assertEquals( "BarException", ((CatchStatement)node2).getExceptionIdentifier().getNameChild().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)17), ((CatchStatement)node2).getVariableName());
-		assertEquals( "b", ((CatchStatement)node2).getVariableName().getEscapedCodeStr());
-		assertEquals( ast.getNodeById((long)18), ((CatchStatement)node2).getContent());
+		assertEquals( ast.getNodeById((long)18), ((CatchStatement)node2).getVariable());
+		assertEquals( ast.getNodeById((long)19), ((CatchStatement)node2).getVariable().getNameExpression());
+		assertEquals( "b", ((CatchStatement)node2).getVariable().getNameExpression().getEscapedCodeStr());
+		assertEquals( ast.getNodeById((long)20), ((CatchStatement)node2).getContent());
 	}
 
 	/**
@@ -3548,7 +3550,7 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		assertEquals( 2, ((CatchList)node).size());
 
 		assertEquals( ast.getNodeById((long)9), ((CatchList)node).getCatchStatement(0));
-		assertEquals( ast.getNodeById((long)14), ((CatchList)node).getCatchStatement(1));
+		assertEquals( ast.getNodeById((long)15), ((CatchList)node).getCatchStatement(1));
 		for( CatchStatement catchstatement : (CatchList)node)
 			assertTrue( ast.containsValue(catchstatement));
 	}

@@ -1,7 +1,7 @@
 package ast.statements.blockstarters;
 
 import ast.expressions.Identifier;
-import ast.expressions.StringExpression;
+import ast.expressions.Variable;
 import ast.logical.statements.BlockStarterWithStmtAndCnd;
 import ast.logical.statements.CompoundStatement;
 import ast.walking.ASTNodeVisitor;
@@ -9,7 +9,7 @@ import ast.walking.ASTNodeVisitor;
 public class CatchStatement extends BlockStarterWithStmtAndCnd
 {
 	private Identifier exceptionIdentifier = null;
-	private StringExpression variableName = null;
+	private Variable variable = null;
 	private CompoundStatement content = null;
 
 	public Identifier getExceptionIdentifier()
@@ -23,15 +23,15 @@ public class CatchStatement extends BlockStarterWithStmtAndCnd
 		super.addChild(exceptionIdentifier);
 	}
 
-	public StringExpression getVariableName()
+	public Variable getVariable()
 	{
-		return this.variableName;
+		return this.variable;
 	}
 
-	public void setVariableName(StringExpression variableName)
+	public void setVariable(Variable variable)
 	{
-		this.variableName = variableName;
-		super.addChild(variableName);
+		this.variable = variable;
+		super.addChild(variable);
 	}
 
 	public CompoundStatement getContent()

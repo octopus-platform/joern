@@ -1943,8 +1943,8 @@ public class PHPCSVEdgeInterpreter implements CSVRowInterpreter
 			case 0: // exception child: Identifier node
 				startNode.setExceptionIdentifier((Identifier)endNode);
 				break;
-			case 1: // varName child: StringExpression node
-				startNode.setVariableName((StringExpression)endNode);
+			case 1: // var child: Variable node
+				startNode.setVariable((Variable)endNode);
 				break;
 			case 2: // stmts child: CompoundStatement node
 				startNode.setContent((CompoundStatement)endNode);

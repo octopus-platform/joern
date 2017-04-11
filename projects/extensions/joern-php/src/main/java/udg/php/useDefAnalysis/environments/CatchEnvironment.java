@@ -15,7 +15,7 @@ public class CatchEnvironment extends UseDefEnvironment
 		// the second child contains the exception variable's symbol
 		int childNum = child.getChildNumber();
 		if( 1 == childNum)
-			this.symbols.add(child.getEscapedCodeStr());
+			this.symbols.addAll(childSymbols);
 	}
 	
 	public Collection<UseOrDef> useOrDefsFromSymbols(ASTProvider child)

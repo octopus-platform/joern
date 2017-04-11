@@ -162,10 +162,10 @@ public class UnstructuredFlowTests extends PHPCSVFunctionConverterBasedTest {
 		
 		assertTrue( edgeExists(cfg, cfg.getEntryNode(), 8, CFGEdge.EMPTY_LABEL));
 		assertTrue( edgeExists(cfg, 8, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
-		assertTrue( edgeExists(cfg, 18, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
+		assertTrue( edgeExists(cfg, 19, cfg.getExitNode(), CFGEdge.EMPTY_LABEL));
 
 		assertTrue( edgeExists(cfg, 8, cfg.getExceptionNode(), CFGEdge.EXCEPT_LABEL));
-		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), 18, CFGEdge.HANDLED_EXCEPT_LABEL));
+		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), 19, CFGEdge.HANDLED_EXCEPT_LABEL));
 		assertTrue( edgeExists(cfg, cfg.getExceptionNode(), cfg.getExitNode(), CFGEdge.UNHANDLED_EXCEPT_LABEL));
 	}
 }
