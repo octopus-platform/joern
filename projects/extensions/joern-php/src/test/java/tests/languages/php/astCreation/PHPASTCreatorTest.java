@@ -282,6 +282,10 @@ public class PHPASTCreatorTest extends PHPCSVBasedTest
 		ASTNode node = ast.getNodeById((long)6);
 
 		assertThat( node, instanceOf(FunctionDef.class));
+		// repeat this three times... in the past, there was a bug that caused the
+		// function name to change across several invocations of getName()
+		assertEquals( "foo", ((FunctionDef)node).getName());
+		assertEquals( "foo", ((FunctionDef)node).getName());
 		assertEquals( "foo", ((FunctionDef)node).getName());
 		assertEquals( 4, node.getChildCount());
 		assertEquals( ast.getNodeById((long)9), ((FunctionDef)node).getParameterList());

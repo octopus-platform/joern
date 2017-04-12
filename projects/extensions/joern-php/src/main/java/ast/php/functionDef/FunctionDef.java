@@ -133,8 +133,12 @@ public class FunctionDef extends FunctionDefBase
 		return retval;
 	}
 
-	public Identifier getIdentifier()
-	{
+	public Identifier getIdentifier() {
 		throw new RuntimeException("An Identifier is not used for PHP function names, use getName() instead!");
+	}
+	
+	@Override
+	public String getEscapedCodeStr() {
+		return getCodeStr();
 	}
 }
