@@ -6,6 +6,8 @@
 Welcome to joern's documentation!
 =================================
 
+**Note: this is the documentation for the now discontinued version of Joern. For the maintained version, please visit: https://shiftleftsecurity.github.io/joern**
+
 Joern is a platform for robust analysis of C/C++ code developed by
 `Fabian Yamaguchi <https://www.tu-braunschweig.de/sec/team/fabs>`_ and
 `Alwin Maier <https://www.tu-braunschweig.de/sec/team/alwin>`_ at the

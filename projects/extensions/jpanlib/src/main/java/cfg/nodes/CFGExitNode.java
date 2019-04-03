@@ -1,8 +1,7 @@
 package cfg.nodes;
 
-import java.util.Map;
-
 import databaseNodes.NodeKeys;
+import java.util.Map;
 
 public class CFGExitNode extends AbstractCFGNode
 {
