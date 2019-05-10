@@ -1,3 +1,5 @@
+This documentation is about a discontinued version of joern. Please see https://joern.io for the maintainted version.
+
 Installation
 =============
 
